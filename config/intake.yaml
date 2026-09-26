@@ -1,0 +1,5 @@
+# How the kiosk intake behaves (M1-07). Research prototype; synthetic data only.
+llm_phrasing: true        # false = approved templates only (deterministic: E2E and scripted tests)
+phrasing_timeout_s: 3.0   # the LLM gets this long to rephrase a question, else the template is used
+max_turns: 8              # the conversation stops after this many patient answers
+max_seconds: 120          # ... or after this long (intake_truncated)
