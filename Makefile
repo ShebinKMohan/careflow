@@ -3,6 +3,9 @@
 
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
+# `uv run` must never re-resolve: a dependency added to a pyproject.toml without `uv lock` fails
+# fast instead of being downloaded and installed before the banned-dependency check can run.
+export UV_LOCKED := 1
 
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check
@@ -12,7 +15,7 @@ help: ## List the targets
 
 install: install-py install-node ## Install locked Python and Node dependencies
 
-install-py:
+install-py: banned-deps
 	uv sync --locked --all-packages
 
 install-node:
@@ -43,7 +46,8 @@ test-py:
 test-node:
 	pnpm -r test
 
+# Runs before any sync, outside the project environment, so a banned package is never installed.
 banned-deps: ## Fail on LiteLLM or any unconstrained Python dependency
-	uv run python scripts/check_banned_deps.py
+	uv run --no-project --python 3.12 python scripts/check_banned_deps.py
 
-check: lint typecheck test banned-deps ## Everything CI checks, except the secret and CVE scans
+check: banned-deps lint typecheck test ## Everything CI checks, except the secret and CVE scans

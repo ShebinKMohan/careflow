@@ -18,4 +18,5 @@ LiteLLM is a popular multi-provider LLM client. Its PyPI package was compromised
 
 - One more small adapter to maintain instead of a large dependency.
 - A contributor or agent who adds LiteLLM, directly or through a transitive dependency, gets a red build with the reason.
+- The check must run before anything installs dependencies: a plain `uv run` first re-resolves and installs a newly declared dependency (found while verifying [M0-01]). So `make install` and `make check` run it first with `uv run --no-project`, the CI `security` job runs it without syncing, and the Makefile exports `UV_LOCKED=1` so `uv run` fails fast on an unlocked change instead of installing it.
 - The ban is recorded here so a later reviewer knows it is deliberate, not an oversight.
