@@ -1021,16 +1021,29 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
   /v1/queue/{department}/call-next:
     parameters:
     - $ref: '#/components/parameters/Department'
     post:
       operationId: callNext
       summary: Call the next token
+      description: Calls the highest-priority waiting token (nurse-confirmed level, then time in
+        the queue) that a free room accepts. With `room`, calls into that room; without it, into
+        the first free room (in config/rooms.yaml order) with an eligible token. A room is busy
+        while a called or arrived token holds it.
       tags:
       - queue
       x-careflow-roles:
       - nurse
+      parameters:
+      - name: room
+        in: query
+        required: false
+        description: Room id from config/rooms.yaml.
+        schema:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
       responses:
         '200':
           description: Call the next token
@@ -1053,6 +1066,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /v1/queue/tokens/{token_id}/arrived:
     parameters:
     - $ref: '#/components/parameters/TokenId'
@@ -1093,6 +1110,8 @@ paths:
     post:
       operationId: markNoShow
       summary: Mark a called token as a no-show
+      description: The same rule as the grace window. A first miss re-queues the token once, at
+        the back of its level (status waiting); a second miss makes it a no-show.
       tags:
       - queue
       x-careflow-roles:
@@ -1114,6 +1133,40 @@ paths:
                 issued_at: '2026-09-26T09:10:00Z'
                 called_at: '2026-09-26T09:30:00Z'
                 grace_until: '2026-09-26T09:40:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/queue/tokens/{token_id}/close:
+    parameters:
+    - $ref: '#/components/parameters/TokenId'
+    post:
+      operationId: closeToken
+      summary: Close a token (seen; frees its room)
+      tags:
+      - queue
+      x-careflow-roles:
+      - nurse
+      responses:
+        '200':
+          description: Close a token (seen; frees its room)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueToken'
+              example:
+                token_id: tok_chest_pain
+                session_id: ses_chest_pain
+                token_code: A-014
+                department: emergency
+                room: Resus 2
+                status: closed
+                issued_at: '2026-09-26T09:06:05Z'
+                called_at: '2026-09-26T09:08:00Z'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1489,6 +1542,33 @@ webhooks:
                 department: emergency
                 room: Resus 2
                 called_at: '2026-09-26T09:08:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  token.no_show:
+    post:
+      operationId: onTokenNoShow
+      summary: token.no_show event
+      tags:
+      - events
+      description: A called token missed its grace window a second time (it was re-queued once
+        after the first miss) and is now a no-show. No name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenNoShowEvent'
+            example:
+              type: token.no_show
+              timestamp: '2026-09-26T09:40:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_no_show
+                token_id: tok_no_show
+                token_code: G-032
+                department: general
+                marked_at: '2026-09-26T09:40:00Z'
       responses:
         '204':
           description: Received. Any 2xx acknowledges delivery.
@@ -2652,6 +2732,23 @@ components:
         timestamp: *id006
         data:
           $ref: '#/components/schemas/TokenCalledData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    TokenNoShowData:
+      $ref: ./events/token-no-show.schema.json#/$defs/TokenNoShowData
+    TokenNoShowEvent:
+      type: object
+      description: '`token.no_show` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: token.no_show
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/TokenNoShowData'
       required:
       - type
       - timestamp

@@ -8,6 +8,7 @@ CareFlow publishes the same events to hospital systems (webhooks, M4-03) and to 
 | `triage.suggested` | `triage-suggested.schema.json` | A model suggested a level (reasons omitted: model text). |
 | `triage.confirmed` | `triage-confirmed.schema.json` | The nurse confirmed or overrode the level; it is now final. |
 | `token.called` | `token-called.schema.json` | A queue token was called to a room. |
+| `token.no_show` | `token-no-show.schema.json` | A called token missed its grace window a second time (after one re-queue). |
 | `intake.completed` | `intake-completed.schema.json` | The intake conversation finished. |
 | `patient.feels_worse` | `patient-feels-worse.schema.json` | The waiting patient pressed "I feel worse". |
 | `nurse.flag` | `nurse-flag.schema.json` | Something needs a nurse, e.g. a refused medical question. |

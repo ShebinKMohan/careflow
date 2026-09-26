@@ -491,7 +491,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Call the next token */
+        /**
+         * Call the next token
+         * @description Calls the highest-priority waiting token (nurse-confirmed level, then time in the queue) that a free room accepts. With `room`, calls into that room; without it, into the first free room (in config/rooms.yaml order) with an eligible token. A room is busy while a called or arrived token holds it.
+         */
         post: operations["callNext"];
         delete?: never;
         options?: never;
@@ -537,8 +540,34 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Mark a called token as a no-show */
+        /**
+         * Mark a called token as a no-show
+         * @description The same rule as the grace window. A first miss re-queues the token once, at the back of its level (status waiting); a second miss makes it a no-show.
+         */
         post: operations["markNoShow"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/queue/tokens/{token_id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque queue token id.
+                 * @example tok_chest_pain
+                 */
+                token_id: components["parameters"]["TokenId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Close a token (seen; frees its room) */
+        post: operations["closeToken"];
         delete?: never;
         options?: never;
         head?: never;
@@ -755,6 +784,26 @@ export interface webhooks {
          * @description A queue token was called to a room. No name, date of birth or free text.
          */
         post: operations["onTokenCalled"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "token.no_show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * token.no_show event
+         * @description A called token missed its grace window a second time (it was re-queued once after the first miss) and is now a no-show. No name, date of birth or free text.
+         */
+        post: operations["onTokenNoShow"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1488,6 +1537,35 @@ export interface components {
             data: components["schemas"]["TokenCalledData"];
         };
         /**
+         * TokenNoShowData
+         * @description A called token missed its grace window a second time (it was re-queued once after the first miss) and is now a no-show. No name, date of birth or free text.
+         * @example {
+         *       "clinic_id": "clinic_demo",
+         *       "session_id": "ses_no_show",
+         *       "token_id": "tok_no_show",
+         *       "token_code": "G-032",
+         *       "department": "general",
+         *       "marked_at": "2026-09-26T09:40:00Z"
+         *     }
+         */
+        TokenNoShowData: {
+            clinic_id: components["schemas"]["Identifier"];
+            session_id: components["schemas"]["Identifier"];
+            token_id: components["schemas"]["Identifier"];
+            token_code: string;
+            department: components["schemas"]["Identifier"];
+            /** Format: date-time */
+            marked_at: string;
+        };
+        /** @description `token.no_show` in the event envelope. */
+        TokenNoShowEvent: {
+            /** @constant */
+            type: "token.no_show";
+            /** Format: date-time */
+            timestamp: string;
+            data: components["schemas"]["TokenNoShowData"];
+        };
+        /**
          * IntakeCompletedData
          * @description The intake conversation finished and the structured facts are ready for the nurse. No name, date of birth or free text.
          * @example {
@@ -1895,7 +1973,7 @@ export interface components {
          * @description Event type, in the Standard Webhooks dotted style.
          * @enum {string}
          */
-        EventType: "alert.raised" | "triage.suggested" | "triage.confirmed" | "token.called" | "intake.completed" | "patient.feels_worse" | "nurse.flag";
+        EventType: "alert.raised" | "triage.suggested" | "triage.confirmed" | "token.called" | "token.no_show" | "intake.completed" | "patient.feels_worse" | "nurse.flag";
     };
     responses: {
         /** @description Unauthorized */
@@ -3254,11 +3332,15 @@ export interface operations {
             };
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
         };
     };
     callNext: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Room id from config/rooms.yaml. */
+                room?: components["schemas"]["Identifier"];
+            };
             header?: never;
             path: {
                 /**
@@ -3297,6 +3379,8 @@ export interface operations {
             };
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
         };
     };
     markArrived: {
@@ -3373,6 +3457,48 @@ export interface operations {
                      *       "issued_at": "2026-09-26T09:10:00Z",
                      *       "called_at": "2026-09-26T09:30:00Z",
                      *       "grace_until": "2026-09-26T09:40:00Z"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["QueueToken"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    closeToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque queue token id.
+                 * @example tok_chest_pain
+                 */
+                token_id: components["parameters"]["TokenId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Close a token (seen; frees its room) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "token_id": "tok_chest_pain",
+                     *       "session_id": "ses_chest_pain",
+                     *       "token_code": "A-014",
+                     *       "department": "emergency",
+                     *       "room": "Resus 2",
+                     *       "status": "closed",
+                     *       "issued_at": "2026-09-26T09:06:05Z",
+                     *       "called_at": "2026-09-26T09:08:00Z"
                      *     }
                      */
                     "application/json": components["schemas"]["QueueToken"];
@@ -3868,6 +3994,42 @@ export interface operations {
                  *     }
                  */
                 "application/json": components["schemas"]["TokenCalledEvent"];
+            };
+        };
+        responses: {
+            /** @description Received. Any 2xx acknowledges delivery. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    onTokenNoShow: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /**
+                 * @example {
+                 *       "type": "token.no_show",
+                 *       "timestamp": "2026-09-26T09:40:00Z",
+                 *       "data": {
+                 *         "clinic_id": "clinic_demo",
+                 *         "session_id": "ses_no_show",
+                 *         "token_id": "tok_no_show",
+                 *         "token_code": "G-032",
+                 *         "department": "general",
+                 *         "marked_at": "2026-09-26T09:40:00Z"
+                 *       }
+                 *     }
+                 */
+                "application/json": components["schemas"]["TokenNoShowEvent"];
             };
         };
         responses: {

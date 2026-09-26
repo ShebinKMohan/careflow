@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "TokenNoShowData: see $defs/TokenNoShowData. A called token missed its grace window a second time (it was re-queued once after the first miss) and is now a no-show. No name, date of birth or free text.",
+  "$ref": "#/$defs/TokenNoShowData",
+  "$defs": {
+    "TokenNoShowData": {
+      "title": "TokenNoShowData",
+      "description": "A called token missed its grace window a second time (it was re-queued once after the first miss) and is now a no-show. No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "token_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "token_code": {
+          "type": "string",
+          "pattern": "^[A-Z]-[0-9]{3}$"
+        },
+        "department": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "marked_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "token_id",
+        "token_code",
+        "department",
+        "marked_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_no_show",
+          "token_id": "tok_no_show",
+          "token_code": "G-032",
+          "department": "general",
+          "marked_at": "2026-09-26T09:40:00Z"
+        }
+      ]
+    }
+  }
+}

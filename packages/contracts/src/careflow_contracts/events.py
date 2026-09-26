@@ -20,6 +20,7 @@ from careflow_contracts.generated.events.intake_completed_schema import IntakeCo
 from careflow_contracts.generated.events.nurse_flag_schema import NurseFlagData
 from careflow_contracts.generated.events.patient_feels_worse_schema import PatientFeelsWorseData
 from careflow_contracts.generated.events.token_called_schema import TokenCalledData
+from careflow_contracts.generated.events.token_no_show_schema import TokenNoShowData
 from careflow_contracts.generated.events.triage_confirmed_schema import TriageConfirmedData
 from careflow_contracts.generated.events.triage_suggested_schema import TriageSuggestedData
 
@@ -28,6 +29,7 @@ DATA_MODEL_FOR_EVENT: Final[dict[EventType, type[BaseModel]]] = {
     EventType.triage_suggested: TriageSuggestedData,
     EventType.triage_confirmed: TriageConfirmedData,
     EventType.token_called: TokenCalledData,
+    EventType.token_no_show: TokenNoShowData,
     EventType.intake_completed: IntakeCompletedData,
     EventType.patient_feels_worse: PatientFeelsWorseData,
     EventType.nurse_flag: NurseFlagData,
@@ -49,6 +51,7 @@ __all__ = [
     "NurseFlagData",
     "PatientFeelsWorseData",
     "TokenCalledData",
+    "TokenNoShowData",
     "TriageConfirmedData",
     "TriageSuggestedData",
 ]
