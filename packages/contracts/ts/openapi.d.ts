@@ -1590,6 +1590,8 @@ export interface components {
             kind: "FhirSource";
             resource_type: string;
             id: components["schemas"]["Identifier"];
+            /** @description The resource's meta.versionId when the fact was read, if the EHR gives one. */
+            version_id?: components["schemas"]["Identifier"];
         };
         /** @description A reading from a (simulated) vitals device. */
         DeviceSource: {
@@ -1850,9 +1852,18 @@ export interface components {
             /** @description On supplemental oxygen (NEWS2 'air or oxygen'). */
             on_supplemental_o2?: components["schemas"]["TriStateFact"];
         };
+        /** @description An allergy from the EHR: a coded fact, plus its criticality when the EHR records one. */
+        AllergyFact: components["schemas"]["FactBase"] & {
+            value: components["schemas"]["Coding"];
+            /**
+             * @description AllergyIntolerance.criticality.
+             * @enum {string}
+             */
+            criticality?: "low" | "high" | "unable-to-assess";
+        };
         /** @description Context read from the hospital EHR. */
         EhrContext: {
-            allergies?: components["schemas"]["CodeFact"][];
+            allergies?: components["schemas"]["AllergyFact"][];
             conditions?: components["schemas"]["CodeFact"][];
             medications?: components["schemas"]["CodeFact"][];
         };

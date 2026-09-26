@@ -24,6 +24,7 @@ import careflow_intake.facts
 import careflow_intake.ports
 from careflow_contracts.generated import (
     alert_schema,
+    ehr_fetch_schema,
     fact_schema,
     nurse_decision_schema,
     structured_facts_schema,
@@ -31,6 +32,7 @@ from careflow_contracts.generated import (
 )
 
 STATE_MODULES: tuple[ModuleType, ...] = (
+    ehr_fetch_schema,
     fact_schema,
     structured_facts_schema,
     alert_schema,

@@ -9,6 +9,7 @@ from typing import Any
 from langgraph.types import interrupt
 from pydantic import ValidationError
 
+from careflow_contracts.generated.ehr_fetch_schema import EhrStatus
 from careflow_contracts.generated.events.envelope_schema import EventType
 from careflow_contracts.generated.events.triage_confirmed_schema import TriageConfirmedData
 from careflow_contracts.generated.events.triage_suggested_schema import TriageSuggestedData
@@ -90,6 +91,11 @@ def review_payload(state: IntakeState, scale: TriageScale) -> dict[str, Any]:
             if need.audience is NeededFactAudience.nurse
         ],
         "flags": dict(state.get("flags", {})),
+        # EhrStatus(...): a StrEnum channel comes back from the Postgres checkpoint as a plain str
+        "ehr_status": EhrStatus(ehr).value
+        if (ehr := state.get("ehr_status")) is not None
+        else None,
+        "ehr_errors": list(state.get("ehr_errors", [])),
     }
 
 

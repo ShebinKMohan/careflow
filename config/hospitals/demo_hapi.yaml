@@ -1,0 +1,22 @@
+# The demo hospital: HAPI FHIR R4 from infra/docker-compose.yml (M0-05). Synthetic data only; never
+# point CareFlow at a real EHR. One file per hospital (M1-08).
+id: demo_hapi
+fhir_base_url: http://localhost:8080/fhir
+# Identifier systems a check-in can carry. The kiosk keypad id is on the 7 seeded personas;
+# Synthea's medical record number (verified on the loaded data: type MR) is on the other patients.
+identifier_systems:
+  keypad: https://careflow.example/fhir/sid/keypad-id
+  mr: http://hospital.smarthealthit.org
+# Where a coded concept's display text comes from, in order of preference.
+display_paths: [text, "coding[0].display"]
+# Condition.category codes to include (a Condition without a category is included too).
+condition_categories: [problem-list-item, encounter-diagnosis]
+# Medication resource types to search, in order (Synthea writes MedicationRequest; the personas
+# have MedicationStatement).
+medication_types: [MedicationStatement, MedicationRequest]
+# Appointment statuses that count as upcoming.
+appointment_statuses: [booked, arrived]
+timeouts:
+  connect_s: 2.0
+  read_s: 5.0
+  total_s: 8.0

@@ -19,6 +19,7 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 | `ehr_context.allergies` | read | AllergyIntolerance | `AllergyIntolerance.code` | tho:allergyintolerance-clinical | active | Active |  | yes |
 | `ehr_context.conditions` | read | Condition | `Condition.code` | tho:condition-clinical | active | Active |  | yes |
 | `ehr_context.medications` | read | MedicationStatement | `MedicationStatement.medicationCodeableConcept` |  | active |  |  | yes |
+| `ehr_context.medications` | read | MedicationRequest | `MedicationRequest.medicationCodeableConcept` |  | active |  |  | yes |
 | `session.appointment` | read | Appointment | `Appointment.status` |  | booked |  |  | yes |
 | `vitals.heart_rate` | write | Observation | `Observation.valueQuantity` | LOINC | 8867-4 | Heart rate | /min | yes |
 | `vitals.respiratory_rate` | write | Observation | `Observation.valueQuantity` | LOINC | 9279-1 | Respiratory rate | /min | yes |
@@ -97,8 +98,8 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 ## Reads (EHR to facts, provenance `EHR`)
 
 - **Patient**: matched by `identifier` with system `https://careflow.example/fhir/sid/keypad-id` (the keypad digits); `birthDate` gives `patient.age_years` and `patient.age_months`; `gender` gives `patient.sex`.
-- **AllergyIntolerance** and **Condition** where `clinicalStatus` is `active`; **MedicationStatement** where `status` is `active`. Each code becomes a `CodeFact` with provenance `EHR` and a `fhir` source.
-- **Appointment**: today's appointments with status `booked` (check-in context for the routine and no-show personas).
+- **AllergyIntolerance** and **Condition** where `clinicalStatus` is `active`; **MedicationStatement** and **MedicationRequest** where `status` is `active` (Synthea writes MedicationRequest). Each code becomes a `CodeFact` (an `AllergyFact`, with criticality, for allergies) with provenance `EHR` and a `fhir` source that carries the resource version.
+- **Appointment**: the patient's appointments from today on with status `booked` or `arrived` (check-in context for the routine and no-show personas).
 
 ## Writes
 

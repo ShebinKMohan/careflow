@@ -18,6 +18,7 @@ from referencing import Resource
 from referencing.jsonschema import DRAFT202012, Schema, SchemaRegistry
 
 from careflow_contracts.generated.alert_schema import Alert
+from careflow_contracts.generated.ehr_fetch_schema import EhrFetch
 from careflow_contracts.generated.extraction_output_schema import ExtractionOutput
 from careflow_contracts.generated.nurse_decision_schema import NurseDecision
 from careflow_contracts.generated.structured_facts_schema import StructuredFacts
@@ -35,6 +36,7 @@ MODEL_FOR_SCHEMA: Final[dict[str, type[BaseModel]]] = {
     "alert": Alert,
     "nurse-decision": NurseDecision,
     "extraction-output": ExtractionOutput,
+    "ehr-fetch": EhrFetch,
 }
 
 type Json = dict[str, Json] | list[Json] | str | int | float | bool | None

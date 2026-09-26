@@ -1,0 +1,33 @@
+[
+ {
+  "birthDate": "2024-07-20",
+  "gender": "male",
+  "id": "persona-child-drowsy",
+  "identifier": [
+   {
+    "system": "https://careflow.example/fhir/sid/keypad-id",
+    "value": "100003"
+   }
+  ],
+  "meta": {
+   "lastUpdated": "2026-09-26T16:15:19.874+00:00",
+   "tag": [
+    {
+     "code": "synthetic-persona",
+     "system": "https://careflow.example/fhir/CodeSystem/data-origin"
+    }
+   ],
+   "versionId": "1"
+  },
+  "name": [
+   {
+    "family": "Haddad",
+    "given": [
+     "Omar"
+    ],
+    "use": "official"
+   }
+  ],
+  "resourceType": "Patient"
+ }
+]

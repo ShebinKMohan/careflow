@@ -6,7 +6,13 @@ from typing import Any
 
 import pytest
 
-from careflow_contracts.generated.structured_facts_schema import StructuredFacts
+from careflow_contracts.generated.ehr_fetch_schema import EhrFetch, EhrStatus
+from careflow_contracts.generated.structured_facts_schema import (
+    EhrContext,
+    FactKey,
+    Patient,
+    StructuredFacts,
+)
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
 from careflow_intake.checkpoint import memory_checkpointer
 from careflow_intake.graph import answer, build_graph, decide, pending, start_intake
@@ -18,6 +24,8 @@ from careflow_intake.stubs import (
     StubEhrReader,
     StubIdentifier,
     StubUrgencyModel,
+    keypad,
+    stable_fact_id,
 )
 
 
@@ -35,13 +43,64 @@ async def run(make_ports: Any, script: dict[str, Any], **overrides: Any) -> dict
     return result
 
 
-async def test_an_unavailable_ehr_is_flagged_and_the_intake_goes_on(
-    make_ports: Any, script: dict[str, Any]
+@pytest.mark.parametrize(
+    ("ehr", "identifier", "status"),
+    [
+        (StubEhrReader(status=EhrStatus.unavailable), keypad(), "unavailable"),
+        (StubEhrReader(status=EhrStatus.not_found), keypad(), "not_found"),
+        (StubEhrReader(status=EhrStatus.ambiguous), keypad(), "ambiguous"),
+        (StubEhrReader(raises=True), keypad(), "unavailable"),
+        (StubEhrReader(), None, "not_found"),  # an anonymous check-in has no EHR record to read
+    ],
+    ids=["unavailable", "not_found", "ambiguous", "reader_crashes", "anonymous"],
+)
+async def test_without_an_ehr_record_the_intake_goes_on_and_the_nurse_sees_why(
+    make_ports: Any, script: dict[str, Any], ehr: StubEhrReader, identifier: Any, status: str
 ) -> None:
-    result = await run(make_ports, script, ehr=StubEhrReader(down=True))
+    result = await run(
+        make_ports, script, ehr=ehr, identifier=StubIdentifier(identifier=identifier)
+    )
     assert result["flags"]["ehr_unavailable"] is True and result["ehr_context"] is None
-    unidentified = await run(make_ports, script, identifier=StubIdentifier(patient_ref=None))
-    assert unidentified["flags"]["ehr_unavailable"] is True
+    review = pending(result) or {}
+    assert review["ehr_status"] == status and review["ehr_errors"]  # never a silent empty record
+
+
+async def test_a_partial_record_is_used_and_marked(make_ports: Any, script: dict[str, Any]) -> None:
+    context = EhrContext.model_validate({"conditions": [condition()]})
+    result = await run(
+        make_ports, script, ehr=StubEhrReader(status=EhrStatus.partial, context=context)
+    )
+    assert "ehr_unavailable" not in result.get("flags", {})
+    assert result["ehr_context"] == context and result["patient_ref"] == "Patient/synthetic-0001"
+    assert (pending(result) or {})["ehr_status"] == "partial"
+
+
+def condition() -> dict[str, Any]:
+    return {
+        "fact_id": stable_fact_id("Condition", "c1"),
+        "provenance": "EHR",
+        "source": {"kind": "fhir", "resource_type": "Condition", "id": "c1", "version_id": "1"},
+        "recorded_at": "2026-09-27T09:00:00Z",
+        "value": {
+            "system": "http://snomed.info/sct",
+            "code": "38341003",
+            "display": "Hypertension",
+        },
+    }
+
+
+class DemographicsReader(StubEhrReader):
+    async def fetch_context(self, identifier: Any, clinic_id: str) -> EhrFetch:
+        fetch = await super().fetch_context(identifier, clinic_id)
+        age = {**condition(), "fact_id": stable_fact_id("Patient", "p1"), "value": 58}
+        age["source"] = {"kind": "fhir", "resource_type": "Patient", "id": "p1"}
+        return fetch.model_copy(update={"patient": Patient.model_validate({"age_years": age})})
+
+
+async def test_ehr_demographics_become_facts(make_ports: Any, script: dict[str, Any]) -> None:
+    result = await run(make_ports, script, ehr=DemographicsReader())
+    [age] = [e for e in result["facts"] if e.key is FactKey.patient_age_years]
+    assert age.provenance.value == "EHR" and age.base.model_dump()["value"] == 58
 
 
 @pytest.mark.parametrize(

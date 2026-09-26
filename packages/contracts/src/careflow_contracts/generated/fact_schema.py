@@ -60,6 +60,12 @@ class FhirSource(BaseModel):
     kind: Literal["fhir"]
     resource_type: Annotated[str, Field(pattern="^[A-Z][A-Za-z]{1,63}$")]
     id: Identifier
+    version_id: Annotated[
+        Identifier | None,
+        Field(
+            description="The resource's meta.versionId when the fact was read, if the EHR gives one."
+        ),
+    ] = None
 
 
 class DeviceSource(BaseModel):

@@ -58,4 +58,5 @@ asyncio_default_fixture_loop_scope = "function"
 markers = [
   "requires_ktas: needs the real KTAS CSV in services/triage/data/raw (skipped when absent)",
   "live: needs a local model on mlx_lm.server (CAREFLOW_LIVE_LLM=1, run through scripts/with_llm.sh)",
+  "hapi: needs HAPI FHIR seeded by `make up` (skipped when it does not answer)",
 ]

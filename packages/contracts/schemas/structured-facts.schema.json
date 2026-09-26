@@ -545,6 +545,35 @@
       },
       "additionalProperties": false
     },
+    "AllergyFact": {
+      "description": "An allergy from the EHR: a coded fact, plus its criticality when the EHR records one.",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/FactBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "fact.schema.json#/$defs/Coding"
+            },
+            "criticality": {
+              "type": "string",
+              "enum": [
+                "low",
+                "high",
+                "unable-to-assess"
+              ],
+              "description": "AllergyIntolerance.criticality."
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
     "EhrContext": {
       "type": "object",
       "description": "Context read from the hospital EHR.",
@@ -552,7 +581,7 @@
         "allergies": {
           "type": "array",
           "items": {
-            "$ref": "fact.schema.json#/$defs/CodeFact"
+            "$ref": "#/$defs/AllergyFact"
           },
           "maxItems": 100
         },

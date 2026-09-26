@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "EhrFetch: see $defs/EhrFetch. The result of reading a patient's context from the hospital EHR over FHIR R4 (M1-08). Every fact in it has provenance EHR and a FHIR source. Research prototype; synthetic data only.",
+  "$ref": "#/$defs/EhrFetch",
+  "$defs": {
+    "PatientIdentifier": {
+      "type": "object",
+      "description": "A patient identifier as FHIR system and value, e.g. the kiosk keypad id or the hospital MR number.",
+      "properties": {
+        "system": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "system",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "EhrStatus": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "partial",
+        "unavailable",
+        "not_found",
+        "ambiguous"
+      ],
+      "description": "ok: every search answered. partial: some searches failed (see errors). unavailable: the EHR could not be read in time. not_found / ambiguous: no patient, or several, match the identifier. Anything but ok is shown to the nurse; an empty record is never shown silently."
+    },
+    "EhrAppointment": {
+      "type": "object",
+      "description": "An upcoming appointment from the EHR.",
+      "properties": {
+        "appointment_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "source": {
+          "$ref": "fact.schema.json#/$defs/FhirSource"
+        }
+      },
+      "required": [
+        "appointment_id",
+        "status",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "EhrFetch": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/EhrStatus"
+        },
+        "patient_ref": {
+          "type": "string",
+          "pattern": "^Patient/[A-Za-z0-9.-]{1,64}$",
+          "description": "The matched FHIR Patient, when there is exactly one."
+        },
+        "patient": {
+          "$ref": "structured-facts.schema.json#/$defs/Patient"
+        },
+        "context": {
+          "$ref": "structured-facts.schema.json#/$defs/EhrContext"
+        },
+        "appointments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EhrAppointment"
+          },
+          "maxItems": 50,
+          "default": []
+        },
+        "fetched_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "maxItems": 20,
+          "default": [],
+          "description": "What failed, without patient data (e.g. \"Condition: HTTP 503\")."
+        }
+      },
+      "required": [
+        "status",
+        "fetched_at"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

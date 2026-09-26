@@ -1,0 +1,24 @@
+[
+ {
+  "id": "persona-stroke-medication-1",
+  "medicationCodeableConcept": {
+   "coding": [
+    {
+     "code": "11289",
+     "display": "warfarin",
+     "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+    }
+   ],
+   "text": "warfarin"
+  },
+  "meta": {
+   "lastUpdated": "2026-09-26T16:15:20.002+00:00",
+   "versionId": "1"
+  },
+  "resourceType": "MedicationStatement",
+  "status": "active",
+  "subject": {
+   "reference": "Patient/persona-stroke"
+  }
+ }
+]

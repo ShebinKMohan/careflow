@@ -13,9 +13,9 @@ from typing import TYPE_CHECKING, Annotated, Literal, Protocol
 from pydantic import BaseModel, ConfigDict, Field
 
 from careflow_contracts.generated.alert_schema import Alert
+from careflow_contracts.generated.ehr_fetch_schema import EhrFetch, PatientIdentifier
 from careflow_contracts.generated.events.envelope_schema import EventType
 from careflow_contracts.generated.structured_facts_schema import (
-    EhrContext,
     FactKey,
     NeededFact,
     StructuredFacts,
@@ -76,24 +76,21 @@ class Assignment(BaseModel):
     room: Annotated[str, Field(min_length=1, max_length=64)]
 
 
-class EhrUnavailable(Exception):
-    """The EHR could not be read; the intake continues with `ehr_unavailable`."""
-
-
 class NoSuggestion(Exception):
     """The urgency model cannot suggest a level (e.g. a patient outside its training data);
     the nurse sets the level without a suggestion."""
 
 
 class Identifier(Protocol):
-    async def identify(self, state: IntakeState) -> str | None:
-        """The patient reference (FHIR `Patient/...`), or None when unknown."""
+    async def identify(self, state: IntakeState) -> PatientIdentifier | None:
+        """How the patient checked in (keypad id, ID card, QR), or None when anonymous."""
         ...
 
 
 class EhrReader(Protocol):
-    async def fetch_context(self, patient_ref: str) -> EhrContext | None:
-        """Allergies, conditions and medications; raises `EhrUnavailable`."""
+    async def fetch_context(self, identifier: PatientIdentifier, clinic_id: str) -> EhrFetch:
+        """The patient's EHR context (M1-08). An EHR problem is reported in `status`
+        (partial, unavailable, not_found, ambiguous), not raised."""
         ...
 
 
@@ -184,7 +181,6 @@ __all__ = [
     "BriefingBuilder",
     "Conversation",
     "EhrReader",
-    "EhrUnavailable",
     "EventSink",
     "ExtractionResult",
     "Extractor",

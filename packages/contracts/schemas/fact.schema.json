@@ -71,6 +71,10 @@
         },
         "id": {
           "$ref": "#/$defs/Identifier"
+        },
+        "version_id": {
+          "$ref": "#/$defs/Identifier",
+          "description": "The resource's meta.versionId when the fact was read, if the EHR gives one."
         }
       },
       "required": [
