@@ -17,4 +17,5 @@ tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 git archive "$base_ref" packages/contracts | tar -x -C "$tmp"
 echo "contracts_breaking: comparing $spec with $base_ref"
-oasdiff breaking "$tmp/$spec" "$spec" --fail-on ERR
+ignore=packages/contracts/oasdiff-err-ignore.txt  # reviewed, intentional changes only
+oasdiff breaking "$tmp/$spec" "$spec" --fail-on ERR --err-ignore "$ignore"

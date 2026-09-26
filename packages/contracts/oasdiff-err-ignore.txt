@@ -1,0 +1,10 @@
+# Intentional contract changes that oasdiff reports as breaking. `make contracts-breaking` ignores
+# exactly these lines (operation + change text); everything else still fails the check. Each entry
+# names its issue and ADR, and is inert once the change is on main.
+#
+# M1-02 (ADR-017): NICE NG143 amber fact child_amber.not_responding_normally joins FactKey, which
+# grows with the facts; CareFlow's clients regenerate with the contract.
+POST /v1/nurse/sessions/{session_id}/vitals added the new `child_amber.not_responding_normally` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `child_amber.not_responding_normally` enum value to the `needed_facts/items/key` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `child_amber.not_responding_normally` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `child_amber.not_responding_normally` enum value to the `needed_facts/items/key` response property for the response status `200`
