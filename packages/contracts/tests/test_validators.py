@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 import pytest
+
 from careflow_contracts import (
     Alert,
     FactKey,

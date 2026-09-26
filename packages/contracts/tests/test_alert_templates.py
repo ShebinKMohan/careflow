@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 import yaml
+
 from careflow_contracts import Alert, RuleId, render_display_text, required_action_for
 from careflow_contracts.alert_text import DISPLAY_TEXT_MAX
 from careflow_contracts.generated.alert_templates import (

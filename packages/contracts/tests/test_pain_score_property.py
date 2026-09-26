@@ -5,11 +5,12 @@ from __future__ import annotations
 import copy
 from typing import Any
 
-from careflow_contracts import StructuredFacts
-from careflow_contracts.testing import load_fixture, schema_errors
 from hypothesis import example, given, settings
 from hypothesis import strategies as st
 from pydantic import ValidationError
+
+from careflow_contracts import StructuredFacts
+from careflow_contracts.testing import load_fixture, schema_errors
 
 ROUTINE: dict[str, Any] = load_fixture("valid/routine.structured-facts.json")  # type: ignore[assignment]
 
