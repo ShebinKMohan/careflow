@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from http import HTTPStatus
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException
 
 PROBLEM_JSON = "application/problem+json"
 
@@ -21,6 +22,8 @@ def problem(status: int, detail: str | None = None, **extra: object) -> JSONResp
 
 
 def install(app: FastAPI) -> None:
+    # Starlette's HTTPException (FastAPI's is a subclass) also covers routing errors: an unknown
+    # route (404) or method (405) is a problem document too.
     @app.exception_handler(HTTPException)
     async def http_problem(_: Request, exc: HTTPException) -> JSONResponse:
         response = problem(exc.status_code, str(exc.detail) if exc.detail else None)

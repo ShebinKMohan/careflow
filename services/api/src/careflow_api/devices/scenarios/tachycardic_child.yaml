@@ -1,0 +1,9 @@
+# Simulated vitals scenario (M1-03). Synthetic; no patient data. No blood-pressure cuff for a child.
+id: tachycardic_child
+description: Feverish toddler with a fast pulse.
+age_band: child
+duration_s: 30
+bp_cuff: false
+series:
+  - {t_s: 0, hr: 165, spo2: 96, temp_c: 38.9}
+  - {t_s: 30, hr: 165, spo2: 96, temp_c: 38.9}

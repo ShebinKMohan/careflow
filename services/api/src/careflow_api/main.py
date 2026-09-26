@@ -10,7 +10,7 @@ from opentelemetry.sdk.trace import TracerProvider
 
 from careflow_api import problems, telemetry
 from careflow_api.config import get_settings
-from careflow_api.routers import admin, auth, health, nurse
+from careflow_api.routers import admin, auth, dev, health, nurse
 
 
 def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
@@ -26,5 +26,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     problems.install(app)
     for module in (health, auth, nurse, admin):
         app.include_router(module.router)
+    if settings.env == "dev":  # test hooks exist only in development (otherwise: 404)
+        app.include_router(dev.router)
     telemetry.instrument(app, tracer_provider or telemetry.build_tracer_provider())
     return app

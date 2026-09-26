@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     )
     fhir_base_url: str = "http://localhost:8080/fhir"
     runtime: str = Field(default="live", validation_alias=AliasChoices("CAREFLOW_RUNTIME"))
+    #: "dev" enables the /v1/dev test hooks; any other value (the default) leaves them out.
+    env: str = Field(default="prod", validation_alias=AliasChoices("CAREFLOW_ENV"))
+    #: Simulated vitals device pace (1 = real time, 0 = no waiting; tests).
+    vitals_sim_speed: float = Field(
+        default=1.0, ge=0, validation_alias=AliasChoices("VITALS_SIM_SPEED")
+    )
     api_version: str = "0.1.0"
 
 
