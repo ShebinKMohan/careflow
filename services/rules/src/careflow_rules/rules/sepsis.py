@@ -9,11 +9,10 @@ for the nurse to collect.
 
 from __future__ import annotations
 
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 from typing import Final
 
 from careflow_contracts import (
-    Alert,
     AlertSeverity,
     NeededFact,
     NeededFactAudience,
@@ -21,10 +20,9 @@ from careflow_contracts import (
     RuleId,
     StructuredFacts,
     TriState,
-    render_display_text,
-    required_action_for,
 )
-from careflow_rules.engine import RuleContext, RuleOutcome, alert_id
+from careflow_rules.engine import RuleContext, RuleOutcome, raise_alert
+from careflow_rules.facts import MEASURED, one_decimal
 from careflow_rules.news2 import PARAMETERS, fact_ids
 
 RULE_ID: Final = RuleId.SEPSIS_NEWS2
@@ -32,7 +30,6 @@ NEWS2_THRESHOLD: Final = 5
 INFECTION_SYMPTOMS: Final = frozenset({"productive_cough", "dysuria", "wound_redness_or_discharge"})
 FEVER_AT_OR_ABOVE: Final = Decimal("38.1")
 HYPOTHERMIA_AT_OR_BELOW: Final = Decimal("36.0")
-MEASURED: Final = frozenset({Provenance.DEVICE_MEASURED, Provenance.NURSE_CONFIRMED})
 NEEDED_REASON: Final = "news2_incomplete"
 
 
@@ -49,7 +46,7 @@ def infection_evidence(facts: StructuredFacts) -> list[str]:
                 evidence.append(fact.fact_id)
     temperature = facts.vitals.temperature_c if facts.vitals else None
     if temperature is not None and temperature.provenance in MEASURED:
-        celsius = Decimal(repr(temperature.value)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+        celsius = one_decimal(temperature.value)
         if celsius >= FEVER_AT_OR_ABOVE or celsius <= HYPOTHERMIA_AT_OR_BELOW:
             evidence.append(temperature.fact_id)
     for symptom in facts.symptoms or []:
@@ -79,20 +76,14 @@ class SepsisNews2Rule:
             return RuleOutcome(needed_facts=needed)
         vitals = fact_ids(facts.vitals)
         contributing = [vitals[p] for p in PARAMETERS if news2.subscores.get(p, 0) > 0]
-        evidence = list(dict.fromkeys([*infection, *contributing]))
-        alert = Alert(
-            alert_id=alert_id(facts.session_id, RULE_ID),
-            session_id=facts.session_id,
-            rule_id=RULE_ID,
-            ruleset_version=ctx.ruleset_version,
-            severity=AlertSeverity.critical,
-            evidence_fact_ids=evidence,
-            required_action=required_action_for(RULE_ID),
-            display_text=render_display_text(
-                RULE_ID, facts.language.value, ["partial_news2"] if news2.partial else []
-            ),
+        alert = raise_alert(
+            facts,
+            ctx,
+            RULE_ID,
+            AlertSeverity.critical,
+            [*infection, *contributing],
             partial=news2.partial,
-            missing_inputs=list(news2.missing),
-            raised_at=ctx.now,
+            missing_inputs=news2.missing,
+            qualifiers=["partial_news2"] if news2.partial else [],
         )
         return RuleOutcome(alerts=(alert,), needed_facts=needed)

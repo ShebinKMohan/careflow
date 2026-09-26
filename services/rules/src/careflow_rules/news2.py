@@ -10,7 +10,7 @@ Pure functions: no I/O, no clock, no randomness.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 from typing import Final, Literal
 
 from pydantic import BaseModel, ConfigDict
@@ -24,6 +24,7 @@ from careflow_contracts import (
     TriState,
     Vitals,
 )
+from careflow_rules.facts import one_decimal, whole_number
 
 type Parameter = Literal[
     "respiratory_rate",
@@ -76,17 +77,8 @@ class News2Result(BaseModel):
     risk_band: RiskBand
 
 
-def _whole(value: float) -> int:
-    """Half-up rounding to a whole number (repr keeps the decimal the reading was written with)."""
-    return int(Decimal(repr(value)).quantize(Decimal(1), rounding=ROUND_HALF_UP))
-
-
-def _one_decimal(value: float) -> Decimal:
-    return Decimal(repr(value)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
-
-
 def score_respiratory_rate(per_min: float) -> int:
-    rate = _whole(per_min)
+    rate = whole_number(per_min)
     if rate <= 8:
         return 3
     if rate <= 11:
@@ -99,7 +91,7 @@ def score_respiratory_rate(per_min: float) -> int:
 
 
 def score_spo2_scale1(percent: float) -> int:
-    spo2 = _whole(percent)
+    spo2 = whole_number(percent)
     if spo2 <= 91:
         return 3
     if spo2 <= 93:
@@ -114,7 +106,7 @@ def score_supplemental_o2(on_oxygen: bool) -> int:
 
 
 def score_systolic_bp(mm_hg: float) -> int:
-    pressure = _whole(mm_hg)
+    pressure = whole_number(mm_hg)
     if pressure <= 90:
         return 3
     if pressure <= 100:
@@ -127,7 +119,7 @@ def score_systolic_bp(mm_hg: float) -> int:
 
 
 def score_pulse(per_min: float) -> int:
-    pulse = _whole(per_min)
+    pulse = whole_number(per_min)
     if pulse <= 40:
         return 3
     if pulse <= 50:
@@ -146,7 +138,7 @@ def score_consciousness(level: AcvpuCode) -> int:
 
 
 def score_temperature(celsius: float) -> int:
-    temperature = _one_decimal(celsius)
+    temperature = one_decimal(celsius)
     if temperature <= Decimal("35.0"):
         return 3
     if temperature <= Decimal("36.0"):
