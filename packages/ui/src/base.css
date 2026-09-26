@@ -1,0 +1,15 @@
+/*
+ * CareFlow base styles: page colours and a visible focus ring (drawn outside the control, so it
+ * contrasts with the page, not the button). Import after tokens.css.
+ */
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+
+:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 3px;
+}

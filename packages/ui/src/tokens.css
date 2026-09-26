@@ -1,0 +1,51 @@
+/*
+ * CareFlow design tokens (Tailwind v4 theme variables, shared by every app).
+ * Apps import this after Tailwind: `@import "tailwindcss"; @import "@careflow/ui/tokens.css";`.
+ * High contrast: every text/background pair is at least 7:1 and every focus/border colour at
+ * least 3:1 (WCAG 2.2 AA or better); packages/ui/tests/contrast.test.ts checks the pairs.
+ * Research prototype. Synthetic data only. Not for clinical use.
+ */
+@theme {
+  /* Colour */
+  --color-canvas: #f3f5f7;
+  --color-surface: #ffffff;
+  --color-ink: #0b1b2b;
+  --color-ink-muted: #3b4754;
+  --color-border: #5b6875;
+  --color-primary: #0a4f94;
+  --color-on-primary: #ffffff;
+  --color-secondary: #dde5ee;
+  --color-on-secondary: #0b1b2b;
+  --color-danger: #a11d1d;
+  --color-on-danger: #ffffff;
+  --color-success: #1d6b36;
+  --color-on-success: #ffffff;
+  --color-focus: #b45309;
+  --color-footer: #1f2933;
+  --color-on-footer: #ffffff;
+
+  /* Spacing: touch targets are at least 64 x 64 px (min-h-touch, min-w-touch) */
+  --spacing-touch: 4rem;
+  --spacing-gutter: 1.5rem;
+
+  /* Radius */
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+
+  /* Type scale: readability first (kiosk users may be stressed or elderly) */
+  --text-label: 1.125rem;
+  --text-label--line-height: 1.5;
+  --text-body: 1.25rem;
+  --text-body--line-height: 1.6;
+  --text-title: 2rem;
+  --text-title--line-height: 1.25;
+  --text-display: 3rem;
+  --text-display--line-height: 1.1;
+
+  /* Fonts: next/font sets --font-latin and --font-arabic on <html> */
+  --font-sans: var(--font-latin), var(--font-arabic), system-ui, sans-serif;
+}
+
+:root:lang(ar) {
+  --font-sans: var(--font-arabic), var(--font-latin), system-ui, sans-serif;
+}
