@@ -1,0 +1,250 @@
+[
+ {
+  "heart_rate": 104.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:00Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:01Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:02Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:03Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:04Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:05Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 89.0,
+  "temperature_c": 37.0,
+  "measured_at": "2026-09-26T09:03:06Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:07Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:08Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:09Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:10Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:11Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:12Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:13Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 90.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:14Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:15Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 89.0,
+  "temperature_c": 37.0,
+  "measured_at": "2026-09-26T09:03:16Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:17Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:18Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:19Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 106.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:20Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:21Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 88.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:22Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 88.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:23Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 88.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:24Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:25Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 88.0,
+  "temperature_c": 37.2,
+  "measured_at": "2026-09-26T09:03:26Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 89.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:27Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 103.0,
+  "spo2": 88.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:28Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 104.0,
+  "spo2": 88.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:29Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ },
+ {
+  "heart_rate": 105.0,
+  "spo2": 88.0,
+  "temperature_c": 37.1,
+  "measured_at": "2026-09-26T09:03:30Z",
+  "device_id": "sim_vitals_01",
+  "simulated": true
+ }
+]

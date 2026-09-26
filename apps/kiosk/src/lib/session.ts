@@ -32,3 +32,8 @@ export function saveDevice(device: DeviceSession): void {
 export function savePatientSession(session: { sessionId: string; token: string }): void {
   window.sessionStorage.setItem(PATIENT_KEY, JSON.stringify(session));
 }
+
+/** The checked-in patient's session, if any. */
+export function readPatientSession(): { sessionId: string; token: string } | null {
+  return read<{ sessionId: string; token: string }>(PATIENT_KEY);
+}

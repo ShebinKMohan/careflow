@@ -39,5 +39,24 @@
   "intake": {
     "title": "Your visit",
     "placeholder": "The intake questions arrive in a later version. Please take a seat; a nurse will see you."
+  },
+  "vitals": {
+    "title": "Your vital signs",
+    "measure": "Measure vitals",
+    "measuring": "Measuring…",
+    "waiting": "Waiting for the first reading…",
+    "simulated": "Simulated device",
+    "heartRate": "Pulse",
+    "spo2": "Oxygen (SpO2)",
+    "temperature": "Temperature",
+    "bloodPressure": "Blood pressure",
+    "perMinute": "/min",
+    "percent": "%",
+    "celsius": "°C",
+    "mmHg": "mmHg",
+    "skinTone": "Pulse oximeter: warns about known skin-tone limits",
+    "noSession": "Check in first to measure your vital signs.",
+    "checkinLink": "Check in",
+    "failed": "The vitals device could not start. Please ask a nurse."
   }
 }

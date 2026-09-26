@@ -15,7 +15,7 @@ async function signInKiosk(page: Page) {
 }
 
 test("the footer is visible on every page", async ({ page }) => {
-  for (const path of ["/", "/setup", "/checkin", "/intake"]) {
+  for (const path of ["/", "/setup", "/checkin", "/intake", "/vitals"]) {
     await page.goto(path);
     await expect(page.getByRole("contentinfo"), path).toHaveText(FOOTER_EN);
     await expect(page.getByRole("contentinfo"), path).toBeVisible();
