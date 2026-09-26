@@ -29,6 +29,10 @@ class Settings(BaseSettings):
         default=1.0, ge=0, validation_alias=AliasChoices("VITALS_SIM_SPEED")
     )
     api_version: str = "0.1.0"
+    #: Run the queue's grace-window expiry in the API process (M1-10).
+    queue_grace_task: bool = Field(
+        default=True, validation_alias=AliasChoices("CAREFLOW_QUEUE_GRACE_TASK")
+    )
 
 
 @lru_cache

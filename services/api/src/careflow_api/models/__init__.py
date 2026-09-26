@@ -5,7 +5,18 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint, func, text
+from sqlalchemy import (
+    Boolean,
+    Date,
+    DateTime,
+    ForeignKey,
+    Integer,
+    SmallInteger,
+    String,
+    UniqueConstraint,
+    func,
+    text,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -108,6 +119,41 @@ class FhirWriteback(_ClinicScoped, Base):
     )
 
 
+class QueueTokenRow(_ClinicScoped, Base):
+    """One queue token (M1-10). Status: waiting | called | arrived | no_show | closed."""
+
+    __tablename__ = "queue_tokens"
+    department: Mapped[str] = mapped_column(String(32))
+    token_code: Mapped[str] = mapped_column(String(5))
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id")
+    )
+    level: Mapped[int] = mapped_column(SmallInteger)
+    #: When the patient arrived at the clinic (the session start); the first queue position.
+    arrived_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+    issued_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+    enqueued_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+    status: Mapped[str] = mapped_column(String(16))
+    called_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+    room_id: Mapped[str | None] = mapped_column(String(32))
+    recall_count: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
+    updated_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class TokenCounter(Base):
+    """The last token number per clinic, department and day (M1-10)."""
+
+    __tablename__ = "token_counters"
+    clinic_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("clinic.id"), primary_key=True
+    )
+    department: Mapped[str] = mapped_column(String(32), primary_key=True)
+    day: Mapped[dt.date] = mapped_column(Date, primary_key=True)
+    last_number: Mapped[int] = mapped_column(Integer)
+
+
 __all__ = [
     "Base",
     "Clinic",
@@ -116,5 +162,7 @@ __all__ = [
     "FhirWriteback",
     "FhirWritebackStatus",
     "PatientSession",
+    "QueueTokenRow",
     "StaffUser",
+    "TokenCounter",
 ]

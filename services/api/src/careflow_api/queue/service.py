@@ -1,0 +1,425 @@
+"""`QueueService`: the queue on Postgres (M1-10).
+
+Every change to a department's queue runs in the caller's transaction, which RLS scopes to the
+caller's clinic, under a transaction-level advisory lock for that clinic and department. It loads
+the department's active tokens into `QueueCore`, applies the rule and writes the changed tokens
+back. Events (`token.called`, `token.no_show`) go through `EventPublisher.add` in the same
+transaction, so they exist exactly when the change commits.
+
+Token codes are `<prefix>-<NNN>`, numbered per clinic, department and local day from a counter row
+locked with `SELECT ... FOR UPDATE`. After 999 the number wraps to 1, skipping any code an active
+token still holds.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import logging
+import uuid
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
+from typing import Final
+from zoneinfo import ZoneInfo
+
+from sqlalchemy import select, text, update
+from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from careflow_api.db import get_sessionmaker
+from careflow_api.events.publisher import Event, EventPublisher
+from careflow_api.models import Clinic, PatientSession, QueueTokenRow, TokenCounter
+from careflow_api.queue.core import ACTIVE, QueueCore, Status, Token
+from careflow_api.queue.rooms import Department, RoomsConfig
+from careflow_api.queue.wait import estimate_wait
+from careflow_api.rls import clinic_session
+from careflow_contracts.api_models import BoardEntry, QueueToken
+from careflow_contracts.events import EventType, TokenCalledData, TokenNoShowData
+
+logger = logging.getLogger("careflow_api.queue")
+
+MAX_NUMBER: Final = 999
+GRACE_INTERVAL_SECONDS: Final = 10.0
+ACTIVE_VALUES: Final = tuple(s.value for s in ACTIVE)
+
+
+def utc_now() -> datetime:
+    return datetime.now(UTC)
+
+
+class UnknownToken(LookupError):
+    pass
+
+
+class UnknownSession(LookupError):
+    pass
+
+
+class QueueFull(RuntimeError):
+    """Every code of the department is held by an active token."""
+
+
+@dataclass(frozen=True)
+class TokenAssignment:
+    token_id: str
+    token_code: str
+    department: str
+    #: Where to wait: the department's name (the room comes with the call).
+    room_hint: str
+    #: An estimate only (`queue.wait.estimate_wait`).
+    wait_estimate_min: int
+
+
+def to_token(row: QueueTokenRow) -> Token:
+    return Token(
+        token_id=str(row.id),
+        session_id=str(row.session_id),
+        token_code=row.token_code,
+        level=row.level,
+        issued_at=row.issued_at,
+        enqueued_at=row.enqueued_at,
+        status=Status(row.status),
+        room_id=row.room_id,
+        called_at=row.called_at,
+        recall_count=row.recall_count,
+    )
+
+
+class QueueService:
+    def __init__(
+        self,
+        rooms: RoomsConfig,
+        events: EventPublisher,
+        *,
+        clock: Callable[[], datetime] = utc_now,
+    ) -> None:
+        self.rooms, self.events, self.clock = rooms, events, clock
+
+    # -- helpers ---------------------------------------------------------------------------
+
+    async def _lock(self, db: AsyncSession, clinic_id: uuid.UUID, department: str) -> None:
+        key = f"careflow.queue:{clinic_id}:{department}"
+        await db.execute(
+            text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"), {"key": key}
+        )
+
+    async def _core(self, db: AsyncSession, department: Department) -> QueueCore:
+        rows = (
+            await db.execute(
+                select(QueueTokenRow).where(
+                    QueueTokenRow.department == department.id,
+                    QueueTokenRow.status.in_(ACTIVE_VALUES),
+                )
+            )
+        ).scalars()
+        return QueueCore(
+            department,
+            grace_seconds=self.rooms.grace_seconds,
+            clock=self.clock,
+            tokens=[to_token(row) for row in rows],
+        )
+
+    async def _write(self, db: AsyncSession, tokens: Iterable[Token]) -> None:
+        for token in tokens:
+            await db.execute(
+                update(QueueTokenRow)
+                .where(QueueTokenRow.id == uuid.UUID(token.token_id))
+                .values(
+                    status=token.status.value,
+                    room_id=token.room_id,
+                    called_at=token.called_at,
+                    enqueued_at=token.enqueued_at,
+                    recall_count=token.recall_count,
+                    updated_at=self.clock(),
+                )
+            )
+
+    async def _next_code(
+        self, db: AsyncSession, clinic_id: uuid.UUID, department: Department
+    ) -> str:
+        zone = (
+            await db.execute(select(Clinic.timezone).where(Clinic.id == clinic_id))
+        ).scalar_one()
+        day = self.clock().astimezone(ZoneInfo(zone)).date()
+        key = {"clinic_id": clinic_id, "department": department.id, "day": day}
+        await db.execute(insert(TokenCounter).values(**key, last_number=0).on_conflict_do_nothing())
+        counter = (
+            await db.execute(select(TokenCounter).filter_by(**key).with_for_update())
+        ).scalar_one()
+        held = set(
+            (
+                await db.execute(
+                    select(QueueTokenRow.token_code).where(
+                        QueueTokenRow.department == department.id,
+                        QueueTokenRow.status.in_(ACTIVE_VALUES),
+                    )
+                )
+            ).scalars()
+        )
+        number = counter.last_number
+        for _ in range(MAX_NUMBER):
+            number = number % MAX_NUMBER + 1
+            code = f"{department.prefix}-{number:03d}"
+            if code not in held:
+                counter.last_number = number
+                return code
+        raise QueueFull(department.id)
+
+    async def _department_of(self, db: AsyncSession, token_id: str) -> Department:
+        try:
+            key = uuid.UUID(token_id)
+        except ValueError as exc:
+            raise UnknownToken(token_id) from exc
+        found = (
+            await db.execute(select(QueueTokenRow.department).where(QueueTokenRow.id == key))
+        ).scalar_one_or_none()
+        if found is None:
+            raise UnknownToken(token_id)
+        return self.rooms.department(found)
+
+    async def _change(
+        self,
+        db: AsyncSession,
+        clinic_id: uuid.UUID,
+        token_id: str,
+        action: Callable[[QueueCore, str], Token],
+    ) -> tuple[Token, Department]:
+        department = await self._department_of(db, token_id)
+        await self._lock(db, clinic_id, department.id)
+        core = await self._core(db, department)
+        if token_id not in core.tokens:  # no longer active: report its state as a conflict
+            row = await db.get(QueueTokenRow, uuid.UUID(token_id))
+            if row is None:
+                raise UnknownToken(token_id)
+            core.tokens[token_id] = to_token(row)
+        token = action(core, token_id)
+        await self._write(db, [token])
+        if token.status is Status.no_show:
+            await self._no_show(db, clinic_id, department, token)
+        return token, department
+
+    async def _no_show(
+        self, db: AsyncSession, clinic_id: uuid.UUID, department: Department, token: Token
+    ) -> None:
+        data = TokenNoShowData(
+            clinic_id=str(clinic_id),
+            session_id=token.session_id,
+            token_id=token.token_id,
+            token_code=token.token_code,
+            department=department.id,
+            marked_at=self.clock(),
+        )
+        await self.events.add(db, Event(EventType.token_no_show, data, self.clock()))
+
+    def room_name(self, department: Department, room_id: str | None) -> str | None:
+        return None if room_id is None else department.room(room_id).name
+
+    def to_api(self, token: Token, department: Department) -> QueueToken:
+        grace = timedelta(seconds=self.rooms.grace_seconds)
+        called = token.status is Status.called and token.called_at is not None
+        return QueueToken(
+            token_id=token.token_id,
+            session_id=token.session_id,
+            token_code=token.token_code,
+            department=department.id,
+            room=self.room_name(department, token.room_id),
+            status=token.status,
+            issued_at=token.issued_at,
+            called_at=token.called_at,
+            grace_until=token.called_at + grace if called and token.called_at else None,
+        )
+
+    # -- operations --------------------------------------------------------------------------
+
+    async def assign_token(
+        self,
+        db: AsyncSession,
+        *,
+        clinic_id: uuid.UUID,
+        session_id: str,
+        level: int,
+        department: str | None = None,
+    ) -> TokenAssignment:
+        """Queue a session at its nurse-confirmed level (call only after the nurse's decision;
+        safety rule 3). A session already holding an active token gets that token back."""
+        target = (
+            self.rooms.department(department) if department else self.rooms.department_for(level)
+        )
+        await self._lock(db, clinic_id, target.id)
+        session_key = uuid.UUID(session_id)
+        row = (
+            await db.execute(
+                select(QueueTokenRow).where(
+                    QueueTokenRow.session_id == session_key,
+                    QueueTokenRow.status.in_(ACTIVE_VALUES),
+                )
+            )
+        ).scalar_one_or_none()
+        if row is None:
+            arrived = (
+                await db.execute(
+                    select(PatientSession.started_at).where(PatientSession.id == session_key)
+                )
+            ).scalar_one_or_none()
+            if arrived is None:
+                raise UnknownSession(session_id)
+            now = self.clock()
+            row = QueueTokenRow(
+                clinic_id=clinic_id,
+                department=target.id,
+                token_code=await self._next_code(db, clinic_id, target),
+                session_id=session_key,
+                level=level,
+                arrived_at=arrived,
+                issued_at=now,
+                enqueued_at=arrived,
+                status=Status.waiting.value,
+                recall_count=0,
+            )
+            db.add(row)
+            await db.flush()
+        department_of_row = self.rooms.department(row.department)
+        core = await self._core(db, department_of_row)
+        token = core.tokens[str(row.id)]
+        return TokenAssignment(
+            token_id=token.token_id,
+            token_code=token.token_code,
+            department=department_of_row.id,
+            room_hint=department_of_row.name,
+            wait_estimate_min=estimate_wait(token, core, self.rooms.service_minutes),
+        )
+
+    async def call_next(
+        self,
+        db: AsyncSession,
+        *,
+        clinic_id: uuid.UUID,
+        department: str,
+        room: str | None = None,
+    ) -> QueueToken | None:
+        """Call the next token into `room`, or into the first free room with an eligible token;
+        publishes `token.called`. None when nobody waiting fits a free room."""
+        target = self.rooms.department(department)
+        chosen = target.room(room) if room is not None else None
+        await self._lock(db, clinic_id, target.id)
+        core = await self._core(db, target)
+        token = core.call_next(chosen) if chosen is not None else core.call_next_free()
+        if token is None:
+            return None
+        await self._write(db, [token])
+        if token.room_id is None or token.called_at is None:
+            raise RuntimeError("a called token has a room and a call time")
+        data = TokenCalledData(
+            clinic_id=str(clinic_id),
+            session_id=token.session_id,
+            token_id=token.token_id,
+            token_code=token.token_code,
+            department=target.id,
+            room=target.room(token.room_id).name,
+            called_at=token.called_at,
+        )
+        await self.events.add(db, Event(EventType.token_called, data, self.clock()))
+        return self.to_api(token, target)
+
+    async def mark_arrived(
+        self, db: AsyncSession, *, clinic_id: uuid.UUID, token_id: str
+    ) -> QueueToken:
+        token, department = await self._change(
+            db, clinic_id, token_id, lambda core, tid: core.mark_arrived(tid)
+        )
+        return self.to_api(token, department)
+
+    async def close(self, db: AsyncSession, *, clinic_id: uuid.UUID, token_id: str) -> QueueToken:
+        token, department = await self._change(
+            db, clinic_id, token_id, lambda core, tid: core.close(tid)
+        )
+        return self.to_api(token, department)
+
+    async def mark_missed(
+        self, db: AsyncSession, *, clinic_id: uuid.UUID, token_id: str
+    ) -> QueueToken:
+        """The nurse says the called patient did not come: the grace rule, applied now."""
+        token, department = await self._change(
+            db, clinic_id, token_id, lambda core, tid: core.miss(tid)
+        )
+        return self.to_api(token, department)
+
+    async def expire_grace(self, db: AsyncSession, *, clinic_id: uuid.UUID) -> list[QueueToken]:
+        """Re-queue or mark no-show every called token past its grace window, in every
+        department of the clinic."""
+        changed: list[QueueToken] = []
+        for department in self.rooms.departments:
+            await self._lock(db, clinic_id, department.id)
+            core = await self._core(db, department)
+            missed = core.expire_grace()
+            await self._write(db, missed)
+            for token in missed:
+                if token.status is Status.no_show:
+                    await self._no_show(db, clinic_id, department, token)
+                changed.append(self.to_api(token, department))
+        return changed
+
+    async def board(self, db: AsyncSession, *, department: str) -> list[BoardEntry]:
+        """What a public board may show: called tokens with their room (latest call first), then
+        waiting tokens in queue order. Never a name or a level."""
+        target = self.rooms.department(department)
+        core = await self._core(db, target)
+        called = sorted(
+            (t for t in core.tokens.values() if t.status is Status.called),
+            key=lambda t: (t.called_at or t.issued_at, t.token_id),
+            reverse=True,
+        )
+        return [
+            BoardEntry(
+                token_code=t.token_code,
+                room=self.room_name(target, t.room_id),
+                status=t.status,
+            )
+            for t in [*called, *core.waiting()]
+        ]
+
+    async def session_token(self, db: AsyncSession, *, session_id: str) -> QueueToken | None:
+        """The session's active token, or its latest one."""
+        try:
+            key = uuid.UUID(session_id)
+        except ValueError:
+            return None
+        found = (
+            await db.execute(
+                select(QueueTokenRow)
+                .where(QueueTokenRow.session_id == key)
+                .order_by(QueueTokenRow.issued_at.desc())
+            )
+        ).scalars()
+        rows = sorted(found, key=lambda r: r.status not in ACTIVE_VALUES)  # active first
+        if not rows:
+            return None
+        return self.to_api(to_token(rows[0]), self.rooms.department(rows[0].department))
+
+
+async def run_grace_expiry(
+    service: QueueService, *, interval: float = GRACE_INTERVAL_SECONDS
+) -> None:
+    """Every `interval` seconds, apply the grace window in every clinic (the API lifespan)."""
+    while True:
+        try:
+            async with get_sessionmaker()() as db:
+                clinic_ids = list((await db.execute(select(Clinic.id))).scalars())
+            for clinic_id in clinic_ids:
+                async with clinic_session(clinic_id) as db:
+                    await service.expire_grace(db, clinic_id=clinic_id)
+        except Exception:  # keep running: the next tick retries
+            logger.exception("queue.grace_expiry_failed")
+        await asyncio.sleep(interval)
+
+
+__all__ = [
+    "GRACE_INTERVAL_SECONDS",
+    "QueueFull",
+    "QueueService",
+    "TokenAssignment",
+    "UnknownSession",
+    "UnknownToken",
+    "run_grace_expiry",
+    "utc_now",
+]
