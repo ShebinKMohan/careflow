@@ -68,6 +68,7 @@ GENERATORS: dict[str, Callable[[], str]] = {
     "POSTGRES_PASSWORD": _password,
     "CAREFLOW_DB_APP_PASSWORD": _password,
     "CAREFLOW_DB_MIGRATOR_PASSWORD": _password,
+    "HAPI_DB_PASSWORD": _password,
     # Self-hosted Langfuse init (M5-05).
     "LANGFUSE_INIT_PROJECT_PUBLIC_KEY": lambda: f"pk-lf-{uuid.uuid4()}",
     "LANGFUSE_INIT_PROJECT_SECRET_KEY": lambda: f"sk-lf-{uuid.uuid4()}",
@@ -104,22 +105,44 @@ def git_tracks_or_ignores(path: Path) -> str:
     return {0: "ignored", 1: "not-ignored"}.get(result.returncode, "no-repo")
 
 
+# Keys computed from other values (connection URLs built from the generated passwords).
+DERIVED: dict[str, Callable[[dict[str, str]], str]] = {
+    "DATABASE_URL": lambda v: (
+        f"postgresql://careflow_app:{v['CAREFLOW_DB_APP_PASSWORD']}@localhost:5432/careflow"
+    ),
+    "DATABASE_URL_MIGRATOR": lambda v: (
+        f"postgresql://careflow_migrator:{v['CAREFLOW_DB_MIGRATOR_PASSWORD']}@localhost:5432/careflow"
+    ),
+    "REDIS_URL": lambda _: "redis://localhost:6379/0",
+    "FHIR_BASE_URL": lambda _: "http://localhost:8080/fhir",
+}
+
+
+def _set(lines: list[str], existing: dict[str, str], key: str, value: str) -> list[str]:
+    if key in existing:  # present with an empty value (e.g. copied from .env.example)
+        return [
+            f"{key}={value}" if (m := _LINE.match(line)) and m.group(1) == key else line
+            for line in lines
+        ]
+    return [*lines, f"{key}={value}"]
+
+
 def fill(text: str) -> tuple[str, list[str]]:
     """Return the new file text and the names of the keys that were added or filled."""
     existing = parse_env(text)
+    values = dict(existing)
     changed: list[str] = []
     lines = text.splitlines()
     for key, generate in GENERATORS.items():
-        if existing.get(key):
-            continue
-        if key in existing:  # present with an empty value (e.g. copied from .env.example)
-            lines = [
-                f"{key}={generate()}" if (m := _LINE.match(line)) and m.group(1) == key else line
-                for line in lines
-            ]
-        else:
-            lines.append(f"{key}={generate()}")
-        changed.append(key)
+        if not existing.get(key):
+            values[key] = generate()
+            lines = _set(lines, existing, key, values[key])
+            changed.append(key)
+    for key, derive in DERIVED.items():
+        if not existing.get(key):
+            values[key] = derive(values)
+            lines = _set(lines, existing, key, values[key])
+            changed.append(key)
     new_text = "\n".join(lines) + "\n" if lines else ""
     if not text:
         new_text = HEADER + new_text
@@ -151,7 +174,8 @@ def main(argv: list[str] | None = None) -> int:
     text = env_file.read_text(encoding="utf-8") if env_file.exists() else ""
     new_text, changed = fill(text)
     if not changed:
-        print(f"gen_dev_env: no changes ({len(GENERATORS)} keys already set in {env_file.name}).")
+        count = len(GENERATORS) + len(DERIVED)
+        print(f"gen_dev_env: no changes ({count} keys already set in {env_file.name}).")
         return 0
     write_private(env_file, new_text)
     print(f"gen_dev_env: set {len(changed)} key(s) in {env_file.name}: {', '.join(changed)}")

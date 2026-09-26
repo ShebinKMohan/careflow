@@ -31,10 +31,14 @@ def values(env_file: Path) -> dict[str, str]:
     return out
 
 
-def generated_keys() -> list[str]:
+def keys_in(dict_name: str) -> list[str]:
     source = SCRIPT.read_text(encoding="utf-8")
-    block = source.split("GENERATORS: dict", 1)[1].split("\n}\n", 1)[0]
+    block = source.split(f"{dict_name}: dict", 1)[1].split("\n}\n", 1)[0]
     return re.findall(r'^\s+"([A-Z0-9_]+)":', block, re.M)
+
+
+def generated_keys() -> list[str]:
+    return keys_in("GENERATORS") + keys_in("DERIVED")
 
 
 def test_creates_all_keys_with_private_mode(tmp_path: Path) -> None:
@@ -92,3 +96,20 @@ def test_env_example_lists_every_generated_name_without_values() -> None:
     example = values(REPO_ROOT / ".env.example")
     assert set(generated_keys()) <= set(example)
     assert all(value == "" for value in example.values())
+
+
+def test_derived_urls_use_the_generated_passwords(tmp_path: Path) -> None:
+    env = tmp_path / ".env"
+    run(env)
+    got = values(env)
+    app, migrator = got["CAREFLOW_DB_APP_PASSWORD"], got["CAREFLOW_DB_MIGRATOR_PASSWORD"]
+    assert got["DATABASE_URL"] == f"postgresql://careflow_app:{app}@localhost:5432/careflow"
+    assert got["DATABASE_URL_MIGRATOR"].startswith(f"postgresql://careflow_migrator:{migrator}@")
+    assert got["FHIR_BASE_URL"] == "http://localhost:8080/fhir"
+
+
+def test_derived_keys_are_added_to_an_existing_env(tmp_path: Path) -> None:
+    env = tmp_path / ".env"
+    env.write_text("CAREFLOW_DB_APP_PASSWORD=keep-me\n")
+    run(env)
+    assert values(env)["DATABASE_URL"].startswith("postgresql://careflow_app:keep-me@")

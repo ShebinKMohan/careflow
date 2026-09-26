@@ -1,0 +1,75 @@
+# CareFlow local infrastructure: Postgres 17 (pgvector + pg_textsearch), Valkey and HAPI FHIR (R4).
+# Default-profile services must fit in 6 GiB of memory in total (scripts/check_mem_budget.py).
+# Run through the Makefile (`make up`, `make seed`, `make down`), which passes --env-file .env.
+# Ports bind to 127.0.0.1 only. Research prototype. Synthetic data only. Not for clinical use.
+name: careflow
+
+services:
+  postgres:
+    build:
+      context: ./postgres
+    image: careflow/postgres:17-pgvector0.8.6-pgts1.4.0
+    command: ["postgres", "-c", "shared_preload_libraries=pg_textsearch"]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run scripts/gen_dev_env.py}
+      CAREFLOW_DB_MIGRATOR_PASSWORD: ${CAREFLOW_DB_MIGRATOR_PASSWORD:?run scripts/gen_dev_env.py}
+      CAREFLOW_DB_APP_PASSWORD: ${CAREFLOW_DB_APP_PASSWORD:?run scripts/gen_dev_env.py}
+      HAPI_DB_PASSWORD: ${HAPI_DB_PASSWORD:?run scripts/gen_dev_env.py}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d careflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+
+  valkey:
+    image: valkey/valkey:8.1.10@sha256:640c5e62cea04b6d6f2084232651d0cc70362d31f4f805e7be94dbed6855e8f2
+    # maxmemory stays under the container limit; streams and tickets must never be evicted.
+    command: ["valkey-server", "--maxmemory", "192mb", "--maxmemory-policy", "noeviction", "--save", "60", "1"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - valkeydata:/data
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  hapi:
+    # HAPI FHIR JPA starter v8.12.0-1 (HAPI FHIR 8.12.0): the newest published image on 26 Sep 2026;
+    # no image exists yet for HAPI FHIR 8.12.1. Native arm64. Distroless: no shell or curl, so no
+    # container healthcheck; `make up` polls http://localhost:8080/fhir/metadata instead.
+    image: hapiproject/hapi:v8.12.0-1@sha256:d7f38d3676900b07e8a7d3500426eaf8d90ea9ced9a6726416f080f68e230fb0
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      hapi.fhir.fhir_version: R4
+      spring.datasource.url: jdbc:postgresql://postgres:5432/hapi
+      spring.datasource.username: hapi
+      spring.datasource.password: ${HAPI_DB_PASSWORD:?run scripts/gen_dev_env.py}
+      spring.datasource.driverClassName: org.postgresql.Driver
+      spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+      spring.jpa.properties.hibernate.search.enabled: "false"
+      JAVA_TOOL_OPTIONS: -Xmx1536m
+    ports:
+      - "127.0.0.1:8080:8080"
+    mem_limit: 2560m
+
+  # TODO(M4-01) Open Integration Engine: service `oie` under `profiles: [hl7]`, image pinned by
+  # digest, MLLP 6661/6662 and admin 8097/8443, mem_limit 768m. Must fit the 6 GiB cap with the
+  # default services (infra/README.md).
+
+  # TODO(M5-05) Langfuse: services under `profiles: [obs]` (web on 3100 plus its workers). Must fit
+  # the 6 GiB cap; running `obs` may mean stopping HAPI (infra/README.md).
+
+volumes:
+  pgdata:
+  valkeydata:
