@@ -90,17 +90,22 @@ async def await_answer(state: IntakeState, ports: IntakePorts, settings: IntakeS
 
 
 async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettings) -> Update:
-    """Facts from the patient's last turn. A failed extraction is not fatal: the rules still run
-    on what is known and the nurse sees `extraction_incomplete` (CONVENTIONS)."""
+    """Facts from the transcript after the patient's answer. A failed extraction is not fatal: the
+    rules still run on what is known and the nurse sees `extraction_incomplete` (CONVENTIONS)."""
     turns = state.get("turns", [])
     if not turns or turns[-1].role is not TurnRole.patient:
         raise RuntimeError("extract needs the patient's turn")
+    question_keys = {
+        turn.turn_id: turn.question_key
+        for turn in turns
+        if turn.role is TurnRole.patient and turn.question_key is not None
+    }
     try:
-        extraction = await ports.extractor.extract(state, turns[-1])
+        result = await ports.extractor.extract(turns, state.get("facts", []), question_keys)
     except Exception as exc:  # fail safe
         logger.warning("extraction failed for %s: %s", state["session_id"], type(exc).__name__)
         return {"flags": {"extraction_incomplete": True}, "node_trace": ["extract"]}
-    update: Update = {"facts": list(extraction.facts), "node_trace": ["extract"]}
-    if not extraction.complete:
+    update: Update = {"facts": list(result.facts), "node_trace": ["extract"]}
+    if result.extraction_incomplete:
         update["flags"] = {"extraction_incomplete": True}
     return update

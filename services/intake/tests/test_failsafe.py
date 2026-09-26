@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import pytest
+
 from careflow_contracts.generated.structured_facts_schema import StructuredFacts
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
 from careflow_intake.checkpoint import memory_checkpointer
@@ -42,11 +44,16 @@ async def test_an_unavailable_ehr_is_flagged_and_the_intake_goes_on(
     assert unidentified["flags"]["ehr_unavailable"] is True
 
 
+@pytest.mark.parametrize(
+    "extractor",
+    [AnswerExtractor(fail=True), AnswerExtractor(incomplete=True)],
+    ids=["raises", "incomplete"],
+)
 async def test_a_failed_extraction_still_runs_the_rules(
-    make_ports: Any, script: dict[str, Any], make_decision: Any
+    make_ports: Any, script: dict[str, Any], make_decision: Any, extractor: AnswerExtractor
 ) -> None:
     rules = RecordingRulesRunner()
-    result = await run(make_ports, script, extractor=AnswerExtractor(fail=True), rules=rules)
+    result = await run(make_ports, script, extractor=extractor, rules=rules)
     assert result["flags"]["extraction_incomplete"] is True
     assert len(rules.seen) == 4  # after each answer and once more before the suggestion
     assert all(facts.extraction_status.value == "incomplete" for facts in rules.seen)

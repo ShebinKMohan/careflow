@@ -5,10 +5,10 @@ real adapters.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, Annotated, Protocol
+from typing import TYPE_CHECKING, Annotated, Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -40,15 +40,22 @@ class Question(BaseModel):
     question_id: OpaqueId
     text: Annotated[str, Field(min_length=1, max_length=500)]
     key: FactKey | None = None
+    source: Literal["llm", "template"] = "template"  # who phrased the text (M1-07)
 
 
-class Extraction(BaseModel):
-    """Facts extracted from one patient turn. `complete=False` flags `extraction_incomplete`."""
+class ExtractionResult(BaseModel):
+    """Facts extracted from the transcript. `extraction_incomplete` (a failed or partial
+    extraction) is shown to the nurse; the rules still run on what is known."""
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     facts: list[FactEntry] = []
-    complete: bool = True
+    dropped_count: int = 0
+    extraction_incomplete: bool = False
+    error_code: str | None = None
+    prompt_version: str | None = None
+    model_id: str | None = None
+    provider: str | None = None
 
 
 class RulesOutcome(BaseModel):
@@ -95,7 +102,16 @@ class Conversation(Protocol):
 
 
 class Extractor(Protocol):
-    async def extract(self, state: IntakeState, turn: Turn) -> Extraction: ...
+    async def extract(
+        self,
+        turns: Sequence[Turn],
+        existing_facts: Sequence[FactEntry],
+        question_keys: Mapping[str, FactKey],
+    ) -> ExtractionResult:
+        """PATIENT_STATED facts from the transcript. `question_keys` maps each patient turn id to
+        the fact its question asked about. Fact ids should be stable for the same statement, so
+        extracting again replaces a fact instead of duplicating it."""
+        ...
 
 
 class RulesRunner(Protocol):
@@ -168,7 +184,7 @@ __all__ = [
     "EhrReader",
     "EhrUnavailable",
     "EventSink",
-    "Extraction",
+    "ExtractionResult",
     "Extractor",
     "Identifier",
     "IntakePorts",

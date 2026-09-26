@@ -8,7 +8,7 @@ advice; the stub rule and the stub suggestion exist only to exercise the graph.
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any, Final
@@ -31,7 +31,7 @@ from careflow_intake.facts import FactEntry, fact_class
 from careflow_intake.ports import (
     Assignment,
     EhrUnavailable,
-    Extraction,
+    ExtractionResult,
     IntakePorts,
     NoSuggestion,
     Question,
@@ -129,21 +129,29 @@ class EndlessConversation:
 
 @dataclass
 class AnswerExtractor:
-    """Turns the answer to a keyed question into one PATIENT_STATED fact: yes/no/unsure for a
-    tri-state key, the text for a text key; nothing otherwise."""
+    """Turns the latest patient answer to a keyed question into one PATIENT_STATED fact:
+    yes/no/unsure for a tri-state key, the text for a text key; nothing otherwise. The fact id
+    comes from the turn (id and time) and key, so extracting again replaces it."""
 
-    complete: bool = True
+    incomplete: bool = False
     fail: bool = False
 
-    async def extract(self, state: IntakeState, turn: Turn) -> Extraction:
+    async def extract(
+        self,
+        turns: Sequence[Turn],
+        existing_facts: Sequence[FactEntry],
+        question_keys: Mapping[str, FactKey],
+    ) -> ExtractionResult:
         if self.fail:
             raise RuntimeError("the stub extractor failed")
-        key = turn.question_key
-        value = _value(key, turn.text) if key is not None else None
-        if key is None or value is None:
-            return Extraction(complete=self.complete)
+        answers = [turn for turn in turns if turn.role is TurnRole.patient]
+        turn = answers[-1] if answers else None
+        key = question_keys.get(turn.turn_id) if turn is not None else None
+        value = _value(key, turn.text) if turn is not None and key is not None else None
+        if turn is None or key is None or value is None:
+            return ExtractionResult(extraction_incomplete=self.incomplete, provider="stub")
         fact = {
-            "fact_id": stable_fact_id(state["session_id"], turn.turn_id, key.value),
+            "fact_id": stable_fact_id(turn.turn_id, turn.created_at.isoformat(), key.value),
             "provenance": "PATIENT_STATED",
             "source": {
                 "kind": "transcript_span",
@@ -156,7 +164,9 @@ class AnswerExtractor:
             "value": value,
         }
         entry = FactEntry.model_validate({"key": key, "fact": fact})
-        return Extraction(facts=[entry], complete=self.complete)
+        return ExtractionResult(
+            facts=[entry], extraction_incomplete=self.incomplete, provider="stub"
+        )
 
 
 def _value(key: FactKey, text: str) -> str | None:
