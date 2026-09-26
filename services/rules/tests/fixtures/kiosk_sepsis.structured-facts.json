@@ -1,0 +1,72 @@
+{
+  "session_id": "ses_rules_kiosk_sepsis",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+    "age_years": {
+      "fact_id": "f_01M3EF2PM0000000000000RF01",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-sepsis"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": 66
+    }
+  },
+  "infection": {
+    "fever_reported": {
+      "fact_id": "f_01M3EF2PM0000000000000RF02",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_01",
+        "start": 0,
+        "end": 18,
+        "quote": "I have had a fever"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    }
+  },
+  "vitals": {
+    "heart_rate": {
+      "fact_id": "f_01M3EF2PM0000000000000RF03",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0001"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 125,
+      "unit": "/min"
+    },
+    "temperature_c": {
+      "fact_id": "f_01M3EF2PM0000000000000RF04",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0001"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 39.4,
+      "unit": "Cel"
+    },
+    "spo2": {
+      "fact_id": "f_01M3EF2PM0000000000000RF05",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0001"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 93,
+      "unit": "%"
+    }
+  },
+  "extraction_status": "complete"
+}

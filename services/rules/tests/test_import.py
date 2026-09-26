@@ -1,5 +1,7 @@
 import careflow_rules
 
 
-def test_package_imports() -> None:
-    assert careflow_rules.__version__ == "0.0.0"
+def test_package_exports_the_engine() -> None:
+    assert careflow_rules.RULESET_VERSION == "2026.1.0"
+    assert careflow_rules.__version__ == careflow_rules.RULESET_VERSION
+    assert callable(careflow_rules.evaluate)
