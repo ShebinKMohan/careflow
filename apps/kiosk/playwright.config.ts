@@ -32,7 +32,7 @@ export default defineConfig({
       reuseExistingServer: dev,
       timeout: 240_000,
       gracefulShutdown: { signal: "SIGTERM", timeout: 5_000 },
-      env: { NEXT_PUBLIC_API_BASE_URL: `http://127.0.0.1:${MOCK_PORT}` },
+      env: { NEXT_PUBLIC_API_BASE_URL: `http://127.0.0.1:${MOCK_PORT}`, NEXT_TELEMETRY_DISABLED: "1" },
     },
   ],
 });
