@@ -12,6 +12,14 @@ CareFlow publishes the same events to hospital systems (webhooks, M4-03) and to 
 | `patient.feels_worse` | `patient-feels-worse.schema.json` | The waiting patient pressed "I feel worse". |
 | `nurse.flag` | `nurse-flag.schema.json` | Something needs a nurse, e.g. a refused medical question. |
 
+## Internal events
+
+These travel only on the CareFlow event bus (M1-11), for example to the audit log (M5-01). They are never sent as webhooks or WebSocket messages, so they are not in `envelope.schema.json`'s type list or under `webhooks:`. `careflow_contracts.events.INTERNAL_DATA_MODELS` lists them.
+
+| Type | Data schema | When |
+|---|---|---|
+| `fhir.write.completed` | `fhir-write-completed.schema.json` | CareFlow wrote a confirmed triage to the hospital FHIR server (M1-09). |
+
 ## Payload
 
 Every payload is the [Standard Webhooks](https://www.standardwebhooks.com/) envelope in [`envelope.schema.json`](envelope.schema.json):
