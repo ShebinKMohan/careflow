@@ -1,0 +1,163 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CareFlow Architecture Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;600&display=swap">
+<style>
+html,body{margin:0;background:#F4F8F7}
+svg{display:block;width:1500px;height:940px;font-family:"Readex Pro",Helvetica,Arial,sans-serif}
+.zone{fill:#FFFFFF;stroke:#C9DAD6;stroke-width:1.5}
+.zlab{font-size:12px;font-weight:600;letter-spacing:.12em;fill:#56706C}
+.t{font-size:15px;font-weight:600;fill:#12302D}
+.s{font-size:12.5px;fill:#4C6461}
+.llm{fill:#E4EAFB;stroke:#3558D4;stroke-width:1.6}
+.ml{fill:#F8E1EE;stroke:#A3246A;stroke-width:1.6}
+.rule{fill:#FCE3DD;stroke:#E0533A;stroke-width:1.6}
+.std{fill:#D5EDE6;stroke:#0E7C66;stroke-width:1.6}
+.store{fill:#E7EAEF;stroke:#5B6472;stroke-width:1.6}
+.hum{fill:#EFE6D6;stroke:#7A5B1E;stroke-width:1.6}
+.plain{fill:#FFFFFF;stroke:#9DB5B0;stroke-width:1.6}
+.a{fill:none;stroke:#34504C;stroke-width:2}
+.a.alert{stroke:#E0533A;stroke-width:2.4}
+.a.dash{stroke-dasharray:6 5;stroke:#7B8F8B}
+.lab{font-size:12.5px;fill:#12302D;paint-order:stroke;stroke:#F4F8F7;stroke-width:5px;stroke-linejoin:round}
+.labw{font-size:12.5px;fill:#12302D;paint-order:stroke;stroke:#FFFFFF;stroke-width:5px;stroke-linejoin:round}
+.n{fill:#12302D}
+.nt{font-size:11px;font-weight:600;fill:#FFFFFF}
+</style></head><body>
+<svg viewBox="0 0 1500 940" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#34504C"/></marker>
+  <marker id="hr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E0533A"/></marker>
+  <marker id="hg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7B8F8B"/></marker>
+</defs>
+
+<text x="40" y="44" style="font-size:22px;font-weight:600;fill:#12302D">CareFlow · how everything connects</text>
+<g transform="translate(40,62)">
+  <rect width="14" height="14" rx="3" class="llm"/><text x="20" y="12" class="s">Language AI</text>
+  <rect x="120" width="14" height="14" rx="3" class="ml"/><text x="140" y="12" class="s">Trained model / speech</text>
+  <rect x="300" width="14" height="14" rx="3" class="rule"/><text x="320" y="12" class="s">Fixed rules</text>
+  <rect x="410" width="14" height="14" rx="3" class="std"/><text x="430" y="12" class="s">Health standard</text>
+  <rect x="550" width="14" height="14" rx="3" class="store"/><text x="570" y="12" class="s">Storage</text>
+  <rect x="640" width="14" height="14" rx="3" class="hum"/><text x="660" y="12" class="s">People</text>
+</g>
+
+<!-- ZONES -->
+<rect x="150" y="120" width="260" height="520" rx="16" class="zone"/><text x="168" y="144" class="zlab">PATIENT DEVICES</text>
+<rect x="460" y="92" width="700" height="630" rx="16" class="zone"/><text x="478" y="116" class="zlab">IN-COUNTRY CLINIC SERVER</text>
+<rect x="1200" y="120" width="250" height="380" rx="16" class="zone"/><text x="1218" y="144" class="zlab">STAFF SCREENS</text>
+<rect x="1200" y="530" width="250" height="192" rx="16" class="zone"/><text x="1218" y="554" class="zlab">HOSPITAL (SIMULATED)</text>
+<rect x="150" y="765" width="1300" height="150" rx="16" class="zone" style="fill:#FBF8F2"/><text x="168" y="789" class="zlab">OFFLINE LEARNING · NEVER LIVE</text>
+
+<!-- PATIENT -->
+<circle cx="75" cy="292" r="20" class="hum"/><path d="M45,345 q30,-40 60,0 z" class="hum"/>
+<text x="75" y="372" text-anchor="middle" class="t">Patient</text>
+
+<!-- KIOSK -->
+<rect x="170" y="160" width="220" height="262" rx="14" class="plain"/>
+<text x="188" y="186" class="t">Kiosk</text><text x="244" y="186" class="s">Tauri 2 + Next.js</text>
+<rect x="185" y="200" width="190" height="44" rx="8" class="hum"/><text x="200" y="227" class="s" style="fill:#12302D">Touch screen + voice</text>
+<rect x="185" y="254" width="190" height="44" rx="8" class="ml"/><text x="200" y="281" class="s" style="fill:#12302D">Camera + cough hints</text>
+<rect x="185" y="308" width="190" height="56" rx="8" class="ml"/><text x="200" y="331" class="t" style="font-size:14px">Laya urgency model</text><text x="200" y="351" class="s">runs on the kiosk</text>
+<text x="188" y="400" class="s">Silent keypad · ID tap · QR</text>
+
+<!-- PHONE -->
+<rect x="170" y="462" width="220" height="160" rx="14" class="plain"/>
+<text x="188" y="488" class="t">Phone companion</text>
+<text x="188" y="512" class="s">• Ask the clinic</text>
+<text x="188" y="534" class="s">• Live queue position</text>
+<text x="188" y="556" class="s">• "I feel worse" button</text>
+<text x="188" y="604" class="s">web app, opened via QR</text>
+
+<!-- SERVER -->
+<rect x="490" y="250" width="170" height="90" rx="12" class="plain"/><text x="505" y="285" class="t">CareFlow API</text><text x="505" y="306" class="s">FastAPI</text><text x="505" y="324" class="s">REST + WebSocket</text>
+<rect x="720" y="136" width="190" height="80" rx="12" class="ml"/><text x="735" y="166" class="t">Voice service</text><text x="735" y="186" class="s">hears: Whisper / Cohere</text><text x="735" y="204" class="s">speaks: Kokoro / SILMA</text>
+<rect x="720" y="262" width="190" height="98" rx="12" class="plain" style="stroke:#12302D;stroke-width:2.2"/><text x="735" y="296" class="t">Intake orchestrator</text><text x="735" y="318" class="s">LangGraph</text><text x="735" y="338" class="s">runs every step in order</text>
+<rect x="960" y="136" width="180" height="90" rx="12" class="llm"/><text x="975" y="166" class="t">Language AI</text><text x="975" y="188" class="s">Qwen3.5-9B</text><text x="975" y="206" class="s">local, on your Mac</text>
+<rect x="960" y="270" width="180" height="80" rx="12" class="rule"/><text x="975" y="302" class="t">Safety rules</text><text x="975" y="324" class="s">plain code, runs first</text>
+<rect x="490" y="470" width="170" height="90" rx="12" class="llm"/><text x="505" y="502" class="t">Ask the clinic</text><text x="505" y="524" class="s">searches clinic handbook</text><text x="505" y="542" class="s">pgvector + BM25</text>
+<rect x="720" y="420" width="190" height="70" rx="12" class="plain"/><text x="735" y="452" class="t">Queue + tokens</text><text x="735" y="472" class="s">rooms · wait time</text>
+<path d="M720,572 a95,12 0 0 1 190,0 v66 a95,12 0 0 1 -190,0 z" class="store"/><path d="M720,572 a95,12 0 0 0 190,0" class="store" style="fill:none"/>
+<text x="735" y="610" class="t">Postgres + Redis</text><text x="735" y="630" class="s">facts · audit log · events</text>
+<rect x="960" y="560" width="180" height="90" rx="12" class="std"/><text x="975" y="592" class="t">Integration gateway</text><text x="975" y="614" class="s">FHIR R4 · HL7 v2</text><text x="975" y="632" class="s">webhooks · SMART</text>
+
+<!-- CLOUD (optional) -->
+<rect x="1215" y="18" width="200" height="62" rx="12" class="llm" style="stroke-dasharray:6 4"/><text x="1230" y="44" class="t">Cloud AI (optional)</text><text x="1230" y="64" class="s">Claude · GPT · Gemini</text>
+
+<!-- STAFF -->
+<rect x="1220" y="160" width="210" height="80" rx="12" class="hum"/><text x="1236" y="192" class="t">Nurse station</text><text x="1236" y="214" class="s">alerts · confirm the level</text>
+<rect x="1220" y="282" width="210" height="80" rx="12" class="hum"/><text x="1236" y="314" class="t">Doctor briefing</text><text x="1236" y="336" class="s">every fact shows its source</text>
+<rect x="1220" y="404" width="210" height="70" rx="12" class="hum"/><text x="1236" y="444" class="t">Queue board</text>
+
+<!-- HOSPITAL -->
+<path d="M1220,578 a105,11 0 0 1 210,0 v56 a105,11 0 0 1 -210,0 z" class="std"/><path d="M1220,578 a105,11 0 0 0 210,0" class="std" style="fill:none"/>
+<text x="1236" y="612" class="t">EHR records</text><text x="1236" y="630" class="s">HAPI FHIR + fake patients</text>
+<rect x="1220" y="656" width="210" height="54" rx="12" class="std"/><text x="1236" y="680" class="t" style="font-size:14px">Health exchange</text><text x="1236" y="699" class="s">HL7 v2 via OIE</text>
+
+<!-- OFFLINE -->
+<rect x="1200" y="808" width="220" height="70" rx="12" class="store"/><text x="1216" y="838" class="t">Nurse changes</text><text x="1216" y="858" class="s">logged with a reason</text>
+<rect x="900" y="808" width="220" height="70" rx="12" class="ml"/><text x="916" y="838" class="t">Retrain Laya</text><text x="916" y="858" class="s">Mac or free Kaggle GPU</text>
+<rect x="600" y="808" width="220" height="70" rx="12" class="rule"/><text x="616" y="838" class="t">Safety test</text><text x="616" y="858" class="s">blocked if it gets worse</text>
+<rect x="300" y="808" width="220" height="70" rx="12" class="ml"/><text x="316" y="838" class="t">New model version</text><text x="316" y="858" class="s">shipped by hand</text>
+
+<!-- ARROWS: main path -->
+<path class="a" d="M108,300 H166" marker-end="url(#h)"/>
+<path class="a" d="M98,350 C120,470 140,520 166,530" marker-end="url(#h)"/>
+<text x="112" y="470" class="lab">scans QR</text>
+
+<path class="a" d="M392,262 C440,262 440,285 487,285" marker-start="url(#h)" marker-end="url(#h)"/>
+<path class="a" d="M575,248 V176 H716" marker-end="url(#h)"/>
+<path class="a" d="M815,218 V258" marker-end="url(#h)"/>
+<path class="a" d="M912,282 C935,282 935,180 956,180" marker-start="url(#h)" marker-end="url(#h)"/>
+<path class="a" d="M912,316 H956" marker-end="url(#h)"/>
+<path class="a" d="M1050,352 V392 H402 V336 H380" marker-end="url(#h)" marker-start="url(#h)"/>
+<path class="a alert" d="M1142,300 C1180,300 1180,200 1216,200" marker-end="url(#hr)"/>
+<path class="a" d="M1400,158 V104 H940 V300 H914" marker-end="url(#h)"/>
+<path class="a" d="M815,362 V416" marker-end="url(#h)"/>
+<path class="a" d="M720,478 H690 V596 H394" marker-end="url(#h)"/>
+<path class="a" d="M912,452 H1216" marker-end="url(#h)"/>
+<path class="a" d="M912,346 C980,372 1160,372 1216,330" marker-end="url(#h)"/>
+<path class="a dash" d="M815,492 V556" marker-end="url(#hg)"/>
+<path class="a" d="M912,606 H956" marker-end="url(#h)"/>
+<path class="a" d="M1142,596 H1216" marker-start="url(#h)" marker-end="url(#h)"/>
+<path class="a" d="M1142,630 C1180,630 1180,683 1216,683" marker-start="url(#h)" marker-end="url(#h)"/>
+<!-- phone questions + RAG -->
+<path class="a" d="M392,500 C440,500 440,330 487,330" marker-end="url(#h)"/>
+<path class="a" d="M575,342 V466" marker-end="url(#h)"/>
+<!-- cloud -->
+<path class="a dash" d="M1140,150 C1180,150 1190,80 1212,60" marker-end="url(#hg)"/>
+<!-- offline loop -->
+<path class="a dash" d="M1432,200 H1462 V843 H1424" marker-end="url(#hg)"/>
+<path class="a dash" d="M1198,843 H1124" marker-end="url(#hg)"/>
+<path class="a dash" d="M898,843 H824" marker-end="url(#hg)"/>
+<path class="a dash" d="M598,843 H524" marker-end="url(#hg)"/>
+<path class="a dash" d="M298,843 H132 V336 H182" marker-end="url(#hg)"/>
+
+<!-- STEP NUMBERS + LABELS -->
+<g>
+  <circle cx="137" cy="300" r="10" class="n"/><text x="137" y="304" text-anchor="middle" class="nt">1</text><text x="92" y="284" class="lab">talks + taps</text>
+  <circle cx="440" cy="273" r="10" class="n"/><text x="440" y="277" text-anchor="middle" class="nt">2</text><text x="410" y="242" class="labw">audio + taps</text>
+  <circle cx="640" cy="176" r="10" class="n"/><text x="640" y="180" text-anchor="middle" class="nt">3</text><text x="600" y="164" class="labw">audio</text>
+  <circle cx="815" cy="238" r="10" class="n"/><text x="815" y="242" text-anchor="middle" class="nt">4</text><text x="832" y="243" class="labw">words</text>
+  <circle cx="935" cy="231" r="10" class="n"/><text x="935" y="235" text-anchor="middle" class="nt">5</text><text x="975" y="252" class="labw">understand + extract</text>
+  <circle cx="938" cy="318" r="9" class="n"/><text x="938" y="322" text-anchor="middle" class="nt">6</text><text x="914" y="302" class="labw">facts</text>
+  <circle cx="470" cy="392" r="10" class="n"/><text x="470" y="396" text-anchor="middle" class="nt">7</text><text x="600" y="384" class="labw">facts → Laya → level</text>
+  <circle cx="1170" cy="250" r="11" style="fill:#E0533A"/><text x="1170" y="254" text-anchor="middle" class="nt">8</text><text x="1150" y="277" class="labw" style="fill:#B2381F">alert</text>
+  <circle cx="1180" cy="104" r="10" class="n"/><text x="1180" y="108" text-anchor="middle" class="nt">9</text><text x="1198" y="98" class="labw">nurse confirms or changes</text>
+  <circle cx="815" cy="389" r="0"/>
+  <circle cx="815" cy="406" r="10" class="n"/><text x="815" y="410" text-anchor="middle" class="nt">10</text><text x="832" y="412" class="labw">token</text>
+  <circle cx="540" cy="596" r="10" class="n"/><text x="540" y="600" text-anchor="middle" class="nt">11</text><text x="420" y="586" class="labw">token + live queue</text>
+  <circle cx="1080" cy="366" r="10" class="n"/><text x="1080" y="370" text-anchor="middle" class="nt">12</text><text x="1096" y="384" class="labw">briefing</text>
+  <circle cx="934" cy="606" r="10" class="n"/><text x="934" y="610" text-anchor="middle" class="nt">13</text>
+  <circle cx="1180" cy="596" r="10" class="n"/><text x="1180" y="600" text-anchor="middle" class="nt">14</text><text x="1150" y="578" class="labw">read / write</text>
+  <text x="1150" y="664" class="labw">HL7 v2</text>
+  <text x="1060" y="446" class="labw">queue board</text>
+  <text x="826" y="530" class="labw">saved</text>
+  <text x="446" y="452" class="labw">questions</text>
+  <text x="585" y="410" class="labw">RAG</text>
+  <text x="1150" y="112" class="labw" style="opacity:0"> </text>
+  <text x="1030" y="128" class="labw" style="font-size:11.5px">optional, only if switched on</text>
+  <text x="1300" y="834" class="lab" style="font-size:11.5px"> </text>
+  <text x="1466" y="520" class="lab" style="font-size:11.5px" transform="rotate(90 1466 520)">overrides</text>
+  <text x="140" y="600" class="lab" style="font-size:11.5px" transform="rotate(-90 140 600)">new model</text>
+</g>
+</svg>
+</body></html>

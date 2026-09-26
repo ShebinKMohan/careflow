@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CareFlow Triage</title>
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Readex+Pro:wght@300;400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#EEF4F2; --paper:#FFFFFF; --ink:#0F2B29; --soft:#56706C; --line:#D3E2DE;
+  --teal:#0E7C66; --teal2:#12A184; --mint:#D5EDE6; --sky:#3558D4; --skybg:#E3E9FC;
+  --coral:#E0533A; --coralbg:#FCE3DD; --sand:#EFE6D6; --plum:#A3246A; --plumbg:#F8E1EE;
+  --steel:#2B3A3F; --steel2:#44555B; --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font:400 16px/1.5 "Readex Pro",system-ui,sans-serif;padding-inline:16px;padding-block:8px;overflow-x:hidden}
+.viewport{position:relative}
+.stage{position:relative;width:100%;max-width:1280px;margin:0 auto}
+.scene{display:grid;place-items:center;padding:40px 24px;min-height:720px}
+html.js .viewport{position:relative;width:100%;max-width:1440px;margin:0 auto;aspect-ratio:16/9;overflow:hidden}
+html.js .stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;max-width:none;margin:0;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center}
+html.js .scene{position:absolute;inset:0;padding:24px 40px;min-height:0;visibility:hidden;opacity:0;transition:opacity .5s var(--ease),visibility 0s .5s}
+html.js .scene.on{visibility:visible;opacity:1;transition:opacity .5s var(--ease)}
+html:not(.js) .bar{display:none}
+html:not(.js) .scene:not(.on) .a,html:not(.js) .scene:not(.on) .p,html:not(.js) .scene:not(.on) .f{opacity:1}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;width:100%}
+.stack{display:grid;gap:16px;justify-items:start}
+.center{display:grid;gap:18px;justify-items:center;text-align:center;width:100%}
+.eyebrow{font:500 12px/1 "JetBrains Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
+.h1{font:800 clamp(30px,4.8vw,60px)/1.05 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.h2{font:800 clamp(26px,3.4vw,42px)/1.1 "Bricolage Grotesque",sans-serif;letter-spacing:-.015em;margin:0;text-wrap:balance;max-width:18ch}
+.lead{font-size:clamp(15px,1.5vw,19px);color:var(--soft);margin:0;max-width:40ch}
+.on .a{animation:rise .7s var(--ease) both;animation-delay:var(--d,0s)}
+.on .p{animation:pop .55s var(--ease) both;animation-delay:var(--d,0s)}
+.on .f{animation:fade .6s ease both;animation-delay:var(--d,0s)}
+.keep{animation:drift 1.4s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes drift{from{transform:translateY(8px)}to{transform:none}}
+.art{width:100%;height:auto;display:block;border-radius:22px}
+
+/* ---------- KIOSK ---------- */
+.kiosk{width:min(320px,76vw);display:grid;justify-items:center;justify-self:center;filter:drop-shadow(0 30px 40px rgba(15,43,41,.22))}
+.k-body{width:100%;background:linear-gradient(160deg,#3A4B51,#223036);border-radius:26px 26px 14px 14px;padding:14px 14px 16px;display:grid;gap:10px}
+.k-top{display:flex;justify-content:center;align-items:center;gap:8px;height:12px}
+.cam{width:10px;height:10px;border-radius:50%;background:#0B1418;box-shadow:inset 0 0 0 2px #56666C;position:relative}
+.led{width:6px;height:6px;border-radius:50%;background:#5A6A70}
+.on .led.live{animation:led .4s var(--d,1s) both}
+@keyframes led{to{background:#3BE08F;box-shadow:0 0 10px #3BE08F}}
+.k-screen{background:var(--paper);border-radius:12px;aspect-ratio:3/4.7;overflow:hidden;position:relative;display:grid;align-content:start;gap:9px;padding:14px 13px;font-size:13px}
+.k-foot{display:flex;justify-content:space-between;align-items:center;padding:0 6px}
+.k-reader{width:64px;height:16px;border-radius:5px;background:#101A1E;box-shadow:inset 0 0 0 2px #56666C}
+.k-slot{width:86px;height:8px;border-radius:4px;background:#0B1418;position:relative}
+.k-neck{width:64px;height:90px;background:linear-gradient(90deg,#2A383D,#3F5056,#2A383D)}
+.k-base{width:180px;height:20px;border-radius:50%;background:#1F2C31}
+.brand{display:flex;align-items:center;gap:8px;font:600 13px "Readex Pro";color:var(--teal)}
+.logo{width:22px;height:22px;border-radius:7px;background:var(--teal);display:grid;place-items:center;color:#fff;font:800 13px "Bricolage Grotesque"}
+.kbtn{border-radius:12px;padding:12px;text-align:center;font-weight:600;border:1.5px solid var(--line);background:var(--paper)}
+.kbtn.pri{background:var(--teal);border-color:var(--teal);color:#fff}
+.kbig{font:800 22px/1.15 "Bricolage Grotesque";margin:6px 0 0}
+.qr{width:64px;height:64px;border-radius:6px;background:
+ conic-gradient(from 90deg,var(--ink) 25%,#fff 0 50%,var(--ink) 0 75%,#fff 0) 0 0/16px 16px;outline:5px solid #fff;box-shadow:0 0 0 6px var(--line)}
+.tap{position:absolute;width:38px;height:38px;border-radius:50%;background:rgba(14,124,102,.18);border:2px solid var(--teal);pointer-events:none}
+.on .tap{animation:tap 1.2s var(--ease) both;animation-delay:var(--d,1s)}
+@keyframes tap{0%{opacity:0;transform:scale(1.6)}40%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(.85)}100%{opacity:0;transform:scale(1.3)}}
+.dots{display:flex;gap:7px;justify-content:center}.dots i{width:13px;height:13px;border-radius:50%;border:2px solid var(--line)}
+.on .dots i{animation:dotfill .2s both;animation-delay:calc(.6s + var(--i)*.18s)}
+@keyframes dotfill{to{background:var(--ink);border-color:var(--ink)}}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.keys span{background:var(--ground);border-radius:9px;text-align:center;padding:6px 0;font:600 15px "Readex Pro"}
+.found{display:flex;gap:10px;align-items:center;background:var(--mint);border-radius:12px;padding:10px}
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(160deg,#C9A77C,#9E7B52);flex:none;position:relative;overflow:hidden}
+.avatar::after{content:"";position:absolute;left:50%;top:9px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#F3E3CC}
+.lang{display:flex;gap:6px}.lang span{flex:1;text-align:center;padding:7px;border-radius:9px;border:1.5px solid var(--line);font-weight:500}
+.lang .sel{border-color:var(--teal);color:var(--teal);background:var(--mint)}
+.ar{direction:rtl;font-family:"Readex Pro"}
+.bubble{padding:9px 12px;border-radius:14px;max-width:88%;font-size:13px;line-height:1.35}
+.b-ai{background:var(--ground);justify-self:start;border-bottom-left-radius:4px}
+.b-me{background:var(--teal);color:#fff;justify-self:end;border-bottom-right-radius:4px}
+.orb{width:74px;height:74px;border-radius:50%;justify-self:center;background:radial-gradient(circle at 35% 30%,#5BD3B5,var(--teal));display:grid;place-items:center;position:relative}
+.orb::before,.orb::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(14,124,102,.35)}
+.on .orb::before{animation:ring 1.8s ease-out infinite}.on .orb::after{animation:ring 1.8s .9s ease-out infinite}
+@keyframes ring{from{transform:scale(.9);opacity:1}to{transform:scale(1.35);opacity:0}}
+.wave{display:flex;gap:3px;align-items:center;height:26px}.wave i{width:4px;border-radius:2px;background:#fff;height:30%}
+.on .wave i{animation:wv 1s ease-in-out infinite;animation-delay:calc(var(--i)*-.12s)}
+@keyframes wv{0%,100%{height:25%}50%{height:95%}}
+/* camera view on kiosk */
+.camview{position:relative;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#1B2A2F,#2C3E44);aspect-ratio:4/3.1}
+.camview svg{position:absolute;inset:0;width:100%;height:100%}
+.rec{position:absolute;left:8px;top:8px;font:500 10px "JetBrains Mono";color:#C9F5E6;background:rgba(0,0,0,.35);padding:3px 6px;border-radius:5px;display:flex;gap:5px;align-items:center}
+.rec i{width:6px;height:6px;border-radius:50%;background:#3BE08F}
+.vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.vit{background:var(--ground);border-radius:9px;padding:7px 6px;text-align:center}
+.vit b{display:block;font:800 19px/1.1 "Bricolage Grotesque"}
+.vit small{font-size:10.5px;color:var(--soft)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12.5px;font-weight:500;background:var(--paper);border:1px solid var(--line)}
+.chip.obs{background:var(--skybg);border-color:#C6D2F7;color:#2A45A8}
+.on .pose{animation:sway 3s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+.on .scan{animation:scan 2.2s linear infinite}
+@keyframes scan{from{transform:translateY(-10%)}to{transform:translateY(110%)}}
+
+/* ---------- PHONE ---------- */
+.phone{width:min(260px,68vw);aspect-ratio:9/19;background:#10191C;border-radius:40px;padding:10px;justify-self:center;position:relative;box-shadow:0 30px 50px -25px rgba(15,43,41,.5),inset 0 0 0 2px #34454B}
+.p-scr{background:var(--ground);border-radius:31px;height:100%;overflow:hidden;display:grid;grid-template-rows:auto auto 1fr;position:relative}
+.island{position:absolute;top:9px;left:50%;width:84px;height:24px;margin-left:-42px;border-radius:14px;background:#10191C;z-index:2}
+.p-status{display:flex;justify-content:space-between;padding:12px 22px 4px;font:600 12px "Readex Pro"}
+.p-status .ic{display:flex;gap:4px;align-items:center}
+.p-status .bat{width:20px;height:10px;border:1.5px solid var(--ink);border-radius:3px;position:relative}.p-status .bat::after{content:"";position:absolute;inset:1px 4px 1px 1px;background:var(--ink);border-radius:1px}
+.p-head{background:var(--teal);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+.p-head .logo{background:#fff;color:var(--teal)}
+.p-body{padding:12px;display:grid;align-content:start;gap:9px;font-size:12.5px}
+.qcard{background:var(--paper);border-radius:14px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.qcard b{font:800 26px/1 "Bricolage Grotesque";color:var(--teal)}
+.src{display:inline-block;margin-top:5px;font:500 10px "JetBrains Mono";color:var(--teal);background:var(--mint);padding:2px 6px;border-radius:4px}
+.worse{background:var(--coral);color:#fff;border-radius:12px;padding:10px;text-align:center;font-weight:600}
+
+/* ---------- TABLET ---------- */
+.tablet{width:min(430px,90vw);aspect-ratio:4/3;background:#10191C;border-radius:26px;padding:12px;justify-self:center;box-shadow:0 30px 50px -25px rgba(15,43,41,.5)}
+.t-scr{background:#F6F9F8;border-radius:16px;height:100%;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.t-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--ink);color:#fff;font-size:13px;font-weight:600}
+.t-body{padding:12px;display:grid;align-content:start;gap:9px;font-size:13px}
+.row{display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.lvl{font:800 13px "Readex Pro";padding:4px 8px;border-radius:6px;background:var(--coralbg);color:var(--coral)}
+.lvl.l3{background:#FFF1D6;color:#9A6400}.lvl.l4{background:var(--mint);color:var(--teal)}
+.alert{background:var(--coral);color:#fff;border-radius:12px;padding:12px;display:grid;gap:3px;box-shadow:0 12px 24px -12px rgba(224,83,58,.8)}
+.alert b{font-size:15px}
+.on .alert.in{animation:slidein .6s var(--ease) both,pulse 1.6s 1.2s ease-in-out 2;animation-delay:var(--d,1s),calc(var(--d,1s) + .6s)}
+@keyframes slidein{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(224,83,58,.2)}}
+.btn{flex:1;text-align:center;padding:10px;border-radius:10px;font-weight:600;border:1.5px solid var(--ink)}
+.btn.ok{background:var(--teal);border-color:var(--teal);color:#fff}
+.on .btn.ok{animation:press .5s both;animation-delay:var(--d,1.6s)}
+@keyframes press{50%{transform:scale(.93)}100%{box-shadow:0 0 0 5px var(--mint)}}
+.gauge{width:180px;justify-self:center}
+
+/* ---------- MONITOR (doctor) ---------- */
+.monitor{width:min(640px,94vw);justify-self:center;display:grid;justify-items:center;filter:drop-shadow(0 30px 40px rgba(15,43,41,.22))}
+.m-frame{width:100%;background:#1A2428;border-radius:16px;padding:12px}
+.m-scr{background:#F7FAF9;border-radius:6px;overflow:hidden;font-size:12.5px}
+.m-bar{display:flex;align-items:center;gap:6px;background:#E3ECE9;padding:7px 10px}
+.m-bar i{width:9px;height:9px;border-radius:50%;background:#C9D6D2}
+.m-bar span{margin-left:8px;font:500 11px "JetBrains Mono";color:var(--soft)}
+.ehr-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;background:var(--paper);border-bottom:1px solid var(--line)}
+.ehr-head .nm{font:700 17px "Readex Pro"}
+.ehr-head small{color:var(--soft)}
+.ehr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px}
+.sec{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 11px;display:grid;gap:5px}
+.sec h4{margin:0;font:600 10.5px "JetBrains Mono";letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.ln{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.tag{font:500 9.5px "JetBrains Mono";padding:2px 5px;border-radius:4px;white-space:nowrap}
+.t-ehr{background:var(--skybg);color:var(--sky)}.t-pt{background:var(--sand);color:#7A5B1E}.t-dev{background:var(--plumbg);color:var(--plum)}.t-rn{background:var(--mint);color:var(--teal)}
+.m-neck{width:90px;height:50px;background:linear-gradient(90deg,#26343A,#3A4A50,#26343A)}
+.m-base{width:220px;height:14px;border-radius:8px;background:#1F2C31}
+
+/* ---------- misc ---------- */
+.ticket{background:#fff;border-radius:6px;padding:12px 14px;width:150px;box-shadow:0 12px 20px -10px rgba(0,0,0,.35);font-size:12px;text-align:center;position:absolute;left:50%;margin-left:-75px;top:100%}
+.on .ticket{animation:print 1.4s var(--ease) both;animation-delay:var(--d,.8s)}
+@keyframes print{from{transform:translateY(-60px);clip-path:inset(0 0 100% 0)}to{transform:translateY(8px);clip-path:inset(0 0 0 0)}}
+.ticket b{display:block;font:800 30px/1.1 "Bricolage Grotesque"}
+.board{background:#0F1E22;color:#D9F2EA;border-radius:14px;padding:12px 16px;display:grid;gap:6px;font:500 14px "JetBrains Mono";min-width:260px}
+.board .hl{color:#3BE08F}
+.on .board .hl{animation:blink 1s steps(2) 3;animation-delay:var(--d,2s)}
+@keyframes blink{50%{opacity:.25}}
+.values{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:100%;max-width:980px}
+.value{background:var(--paper);border-radius:16px;padding:18px 14px;display:grid;gap:10px;justify-items:center;font:700 17px/1.2 "Bricolage Grotesque"}
+.value svg{width:40px;height:40px}
+.rings{position:relative;width:min(480px,86vw);aspect-ratio:1;justify-self:center}
+.ring{position:absolute;border-radius:50%;display:grid;justify-items:center;align-content:start;padding-top:6%;gap:6px;text-align:center}
+.r3{inset:0;background:#E1EEEA;border:2px dashed var(--teal)}
+.r2{inset:17%;background:#C8E4DB}
+.r1{inset:31%;background:var(--ink);color:#fff;align-content:center;padding-top:0}
+.ring b{font:700 14px "Readex Pro"}.ring small{font-size:12px;opacity:.8}
+.ico{width:28px;height:28px}
+.alerts4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.a4{background:var(--paper);border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-size:14px;border:1px solid var(--line)}
+.a4 svg{width:34px;height:34px;flex:none}
+.a4 b{display:block;font-size:13px;color:var(--coral)}
+.summary{background:var(--paper);border-radius:16px;padding:14px;display:grid;gap:7px;width:min(330px,90vw);box-shadow:0 20px 40px -24px rgba(15,43,41,.4)}
+.summary h4{margin:0 0 4px;font:600 11px "JetBrains Mono";letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.sline{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:6px;font-size:14px}
+.sline span:first-child{color:var(--soft)}
+.flowarrow{width:60px;height:60px;justify-self:center}
+
+/* controls */
+.bar{position:relative;max-width:1240px;width:100%;margin:0 auto;padding-inline:16px;display:flex;align-items:center;gap:12px;padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));background:var(--ground)}
+.ctl{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:600 16px/1 "Readex Pro";cursor:pointer;display:grid;place-items:center;flex:none}
+.ctl:focus-visible,.seg:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.segs{flex:1;display:flex;gap:4px}
+.seg{flex:1;height:6px;border-radius:3px;background:var(--line);border:0;padding:0;cursor:pointer;position:relative;overflow:hidden}
+.seg i{position:absolute;inset:0;background:var(--teal);transform-origin:left;transform:scaleX(0)}
+.seg.done i{transform:scaleX(1)}
+.seg.cur i{animation:prog var(--dur) linear forwards}
+.paused .seg.cur i{animation-play-state:paused}
+@keyframes prog{to{transform:scaleX(1)}}
+.label{font:500 12px/1 "JetBrains Mono";color:var(--soft);min-width:150px;text-align:right}
+@media (max-width:820px){
+  html:not(.js) .split{grid-template-columns:1fr;gap:22px}.split .stack{justify-items:center;text-align:center}
+  html:not(.js) .values{grid-template-columns:1fr 1fr}html:not(.js) .ehr{grid-template-columns:1fr}.label{display:none}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="viewport" id="viewport"><main class="stage" id="stage" aria-live="polite">
+
+<!-- 1 · Question -->
+<section class="scene on" data-label="The question" data-dur="7000">
+  <div class="center">
+    <svg class="art keep" viewBox="0 0 1000 380" aria-hidden="true" style="max-width:980px">
+      <rect width="1000" height="380" rx="24" fill="#E3EEEA"/>
+      <rect x="0" y="250" width="1000" height="130" fill="#D2E2DD"/>
+      <g fill="#F7FBFA" stroke="#C3D7D1" stroke-width="3"><rect x="60" y="50" width="150" height="150" rx="6"/><rect x="240" y="50" width="150" height="150" rx="6"/><rect x="760" y="50" width="180" height="150" rx="6"/></g>
+      <rect x="430" y="40" width="300" height="48" rx="10" fill="#0E7C66"/><text x="580" y="71" text-anchor="middle" fill="#fff" font-family="Readex Pro" font-size="18" font-weight="600">Urgent Care</text>
+      <rect x="560" y="170" width="300" height="95" rx="10" fill="#C9A77C"/><rect x="560" y="160" width="300" height="16" rx="6" fill="#B08D63"/>
+      <g><circle cx="700" cy="140" r="16" fill="#8A6A48"/><rect x="684" y="156" width="32" height="30" rx="10" fill="#0E7C66"/></g>
+      <g class="walk">
+        <g transform="translate(520,190)"><circle r="17" fill="#6E8BA8"/><rect x="-19" y="18" width="38" height="70" rx="15" fill="#6E8BA8"/></g>
+        <g transform="translate(470,196)"><circle r="16" fill="#D98C7A"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#D98C7A"/><circle cx="16" cy="40" r="10" fill="#F2C9A0"/></g>
+        <g transform="translate(420,192)"><circle r="17" fill="#8FB5AE"/><rect x="-19" y="18" width="38" height="70" rx="15" fill="#8FB5AE"/><rect x="-6" y="30" width="16" height="10" rx="3" fill="#E0533A"/></g>
+        <g transform="translate(370,198)"><circle r="16" fill="#B39BC8"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#B39BC8"/></g>
+        <g transform="translate(320,194)"><circle r="17" fill="#C9A77C"/><rect x="-19" y="18" width="38" height="70" rx="15" fill="#C9A77C"/></g>
+        <g transform="translate(270,200)"><circle r="16" fill="#7FA39C"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#7FA39C"/></g>
+      </g>
+      <g transform="translate(150,300)"><rect x="-60" y="-40" width="120" height="30" rx="8" fill="#9DB5B0"/><rect x="-55" y="-10" width="8" height="30" fill="#8AA39E"/><rect x="47" y="-10" width="8" height="30" fill="#8AA39E"/></g>
+    </svg>
+    <h1 class="h1 keep" style="margin-top:6px">Why do we make people who are hurting wait to be understood?</h1>
+  </div>
+</section>
+
+<!-- 2 · Today -->
+<section class="scene" data-label="Today" data-dur="8000">
+  <div class="split">
+    <svg class="art p" viewBox="0 0 560 400" aria-hidden="true">
+      <rect width="560" height="400" rx="24" fill="#F6E9E4"/>
+      <rect y="290" width="560" height="110" fill="#EBD6CE"/>
+      <rect x="360" y="190" width="170" height="100" rx="10" fill="#C9A77C"/>
+      <g><circle cx="445" cy="160" r="15" fill="#8A6A48"/><rect x="430" y="175" width="30" height="24" rx="9" fill="#5B6472"/></g>
+      <g transform="translate(340,210)"><circle r="16" fill="#6E8BA8"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#6E8BA8"/></g>
+      <g class="f" style="--d:.8s"><rect x="240" y="120" width="120" height="40" rx="12" fill="#fff" stroke="#E0533A" stroke-width="2"/><path d="M300,160 l10,14 l6,-14z" fill="#fff" stroke="#E0533A" stroke-width="2"/><text x="300" y="146" text-anchor="middle" font-family="JetBrains Mono" font-size="15" fill="#E0533A">050 123 4567</text></g>
+      <g transform="translate(280,214)"><circle r="16" fill="#D98C7A"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#D98C7A"/><circle cx="14" cy="38" r="10" fill="#F2C9A0"/></g>
+      <g transform="translate(225,212)"><circle r="16" fill="#8FB5AE"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#8FB5AE"/><rect x="-7" y="28" width="16" height="10" rx="3" fill="#E0533A"/></g>
+      <g transform="translate(170,216)"><circle r="16" fill="#B39BC8"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#B39BC8"/></g>
+      <g transform="translate(115,214)"><circle r="16" fill="#C9A77C"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#C9A77C"/></g>
+      <g transform="translate(60,218)"><circle r="16" fill="#7FA39C"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#7FA39C"/></g>
+      <g transform="translate(80,70)"><circle r="36" fill="#fff" stroke="#0F2B29" stroke-width="4"/><line x1="0" y1="0" x2="0" y2="-24" stroke="#0F2B29" stroke-width="4" stroke-linecap="round" class="hand1"/><line x1="0" y1="0" x2="16" y2="6" stroke="#E0533A" stroke-width="4" stroke-linecap="round"/></g>
+      <g class="f" style="--d:1.3s" transform="translate(150,40)"><rect width="60" height="76" rx="6" fill="#fff" stroke="#56706C" stroke-width="2"/><rect x="10" y="10" width="60" height="76" rx="6" fill="#fff" stroke="#0F2B29" stroke-width="2"/><path d="M20,30h40M20,42h40M20,54h26" stroke="#0F2B29" stroke-width="3"/></g>
+    </svg>
+    <div class="stack">
+      <div class="eyebrow a">Today</div>
+      <h2 class="h2 a" style="--d:.2s">Long lines. Private details said out loud. The same forms, again.</h2>
+      <p class="lead a" style="--d:.5s">And the doctor still starts from zero.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · Meet CareFlow -->
+<section class="scene" data-label="Meet CareFlow" data-dur="7000">
+  <div class="center">
+    <svg class="art p" viewBox="0 0 1000 340" aria-hidden="true" style="max-width:980px">
+      <rect width="1000" height="340" rx="24" fill="#E3EEEA"/>
+      <rect y="240" width="1000" height="100" fill="#D2E2DD"/>
+      <rect x="380" y="36" width="240" height="44" rx="10" fill="#0E7C66"/><text x="500" y="65" text-anchor="middle" fill="#fff" font-family="Readex Pro" font-size="17" font-weight="600">CareFlow Check-in</text>
+      <g fill="#2B3A3F"><rect x="330" y="110" width="70" height="110" rx="10"/><rect x="465" y="110" width="70" height="110" rx="10"/><rect x="600" y="110" width="70" height="110" rx="10"/></g>
+      <g fill="#DFF3EC"><rect x="338" y="120" width="54" height="70" rx="5"/><rect x="473" y="120" width="54" height="70" rx="5"/><rect x="608" y="120" width="54" height="70" rx="5"/></g>
+      <g fill="#2B3A3F"><rect x="357" y="220" width="16" height="30"/><rect x="492" y="220" width="16" height="30"/><rect x="627" y="220" width="16" height="30"/></g>
+      <g transform="translate(300,160)"><circle r="16" fill="#6E8BA8"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#6E8BA8"/></g>
+      <g transform="translate(570,166)"><circle r="16" fill="#D98C7A"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#D98C7A"/></g>
+      <g transform="translate(780,160)"><circle r="16" fill="#8A6A48"/><rect x="-18" y="17" width="36" height="66" rx="14" fill="#0E7C66"/></g>
+      <g transform="translate(830,172)"><circle r="15" fill="#E7E1D6"/><rect x="-17" y="16" width="34" height="62" rx="13" fill="#B39BC8"/><rect x="18" y="30" width="4" height="50" rx="2" fill="#7A5B1E"/></g>
+      <g transform="translate(120,190)"><rect x="-40" y="10" width="80" height="50" rx="12" fill="#9DB5B0"/><circle cx="-20" cy="-2" r="14" fill="#7FA39C"/><circle cx="18" cy="-2" r="14" fill="#C9A77C"/></g>
+      <g transform="translate(920,230)"><rect x="-14" y="-10" width="28" height="30" rx="6" fill="#B08D63"/><circle cy="-30" r="26" fill="#5DAF8F"/></g>
+    </svg>
+    <div class="h1 p" style="--d:.6s;color:var(--teal)">CareFlow Triage</div>
+    <p class="lead a" style="--d:1s;max-width:48ch">An intelligent, private and human front door for every clinic.</p>
+  </div>
+</section>
+
+<!-- 4 · Welcome -->
+<section class="scene" data-label="Welcome" data-dur="7000">
+  <div class="split">
+    <div class="kiosk p">
+      <div class="k-body">
+        <div class="k-top"><span class="cam"></span><span class="led"></span></div>
+        <div class="k-screen">
+          <div class="brand"><span class="logo">C</span>CareFlow</div>
+          <div class="kbig">Welcome</div>
+          <div style="display:inline-flex;gap:6px;align-items:center;font-size:12.5px;color:var(--teal);font-weight:500"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#0E7C66" stroke-width="1.5"/><path d="M1,7h12M7,1c3,3 3,9 0,12M7,1c-3,3 -3,9 0,12" fill="none" stroke="#0E7C66" stroke-width="1.2"/></svg>Multilingual</div>
+          <div class="kbtn pri" style="margin-top:18px;position:relative">Tap to begin<span class="tap" style="--d:1.6s;left:50%;top:50%;margin:-19px 0 0 -19px"></span></div>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:18px"><span class="qr" aria-hidden="true"></span><span style="font-size:12.5px;color:var(--soft)">Prefer your phone? Scan to check in privately.</span></div>
+        </div>
+        <div class="k-foot"><span class="k-reader"></span><span class="k-slot"></span></div>
+      </div>
+      <div class="k-neck"></div><div class="k-base"></div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">1 · Arrival</div>
+      <h2 class="h2 a" style="--d:.2s">Walk up and tap. Or continue on your phone.</h2>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · Identify -->
+<section class="scene" data-label="Private check-in" data-dur="8500">
+  <div class="split">
+    <div class="kiosk p">
+      <div class="k-body">
+        <div class="k-top"><span class="cam"></span><span class="led"></span></div>
+        <div class="k-screen">
+          <div class="brand"><span class="logo">C</span>CareFlow</div>
+          <div style="font-weight:600">Enter your mobile number or tap your ID</div>
+          <div class="dots"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i></div>
+          <div class="keys"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div>
+          <div class="found a" style="--d:2.8s"><span class="avatar"></span><div><b>Welcome back, Marcus</b><div style="font-size:12px;color:var(--soft)">Records found</div></div></div>
+          <div class="lang a" style="--d:3.3s"><span class="sel">Language: English</span><span>Change</span></div>
+          <div class="a" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative;--d:3.8s">
+            <span class="kbtn pri">For myself</span><span class="kbtn">For my child</span>
+            <span class="tap" style="--d:4.6s;left:22%;top:6px"></span>
+          </div>
+        </div>
+        <div class="k-foot"><span class="k-reader"></span><span class="k-slot"></span></div>
+      </div>
+      <div class="k-neck"></div><div class="k-base"></div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">2 · Private check-in</div>
+      <h2 class="h2 a" style="--d:.2s">Typed quietly. Recognised instantly.</h2>
+      <p class="lead a" style="--d:.5s">Records, allergies and language preference load in a second. Parents choose "For my child".</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · Conversation -->
+<section class="scene" data-label="Conversation" data-dur="9000">
+  <div class="split">
+    <div class="kiosk p">
+      <div class="k-body">
+        <div class="k-top"><span class="cam"></span><span class="led"></span></div>
+        <div class="k-screen">
+          <div class="brand"><span class="logo">C</span>CareFlow</div>
+          <div class="orb"><div class="wave"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div></div>
+          <div class="bubble b-ai a" style="--d:.6s">What brings you in today?</div>
+                    <div class="bubble b-me a" style="--d:2s">My chest has felt tight since I climbed the stairs.</div>
+          <div class="bubble b-ai a" style="--d:3.2s">When did it start? Does it spread to your arm or jaw?</div>
+          <div class="bubble b-me a" style="--d:4.4s">About 45 minutes ago. No.</div>
+        </div>
+        <div class="k-foot"><span class="k-reader"></span><span class="k-slot"></span></div>
+      </div>
+      <div class="k-neck"></div><div class="k-base"></div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">3 · Conversation</div>
+      <h2 class="h2 a" style="--d:.2s">Speak naturally, in your own language.</h2>
+      <p class="lead a" style="--d:.5s">Clear, specific questions. Tap answers whenever you prefer.</p>
+      <span class="chip a" style="--d:.8s">Multilingual (English, Arabic)</span>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · Vitals + camera -->
+<section class="scene" data-label="Vitals" data-dur="9000">
+  <div class="split">
+    <div class="kiosk p">
+      <div class="k-body">
+        <div class="k-top"><span class="cam"></span><span class="led live" style="--d:.8s"></span></div>
+        <div class="k-screen">
+          <div class="brand"><span class="logo">C</span>CareFlow</div>
+          <div style="font-weight:600">Now, your vitals</div>
+          <div class="camview f" style="--d:.9s">
+            <svg viewBox="0 0 200 155" aria-hidden="true">
+              <rect width="200" height="155" fill="none"/>
+              <g class="pose">
+                <ellipse cx="100" cy="46" rx="20" ry="23" fill="#5E7780"/>
+                <path d="M58,155 C58,98 76,80 100,80 C124,80 142,98 142,155 Z" fill="#5E7780"/>
+                <g stroke="#3BE08F" stroke-width="2" fill="none"><path d="M100,70 L100,120 M76,92 L124,92 M76,92 L90,112 L104,104 M124,92 L132,130"/></g>
+                <g fill="#3BE08F"><circle cx="100" cy="46" r="3"/><circle cx="76" cy="92" r="3.5"/><circle cx="124" cy="92" r="3.5"/><circle cx="90" cy="112" r="3.5"/><circle cx="104" cy="104" r="4.5" fill="#FF8A6B"/><circle cx="132" cy="130" r="3.5"/><circle cx="100" cy="120" r="3"/></g>
+              </g>
+              <rect class="scan" x="0" y="0" width="200" height="3" fill="rgba(59,224,143,.5)"/>
+            </svg>
+            <span class="rec"><i></i>Live · not recorded</span>
+          </div>
+          <div class="vitals">
+            <div class="vit"><b data-count="118">118</b><small>pulse</small></div>
+            <div class="vit"><b data-count="96" data-suffix="%">96%</b><small>SpO₂</small></div>
+            <div class="vit"><b data-count="37.9" data-dec="1" data-suffix="°">37.9°</b><small>temp</small></div>
+          </div>
+        </div>
+        <div class="k-foot"><span class="k-reader"></span><span class="k-slot"></span></div>
+      </div>
+      <div class="k-neck"></div><div class="k-base"></div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">4 · Vitals</div>
+      <h2 class="h2 a" style="--d:.2s">The camera turns on only for this step.</h2>
+      <p class="lead a" style="--d:.5s">Pulse, oxygen and temperature in seconds. What the camera sees stays on the kiosk.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="chip obs a" style="--d:2.4s">Hand on chest noticed</span>
+        <span class="chip obs a" style="--d:3s">Coughing noticed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · Understanding + urgency -->
+<section class="scene" data-label="Understanding" data-dur="9000">
+  <div class="center">
+    <div class="eyebrow a">5 · Understanding</div>
+    <h2 class="h2 a" style="--d:.2s;max-width:26ch">Everything becomes one clear picture, with an urgency level.</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:center;margin-top:6px">
+      <div class="summary p" style="--d:.6s">
+        <h4>Patient summary</h4>
+        <div class="sline a" style="--d:1s"><span>Complaint</span><span>Chest tightness</span></div>
+        <div class="sline a" style="--d:1.3s"><span>Started</span><span>45 min ago, on exertion</span></div>
+        <div class="sline a" style="--d:1.6s"><span>Pulse · SpO₂ · Temp</span><span>118 · 96% · 37.9°</span></div>
+        <div class="sline a" style="--d:1.9s"><span>History</span><span>Hypertension</span></div>
+        <div class="sline a" style="--d:2.2s;border:0"><span>Observed</span><span>Hand on chest, cough</span></div>
+      </div>
+      <svg class="flowarrow a" style="--d:2.6s" viewBox="0 0 60 60" aria-hidden="true"><path d="M8,30 H48 M36,18 L50,30 L36,42" fill="none" stroke="#0E7C66" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="summary p" style="--d:2.9s;justify-items:center;text-align:center">
+        <h4>Suggested urgency</h4>
+        <svg class="gauge" viewBox="0 0 200 116" aria-hidden="true">
+          <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="#E7EFEC" stroke-width="18" stroke-linecap="round"/>
+          <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="url(#gg)" stroke-width="18" stroke-linecap="round" stroke-dasharray="252" stroke-dashoffset="252" class="gaugeArc"/>
+          <defs><linearGradient id="gg"><stop offset="0" stop-color="#12A184"/><stop offset=".6" stop-color="#F2A93B"/><stop offset="1" stop-color="#E0533A"/></linearGradient></defs>
+          <text x="100" y="92" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="30" fill="#E0533A">Level 2</text>
+          <text x="100" y="112" text-anchor="middle" font-family="Readex Pro" font-size="13" fill="#56706C">86% confidence</text>
+        </svg>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+          <span class="chip a" style="--d:3.6s">Chest tightness</span><span class="chip a" style="--d:3.8s">Pulse 118</span><span class="chip a" style="--d:4s">Age 58</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · Priority alerts -->
+<section class="scene" data-label="Priority alerts" data-dur="9000">
+  <div class="split">
+    <div class="tablet p">
+      <div class="t-scr">
+        <div class="t-head"><span>Nurse station</span><span style="font-weight:400;opacity:.8">09:41</span></div>
+        <div class="t-body">
+          <div class="alert in" style="--d:1s"><b>Chest pain · ECG within 10 minutes</b><span>Marcus, 58 · Kiosk 3 · just now</span></div>
+          <div class="row a" style="--d:.4s"><span>Aisha, 34 · sore throat</span><span class="lvl l4">Level 4</span></div>
+          <div class="row a" style="--d:.5s"><span>Omar, 7 · fever</span><span class="lvl l3">Level 3</span></div>
+          <div class="row a" style="--d:.6s"><span>Grace, 71 · dizziness</span><span class="lvl l3">Level 3</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">6 · Priority alerts</div>
+      <h2 class="h2 a" style="--d:.2s">Danger signs never wait in line.</h2>
+      <div class="alerts4">
+        <div class="a4 a" style="--d:.6s"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17,29 C5,20 3,13 7,8 C10,4 15,5 17,9 C19,5 24,4 27,8 C31,13 29,20 17,29Z" fill="#FCE3DD" stroke="#E0533A" stroke-width="2"/><path d="M8,17 h6 l2,-4 l3,8 l2,-4 h5" fill="none" stroke="#E0533A" stroke-width="2"/></svg><span><b>Chest pain</b>ECG within 10 min</span></div>
+        <div class="a4 a" style="--d:.8s"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M10,26 C4,24 4,14 9,12 C9,6 16,4 18,8 C22,4 30,7 28,13 C32,17 29,25 23,25 Z" fill="#FCE3DD" stroke="#E0533A" stroke-width="2"/><path d="M16,10 v14" stroke="#E0533A" stroke-width="2"/></svg><span><b>Sudden weakness reported</b>Stroke team alerted</span></div>
+        <div class="a4 a" style="--d:1s"><svg viewBox="0 0 34 34" aria-hidden="true"><rect x="13" y="4" width="8" height="20" rx="4" fill="#FCE3DD" stroke="#E0533A" stroke-width="2"/><circle cx="17" cy="26" r="5" fill="#E0533A"/></svg><span><b>Infection signs</b>Sepsis alert</span></div>
+        <div class="a4 a" style="--d:1.2s"><svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="11" r="6" fill="#FCE3DD" stroke="#E0533A" stroke-width="2"/><path d="M8,30 C8,21 26,21 26,30" fill="#FCE3DD" stroke="#E0533A" stroke-width="2"/><path d="M22,6 l3,-3 M26,9 l3,-1" stroke="#E0533A" stroke-width="2"/></svg><span><b>Very drowsy child</b>Urgent nurse review</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · Nurse decides -->
+<section class="scene" data-label="The nurse decides" data-dur="7500">
+  <div class="split">
+    <div class="stack">
+      <div class="eyebrow a">7 · Clinical judgement</div>
+      <h2 class="h2 a" style="--d:.2s">AI suggests. The nurse decides.</h2>
+      <p class="lead a" style="--d:.5s">One tap to confirm, or change it with a reason. Every decision is recorded.</p>
+    </div>
+    <div class="tablet p" style="--d:.3s">
+      <div class="t-scr">
+        <div class="t-head"><span>Marcus, 58 · Kiosk 3</span><span style="font-weight:400;opacity:.8">09:42</span></div>
+        <div class="t-body">
+          <div class="row"><span>Suggested urgency</span><span class="lvl">Level 2 · 86%</span></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Chest tightness</span><span class="chip">Pulse 118</span><span class="chip">Age 58</span></div>
+          <div style="display:flex;gap:8px;margin-top:4px;position:relative"><span class="btn ok" style="--d:1.8s">Confirm</span><span class="btn">Change</span><span class="tap" style="--d:1.5s;left:18%;top:0"></span></div>
+          <div class="row a" style="--d:2.4s;background:var(--mint);border-color:#B6E0D3"><span style="color:var(--teal);font-weight:600">Confirmed by Nurse Fatima</span><span>09:42</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · Ticket + waiting -->
+<section class="scene" data-label="While you wait" data-dur="9500">
+  <div class="split">
+    <div style="display:grid;grid-template-columns:auto auto;gap:28px;align-items:end;justify-content:center">
+      <div style="display:grid;gap:40px;justify-items:center">
+        <div style="position:relative">
+          <div class="k-body" style="width:170px;padding:10px;border-radius:18px">
+            <div class="k-screen" style="aspect-ratio:3/2.4;padding:10px;font-size:12px;align-content:center;justify-items:center;text-align:center"><div style="font-weight:600">Your token is printing</div><div class="kbig" style="font-size:18px;color:var(--teal)">A-104</div></div>
+            <div class="k-foot" style="justify-content:center;margin-top:8px"><span class="k-slot" style="position:relative"><span class="ticket" style="--d:.8s"><span style="color:var(--soft)">Token</span><b>A-104</b>Room 12<br><span style="color:var(--soft)">≈ 15 min</span></span></span></div>
+          </div>
+        </div>
+        <div class="board a" style="--d:2s;margin-top:130px"><div>NOW CALLING</div><div class="hl" style="--d:2.6s">A-104 → Room 12</div><div style="opacity:.7">A-103 → Room 9</div></div>
+      </div>
+      <div class="phone p" style="--d:1.2s">
+        <div class="p-scr">
+          <span class="island"></span>
+          <div class="p-status"><span>9:41</span><span class="ic"><svg width="16" height="10" viewBox="0 0 16 10"><rect x="0" y="6" width="3" height="4" fill="#0F2B29"/><rect x="4" y="4" width="3" height="6" fill="#0F2B29"/><rect x="8" y="2" width="3" height="8" fill="#0F2B29"/><rect x="12" y="0" width="3" height="10" fill="#0F2B29"/></svg><span class="bat"></span></span></div>
+          <div class="p-head"><span class="logo">C</span>CareFlow · A-104</div>
+          <div class="p-body">
+            <div class="qcard"><span>You are<br><span style="color:var(--soft)">Room 12</span></span><b>3rd</b></div>
+            <div class="bubble b-me a" style="--d:2.4s;max-width:100%">Where is the pharmacy?</div>
+            <div class="bubble b-ai a" style="--d:3.2s;max-width:100%;background:#fff">Ground floor, next to Entrance B. Open until 22:00.<br><span class="src">Clinic guide</span></div>
+            <div class="bubble b-me a" style="--d:4.2s;max-width:100%">Can my wife come in with me?</div>
+            <div class="bubble b-ai a" style="--d:5s;max-width:100%;background:#fff">Yes, one companion is welcome.<br><span class="src">Visitor policy</span></div>
+            <div class="worse a" style="--d:5.8s">I feel worse</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">8 · While you wait</div>
+      <h2 class="h2 a" style="--d:.2s">Your place in line, and answers, on your phone.</h2>
+      <p class="lead a" style="--d:.5s">Ask about the clinic any time. Feel worse? One tap tells the nurse.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · Doctor -->
+<section class="scene" data-label="Room 12" data-dur="9500">
+  <div class="center">
+    <div class="eyebrow a">9 · Room 12</div>
+    <h2 class="h2 a" style="--d:.2s;max-width:30ch">The doctor knows the story before the door opens.</h2>
+    <div class="monitor p" style="--d:.5s">
+      <div class="m-frame"><div class="m-scr">
+        <div class="m-bar"><i></i><i></i><i></i><span>Clinic EHR · Pre-consultation summary</span></div>
+        <div class="ehr-head">
+          <span class="avatar" style="width:42px;height:42px"></span>
+          <div><div class="nm">Marcus Reed · 58 · M</div><small>MRN 004 1187 · Token A-104 · Room 12 · 09:43</small></div>
+          <span class="lvl" style="font-size:14px">Triage Level 2</span>
+        </div>
+        <div class="ehr">
+          <div class="sec a" style="--d:1s"><h4>Presenting complaint</h4><div class="ln"><span>Chest tightness for 45 min, started on stairs. No spread to arm or jaw.</span><span class="tag t-pt">Patient</span></div></div>
+          <div class="sec a" style="--d:1.3s"><h4>Vitals</h4><div class="ln"><span>Pulse 118 · SpO₂ 96% · Temp 37.9 °C</span><span class="tag t-dev">Device</span></div><div class="ln"><span>Resp. rate 20 · BP 148/92</span><span class="tag t-rn">Nurse</span></div></div>
+          <div class="sec a" style="--d:1.6s"><h4>History and medication</h4><div class="ln"><span>Hypertension · Amlodipine 5 mg daily</span><span class="tag t-ehr">EHR</span></div><div class="ln"><span>Allergy: penicillin</span><span class="tag t-ehr">EHR</span></div></div>
+          <div class="sec a" style="--d:1.9s"><h4>Observed and actions</h4><div class="ln"><span>Hand on chest · cough</span><span class="tag t-dev">Camera</span></div><div class="ln"><span>ECG done 09:47 · Level 2 confirmed</span><span class="tag t-rn">Nurse</span></div></div>
+        </div>
+      </div></div>
+      <div class="m-neck"></div><div class="m-base"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · Privacy -->
+<section class="scene" data-label="Privacy by design" data-dur="7500">
+  <div class="split">
+    <div class="rings p">
+      <div class="ring r3"><b>The country</b><small>All health data stays here</small></div>
+      <div class="ring r2"><b>Clinic server</b><small>Speech · AI · records</small></div>
+      <div class="ring r1"><svg class="ico" viewBox="0 0 28 28" aria-hidden="true"><rect x="7" y="3" width="14" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2"/><rect x="12" y="21" width="4" height="4" fill="#fff"/><circle cx="14" cy="7" r="1.5" fill="#3BE08F"/></svg><b>Kiosk</b><small style="font-size:11px">Camera · urgency</small></div>
+    </div>
+    <div class="stack">
+      <div class="eyebrow a">10 · Privacy by design</div>
+      <h2 class="h2 a" style="--d:.2s">Your health data never leaves the country.</h2>
+      <p class="lead a" style="--d:.5s">Camera images are never stored. The AI runs on the clinic's own servers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · Close -->
+<section class="scene" data-label="CareFlow" data-dur="9000">
+  <div class="center">
+    <div class="h1 a" style="color:var(--teal)">CareFlow Triage</div>
+    <p class="lead a" style="--d:.3s">The front door that understands.</p>
+    <div class="values">
+      <div class="value a" style="--d:.6s"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="9" y="17" width="22" height="16" rx="4" fill="#D5EDE6" stroke="#0E7C66" stroke-width="2.5"/><path d="M13,17 v-4 a7,7 0 0 1 14,0 v4" fill="none" stroke="#0E7C66" stroke-width="2.5"/></svg>Privacy by design</div>
+      <div class="value a" style="--d:.8s"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="8" width="24" height="24" rx="5" fill="#F8E1EE" stroke="#A3246A" stroke-width="2.5"/><path d="M14,4v4M20,4v4M26,4v4M14,32v4M20,32v4M26,32v4M4,14h4M4,20h4M4,26h4M32,14h4M32,20h4M32,26h4" stroke="#A3246A" stroke-width="2.5"/></svg>On-device intelligence</div>
+      <div class="value a" style="--d:1s"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20,4 L33,9 V19 C33,27 27,33 20,36 C13,33 7,27 7,19 V9 Z" fill="#FCE3DD" stroke="#E0533A" stroke-width="2.5"/><path d="M14,20 l4,4 l8,-9" fill="none" stroke="#E0533A" stroke-width="2.5"/></svg>Clinical safety</div>
+      <div class="value a" style="--d:1.2s"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20,34 C7,25 5,17 9,11 C13,6 18,8 20,12 C22,8 27,6 31,11 C35,17 33,25 20,34Z" fill="#E3E9FC" stroke="#3558D4" stroke-width="2.5"/></svg>Human empathy</div>
+    </div>
+  </div>
+</section>
+</main></div>
+
+<nav class="bar" aria-label="Presentation controls">
+  <button class="ctl" id="prev" aria-label="Previous scene">‹</button>
+  <button class="ctl" id="play" aria-label="Pause">❚❚</button>
+  <button class="ctl" id="next" aria-label="Next scene">›</button>
+  <div class="segs" id="segs"></div>
+  <span class="label" id="label">The question</span>
+</nav>
+
+<script>
+(function(){
+  var scenes=[].slice.call(document.querySelectorAll('.scene'));
+  var segs=document.getElementById('segs'),label=document.getElementById('label'),playBtn=document.getElementById('play'),bar=document.querySelector('.bar');
+  var still=/still/.test(location.hash);
+  var cur=0,playing=!still,timer=null,started=0,remaining=0;
+  scenes.forEach(function(s,i){var b=document.createElement('button');b.className='seg';b.setAttribute('aria-label','Scene '+(i+1)+': '+s.dataset.label);b.appendChild(document.createElement('i'));b.addEventListener('click',function(){go(i)});segs.appendChild(b)});
+  var segEls=[].slice.call(segs.children);
+  var vp=document.getElementById('viewport'),stage=document.getElementById('stage');
+  function fit(){var bar=document.querySelector('.bar');var avail=window.innerHeight-(bar?bar.offsetHeight:64)-20;var cap=avail>=300?Math.floor(avail*16/9):1440;cap=Math.min(cap,1440)+'px';if(vp.style.maxWidth!==cap)vp.style.maxWidth=cap;var w=vp.clientWidth||1280,hh=vp.clientHeight||w*9/16;var s=Math.min(w/1280,hh/720);stage.style.setProperty('--s',Math.max(.15,s).toFixed(4))}
+  if(window.ResizeObserver){new ResizeObserver(fit).observe(vp)}
+  window.addEventListener('resize',fit);fit();
+  function dur(i){return +scenes[i].dataset.dur||7000}
+  function counters(s){[].forEach.call(s.querySelectorAll('[data-count]'),function(el){
+    var end=+el.dataset.count,dec=+(el.dataset.dec||0),suf=el.dataset.suffix||'',t0=null;
+    function step(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1400);el.textContent=(end*k).toFixed(dec)+suf;if(k<1)requestAnimationFrame(step)}
+    setTimeout(function(){requestAnimationFrame(step)},1600);})}
+  function gauge(s){var g=s.querySelector('.gaugeArc');if(!g)return;g.style.transition='none';g.style.strokeDashoffset=252;void g.getBoundingClientRect();g.style.transition='stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1) 3.2s';g.style.strokeDashoffset=252*0.22}
+  function paint(){segEls.forEach(function(s,i){s.classList.toggle('done',i<cur);s.classList.remove('cur')});var c=segEls[cur];void c.offsetWidth;c.style.setProperty('--dur',dur(cur)+'ms');c.classList.add('cur');label.textContent=scenes[cur].dataset.label}
+  function schedule(ms){clearTimeout(timer);remaining=ms;started=Date.now();if(playing)timer=setTimeout(function(){go((cur+1)%scenes.length)},ms)}
+  function go(i){scenes[cur].classList.remove('on');cur=i;var s=scenes[cur];void s.offsetWidth;s.classList.add('on');counters(s);gauge(s);paint();schedule(dur(cur))}
+  function toggle(){playing=!playing;bar.classList.toggle('paused',!playing);playBtn.textContent=playing?'❚❚':'▶';playBtn.setAttribute('aria-label',playing?'Pause':'Play');if(playing){schedule(remaining)}else{clearTimeout(timer);remaining=Math.max(0,remaining-(Date.now()-started))}}
+  document.getElementById('prev').addEventListener('click',function(){go((cur-1+scenes.length)%scenes.length)});
+  document.getElementById('next').addEventListener('click',function(){go((cur+1)%scenes.length)});
+  playBtn.addEventListener('click',toggle);
+  document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')go((cur+1)%scenes.length);else if(e.key==='ArrowLeft')go((cur-1+scenes.length)%scenes.length);else if(e.key===' '){e.preventDefault();toggle()}});
+  var m=location.hash.match(/s(\d+)/);var start=m?Math.min(scenes.length-1,Math.max(0,+m[1]-1)):0;
+  if(still){bar.classList.add('paused');playBtn.textContent='▶'}
+  if(start!==0){go(start)}else{paint();schedule(dur(0))}
+})();
+</script>
+</body>
+</html>
