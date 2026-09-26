@@ -1,0 +1,12 @@
+{
+  "3e1e5f695314e72ea8ad3d5a7c70030969858de68ff3516ffe76e9ff811cb775": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and bad shivering for two days\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and bad shivering for two days\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"bad shivering\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"for two days\", \"turn_id\": \"t2\", \"quote\": \"for two days\", \"negated\": false}]}"
+  },
+  "695bc8c9a67b2edc2d18862d6791551bbe0b4d247e1b35a6f6089ba69fa0e165": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and bad shivering for two days\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and bad shivering for two days\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"bad shivering\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"for two days\", \"turn_id\": \"t2\", \"quote\": \"for two days\", \"negated\": false}]}"
+  }
+}

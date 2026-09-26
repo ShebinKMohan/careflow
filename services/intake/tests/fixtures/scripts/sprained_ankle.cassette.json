@@ -1,0 +1,22 @@
+{
+  "60f8f73f7de06ba107e1e3959ebd007f3a22de5510f2387f831534ad7973ede2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football an hour ago\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football an hour ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t4\", \"quote\": \"Maybe a four\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My right ankle\", \"turn_id\": \"t6\", \"quote\": \"My right ankle\", \"negated\": false}, {\"key\": \"injury\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No, none that I know of\", \"negated\": true}]}"
+  },
+  "80443cce80cb3d3a46ea85a90960bd3830e8623fa2afa0b451dc32fec97341c5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football an hour ago\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football an hour ago\", \"negated\": false}, {\"key\": \"injury\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"an hour ago\", \"turn_id\": \"t2\", \"quote\": \"an hour ago\", \"negated\": false}]}"
+  },
+  "cf15742c644f0c394e60a8a911e3759106c3dbf010a9aea5bef81a27511a48e4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football an hour ago\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football an hour ago\", \"negated\": false}, {\"key\": \"injury\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t4\", \"quote\": \"Maybe a four\", \"negated\": false}]}"
+  },
+  "e158677f93da95f98151a4714614bc9b6605eb4239f91d3411851f3ab1a308e1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football an hour ago\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football an hour ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t4\", \"quote\": \"Maybe a four\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My right ankle\", \"turn_id\": \"t6\", \"quote\": \"My right ankle\", \"negated\": false}]}"
+  }
+}

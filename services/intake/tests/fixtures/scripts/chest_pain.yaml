@@ -1,0 +1,29 @@
+# Scripted synthetic patient (M1-07): an adult with chest pain since the morning.
+# The chest-pain rule fires on the complaint; the nurse-coming message comes first, then only the
+# chest-pain screen questions are asked. Extraction replies: chest_pain.cassette.json (live model).
+id: chest_pain
+description: Adult with chest pain since this morning.
+session: {session_id: ses_script_chest_pain, clinic_id: clinic_a, language: en}
+answers:
+  chief_complaint: "I've had chest pain since this morning."
+  chest_pain.radiates: "Yes, it goes down my left arm."
+  chest_pain.short_of_breath: "Yes, a little."
+  chest_pain.sweating: "No."
+  chest_pain.onset: "It started around seven this morning."
+  symptom_onset_at: "This morning."
+  pain_score: "About a seven."
+  severity: "About a seven."
+  pain_location: "In the middle of my chest."
+  allergies_confirm: "No allergies."
+default_answer: "I'm not sure."
+expect:
+  alerts: [CHEST_PAIN_ECG_10MIN]
+  screens: [chest_pain.radiates, chest_pain.short_of_breath, chest_pain.sweating]
+  notice: true
+  facts:
+    chest_pain.present: "yes"
+    chest_pain.radiates: "yes"
+    chest_pain.short_of_breath: "yes"
+    chest_pain.sweating: "no"
+  complete: true
+  max_patient_turns: 8
