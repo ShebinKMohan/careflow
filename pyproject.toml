@@ -27,6 +27,9 @@ dev = [
   "rfc3339-validator==0.1.4",
   "fhir.resources==8.3.0",
   "httpx==0.28.1",
+  "respx==0.23.1",
+  # Local LLM server (Apple silicon only); scripts/with_llm.sh and `make llm-local` use it.
+  "mlx-lm==0.31.3; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
 
 [tool.ruff]
