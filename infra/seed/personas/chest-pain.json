@@ -1,0 +1,107 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "Patient/persona-chest-pain",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "persona-chest-pain",
+        "meta": {
+          "tag": [
+            {
+              "system": "https://careflow.example/fhir/CodeSystem/data-origin",
+              "code": "synthetic-persona"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://careflow.example/fhir/sid/keypad-id",
+            "value": "100001"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Saeed",
+            "given": [
+              "Mohammed"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1968-03-14"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/persona-chest-pain"
+      }
+    },
+    {
+      "fullUrl": "Condition/persona-chest-pain-condition-1",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "persona-chest-pain-condition-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "38341003",
+              "display": "Hypertensive disorder"
+            }
+          ],
+          "text": "Hypertensive disorder"
+        },
+        "subject": {
+          "reference": "Patient/persona-chest-pain"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Condition/persona-chest-pain-condition-1"
+      }
+    },
+    {
+      "fullUrl": "MedicationStatement/persona-chest-pain-medication-1",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "id": "persona-chest-pain-medication-1",
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "17767",
+              "display": "amlodipine"
+            }
+          ],
+          "text": "amlodipine"
+        },
+        "subject": {
+          "reference": "Patient/persona-chest-pain"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "MedicationStatement/persona-chest-pain-medication-1"
+      }
+    }
+  ]
+}

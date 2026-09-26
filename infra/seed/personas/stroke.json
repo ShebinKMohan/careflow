@@ -1,0 +1,107 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "Patient/persona-stroke",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "persona-stroke",
+        "meta": {
+          "tag": [
+            {
+              "system": "https://careflow.example/fhir/CodeSystem/data-origin",
+              "code": "synthetic-persona"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://careflow.example/fhir/sid/keypad-id",
+            "value": "100002"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Ahmed",
+            "given": [
+              "Fatima"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1955-06-02"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/persona-stroke"
+      }
+    },
+    {
+      "fullUrl": "Condition/persona-stroke-condition-1",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "persona-stroke-condition-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "49436004",
+              "display": "Atrial fibrillation"
+            }
+          ],
+          "text": "Atrial fibrillation"
+        },
+        "subject": {
+          "reference": "Patient/persona-stroke"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Condition/persona-stroke-condition-1"
+      }
+    },
+    {
+      "fullUrl": "MedicationStatement/persona-stroke-medication-1",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "id": "persona-stroke-medication-1",
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "11289",
+              "display": "warfarin"
+            }
+          ],
+          "text": "warfarin"
+        },
+        "subject": {
+          "reference": "Patient/persona-stroke"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "MedicationStatement/persona-stroke-medication-1"
+      }
+    }
+  ]
+}

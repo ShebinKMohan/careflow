@@ -26,6 +26,7 @@ dev = [
   "pyyaml==6.0.3",
   "rfc3339-validator==0.1.4",
   "fhir.resources==8.3.0",
+  "httpx==0.28.1",
 ]
 
 [tool.ruff]

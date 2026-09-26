@@ -1,0 +1,65 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "Patient/persona-routine",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "persona-routine",
+        "meta": {
+          "tag": [
+            {
+              "system": "https://careflow.example/fhir/CodeSystem/data-origin",
+              "code": "synthetic-persona"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://careflow.example/fhir/sid/keypad-id",
+            "value": "100005"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Karim",
+            "given": [
+              "Layla"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1992-04-18"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/persona-routine"
+      }
+    },
+    {
+      "fullUrl": "Appointment/persona-routine-appointment",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "persona-routine-appointment",
+        "status": "booked",
+        "description": "Booked clinic visit (synthetic)",
+        "start": "__TODAY__T10:00:00Z",
+        "end": "__TODAY__T10:20:00Z",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/persona-routine"
+            },
+            "status": "accepted"
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Appointment/persona-routine-appointment"
+      }
+    }
+  ]
+}

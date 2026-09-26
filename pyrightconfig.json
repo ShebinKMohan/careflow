@@ -1,5 +1,5 @@
 {
-  "include": ["packages", "services", "scripts"],
+  "include": ["packages", "services", "scripts", "infra"],
   "exclude": ["**/node_modules", "**/__pycache__", "**/.venv", "**/.next", "**/dist"],
   "pythonVersion": "3.12",
   "venvPath": ".",

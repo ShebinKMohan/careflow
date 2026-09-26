@@ -1,0 +1,107 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "Patient/persona-sepsis",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "persona-sepsis",
+        "meta": {
+          "tag": [
+            {
+              "system": "https://careflow.example/fhir/CodeSystem/data-origin",
+              "code": "synthetic-persona"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://careflow.example/fhir/sid/keypad-id",
+            "value": "100004"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Rahman",
+            "given": [
+              "Khalid"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1960-01-11"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/persona-sepsis"
+      }
+    },
+    {
+      "fullUrl": "Condition/persona-sepsis-condition-1",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "persona-sepsis-condition-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "44054006",
+              "display": "Diabetes mellitus type 2"
+            }
+          ],
+          "text": "Diabetes mellitus type 2"
+        },
+        "subject": {
+          "reference": "Patient/persona-sepsis"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Condition/persona-sepsis-condition-1"
+      }
+    },
+    {
+      "fullUrl": "MedicationStatement/persona-sepsis-medication-1",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "id": "persona-sepsis-medication-1",
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "6809",
+              "display": "metformin"
+            }
+          ],
+          "text": "metformin"
+        },
+        "subject": {
+          "reference": "Patient/persona-sepsis"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "MedicationStatement/persona-sepsis-medication-1"
+      }
+    }
+  ]
+}
