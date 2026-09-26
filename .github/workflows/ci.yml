@@ -38,12 +38,39 @@ jobs:
           cache-dependency-glob: uv.lock
       - name: Install
         run: make install-py
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build the Postgres image (pgvector + pg_textsearch; never pushed)
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: infra/postgres
+          tags: careflow-postgres:ci
+          load: true
+          push: false
+          cache-from: type=gha,scope=careflow-postgres
+          cache-to: type=gha,scope=careflow-postgres,mode=max
+      - name: Start Postgres (throwaway CI credentials)
+        run: |
+          docker run -d --name careflow-pg -p 5432:5432 \
+            -e POSTGRES_PASSWORD=ci-postgres-pw -e CAREFLOW_DB_MIGRATOR_PASSWORD=ci-migrator-pw \
+            -e CAREFLOW_DB_APP_PASSWORD=ci-app-pw -e HAPI_DB_PASSWORD=ci-hapi-pw \
+            careflow-postgres:ci postgres -c shared_preload_libraries=pg_textsearch
+          for _ in $(seq 1 60); do
+            docker exec careflow-pg pg_isready -h 127.0.0.1 -U postgres -d careflow && exit 0
+            sleep 2
+          done
+          docker logs careflow-pg
+          exit 1
       - name: Lint
         run: make lint-py
       - name: Typecheck
         run: make typecheck-py
       - name: Test
         run: make test-py
+        env:
+          CAREFLOW_REQUIRE_DB: "1"
+          CAREFLOW_TEST_ADMIN_URL: postgresql+psycopg://postgres:ci-postgres-pw@localhost:5432/postgres
+          DATABASE_URL: postgresql://careflow_app:ci-app-pw@localhost:5432/careflow
+          DATABASE_URL_MIGRATOR: postgresql://careflow_migrator:ci-migrator-pw@localhost:5432/careflow
 
   node:
     runs-on: ubuntu-24.04
