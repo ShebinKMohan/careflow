@@ -43,3 +43,13 @@ async def test_console_exporter_prints_a_span() -> None:
     printed = out.getvalue()
     assert '"name": "GET /v1/auth/me' in printed
     assert '"service.name": "careflow-api"' in printed
+
+
+async def test_unknown_routes_and_methods_are_problems(client: AsyncClient) -> None:
+    missing = await client.get("/v1/no-such-route")
+    assert missing.status_code == 404
+    assert missing.headers["content-type"].startswith("application/problem+json")
+    assert missing.json()["title"] == "Not Found"
+    wrong_method = await client.put("/v1/auth/login")
+    assert wrong_method.status_code == 405
+    assert wrong_method.headers["content-type"].startswith("application/problem+json")
