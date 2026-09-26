@@ -9,7 +9,7 @@ export UV_LOCKED := 1
 
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
-	contracts-drift contracts-breaking contracts-check
+	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -70,3 +70,33 @@ contracts-breaking: ## oasdiff breaking changes against origin/main (skipped whe
 	scripts/contracts_breaking.sh
 
 contracts-check: contracts-lint contracts-drift contracts-breaking ## All contract gates CI runs
+
+# --- Local infrastructure (M0-05): Postgres 17, Valkey, HAPI FHIR -------------------------------
+COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
+SEED_SYNTHEA ?= 1
+
+up: ## Start Postgres, Valkey and HAPI FHIR and wait until they are healthy
+	scripts/ensure_docker.sh
+	python3 scripts/gen_dev_env.py
+	python3 scripts/check_mem_budget.py
+	$(COMPOSE) up -d --build --wait postgres valkey
+	$(COMPOSE) up -d hapi
+	python3 scripts/wait_for_http.py http://localhost:8080/fhir/metadata 180
+
+down: ## Stop the services; named volumes keep the data
+	$(COMPOSE) down
+
+seed: ## Load Synthea patients (SEED_SYNTHEA=0 skips them) and the 7 personas; FORCE=1 reloads
+	@if [ "$(SEED_SYNTHEA)" != "0" ]; then infra/seed/run_synthea.sh; fi
+	uv run python infra/seed/load_fhir.py $(if $(filter 0,$(SEED_SYNTHEA)),--personas-only,)
+
+ps: ## Service status
+	$(COMPOSE) ps
+
+logs: ## Last 200 log lines of every service
+	$(COMPOSE) logs --tail 200
+
+nuke: ## Delete every local data volume (asks first). Agents never run this: use make seed FORCE=1
+	@read -r -p "This deletes all CareFlow Docker volumes (Postgres, Valkey, HAPI data). Type nuke: " a; \
+		[ "$$a" = "nuke" ] || { echo "aborted"; exit 1; }
+	$(COMPOSE) down -v
