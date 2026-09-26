@@ -1,4 +1,5 @@
-"""An async FHIR R4 REST client: search with paging, read, timeouts and retries (M1-08).
+"""An async FHIR R4 REST client: search with paging, read, transaction, versioned update and
+$validate, with timeouts and retries (M1-08, M1-09).
 
 Only this package talks FHIR. It returns raw resource dicts; `adapters.mapper` parses them.
 """
@@ -6,6 +7,7 @@ Only this package talks FHIR. It returns raw resource dicts; `adapters.mapper` p
 from __future__ import annotations
 
 import asyncio
+import json
 from collections.abc import Awaitable, Callable, Mapping, Sequence
 from typing import Any, Final
 
@@ -16,6 +18,9 @@ RETRY_DELAYS: Final = (0.2, 0.8)
 MAX_PAGES: Final = 5
 PAGE_SIZE: Final = 100
 DEFAULT_TIMEOUT: Final = httpx.Timeout(5.0, connect=2.0)
+FHIR_JSON: Final = "application/fhir+json"
+#: $validate answers an invalid resource with its OperationOutcome and one of these statuses.
+VALIDATION_STATUSES: Final = frozenset({400, 412, 422})
 
 type Json = dict[str, Any]
 type Sleep = Callable[[float], Awaitable[None]]
@@ -27,6 +32,11 @@ class FhirError(Exception):
     def __init__(self, message: str, *, status: int | None = None) -> None:
         super().__init__(message)
         self.status = status
+
+
+def canonical_json(body: Json) -> bytes:
+    """Sorted keys, no spaces, UTF-8: the same resource always gives the same bytes."""
+    return json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
 
 
 def _entries(bundle: Json) -> list[Json]:
@@ -42,7 +52,8 @@ def _next_link(bundle: Json) -> str | None:
 
 class FhirClient:
     """`httpx.AsyncClient` with `Accept: application/fhir+json`. Retries twice (0.2 s, 0.8 s) on
-    connection errors, timeouts and HTTP 429/502/503/504; never on any other status."""
+    connection errors, timeouts and HTTP 429/502/503/504; never on any other status. A transaction
+    is sent once: its caller owns the retries (the write-back handler)."""
 
     def __init__(
         self,
@@ -61,7 +72,7 @@ class FhirClient:
         self._client = httpx.AsyncClient(
             base_url=self.base_url + "/",
             timeout=timeout,
-            headers={"Accept": "application/fhir+json"},
+            headers={"Accept": FHIR_JSON},
             auth=auth,
             transport=transport,
         )
@@ -75,11 +86,27 @@ class FhirClient:
     async def __aexit__(self, *exc: object) -> None:
         await self.aclose()
 
-    async def _get(self, url: str, params: Mapping[str, str] | None = None) -> Json:
-        delays: list[float | None] = [*self._retry_delays, None]
+    async def _request(
+        self,
+        method: str,
+        url: str,
+        *,
+        params: Mapping[str, str] | None = None,
+        body: Json | None = None,
+        headers: Mapping[str, str] | None = None,
+        retry: bool = True,
+        accept: frozenset[int] = frozenset(),
+    ) -> Json:
+        """One request, retried per the class policy (unless `retry` is False). An error status in
+        `accept` returns its body (an OperationOutcome) instead of raising."""
+        content = None if body is None else canonical_json(body)
+        sent = {**(headers or {}), **({"Content-Type": FHIR_JSON} if body is not None else {})}
+        delays: list[float | None] = [*self._retry_delays, None] if retry else [None]
         for delay in delays:
             try:
-                response = await self._client.get(url, params=params)
+                response = await self._client.request(
+                    method, url, params=params, content=content, headers=sent
+                )
             except httpx.TransportError as exc:  # connection errors and timeouts
                 if delay is None:
                     raise FhirError(type(exc).__name__) from exc
@@ -88,16 +115,35 @@ class FhirClient:
             if response.status_code in RETRY_STATUSES and delay is not None:
                 await self._sleep(delay)
                 continue
-            if response.is_error:
+            if response.is_error and response.status_code not in accept:
                 raise FhirError(f"HTTP {response.status_code}", status=response.status_code)
-            body: Json = response.json()
-            return body
+            answer: Json = response.json()
+            return answer
         raise FhirError(
             "no attempt was made"
         )  # pragma: no cover - the loop always returns or raises
 
+    async def _get(self, url: str, params: Mapping[str, str] | None = None) -> Json:
+        return await self._request("GET", url, params=params)
+
     async def read(self, resource_type: str, resource_id: str) -> Json:
         return await self._get(f"{resource_type}/{resource_id}")
+
+    async def transaction(self, bundle: Json) -> Json:
+        """POST a transaction Bundle to the base URL, once; returns the transaction-response."""
+        return await self._request("POST", "", body=bundle, retry=False)
+
+    async def update(self, resource: Json, *, version_id: str) -> Json:
+        """PUT `resource` over version `version_id` only (`If-Match`); HAPI answers 412 when the
+        resource changed since. Returns the stored resource."""
+        url = f"{resource['resourceType']}/{resource['id']}"
+        headers = {"If-Match": f'W/"{version_id}"', "Prefer": "return=representation"}
+        return await self._request("PUT", url, body=resource, headers=headers)
+
+    async def validate(self, resource: Json) -> Json:
+        """The server's `$validate` OperationOutcome for `resource` (nothing is stored)."""
+        url = f"{resource['resourceType']}/$validate"
+        return await self._request("POST", url, body=resource, accept=VALIDATION_STATUSES)
 
     def _same_origin(self, url: str) -> bool:
         target = httpx.URL(url)
@@ -123,4 +169,13 @@ class FhirClient:
         return resources
 
 
-__all__ = ["DEFAULT_TIMEOUT", "MAX_PAGES", "PAGE_SIZE", "RETRY_STATUSES", "FhirClient", "FhirError"]
+__all__ = [
+    "DEFAULT_TIMEOUT",
+    "FHIR_JSON",
+    "MAX_PAGES",
+    "PAGE_SIZE",
+    "RETRY_STATUSES",
+    "FhirClient",
+    "FhirError",
+    "canonical_json",
+]

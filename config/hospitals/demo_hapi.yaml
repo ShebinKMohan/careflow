@@ -20,3 +20,5 @@ timeouts:
   connect_s: 2.0
   read_s: 5.0
   total_s: 8.0
+# Encounter.class of the triage encounter written back (M1-09): an emergency department triage.
+encounter_class: EMER
