@@ -13,8 +13,10 @@ import pytest
 import respx
 
 from careflow_integration.adapters.loader import HospitalAdapter, load_adapter
+from careflow_integration.fhir.writeback.record import TriageRecord
 
 FIXTURES = Path(__file__).parent / "fixtures" / "fhir"
+WRITEBACK = Path(__file__).parent / "fixtures" / "writeback"
 NOW = datetime(2026, 9, 26, 12, 0, tzinfo=UTC)  # the day the persona answers were recorded
 BASE = "http://fhir.test/fhir"
 
@@ -54,6 +56,18 @@ def recorded() -> Callable[[str], Answers]:
 @pytest.fixture
 def now() -> datetime:
     return NOW
+
+
+def load_record(name: str) -> TriageRecord:
+    return TriageRecord.model_validate_json(
+        (WRITEBACK / f"{name}.json").read_text(encoding="utf-8")
+    )
+
+
+@pytest.fixture
+def triage_record() -> Callable[[str], TriageRecord]:
+    """A synthetic confirmed triage: chest_pain, sepsis or routine (fixtures/writeback)."""
+    return load_record
 
 
 def bundle(resources: list[dict[str, Any]], next_url: str | None = None) -> dict[str, Any]:

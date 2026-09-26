@@ -1,0 +1,118 @@
+{
+ "authored": "2026-09-26T09:02:00Z",
+ "encounter": {
+  "reference": "urn:uuid:b76cf043-020c-59d3-a4f4-de92f9353d3e"
+ },
+ "identifier": {
+  "system": "urn:careflow:fact",
+  "value": "ses_chest_pain:qr-patient"
+ },
+ "item": [
+  {
+   "answer": [
+    {
+     "valueString": "Crushing chest pain for about an hour"
+    }
+   ],
+   "linkId": "chief_complaint"
+  },
+  {
+   "answer": [
+    {
+     "valueCoding": {
+      "code": "yes",
+      "display": "Yes",
+      "system": "https://careflow.example/fhir/CodeSystem/tri-state"
+     }
+    }
+   ],
+   "linkId": "pain_present"
+  },
+  {
+   "answer": [
+    {
+     "valueInteger": 8
+    }
+   ],
+   "linkId": "pain_score"
+  },
+  {
+   "item": [
+    {
+     "answer": [
+      {
+       "valueCoding": {
+        "code": "yes",
+        "display": "Yes",
+        "system": "https://careflow.example/fhir/CodeSystem/tri-state"
+       }
+      }
+     ],
+     "linkId": "chest_pain.present"
+    },
+    {
+     "answer": [
+      {
+       "valueCoding": {
+        "code": "yes",
+        "display": "Yes",
+        "system": "https://careflow.example/fhir/CodeSystem/tri-state"
+       }
+      }
+     ],
+     "linkId": "chest_pain.radiates"
+    },
+    {
+     "answer": [
+      {
+       "valueCoding": {
+        "code": "yes",
+        "display": "Yes",
+        "system": "https://careflow.example/fhir/CodeSystem/tri-state"
+       }
+      }
+     ],
+     "linkId": "chest_pain.sweating"
+    },
+    {
+     "answer": [
+      {
+       "valueCoding": {
+        "code": "no",
+        "display": "No",
+        "system": "https://careflow.example/fhir/CodeSystem/tri-state"
+       }
+      }
+     ],
+     "linkId": "chest_pain.short_of_breath"
+    },
+    {
+     "answer": [
+      {
+       "valueString": "PT1H"
+      }
+     ],
+     "linkId": "chest_pain.onset"
+    }
+   ],
+   "linkId": "chest_pain"
+  }
+ ],
+ "meta": {
+  "tag": [
+   {
+    "code": "PATIENT_STATED",
+    "system": "https://careflow.example/fhir/CodeSystem/provenance-source"
+   }
+  ]
+ },
+ "questionnaire": "https://careflow.example/fhir/Questionnaire/careflow-intake|0.1.0",
+ "resourceType": "QuestionnaireResponse",
+ "source": {
+  "reference": "Patient/persona-chest-pain"
+ },
+ "status": "completed",
+ "subject": {
+  "reference": "Patient/persona-chest-pain"
+ }
+}

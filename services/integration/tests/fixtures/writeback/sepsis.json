@@ -1,0 +1,220 @@
+{
+ "clinic_id": "clinic_demo",
+ "session_id": "ses_sepsis",
+ "patient_ref": "Patient/persona-sepsis",
+ "arrived_at": "2026-09-26T09:00:00Z",
+ "decision": {
+  "decision_id": "dec_sepsis",
+  "session_id": "ses_sepsis",
+  "suggestion_id": "sug_sepsis",
+  "action": "CONFIRM",
+  "final_level": 2,
+  "scale": "KTAS",
+  "nurse_user_id": "nurse_demo_01",
+  "acknowledged_alert_ids": [
+   "alr_dabc4cef14be8ee77a2cfd94"
+  ],
+  "decided_at": "2026-09-26T09:06:00Z"
+ },
+ "facts": {
+  "session_id": "ses_sepsis",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+   "fhir_patient_id": "persona-sepsis",
+   "age_years": {
+    "fact_id": "f_5HR8FVV19BWGZYRV7BNYWVDBF5",
+    "provenance": "EHR",
+    "source": {
+     "kind": "fhir",
+     "resource_type": "Patient",
+     "id": "persona-sepsis",
+     "version_id": "1"
+    },
+    "recorded_at": "2026-09-26T09:00:00Z",
+    "value": 66
+   },
+   "sex": {
+    "fact_id": "f_ZMQHMX55CPP5CQ47X612WRM5C9",
+    "provenance": "EHR",
+    "source": {
+     "kind": "fhir",
+     "resource_type": "Patient",
+     "id": "persona-sepsis",
+     "version_id": "1"
+    },
+    "recorded_at": "2026-09-26T09:00:00Z",
+    "value": {
+     "system": "http://hl7.org/fhir/administrative-gender",
+     "code": "male",
+     "display": "Male"
+    }
+   }
+  },
+  "chief_complaint": {
+   "fact_id": "f_DS4Y9WKABHG5BT0TTZJJ77VZD4",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_01",
+    "start": 0,
+    "end": 32,
+    "quote": "fever and shivering with a cough"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": "Fever and shivering with a cough"
+  },
+  "complaint_category": {
+   "fact_id": "f_PW4P7RQ2K4FKZZJE85DNKQ2HSM",
+   "provenance": "MODEL_INFERRED",
+   "source": {
+    "kind": "model",
+    "model_id": "careflow_triage.complaint_category",
+    "model_version": "0.1.0"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": {
+    "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+    "code": "fever",
+    "display": "Fever"
+   }
+  },
+  "symptoms": [
+   {
+    "name": {
+     "fact_id": "f_H0WS78KM1N3462Y15SSR3HH9KE",
+     "provenance": "PATIENT_STATED",
+     "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_02",
+      "start": 0,
+      "end": 19,
+      "quote": "a cough with phlegm"
+     },
+     "recorded_at": "2026-09-26T09:01:00Z",
+     "value": "productive_cough"
+    },
+    "onset": {
+     "fact_id": "f_TYV2H0A9YWTHVMXHFT564CETD8",
+     "provenance": "PATIENT_STATED",
+     "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_03",
+      "start": 0,
+      "end": 10,
+      "quote": "three days"
+     },
+     "recorded_at": "2026-09-26T09:02:00Z",
+     "value": "P3D"
+    },
+    "severity": "moderate"
+   }
+  ],
+  "infection": {
+   "fever_reported": {
+    "fact_id": "f_EJW1HSRQ0MQQ900JZA91X25VTK",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_04",
+     "start": 0,
+     "end": 5,
+     "quote": "fever"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "yes"
+   },
+   "rigors": {
+    "fact_id": "f_1B9AKG9D5GG09E0VT26GMTK3JM",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_05",
+     "start": 0,
+     "end": 9,
+     "quote": "shivering"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "yes"
+   }
+  },
+  "vitals": {
+   "heart_rate": {
+    "fact_id": "f_8KRW80AY4R99RX9Q7HNH3RQ7FB",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_sepsis"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 125.0,
+    "unit": "/min"
+   },
+   "spo2": {
+    "fact_id": "f_QS3HN38V7XV1HP9KH2ST9AZ43D",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_sepsis"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 93.0,
+    "unit": "%"
+   },
+   "temperature_c": {
+    "fact_id": "f_M0P796AG1ZYDWZRHTRQDHGR4TN",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_sepsis"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 39.4,
+    "unit": "Cel"
+   }
+  },
+  "extraction_status": "complete"
+ },
+ "alerts": [
+  {
+   "alert_id": "alr_dabc4cef14be8ee77a2cfd94",
+   "session_id": "ses_sepsis",
+   "rule_id": "SEPSIS_NEWS2",
+   "ruleset_version": "2026.2.0",
+   "severity": "critical",
+   "evidence_fact_ids": [
+    "f_EJW1HSRQ0MQQ900JZA91X25VTK",
+    "f_1B9AKG9D5GG09E0VT26GMTK3JM",
+    "f_M0P796AG1ZYDWZRHTRQDHGR4TN",
+    "f_H0WS78KM1N3462Y15SSR3HH9KE",
+    "f_QS3HN38V7XV1HP9KH2ST9AZ43D",
+    "f_8KRW80AY4R99RX9Q7HNH3RQ7FB"
+   ],
+   "required_action": "sepsis_review_now",
+   "display_text": "Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review. (partial NEWS2 (kiosk vitals only))",
+   "partial": true,
+   "missing_inputs": [
+    "vitals.respiratory_rate",
+    "vitals.systolic_bp",
+    "vitals.acvpu",
+    "vitals.on_supplemental_o2"
+   ],
+   "raised_at": "2026-09-26T09:05:00Z"
+  }
+ ],
+ "news2": {
+  "total": 6,
+  "partial": true,
+  "missing": [
+   "vitals.respiratory_rate",
+   "vitals.systolic_bp",
+   "vitals.acvpu",
+   "vitals.on_supplemental_o2"
+  ],
+  "scored_at": "2026-09-26T09:05:00Z"
+ },
+ "completed_actions": []
+}

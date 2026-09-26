@@ -1,0 +1,301 @@
+{
+ "clinic_id": "clinic_demo",
+ "session_id": "ses_chest_pain",
+ "patient_ref": "Patient/persona-chest-pain",
+ "arrived_at": "2026-09-26T09:00:00Z",
+ "decision": {
+  "decision_id": "dec_chest_pain",
+  "session_id": "ses_chest_pain",
+  "suggestion_id": "sug_chest_pain",
+  "action": "CONFIRM",
+  "final_level": 2,
+  "scale": "KTAS",
+  "nurse_user_id": "nurse_demo_01",
+  "acknowledged_alert_ids": [
+   "alr_db6cc12990aacb592479a524"
+  ],
+  "decided_at": "2026-09-26T09:06:00Z"
+ },
+ "facts": {
+  "session_id": "ses_chest_pain",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+   "fhir_patient_id": "persona-chest-pain",
+   "age_years": {
+    "fact_id": "f_0E8DTQMAT0AQVW0GZ9RAXYNST0",
+    "provenance": "EHR",
+    "source": {
+     "kind": "fhir",
+     "resource_type": "Patient",
+     "id": "persona-chest-pain",
+     "version_id": "1"
+    },
+    "recorded_at": "2026-09-26T09:00:00Z",
+    "value": 58
+   },
+   "sex": {
+    "fact_id": "f_7JA2ZRF8P5PECVP9A24C13S19F",
+    "provenance": "EHR",
+    "source": {
+     "kind": "fhir",
+     "resource_type": "Patient",
+     "id": "persona-chest-pain",
+     "version_id": "1"
+    },
+    "recorded_at": "2026-09-26T09:00:00Z",
+    "value": {
+     "system": "http://hl7.org/fhir/administrative-gender",
+     "code": "male",
+     "display": "Male"
+    }
+   }
+  },
+  "chief_complaint": {
+   "fact_id": "f_JE5ZNAS049J0TRBQDJ2WGJ18A9",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_01",
+    "start": 0,
+    "end": 37,
+    "quote": "crushing chest pain for about an hour"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": "Crushing chest pain for about an hour"
+  },
+  "complaint_category": {
+   "fact_id": "f_4E7HZBV5GASHXR6P3DNY9RWT32",
+   "provenance": "MODEL_INFERRED",
+   "source": {
+    "kind": "model",
+    "model_id": "careflow_triage.complaint_category",
+    "model_version": "0.1.0"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": {
+    "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+    "code": "chest_pain",
+    "display": "Chest pain"
+   }
+  },
+  "pain_score": {
+   "fact_id": "f_7X461EX5M17Q2VNK8A92KE8FQ0",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_03",
+    "start": 0,
+    "end": 14,
+    "quote": "about an eight"
+   },
+   "recorded_at": "2026-09-26T09:02:00Z",
+   "value": 8
+  },
+  "pain_present": {
+   "fact_id": "f_EP481Z7H6MZS1M8M7WPT6M2JPV",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_02",
+    "start": 0,
+    "end": 19,
+    "quote": "crushing chest pain"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": "yes"
+  },
+  "chest_pain": {
+   "present": {
+    "fact_id": "f_XFA9EXHCVY7D4YZH6C1VZ0ZEYF",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_04",
+     "start": 0,
+     "end": 10,
+     "quote": "chest pain"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "yes"
+   },
+   "radiates": {
+    "fact_id": "f_99TXC3GNQ750GDFBYV3R09NYG9",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_05",
+     "start": 0,
+     "end": 24,
+     "quote": "it goes down my left arm"
+    },
+    "recorded_at": "2026-09-26T09:02:00Z",
+    "value": "yes"
+   },
+   "sweating": {
+    "fact_id": "f_B3Z6KM4KZ7R81XBJMG66Y81A3V",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_06",
+     "start": 0,
+     "end": 13,
+     "quote": "I am sweating"
+    },
+    "recorded_at": "2026-09-26T09:02:00Z",
+    "value": "yes"
+   },
+   "short_of_breath": {
+    "fact_id": "f_B0B30SV0BND0E6X4C50J14Q6WR",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_07",
+     "start": 0,
+     "end": 21,
+     "quote": "no, breathing is fine"
+    },
+    "recorded_at": "2026-09-26T09:02:00Z",
+    "value": "no"
+   },
+   "onset": {
+    "fact_id": "f_EABHK26HNAKQ2N5D2M67P68BCB",
+    "provenance": "PATIENT_STATED",
+    "source": {
+     "kind": "transcript_span",
+     "turn_id": "turn_08",
+     "start": 0,
+     "end": 13,
+     "quote": "about an hour"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "PT1H"
+   }
+  },
+  "vitals": {
+   "heart_rate": {
+    "fact_id": "f_GHY14ZWFV7RYS4QEDBYKMJVE2S",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_chest_pain"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 96.0,
+    "unit": "/min"
+   },
+   "spo2": {
+    "fact_id": "f_DWJT2QD122TECG4XF4J0W3HGPT",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_chest_pain"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 97.0,
+    "unit": "%"
+   },
+   "temperature_c": {
+    "fact_id": "f_62C1WY2SN3H7R3FCAT7M14MQ9W",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_chest_pain"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 36.8,
+    "unit": "Cel"
+   },
+   "respiratory_rate": {
+    "fact_id": "f_4857FJBVR1AX0A5S38BAX4SVC9",
+    "provenance": "NURSE_CONFIRMED",
+    "source": {
+     "kind": "nurse",
+     "staff_user_id": "nurse_demo_01"
+    },
+    "recorded_at": "2026-09-26T09:05:00Z",
+    "value": 18.0,
+    "unit": "/min"
+   },
+   "systolic_bp": {
+    "fact_id": "f_RVM16RJM0SY2DPRNAW0MNCNZSX",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_chest_pain"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 158.0,
+    "unit": "mm[Hg]"
+   },
+   "diastolic_bp": {
+    "fact_id": "f_4CNMZ6SGM4KPS26F60B7T2TYBB",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_chest_pain"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 94.0,
+    "unit": "mm[Hg]"
+   },
+   "acvpu": {
+    "fact_id": "f_B1WE4TAEPW6E2HZX6SFJ10A50Z",
+    "provenance": "NURSE_CONFIRMED",
+    "source": {
+     "kind": "nurse",
+     "staff_user_id": "nurse_demo_01"
+    },
+    "recorded_at": "2026-09-26T09:05:00Z",
+    "value": {
+     "system": "https://careflow.example/fhir/CodeSystem/acvpu",
+     "code": "A",
+     "display": "Alert"
+    }
+   },
+   "on_supplemental_o2": {
+    "fact_id": "f_P6WPZP5JQ2M82XR5QEZ45WREB6",
+    "provenance": "NURSE_CONFIRMED",
+    "source": {
+     "kind": "nurse",
+     "staff_user_id": "nurse_demo_01"
+    },
+    "recorded_at": "2026-09-26T09:05:00Z",
+    "value": "no"
+   }
+  },
+  "extraction_status": "complete"
+ },
+ "alerts": [
+  {
+   "alert_id": "alr_db6cc12990aacb592479a524",
+   "session_id": "ses_chest_pain",
+   "rule_id": "CHEST_PAIN_ECG_10MIN",
+   "ruleset_version": "2026.2.0",
+   "severity": "critical",
+   "evidence_fact_ids": [
+    "f_XFA9EXHCVY7D4YZH6C1VZ0ZEYF",
+    "f_99TXC3GNQ750GDFBYV3R09NYG9",
+    "f_B3Z6KM4KZ7R81XBJMG66Y81A3V"
+   ],
+   "required_action": "ecg_within_10_min",
+   "display_text": "Chest pain: ECG within 10 minutes of arrival.",
+   "partial": false,
+   "missing_inputs": [],
+   "raised_at": "2026-09-26T09:05:00Z",
+   "deadline_at": "2026-09-26T09:10:00Z"
+  }
+ ],
+ "news2": {
+  "total": 1,
+  "partial": false,
+  "missing": [],
+  "scored_at": "2026-09-26T09:05:00Z"
+ },
+ "completed_actions": []
+}
