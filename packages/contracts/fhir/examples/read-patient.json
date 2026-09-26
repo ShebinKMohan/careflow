@@ -1,0 +1,21 @@
+{
+  "resourceType": "Patient",
+  "id": "persona-chest-pain",
+  "identifier": [
+    {
+      "system": "https://careflow.example/fhir/sid/keypad-id",
+      "value": "100001"
+    }
+  ],
+  "name": [
+    {
+      "use": "official",
+      "family": "Demo",
+      "given": [
+        "Chest-Pain"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1968-03-14"
+}

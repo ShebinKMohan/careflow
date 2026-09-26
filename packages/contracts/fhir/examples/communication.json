@@ -1,0 +1,46 @@
+{
+  "resourceType": "Communication",
+  "id": "comm-chest-pain-alert",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/provenance-source",
+        "code": "PATIENT_STATED"
+      }
+    ]
+  },
+  "status": "completed",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/communication-category",
+          "code": "notification",
+          "display": "Notification"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/persona-chest-pain"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-chest-pain"
+  },
+  "about": [
+    {
+      "reference": "Flag/flag-chest-pain-ecg"
+    }
+  ],
+  "sent": "2026-09-26T09:02:11Z",
+  "recipient": [
+    {
+      "reference": "Practitioner/nurse-demo-01"
+    }
+  ],
+  "payload": [
+    {
+      "contentString": "Chest pain: ECG within 10 minutes of arrival."
+    }
+  ]
+}

@@ -1,0 +1,1325 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "careflow-intake",
+  "url": "https://careflow.example/fhir/Questionnaire/careflow-intake",
+  "version": "0.1.0",
+  "name": "CareFlowIntake",
+  "title": "CareFlow triage intake",
+  "_title": {
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/translation",
+        "extension": [
+          {
+            "url": "lang",
+            "valueCode": "ar"
+          },
+          {
+            "url": "content",
+            "valueString": "استبيان الفرز في كيرفلو"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "draft",
+  "experimental": true,
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2026-09-26",
+  "description": "Intake questions asked by the CareFlow kiosk or phone. Each linkId is the StructuredFacts path it fills. Items with the audience extension set to nurse are answered by the nurse. English only; Arabic text arrives through the translation extension in M2-03 (the title shows the pattern). Research prototype; synthetic data only; not for clinical use.",
+  "item": [
+    {
+      "linkId": "patient",
+      "text": "About you",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "patient.age_years",
+          "text": "How old are you (or the patient), in years?",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueInteger": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 150
+            }
+          ]
+        },
+        {
+          "linkId": "patient.age_months",
+          "text": "For a child under 5: how old, in months?",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueInteger": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 60
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "patient.age_years",
+              "operator": "<",
+              "answerInteger": 5
+            }
+          ]
+        },
+        {
+          "linkId": "patient.sex",
+          "text": "Sex",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "male",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "female",
+                "display": "Female"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "other",
+                "display": "Other"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "chief_complaint",
+      "text": "What is the main reason for your visit today?",
+      "type": "string",
+      "required": true
+    },
+    {
+      "linkId": "symptoms",
+      "text": "Other symptoms",
+      "type": "group",
+      "repeats": true,
+      "item": [
+        {
+          "linkId": "symptoms.name",
+          "text": "Symptom",
+          "type": "string"
+        },
+        {
+          "linkId": "symptoms.onset",
+          "text": "When did it start?",
+          "type": "string"
+        },
+        {
+          "linkId": "symptoms.severity",
+          "text": "How bad is it?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/symptom-severity",
+                "code": "mild",
+                "display": "Mild"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/symptom-severity",
+                "code": "moderate",
+                "display": "Moderate"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/symptom-severity",
+                "code": "severe",
+                "display": "Severe"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "pain_score",
+      "text": "On a scale of 0 to 10, how bad is your pain now?",
+      "type": "integer",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+          "valueInteger": 0
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueInteger": 10
+        }
+      ]
+    },
+    {
+      "linkId": "fast",
+      "text": "Stroke check (FAST)",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "fast.face_droop",
+          "text": "Has one side of the face dropped?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "fast.arm_weakness",
+          "text": "Is one arm weak or numb?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "fast.speech_difficulty",
+          "text": "Is speech slurred or strange?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "fast.last_known_well",
+          "text": "When was the patient last known to be well?",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "linkId": "chest_pain",
+      "text": "Chest pain",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "chest_pain.present",
+          "text": "Do you have chest pain now, or have you had it in the last few hours?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.radiates",
+          "text": "Does the pain spread to your arm, jaw, neck or back?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chest_pain.present",
+              "operator": "=",
+              "answerCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.sweating",
+          "text": "Are you sweating with the pain?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chest_pain.present",
+              "operator": "=",
+              "answerCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.short_of_breath",
+          "text": "Are you short of breath with the pain?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chest_pain.present",
+              "operator": "=",
+              "answerCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.onset",
+          "text": "When did the pain start?",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "chest_pain.present",
+              "operator": "=",
+              "answerCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "infection",
+      "text": "Infection",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "infection.fever_reported",
+          "text": "Have you had a fever?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "infection.rigors",
+          "text": "Have you had shaking chills?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "infection.suspected",
+          "text": "Infection suspected",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "child_danger",
+      "text": "Child danger signs (NICE NG143)",
+      "type": "group",
+      "enableWhen": [
+        {
+          "question": "patient.age_years",
+          "operator": "<",
+          "answerInteger": 16
+        }
+      ],
+      "item": [
+        {
+          "linkId": "child_danger.hard_to_wake",
+          "text": "Is your child hard to wake, or not staying awake?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.no_response_to_social_cues",
+          "text": "Is your child not responding to you (no smile, no eye contact)?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.weak_high_pitched_or_continuous_cry",
+          "text": "Is the cry weak, high-pitched or continuous?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.pale_mottled_ashen_or_blue",
+          "text": "Is the skin, lips or tongue pale, mottled, grey or blue?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.grunting",
+          "text": "Is your child grunting when breathing?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.non_blanching_rash",
+          "text": "Is there a rash that does not fade when you press a glass on it?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.neck_stiffness",
+          "text": "Does your child have a stiff neck?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.seizure",
+          "text": "Has your child had a fit or seizure?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.appears_ill_to_hcp",
+          "text": "Appears ill to a healthcare professional",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.chest_indrawing",
+          "text": "Moderate or severe chest indrawing",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.reduced_skin_turgor",
+          "text": "Reduced skin turgor",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.bulging_fontanelle",
+          "text": "Bulging fontanelle",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_danger.focal_neuro_signs",
+          "text": "Focal neurological signs or focal seizures",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "child_amber",
+      "text": "Child amber features (NICE NG143)",
+      "type": "group",
+      "enableWhen": [
+        {
+          "question": "patient.age_years",
+          "operator": "<",
+          "answerInteger": 5
+        }
+      ],
+      "item": [
+        {
+          "linkId": "child_amber.pallor_reported",
+          "text": "Have you noticed pale skin, lips or tongue?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.decreased_activity",
+          "text": "Is your child less active than usual?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.poor_feeding",
+          "text": "Is your baby feeding poorly?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.reduced_urine_output",
+          "text": "Fewer wet nappies or passing less urine?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.fever_5_days_or_more",
+          "text": "Has the fever lasted 5 days or more?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.limb_or_joint_swelling",
+          "text": "Is a limb or joint swollen?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.non_weight_bearing",
+          "text": "Is your child not using or not standing on a limb?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.wakes_only_with_prolonged_stimulation",
+          "text": "Wakes only with prolonged stimulation",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.nasal_flaring",
+          "text": "Nasal flaring",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.crackles",
+          "text": "Crackles in the chest",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.cap_refill_3s_or_more",
+          "text": "Capillary refill time 3 seconds or more",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.dry_mucous_membranes",
+          "text": "Dry mucous membranes",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "https://careflow.example/fhir/StructureDefinition/audience",
+              "valueCode": "nurse"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
