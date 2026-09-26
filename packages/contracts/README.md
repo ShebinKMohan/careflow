@@ -9,6 +9,7 @@ Source of truth for CareFlow's interfaces. Every lane imports these types and ne
 | `events/` | Standard Webhooks envelope and one data schema per event; [`events/README.md`](events/README.md), [`events/websocket.md`](events/websocket.md). |
 | `alert_templates.yaml` | Fixed, non-PHI alert line per rule (`en`, `ar`) and its `required_action` key. |
 | `fixtures/` | Valid persona fixtures and invalid cases, `<case>.<schema>.json`; load with `careflow_contracts.testing.load_model`. |
+| `fhir/` | FHIR R4 mapping ([`mapping.yaml`](fhir/mapping.yaml), [`mapping.md`](fhir/mapping.md)), the intake Questionnaire and one example per mapped resource (M0-04, ADR-011). |
 | `codegen/` | `generate.sh` (run by `make contracts`) and the alert-template generator. |
 
 Generated (never edit; CI regenerates and fails on a diff):
