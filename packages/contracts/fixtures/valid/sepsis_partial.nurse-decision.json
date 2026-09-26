@@ -1,0 +1,13 @@
+{
+  "decision_id": "dec_sepsis_partial",
+  "session_id": "ses_sepsis_partial",
+  "suggestion_id": "sug_sepsis_partial",
+  "action": "CONFIRM",
+  "final_level": 2,
+  "scale": "KTAS",
+  "nurse_user_id": "nurse_demo_01",
+  "acknowledged_alert_ids": [
+    "alr_sepsis_partial"
+  ],
+  "decided_at": "2026-09-26T09:06:00Z"
+}

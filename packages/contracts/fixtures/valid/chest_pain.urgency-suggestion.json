@@ -1,0 +1,26 @@
+{
+  "suggestion_id": "sug_chest_pain",
+  "session_id": "ses_chest_pain",
+  "level": 2,
+  "scale": "KTAS",
+  "confidence": 0.71,
+  "reasons": [
+    {
+      "text": "Chest pain radiating to the left arm with sweating",
+      "fact_ids": [
+        "f_01M3EF2PM000000000035FW001",
+        "f_01M3EF2PM000000000035FW003",
+        "f_01M3EF2PM000000000035FW004"
+      ]
+    },
+    {
+      "text": "Raised heart rate",
+      "fact_ids": [
+        "f_01M3EF2PM000000000035FW00B"
+      ]
+    }
+  ],
+  "model_id": "careflow-ktas-gbm",
+  "model_version": "0.1.0",
+  "created_at": "2026-09-26T09:04:00Z"
+}

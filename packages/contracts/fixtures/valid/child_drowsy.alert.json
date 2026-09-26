@@ -1,0 +1,15 @@
+{
+  "alert_id": "alr_child_drowsy",
+  "session_id": "ses_child_drowsy",
+  "rule_id": "NG143_RED_FLAG",
+  "ruleset_version": "2026.1.0",
+  "severity": "critical",
+  "evidence_fact_ids": [
+    "f_01M3EF2PM000000000035FW010"
+  ],
+  "required_action": "paediatric_review_now",
+  "display_text": "Child red flag (NICE NG143). Urgent medical review.",
+  "partial": false,
+  "missing_inputs": [],
+  "raised_at": "2026-09-26T09:02:10Z"
+}

@@ -1,0 +1,17 @@
+{
+  "alert_id": "alr_stroke",
+  "session_id": "ses_stroke",
+  "rule_id": "FAST_STROKE",
+  "ruleset_version": "2026.1.0",
+  "severity": "critical",
+  "evidence_fact_ids": [
+    "f_01M3EF2PM000000000035FW00J",
+    "f_01M3EF2PM000000000035FW00M",
+    "f_01M3EF2PM000000000035FW00K"
+  ],
+  "required_action": "stroke_team_now",
+  "display_text": "Possible stroke: FAST screen positive. Immediate stroke assessment.",
+  "partial": false,
+  "missing_inputs": [],
+  "raised_at": "2026-09-26T09:02:10Z"
+}

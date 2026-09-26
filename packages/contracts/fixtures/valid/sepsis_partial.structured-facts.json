@@ -1,0 +1,181 @@
+{
+  "session_id": "ses_sepsis_partial",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+    "fhir_patient_id": "persona-sepsis",
+    "age_years": {
+      "fact_id": "f_01M3EF2PM000000000035FW01G",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-sepsis"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": 66
+    },
+    "sex": {
+      "fact_id": "f_01M3EF2PM000000000035FW01H",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-sepsis"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": {
+        "system": "http://hl7.org/fhir/administrative-gender",
+        "code": "male",
+        "display": "Male"
+      }
+    }
+  },
+  "chief_complaint": {
+    "fact_id": "f_01M3EF2PM000000000035FW01J",
+    "provenance": "PATIENT_STATED",
+    "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_01",
+      "start": 13,
+      "end": 53,
+      "quote": "fever and shaking chills since yesterday"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "Fever and shaking chills since yesterday"
+  },
+  "symptoms": [
+    {
+      "name": {
+        "fact_id": "f_01M3EF2PM000000000035FW01K",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "turn_02",
+          "start": 5,
+          "end": 30,
+          "quote": "coughing up yellow phlegm"
+        },
+        "recorded_at": "2026-09-26T09:01:00Z",
+        "value": "productive_cough"
+      },
+      "onset": {
+        "fact_id": "f_01M3EF2PM000000000035FW01M",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "turn_02",
+          "start": 31,
+          "end": 43,
+          "quote": "for two days"
+        },
+        "recorded_at": "2026-09-26T09:01:00Z",
+        "value": "P2D"
+      },
+      "severity": "moderate"
+    }
+  ],
+  "infection": {
+    "fever_reported": {
+      "fact_id": "f_01M3EF2PM000000000035FW01B",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_01",
+        "start": 0,
+        "end": 18,
+        "quote": "I have had a fever"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    },
+    "rigors": {
+      "fact_id": "f_01M3EF2PM000000000035FW01C",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_01",
+        "start": 23,
+        "end": 37,
+        "quote": "shaking chills"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    }
+  },
+  "vitals": {
+    "heart_rate": {
+      "fact_id": "f_01M3EF2PM000000000035FW01D",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0014"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 125,
+      "unit": "/min"
+    },
+    "spo2": {
+      "fact_id": "f_01M3EF2PM000000000035FW01E",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0015"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 93,
+      "unit": "%"
+    },
+    "temperature_c": {
+      "fact_id": "f_01M3EF2PM000000000035FW01F",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0016"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 39.4,
+      "unit": "Cel"
+    }
+  },
+  "ehr_context": {
+    "conditions": [
+      {
+        "fact_id": "f_01M3EF2PM000000000035FW01N",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Condition",
+          "id": "persona-sepsis-t2dm"
+        },
+        "recorded_at": "2026-09-26T09:00:00Z",
+        "value": {
+          "system": "http://snomed.info/sct",
+          "code": "44054006",
+          "display": "Diabetes mellitus type 2"
+        }
+      }
+    ],
+    "medications": [
+      {
+        "fact_id": "f_01M3EF2PM000000000035FW01P",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "MedicationStatement",
+          "id": "persona-sepsis-metformin"
+        },
+        "recorded_at": "2026-09-26T09:00:00Z",
+        "value": {
+          "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+          "code": "6809",
+          "display": "metformin"
+        }
+      }
+    ]
+  },
+  "extraction_status": "complete"
+}
