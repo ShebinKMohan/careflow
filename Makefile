@@ -8,7 +8,8 @@ SHELL := /bin/bash
 export UV_LOCKED := 1
 
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
-	typecheck-node test test-py test-node banned-deps check contracts
+	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
+	contracts-drift contracts-breaking contracts-check
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -53,16 +54,19 @@ banned-deps: ## Fail on LiteLLM or any unconstrained Python dependency
 check: banned-deps lint typecheck test ## Everything CI checks, except the secret and CVE scans
 
 CONTRACTS := packages/contracts
-CONTRACTS_PY := $(CONTRACTS)/src/careflow_contracts/generated
 
 # Regenerate typed models from packages/contracts. Deterministic: CI checks `git diff --exit-code`.
-contracts: ## Regenerate the Python models and alert templates from packages/contracts
-	rm -rf $(CONTRACTS_PY)
-	uv run datamodel-codegen --input $(CONTRACTS)/schemas --input-file-type jsonschema \
-		--output $(CONTRACTS_PY) --output-model-type pydantic_v2.BaseModel \
-		--target-python-version 3.12 --use-annotated --field-constraints --use-union-operator \
-		--use-standard-collections --disable-timestamp --collapse-root-models --use-type-alias \
-		--strict-nullable \
-		--formatters ruff-format \
-		--custom-file-header-mode prepend --custom-file-header-path $(CONTRACTS)/codegen/header.txt
-	uv run python $(CONTRACTS)/codegen/gen_alert_templates.py
+contracts: ## Regenerate Python models, TS types and alert templates from packages/contracts
+	$(CONTRACTS)/codegen/generate.sh
+
+contracts-lint: ## Redocly lint of openapi.yaml (0 errors required)
+	pnpm --filter @careflow/contracts exec redocly lint openapi.yaml
+
+contracts-drift: contracts ## Regenerate, then fail if the committed outputs differ
+	git diff --exit-code -- $(CONTRACTS)
+	test -z "$$(git status --porcelain --untracked-files=all -- $(CONTRACTS))"
+
+contracts-breaking: ## oasdiff breaking changes against origin/main (skipped when main has no spec)
+	scripts/contracts_breaking.sh
+
+contracts-check: contracts-lint contracts-drift contracts-breaking ## All contract gates CI runs

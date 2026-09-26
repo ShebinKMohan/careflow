@@ -1,0 +1,5 @@
+# DO NOT EDIT: generated from packages/contracts by `make contracts` (packages/contracts/codegen).
+# Specialised facts narrow a base field (e.g. unit: Literal["Cel"] over str) and Pydantic validates
+# the narrowed type; mapped external refs are imported into every module. So pyright's invariance
+# and unused-import checks are disabled for generated files only.
+# pyright: reportIncompatibleVariableOverride=false, reportUnusedImport=false
