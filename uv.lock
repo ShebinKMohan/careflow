@@ -288,6 +288,16 @@ source = { editable = "services/rag" }
 name = "careflow-rules"
 version = "0.0.0"
 source = { editable = "services/rules" }
+dependencies = [
+    { name = "careflow-contracts" },
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "careflow-contracts", editable = "packages/contracts" },
+    { name = "pydantic", specifier = ">=2.13,<3" },
+]
 
 [[package]]
 name = "careflow-triage"
