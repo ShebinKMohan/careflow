@@ -8,6 +8,12 @@ from typing import TypeAlias
 
 from careflow_contracts.alert_text import render_display_text, required_action_for
 from careflow_contracts.generated.alert_schema import Alert, AlertSeverity, RuleId
+from careflow_contracts.generated.ehr_fetch_schema import (
+    EhrAppointment,
+    EhrFetch,
+    EhrStatus,
+    PatientIdentifier,
+)
 from careflow_contracts.generated.extraction_output_schema import ExtractedFact, ExtractionOutput
 from careflow_contracts.generated.fact_schema import (
     CodeFact,
@@ -36,6 +42,7 @@ from careflow_contracts.generated.structured_facts_schema import (
     AcvpuFact,
     AgeMonthsFact,
     AgeYearsFact,
+    AllergyFact,
     BloodPressureFact,
     ChestPain,
     ChildAmber,
@@ -80,6 +87,7 @@ __all__ = [
     "AgeYearsFact",
     "Alert",
     "AlertSeverity",
+    "AllergyFact",
     "BloodPressureFact",
     "ChestPain",
     "ChildAmber",
@@ -88,7 +96,10 @@ __all__ = [
     "Coding",
     "DecisionAction",
     "DeviceSource",
+    "EhrAppointment",
     "EhrContext",
+    "EhrFetch",
+    "EhrStatus",
     "ExtractedFact",
     "ExtractionOutput",
     "ExtractionStatus",
@@ -109,6 +120,7 @@ __all__ = [
     "OverrideReasonCode",
     "PainScoreFact",
     "Patient",
+    "PatientIdentifier",
     "Provenance",
     "RespiratoryRateFact",
     "RuleId",

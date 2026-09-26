@@ -1,0 +1,95 @@
+{
+  "status": "ok",
+  "patient_ref": "Patient/persona-chest-pain",
+  "patient": {
+    "fhir_patient_id": "persona-chest-pain",
+    "age_years": {
+      "fact_id": "f_JPBQXC9XF2DNV4MMQZJM3Q5790",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-chest-pain",
+        "version_id": "1"
+      },
+      "recorded_at": "2026-09-27T09:00:05Z",
+      "value": 58
+    },
+    "sex": {
+      "fact_id": "f_6JTSYS90Z0944MSNN1VMQAY2M5",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-chest-pain",
+        "version_id": "1"
+      },
+      "recorded_at": "2026-09-27T09:00:05Z",
+      "value": {
+        "system": "http://hl7.org/fhir/administrative-gender",
+        "code": "male",
+        "display": "Male"
+      }
+    }
+  },
+  "context": {
+    "allergies": [
+      {
+        "fact_id": "f_XQ9GR3GD3FV0GS395KE6WHS9V7",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "AllergyIntolerance",
+          "id": "allergy-1",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-27T09:00:05Z",
+        "value": {
+          "system": "http://snomed.info/sct",
+          "code": "91936005",
+          "display": "Allergy to penicillin"
+        },
+        "criticality": "high"
+      }
+    ],
+    "conditions": [
+      {
+        "fact_id": "f_7HPAK73E566DHWGM7KE6D49G72",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Condition",
+          "id": "persona-chest-pain-hypertension",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-27T09:00:05Z",
+        "value": {
+          "system": "http://snomed.info/sct",
+          "code": "38341003",
+          "display": "Hypertension"
+        }
+      }
+    ],
+    "medications": [
+      {
+        "fact_id": "f_9SMT7QTZANA28JDG22ABFHJ3XV",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "MedicationStatement",
+          "id": "persona-chest-pain-amlodipine",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-27T09:00:05Z",
+        "value": {
+          "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+          "code": "197361",
+          "display": "Amlodipine 5 MG Oral Tablet"
+        }
+      }
+    ]
+  },
+  "appointments": [],
+  "fetched_at": "2026-09-27T09:00:05Z",
+  "errors": []
+}

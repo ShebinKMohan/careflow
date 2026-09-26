@@ -62,7 +62,7 @@ entries:
   display: Active
   unit: null
   verified: true
-  notes: Only clinicalStatus = active. Each code becomes a CodeFact with provenance EHR.
+  notes: Only clinicalStatus = active. Each code becomes an AllergyFact (a coded fact plus criticality) with provenance EHR.
 - fact_path: ehr_context.conditions
   direction: read
   resource: Condition
@@ -83,6 +83,17 @@ entries:
   unit: null
   verified: true
   notes: Only status = active (MedicationStatement.status is a required code, no system).
+- fact_path: ehr_context.medications
+  direction: read
+  resource: MedicationRequest
+  element: MedicationRequest.medicationCodeableConcept
+  code_system: null
+  code: active
+  display: null
+  unit: null
+  verified: true
+  notes: Only status = active. Synthea writes MedicationRequest, not MedicationStatement (checked on the loaded data in
+    M1-08); the hospital adapter lists the medication types to read. A medicationReference is not resolved.
 - fact_path: session.appointment
   direction: read
   resource: Appointment
@@ -92,8 +103,8 @@ entries:
   display: null
   unit: null
   verified: true
-  notes: Today's appointments for the patient with status booked (routine and no-show personas). Context for check-in, not
-    a fact.
+  notes: The patient's appointments from today on with a status the hospital adapter lists (booked, arrived), e.g. the
+    routine and no-show personas. Context for check-in, not a fact.
 - fact_path: vitals.heart_rate
   direction: write
   resource: Observation

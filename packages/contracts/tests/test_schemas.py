@@ -30,6 +30,7 @@ INVALID = {
     "patient_stated_fhir_source.structured-facts.json",
     "four_reasons.urgency-suggestion.json",
     "free_form_key.extraction-output.json",
+    "unknown_status.ehr-fetch.json",
 }
 
 
@@ -41,7 +42,7 @@ def model_errors(schema_name: str, raw: str) -> str | None:
     return None
 
 
-def test_the_six_schema_files_exist() -> None:
+def test_the_seven_schema_files_exist() -> None:
     assert set(schema_files()) == {
         "fact",
         "structured-facts",
@@ -49,6 +50,7 @@ def test_the_six_schema_files_exist() -> None:
         "alert",
         "nurse-decision",
         "extraction-output",
+        "ehr-fetch",
     }
 
 

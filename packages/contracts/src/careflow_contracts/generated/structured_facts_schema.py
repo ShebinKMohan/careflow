@@ -12,7 +12,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Annotated, Literal
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
-from .fact_schema import CodeFact, Coding, IntegerFact, NumberFact
+from .fact_schema import CodeFact, Coding, FactBase, IntegerFact, NumberFact
 from . import fact_schema
 
 
@@ -352,11 +352,27 @@ class ChildAmber(BaseModel):
     ] = None
 
 
+class Criticality(StrEnum):
+    low = "low"
+    high = "high"
+    unable_to_assess = "unable-to-assess"
+
+
+class AllergyFact(FactBase):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    value: fact_schema.Coding
+    criticality: Annotated[
+        Criticality | None, Field(description="AllergyIntolerance.criticality.")
+    ] = None
+
+
 class EhrContext(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    allergies: Annotated[list[fact_schema.CodeFact] | None, Field(max_length=100)] = None
+    allergies: Annotated[list[AllergyFact] | None, Field(max_length=100)] = None
     conditions: Annotated[list[fact_schema.CodeFact] | None, Field(max_length=200)] = None
     medications: Annotated[list[fact_schema.CodeFact] | None, Field(max_length=200)] = None
 
