@@ -153,7 +153,11 @@ def check_pnpm_lock(path: Path) -> list[str]:
 def workspace_package_names(pyprojects: list[Path]) -> set[str]:
     names: set[str] = set()
     for path in pyprojects:
-        name = tomllib.loads(path.read_text(encoding="utf-8")).get("project", {}).get("name")
+        try:
+            data = tomllib.loads(path.read_text(encoding="utf-8"))
+        except (tomllib.TOMLDecodeError, UnicodeDecodeError):
+            continue  # reported by the per-file check
+        name = data.get("project", {}).get("name")
         if isinstance(name, str):
             names.add(normalize(name))
     return names

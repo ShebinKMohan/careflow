@@ -55,9 +55,10 @@ def test_adding_litellm_to_any_pyproject_fails(tmp_path: Path, rel: Path) -> Non
     assert run_check(tmp_path).returncode == 0
     target = tmp_path / rel
     text = target.read_text(encoding="utf-8")
-    if "\ndependencies = []" in text:
-        text = text.replace("\ndependencies = []", '\ndependencies = ["litellm>=1.0"]')
-    else:
+    if "\ndependencies = [" in text:  # prepend to the existing [project] dependencies
+        text = text.replace("\ndependencies = [", '\ndependencies = ["litellm>=1.0", ', 1)
+        text = text.replace('"litellm>=1.0", ]', '"litellm>=1.0"]')
+    else:  # the virtual workspace root has no [project] table
         text += '\n[project]\nname = "x"\ndependencies = ["litellm>=1.0"]\n'
     target.write_text(text, encoding="utf-8")
     result = run_check(tmp_path)
@@ -131,6 +132,14 @@ def test_litellm_in_pnpm_lock_fails(tmp_path: Path) -> None:
         "lockfileVersion: '9.0'\npackages:\n  litellm@1.0.0:\n    resolution: {integrity: x}\n",
     )
     assert run_check(tmp_path).returncode == 1
+
+
+def test_unparsable_pyproject_is_reported_not_crashed(tmp_path: Path) -> None:
+    write(tmp_path / "pyproject.toml", "[project]\n[project]\n")
+    result = run_check(tmp_path)
+    assert result.returncode == 1
+    assert "cannot parse" in result.stderr
+    assert "Traceback" not in result.stderr
 
 
 def test_node_modules_is_skipped(tmp_path: Path) -> None:
