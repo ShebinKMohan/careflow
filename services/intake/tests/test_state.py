@@ -8,8 +8,9 @@ import pytest
 from pydantic import ValidationError
 
 from careflow_contracts.generated.alert_schema import Alert
-from careflow_contracts.generated.fact_schema import CodeFact, TextFact, TriStateFact
+from careflow_contracts.generated.fact_schema import TextFact, TriStateFact
 from careflow_contracts.generated.structured_facts_schema import (
+    AllergyFact,
     EhrContext,
     FactKey,
     HeartRateFact,
@@ -47,7 +48,7 @@ def test_fact_class_follows_the_contract() -> None:
     assert fact_class(FactKey.chest_pain_present) is TriStateFact
     assert fact_class(FactKey.chief_complaint) is TextFact
     assert fact_class(FactKey.symptoms) is Symptom
-    assert fact_class(FactKey.ehr_context_allergies) is CodeFact
+    assert fact_class(FactKey.ehr_context_allergies) is AllergyFact  # CodeFact plus criticality
     for key in FactKey:  # every contract key resolves
         assert fact_class(key)
 

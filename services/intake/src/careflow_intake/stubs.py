@@ -15,6 +15,7 @@ from typing import Any, Final
 from pydantic import BaseModel
 
 from careflow_contracts.generated.alert_schema import Alert, AlertSeverity, RuleId
+from careflow_contracts.generated.ehr_fetch_schema import EhrFetch, EhrStatus, PatientIdentifier
 from careflow_contracts.generated.events.envelope_schema import EventType
 from careflow_contracts.generated.fact_schema import TextFact, TriState, TriStateFact
 from careflow_contracts.generated.structured_facts_schema import (
@@ -29,7 +30,6 @@ from careflow_contracts.validators import iter_facts
 from careflow_intake.facts import FactEntry, fact_class, stable_fact_id
 from careflow_intake.ports import (
     Assignment,
-    EhrUnavailable,
     ExtractionResult,
     IntakePorts,
     NoSuggestion,
@@ -58,23 +58,40 @@ class SteppingClock:
         return now
 
 
+KEYPAD_SYSTEM: Final = "https://careflow.example/fhir/sid/keypad-id"
+
+
+def keypad(value: str = "100001") -> PatientIdentifier:
+    return PatientIdentifier(system=KEYPAD_SYSTEM, value=value)
+
+
 @dataclass
 class StubIdentifier:
-    patient_ref: str | None = "Patient/synthetic-0001"
+    identifier: PatientIdentifier | None = field(default_factory=keypad)
 
-    async def identify(self, state: IntakeState) -> str | None:
-        return self.patient_ref
+    async def identify(self, state: IntakeState) -> PatientIdentifier | None:
+        return self.identifier
 
 
 @dataclass
 class StubEhrReader:
-    context: EhrContext | None = None
-    down: bool = False
+    """Answers with `status` and `context`; `raises` simulates a reader that crashes."""
 
-    async def fetch_context(self, patient_ref: str) -> EhrContext | None:
-        if self.down:
-            raise EhrUnavailable("the stub EHR is down")
-        return self.context
+    status: EhrStatus = EhrStatus.ok
+    context: EhrContext | None = None
+    raises: bool = False
+
+    async def fetch_context(self, identifier: PatientIdentifier, clinic_id: str) -> EhrFetch:
+        if self.raises:
+            raise RuntimeError("the stub EHR reader crashed")
+        usable = self.status in (EhrStatus.ok, EhrStatus.partial)
+        return EhrFetch(
+            status=self.status,
+            patient_ref="Patient/synthetic-0001" if usable else None,
+            context=self.context if usable else None,
+            fetched_at=START,
+            errors=[] if self.status is EhrStatus.ok else [f"stub: {self.status.value}"],
+        )
 
 
 DEFAULT_QUESTIONS: Final = (
@@ -301,6 +318,7 @@ def stub_ports(**overrides: Any) -> IntakePorts:
 
 __all__ = [
     "DEFAULT_QUESTIONS",
+    "KEYPAD_SYSTEM",
     "START",
     "AnswerExtractor",
     "EndlessConversation",
@@ -314,6 +332,7 @@ __all__ = [
     "StubQueue",
     "StubUrgencyModel",
     "StubWriteback",
+    "keypad",
     "stable_fact_id",
     "stub_ports",
 ]

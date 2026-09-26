@@ -13,6 +13,11 @@ from datetime import datetime
 from typing import Annotated, Any, Required, TypedDict
 
 from careflow_contracts.generated.alert_schema import Alert
+from careflow_contracts.generated.ehr_fetch_schema import (
+    EhrAppointment,
+    EhrStatus,
+    PatientIdentifier,
+)
 from careflow_contracts.generated.nurse_decision_schema import NurseDecision
 from careflow_contracts.generated.structured_facts_schema import (
     EhrContext,
@@ -62,8 +67,12 @@ class IntakeState(TypedDict, total=False):
     arrived_at: Required[datetime]
     # Set by the nodes.
     started_at: datetime
+    patient_identifier: PatientIdentifier | None
     patient_ref: str | None
+    ehr_status: EhrStatus | None
+    ehr_errors: list[str]
     ehr_context: EhrContext | None
+    appointments: list[EhrAppointment]
     turns: Annotated[list[Turn], operator.add]
     turn_count: int
     pending_question: Question | None
