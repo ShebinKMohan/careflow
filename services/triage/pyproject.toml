@@ -4,7 +4,27 @@ version = "0.0.0"
 description = "CareFlow urgency model: training, evaluation, ONNX export and inference."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+  "careflow-contracts",
+  "httpx>=0.28,<0.29",
+  "joblib>=1.6,<2",
+  "numpy>=2.3,<3",
+  "openpyxl>=3.1,<4",
+  "pandas>=3.0,<4",
+  "pydantic>=2.13,<3",
+  "pyyaml>=6.0,<7",
+  "scikit-learn>=1.9,<1.10",
+  "scipy>=1.18,<2",
+  "shap>=0.52,<0.53",
+  "threadpoolctl>=3.7,<4",
+  "typer>=0.27,<0.28",
+]
+
+[project.scripts]
+careflow-triage = "careflow_triage.cli:main"
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]

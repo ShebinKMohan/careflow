@@ -28,7 +28,8 @@ coverage/
 target/
 
 # Data, models and private material (never committed)
-services/triage/data/raw/
+services/triage/data/
+services/triage/artifacts/
 eval/private/
 *.onnx.tmp
 models/cache/
