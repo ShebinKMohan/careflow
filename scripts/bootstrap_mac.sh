@@ -13,7 +13,8 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 # formula:command-it-provides
-tools=(pnpm:pnpm mkcert:mkcert osv-scanner:osv-scanner gitleaks:gitleaks rustup:rustup coreutils:gtimeout)
+tools=(pnpm:pnpm mkcert:mkcert osv-scanner:osv-scanner gitleaks:gitleaks rustup:rustup coreutils:gtimeout
+  oasdiff:oasdiff)
 missing=()
 for entry in "${tools[@]}"; do
   formula="${entry%%:*}"
