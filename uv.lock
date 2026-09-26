@@ -253,20 +253,24 @@ source = { editable = "services/intake" }
 dependencies = [
     { name = "careflow-contracts" },
     { name = "careflow-providers" },
+    { name = "careflow-rules" },
     { name = "langgraph" },
     { name = "langgraph-checkpoint-postgres" },
     { name = "psycopg", extra = ["binary", "pool"] },
     { name = "pydantic" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "careflow-contracts", editable = "packages/contracts" },
     { name = "careflow-providers", editable = "packages/providers" },
+    { name = "careflow-rules", editable = "services/rules" },
     { name = "langgraph", specifier = "==1.2.12" },
     { name = "langgraph-checkpoint-postgres", specifier = ">=3.1.2,<3.2" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.3,<3.4" },
     { name = "pydantic", specifier = ">=2.13,<3" },
+    { name = "pyyaml", specifier = ">=6.0,<7" },
 ]
 
 [[package]]
