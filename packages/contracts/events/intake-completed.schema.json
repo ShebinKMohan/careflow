@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "IntakeCompletedData: see $defs/IntakeCompletedData. The intake conversation finished and the structured facts are ready for the nurse. No name, date of birth or free text.",
+  "$ref": "#/$defs/IntakeCompletedData",
+  "$defs": {
+    "IntakeCompletedData": {
+      "title": "IntakeCompletedData",
+      "description": "The intake conversation finished and the structured facts are ready for the nurse. No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "extraction_status": {
+          "$ref": "../schemas/structured-facts.schema.json#/$defs/ExtractionStatus"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "extraction_status",
+        "completed_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_routine",
+          "extraction_status": "complete",
+          "completed_at": "2026-09-26T09:03:00Z"
+        }
+      ]
+    }
+  }
+}

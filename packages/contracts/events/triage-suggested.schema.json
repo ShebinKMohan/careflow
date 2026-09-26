@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "TriageSuggestedData: see $defs/TriageSuggestedData. A model suggested an urgency level; the nurse must still confirm it. Reasons are not included (model text). No name, date of birth or free text.",
+  "$ref": "#/$defs/TriageSuggestedData",
+  "$defs": {
+    "TriageSuggestedData": {
+      "title": "TriageSuggestedData",
+      "description": "A model suggested an urgency level; the nurse must still confirm it. Reasons are not included (model text). No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "suggestion_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "level": {
+          "$ref": "../schemas/urgency-suggestion.schema.json#/$defs/UrgencyLevel"
+        },
+        "scale": {
+          "$ref": "../schemas/urgency-suggestion.schema.json#/$defs/TriageScale"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "model_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "model_version": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "suggestion_id",
+        "level",
+        "scale",
+        "confidence",
+        "model_id",
+        "model_version",
+        "created_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_chest_pain",
+          "suggestion_id": "sug_chest_pain",
+          "level": 2,
+          "scale": "KTAS",
+          "confidence": 0.71,
+          "model_id": "careflow-ktas-gbm",
+          "model_version": "0.1.0",
+          "created_at": "2026-09-26T09:04:00Z"
+        }
+      ]
+    }
+  }
+}

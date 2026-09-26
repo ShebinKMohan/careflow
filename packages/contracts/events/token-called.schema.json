@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "TokenCalledData: see $defs/TokenCalledData. A queue token was called to a room. No name, date of birth or free text.",
+  "$ref": "#/$defs/TokenCalledData",
+  "$defs": {
+    "TokenCalledData": {
+      "title": "TokenCalledData",
+      "description": "A queue token was called to a room. No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "token_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "token_code": {
+          "type": "string",
+          "pattern": "^[A-Z]-[0-9]{3}$"
+        },
+        "department": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "room": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "called_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "token_id",
+        "token_code",
+        "department",
+        "room",
+        "called_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_chest_pain",
+          "token_id": "tok_chest_pain",
+          "token_code": "A-014",
+          "department": "emergency",
+          "room": "Resus 2",
+          "called_at": "2026-09-26T09:08:00Z"
+        }
+      ]
+    }
+  }
+}

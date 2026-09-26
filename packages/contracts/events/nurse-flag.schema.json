@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "NurseFlagData: see $defs/NurseFlagData. Something needs a nurse's attention, e.g. the phone assistant refused a medical question. No name, date of birth or free text.",
+  "$ref": "#/$defs/NurseFlagData",
+  "$defs": {
+    "NurseFlagData": {
+      "title": "NurseFlagData",
+      "description": "Something needs a nurse's attention, e.g. the phone assistant refused a medical question. No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "flag_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "medical_question",
+            "feels_worse",
+            "other"
+          ]
+        },
+        "raised_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "flag_id",
+        "reason",
+        "raised_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_routine",
+          "flag_id": "flg_routine_02",
+          "reason": "medical_question",
+          "raised_at": "2026-09-26T09:42:00Z"
+        }
+      ]
+    }
+  }
+}
