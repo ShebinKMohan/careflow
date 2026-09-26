@@ -20,12 +20,18 @@ dev = [
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
   "hypothesis==6.168.1",
+  "datamodel-code-generator==0.83.0",
+  "jsonschema==4.26.0",
+  "referencing==0.37.0",
+  "pyyaml==6.0.3",
+  "rfc3339-validator==0.1.4",
 ]
 
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = ["**/node_modules", "**/.next", "**/dist"]
+# Generated code is checked by `make contracts && git diff --exit-code`, not by the linter.
+extend-exclude = ["**/node_modules", "**/.next", "**/dist", "**/generated"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S", "ASYNC"]

@@ -1,0 +1,4 @@
+# DO NOT EDIT: generated from packages/contracts/schemas by `make contracts`.
+# Specialised facts narrow a base field (e.g. unit: Literal["Cel"] over str); Pydantic validates
+# the narrowed type, so pyright's invariance check on mutable fields is disabled for this file.
+# pyright: reportIncompatibleVariableOverride=false
