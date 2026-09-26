@@ -575,7 +575,7 @@
         },
         {
           "linkId": "child_danger.no_response_to_social_cues",
-          "text": "Is your child not responding to you (no smile, no eye contact)?",
+          "text": "Is your child not responding to you at all (no reaction to your face or voice)?",
           "type": "choice",
           "answerOption": [
             {
@@ -956,6 +956,34 @@
         {
           "linkId": "child_amber.pallor_reported",
           "text": "Have you noticed pale skin, lips or tongue?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "unknown",
+                "display": "Not sure"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "child_amber.not_responding_normally",
+          "text": "Is your child not responding to you as usual, or not smiling?",
           "type": "choice",
           "answerOption": [
             {

@@ -279,6 +279,10 @@ class ChildAmber(BaseModel):
             description="Pallor of skin, lips or tongue reported by parent or carer (NG143 amber)."
         ),
     ] = None
+    not_responding_normally: Annotated[
+        fact_schema.TriStateFact | None,
+        Field(description="Not responding normally to social cues, or no smile (NG143 amber)."),
+    ] = None
     decreased_activity: Annotated[
         fact_schema.TriStateFact | None, Field(description="Decreased activity (NG143 amber).")
     ] = None
@@ -364,6 +368,7 @@ class FactKey(StrEnum):
     child_danger_bulging_fontanelle = "child_danger.bulging_fontanelle"
     child_danger_focal_neuro_signs = "child_danger.focal_neuro_signs"
     child_amber_pallor_reported = "child_amber.pallor_reported"
+    child_amber_not_responding_normally = "child_amber.not_responding_normally"
     child_amber_decreased_activity = "child_amber.decreased_activity"
     child_amber_wakes_only_with_prolonged_stimulation = (
         "child_amber.wakes_only_with_prolonged_stimulation"

@@ -71,6 +71,7 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 | `child_danger.bulging_fontanelle` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_danger.bulging_fontanelle).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `child_danger.focal_neuro_signs` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_danger.focal_neuro_signs).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `child_amber.pallor_reported` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.pallor_reported).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
+| `child_amber.not_responding_normally` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.not_responding_normally).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `child_amber.decreased_activity` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.decreased_activity).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `child_amber.wakes_only_with_prolonged_stimulation` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.wakes_only_with_prolonged_stimulation).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `child_amber.nasal_flaring` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.nasal_flaring).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
