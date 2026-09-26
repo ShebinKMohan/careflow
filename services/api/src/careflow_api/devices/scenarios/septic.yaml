@@ -1,0 +1,10 @@
+# Simulated vitals scenario (M1-03). Synthetic; no patient data. With a stated fever, the kiosk
+# vitals alone give a partial NEWS2 of 5 or more (pulse 2, SpO2 2, temperature 2).
+id: septic
+description: Adult with fever, rising pulse and borderline SpO2.
+age_band: adult
+duration_s: 30
+bp_cuff: true
+series:
+  - {t_s: 0, hr: 118, spo2: 94, temp_c: 39.2, sbp: 98, dbp: 60}
+  - {t_s: 30, hr: 126, spo2: 93, temp_c: 39.5, sbp: 94, dbp: 58}

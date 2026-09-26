@@ -4,7 +4,7 @@ Three Next.js 16 apps (App Router, TypeScript, Tailwind v4) built from `@careflo
 
 | App | Port | Screens (M0-08 placeholders) |
 |---|---|---|
-| `kiosk` | 3000 | `/` language choice, `/setup` kiosk sign-in (staff stub), `/checkin` keypad → `POST /v1/checkin/keypad`, `/intake` |
+| `kiosk` | 3000 | `/` language choice, `/setup` kiosk sign-in (staff stub), `/checkin` keypad → `POST /v1/checkin/keypad`, `/intake`, `/vitals` (simulated vitals panel; `?scenario=`) |
 | `staff` | 3001 | `/login` (stub), `/nurse` worklist, `/doctor/[sessionId]` briefing, `/board?department=ed`, `/admin` providers |
 | `companion` | 3002 | `/` QR hand-over claim → `POST /v1/checkin/qr/claim`, `/status` queue status; installable PWA |
 

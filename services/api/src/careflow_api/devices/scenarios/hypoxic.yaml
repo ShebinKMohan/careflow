@@ -1,0 +1,9 @@
+# Simulated vitals scenario (M1-03). Synthetic; no patient data.
+id: hypoxic
+description: Adult with falling oxygen saturation.
+age_band: adult
+duration_s: 30
+bp_cuff: true
+series:
+  - {t_s: 0, hr: 104, spo2: 90, temp_c: 37.1, sbp: 128, dbp: 80}
+  - {t_s: 30, hr: 104, spo2: 88, temp_c: 37.1, sbp: 128, dbp: 80}

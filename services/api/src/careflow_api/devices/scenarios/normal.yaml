@@ -1,0 +1,9 @@
+# Simulated vitals scenario (M1-03). Synthetic; no patient data.
+id: normal
+description: Well adult at rest.
+age_band: adult
+duration_s: 30
+bp_cuff: true
+series:
+  - {t_s: 0, hr: 78, spo2: 98, temp_c: 36.8, sbp: 122, dbp: 78}
+  - {t_s: 30, hr: 78, spo2: 98, temp_c: 36.8, sbp: 122, dbp: 78}

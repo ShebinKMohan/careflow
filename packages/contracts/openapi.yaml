@@ -44,6 +44,8 @@ tags:
   description: Patient phone.
 - name: admin
   description: Admin status.
+- name: dev
+  description: Development-only test hooks. They exist only when CAREFLOW_ENV=dev.
 - name: events
   description: Outbound events (webhooks).
 paths:
@@ -592,6 +594,13 @@ paths:
                 state: queued
                 token_code: G-031
                 wait_estimate_min: 25
+                vitals:
+                  heart_rate: 78
+                  spo2: 98
+                  temperature_c: 36.8
+                  measured_at: '2026-09-26T09:03:00Z'
+                  device_id: sim_vitals_01
+                  simulated: true
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -709,6 +718,47 @@ paths:
                   model_version: 0.1.0
                   created_at: '2026-09-26T09:04:00Z'
                 needed_facts: []
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/dev/sessions/{session_id}/vitals-sim:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: startVitalsSimulation
+      summary: Start the simulated vitals device (development only)
+      tags:
+      - dev
+      description: 'Test hook (M1-03): runs the scenario-driven vitals simulator for the session in the
+        background. Scenario order: request body, then the VITALS_SCENARIO environment variable, then
+        normal. The route exists only when CAREFLOW_ENV=dev; otherwise it answers 404.'
+      x-careflow-roles:
+      - kiosk_device
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VitalsSimRequest'
+            example:
+              scenario: septic
+      responses:
+        '202':
+          description: The simulator is running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VitalsSimStarted'
+              example:
+                session_id: ses_sepsis_partial
+                scenario: septic
+                frames: 31
+                simulated: true
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1946,8 +1996,82 @@ components:
         wait_estimate_min:
           type: integer
           minimum: 0
+        vitals:
+          $ref: '#/components/schemas/LatestVitals'
       required:
       - state
+      additionalProperties: false
+    LatestVitals:
+      type: object
+      description: The latest device readings, for the kiosk vitals panel. Numbers only; never a level
+        or an alert.
+      properties:
+        heart_rate:
+          type: number
+          minimum: 0
+          description: /min
+        spo2:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: '%'
+        temperature_c:
+          type: number
+          description: Cel
+        systolic_bp:
+          type: number
+          minimum: 0
+          description: mm[Hg]
+        diastolic_bp:
+          type: number
+          minimum: 0
+          description: mm[Hg]
+        measured_at:
+          type: string
+          format: date-time
+        device_id:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
+        simulated:
+          type: boolean
+          description: True when the reading comes from the simulated device (M1-03).
+      required:
+      - measured_at
+      - device_id
+      - simulated
+      additionalProperties: false
+    VitalsScenario:
+      type: string
+      description: A simulated vitals scenario (services/api/src/careflow_api/devices/scenarios).
+      enum:
+      - normal
+      - septic
+      - hypoxic
+      - tachycardic_child
+    VitalsSimRequest:
+      type: object
+      properties:
+        scenario:
+          $ref: '#/components/schemas/VitalsScenario'
+      additionalProperties: false
+    VitalsSimStarted:
+      type: object
+      properties:
+        session_id:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
+        scenario:
+          $ref: '#/components/schemas/VitalsScenario'
+        frames:
+          type: integer
+          minimum: 1
+          description: Readings the simulator will send.
+        simulated:
+          type: boolean
+          const: true
+      required:
+      - session_id
+      - scenario
+      - frames
+      - simulated
       additionalProperties: false
     DeviceVitalsReading:
       type: object

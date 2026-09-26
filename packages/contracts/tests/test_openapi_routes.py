@@ -17,7 +17,8 @@ OPERATIONS = [
     for method, op in item.items()
     if method in ("get", "post", "put", "patch", "delete")
 ]
-# The route list in the M0-03 issue: the single source for names used by later issues.
+# The route list in the M0-03 issue (the single source for names used by later issues), plus the
+# routes later issues add: M1-03 the dev-only vitals simulator.
 EXPECTED_ROUTES = """
 post /v1/auth/login
 post /v1/auth/device-token
@@ -49,6 +50,7 @@ post /v1/companion/feels-worse
 post /v1/companion/ask
 get /v1/admin/providers
 get /v1/admin/status
+post /v1/dev/sessions/{session_id}/vitals-sim
 get /health
 """
 EXPECTED = {(m, r) for m, r in (line.split() for line in EXPECTED_ROUTES.strip().splitlines())}
@@ -93,7 +95,13 @@ def test_no_patient_identity_in_urls() -> None:
 
 def test_session_status_never_carries_a_level_or_alert() -> None:
     props = set(schema("SessionStatus")["properties"])
-    assert props == {"state", "token_code", "room", "wait_estimate_min"}
+    assert props == {"state", "token_code", "room", "wait_estimate_min", "vitals"}
+    # The kiosk vitals panel (M1-03) shows measured numbers only: no score, level or alert.
+    vitals = set(schema("LatestVitals")["properties"])
+    assert vitals == {
+        "heart_rate", "spo2", "temperature_c", "systolic_bp", "diastolic_bp",
+        "measured_at", "device_id", "simulated",
+    }  # fmt: skip
 
 
 def test_only_the_decision_route_makes_a_level_final() -> None:

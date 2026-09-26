@@ -307,14 +307,44 @@ class SessionState(StrEnum):
     closed = "closed"
 
 
-class SessionStatus(BaseModel):
+class LatestVitals(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    state: SessionState
-    token_code: str | None = None
-    room: str | None = None
-    wait_estimate_min: Annotated[int | None, Field(ge=0)] = None
+    heart_rate: Annotated[float | None, Field(description="/min", ge=0.0)] = None
+    spo2: Annotated[float | None, Field(description="%", ge=0.0, le=100.0)] = None
+    temperature_c: Annotated[float | None, Field(description="Cel")] = None
+    systolic_bp: Annotated[float | None, Field(description="mm[Hg]", ge=0.0)] = None
+    diastolic_bp: Annotated[float | None, Field(description="mm[Hg]", ge=0.0)] = None
+    measured_at: AwareDatetime
+    device_id: Identifier
+    simulated: Annotated[
+        bool, Field(description="True when the reading comes from the simulated device (M1-03).")
+    ]
+
+
+class VitalsScenario(StrEnum):
+    normal = "normal"
+    septic = "septic"
+    hypoxic = "hypoxic"
+    tachycardic_child = "tachycardic_child"
+
+
+class VitalsSimRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    scenario: VitalsScenario | None = None
+
+
+class VitalsSimStarted(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: Identifier
+    scenario: VitalsScenario
+    frames: Annotated[int, Field(description="Readings the simulator will send.", ge=1)]
+    simulated: Literal[True]
 
 
 class DeviceVitalsReading(BaseModel):
@@ -715,6 +745,17 @@ class NurseFlagEvent(BaseModel):
     type: Literal["nurse.flag"]
     timestamp: AwareDatetime
     data: NurseFlagDataModel
+
+
+class SessionStatus(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    state: SessionState
+    token_code: str | None = None
+    room: str | None = None
+    wait_estimate_min: Annotated[int | None, Field(ge=0)] = None
+    vitals: LatestVitals | None = None
 
 
 class DecisionResult(BaseModel):

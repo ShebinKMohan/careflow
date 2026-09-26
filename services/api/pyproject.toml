@@ -17,6 +17,7 @@ dependencies = [
   "bcrypt>=5.0,<6",
   "redis>=8.1,<9",
   "httpx>=0.28,<0.29",
+  "pyyaml>=6.0,<7",
   "typer>=0.27,<0.28",
   "opentelemetry-api>=1.45,<2",
   "opentelemetry-sdk>=1.45,<2",
@@ -26,6 +27,7 @@ dependencies = [
 
 [project.scripts]
 careflow-api = "careflow_api.cli:main"
+careflow-vitals-sim = "careflow_api.devices.cli:main"
 
 [tool.uv.sources]
 careflow-contracts = { workspace = true }
