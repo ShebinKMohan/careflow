@@ -1,0 +1,9 @@
+id: ng143-red-seizure
+description: "20-month-old; a fit this morning."
+covers: [red:child_danger.seizure]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 20, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.seizure, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_RED_FLAG]

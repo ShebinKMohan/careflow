@@ -619,6 +619,16 @@ entries:
   unit: null
   verified: true
   notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.not_responding_normally
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.not_responding_normally).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
 - fact_path: child_amber.decreased_activity
   direction: write
   resource: QuestionnaireResponse

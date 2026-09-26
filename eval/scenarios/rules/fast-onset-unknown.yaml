@@ -1,0 +1,11 @@
+id: fast-onset-unknown
+description: "67-year-old; face drooping, time last known well unknown."
+covers: [fast:fast.last_known_well]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 67, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: fast.face_droop, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [FAST_STROKE]
+expect_needed:
+  - fast.last_known_well

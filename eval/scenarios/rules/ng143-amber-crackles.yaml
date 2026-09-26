@@ -1,0 +1,9 @@
+id: ng143-amber-crackles
+description: "18-month-old; the nurse hears crackles in the chest."
+covers: [amber:child_amber.crackles]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.crackles, value: "yes", provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

@@ -1,0 +1,14 @@
+id: fast-screen-from-symptom
+description: "58-year-old reports new weakness; FAST questions not asked yet."
+covers: [fast:symptoms]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 58, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: symptoms, value: "weakness", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: []
+expect_needed:
+  - fast.face_droop
+  - fast.arm_weakness
+  - fast.speech_difficulty
+  - fast.last_known_well

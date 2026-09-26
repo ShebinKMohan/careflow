@@ -1,0 +1,9 @@
+id: ng143-red-infant-fever
+description: "2-month-old with a temperature of 38.0 C."
+covers: [red:vitals.temperature_c]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 2, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.temperature_c, value: 38.0, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: [NG143_RED_FLAG]

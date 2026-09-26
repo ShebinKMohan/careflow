@@ -398,6 +398,10 @@
           "$ref": "fact.schema.json#/$defs/TriStateFact",
           "description": "Pallor of skin, lips or tongue reported by parent or carer (NG143 amber)."
         },
+        "not_responding_normally": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Not responding normally to social cues, or no smile (NG143 amber)."
+        },
         "decreased_activity": {
           "$ref": "fact.schema.json#/$defs/TriStateFact",
           "description": "Decreased activity (NG143 amber)."
@@ -541,6 +545,7 @@
         "child_danger.bulging_fontanelle",
         "child_danger.focal_neuro_signs",
         "child_amber.pallor_reported",
+        "child_amber.not_responding_normally",
         "child_amber.decreased_activity",
         "child_amber.wakes_only_with_prolonged_stimulation",
         "child_amber.nasal_flaring",

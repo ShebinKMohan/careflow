@@ -1,0 +1,15 @@
+id: chest-pain-ecg-deadline
+description: "58-year-old with chest pain; ECG due 10 minutes after arrival."
+covers: [chest:chest_pain.present]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 58, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: chest_pain.present, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [CHEST_PAIN_ECG_10MIN]
+expect_needed:
+  - chest_pain.radiates
+  - chest_pain.short_of_breath
+  - chest_pain.sweating
+  - chest_pain.onset
+expect_deadline_at: "2026-09-26T09:10:00Z"

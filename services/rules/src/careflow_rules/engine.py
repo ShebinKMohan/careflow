@@ -14,7 +14,16 @@ from typing import Final, Protocol
 
 from pydantic import BaseModel, ConfigDict
 
-from careflow_contracts import Alert, AlertSeverity, NeededFact, RuleId, StructuredFacts
+from careflow_contracts import (
+    Alert,
+    AlertSeverity,
+    FactKey,
+    NeededFact,
+    RuleId,
+    StructuredFacts,
+    render_display_text,
+    required_action_for,
+)
 from careflow_rules.news2 import (
     NOT_APPLICABLE_UNDER_16,
     News2Result,
@@ -31,11 +40,15 @@ SEVERITY_ORDER: Final[dict[AlertSeverity, int]] = {
 
 @dataclass(frozen=True, slots=True)
 class RuleContext:
-    """What every rule sees besides the facts. Rules never read the clock: they use `now`."""
+    """What every rule sees besides the facts. Rules never read the clock: they use `now`.
+
+    `arrived_at` is when the patient arrived (the door time for CHEST_PAIN_ECG_10MIN), if known.
+    """
 
     now: datetime
     ruleset_version: str
     news2: News2Result | None
+    arrived_at: datetime | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,18 +87,54 @@ def alert_id(session_id: str, rule_id: RuleId) -> str:
     return f"alr_{digest}"
 
 
-def evaluate(facts: StructuredFacts, now: datetime, ruleset: Ruleset | None = None) -> RulesResult:
+def raise_alert(
+    facts: StructuredFacts,
+    ctx: RuleContext,
+    rule_id: RuleId,
+    severity: AlertSeverity,
+    evidence_fact_ids: Sequence[str],
+    *,
+    partial: bool = False,
+    missing_inputs: Sequence[FactKey] = (),
+    qualifiers: Sequence[str] = (),
+    deadline_at: datetime | None = None,
+) -> Alert:
+    """An alert with the fixed template text for `rule_id` in the session language."""
+    return Alert(
+        alert_id=alert_id(facts.session_id, rule_id),
+        session_id=facts.session_id,
+        rule_id=rule_id,
+        ruleset_version=ctx.ruleset_version,
+        severity=severity,
+        evidence_fact_ids=list(dict.fromkeys(evidence_fact_ids)),
+        required_action=required_action_for(rule_id),
+        display_text=render_display_text(rule_id, facts.language.value, qualifiers),
+        partial=partial,
+        missing_inputs=list(missing_inputs),
+        raised_at=ctx.now,
+        deadline_at=deadline_at,
+    )
+
+
+def evaluate(
+    facts: StructuredFacts,
+    now: datetime,
+    ruleset: Ruleset | None = None,
+    *,
+    arrived_at: datetime | None = None,
+) -> RulesResult:
     """Run every rule in order; dedupe alerts by rule id and needed facts by (key, audience); sort
     alerts by severity (critical first), keeping rule order within a severity."""
-    if now.tzinfo is None or now.utcoffset() is None:
-        raise ValueError("now must be timezone-aware")
+    for name, moment in (("now", now), ("arrived_at", arrived_at)):
+        if moment is not None and (moment.tzinfo is None or moment.utcoffset() is None):
+            raise ValueError(f"{name} must be timezone-aware")
     if ruleset is None:
         from careflow_rules.rules import DEFAULT_RULESET
 
         ruleset = DEFAULT_RULESET
     inputs = news2_inputs(facts)
     news2 = score_news2(inputs)
-    ctx = RuleContext(now=now, ruleset_version=ruleset.version, news2=news2)
+    ctx = RuleContext(now=now, ruleset_version=ruleset.version, news2=news2, arrived_at=arrived_at)
     alerts: dict[RuleId, Alert] = {}
     needed: dict[tuple[str, str], NeededFact] = {}
     for rule in ruleset.rules:
@@ -111,5 +160,6 @@ __all__ = [
     "Ruleset",
     "RulesResult",
     "alert_id",
+    "raise_alert",
     "evaluate",
 ]

@@ -1,0 +1,9 @@
+id: ng143-amber-fever-5-days
+description: "30-month-old; fever for 6 days."
+covers: [amber:child_amber.fever_5_days_or_more]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 30, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.fever_5_days_or_more, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

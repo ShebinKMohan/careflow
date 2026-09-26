@@ -1,0 +1,9 @@
+id: ng143-amber-dry-mucous-membranes
+description: "18-month-old; dry mucous membranes."
+covers: [amber:child_amber.dry_mucous_membranes]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.dry_mucous_membranes, value: "yes", provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

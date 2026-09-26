@@ -11,6 +11,7 @@ Source of truth for CareFlow's interfaces. Every lane imports these types and ne
 | `fixtures/` | Valid persona fixtures and invalid cases, `<case>.<schema>.json`; load with `careflow_contracts.testing.load_model`. |
 | `fhir/` | FHIR R4 mapping ([`mapping.yaml`](fhir/mapping.yaml), [`mapping.md`](fhir/mapping.md)), the intake Questionnaire and one example per mapped resource (M0-04, ADR-011). |
 | `codegen/` | `generate.sh` (run by `make contracts`) and the alert-template generator. |
+| `oasdiff-err-ignore.txt` | Reviewed, intentional changes that oasdiff reports as breaking. One line per change, naming its issue and ADR. The breaking-change check fails on anything else. |
 
 Generated (never edit; CI regenerates and fails on a diff):
 

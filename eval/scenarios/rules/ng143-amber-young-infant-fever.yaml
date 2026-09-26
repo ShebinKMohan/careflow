@@ -1,0 +1,9 @@
+id: ng143-amber-young-infant-fever
+description: "4-month-old with a temperature of 39.0 C."
+covers: [amber:vitals.temperature_c]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 4, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.temperature_c, value: 39.0, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

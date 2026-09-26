@@ -1,0 +1,11 @@
+id: chest-pain-no-arrival-time
+description: "Chest pain with no recorded arrival time; the deadline counts from the chest-pain answer."
+covers: [chest:chest_pain.present]
+now: "2026-09-26T09:05:00Z"
+arrived_at: null
+facts:
+  - {path: patient.age_years, value: 52, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: chest_pain.present, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+  - {path: chest_pain.radiates, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [CHEST_PAIN_ECG_10MIN]
+expect_deadline_at: "2026-09-26T09:11:00Z"

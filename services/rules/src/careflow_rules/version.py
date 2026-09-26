@@ -2,4 +2,4 @@
 
 from typing import Final
 
-RULESET_VERSION: Final = "2026.1.0"
+RULESET_VERSION: Final = "2026.2.0"

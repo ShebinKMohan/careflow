@@ -1,0 +1,13 @@
+id: benign-adult-fever-low-news2
+description: "30-year-old with a reported fever; NEWS2 is only 1."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 30, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: infection.fever_reported, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+  - {path: vitals.temperature_c, value: 38.3, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.heart_rate, value: 88, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.spo2, value: 98, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: []
+expect_needed:
+  - vitals.respiratory_rate

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rules scenario",
+  "description": "One synthetic scenario for the safety rules engine (M1-02). Loaded with yaml.safe_load: quote yes/no answers and timestamps so they stay strings. Research prototype. Synthetic data only.",
+  "type": "object",
+  "required": ["id", "description", "now", "arrived_at", "facts", "expect_alerts"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "description": "Equals the file name without .yaml."},
+    "description": {"type": "string", "minLength": 1, "maxLength": 300},
+    "covers": {
+      "type": "array",
+      "description": "The rule features this scenario exists for, e.g. red:child_danger.grunting.",
+      "items": {"type": "string", "pattern": "^(red|amber|fast|chest|sepsis):[a-z0-9_.]+$"},
+      "uniqueItems": true
+    },
+    "language": {"enum": ["en", "ar"]},
+    "now": {"type": "string", "format": "date-time"},
+    "arrived_at": {"type": ["string", "null"], "format": "date-time"},
+    "facts": {"type": "array", "items": {"$ref": "#/$defs/Fact"}},
+    "expect_alerts": {
+      "type": "array",
+      "items": {"enum": ["FAST_STROKE", "CHEST_PAIN_ECG_10MIN", "SEPSIS_NEWS2", "NG143_RED_FLAG", "NG143_AMBER_FLAG", "CHILD_HARD_TO_WAKE"]},
+      "uniqueItems": true
+    },
+    "expect_needed": {"type": "array", "items": {"type": "string", "pattern": "^[a-z_]+(\\.[a-z0-9_]+)?$"}, "uniqueItems": true},
+    "expect_deadline_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "Fact": {
+      "type": "object",
+      "required": ["path", "value", "provenance", "recorded_at"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {"type": "string", "pattern": "^[a-z_]+(\\.[a-z0-9_]+)?$", "description": "A contract fact path (FactKey), `symptoms` or `chief_complaint`."},
+        "value": {"type": ["string", "number"]},
+        "provenance": {"enum": ["EHR", "PATIENT_STATED", "DEVICE_MEASURED", "NURSE_CONFIRMED", "MODEL_INFERRED"]},
+        "recorded_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
