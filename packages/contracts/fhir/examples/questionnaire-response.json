@@ -1,0 +1,99 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "id": "qr-chest-pain",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/provenance-source",
+        "code": "PATIENT_STATED"
+      }
+    ]
+  },
+  "questionnaire": "https://careflow.example/fhir/Questionnaire/careflow-intake|0.1.0",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/persona-chest-pain"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-chest-pain"
+  },
+  "authored": "2026-09-26T09:02:00Z",
+  "source": {
+    "reference": "Patient/persona-chest-pain"
+  },
+  "item": [
+    {
+      "linkId": "chief_complaint",
+      "answer": [
+        {
+          "valueString": "Crushing chest pain for about an hour"
+        }
+      ]
+    },
+    {
+      "linkId": "pain_score",
+      "answer": [
+        {
+          "valueInteger": 8
+        }
+      ]
+    },
+    {
+      "linkId": "chest_pain",
+      "item": [
+        {
+          "linkId": "chest_pain.present",
+          "answer": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.radiates",
+          "answer": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.sweating",
+          "answer": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.short_of_breath",
+          "answer": [
+            {
+              "valueCoding": {
+                "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "chest_pain.onset",
+          "answer": [
+            {
+              "valueString": "PT1H"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "resourceType": "Appointment",
+  "id": "persona-routine-appt",
+  "status": "booked",
+  "start": "2026-09-26T10:00:00Z",
+  "end": "2026-09-26T10:20:00Z",
+  "participant": [
+    {
+      "actor": {
+        "reference": "Patient/persona-routine"
+      },
+      "status": "accepted"
+    }
+  ]
+}

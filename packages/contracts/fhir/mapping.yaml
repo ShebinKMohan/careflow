@@ -1,0 +1,742 @@
+# FHIR R4 mapping: see mapping.md for the reasoning. Hand-maintained; tests check coverage.
+version: 0.1.0
+fhir_version: 4.0.1
+description: StructuredFacts and CareFlow outputs to FHIR R4. Integration code implements exactly this table (M1-08, M1-09,
+  M1-16, M4-*). Research prototype; synthetic data only.
+careflow_code_systems:
+  triage-level: https://careflow.example/fhir/CodeSystem/triage-level
+  triage-scale: https://careflow.example/fhir/CodeSystem/triage-scale
+  rule-id: https://careflow.example/fhir/CodeSystem/rule-id
+  task-kind: https://careflow.example/fhir/CodeSystem/task-kind
+  provenance-source: https://careflow.example/fhir/CodeSystem/provenance-source
+  tri-state: https://careflow.example/fhir/CodeSystem/tri-state
+  complaint-category: https://careflow.example/fhir/CodeSystem/complaint-category
+entries:
+- fact_path: patient.fhir_patient_id
+  direction: read
+  resource: Patient
+  element: Patient.id (matched on Patient.identifier)
+  code_system: https://careflow.example/fhir/sid/keypad-id
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Search Patient?identifier=https://careflow.example/fhir/sid/keypad-id|<digits>. The keypad digits never appear in
+    a URL CareFlow exposes; the FHIR search runs server to server.
+- fact_path: patient.age_years
+  direction: read
+  resource: Patient
+  element: Patient.birthDate
+  code_system: null
+  code: null
+  display: null
+  unit: a
+  verified: true
+  notes: Whole years at check-in time, computed from birthDate.
+- fact_path: patient.age_months
+  direction: read
+  resource: Patient
+  element: Patient.birthDate
+  code_system: null
+  code: null
+  display: null
+  unit: mo
+  verified: true
+  notes: Total whole months at check-in time, computed from birthDate (young children).
+- fact_path: patient.sex
+  direction: read
+  resource: Patient
+  element: Patient.gender
+  code_system: http://hl7.org/fhir/administrative-gender
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: male | female | other | unknown, copied as a Coding.
+- fact_path: ehr_context.allergies
+  direction: read
+  resource: AllergyIntolerance
+  element: AllergyIntolerance.code
+  code_system: http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
+  code: active
+  display: Active
+  unit: null
+  verified: true
+  notes: Only clinicalStatus = active. Each code becomes a CodeFact with provenance EHR.
+- fact_path: ehr_context.conditions
+  direction: read
+  resource: Condition
+  element: Condition.code
+  code_system: http://terminology.hl7.org/CodeSystem/condition-clinical
+  code: active
+  display: Active
+  unit: null
+  verified: true
+  notes: Only clinicalStatus = active.
+- fact_path: ehr_context.medications
+  direction: read
+  resource: MedicationStatement
+  element: MedicationStatement.medicationCodeableConcept
+  code_system: null
+  code: active
+  display: null
+  unit: null
+  verified: true
+  notes: Only status = active (MedicationStatement.status is a required code, no system).
+- fact_path: session.appointment
+  direction: read
+  resource: Appointment
+  element: Appointment.status
+  code_system: null
+  code: booked
+  display: null
+  unit: null
+  verified: true
+  notes: Today's appointments for the patient with status booked (routine and no-show personas). Context for check-in, not
+    a fact.
+- fact_path: vitals.heart_rate
+  direction: write
+  resource: Observation
+  element: Observation.valueQuantity
+  code_system: http://loinc.org
+  code: 8867-4
+  display: Heart rate
+  unit: /min
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category).
+- fact_path: vitals.respiratory_rate
+  direction: write
+  resource: Observation
+  element: Observation.valueQuantity
+  code_system: http://loinc.org
+  code: 9279-1
+  display: Respiratory rate
+  unit: /min
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category).
+- fact_path: vitals.spo2
+  direction: write
+  resource: Observation
+  element: Observation.valueQuantity
+  code_system: http://loinc.org
+  code: 2708-6
+  display: Oxygen saturation in Arterial blood
+  unit: '%'
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category). Second coding LOINC
+    59408-5 Oxygen saturation in Arterial blood by Pulse oximetry.
+- fact_path: vitals.temperature_c
+  direction: write
+  resource: Observation
+  element: Observation.valueQuantity
+  code_system: http://loinc.org
+  code: 8310-5
+  display: Body temperature
+  unit: Cel
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category).
+- fact_path: vitals.systolic_bp
+  direction: write
+  resource: Observation
+  element: Observation.component(8480-6).valueQuantity
+  code_system: http://loinc.org
+  code: 8480-6
+  display: Systolic blood pressure
+  unit: mm[Hg]
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category). One panel Observation,
+    code LOINC 85354-9 Blood pressure panel with all children optional, holds both components.
+- fact_path: vitals.diastolic_bp
+  direction: write
+  resource: Observation
+  element: Observation.component(8462-4).valueQuantity
+  code_system: http://loinc.org
+  code: 8462-4
+  display: Diastolic blood pressure
+  unit: mm[Hg]
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category). Component of the
+    LOINC 85354-9 panel.
+- fact_path: pain_score
+  direction: write
+  resource: Observation
+  element: Observation.valueQuantity
+  code_system: http://loinc.org
+  code: 72514-3
+  display: Pain severity - 0-10 verbal numeric rating [Score] - Reported
+  unit: '{score}'
+  verified: true
+  notes: Observation.category = vital-signs (http://terminology.hl7.org/CodeSystem/observation-category). Patient-reported;
+    also answered in the intake QuestionnaireResponse.
+- fact_path: vitals.acvpu
+  direction: write
+  resource: Observation
+  element: Observation.valueCodeableConcept
+  code_system: http://snomed.info/sct
+  code: '1104441000000107'
+  display: Alert Confusion Voice Pain Unresponsive scale score
+  unit: null
+  verified: true
+  notes: 'SNOMED CT UK edition (NHS Clinical Observations guide). Value from the UK Core ACVPU value set: A 248234008 Mentally
+    alert, C 130987000 Acute confusion, V 300202002 Responds to voice, P 450847001 Responds to pain, U 422768004 Unresponsive.'
+- fact_path: vitals.on_supplemental_o2
+  direction: write
+  resource: Observation
+  element: Observation.code
+  code_system: http://snomed.info/sct
+  code: 371825009 | 722742002
+  display: Patient on oxygen | Breathing room air
+  unit: null
+  verified: false
+  notes: Codes verified (NHS Clinical Observations guide); the pattern of carrying them in Observation.code follows the INTEROPen
+    NEWS2 InspiredOxygen guidance, whose value set membership is an open question.
+- fact_path: rules.news2_total
+  direction: write
+  resource: Observation
+  element: Observation.valueQuantity
+  code_system: http://snomed.info/sct
+  code: '1104051000000101'
+  display: Royal College of Physicians NEWS2 (National Early Warning Score 2) total score
+  unit: '{score}'
+  verified: true
+  notes: 'INTEROPen/NHS FHIR-NEWS2 guidance: category survey unless a local category exists. A partial kiosk NEWS2 is written
+    with Observation.status = preliminary and a note naming the missing inputs; never as a full score.'
+- fact_path: nurse_decision.final_level
+  direction: write
+  resource: Observation
+  element: Observation.valueInteger
+  code_system: https://careflow.example/fhir/CodeSystem/triage-level
+  code: triage-level
+  display: Triage urgency level (1 = most urgent)
+  unit: null
+  verified: true
+  notes: CareFlow CodeSystem. Only the nurse's final level (NurseDecision) is written; a model suggestion is never written
+    as a level.
+- fact_path: nurse_decision.scale
+  direction: write
+  resource: Observation
+  element: Observation.component(scale).valueCodeableConcept
+  code_system: https://careflow.example/fhir/CodeSystem/triage-scale
+  code: KTAS | ESI | CTAS | MTS
+  display: null
+  unit: null
+  verified: true
+  notes: Component code triage-level#scale; value from the CareFlow triage-scale CodeSystem.
+- fact_path: nurse_decision.priority
+  direction: write
+  resource: Encounter
+  element: Encounter.priority
+  code_system: http://terminology.hl7.org/CodeSystem/v3-ActPriority
+  code: S | EM | UR | R
+  display: stat | emergency | urgent | routine
+  unit: null
+  verified: true
+  notes: 'CareFlow CONVENTION, not a standard: level 1 -> S, 2 -> EM, 3 -> UR, 4 and 5 -> R.'
+- fact_path: session.encounter
+  direction: write
+  resource: Encounter
+  element: Encounter.status / Encounter.class
+  code_system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+  code: AMB
+  display: ambulatory
+  unit: null
+  verified: true
+  notes: status in-progress at check-in, finished at discharge from the queue. class defaults to AMB, configurable per hospital
+    (config/hospitals/*.yaml).
+- fact_path: complaint_category
+  direction: write
+  resource: Encounter
+  element: Encounter.reasonCode
+  code_system: https://careflow.example/fhir/CodeSystem/complaint-category
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: MODEL_INFERRED; Encounter.meta.tag lists MODEL_INFERRED alongside the other sources it carries.
+- fact_path: alert
+  direction: write
+  resource: Flag
+  element: Flag.code
+  code_system: https://careflow.example/fhir/CodeSystem/rule-id
+  code: FAST_STROKE | CHEST_PAIN_ECG_10MIN | SEPSIS_NEWS2 | NG143_RED_FLAG | NG143_AMBER_FLAG | CHILD_HARD_TO_WAKE
+  display: null
+  unit: null
+  verified: true
+  notes: 'One Flag per Alert: status active, category clinical (http://terminology.hl7.org/CodeSystem/flag-category).'
+- fact_path: alert.required_action
+  direction: write
+  resource: Task
+  element: Task.code / Task.restriction.period.end
+  code_system: https://careflow.example/fhir/CodeSystem/task-kind
+  code: ecg_within_10_min
+  display: ECG within 10 minutes of arrival
+  unit: null
+  verified: true
+  notes: status requested, intent order; restriction.period.end = Alert.deadline_at (raised_at + 10 min for CHEST_PAIN_ECG_10MIN);
+    focus -> the Flag.
+- fact_path: alert.notification
+  direction: write
+  resource: Communication
+  element: Communication.category
+  code_system: http://terminology.hl7.org/CodeSystem/communication-category
+  code: notification
+  display: Notification
+  unit: null
+  verified: true
+  notes: 'Nurse notification: status completed, about -> Flag, recipient -> Practitioner (nurse), payload.contentString =
+    the Alert display_text (fixed template, no PHI).'
+- fact_path: briefing
+  direction: write
+  resource: Composition
+  element: Composition.type
+  code_system: http://loinc.org
+  code: 54094-8
+  display: Emergency Department Triage Note
+  unit: null
+  verified: true
+  notes: 'Doctor briefing: one section per topic; sent as a Bundle of type document with the Composition as the first entry.
+    Every section entry keeps its source provenance.'
+- fact_path: intake.questionnaire_response
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.questionnaire
+  code_system: null
+  code: https://careflow.example/fhir/Questionnaire/careflow-intake
+  display: null
+  unit: null
+  verified: true
+  notes: 'Items keyed by linkId = fact path. One QuestionnaireResponse per answering source: source Patient or RelatedPerson
+    (PATIENT_STATED), Practitioner (NURSE_CONFIRMED).'
+- fact_path: write_batch.provenance
+  direction: write
+  resource: Provenance
+  element: Provenance.agent.type
+  code_system: http://terminology.hl7.org/CodeSystem/provenance-participant-type
+  code: performer | assembler | author | informant
+  display: null
+  unit: null
+  verified: true
+  notes: 'One Provenance per write batch (target[], recorded). Agent: Device performer (kiosk vitals) or assembler (model),
+    Practitioner author (nurse), Patient informant (patient stated).'
+- fact_path: write_batch.meta_tag
+  direction: write
+  resource: (every written resource)
+  element: meta.tag
+  code_system: https://careflow.example/fhir/CodeSystem/provenance-source
+  code: EHR | PATIENT_STATED | DEVICE_MEASURED | NURSE_CONFIRMED | MODEL_INFERRED
+  display: null
+  unit: null
+  verified: true
+  notes: 'Safety rule 4: every written resource carries the provenance of every fact it contains.'
+- fact_path: ehr_context.allergies
+  direction: write
+  resource: AllergyIntolerance
+  element: AllergyIntolerance.verificationStatus
+  code_system: http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
+  code: unconfirmed
+  display: Unconfirmed
+  unit: null
+  verified: true
+  notes: 'Only for an allergy the patient states (PATIENT_STATED): never written as confirmed. EHR allergies are not written
+    back.'
+- fact_path: chief_complaint
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=chief_complaint).answer.valueString
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text answer; the extraction source span stays in CareFlow.
+- fact_path: symptoms
+  direction: write
+  resource: QuestionnaireResponse
+  element: 'QuestionnaireResponse.item(linkId=symptoms).answer.item (group: name, onset, severity)'
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text answer; the extraction source span stays in CareFlow.
+- fact_path: fast.face_droop
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=fast.face_droop).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: fast.arm_weakness
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=fast.arm_weakness).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: fast.speech_difficulty
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=fast.speech_difficulty).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: fast.last_known_well
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=fast.last_known_well).answer.valueString
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text answer; the extraction source span stays in CareFlow.
+- fact_path: chest_pain.present
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=chest_pain.present).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: chest_pain.radiates
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=chest_pain.radiates).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: chest_pain.sweating
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=chest_pain.sweating).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: chest_pain.short_of_breath
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=chest_pain.short_of_breath).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: chest_pain.onset
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=chest_pain.onset).answer.valueString
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text answer; the extraction source span stays in CareFlow.
+- fact_path: infection.suspected
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=infection.suspected).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: infection.fever_reported
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=infection.fever_reported).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: infection.rigors
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=infection.rigors).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.hard_to_wake
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.hard_to_wake).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.no_response_to_social_cues
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.no_response_to_social_cues).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.weak_high_pitched_or_continuous_cry
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.weak_high_pitched_or_continuous_cry).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.pale_mottled_ashen_or_blue
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.pale_mottled_ashen_or_blue).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.grunting
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.grunting).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.non_blanching_rash
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.non_blanching_rash).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.neck_stiffness
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.neck_stiffness).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.seizure
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.seizure).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.appears_ill_to_hcp
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.appears_ill_to_hcp).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.chest_indrawing
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.chest_indrawing).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.reduced_skin_turgor
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.reduced_skin_turgor).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.bulging_fontanelle
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.bulging_fontanelle).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_danger.focal_neuro_signs
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_danger.focal_neuro_signs).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.pallor_reported
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.pallor_reported).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.decreased_activity
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.decreased_activity).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.wakes_only_with_prolonged_stimulation
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.wakes_only_with_prolonged_stimulation).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.nasal_flaring
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.nasal_flaring).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.crackles
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.crackles).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.cap_refill_3s_or_more
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.cap_refill_3s_or_more).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.dry_mucous_membranes
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.dry_mucous_membranes).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.poor_feeding
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.poor_feeding).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.reduced_urine_output
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.reduced_urine_output).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.fever_5_days_or_more
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.fever_5_days_or_more).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.limb_or_joint_swelling
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.limb_or_joint_swelling).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: child_amber.non_weight_bearing
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=child_amber.non_weight_bearing).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: pain_score
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=pain_score).answer.valueInteger
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Integer 0-10 (minValue/maxValue on the Questionnaire item).
+not_mapped: []

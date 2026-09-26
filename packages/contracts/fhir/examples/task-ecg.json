@@ -1,0 +1,39 @@
+{
+  "resourceType": "Task",
+  "id": "task-chest-pain-ecg",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/provenance-source",
+        "code": "PATIENT_STATED"
+      }
+    ]
+  },
+  "status": "requested",
+  "intent": "order",
+  "priority": "stat",
+  "code": {
+    "coding": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/task-kind",
+        "code": "ecg_within_10_min",
+        "display": "ECG within 10 minutes of arrival"
+      }
+    ]
+  },
+  "focus": {
+    "reference": "Flag/flag-chest-pain-ecg"
+  },
+  "for": {
+    "reference": "Patient/persona-chest-pain"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-chest-pain"
+  },
+  "authoredOn": "2026-09-26T09:02:10Z",
+  "restriction": {
+    "period": {
+      "end": "2026-09-26T09:10:00Z"
+    }
+  }
+}

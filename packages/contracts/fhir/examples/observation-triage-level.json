@@ -1,0 +1,57 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-chest-pain-triage-level",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/provenance-source",
+        "code": "NURSE_CONFIRMED"
+      }
+    ]
+  },
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/triage-level",
+        "code": "triage-level",
+        "display": "Triage urgency level (1 = most urgent)"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/persona-chest-pain"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-chest-pain"
+  },
+  "effectiveDateTime": "2026-09-26T09:06:00Z",
+  "performer": [
+    {
+      "reference": "Practitioner/nurse-demo-01"
+    }
+  ],
+  "valueInteger": 2,
+  "component": [
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "https://careflow.example/fhir/CodeSystem/triage-level",
+            "code": "scale",
+            "display": "Triage scale"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "https://careflow.example/fhir/CodeSystem/triage-scale",
+            "code": "KTAS",
+            "display": "Korean Triage and Acuity Scale"
+          }
+        ]
+      }
+    }
+  ]
+}

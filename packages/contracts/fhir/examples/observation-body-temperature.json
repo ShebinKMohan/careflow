@@ -1,0 +1,49 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-chest-pain-body-temperature",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://careflow.example/fhir/CodeSystem/provenance-source",
+        "code": "DEVICE_MEASURED"
+      }
+    ]
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "8310-5",
+        "display": "Body temperature"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/persona-chest-pain"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-chest-pain"
+  },
+  "effectiveDateTime": "2026-09-26T09:03:00Z",
+  "device": {
+    "reference": "Device/sim-vitals-01"
+  },
+  "valueQuantity": {
+    "value": 36.8,
+    "unit": "Cel",
+    "system": "http://unitsofmeasure.org",
+    "code": "Cel"
+  }
+}
