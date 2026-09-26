@@ -1,10 +1,19 @@
 [project]
 name = "careflow-integration"
-version = "0.0.0"
+version = "0.1.0"
 description = "CareFlow hospital integration: FHIR R4, webhooks, CDS Hooks, SMART, HL7."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+  "careflow-contracts",
+  "fhir.resources==8.3.0",
+  "httpx>=0.28,<0.29",
+  "pydantic>=2.13,<3",
+  "pyyaml>=6.0,<7",
+]
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]
