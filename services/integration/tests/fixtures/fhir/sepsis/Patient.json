@@ -1,0 +1,33 @@
+[
+ {
+  "birthDate": "1960-01-11",
+  "gender": "male",
+  "id": "persona-sepsis",
+  "identifier": [
+   {
+    "system": "https://careflow.example/fhir/sid/keypad-id",
+    "value": "100004"
+   }
+  ],
+  "meta": {
+   "lastUpdated": "2026-09-26T16:15:19.980+00:00",
+   "tag": [
+    {
+     "code": "synthetic-persona",
+     "system": "https://careflow.example/fhir/CodeSystem/data-origin"
+    }
+   ],
+   "versionId": "1"
+  },
+  "name": [
+   {
+    "family": "Rahman",
+    "given": [
+     "Khalid"
+    ],
+    "use": "official"
+   }
+  ],
+  "resourceType": "Patient"
+ }
+]
