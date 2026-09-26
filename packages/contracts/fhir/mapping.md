@@ -6,7 +6,7 @@ Machine-readable source: [`mapping.yaml`](mapping.yaml). Integration code (M1-08
 
 ## CareFlow code systems
 
-CareFlow defines its own code systems under `https://careflow.example/fhir/CodeSystem/` where no standard code fits: `triage-level` (the level Observation and its `scale` component), `triage-scale` (KTAS, ESI, CTAS, MTS), `rule-id` (the six safety rules), `task-kind` (`ecg_within_10_min`), `provenance-source` (the five provenance tags), `tri-state` (yes, no, unknown answers), `complaint-category` and `symptom-severity`. Abbreviations below: `cf:` = CareFlow code system, `tho:` = `http://terminology.hl7.org/CodeSystem/`.
+CareFlow defines its own code systems under `https://careflow.example/fhir/CodeSystem/` where no standard code fits: `triage-level` (the level Observation and its `scale` component), `triage-scale` (KTAS, ESI, CTAS, MTS), `rule-id` (the six safety rules), `task-kind` (`ecg_within_10_min`), `provenance-source` (the five provenance tags), `tri-state` (yes, no, unknown answers), `complaint-category`, `symptom-severity` and `arrival-mode` (the KTAS arrival modes: walking, private_vehicle, public_ambulance, private_ambulance, other). Abbreviations below: `cf:` = CareFlow code system, `tho:` = `http://terminology.hl7.org/CodeSystem/`.
 
 ## Table
 
@@ -84,6 +84,9 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 | `child_amber.limb_or_joint_swelling` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.limb_or_joint_swelling).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `child_amber.non_weight_bearing` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=child_amber.non_weight_bearing).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `pain_score` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=pain_score).answer.valueInteger` |  |  |  |  | yes |
+| `pain_present` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=pain_present).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
+| `injury` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=injury).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
+| `arrival_mode` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=arrival_mode).answer.valueCoding` | cf:arrival-mode | walking / private_vehicle / public_ambulance / private_ambulance / other |  |  | yes |
 
 `not_mapped`: none. Every StructuredFacts leaf is read from or written to FHIR (test: `tests/test_fhir_mapping.py`).
 

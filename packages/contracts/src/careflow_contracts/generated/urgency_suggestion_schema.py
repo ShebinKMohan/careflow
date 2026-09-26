@@ -48,6 +48,14 @@ class UrgencySuggestion(BaseModel):
     session_id: fact_schema.Identifier
     level: UrgencyLevel
     scale: TriageScale
+    display_label: Annotated[
+        str | None,
+        Field(
+            description="The level as shown in its display scale, e.g. 'KTAS 2' or 'Emergent' (CTAS). A display mapping only: the scales are not clinically equivalent.",
+            max_length=40,
+            min_length=1,
+        ),
+    ] = None
     confidence: Annotated[
         float,
         Field(description="Calibrated probability that the level is correct.", ge=0.0, le=1.0),

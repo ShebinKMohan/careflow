@@ -162,6 +162,34 @@
       ]
     },
     {
+      "linkId": "pain_present",
+      "text": "Do you have pain now?",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+            "code": "yes",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+            "code": "no",
+            "display": "No"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+            "code": "unknown",
+            "display": "Not sure"
+          }
+        }
+      ]
+    },
+    {
       "linkId": "pain_score",
       "text": "On a scale of 0 to 10, how bad is your pain now?",
       "type": "integer",
@@ -173,6 +201,76 @@
         {
           "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
           "valueInteger": 10
+        }
+      ]
+    },
+    {
+      "linkId": "injury",
+      "text": "Are you here because of an injury?",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+            "code": "yes",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+            "code": "no",
+            "display": "No"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/tri-state",
+            "code": "unknown",
+            "display": "Not sure"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "arrival_mode",
+      "text": "How did you get here today?",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/arrival-mode",
+            "code": "walking",
+            "display": "Walked in"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/arrival-mode",
+            "code": "private_vehicle",
+            "display": "Private car or taxi"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/arrival-mode",
+            "code": "public_ambulance",
+            "display": "Public ambulance"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/arrival-mode",
+            "code": "private_ambulance",
+            "display": "Private ambulance"
+          }
+        },
+        {
+          "valueCoding": {
+            "system": "https://careflow.example/fhir/CodeSystem/arrival-mode",
+            "code": "other",
+            "display": "Other"
+          }
         }
       ]
     },

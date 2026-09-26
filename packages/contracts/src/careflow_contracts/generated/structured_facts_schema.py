@@ -117,6 +117,28 @@ class BloodPressureFact(NumberFact):
     ]
 
 
+class ArrivalModeCode(StrEnum):
+    walking = "walking"
+    private_vehicle = "private_vehicle"
+    public_ambulance = "public_ambulance"
+    private_ambulance = "private_ambulance"
+    other = "other"
+
+
+class ArrivalModeCoding(Coding):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    code: ArrivalModeCode
+
+
+class ArrivalModeFact(CodeFact):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    value: ArrivalModeCoding
+
+
 class Patient(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -340,6 +362,9 @@ class FactKey(StrEnum):
     complaint_category = "complaint_category"
     symptoms = "symptoms"
     pain_score = "pain_score"
+    pain_present = "pain_present"
+    injury = "injury"
+    arrival_mode = "arrival_mode"
     fast_face_droop = "fast.face_droop"
     fast_arm_weakness = "fast.arm_weakness"
     fast_speech_difficulty = "fast.speech_difficulty"
@@ -493,6 +518,14 @@ class StructuredFacts(BaseModel):
     ] = None
     symptoms: Annotated[list[Symptom] | None, Field(max_length=30)] = None
     pain_score: PainScoreFact | None = None
+    pain_present: Annotated[
+        fact_schema.TriStateFact | None,
+        Field(description="The patient reports pain now (the 0-10 score may be missing)."),
+    ] = None
+    injury: Annotated[
+        fact_schema.TriStateFact | None, Field(description="The visit is for an injury (trauma).")
+    ] = None
+    arrival_mode: ArrivalModeFact | None = None
     fast: Fast | None = None
     chest_pain: ChestPain | None = None
     infection: Infection | None = None

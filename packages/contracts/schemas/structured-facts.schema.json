@@ -220,6 +220,51 @@
       ],
       "unevaluatedProperties": false
     },
+    "ArrivalModeCode": {
+      "type": "string",
+      "enum": [
+        "walking",
+        "private_vehicle",
+        "public_ambulance",
+        "private_ambulance",
+        "other"
+      ],
+      "description": "How the patient arrived (the KTAS arrival modes)."
+    },
+    "ArrivalModeCoding": {
+      "description": "Arrival mode from the CareFlow arrival-mode CodeSystem (https://careflow.example/fhir/CodeSystem/arrival-mode).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/Coding"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "$ref": "#/$defs/ArrivalModeCode"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "ArrivalModeFact": {
+      "description": "How the patient arrived at the ED.",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/CodeFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/ArrivalModeCoding"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
     "Patient": {
       "type": "object",
       "description": "Who the patient is. Demographics are facts so the briefing can show their source.",
@@ -519,6 +564,9 @@
         "complaint_category",
         "symptoms",
         "pain_score",
+        "pain_present",
+        "injury",
+        "arrival_mode",
         "fast.face_droop",
         "fast.arm_weakness",
         "fast.speech_difficulty",
@@ -688,6 +736,17 @@
         },
         "pain_score": {
           "$ref": "#/$defs/PainScoreFact"
+        },
+        "pain_present": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "The patient reports pain now (the 0-10 score may be missing)."
+        },
+        "injury": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "The visit is for an injury (trauma)."
+        },
+        "arrival_mode": {
+          "$ref": "#/$defs/ArrivalModeFact"
         },
         "fast": {
           "$ref": "#/$defs/Fast"

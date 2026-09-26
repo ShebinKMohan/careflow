@@ -749,4 +749,34 @@ entries:
   unit: null
   verified: true
   notes: Integer 0-10 (minValue/maxValue on the Questionnaire item).
+- fact_path: pain_present
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=pain_present).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: injury
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=injury).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/tri-state
+  code: yes | no | unknown
+  display: null
+  unit: null
+  verified: true
+  notes: Tri-state answer from the CareFlow tri-state CodeSystem.
+- fact_path: arrival_mode
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=arrival_mode).answer.valueCoding
+  code_system: https://careflow.example/fhir/CodeSystem/arrival-mode
+  code: walking | private_vehicle | public_ambulance | private_ambulance | other
+  display: null
+  unit: null
+  verified: true
+  notes: CareFlow arrival-mode CodeSystem (the KTAS arrival modes, M1-04).
 not_mapped: []
