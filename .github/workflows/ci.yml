@@ -36,6 +36,11 @@ jobs:
           cache-dependency-glob: uv.lock
       - name: Install
         run: make install-py
+      - name: Contracts are regenerated and committed
+        run: |
+          make contracts
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
       - name: Lint
         run: make lint-py
       - name: Typecheck

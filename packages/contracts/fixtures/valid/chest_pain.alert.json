@@ -1,0 +1,18 @@
+{
+  "alert_id": "alr_chest_pain",
+  "session_id": "ses_chest_pain",
+  "rule_id": "CHEST_PAIN_ECG_10MIN",
+  "ruleset_version": "2026.1.0",
+  "severity": "critical",
+  "evidence_fact_ids": [
+    "f_01M3EF2PM000000000035FW001",
+    "f_01M3EF2PM000000000035FW003",
+    "f_01M3EF2PM000000000035FW004"
+  ],
+  "required_action": "ecg_within_10_min",
+  "display_text": "Chest pain: ECG within 10 minutes of arrival.",
+  "partial": false,
+  "missing_inputs": [],
+  "raised_at": "2026-09-26T09:02:10Z",
+  "deadline_at": "2026-09-26T09:10:00Z"
+}

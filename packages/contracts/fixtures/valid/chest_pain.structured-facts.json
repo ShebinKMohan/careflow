@@ -1,0 +1,241 @@
+{
+  "session_id": "ses_chest_pain",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+    "fhir_patient_id": "persona-chest-pain",
+    "age_years": {
+      "fact_id": "f_01M3EF2PM000000000035FW006",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-chest-pain"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": 58
+    },
+    "sex": {
+      "fact_id": "f_01M3EF2PM000000000035FW007",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-chest-pain"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": {
+        "system": "http://hl7.org/fhir/administrative-gender",
+        "code": "male",
+        "display": "Male"
+      }
+    }
+  },
+  "chief_complaint": {
+    "fact_id": "f_01M3EF2PM000000000035FW008",
+    "provenance": "PATIENT_STATED",
+    "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_01",
+      "start": 9,
+      "end": 34,
+      "quote": "crushing pain in my chest"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "Crushing chest pain for about an hour"
+  },
+  "complaint_category": {
+    "fact_id": "f_01M3EF2PM000000000035FW009",
+    "provenance": "MODEL_INFERRED",
+    "source": {
+      "kind": "model",
+      "model_id": "complaint-classifier",
+      "model_version": "0.1.0"
+    },
+    "recorded_at": "2026-09-26T09:02:00Z",
+    "value": {
+      "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+      "code": "chest_pain",
+      "display": "Chest pain"
+    }
+  },
+  "pain_score": {
+    "fact_id": "f_01M3EF2PM000000000035FW00A",
+    "provenance": "PATIENT_STATED",
+    "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_04",
+      "start": 9,
+      "end": 20,
+      "quote": "8 out of 10"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": 8
+  },
+  "chest_pain": {
+    "present": {
+      "fact_id": "f_01M3EF2PM000000000035FW001",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_01",
+        "start": 9,
+        "end": 34,
+        "quote": "crushing pain in my chest"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    },
+    "onset": {
+      "fact_id": "f_01M3EF2PM000000000035FW002",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_01",
+        "start": 47,
+        "end": 64,
+        "quote": "about an hour ago"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "PT1H"
+    },
+    "radiates": {
+      "fact_id": "f_01M3EF2PM000000000035FW003",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_02",
+        "start": 5,
+        "end": 29,
+        "quote": "it goes down my left arm"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    },
+    "sweating": {
+      "fact_id": "f_01M3EF2PM000000000035FW004",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_02",
+        "start": 34,
+        "end": 53,
+        "quote": "I am sweating a lot"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    },
+    "short_of_breath": {
+      "fact_id": "f_01M3EF2PM000000000035FW005",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_03",
+        "start": 4,
+        "end": 24,
+        "quote": "my breathing is fine"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "no"
+    }
+  },
+  "vitals": {
+    "heart_rate": {
+      "fact_id": "f_01M3EF2PM000000000035FW00B",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0001"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 104,
+      "unit": "/min"
+    },
+    "spo2": {
+      "fact_id": "f_01M3EF2PM000000000035FW00C",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0002"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 96,
+      "unit": "%"
+    },
+    "temperature_c": {
+      "fact_id": "f_01M3EF2PM000000000035FW00D",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0003"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 36.8,
+      "unit": "Cel"
+    },
+    "systolic_bp": {
+      "fact_id": "f_01M3EF2PM000000000035FW00E",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0004"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 158,
+      "unit": "mm[Hg]"
+    },
+    "diastolic_bp": {
+      "fact_id": "f_01M3EF2PM000000000035FW00F",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0005"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 94,
+      "unit": "mm[Hg]"
+    }
+  },
+  "ehr_context": {
+    "conditions": [
+      {
+        "fact_id": "f_01M3EF2PM000000000035FW00G",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Condition",
+          "id": "persona-chest-pain-htn"
+        },
+        "recorded_at": "2026-09-26T09:00:00Z",
+        "value": {
+          "system": "http://snomed.info/sct",
+          "code": "38341003",
+          "display": "Hypertensive disorder"
+        }
+      }
+    ],
+    "medications": [
+      {
+        "fact_id": "f_01M3EF2PM000000000035FW00H",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "MedicationStatement",
+          "id": "persona-chest-pain-amlodipine"
+        },
+        "recorded_at": "2026-09-26T09:00:00Z",
+        "value": {
+          "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+          "code": "17767",
+          "display": "amlodipine"
+        }
+      }
+    ]
+  },
+  "extraction_status": "complete"
+}

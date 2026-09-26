@@ -1,0 +1,153 @@
+{
+  "session_id": "ses_child_drowsy",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+    "fhir_patient_id": "persona-child-drowsy",
+    "age_years": {
+      "fact_id": "f_01M3EF2PM000000000035FW013",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-child-drowsy"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": 2
+    },
+    "sex": {
+      "fact_id": "f_01M3EF2PM000000000035FW014",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-child-drowsy"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": {
+        "system": "http://hl7.org/fhir/administrative-gender",
+        "code": "male",
+        "display": "Male"
+      }
+    },
+    "age_months": {
+      "fact_id": "f_01M3EF2PM000000000035FW015",
+      "provenance": "EHR",
+      "source": {
+        "kind": "fhir",
+        "resource_type": "Patient",
+        "id": "persona-child-drowsy"
+      },
+      "recorded_at": "2026-09-26T09:00:00Z",
+      "value": 26
+    }
+  },
+  "chief_complaint": {
+    "fact_id": "f_01M3EF2PM000000000035FW016",
+    "provenance": "PATIENT_STATED",
+    "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_01",
+      "start": 6,
+      "end": 53,
+      "quote": "very sleepy and hard to wake since this morning"
+    },
+    "recorded_at": "2026-09-26T09:01:00Z",
+    "value": "Very sleepy and hard to wake since this morning"
+  },
+  "infection": {
+    "fever_reported": {
+      "fact_id": "f_01M3EF2PM000000000035FW017",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_02",
+        "start": 0,
+        "end": 25,
+        "quote": "He had a fever last night"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    }
+  },
+  "child_danger": {
+    "hard_to_wake": {
+      "fact_id": "f_01M3EF2PM000000000035FW010",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_01",
+        "start": 22,
+        "end": 34,
+        "quote": "hard to wake"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "yes"
+    },
+    "no_response_to_social_cues": {
+      "fact_id": "f_01M3EF2PM000000000035FW011",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_03",
+        "start": 0,
+        "end": 37,
+        "quote": "I am not sure if he smiles back at me"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "unknown"
+    },
+    "weak_high_pitched_or_continuous_cry": {
+      "fact_id": "f_01M3EF2PM000000000035FW012",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "turn_04",
+        "start": 4,
+        "end": 25,
+        "quote": "his cry sounds normal"
+      },
+      "recorded_at": "2026-09-26T09:01:00Z",
+      "value": "no"
+    }
+  },
+  "vitals": {
+    "heart_rate": {
+      "fact_id": "f_01M3EF2PM000000000035FW018",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0011"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 150,
+      "unit": "/min"
+    },
+    "spo2": {
+      "fact_id": "f_01M3EF2PM000000000035FW019",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0012"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 95,
+      "unit": "%"
+    },
+    "temperature_c": {
+      "fact_id": "f_01M3EF2PM000000000035FW01A",
+      "provenance": "DEVICE_MEASURED",
+      "source": {
+        "kind": "device",
+        "device_id": "sim_vitals_01",
+        "reading_id": "rd_0013"
+      },
+      "recorded_at": "2026-09-26T09:03:00Z",
+      "value": 39.2,
+      "unit": "Cel"
+    }
+  },
+  "extraction_status": "complete"
+}

@@ -1,0 +1,13 @@
+{
+  "decision_id": "dec_chest_pain",
+  "session_id": "ses_chest_pain",
+  "suggestion_id": "sug_chest_pain",
+  "action": "CONFIRM",
+  "final_level": 2,
+  "scale": "KTAS",
+  "nurse_user_id": "nurse_demo_01",
+  "acknowledged_alert_ids": [
+    "alr_chest_pain"
+  ],
+  "decided_at": "2026-09-26T09:06:00Z"
+}

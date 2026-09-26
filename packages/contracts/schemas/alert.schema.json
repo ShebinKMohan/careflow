@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://careflow.example/schemas/alert.schema.json",
+  "title": "Alert",
+  "description": "A safety alert raised by the deterministic rules engine before any urgency suggestion. No model can lower or remove it. There is no free-text message: display_text comes from a fixed per-rule template (packages/contracts/alert_templates.yaml).",
+  "type": "object",
+  "properties": {
+    "alert_id": {
+      "$ref": "fact.schema.json#/$defs/Identifier"
+    },
+    "session_id": {
+      "$ref": "fact.schema.json#/$defs/Identifier"
+    },
+    "rule_id": {
+      "$ref": "#/$defs/RuleId"
+    },
+    "ruleset_version": {
+      "type": "string",
+      "description": "Semantic version of the ruleset that raised the alert.",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$"
+    },
+    "severity": {
+      "$ref": "#/$defs/AlertSeverity"
+    },
+    "evidence_fact_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "fact.schema.json#/$defs/FactId"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "The facts that triggered the rule. Never empty."
+    },
+    "required_action": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "maxLength": 64,
+      "description": "Message key for the action the nurse must take, e.g. ecg_within_10_min."
+    },
+    "display_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "description": "Short non-PHI line rendered from the fixed template for rule_id (plus fixed qualifiers). Never patient words."
+    },
+    "partial": {
+      "type": "boolean",
+      "description": "True when the rule fired on incomplete inputs (e.g. a partial NEWS2 from kiosk vitals only)."
+    },
+    "missing_inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "structured-facts.schema.json#/$defs/FactKey"
+      },
+      "uniqueItems": true,
+      "default": [],
+      "description": "Fact paths still missing when partial is true, e.g. vitals.respiratory_rate."
+    },
+    "raised_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deadline_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the required action is due, e.g. arrival + 10 min for CHEST_PAIN_ECG_10MIN."
+    }
+  },
+  "required": [
+    "alert_id",
+    "session_id",
+    "rule_id",
+    "ruleset_version",
+    "severity",
+    "evidence_fact_ids",
+    "required_action",
+    "partial",
+    "raised_at"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "RuleId": {
+      "type": "string",
+      "enum": [
+        "FAST_STROKE",
+        "CHEST_PAIN_ECG_10MIN",
+        "SEPSIS_NEWS2",
+        "NG143_RED_FLAG",
+        "NG143_AMBER_FLAG",
+        "CHILD_HARD_TO_WAKE"
+      ],
+      "description": "The safety rule that raised the alert."
+    },
+    "AlertSeverity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high"
+      ]
+    }
+  }
+}

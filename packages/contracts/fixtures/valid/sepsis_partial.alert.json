@@ -1,0 +1,23 @@
+{
+  "alert_id": "alr_sepsis_partial",
+  "session_id": "ses_sepsis_partial",
+  "rule_id": "SEPSIS_NEWS2",
+  "ruleset_version": "2026.1.0",
+  "severity": "critical",
+  "evidence_fact_ids": [
+    "f_01M3EF2PM000000000035FW01B",
+    "f_01M3EF2PM000000000035FW01D",
+    "f_01M3EF2PM000000000035FW01F",
+    "f_01M3EF2PM000000000035FW01E"
+  ],
+  "required_action": "sepsis_review_now",
+  "display_text": "Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review. (partial NEWS2 (kiosk vitals only))",
+  "partial": true,
+  "missing_inputs": [
+    "vitals.respiratory_rate",
+    "vitals.systolic_bp",
+    "vitals.acvpu",
+    "vitals.on_supplemental_o2"
+  ],
+  "raised_at": "2026-09-26T09:02:10Z"
+}
