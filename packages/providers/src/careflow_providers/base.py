@@ -6,7 +6,7 @@ import json
 import re
 from collections.abc import AsyncIterator, Sequence
 from dataclasses import dataclass, field
-from typing import Literal, Protocol, TypedDict, runtime_checkable
+from typing import Final, Literal, Protocol, TypedDict, runtime_checkable
 
 from pydantic import BaseModel, ValidationError
 
@@ -58,6 +58,9 @@ class StructuredFailure:
     errors: list[str] = field(default_factory=list)
     raw_text: str = ""
 
+
+MAX_ERROR_CHARS: Final = 2000
+"""The validation errors sent back with the retry are cut to this length (M1-06)."""
 
 _THINK = re.compile(r"<think>.*?(</think>|$)", re.S | re.I)
 _FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.S)
@@ -130,7 +133,7 @@ async def structured[T: BaseModel](
                 {
                     "role": "user",
                     "content": "That reply did not validate. Fix it and reply with the corrected "
-                    f"JSON object only. Validation errors:\n{exc}",
+                    f"JSON object only. Validation errors:\n{str(exc)[:MAX_ERROR_CHARS]}",
                 },
             ]
             continue

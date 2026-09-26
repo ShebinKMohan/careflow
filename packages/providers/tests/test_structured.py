@@ -8,7 +8,7 @@ from collections.abc import AsyncIterator, Sequence
 from careflow_contracts import StructuredFacts
 from careflow_contracts.testing import load_fixture
 from careflow_providers import ChatResult, Message, StructuredFailure, StructuredOk, structured
-from careflow_providers.base import extract_json, strip_thinking
+from careflow_providers.base import MAX_ERROR_CHARS, extract_json, strip_thinking
 
 FACTS = json.dumps(load_fixture("valid/chest_pain.structured-facts.json"))
 
@@ -54,6 +54,16 @@ async def test_bad_json_then_repair_then_ok() -> None:
     assert result.attempts == 2
     repair = provider.calls[1][-1]
     assert repair["role"] == "user" and "did not validate" in repair["content"]
+
+
+async def test_the_errors_sent_with_the_retry_are_cut_to_2000_characters() -> None:
+    many_errors = json.dumps({"session_id": 1, "vitals": {f"x{i}": i for i in range(300)}})
+    provider = ScriptedProvider(many_errors, FACTS)
+    result = await structured(provider, USER, StructuredFacts)
+    assert isinstance(result, StructuredOk) and result.attempts == 2
+    repair = provider.calls[1][-1]["content"]
+    errors = repair.split("Validation errors:\n", 1)[1]
+    assert len(errors) == MAX_ERROR_CHARS == 2000
 
 
 async def test_bad_json_twice_is_a_structured_failure() -> None:
