@@ -101,7 +101,7 @@ async def test_extraction_case(name: str, tmp_path: Path) -> None:
     else:
         got = sorted((summary(entry) for entry in result.facts), key=lambda f: f["key"])
         assert got == sorted(expected["facts"], key=lambda f: f["key"])
-    assert result.prompt_version == PROMPT_VERSION == "extraction_v1"
+    assert result.prompt_version == PROMPT_VERSION == "extraction_v2"
     assert result.provider == "scripted" and result.model_id == "scripted"
 
 
