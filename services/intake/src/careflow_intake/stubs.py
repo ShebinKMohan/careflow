@@ -7,7 +7,6 @@ advice; the stub rule and the stub suggestion exist only to exercise the graph.
 
 from __future__ import annotations
 
-import hashlib
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
@@ -27,7 +26,7 @@ from careflow_contracts.generated.structured_facts_schema import (
 )
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
 from careflow_contracts.validators import iter_facts
-from careflow_intake.facts import FactEntry, fact_class
+from careflow_intake.facts import FactEntry, fact_class, stable_fact_id
 from careflow_intake.ports import (
     Assignment,
     EhrUnavailable,
@@ -39,18 +38,7 @@ from careflow_intake.ports import (
 )
 from careflow_intake.state import IntakeState
 
-CROCKFORD: Final = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 START: Final = datetime(2026, 9, 27, 9, 0, tzinfo=UTC)
-
-
-def stable_fact_id(*parts: str) -> str:
-    """A contract fact id (`f_` + 26 Crockford base32 characters) derived from `parts`."""
-    number = int.from_bytes(hashlib.sha256("|".join(parts).encode()).digest()[:17], "big")
-    chars = []
-    for _ in range(26):
-        chars.append(CROCKFORD[number & 31])
-        number >>= 5
-    return "f_" + "".join(reversed(chars))
 
 
 def _asked(state: IntakeState) -> int:

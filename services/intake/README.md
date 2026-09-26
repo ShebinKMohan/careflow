@@ -64,6 +64,26 @@ async with postgres_checkpointer(database_url) as saver:
 
 **Stubs.** `careflow_intake.stubs` holds deterministic stand-ins for every port (`stub_ports()`), for tests and demos. M1-06, M1-07 and M1-12 inject the real ones.
 
+## Fact extraction (M1-06)
+
+`careflow_intake.extraction.LlmExtractor` implements the `Extractor` port over the provider layer's `extraction` task. By default this is the local Qwen3.5-9B on `mlx_lm.server`, and `config/providers.yaml` can switch it.
+
+**The prompt.** `prompts/extraction_v1.md` shows the model the transcript as `t1..tn`, with each turn's role and question key, and lets it use only the keys a patient can state.
+
+**Verification.** Code checks every fact, and a fact that fails any check is dropped and logged (`extraction.fact_dropped`, without the patient's words):
+
+- the quote must come from a patient turn;
+- it matches exactly, or ignoring case and spacing, and the offsets are always recomputed;
+- every number must appear in the quote.
+
+**Failures.** An invalid reply is retried once. A second invalid reply, a timeout or a provider error returns the facts already known, with `extraction_incomplete`.
+
+```bash
+uv run pytest services/intake -k extraction                      # replayed replies (M0-06 ReplayProvider)
+CAREFLOW_LIVE_LLM=1 scripts/with_llm.sh uv run pytest services/intake -m live -s
+scripts/with_llm.sh uv run python -m careflow_intake.extraction.record --case live/chest_pain
+```
+
 ## Tests
 
 ```bash

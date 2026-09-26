@@ -1,0 +1,71 @@
+{
+  "description": "Live transcript: chest pain spreading to the left arm, some breathlessness, pain 8/10. Synthetic.",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "What brings you in today?",
+      "question_key": "chief_complaint",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "I've had a tight chest pain since about seven this morning.",
+      "question_key": "chief_complaint",
+      "created_at": "2026-09-27T09:00:10Z"
+    },
+    {
+      "turn_id": "trn_003",
+      "role": "assistant",
+      "text": "Does the pain spread to your arm, neck or jaw?",
+      "question_key": "chest_pain.radiates",
+      "created_at": "2026-09-27T09:00:15Z"
+    },
+    {
+      "turn_id": "trn_004",
+      "role": "patient",
+      "text": "Yes, it goes into my left arm.",
+      "question_key": "chest_pain.radiates",
+      "created_at": "2026-09-27T09:00:20Z"
+    },
+    {
+      "turn_id": "trn_005",
+      "role": "assistant",
+      "text": "Are you short of breath?",
+      "question_key": "chest_pain.short_of_breath",
+      "created_at": "2026-09-27T09:00:25Z"
+    },
+    {
+      "turn_id": "trn_006",
+      "role": "patient",
+      "text": "A little bit, yes.",
+      "question_key": "chest_pain.short_of_breath",
+      "created_at": "2026-09-27T09:00:30Z"
+    },
+    {
+      "turn_id": "trn_007",
+      "role": "assistant",
+      "text": "On a scale from 0 to 10, how bad is the pain?",
+      "question_key": "pain_score",
+      "created_at": "2026-09-27T09:00:35Z"
+    },
+    {
+      "turn_id": "trn_008",
+      "role": "patient",
+      "text": "I'd say an eight.",
+      "question_key": "pain_score",
+      "created_at": "2026-09-27T09:00:40Z"
+    }
+  ],
+  "expected": {
+    "required": {
+      "chest_pain.radiates": "yes",
+      "chest_pain.short_of_breath": "yes",
+      "pain_score": 8
+    },
+    "present": [
+      "chief_complaint"
+    ]
+  }
+}

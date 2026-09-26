@@ -1,0 +1,7 @@
+{
+  "c565ebae3f2a0dc1d887aafc8c6af917a4bfeaf59743cb3579e29b4b88805ea4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"tight chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had a tight chest pain since about seven this morning.\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a tight chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"seven\", \"turn_id\": \"t2\", \"quote\": \"since about seven this morning\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, it goes into my left arm.\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"A little bit, yes.\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 8, \"turn_id\": \"t8\", \"quote\": \"I'd say an eight.\", \"negated\": false}]}"
+  }
+}

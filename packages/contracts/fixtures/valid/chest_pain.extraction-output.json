@@ -1,0 +1,35 @@
+{
+  "facts": [
+    {
+      "key": "chief_complaint",
+      "value": "chest pain since this morning",
+      "turn_id": "t2",
+      "quote": "chest pain since this morning",
+      "char_start": 11,
+      "char_end": 40,
+      "negated": false
+    },
+    {
+      "key": "chest_pain.present",
+      "value": true,
+      "turn_id": "t2",
+      "quote": "chest pain",
+      "negated": false
+    },
+    {
+      "key": "pain_score",
+      "value": 7,
+      "unit": "/10",
+      "turn_id": "t4",
+      "quote": "about a 7",
+      "negated": false
+    },
+    {
+      "key": "chest_pain.sweating",
+      "value": false,
+      "turn_id": "t6",
+      "quote": "no sweating",
+      "negated": true
+    }
+  ]
+}

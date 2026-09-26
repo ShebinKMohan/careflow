@@ -8,6 +8,7 @@ from typing import TypeAlias
 
 from careflow_contracts.alert_text import render_display_text, required_action_for
 from careflow_contracts.generated.alert_schema import Alert, AlertSeverity, RuleId
+from careflow_contracts.generated.extraction_output_schema import ExtractedFact, ExtractionOutput
 from careflow_contracts.generated.fact_schema import (
     CodeFact,
     Coding,
@@ -88,6 +89,8 @@ __all__ = [
     "DecisionAction",
     "DeviceSource",
     "EhrContext",
+    "ExtractedFact",
+    "ExtractionOutput",
     "ExtractionStatus",
     "FactBase",
     "FactKey",

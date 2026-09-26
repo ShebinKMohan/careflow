@@ -252,6 +252,7 @@ version = "0.1.0"
 source = { editable = "services/intake" }
 dependencies = [
     { name = "careflow-contracts" },
+    { name = "careflow-providers" },
     { name = "langgraph" },
     { name = "langgraph-checkpoint-postgres" },
     { name = "psycopg", extra = ["binary", "pool"] },
@@ -261,6 +262,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "careflow-contracts", editable = "packages/contracts" },
+    { name = "careflow-providers", editable = "packages/providers" },
     { name = "langgraph", specifier = "==1.2.12" },
     { name = "langgraph-checkpoint-postgres", specifier = ">=3.1.2,<3.2" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.3,<3.4" },
