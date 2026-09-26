@@ -99,11 +99,14 @@ Several details are not settled by the issue or by the M0-02 contracts:
   - the top 3 |SHAP| features for the predicted class.
 - **Explainers.** LR uses `shap.LinearExplainer` on the transformed background, with the one-hot columns summed back to their feature. HGB uses `shap.TreeExplainer`, which in shap 0.52 supports multiclass HistGradientBoosting with raw output. A test checks that the SHAP values plus the base value equal each class's logit.
 - **Reason wording.** A reason reads, for example, "Heart rate 128/min made KTAS 2 more likely", and cites the fact ids behind it. It does not say "raised urgency" as the issue's example does. A SHAP value towards the predicted class says which level the feature favours, not whether the patient is more urgent.
-- **Latency.** Single-row prediction runs inside `threadpool_limits(1)`. On the 191 test rows (M3 Pro):
-  - HGB takes a median of 4.8 ms with the limit, against 20.1 ms (worst 38 ms) with OpenMP threads for one row.
-  - LR pays about 1 ms for the limit (1.2 → 2.2 ms).
-
-  Both stay well under the 20 ms budget.
+- **Latency.** Single-row prediction runs with OpenMP limited to one thread. The limit uses a `ThreadpoolController` built once per model; building one per call with `threadpool_limits` cost about 1 ms. On the 191 test rows (M3 Pro):
+  - HGB: median 3.9 ms (max 4.1 ms), against 20.5 ms (max 28.8 ms) with OpenMP threads for one row.
+  - LR: median 1.2 ms (max 1.6 ms).
+- **The 20 ms budget is not a CI gate.** The owner decisions say speed targets are measured and published, never CI gates. The first CI run failed on a single HGB call of 21.4 ms on a GitHub runner.
+  - The test now asserts the budget on the reference machine, meaning any run without `CI=true`.
+  - On a CI runner, it warns with the measured numbers when a call goes over the budget.
+  - The reasons and `model_version` assertions run everywhere.
+  - This is recorded in `docs/FLAKY.md`.
 - **Adults only.** A patient whose recorded age is under 15 (in years or months) gets `OutOfScopeError` instead of a suggestion. A child with no recorded age cannot be detected, which the model card states.
 
 ## Consequences
