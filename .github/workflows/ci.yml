@@ -1,0 +1,93 @@
+# CareFlow CI: Python, Node and security gates. Ubuntu runners only (private repo on GitHub Free,
+# ~2,000 Actions minutes a month). Every action is pinned to a full commit SHA.
+name: ci
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["docs/**", "**/*.md"]
+  pull_request:
+    paths-ignore: ["docs/**", "**/*.md"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  GITLEAKS_VERSION: "8.30.1"
+  GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+  OSV_SCANNER_VERSION: "2.6.0"
+  OSV_SCANNER_SHA256: "ca69b3d3cd08f889a49dc0a383122f71cc528b83803671df5fd874d97485b108"
+
+jobs:
+  python:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.14"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - name: Install
+        run: make install-py
+      - name: Lint
+        run: make lint-py
+      - name: Typecheck
+        run: make typecheck-py
+      - name: Test
+        run: make test-py
+
+  node:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install
+        run: make install-node
+      - name: Lint
+        run: make lint-node
+      - name: Typecheck
+        run: make typecheck-node
+      - name: Test
+        run: make test-node
+
+  security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # gitleaks scans the full history
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.14"
+      - name: Install gitleaks and osv-scanner (checksum-verified)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fsSLo gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          curl -fsSLo osv-scanner \
+            "https://github.com/google/osv-scanner/releases/download/v${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
+          echo "${OSV_SCANNER_SHA256}  osv-scanner" | sha256sum -c -
+          chmod +x gitleaks osv-scanner
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: gitleaks (full history)
+        run: gitleaks git --redact --verbose --exit-code 1 .
+      - name: osv-scanner (uv.lock and pnpm-lock.yaml)
+        run: osv-scanner scan source --lockfile uv.lock --lockfile pnpm-lock.yaml
+      - name: Banned and unconstrained dependencies
+        run: uv run --no-project --python 3.12 python scripts/check_banned_deps.py
