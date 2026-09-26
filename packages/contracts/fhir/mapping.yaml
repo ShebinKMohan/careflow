@@ -243,6 +243,17 @@ entries:
   unit: null
   verified: true
   notes: 'CareFlow CONVENTION, not a standard: level 1 -> S, 2 -> EM, 3 -> UR, 4 and 5 -> R.'
+- fact_path: nurse_decision.final_level
+  direction: write
+  resource: Encounter
+  element: Encounter.priority.coding (after the ActPriority coding) and Encounter.priority.text
+  code_system: https://careflow.example/fhir/CodeSystem/triage-level
+  code: <scale>-<level>, e.g. KTAS-2
+  display: <scale> level <level>
+  unit: null
+  verified: true
+  notes: CareFlow CodeSystem (M1-09). Only the nurse's final level; text "<scale> level <level>, confirmed by the triage
+    nurse" (or "set by the triage nurse" for an override).
 - fact_path: session.encounter
   direction: write
   resource: Encounter
@@ -252,8 +263,9 @@ entries:
   display: ambulatory
   unit: null
   verified: true
-  notes: status in-progress at check-in, finished at discharge from the queue. class defaults to AMB, configurable per hospital
-    (config/hospitals/*.yaml).
+  notes: status triaged when CareFlow writes the nurse-confirmed triage (M1-09); later status changes are not written yet.
+    class from the hospital adapter's encounter_class (config/hospitals/*.yaml), AMB by default and EMER (emergency) for
+    demo_hapi.
 - fact_path: complaint_category
   direction: write
   resource: Encounter
@@ -294,8 +306,9 @@ entries:
   display: Notification
   unit: null
   verified: true
-  notes: 'Nurse notification: status completed, about -> Flag, recipient -> Practitioner (nurse), payload.contentString =
-    the Alert display_text (fixed template, no PHI).'
+  notes: 'One nurse hand-off per write-back (M1-09): status completed, about -> every Flag, recipient -> the triage nurse (a
+    logical reference by staff identifier), payload.contentString = a fixed-template hand-off: the final level, each Alert
+    display_text and structured key facts (vitals, NEWS2, positive screens, pain score). Never the patient''s own words.'
 - fact_path: briefing
   direction: write
   resource: Composition
@@ -328,7 +341,8 @@ entries:
   unit: null
   verified: true
   notes: 'One Provenance per write batch (target[], recorded). Agent: Device performer (kiosk vitals) or assembler (model),
-    Practitioner author (nurse), Patient informant (patient stated).'
+    Practitioner author (nurse), Patient informant (patient stated). R4 Provenance has no identifier, so its conditional
+    create matches meta.tag urn:careflow:writeback|<session_id> instead (M1-09).'
 - fact_path: write_batch.meta_tag
   direction: write
   resource: (every written resource)

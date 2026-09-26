@@ -34,7 +34,8 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 | `nurse_decision.final_level` | write | Observation | `Observation.valueInteger` | cf:triage-level | triage-level | Triage urgency level (1 = most urgent) |  | yes |
 | `nurse_decision.scale` | write | Observation | `Observation.component(scale).valueCodeableConcept` | cf:triage-scale | KTAS / ESI / CTAS / MTS |  |  | yes |
 | `nurse_decision.priority` | write | Encounter | `Encounter.priority` | tho:v3-ActPriority | S / EM / UR / R | stat / emergency / urgent / routine |  | yes |
-| `session.encounter` | write | Encounter | `Encounter.status / Encounter.class` | tho:v3-ActCode | AMB | ambulatory |  | yes |
+| `nurse_decision.final_level` | write | Encounter | `Encounter.priority.coding` and `.text` | cf:triage-level | `<scale>-<level>`, e.g. KTAS-2 | `<scale>` level `<level>` |  | yes |
+| `session.encounter` | write | Encounter | `Encounter.status / Encounter.class` | tho:v3-ActCode | AMB (EMER per hospital) | ambulatory (emergency) |  | yes |
 | `complaint_category` | write | Encounter | `Encounter.reasonCode` | cf:complaint-category |  |  |  | yes |
 | `alert` | write | Flag | `Flag.code` | cf:rule-id | FAST_STROKE / CHEST_PAIN_ECG_10MIN / SEPSIS_NEWS2 / NG143_RED_FLAG / NG143_AMBER_FLAG / CHILD_HARD_TO_WAKE |  |  | yes |
 | `alert.required_action` | write | Task | `Task.code / Task.restriction.period.end` | cf:task-kind | ecg_within_10_min | ECG within 10 minutes of arrival |  | yes |
@@ -103,16 +104,23 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 
 ## Writes
 
-- **Encounter**: `status` in-progress, then finished; `class` v3 ActCode `AMB` by default (configurable per hospital); `priority` from the final level (convention below); `reasonCode` from the model-inferred complaint category.
+- **Encounter**: `status` triaged when the nurse-confirmed triage is written (M1-09); `class` v3 ActCode from the hospital adapter (`AMB` by default, `EMER` for `demo_hapi`); `priority` from the final level: the ActPriority code (convention below), then `cf:triage-level#<scale>-<level>` and a text; `reasonCode` from the model-inferred complaint category.
 - **Vital signs**: Observations with category `vital-signs`, LOINC codes and UCUM units: heart rate 8867-4 `/min`, respiratory rate 9279-1 `/min`, SpO2 2708-6 plus 59408-5 `%`, body temperature 8310-5 `Cel`, blood pressure panel 85354-9 with systolic 8480-6 and diastolic 8462-4 `mm[Hg]`, pain 72514-3 `{score}`. A nurse value replaces a device value at the same fact path; each Observation is written with the provenance of the value it carries.
 - **NEWS2 total** (SNOMED CT UK 1104051000000101, `{score}`), **ACVPU** (1104441000000107 with the UK Core ACVPU answers) and **supplemental oxygen** (371825009 Patient on oxygen / 722742002 Breathing room air). A partial kiosk NEWS2 is written with status `preliminary` and a note naming the missing inputs, never as a full score.
 - **Triage level**: one Observation, code `cf:triage-level#triage-level`, `valueInteger` = the nurse's final level (1 = most urgent), component `scale` from `cf:triage-scale`. A model suggestion is never written as a level: only the NurseDecision is.
 - **QuestionnaireResponse**: `questionnaire` = `https://careflow.example/fhir/Questionnaire/careflow-intake|0.1.0`, items keyed by linkId = fact path. One response per answering source: the patient or parent (`source` Patient or RelatedPerson, tag `PATIENT_STATED`) and the nurse (`source` Practitioner, tag `NURSE_CONFIRMED`).
 - **Flag**: one per Alert; status active, category clinical, code from `cf:rule-id`.
 - **Task**: for `CHEST_PAIN_ECG_10MIN`, code `cf:task-kind#ecg_within_10_min`, status requested, intent order, `restriction.period.end` = `Alert.deadline_at` (raised_at + 10 min), focus the Flag.
-- **Communication**: the nurse notification (category `notification`, about the Flag, payload = the fixed, non-PHI alert template).
+- **Communication**: one nurse hand-off per write-back (category `notification`, about every Flag, recipient the triage nurse). The payload is built from fixed templates: the final level, each alert's display text and structured key facts. It never holds the patient's own words.
 - **Composition**: the doctor briefing, type LOINC 54094-8 Emergency Department Triage Note, one section per topic, sent as a `document` Bundle with the Composition first. Section text shows the provenance tag of every item (safety rule 4).
 - **AllergyIntolerance** (write): only for an allergy the patient states, with `verificationStatus` = `unconfirmed`. What the patient says is never written as confirmed.
+
+## Write-back transaction (M1-09)
+
+- **One transaction Bundle** per confirmed triage. Every entry is a conditional create: `request.ifNoneExist` = `identifier=<system>|<value>`, so a retry, or a second post of the same triage, creates nothing new.
+- **Identifiers.** Encounter: `urn:careflow:session|<session_id>`. Every other resource: `urn:careflow:fact|<session_id>:<local id>` (for example `obs-heart-rate`, `flag-CHEST_PAIN_ECG_10MIN`). The Provenance, which has no identifier in R4, is matched on the tag `urn:careflow:writeback|<session_id>`.
+- **fullUrl.** `urn:uuid:` plus a UUIDv5 of the identifier, so the same triage always builds the same Bundle. References inside the Bundle use these `urn:uuid` values.
+- **Staff and devices** are logical references (`Reference.identifier`, systems `urn:careflow:staff` and `urn:careflow:device`). CareFlow never creates Practitioner or Device resources in the hospital's record.
 
 ## Priority convention (a CareFlow convention, not a standard)
 
@@ -159,5 +167,7 @@ Abu Dhabi's Malaffi (DoH) and Dubai's NABIDH exchange HL7 v2.5.1 messages (ADT, 
 | SNOMED CT 248234008, 130987000, 300202002, 450847001, 422768004 | UK Core ACVPU value set (fhir.interweavedigital.com) |
 | v3 ActPriority S, EM, UR, R | hl7.org/fhir/R4/v3/ActPriority/cs.html |
 | v3 ActCode AMB | hl7.org/fhir/R4/v3/ActEncounterCode/vs.html |
+| v3 ActCode EMER emergency (27 Sep 2026) | hl7.org/fhir/R4/v3/ActEncounterCode/vs.html |
+| Encounter.status `triaged` (27 Sep 2026) | hl7.org/fhir/R4/valueset-encounter-status.html |
 | flag-category `clinical`, communication-category `notification` | hl7.org/fhir/R4 code system pages |
 | provenance-participant-type | terminology.hl7.org CodeSystem provenance-participant-type |

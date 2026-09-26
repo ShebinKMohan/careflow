@@ -1,0 +1,214 @@
+{
+ "clinic_id": "clinic_demo",
+ "session_id": "ses_routine",
+ "patient_ref": "Patient/persona-routine",
+ "arrived_at": "2026-09-26T09:00:00Z",
+ "decision": {
+  "decision_id": "dec_routine",
+  "session_id": "ses_routine",
+  "suggestion_id": "sug_routine",
+  "action": "OVERRIDE",
+  "final_level": 4,
+  "scale": "KTAS",
+  "override_reason_code": "clinical_judgement",
+  "nurse_user_id": "nurse_demo_01",
+  "acknowledged_alert_ids": [],
+  "decided_at": "2026-09-26T09:06:00Z"
+ },
+ "facts": {
+  "session_id": "ses_routine",
+  "clinic_id": "clinic_demo",
+  "language": "en",
+  "patient": {
+   "fhir_patient_id": "persona-routine",
+   "age_years": {
+    "fact_id": "f_Y29T69F5AG79J8YFW1DGAHXCVQ",
+    "provenance": "EHR",
+    "source": {
+     "kind": "fhir",
+     "resource_type": "Patient",
+     "id": "persona-routine",
+     "version_id": "1"
+    },
+    "recorded_at": "2026-09-26T09:00:00Z",
+    "value": 34
+   },
+   "sex": {
+    "fact_id": "f_R7E52A6A77GEP9BT80D3XFJ3X2",
+    "provenance": "EHR",
+    "source": {
+     "kind": "fhir",
+     "resource_type": "Patient",
+     "id": "persona-routine",
+     "version_id": "1"
+    },
+    "recorded_at": "2026-09-26T09:00:00Z",
+    "value": {
+     "system": "http://hl7.org/fhir/administrative-gender",
+     "code": "female",
+     "display": "Female"
+    }
+   }
+  },
+  "chief_complaint": {
+   "fact_id": "f_0GJ1BVQ2T0CPDAEP29WT9PMEBY",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_01",
+    "start": 0,
+    "end": 41,
+    "quote": "sore throat for five days, getting better"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": "Sore throat for five days, getting better"
+  },
+  "complaint_category": {
+   "fact_id": "f_NTTJF9YQS7TNH81QG78THG9Y3M",
+   "provenance": "MODEL_INFERRED",
+   "source": {
+    "kind": "model",
+    "model_id": "careflow_triage.complaint_category",
+    "model_version": "0.1.0"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": {
+    "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+    "code": "eye_ent",
+    "display": "Eye, ear, nose or throat"
+   }
+  },
+  "symptoms": [
+   {
+    "name": {
+     "fact_id": "f_SFASEZ2QRPQY85FV8E9JTT0C79",
+     "provenance": "PATIENT_STATED",
+     "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_02",
+      "start": 0,
+      "end": 11,
+      "quote": "sore throat"
+     },
+     "recorded_at": "2026-09-26T09:01:00Z",
+     "value": "sore_throat"
+    },
+    "onset": {
+     "fact_id": "f_TZBCV3806DKQP2S4NP3G22C18E",
+     "provenance": "PATIENT_STATED",
+     "source": {
+      "kind": "transcript_span",
+      "turn_id": "turn_03",
+      "start": 0,
+      "end": 9,
+      "quote": "five days"
+     },
+     "recorded_at": "2026-09-26T09:01:00Z",
+     "value": "P5D"
+    },
+    "severity": "mild"
+   }
+  ],
+  "pain_score": {
+   "fact_id": "f_EKM8Z23T6AS7DQ3DADT4FV7WBM",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_05",
+    "start": 0,
+    "end": 7,
+    "quote": "a three"
+   },
+   "recorded_at": "2026-09-26T09:02:00Z",
+   "value": 3
+  },
+  "pain_present": {
+   "fact_id": "f_G3F90XAY6XQX9807N8KZJYN6VS",
+   "provenance": "PATIENT_STATED",
+   "source": {
+    "kind": "transcript_span",
+    "turn_id": "turn_04",
+    "start": 0,
+    "end": 4,
+    "quote": "sore"
+   },
+   "recorded_at": "2026-09-26T09:01:00Z",
+   "value": "yes"
+  },
+  "vitals": {
+   "heart_rate": {
+    "fact_id": "f_BV682PMRYBWH58JE3CR67JZMEB",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_routine"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 72.0,
+    "unit": "/min"
+   },
+   "spo2": {
+    "fact_id": "f_3DJ090Y92DJ480E7JV20R07HBM",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_routine"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 99.0,
+    "unit": "%"
+   },
+   "temperature_c": {
+    "fact_id": "f_1JR0577SY6RV0AEXBQY0S3AJG5",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_routine"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 37.0,
+    "unit": "Cel"
+   },
+   "systolic_bp": {
+    "fact_id": "f_ZE05N5XX53ZNR6AP5Y2T23MPYQ",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_routine"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 118.0,
+    "unit": "mm[Hg]"
+   },
+   "diastolic_bp": {
+    "fact_id": "f_CJSYF55310VSWB5Y9XTGDEW8NK",
+    "provenance": "DEVICE_MEASURED",
+    "source": {
+     "kind": "device",
+     "device_id": "sim_vitals_01",
+     "reading_id": "rd_ses_routine"
+    },
+    "recorded_at": "2026-09-26T09:03:00Z",
+    "value": 76.0,
+    "unit": "mm[Hg]"
+   }
+  },
+  "extraction_status": "complete"
+ },
+ "alerts": [],
+ "news2": {
+  "total": 0,
+  "partial": true,
+  "missing": [
+   "vitals.respiratory_rate",
+   "vitals.acvpu",
+   "vitals.on_supplemental_o2"
+  ],
+  "scored_at": "2026-09-26T09:05:00Z"
+ },
+ "completed_actions": []
+}

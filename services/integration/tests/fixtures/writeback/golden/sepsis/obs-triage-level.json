@@ -1,0 +1,66 @@
+{
+ "code": {
+  "coding": [
+   {
+    "code": "triage-level",
+    "display": "Triage urgency level (1 = most urgent)",
+    "system": "https://careflow.example/fhir/CodeSystem/triage-level"
+   }
+  ]
+ },
+ "component": [
+  {
+   "code": {
+    "coding": [
+     {
+      "code": "scale",
+      "display": "Triage scale",
+      "system": "https://careflow.example/fhir/CodeSystem/triage-level"
+     }
+    ]
+   },
+   "valueCodeableConcept": {
+    "coding": [
+     {
+      "code": "KTAS",
+      "display": "Korean Triage and Acuity Scale",
+      "system": "https://careflow.example/fhir/CodeSystem/triage-scale"
+     }
+    ]
+   }
+  }
+ ],
+ "effectiveDateTime": "2026-09-26T09:06:00Z",
+ "encounter": {
+  "reference": "urn:uuid:689055a5-7c0b-5315-8a72-b970c6324bf1"
+ },
+ "identifier": [
+  {
+   "system": "urn:careflow:fact",
+   "value": "ses_sepsis:obs-triage-level"
+  }
+ ],
+ "meta": {
+  "tag": [
+   {
+    "code": "NURSE_CONFIRMED",
+    "system": "https://careflow.example/fhir/CodeSystem/provenance-source"
+   }
+  ]
+ },
+ "performer": [
+  {
+   "display": "Triage nurse",
+   "identifier": {
+    "system": "urn:careflow:staff",
+    "value": "nurse_demo_01"
+   }
+  }
+ ],
+ "resourceType": "Observation",
+ "status": "final",
+ "subject": {
+  "reference": "Patient/persona-sepsis"
+ },
+ "valueInteger": 2
+}

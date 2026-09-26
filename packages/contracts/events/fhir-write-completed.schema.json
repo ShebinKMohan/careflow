@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "FhirWriteCompletedData: see $defs/FhirWriteCompletedData. Internal only: CareFlow wrote a confirmed triage to the hospital FHIR server. It travels on the CareFlow event bus (for the audit log, M5-01) and is never a webhook or a WebSocket message. No name, date of birth or free text.",
+  "$ref": "#/$defs/FhirWriteCompletedData",
+  "$defs": {
+    "FhirWriteCompletedData": {
+      "title": "FhirWriteCompletedData",
+      "description": "Internal only: CareFlow wrote a confirmed triage to the hospital FHIR server as one transaction Bundle (M1-09). No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "bundle_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier",
+          "description": "The transaction Bundle's identifier (a UUID derived from the session and the nurse decision, the same on every retry)."
+        },
+        "resource_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Resources in the Bundle, created or already present."
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "bundle_id",
+        "resource_count"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_chest_pain",
+          "bundle_id": "6f0f5f1e-3c1a-5b6e-9d57-2b8f3f0d9a41",
+          "resource_count": 14
+        }
+      ]
+    }
+  }
+}

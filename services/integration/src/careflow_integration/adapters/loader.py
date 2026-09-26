@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Final
+from typing import Final, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
@@ -33,6 +33,8 @@ class HospitalAdapter(BaseModel):
     )
     appointment_statuses: list[str] = Field(default_factory=lambda: ["booked", "arrived"])
     timeouts: Timeouts = Field(default_factory=Timeouts)
+    #: Encounter.class (v3 ActCode) of the triage encounter CareFlow writes back (M1-09).
+    encounter_class: Literal["AMB", "EMER"] = "AMB"
 
 
 def load_adapter(hospital: str = "demo_hapi", directory: Path = HOSPITALS) -> HospitalAdapter:

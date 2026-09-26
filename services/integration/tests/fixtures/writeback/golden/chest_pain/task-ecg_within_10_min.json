@@ -1,0 +1,45 @@
+{
+ "authoredOn": "2026-09-26T09:05:00Z",
+ "code": {
+  "coding": [
+   {
+    "code": "ecg_within_10_min",
+    "display": "ECG within 10 minutes of arrival",
+    "system": "https://careflow.example/fhir/CodeSystem/task-kind"
+   }
+  ],
+  "text": "12-lead ECG"
+ },
+ "encounter": {
+  "reference": "urn:uuid:b76cf043-020c-59d3-a4f4-de92f9353d3e"
+ },
+ "focus": {
+  "reference": "urn:uuid:6fbc23ea-7185-5bf2-b8f1-113b1254f004"
+ },
+ "for": {
+  "reference": "Patient/persona-chest-pain"
+ },
+ "identifier": [
+  {
+   "system": "urn:careflow:fact",
+   "value": "ses_chest_pain:task-ecg_within_10_min"
+  }
+ ],
+ "intent": "order",
+ "meta": {
+  "tag": [
+   {
+    "code": "PATIENT_STATED",
+    "system": "https://careflow.example/fhir/CodeSystem/provenance-source"
+   }
+  ]
+ },
+ "priority": "stat",
+ "resourceType": "Task",
+ "restriction": {
+  "period": {
+   "end": "2026-09-26T09:10:00Z"
+  }
+ },
+ "status": "requested"
+}
