@@ -15,6 +15,9 @@ make install && make check
 - `make install`: `uv sync --locked` and `pnpm install --frozen-lockfile`.
 - `make check`: ruff, pyright, pytest, ESLint, tsc, Vitest and the banned-dependency check.
 - `uv run python scripts/gen_dev_env.py` creates the gitignored `.env` with random local dev secrets.
+- `make mock` serves the API contract's examples with Prism on :4010; `pnpm -F kiosk dev` (3000), `staff` (3001) and `companion` (3002) run the apps against it, and `make e2e` runs their Playwright smoke tests ([`apps/README.md`](apps/README.md)).
+
+**Languages:** English and Arabic, with right-to-left layout. Arabic supported; not validated by native speakers.
 
 ## Repository
 

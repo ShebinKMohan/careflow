@@ -5,7 +5,8 @@
   "description": "Typed CareFlow API contract: paths, components and webhooks generated from openapi.yaml.",
   "type": "module",
   "exports": {
-    ".": "./ts/index.ts"
+    ".": "./ts/index.ts",
+    "./client": "./ts/client.ts"
   },
   "scripts": {
     "generate": "openapi-typescript openapi.yaml -o ts/openapi.d.ts",
@@ -18,5 +19,8 @@
     "openapi-typescript": "7.13.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "dependencies": {
+    "openapi-fetch": "catalog:"
   }
 }

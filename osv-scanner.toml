@@ -1,0 +1,11 @@
+# osv-scanner exceptions. Each one names the advisory, why it is unreachable here, and an expiry,
+# after which the scan fails again and the exception must be reviewed (ADR-015).
+
+[[IgnoredVulns]]
+id = "GHSA-qxc2-j82w-r537"
+ignoreUntil = 2027-03-31T00:00:00Z
+reason = """@faker-js/faker 5.5.3, pinned by postman-collection 4.5.0 (and 5.3.1) under \
+@stoplight/prism-cli, the dev-only mock server. The advisory is code execution through \
+faker.helpers.fake() templates. postman-collection calls it only for Postman dynamic variables when \
+a Postman collection is resolved; `make mock` serves openapi.yaml static examples and never loads a \
+collection. faker 10 (the fix) breaks postman-collection at load time, so it cannot be overridden."""

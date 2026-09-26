@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "CareFlow kiosk",
+    "description": "Self check-in kiosk. Research prototype."
+  },
+  "header": {
+    "app": "CareFlow check-in"
+  },
+  "home": {
+    "title": "Welcome",
+    "subtitle": "Choose your language to check in.",
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "setup": {
+    "title": "Kiosk setup",
+    "intro": "Staff only: sign this kiosk in with its device ID and secret.",
+    "deviceId": "Device ID",
+    "deviceSecret": "Device secret",
+    "submit": "Sign in kiosk",
+    "working": "Signing in…",
+    "invalid": "Enter a device ID and a secret of at least 16 characters.",
+    "failed": "The kiosk could not be signed in. Check the ID and secret."
+  },
+  "checkin": {
+    "title": "Check in",
+    "instructions": "Enter your 6-digit keypad ID.",
+    "display": "Keypad ID",
+    "clear": "Clear",
+    "submit": "Check in",
+    "working": "Checking in…",
+    "welcome": "Welcome, {initials}",
+    "session": "Session {id}",
+    "continue": "Continue",
+    "failed": "We could not find that keypad ID. Please try again or ask a nurse.",
+    "needsSetup": "This kiosk is not signed in yet.",
+    "setupLink": "Kiosk setup (staff)"
+  },
+  "intake": {
+    "title": "Your visit",
+    "placeholder": "The intake questions arrive in a later version. Please take a seat; a nurse will see you."
+  }
+}

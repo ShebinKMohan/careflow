@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@careflow/ui/tokens.css";
+@import "@careflow/ui/base.css";
+
+/* Generate the utilities used by the shared components too. */
+@source "../../../../packages/ui/src";

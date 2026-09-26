@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "CareFlow staff",
+    "description": "Nurse station, doctor briefing, queue board and admin. Research prototype."
+  },
+  "header": {
+    "app": "CareFlow staff"
+  },
+  "home": {
+    "title": "Staff screens",
+    "nurse": "Nurse station",
+    "doctor": "Doctor briefing (example session)",
+    "board": "Queue board",
+    "admin": "Admin status",
+    "login": "Sign in"
+  },
+  "login": {
+    "title": "Sign in",
+    "intro": "Development sign-in for synthetic staff accounts.",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in",
+    "working": "Signing in…",
+    "invalid": "Enter a username and a password.",
+    "failed": "Sign-in failed. Check the username and password."
+  },
+  "common": {
+    "loading": "Loading…",
+    "unauthorized": "Please sign in to see this screen.",
+    "signIn": "Sign in",
+    "failed": "The data could not be loaded.",
+    "empty": "Nothing to show."
+  },
+  "nurse": {
+    "title": "Nurse worklist",
+    "patient": "Patient",
+    "state": "State",
+    "suggested": "Suggested level",
+    "alerts": "Alerts",
+    "arrived": "Arrived",
+    "level": "{scale} {level}",
+    "noLevel": "Not assessed"
+  },
+  "doctor": {
+    "title": "Doctor briefing",
+    "session": "Session {id}"
+  },
+  "board": {
+    "title": "Queue board: {department}",
+    "token": "Number",
+    "room": "Room",
+    "status": "Status",
+    "noRoom": "Please wait"
+  },
+  "admin": {
+    "title": "Model providers",
+    "task": "Task",
+    "provider": "Provider",
+    "model": "Model or tool",
+    "available": "Available",
+    "yes": "Yes",
+    "no": "No"
+  }
+}
