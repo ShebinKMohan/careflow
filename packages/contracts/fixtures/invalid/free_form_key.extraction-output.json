@@ -1,0 +1,11 @@
+{
+  "facts": [
+    {
+      "key": "diagnosis",
+      "value": "myocardial infarction",
+      "turn_id": "t2",
+      "quote": "chest pain",
+      "negated": false
+    }
+  ]
+}

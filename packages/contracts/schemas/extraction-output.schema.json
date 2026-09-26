@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "ExtractionOutput: see $defs/ExtractionOutput. What the extraction LLM returns (M1-06): candidate facts, each with the patient's words copied verbatim. Code finds every quote in the transcript and computes the offsets itself; a fact it cannot verify is dropped, never stored. Research prototype; synthetic data only.",
+  "$ref": "#/$defs/ExtractionOutput",
+  "$defs": {
+    "ExtractedFact": {
+      "type": "object",
+      "description": "One candidate fact. Only StructuredFacts keys are allowed (FactKey), so the model cannot invent fields.",
+      "properties": {
+        "key": {
+          "$ref": "structured-facts.schema.json#/$defs/FactKey"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          ],
+          "description": "yes/no answers as true/false or \"yes\"/\"no\"/\"unknown\"; numbers as numbers; free text as a string."
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The unit the patient used, if any (e.g. \"C\", \"/10\")."
+        },
+        "turn_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier",
+          "description": "The patient turn the quote comes from."
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "The patient's words, copied verbatim from that turn."
+        },
+        "char_start": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The model's offset. Ignored: code recomputes it from the quote."
+        },
+        "char_end": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The model's offset. Ignored: code recomputes it from the quote."
+        },
+        "negated": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the patient denied it (\"no chest pain\")."
+        }
+      },
+      "required": [
+        "key",
+        "value",
+        "turn_id",
+        "quote"
+      ],
+      "additionalProperties": false
+    },
+    "ExtractionOutput": {
+      "type": "object",
+      "properties": {
+        "facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExtractedFact"
+          },
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "facts"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
