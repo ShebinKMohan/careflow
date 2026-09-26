@@ -84,6 +84,25 @@
       ],
       "unevaluatedProperties": false
     },
+    "SeverityFact": {
+      "description": "How bad the main problem is now, on a 0-10 scale (asked when no pain score is known).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/IntegerFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
     "HeartRateFact": {
       "description": "Pulse / heart rate in beats per minute (UCUM /min).",
       "allOf": [
@@ -563,10 +582,14 @@
         "chief_complaint",
         "complaint_category",
         "symptoms",
+        "symptom_onset_at",
+        "severity",
         "pain_score",
         "pain_present",
+        "pain_location",
         "injury",
         "arrival_mode",
+        "allergies_confirm",
         "fast.face_droop",
         "fast.arm_weakness",
         "fast.speech_difficulty",
@@ -734,6 +757,13 @@
           },
           "maxItems": 30
         },
+        "symptom_onset_at": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "When the main problem started, in the patient's words (e.g. \"since this morning\")."
+        },
+        "severity": {
+          "$ref": "#/$defs/SeverityFact"
+        },
         "pain_score": {
           "$ref": "#/$defs/PainScoreFact"
         },
@@ -741,12 +771,20 @@
           "$ref": "fact.schema.json#/$defs/TriStateFact",
           "description": "The patient reports pain now (the 0-10 score may be missing)."
         },
+        "pain_location": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "Where the pain is, in the patient's words."
+        },
         "injury": {
           "$ref": "fact.schema.json#/$defs/TriStateFact",
           "description": "The visit is for an injury (trauma)."
         },
         "arrival_mode": {
           "$ref": "#/$defs/ArrivalModeFact"
+        },
+        "allergies_confirm": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "The patient's answer about allergies, in their words: confirming or correcting the EHR list, or naming allergies when the EHR has none. Free text on purpose: a yes/no would mean different things for the two questions."
         },
         "fast": {
           "$ref": "#/$defs/Fast"

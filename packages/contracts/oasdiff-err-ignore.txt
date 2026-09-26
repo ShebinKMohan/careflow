@@ -2,18 +2,22 @@
 # exactly these lines (operation + change text); everything else still fails the check. Each entry
 # names its issue and ADR, and is inert once the change is on main.
 #
-# M1-04 (ADR-019): the KTAS features pain_present, injury and arrival_mode join FactKey, which grows
-# with the facts; CareFlow's clients regenerate with the contract. (The M1-02 entries were removed
-# once on main.)
-POST /v1/nurse/sessions/{session_id}/vitals added the new `pain_present` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
-POST /v1/nurse/sessions/{session_id}/vitals added the new `pain_present` enum value to the `needed_facts/items/key` response property for the response status `200`
-POST /v1/nurse/sessions/{session_id}/vitals added the new `injury` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
-POST /v1/nurse/sessions/{session_id}/vitals added the new `injury` enum value to the `needed_facts/items/key` response property for the response status `200`
-POST /v1/nurse/sessions/{session_id}/vitals added the new `arrival_mode` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
-POST /v1/nurse/sessions/{session_id}/vitals added the new `arrival_mode` enum value to the `needed_facts/items/key` response property for the response status `200`
-GET /v1/sessions/{session_id}/triage added the new `pain_present` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
-GET /v1/sessions/{session_id}/triage added the new `pain_present` enum value to the `needed_facts/items/key` response property for the response status `200`
-GET /v1/sessions/{session_id}/triage added the new `injury` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
-GET /v1/sessions/{session_id}/triage added the new `injury` enum value to the `needed_facts/items/key` response property for the response status `200`
-GET /v1/sessions/{session_id}/triage added the new `arrival_mode` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
-GET /v1/sessions/{session_id}/triage added the new `arrival_mode` enum value to the `needed_facts/items/key` response property for the response status `200`
+# M1-07 (ADR-022): the intake checklist facts symptom_onset_at, severity, pain_location and
+# allergies_confirm join FactKey, which grows with the facts; CareFlow's clients regenerate with the
+# contract. (The M1-04 entries were removed once on main.)
+POST /v1/nurse/sessions/{session_id}/vitals added the new `symptom_onset_at` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `symptom_onset_at` enum value to the `needed_facts/items/key` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `severity` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `severity` enum value to the `needed_facts/items/key` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `pain_location` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `pain_location` enum value to the `needed_facts/items/key` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `allergies_confirm` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `allergies_confirm` enum value to the `needed_facts/items/key` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `symptom_onset_at` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `symptom_onset_at` enum value to the `needed_facts/items/key` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `severity` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `severity` enum value to the `needed_facts/items/key` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `pain_location` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `pain_location` enum value to the `needed_facts/items/key` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `allergies_confirm` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `allergies_confirm` enum value to the `needed_facts/items/key` response property for the response status `200`

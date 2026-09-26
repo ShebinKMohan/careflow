@@ -860,12 +860,19 @@ export interface components {
             /** @description Coded complaint category (a triage model feature). */
             complaint_category?: components["schemas"]["CodeFact"];
             symptoms?: components["schemas"]["Symptom"][];
+            /** @description When the main problem started, in the patient's words (e.g. "since this morning"). */
+            symptom_onset_at?: components["schemas"]["TextFact"];
+            severity?: components["schemas"]["SeverityFact"];
             pain_score?: components["schemas"]["PainScoreFact"];
             /** @description The patient reports pain now (the 0-10 score may be missing). */
             pain_present?: components["schemas"]["TriStateFact"];
+            /** @description Where the pain is, in the patient's words. */
+            pain_location?: components["schemas"]["TextFact"];
             /** @description The visit is for an injury (trauma). */
             injury?: components["schemas"]["TriStateFact"];
             arrival_mode?: components["schemas"]["ArrivalModeFact"];
+            /** @description The patient's answer about allergies, in their words: confirming or correcting the EHR list, or naming allergies when the EHR has none. Free text on purpose: a yes/no would mean different things for the two questions. */
+            allergies_confirm?: components["schemas"]["TextFact"];
             fast?: components["schemas"]["Fast"];
             chest_pain?: components["schemas"]["ChestPain"];
             infection?: components["schemas"]["Infection"];
@@ -1667,6 +1674,10 @@ export interface components {
             onset?: components["schemas"]["TextFact"];
             severity?: components["schemas"]["SymptomSeverity"];
         };
+        /** @description How bad the main problem is now, on a 0-10 scale (asked when no pain score is known). */
+        SeverityFact: components["schemas"]["IntegerFact"] & {
+            value?: number;
+        };
         /** @description Pain on a 0-10 numeric rating scale. */
         PainScoreFact: components["schemas"]["IntegerFact"] & {
             value?: number;
@@ -1854,7 +1865,7 @@ export interface components {
          * @description Every leaf fact path in StructuredFacts (list-valued paths name the list). Used for question keys, needed facts, missing inputs, FHIR mapping keys and Questionnaire linkIds.
          * @enum {string}
          */
-        FactKey: "patient.age_years" | "patient.age_months" | "patient.sex" | "chief_complaint" | "complaint_category" | "symptoms" | "pain_score" | "pain_present" | "injury" | "arrival_mode" | "fast.face_droop" | "fast.arm_weakness" | "fast.speech_difficulty" | "fast.last_known_well" | "chest_pain.present" | "chest_pain.radiates" | "chest_pain.sweating" | "chest_pain.short_of_breath" | "chest_pain.onset" | "infection.suspected" | "infection.fever_reported" | "infection.rigors" | "child_danger.hard_to_wake" | "child_danger.no_response_to_social_cues" | "child_danger.weak_high_pitched_or_continuous_cry" | "child_danger.pale_mottled_ashen_or_blue" | "child_danger.grunting" | "child_danger.non_blanching_rash" | "child_danger.neck_stiffness" | "child_danger.seizure" | "child_danger.appears_ill_to_hcp" | "child_danger.chest_indrawing" | "child_danger.reduced_skin_turgor" | "child_danger.bulging_fontanelle" | "child_danger.focal_neuro_signs" | "child_amber.pallor_reported" | "child_amber.not_responding_normally" | "child_amber.decreased_activity" | "child_amber.wakes_only_with_prolonged_stimulation" | "child_amber.nasal_flaring" | "child_amber.crackles" | "child_amber.cap_refill_3s_or_more" | "child_amber.dry_mucous_membranes" | "child_amber.poor_feeding" | "child_amber.reduced_urine_output" | "child_amber.fever_5_days_or_more" | "child_amber.limb_or_joint_swelling" | "child_amber.non_weight_bearing" | "vitals.heart_rate" | "vitals.spo2" | "vitals.temperature_c" | "vitals.respiratory_rate" | "vitals.systolic_bp" | "vitals.diastolic_bp" | "vitals.acvpu" | "vitals.on_supplemental_o2" | "ehr_context.allergies" | "ehr_context.conditions" | "ehr_context.medications";
+        FactKey: "patient.age_years" | "patient.age_months" | "patient.sex" | "chief_complaint" | "complaint_category" | "symptoms" | "symptom_onset_at" | "severity" | "pain_score" | "pain_present" | "pain_location" | "injury" | "arrival_mode" | "allergies_confirm" | "fast.face_droop" | "fast.arm_weakness" | "fast.speech_difficulty" | "fast.last_known_well" | "chest_pain.present" | "chest_pain.radiates" | "chest_pain.sweating" | "chest_pain.short_of_breath" | "chest_pain.onset" | "infection.suspected" | "infection.fever_reported" | "infection.rigors" | "child_danger.hard_to_wake" | "child_danger.no_response_to_social_cues" | "child_danger.weak_high_pitched_or_continuous_cry" | "child_danger.pale_mottled_ashen_or_blue" | "child_danger.grunting" | "child_danger.non_blanching_rash" | "child_danger.neck_stiffness" | "child_danger.seizure" | "child_danger.appears_ill_to_hcp" | "child_danger.chest_indrawing" | "child_danger.reduced_skin_turgor" | "child_danger.bulging_fontanelle" | "child_danger.focal_neuro_signs" | "child_amber.pallor_reported" | "child_amber.not_responding_normally" | "child_amber.decreased_activity" | "child_amber.wakes_only_with_prolonged_stimulation" | "child_amber.nasal_flaring" | "child_amber.crackles" | "child_amber.cap_refill_3s_or_more" | "child_amber.dry_mucous_membranes" | "child_amber.poor_feeding" | "child_amber.reduced_urine_output" | "child_amber.fever_5_days_or_more" | "child_amber.limb_or_joint_swelling" | "child_amber.non_weight_bearing" | "vitals.heart_rate" | "vitals.spo2" | "vitals.temperature_c" | "vitals.respiratory_rate" | "vitals.systolic_bp" | "vitals.diastolic_bp" | "vitals.acvpu" | "vitals.on_supplemental_o2" | "ehr_context.allergies" | "ehr_context.conditions" | "ehr_context.medications";
         /** @description One of the top reasons for the suggestion, citing the facts it rests on. */
         SuggestionReason: {
             text: string;

@@ -162,6 +162,26 @@
       ]
     },
     {
+      "linkId": "symptom_onset_at",
+      "text": "When did this start?",
+      "type": "string"
+    },
+    {
+      "linkId": "severity",
+      "text": "On a scale of 0 to 10, how bad is it now?",
+      "type": "integer",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+          "valueInteger": 0
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueInteger": 10
+        }
+      ]
+    },
+    {
       "linkId": "pain_present",
       "text": "Do you have pain now?",
       "type": "choice",
@@ -188,6 +208,11 @@
           }
         }
       ]
+    },
+    {
+      "linkId": "pain_location",
+      "text": "Where is the pain?",
+      "type": "string"
     },
     {
       "linkId": "pain_score",
@@ -273,6 +298,11 @@
           }
         }
       ]
+    },
+    {
+      "linkId": "allergies_confirm",
+      "text": "Are you allergic to any medicines?",
+      "type": "string"
     },
     {
       "linkId": "fast",

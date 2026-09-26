@@ -87,6 +87,10 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 | `pain_present` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=pain_present).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `injury` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=injury).answer.valueCoding` | cf:tri-state | yes / no / unknown |  |  | yes |
 | `arrival_mode` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=arrival_mode).answer.valueCoding` | cf:arrival-mode | walking / private_vehicle / public_ambulance / private_ambulance / other |  |  | yes |
+| `symptom_onset_at` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=symptom_onset_at).answer.valueString` |  |  |  |  | yes |
+| `severity` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=severity).answer.valueInteger` |  |  |  |  | yes |
+| `pain_location` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=pain_location).answer.valueString` |  |  |  |  | yes |
+| `allergies_confirm` | write | QuestionnaireResponse | `QuestionnaireResponse.item(linkId=allergies_confirm).answer.valueString` |  |  |  |  | yes |
 
 `not_mapped`: none. Every StructuredFacts leaf is read from or written to FHIR (test: `tests/test_fhir_mapping.py`).
 
