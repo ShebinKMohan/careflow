@@ -1,0 +1,2565 @@
+# CareFlow API contract (OpenAPI 3.1). Source of truth for routes, roles and bodies (ADR-002).
+# Research prototype. Synthetic data only. Not for clinical use.
+openapi: 3.1.0
+info:
+  title: CareFlow API
+  version: 0.1.0
+  summary: Triage check-in kiosk, nurse, doctor and companion API. Research prototype. Synthetic data only. Not
+    for clinical use.
+  description: Source of truth for routes, roles and bodies (ADR-002). Roles per operation are in `x-careflow-roles`.
+    Errors are RFC 9457 problem details. Events are listed under `webhooks` and use the Standard Webhooks envelope
+    (see events/README.md); the same envelope frames WebSocket messages (events/websocket.md). Patient identity
+    never appears in a URL.
+servers:
+- url: http://localhost:8000
+  description: Local development
+security:
+- bearerAuth: []
+tags:
+- name: health
+  description: Liveness.
+- name: auth
+  description: Staff and device tokens.
+- name: realtime
+  description: WebSocket tickets.
+- name: checkin
+  description: Private check-in paths.
+- name: consent
+  description: Consent gate.
+- name: intake
+  description: Intake conversation and facts.
+- name: vitals
+  description: Device and nurse vitals.
+- name: triage
+  description: Alerts, suggestion and the nurse decision.
+- name: nurse
+  description: Nurse worklist and tasks.
+- name: queue
+  description: Tokens and rooms.
+- name: board
+  description: Public queue board.
+- name: doctor
+  description: Doctor sessions and briefing.
+- name: companion
+  description: Patient phone.
+- name: admin
+  description: Admin status.
+- name: events
+  description: Outbound events (webhooks).
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Liveness
+      tags:
+      - health
+      x-careflow-roles: []
+      security: []
+      responses:
+        '200':
+          description: Liveness
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: ok
+                version: 0.1.0
+  /v1/auth/login:
+    post:
+      operationId: login
+      summary: Staff login
+      tags:
+      - auth
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: nurse_demo_01
+              password: dev-password-from-env
+      responses:
+        '200':
+          description: Staff login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                access_token: example-access-token-nurse
+                token_type: Bearer
+                expires_in: 3600
+                role: nurse
+                clinic_id: clinic_demo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/auth/device-token:
+    post:
+      operationId: deviceToken
+      summary: Kiosk or board device token
+      tags:
+      - auth
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceTokenRequest'
+            example:
+              device_id: kiosk_01
+              device_type: kiosk
+              device_secret: dev-device-secret-from-env
+      responses:
+        '200':
+          description: Kiosk or board device token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                access_token: example-access-token-kiosk
+                token_type: Bearer
+                expires_in: 43200
+                role: kiosk_device
+                clinic_id: clinic_demo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/auth/me:
+    get:
+      operationId: getMe
+      summary: Who am I
+      tags:
+      - auth
+      x-careflow-roles:
+      - kiosk_device
+      - patient_session
+      - nurse
+      - doctor
+      - admin
+      - board
+      - integration
+      responses:
+        '200':
+          description: Who am I
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+              example:
+                user_id: nurse_demo_01
+                role: nurse
+                clinic_id: clinic_demo
+                display_name: Nurse Demo
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/ws-ticket:
+    post:
+      operationId: createWsTicket
+      summary: One-time WebSocket ticket
+      tags:
+      - realtime
+      description: Returns a single-use ticket valid for 30 s. Connect to /v1/ws/staff or /v1/ws/sessions/{session_id}
+        with ?ticket=... . A JWT never goes in a URL or frame.
+      x-careflow-roles:
+      - kiosk_device
+      - patient_session
+      - nurse
+      - doctor
+      - board
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WsTicketRequest'
+            example:
+              channel: session
+              session_id: ses_routine
+      responses:
+        '200':
+          description: One-time WebSocket ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WsTicket'
+              example:
+                ticket: ws-example-ticket-routine
+                channel: session
+                session_id: ses_routine
+                expires_at: '2026-09-26T09:01:30Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/checkin/keypad:
+    post:
+      operationId: checkinKeypad
+      summary: Check in with the silent keypad
+      tags:
+      - checkin
+      x-careflow-roles:
+      - kiosk_device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeypadCheckinRequest'
+            example:
+              clinic_id: clinic_demo
+              kiosk_id: kiosk_01
+              digits: '100001'
+      responses:
+        '200':
+          description: Check in with the silent keypad
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinResult'
+              example:
+                session_id: ses_chest_pain
+                session_token: example-session-token-chest-pain
+                patient_display: M. S.
+                language: en
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/checkin/id-tap:
+    post:
+      operationId: checkinIdTap
+      summary: Check in with the mock ID tap
+      tags:
+      - checkin
+      x-careflow-roles:
+      - kiosk_device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdTapCheckinRequest'
+            example:
+              mock_card_payload: MOCKID:784-1955-0000002-1
+      responses:
+        '200':
+          description: Check in with the mock ID tap
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinResult'
+              example:
+                session_id: ses_stroke
+                session_token: example-session-token-stroke
+                patient_display: F. A.
+                language: en
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/qr:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: issueQrToken
+      summary: Issue a one-time QR hand-over token
+      tags:
+      - checkin
+      x-careflow-roles:
+      - kiosk_device
+      responses:
+        '200':
+          description: Issue a one-time QR hand-over token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QrToken'
+              example:
+                qr_token: qr-example-token-routine
+                expires_at: '2026-09-26T09:05:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/checkin/qr/claim:
+    post:
+      operationId: claimQrToken
+      summary: Claim the QR hand-over on the phone
+      tags:
+      - checkin
+      description: The single-use qr_token in the body is the credential, so no bearer is needed. It fails with
+        401 once used or expired.
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QrClaimRequest'
+            example:
+              qr_token: qr-example-token-routine
+      responses:
+        '200':
+          description: Claim the QR hand-over on the phone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinResult'
+              example:
+                session_id: ses_routine
+                session_token: example-session-token-routine
+                patient_display: L. K.
+                language: en
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/consent:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: recordConsent
+      summary: Record camera and voice consent
+      tags:
+      - consent
+      x-careflow-roles:
+      - patient_session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentRequest'
+            example:
+              camera: false
+              voice: true
+      responses:
+        '200':
+          description: Record camera and voice consent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentRecord'
+              example:
+                session_id: ses_routine
+                camera: false
+                voice: true
+                recorded_at: '2026-09-26T09:00:30Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/turns:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: postTurn
+      summary: Send one intake turn
+      tags:
+      - intake
+      x-careflow-roles:
+      - patient_session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TurnRequest'
+            example:
+              input_mode: text
+              text: I have had a sore throat for five days, it is getting better.
+              language: en
+      responses:
+        '200':
+          description: Send one intake turn
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TurnResponse'
+              example:
+                turn_id: turn_02
+                assistant_text: Thank you. On a scale of 0 to 10, how bad is the pain?
+                done: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/facts:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getFacts
+      summary: Structured facts for a session
+      tags:
+      - intake
+      x-careflow-roles:
+      - nurse
+      - doctor
+      responses:
+        '200':
+          description: Structured facts for a session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StructuredFacts'
+              example:
+                session_id: ses_routine
+                clinic_id: clinic_demo
+                language: en
+                patient:
+                  fhir_patient_id: persona-routine
+                  age_years:
+                    fact_id: f_01M3EF2PM000000000035FW01Q
+                    provenance: EHR
+                    source:
+                      kind: fhir
+                      resource_type: Patient
+                      id: persona-routine
+                    recorded_at: '2026-09-26T09:00:00Z'
+                    value: 34
+                  sex:
+                    fact_id: f_01M3EF2PM000000000035FW01R
+                    provenance: EHR
+                    source:
+                      kind: fhir
+                      resource_type: Patient
+                      id: persona-routine
+                    recorded_at: '2026-09-26T09:00:00Z'
+                    value:
+                      system: http://hl7.org/fhir/administrative-gender
+                      code: female
+                      display: Female
+                chief_complaint:
+                  fact_id: f_01M3EF2PM000000000035FW01S
+                  provenance: PATIENT_STATED
+                  source:
+                    kind: transcript_span
+                    turn_id: turn_01
+                    start: 13
+                    end: 60
+                    quote: sore throat for five days, it is getting better
+                  recorded_at: '2026-09-26T09:01:00Z'
+                  value: Sore throat for five days, improving
+                symptoms:
+                - name:
+                    fact_id: f_01M3EF2PM000000000035FW01T
+                    provenance: PATIENT_STATED
+                    source:
+                      kind: transcript_span
+                      turn_id: turn_01
+                      start: 13
+                      end: 24
+                      quote: sore throat
+                    recorded_at: '2026-09-26T09:01:00Z'
+                    value: sore_throat
+                  onset:
+                    fact_id: f_01M3EF2PM000000000035FW01V
+                    provenance: PATIENT_STATED
+                    source:
+                      kind: transcript_span
+                      turn_id: turn_01
+                      start: 25
+                      end: 38
+                      quote: for five days
+                    recorded_at: '2026-09-26T09:01:00Z'
+                    value: P5D
+                  severity: mild
+                pain_score:
+                  fact_id: f_01M3EF2PM000000000035FW01W
+                  provenance: PATIENT_STATED
+                  source:
+                    kind: transcript_span
+                    turn_id: turn_02
+                    start: 12
+                    end: 21
+                    quote: about a 2
+                  recorded_at: '2026-09-26T09:01:00Z'
+                  value: 2
+                vitals:
+                  heart_rate:
+                    fact_id: f_01M3EF2PM000000000035FW01X
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_0017
+                    recorded_at: '2026-09-26T09:03:00Z'
+                    value: 72
+                    unit: /min
+                  spo2:
+                    fact_id: f_01M3EF2PM000000000035FW01Y
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_0018
+                    recorded_at: '2026-09-26T09:03:00Z'
+                    value: 99
+                    unit: '%'
+                  temperature_c:
+                    fact_id: f_01M3EF2PM000000000035FW01Z
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_0019
+                    recorded_at: '2026-09-26T09:03:00Z'
+                    value: 36.7
+                    unit: Cel
+                  systolic_bp:
+                    fact_id: f_01M3EF2PM000000000035FW020
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_0020
+                    recorded_at: '2026-09-26T09:03:00Z'
+                    value: 118
+                    unit: mm[Hg]
+                  diastolic_bp:
+                    fact_id: f_01M3EF2PM000000000035FW021
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_0021
+                    recorded_at: '2026-09-26T09:03:00Z'
+                    value: 76
+                    unit: mm[Hg]
+                extraction_status: complete
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/sessions/{session_id}/status:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getSessionStatus
+      summary: Patient-safe session status
+      tags:
+      - intake
+      description: Never returns an urgency level or an alert.
+      x-careflow-roles:
+      - patient_session
+      - kiosk_device
+      responses:
+        '200':
+          description: Patient-safe session status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatus'
+              example:
+                state: queued
+                token_code: G-031
+                wait_estimate_min: 25
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/sessions/{session_id}/vitals:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: postDeviceVitals
+      summary: Device vitals reading
+      tags:
+      - vitals
+      x-careflow-roles:
+      - kiosk_device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceVitalsReading'
+            example:
+              device_id: sim_vitals_01
+              reading_id: rd_0042
+              measured_at: '2026-09-26T09:03:00Z'
+              heart_rate: 125
+              spo2: 93
+              temperature_c: 39.4
+      responses:
+        '200':
+          description: Device vitals reading
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VitalsAccepted'
+              example:
+                session_id: ses_sepsis_partial
+                fact_ids:
+                - f_01M3EF2PM000000000035FW01D
+                - f_01M3EF2PM000000000035FW01E
+                - f_01M3EF2PM000000000035FW01F
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/nurse/sessions/{session_id}/vitals:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: postNurseVitals
+      summary: Nurse vitals that complete the NEWS2
+      tags:
+      - vitals
+      x-careflow-roles:
+      - nurse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NurseVitalsRequest'
+            example:
+              respiratory_rate: 26
+              systolic_bp: 88
+              acvpu: V
+              on_supplemental_o2: false
+      responses:
+        '200':
+          description: Nurse vitals that complete the NEWS2
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriageView'
+              example:
+                session_id: ses_sepsis_partial
+                status: awaiting_nurse
+                alerts:
+                - alert_id: alr_sepsis_partial
+                  session_id: ses_sepsis_partial
+                  rule_id: SEPSIS_NEWS2
+                  ruleset_version: 2026.1.0
+                  severity: critical
+                  evidence_fact_ids: &id001
+                  - f_01M3EF2PM000000000035FW01B
+                  - f_01M3EF2PM000000000035FW01D
+                  - f_01M3EF2PM000000000035FW01F
+                  - f_01M3EF2PM000000000035FW01E
+                  required_action: sepsis_review_now
+                  display_text: 'Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review.'
+                  partial: false
+                  missing_inputs: []
+                  raised_at: '2026-09-26T09:02:10Z'
+                suggestion: &id002
+                  suggestion_id: sug_sepsis_partial
+                  session_id: ses_sepsis_partial
+                  level: 2
+                  scale: KTAS
+                  confidence: 0.64
+                  reasons:
+                  - text: Fever and rigors with a productive cough
+                    fact_ids:
+                    - f_01M3EF2PM000000000035FW01B
+                    - f_01M3EF2PM000000000035FW01C
+                    - f_01M3EF2PM000000000035FW01K
+                  - text: Fast heart rate and low oxygen saturation
+                    fact_ids:
+                    - f_01M3EF2PM000000000035FW01D
+                    - f_01M3EF2PM000000000035FW01E
+                  model_id: careflow-ktas-gbm
+                  model_version: 0.1.0
+                  created_at: '2026-09-26T09:04:00Z'
+                needed_facts: []
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/triage:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getTriage
+      summary: Alerts and the urgency suggestion
+      tags:
+      - triage
+      x-careflow-roles:
+      - nurse
+      - doctor
+      responses:
+        '200':
+          description: Alerts and the urgency suggestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriageView'
+              example:
+                session_id: ses_sepsis_partial
+                status: awaiting_nurse
+                alerts:
+                - alert_id: alr_sepsis_partial
+                  session_id: ses_sepsis_partial
+                  rule_id: SEPSIS_NEWS2
+                  ruleset_version: 2026.1.0
+                  severity: critical
+                  evidence_fact_ids: *id001
+                  required_action: sepsis_review_now
+                  display_text: 'Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review. (partial
+                    NEWS2 (kiosk vitals only))'
+                  partial: true
+                  missing_inputs:
+                  - vitals.respiratory_rate
+                  - vitals.systolic_bp
+                  - vitals.acvpu
+                  - vitals.on_supplemental_o2
+                  raised_at: '2026-09-26T09:02:10Z'
+                suggestion: *id002
+                needed_facts:
+                - key: vitals.respiratory_rate
+                  audience: nurse
+                  reason: news2_incomplete
+                - key: vitals.systolic_bp
+                  audience: nurse
+                  reason: news2_incomplete
+                - key: vitals.acvpu
+                  audience: nurse
+                  reason: news2_incomplete
+                - key: vitals.on_supplemental_o2
+                  audience: nurse
+                  reason: news2_incomplete
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/nurse/sessions/{session_id}/decision:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: postNurseDecision
+      summary: Confirm or override the urgency level
+      tags:
+      - triage
+      description: 'Safety rule 3: the only route that makes a level final.'
+      x-careflow-roles:
+      - nurse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NurseDecision'
+            example: &id003
+              decision_id: dec_chest_pain
+              session_id: ses_chest_pain
+              suggestion_id: sug_chest_pain
+              action: CONFIRM
+              final_level: 2
+              scale: KTAS
+              nurse_user_id: nurse_demo_01
+              acknowledged_alert_ids:
+              - alr_chest_pain
+              decided_at: '2026-09-26T09:06:00Z'
+      responses:
+        '200':
+          description: Confirm or override the urgency level
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionResult'
+              example:
+                decision: *id003
+                token:
+                  token_id: tok_chest_pain
+                  session_id: ses_chest_pain
+                  token_code: A-014
+                  department: emergency
+                  room: Resus 2
+                  status: waiting
+                  issued_at: '2026-09-26T09:06:05Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/nurse/sessions/{session_id}/tasks/{task_id}/complete:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      operationId: completeTask
+      summary: Mark a task (e.g. the 10-minute ECG) done
+      tags:
+      - nurse
+      x-careflow-roles:
+      - nurse
+      responses:
+        '200':
+          description: Mark a task (e.g. the 10-minute ECG) done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                task_id: tsk_chest_pain_ecg
+                session_id: ses_chest_pain
+                kind: ecg_within_10_min
+                status: completed
+                due_at: '2026-09-26T09:10:00Z'
+                completed_at: '2026-09-26T09:08:30Z'
+                completed_by: nurse_demo_01
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/nurse/worklist:
+    get:
+      operationId: getNurseWorklist
+      summary: Nurse worklist
+      tags:
+      - nurse
+      x-careflow-roles:
+      - nurse
+      responses:
+        '200':
+          description: Nurse worklist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worklist'
+              example:
+              - session_id: ses_chest_pain
+                patient_display: M. S.
+                arrived_at: '2026-09-26T09:00:00Z'
+                state: awaiting_nurse
+                alerts:
+                - alert_id: alr_chest_pain
+                  rule_id: CHEST_PAIN_ECG_10MIN
+                  severity: critical
+                  partial: false
+                suggested_level: 2
+                scale: KTAS
+                open_tasks:
+                - task_id: tsk_chest_pain_ecg
+                  session_id: ses_chest_pain
+                  kind: ecg_within_10_min
+                  status: open
+                  due_at: '2026-09-26T09:10:00Z'
+              - session_id: ses_routine
+                patient_display: L. K.
+                arrived_at: '2026-09-26T09:01:00Z'
+                state: queued
+                token_code: G-031
+                alerts: []
+                suggested_level: 5
+                confirmed_level: 5
+                scale: KTAS
+                open_tasks: []
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/sessions/{session_id}/token:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getSessionToken
+      summary: The session's queue token
+      tags:
+      - queue
+      x-careflow-roles:
+      - patient_session
+      - nurse
+      responses:
+        '200':
+          description: The session's queue token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueToken'
+              example: &id004
+                token_id: tok_routine
+                session_id: ses_routine
+                token_code: G-031
+                department: general
+                status: waiting
+                issued_at: '2026-09-26T09:07:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/board/{department}:
+    parameters:
+    - $ref: '#/components/parameters/Department'
+    get:
+      operationId: getBoard
+      summary: Queue board (read-only)
+      tags:
+      - board
+      x-careflow-roles:
+      - board
+      responses:
+        '200':
+          description: Queue board (read-only)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+              example:
+              - token_code: A-014
+                room: Resus 2
+                status: called
+              - token_code: G-031
+                room: null
+                status: waiting
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/queue/{department}/call-next:
+    parameters:
+    - $ref: '#/components/parameters/Department'
+    post:
+      operationId: callNext
+      summary: Call the next token
+      tags:
+      - queue
+      x-careflow-roles:
+      - nurse
+      responses:
+        '200':
+          description: Call the next token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallNextResult'
+              example:
+                token:
+                  token_id: tok_chest_pain
+                  session_id: ses_chest_pain
+                  token_code: A-014
+                  department: emergency
+                  room: Resus 2
+                  status: called
+                  issued_at: '2026-09-26T09:06:05Z'
+                  called_at: '2026-09-26T09:08:00Z'
+                  grace_until: '2026-09-26T09:18:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/queue/tokens/{token_id}/arrived:
+    parameters:
+    - $ref: '#/components/parameters/TokenId'
+    post:
+      operationId: markArrived
+      summary: Patient arrived at the room
+      tags:
+      - queue
+      x-careflow-roles:
+      - nurse
+      responses:
+        '200':
+          description: Patient arrived at the room
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueToken'
+              example:
+                token_id: tok_chest_pain
+                session_id: ses_chest_pain
+                token_code: A-014
+                department: emergency
+                room: Resus 2
+                status: arrived
+                issued_at: '2026-09-26T09:06:05Z'
+                called_at: '2026-09-26T09:08:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/queue/tokens/{token_id}/no-show:
+    parameters:
+    - $ref: '#/components/parameters/TokenId'
+    post:
+      operationId: markNoShow
+      summary: Mark a called token as a no-show
+      tags:
+      - queue
+      x-careflow-roles:
+      - nurse
+      responses:
+        '200':
+          description: Mark a called token as a no-show
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueToken'
+              example:
+                token_id: tok_no_show
+                session_id: ses_no_show
+                token_code: G-032
+                department: general
+                room: Room 4
+                status: no_show
+                issued_at: '2026-09-26T09:10:00Z'
+                called_at: '2026-09-26T09:30:00Z'
+                grace_until: '2026-09-26T09:40:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/doctor/sessions:
+    get:
+      operationId: getDoctorSessions
+      summary: Confirmed sessions for the doctor
+      tags:
+      - doctor
+      x-careflow-roles:
+      - doctor
+      responses:
+        '200':
+          description: Confirmed sessions for the doctor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoctorSessions'
+              example:
+              - session_id: ses_chest_pain
+                token_code: A-014
+                arrived_at: '2026-09-26T09:00:00Z'
+                confirmed_level: 2
+                scale: KTAS
+                alert_chips:
+                - alert_id: alr_chest_pain
+                  rule_id: CHEST_PAIN_ECG_10MIN
+                  severity: critical
+                  partial: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/doctor/sessions/{session_id}/briefing:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getBriefing
+      summary: Doctor briefing with provenance
+      tags:
+      - doctor
+      description: 'Safety rule 4: every item carries a provenance tag.'
+      x-careflow-roles:
+      - doctor
+      responses:
+        '200':
+          description: Doctor briefing with provenance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Briefing'
+              example:
+                session_id: ses_chest_pain
+                generated_at: '2026-09-26T09:07:00Z'
+                sections:
+                - title: Presenting complaint
+                  items:
+                  - text: Crushing chest pain for about an hour
+                    provenance: PATIENT_STATED
+                    source:
+                      kind: transcript_span
+                      turn_id: turn_01
+                      start: 9
+                      end: 34
+                      quote: crushing pain in my chest
+                    fact_id: f_01M3EF2PM000000000035FW008
+                - title: Vital signs
+                  items:
+                  - text: Heart rate 104 /min
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_0001
+                    fact_id: f_01M3EF2PM000000000035FW00B
+                - title: History
+                  items:
+                  - text: Hypertension
+                    provenance: EHR
+                    source:
+                      kind: fhir
+                      resource_type: Condition
+                      id: persona-chest-pain-htn
+                    fact_id: f_01M3EF2PM000000000035FW00G
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/companion/status:
+    get:
+      operationId: getCompanionStatus
+      summary: Queue position on the phone
+      tags:
+      - companion
+      x-careflow-roles:
+      - patient_session
+      responses:
+        '200':
+          description: Queue position on the phone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanionStatus'
+              example:
+                position: 3
+                wait_estimate_minutes: 25
+                token: *id004
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/companion/feels-worse:
+    post:
+      operationId: postFeelsWorse
+      summary: I feel worse
+      tags:
+      - companion
+      description: 'Safety feature: re-alerts the nurse immediately.'
+      x-careflow-roles:
+      - patient_session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeelsWorseRequest'
+            example:
+              note: My throat is much more painful now.
+      responses:
+        '202':
+          description: I feel worse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeelsWorseAck'
+              example:
+                flag_id: flg_routine_01
+                received_at: '2026-09-26T09:40:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/companion/ask:
+    post:
+      operationId: askTheClinic
+      summary: Ask the clinic (phone only)
+      tags:
+      - companion
+      description: 'Safety rule 2: medical questions are refused with a fixed safe message (refused_medical: true)
+        and flagged to the nurse.'
+      x-careflow-roles:
+      - patient_session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AskRequest'
+            example:
+              question: Where is the pharmacy?
+              language: en
+      responses:
+        '200':
+          description: Ask the clinic (phone only)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AskResponse'
+              example:
+                answer: The pharmacy is on the ground floor next to the main entrance and is open until 22:00.
+                citations:
+                - doc_id: doc_pharmacy
+                  title: Pharmacy and prescriptions
+                  chunk_id: doc_pharmacy_c02
+                refused_medical: false
+                dont_know: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/admin/providers:
+    get:
+      operationId: getProviders
+      summary: Model provider per task
+      tags:
+      - admin
+      x-careflow-roles:
+      - admin
+      responses:
+        '200':
+          description: Model provider per task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvidersResponse'
+              example:
+                tasks:
+                - task: conversation
+                  provider: local
+                  model: qwen3.5-9b-4bit
+                  available: true
+                - task: eval_judge
+                  provider: cli
+                  tool: codex
+                  available: false
+                  detail: offline only
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/admin/status:
+    get:
+      operationId: getAdminStatus
+      summary: Service status
+      tags:
+      - admin
+      x-careflow-roles:
+      - admin
+      responses:
+        '200':
+          description: Service status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminStatus'
+              example:
+                api_version: 0.1.0
+                ruleset_version: 2026.1.0
+                services:
+                - name: postgres
+                  status: ok
+                - name: hapi-fhir
+                  status: ok
+                - name: mlx-lm
+                  status: down
+                  detail: not started
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+webhooks:
+  alert.raised:
+    post:
+      operationId: onAlertRaised
+      summary: alert.raised event
+      tags:
+      - events
+      description: A safety rule raised an alert for a session. No name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRaisedEvent'
+            example:
+              type: alert.raised
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_chest_pain
+                alert:
+                  alert_id: alr_chest_pain
+                  session_id: ses_chest_pain
+                  rule_id: CHEST_PAIN_ECG_10MIN
+                  ruleset_version: 2026.1.0
+                  severity: critical
+                  evidence_fact_ids:
+                  - f_01M3EF2PM000000000035FW001
+                  - f_01M3EF2PM000000000035FW003
+                  - f_01M3EF2PM000000000035FW004
+                  required_action: ecg_within_10_min
+                  display_text: 'Chest pain: ECG within 10 minutes of arrival.'
+                  partial: false
+                  missing_inputs: []
+                  raised_at: '2026-09-26T09:02:10Z'
+                  deadline_at: '2026-09-26T09:10:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  triage.suggested:
+    post:
+      operationId: onTriageSuggested
+      summary: triage.suggested event
+      tags:
+      - events
+      description: A model suggested an urgency level; the nurse must still confirm it. Reasons are not included
+        (model text). No name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriageSuggestedEvent'
+            example:
+              type: triage.suggested
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_chest_pain
+                suggestion_id: sug_chest_pain
+                level: 2
+                scale: KTAS
+                confidence: 0.71
+                model_id: careflow-ktas-gbm
+                model_version: 0.1.0
+                created_at: '2026-09-26T09:04:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  triage.confirmed:
+    post:
+      operationId: onTriageConfirmed
+      summary: triage.confirmed event
+      tags:
+      - events
+      description: The nurse confirmed or overrode the urgency level; the level is now final. The override note
+        is not included (free text). No name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriageConfirmedEvent'
+            example:
+              type: triage.confirmed
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_child_drowsy
+                decision_id: dec_child_drowsy
+                suggestion_id: sug_child_drowsy
+                action: OVERRIDE
+                final_level: 1
+                scale: KTAS
+                override_reason_code: clinical_judgement
+                nurse_user_id: nurse_demo_01
+                decided_at: '2026-09-26T09:06:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  token.called:
+    post:
+      operationId: onTokenCalled
+      summary: token.called event
+      tags:
+      - events
+      description: A queue token was called to a room. No name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenCalledEvent'
+            example:
+              type: token.called
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_chest_pain
+                token_id: tok_chest_pain
+                token_code: A-014
+                department: emergency
+                room: Resus 2
+                called_at: '2026-09-26T09:08:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  intake.completed:
+    post:
+      operationId: onIntakeCompleted
+      summary: intake.completed event
+      tags:
+      - events
+      description: The intake conversation finished and the structured facts are ready for the nurse. No name, date
+        of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntakeCompletedEvent'
+            example:
+              type: intake.completed
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_routine
+                extraction_status: complete
+                completed_at: '2026-09-26T09:03:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  patient.feels_worse:
+    post:
+      operationId: onPatientFeelsWorse
+      summary: patient.feels_worse event
+      tags:
+      - events
+      description: The waiting patient pressed 'I feel worse' on their phone. The note stays in the API, never in
+        the event. No name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientFeelsWorseEvent'
+            example:
+              type: patient.feels_worse
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_routine
+                flag_id: flg_routine_01
+                reported_at: '2026-09-26T09:40:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+  nurse.flag:
+    post:
+      operationId: onNurseFlag
+      summary: nurse.flag event
+      tags:
+      - events
+      description: Something needs a nurse's attention, e.g. the phone assistant refused a medical question. No
+        name, date of birth or free text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NurseFlagEvent'
+            example:
+              type: nurse.flag
+              timestamp: '2026-09-26T09:05:00Z'
+              data:
+                clinic_id: clinic_demo
+                session_id: ses_routine
+                flag_id: flg_routine_02
+                reason: medical_question
+                raised_at: '2026-09-26T09:42:00Z'
+      responses:
+        '204':
+          description: Received. Any 2xx acknowledges delivery.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      description: Opaque session id (never patient identity).
+      schema: &id005
+        $ref: ./schemas/fact.schema.json#/$defs/Identifier
+      example: ses_chest_pain
+    TokenId:
+      name: token_id
+      in: path
+      required: true
+      description: Opaque queue token id.
+      schema: *id005
+      example: tok_chest_pain
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      description: Opaque task id.
+      schema: *id005
+      example: tsk_chest_pain_ecg
+    Department:
+      name: department
+      in: path
+      required: true
+      description: Department id from config/rooms.yaml.
+      schema: *id005
+      example: emergency
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Unauthorized
+            status: 401
+            detail: A valid bearer token is required.
+    Forbidden:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Forbidden
+            status: 403
+            detail: This role may not call this route.
+    Notfound:
+      description: Not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Not found
+            status: 404
+            detail: No such session.
+    Conflict:
+      description: Conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Conflict
+            status: 409
+            detail: The session is not in a state that allows this.
+    Unprocessablecontent:
+      description: Unprocessable content
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Unprocessable content
+            status: 422
+            detail: The request failed validation.
+            errors:
+            - loc: body.digits
+              msg: String should match pattern '^[0-9]{6}$'
+  schemas:
+    Problem:
+      type: object
+      description: RFC 9457 problem details (application/problem+json). Never contains PHI.
+      properties:
+        type:
+          type: string
+          description: URI reference identifying the problem type.
+          default: about:blank
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+        instance:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: string
+              msg:
+                type: string
+            required:
+            - loc
+            - msg
+            additionalProperties: false
+          description: Field-level validation errors (422 only).
+      required:
+      - title
+      - status
+      additionalProperties: false
+    Role:
+      type: string
+      enum:
+      - kiosk_device
+      - patient_session
+      - nurse
+      - doctor
+      - admin
+      - board
+      - integration
+      description: Caller role carried in the JWT.
+    StructuredFacts:
+      $ref: ./schemas/structured-facts.schema.json#/$defs/StructuredFacts
+    UrgencySuggestion:
+      $ref: ./schemas/urgency-suggestion.schema.json#/$defs/UrgencySuggestion
+    Alert:
+      $ref: ./schemas/alert.schema.json#/$defs/Alert
+    NurseDecision:
+      $ref: ./schemas/nurse-decision.schema.json#/$defs/NurseDecision
+    NeededFact:
+      $ref: ./schemas/structured-facts.schema.json#/$defs/NeededFact
+    Language:
+      $ref: ./schemas/structured-facts.schema.json#/$defs/Language
+    Provenance:
+      $ref: ./schemas/fact.schema.json#/$defs/Provenance
+    SourceRef:
+      $ref: ./schemas/fact.schema.json#/$defs/SourceRef
+    RuleId:
+      $ref: ./schemas/alert.schema.json#/$defs/RuleId
+    AlertSeverity:
+      $ref: ./schemas/alert.schema.json#/$defs/AlertSeverity
+    TriageScale:
+      $ref: ./schemas/urgency-suggestion.schema.json#/$defs/TriageScale
+    UrgencyLevel:
+      $ref: ./schemas/urgency-suggestion.schema.json#/$defs/UrgencyLevel
+    AcvpuCode:
+      $ref: ./schemas/structured-facts.schema.json#/$defs/AcvpuCode
+    LoginRequest:
+      type: object
+      description: Staff login (dev users only; synthetic).
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 64
+        password:
+          type: string
+          minLength: 1
+          maxLength: 256
+          writeOnly: true
+      required:
+      - username
+      - password
+      additionalProperties: false
+    DeviceTokenRequest:
+      type: object
+      description: A kiosk or queue-board device exchanges its provisioned secret for a device token.
+      properties:
+        device_id: *id005
+        device_type:
+          type: string
+          enum:
+          - kiosk
+          - board
+        device_secret:
+          type: string
+          minLength: 16
+          maxLength: 256
+          writeOnly: true
+      required:
+      - device_id
+      - device_type
+      - device_secret
+      additionalProperties: false
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          const: Bearer
+        expires_in:
+          type: integer
+          minimum: 1
+          description: Seconds.
+        role:
+          $ref: '#/components/schemas/Role'
+        clinic_id: *id005
+      required:
+      - access_token
+      - token_type
+      - expires_in
+      - role
+      - clinic_id
+      additionalProperties: false
+    Me:
+      type: object
+      properties:
+        user_id: *id005
+        role:
+          $ref: '#/components/schemas/Role'
+        clinic_id: *id005
+        display_name:
+          type: string
+          maxLength: 64
+      required:
+      - user_id
+      - role
+      - clinic_id
+      additionalProperties: false
+    WsTicketRequest:
+      type: object
+      description: session_id is required for the session channel.
+      properties:
+        channel:
+          type: string
+          enum:
+          - staff
+          - session
+        session_id: *id005
+      required:
+      - channel
+      additionalProperties: false
+    WsTicket:
+      type: object
+      description: Single-use ticket, valid for 30 s. Connect with ?ticket=...
+      properties:
+        ticket:
+          type: string
+          minLength: 16
+        channel:
+          type: string
+          enum:
+          - staff
+          - session
+        session_id: *id005
+        expires_at: &id006
+          type: string
+          format: date-time
+      required:
+      - ticket
+      - channel
+      - expires_at
+      additionalProperties: false
+    KeypadCheckinRequest:
+      type: object
+      properties:
+        clinic_id: *id005
+        kiosk_id: *id005
+        digits:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Keypad ID. Only ever in the body, never in a URL.
+      required:
+      - clinic_id
+      - kiosk_id
+      - digits
+      additionalProperties: false
+    IdTapCheckinRequest:
+      type: object
+      properties:
+        mock_card_payload:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Payload of the mock ID card (Emirates ID / UAE Pass style mock). Synthetic only.
+      required:
+      - mock_card_payload
+      additionalProperties: false
+    CheckinResult:
+      type: object
+      properties:
+        session_id: *id005
+        session_token:
+          type: string
+          description: Bearer JWT with role patient_session, scoped to this session.
+        patient_display:
+          type: string
+          minLength: 1
+          maxLength: 8
+          description: Initials only, e.g. 'M. S.'.
+        language:
+          $ref: '#/components/schemas/Language'
+      required:
+      - session_id
+      - session_token
+      - patient_display
+      - language
+      additionalProperties: false
+    QrToken:
+      type: object
+      description: One-time token shown as a QR code on the kiosk.
+      properties:
+        qr_token:
+          type: string
+          minLength: 16
+        expires_at: *id006
+      required:
+      - qr_token
+      - expires_at
+      additionalProperties: false
+    QrClaimRequest:
+      type: object
+      properties:
+        qr_token:
+          type: string
+          minLength: 16
+      required:
+      - qr_token
+      additionalProperties: false
+    ConsentRequest:
+      type: object
+      properties:
+        camera:
+          type: boolean
+        voice:
+          type: boolean
+      required:
+      - camera
+      - voice
+      additionalProperties: false
+    ConsentRecord:
+      type: object
+      properties:
+        session_id: *id005
+        camera:
+          type: boolean
+        voice:
+          type: boolean
+        recorded_at: *id006
+      required:
+      - session_id
+      - camera
+      - voice
+      - recorded_at
+      additionalProperties: false
+    TurnRequest:
+      type: object
+      properties:
+        input_mode:
+          type: string
+          enum:
+          - tap
+          - text
+          - voice
+        text:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        language:
+          $ref: '#/components/schemas/Language'
+      required:
+      - input_mode
+      - text
+      - language
+      additionalProperties: false
+    TurnResponse:
+      type: object
+      properties:
+        turn_id: *id005
+        assistant_text:
+          type: string
+          maxLength: 2000
+        done:
+          type: boolean
+      required:
+      - turn_id
+      - assistant_text
+      - done
+      additionalProperties: false
+    SessionState:
+      type: string
+      enum:
+      - intake
+      - awaiting_nurse
+      - queued
+      - called
+      - arrived
+      - no_show
+      - closed
+    SessionStatus:
+      type: object
+      description: What the patient may see. Never a level or an alert.
+      properties:
+        state:
+          $ref: '#/components/schemas/SessionState'
+        token_code:
+          type: string
+        room:
+          type: string
+        wait_estimate_min:
+          type: integer
+          minimum: 0
+      required:
+      - state
+      additionalProperties: false
+    DeviceVitalsReading:
+      type: object
+      description: One reading from the (simulated) vitals device.
+      properties:
+        device_id: *id005
+        reading_id: *id005
+        measured_at: *id006
+        heart_rate:
+          type: number
+          minimum: 0
+          description: /min
+        spo2:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: '%'
+        temperature_c:
+          type: number
+          description: Cel
+        systolic_bp:
+          type: number
+          minimum: 0
+          description: mm[Hg]
+        diastolic_bp:
+          type: number
+          minimum: 0
+          description: mm[Hg]
+      required:
+      - device_id
+      - reading_id
+      - measured_at
+      additionalProperties: false
+    VitalsAccepted:
+      type: object
+      properties:
+        session_id: *id005
+        fact_ids:
+          type: array
+          items:
+            $ref: ./schemas/fact.schema.json#/$defs/FactId
+      required:
+      - session_id
+      - fact_ids
+      additionalProperties: false
+    NurseVitalsRequest:
+      type: object
+      description: Nurse-entered vitals that complete the NEWS2.
+      properties:
+        respiratory_rate:
+          type: number
+          minimum: 0
+          description: /min -> vitals.respiratory_rate
+        systolic_bp:
+          type: number
+          minimum: 0
+          description: mm[Hg] -> vitals.systolic_bp
+        acvpu:
+          $ref: '#/components/schemas/AcvpuCode'
+        on_supplemental_o2:
+          type: boolean
+          description: -> vitals.on_supplemental_o2 (yes/no)
+      additionalProperties: false
+      minProperties: 1
+    TriageStatus:
+      type: string
+      enum:
+      - awaiting_nurse
+      - confirmed
+    TriageView:
+      type: object
+      properties:
+        session_id: *id005
+        status:
+          $ref: '#/components/schemas/TriageStatus'
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alert'
+        suggestion:
+          oneOf:
+          - $ref: '#/components/schemas/UrgencySuggestion'
+          - type: 'null'
+        needed_facts:
+          type: array
+          items:
+            $ref: '#/components/schemas/NeededFact'
+        decision:
+          $ref: '#/components/schemas/NurseDecision'
+      required:
+      - session_id
+      - status
+      - alerts
+      - suggestion
+      additionalProperties: false
+    TaskKind:
+      type: string
+      enum:
+      - ecg_within_10_min
+    Task:
+      type: object
+      properties:
+        task_id: *id005
+        session_id: *id005
+        kind:
+          $ref: '#/components/schemas/TaskKind'
+        status:
+          type: string
+          enum:
+          - open
+          - completed
+        due_at: *id006
+        completed_at: *id006
+        completed_by: *id005
+      required:
+      - task_id
+      - session_id
+      - kind
+      - status
+      additionalProperties: false
+    DecisionResult:
+      type: object
+      description: The final level and the queue token it produced.
+      properties:
+        decision:
+          $ref: '#/components/schemas/NurseDecision'
+        token:
+          oneOf:
+          - $ref: '#/components/schemas/QueueToken'
+          - type: 'null'
+      required:
+      - decision
+      - token
+      additionalProperties: false
+    AlertChip:
+      type: object
+      properties:
+        alert_id: *id005
+        rule_id:
+          $ref: '#/components/schemas/RuleId'
+        severity:
+          $ref: '#/components/schemas/AlertSeverity'
+        partial:
+          type: boolean
+      required:
+      - alert_id
+      - rule_id
+      - severity
+      - partial
+      additionalProperties: false
+    WorklistItem:
+      type: object
+      properties:
+        session_id: *id005
+        patient_display:
+          type: string
+          maxLength: 8
+        arrived_at: *id006
+        state:
+          $ref: '#/components/schemas/SessionState'
+        token_code:
+          type: string
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertChip'
+        suggested_level:
+          $ref: '#/components/schemas/UrgencyLevel'
+        confirmed_level:
+          $ref: '#/components/schemas/UrgencyLevel'
+        scale:
+          $ref: '#/components/schemas/TriageScale'
+        open_tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+      required:
+      - session_id
+      - patient_display
+      - arrived_at
+      - state
+      - alerts
+      - open_tasks
+      additionalProperties: false
+    Worklist:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorklistItem'
+    QueueTokenStatus:
+      type: string
+      enum:
+      - waiting
+      - called
+      - arrived
+      - no_show
+      - closed
+    QueueToken:
+      type: object
+      properties:
+        token_id: *id005
+        session_id: *id005
+        token_code:
+          type: string
+          pattern: ^[A-Z]-[0-9]{3}$
+        department: *id005
+        room:
+          type: string
+          maxLength: 32
+        status:
+          $ref: '#/components/schemas/QueueTokenStatus'
+        issued_at: *id006
+        called_at: *id006
+        grace_until:
+          type: string
+          format: date-time
+          description: No-show grace window end.
+      required:
+      - token_id
+      - session_id
+      - token_code
+      - department
+      - status
+      - issued_at
+      additionalProperties: false
+    BoardEntry:
+      type: object
+      description: Only what a public board may show.
+      properties:
+        token_code:
+          type: string
+          pattern: ^[A-Z]-[0-9]{3}$
+        room:
+          oneOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+        status:
+          $ref: '#/components/schemas/QueueTokenStatus'
+      required:
+      - token_code
+      - room
+      - status
+      additionalProperties: false
+    Board:
+      type: array
+      items:
+        $ref: '#/components/schemas/BoardEntry'
+    CallNextResult:
+      type: object
+      description: token is null when nobody is waiting.
+      properties:
+        token:
+          oneOf:
+          - $ref: '#/components/schemas/QueueToken'
+          - type: 'null'
+      required:
+      - token
+      additionalProperties: false
+    DoctorSessionSummary:
+      type: object
+      properties:
+        session_id: *id005
+        token_code:
+          type: string
+        arrived_at: *id006
+        confirmed_level:
+          $ref: '#/components/schemas/UrgencyLevel'
+        scale:
+          $ref: '#/components/schemas/TriageScale'
+        alert_chips:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertChip'
+      required:
+      - session_id
+      - token_code
+      - arrived_at
+      - confirmed_level
+      - scale
+      - alert_chips
+      additionalProperties: false
+    DoctorSessions:
+      type: array
+      items:
+        $ref: '#/components/schemas/DoctorSessionSummary'
+    BriefingItem:
+      type: object
+      description: 'Safety rule 4: every item carries its provenance and source.'
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 500
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+        source:
+          $ref: '#/components/schemas/SourceRef'
+        fact_id:
+          $ref: ./schemas/fact.schema.json#/$defs/FactId
+      required:
+      - text
+      - provenance
+      - source
+      additionalProperties: false
+    BriefingSection:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 80
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BriefingItem'
+      required:
+      - title
+      - items
+      additionalProperties: false
+    Briefing:
+      type: object
+      description: Doctor briefing (extended by M1-16).
+      properties:
+        session_id: *id005
+        generated_at: *id006
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/BriefingSection'
+      required:
+      - session_id
+      - generated_at
+      - sections
+      additionalProperties: false
+    CompanionStatus:
+      type: object
+      properties:
+        position:
+          type: integer
+          minimum: 0
+        wait_estimate_minutes:
+          type: integer
+          minimum: 0
+        token:
+          oneOf:
+          - $ref: '#/components/schemas/QueueToken'
+          - type: 'null'
+      required:
+      - position
+      - wait_estimate_minutes
+      - token
+      additionalProperties: false
+    FeelsWorseRequest:
+      type: object
+      properties:
+        note:
+          type: string
+          maxLength: 280
+          description: Optional; shown to the nurse, never put in events.
+      additionalProperties: false
+    FeelsWorseAck:
+      type: object
+      properties:
+        flag_id: *id005
+        received_at: *id006
+      required:
+      - flag_id
+      - received_at
+      additionalProperties: false
+    AskRequest:
+      type: object
+      properties:
+        question:
+          type: string
+          minLength: 1
+          maxLength: 500
+        language:
+          $ref: '#/components/schemas/Language'
+      required:
+      - question
+      - language
+      additionalProperties: false
+    Citation:
+      type: object
+      properties:
+        doc_id: *id005
+        title:
+          type: string
+          maxLength: 200
+        chunk_id: *id005
+      required:
+      - doc_id
+      - title
+      - chunk_id
+      additionalProperties: false
+    AskResponse:
+      type: object
+      description: 'Safety rule 2: never medical advice.'
+      properties:
+        answer:
+          type: string
+          maxLength: 2000
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+        refused_medical:
+          type: boolean
+          description: 'True for a medical question: answer is the fixed safe message and the nurse is flagged.'
+        dont_know:
+          type: boolean
+      required:
+      - answer
+      - citations
+      - refused_medical
+      - dont_know
+      additionalProperties: false
+    ProviderStatus:
+      type: object
+      properties:
+        task:
+          type: string
+        provider:
+          type: string
+          enum:
+          - local
+          - api
+          - cli
+          - replay
+        model:
+          type: string
+        tool:
+          type: string
+        available:
+          type: boolean
+        detail:
+          type: string
+          maxLength: 200
+      required:
+      - task
+      - provider
+      - available
+      additionalProperties: false
+    ProvidersResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderStatus'
+      required:
+      - tasks
+      additionalProperties: false
+    ServiceStatus:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+          - ok
+          - degraded
+          - down
+        detail:
+          type: string
+          maxLength: 200
+      required:
+      - name
+      - status
+      additionalProperties: false
+    AdminStatus:
+      type: object
+      properties:
+        api_version:
+          type: string
+        ruleset_version:
+          type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceStatus'
+      required:
+      - api_version
+      - ruleset_version
+      - services
+      additionalProperties: false
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+        version:
+          type: string
+      required:
+      - status
+      - version
+      additionalProperties: false
+    EventEnvelope:
+      $ref: ./events/envelope.schema.json#/$defs/EventEnvelope
+    AlertRaisedData:
+      $ref: ./events/alert-raised.schema.json#/$defs/AlertRaisedData
+    AlertRaisedEvent:
+      type: object
+      description: '`alert.raised` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: alert.raised
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/AlertRaisedData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    TriageSuggestedData:
+      $ref: ./events/triage-suggested.schema.json#/$defs/TriageSuggestedData
+    TriageSuggestedEvent:
+      type: object
+      description: '`triage.suggested` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: triage.suggested
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/TriageSuggestedData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    TriageConfirmedData:
+      $ref: ./events/triage-confirmed.schema.json#/$defs/TriageConfirmedData
+    TriageConfirmedEvent:
+      type: object
+      description: '`triage.confirmed` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: triage.confirmed
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/TriageConfirmedData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    TokenCalledData:
+      $ref: ./events/token-called.schema.json#/$defs/TokenCalledData
+    TokenCalledEvent:
+      type: object
+      description: '`token.called` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: token.called
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/TokenCalledData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    IntakeCompletedData:
+      $ref: ./events/intake-completed.schema.json#/$defs/IntakeCompletedData
+    IntakeCompletedEvent:
+      type: object
+      description: '`intake.completed` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: intake.completed
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/IntakeCompletedData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    PatientFeelsWorseData:
+      $ref: ./events/patient-feels-worse.schema.json#/$defs/PatientFeelsWorseData
+    PatientFeelsWorseEvent:
+      type: object
+      description: '`patient.feels_worse` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: patient.feels_worse
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/PatientFeelsWorseData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false
+    NurseFlagData:
+      $ref: ./events/nurse-flag.schema.json#/$defs/NurseFlagData
+    NurseFlagEvent:
+      type: object
+      description: '`nurse.flag` in the event envelope.'
+      properties:
+        type:
+          type: string
+          const: nurse.flag
+        timestamp: *id006
+        data:
+          $ref: '#/components/schemas/NurseFlagData'
+      required:
+      - type
+      - timestamp
+      - data
+      additionalProperties: false

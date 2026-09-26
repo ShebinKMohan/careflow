@@ -1,0 +1,11 @@
+# Redocly lint config for openapi.yaml. `make contracts-check` requires 0 errors.
+extends:
+  - recommended
+rules:
+  # The owner has not chosen a licence yet; do not assert one in the spec.
+  info-license: off
+  # Redocly's bundled validator rejects the valid StructuredFacts example (it mis-evaluates
+  # unevaluatedProperties with the provenance if/then; the reference jsonschema implementation and
+  # stock ajv 2020 both accept it). Every example is validated instead, with the reference
+  # jsonschema implementation and the generated models, by tests/test_openapi_examples.py.
+  no-invalid-media-type-examples: off
