@@ -84,6 +84,23 @@ CAREFLOW_LIVE_LLM=1 scripts/with_llm.sh uv run pytest services/intake -m live -s
 scripts/with_llm.sh uv run python -m careflow_intake.extraction.record --case live/chest_pain
 ```
 
+## The conversation and the real ports (M1-07)
+
+`careflow_intake.conversation.ChecklistConversation` implements the `Conversation` port. Code decides what to ask, and the LLM only rephrases:
+
+- **The picker** asks the complaint first. Next come the danger screens the rules ask for, the most severe alert's first, then the rest of the checklist: onset, pain score, severity, pain location, allergies.
+- **After a critical alert,** the fixed nurse-coming message is shown, and only the remaining screens follow.
+- **The approved questions** are in `conversation/templates_en.yaml`.
+- **Phrasing.** With `llm_phrasing: true` in `config/intake.yaml`, the `conversation` task rephrases a question within 3 s, and anything that is not one clean, allowed question falls back to the template.
+- **The output filter.** `conversation.output_filter.check_patient_facing` checks every string sent to the patient, and blocks diagnoses, condition names, advice, dosing, more than one question and anything over 40 words.
+
+`careflow_intake.wiring.build_real_ports()` wires the M1-06 extractor, the rules engine (`CareflowRules`) and this conversation into the graph. The other ports are stubs until their issues land.
+
+```bash
+uv run pytest services/intake -k "conversation or scripts"          # scripted patients, recorded replies
+scripts/with_llm.sh uv run python -m careflow_intake.scripts --record chest_pain
+```
+
 ## Tests
 
 ```bash
