@@ -1,0 +1,14 @@
+[project]
+name = "careflow-triage"
+version = "0.0.0"
+description = "CareFlow urgency model: training, evaluation, ONNX export and inference."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/careflow_triage"]

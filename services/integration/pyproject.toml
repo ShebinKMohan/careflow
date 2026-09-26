@@ -1,0 +1,14 @@
+[project]
+name = "careflow-integration"
+version = "0.0.0"
+description = "CareFlow hospital integration: FHIR R4, webhooks, CDS Hooks, SMART, HL7."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/careflow_integration"]

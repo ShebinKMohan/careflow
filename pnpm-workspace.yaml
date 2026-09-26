@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/ui
+  - packages/contracts
+
+# One exact version per shared tool; packages refer to these with "catalog:".
+catalog:
+  "@eslint/js": 10.0.1
+  "@types/node": 24.19.0
+  eslint: 10.11.0
+  typescript: 6.0.3
+  typescript-eslint: 8.70.1
+  vitest: 5.0.2
