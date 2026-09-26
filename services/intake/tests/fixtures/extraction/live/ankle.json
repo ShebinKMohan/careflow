@@ -1,0 +1,71 @@
+{
+  "description": "Live transcript: a sprained ankle after a fall, pain 4/10, no chest pain. Synthetic.",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "What brings you in today?",
+      "question_key": "chief_complaint",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "I twisted my ankle playing football an hour ago.",
+      "question_key": "chief_complaint",
+      "created_at": "2026-09-27T09:00:10Z"
+    },
+    {
+      "turn_id": "trn_003",
+      "role": "assistant",
+      "text": "Did this happen because of an injury or accident?",
+      "question_key": "injury",
+      "created_at": "2026-09-27T09:00:15Z"
+    },
+    {
+      "turn_id": "trn_004",
+      "role": "patient",
+      "text": "Yes, I fell on it.",
+      "question_key": "injury",
+      "created_at": "2026-09-27T09:00:20Z"
+    },
+    {
+      "turn_id": "trn_005",
+      "role": "assistant",
+      "text": "How bad is the pain from 0 to 10?",
+      "question_key": "pain_score",
+      "created_at": "2026-09-27T09:00:25Z"
+    },
+    {
+      "turn_id": "trn_006",
+      "role": "patient",
+      "text": "Maybe a four.",
+      "question_key": "pain_score",
+      "created_at": "2026-09-27T09:00:30Z"
+    },
+    {
+      "turn_id": "trn_007",
+      "role": "assistant",
+      "text": "Do you have any chest pain?",
+      "question_key": "chest_pain.present",
+      "created_at": "2026-09-27T09:00:35Z"
+    },
+    {
+      "turn_id": "trn_008",
+      "role": "patient",
+      "text": "No.",
+      "question_key": "chest_pain.present",
+      "created_at": "2026-09-27T09:00:40Z"
+    }
+  ],
+  "expected": {
+    "required": {
+      "injury": "yes",
+      "pain_score": 4,
+      "chest_pain.present": "no"
+    },
+    "present": [
+      "chief_complaint"
+    ]
+  }
+}
