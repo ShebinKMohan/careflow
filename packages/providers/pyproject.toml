@@ -4,7 +4,21 @@ version = "0.0.0"
 description = "CareFlow model provider layer: local, API and subscription-CLI adapters."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+  "pydantic>=2.13,<3",
+  "openai>=2.54,<3",  # 3.x moved to httpx2, which respx cannot mock (ADR-013)
+  "langchain>=1.4,<2",
+  "langchain-core>=1.6,<2",
+  "langchain-anthropic>=1.7,<2",
+  "langchain-openai>=1.6,<2",
+  "langchain-google-genai>=4.4,<5",
+  "typer>=0.27,<0.28",
+  "pyyaml>=6.0,<7",
+  "httpx>=0.28,<0.29",
+]
+
+[project.scripts]
+careflow = "careflow_providers.cli:main"
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]

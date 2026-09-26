@@ -9,7 +9,8 @@ export UV_LOCKED := 1
 
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
-	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke
+	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke \
+	llm-local
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -49,7 +50,7 @@ test-node:
 
 # Runs before any sync, outside the project environment, so a banned package is never installed.
 banned-deps: ## Fail on LiteLLM or any unconstrained Python dependency
-	uv run --no-project --python 3.12 python scripts/check_banned_deps.py
+	env -u UV_LOCKED uv run --no-project --python 3.12 python scripts/check_banned_deps.py
 
 check: banned-deps lint typecheck test ## Everything CI checks, except the secret and CVE scans
 
@@ -100,3 +101,11 @@ nuke: ## Delete every local data volume (asks first). Agents never run this: use
 	@read -r -p "This deletes all CareFlow Docker volumes (Postgres, Valkey, HAPI data). Type nuke: " a; \
 		[ "$$a" = "nuke" ] || { echo "aborted"; exit 1; }
 	$(COMPOSE) down -v
+
+# --- Local LLM (M0-06) ------------------------------------------------------------------------
+LLM_MODEL := mlx-community/Qwen3.5-9B-MLX-4bit
+LLM_REVISION := 938d8919941c6e7efd3c7150eff7fe9d12afa631
+
+llm-local: ## Serve the pinned local model on 127.0.0.1:8081 in the foreground (Ctrl-C stops it)
+	uv run mlx_lm.server --host 127.0.0.1 --port 8081 --model "$$(uvx --from 'huggingface_hub==2.0.0' \
+		hf download $(LLM_MODEL) --revision $(LLM_REVISION) --quiet)"
