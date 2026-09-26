@@ -310,6 +310,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/dev/sessions/{session_id}/vitals-sim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start the simulated vitals device (development only)
+         * @description Test hook (M1-03): runs the scenario-driven vitals simulator for the session in the background. Scenario order: request body, then the VITALS_SCENARIO environment variable, then normal. The route exists only when CAREFLOW_ENV=dev; otherwise it answers 404.
+         */
+        post: operations["startVitalsSimulation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/sessions/{session_id}/triage": {
         parameters: {
             query?: never;
@@ -1050,6 +1076,41 @@ export interface components {
             token_code?: string;
             room?: string;
             wait_estimate_min?: number;
+            vitals?: components["schemas"]["LatestVitals"];
+        };
+        /** @description The latest device readings, for the kiosk vitals panel. Numbers only; never a level or an alert. */
+        LatestVitals: {
+            /** @description /min */
+            heart_rate?: number;
+            /** @description % */
+            spo2?: number;
+            /** @description Cel */
+            temperature_c?: number;
+            /** @description mm[Hg] */
+            systolic_bp?: number;
+            /** @description mm[Hg] */
+            diastolic_bp?: number;
+            /** Format: date-time */
+            measured_at: string;
+            device_id: components["schemas"]["Identifier"];
+            /** @description True when the reading comes from the simulated device (M1-03). */
+            simulated: boolean;
+        };
+        /**
+         * @description A simulated vitals scenario (services/api/src/careflow_api/devices/scenarios).
+         * @enum {string}
+         */
+        VitalsScenario: "normal" | "septic" | "hypoxic" | "tachycardic_child";
+        VitalsSimRequest: {
+            scenario?: components["schemas"]["VitalsScenario"];
+        };
+        VitalsSimStarted: {
+            session_id: components["schemas"]["Identifier"];
+            scenario: components["schemas"]["VitalsScenario"];
+            /** @description Readings the simulator will send. */
+            frames: number;
+            /** @constant */
+            simulated: true;
         };
         /** @description One reading from the (simulated) vitals device. */
         DeviceVitalsReading: {
@@ -2562,7 +2623,15 @@ export interface operations {
                      * @example {
                      *       "state": "queued",
                      *       "token_code": "G-031",
-                     *       "wait_estimate_min": 25
+                     *       "wait_estimate_min": 25,
+                     *       "vitals": {
+                     *         "heart_rate": 78,
+                     *         "spo2": 98,
+                     *         "temperature_c": 36.8,
+                     *         "measured_at": "2026-09-26T09:03:00Z",
+                     *         "device_id": "sim_vitals_01",
+                     *         "simulated": true
+                     *       }
                      *     }
                      */
                     "application/json": components["schemas"]["SessionStatus"];
@@ -2715,6 +2784,53 @@ export interface operations {
                      *     }
                      */
                     "application/json": components["schemas"]["TriageView"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+            422: components["responses"]["Unprocessablecontent"];
+        };
+    };
+    startVitalsSimulation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                /**
+                 * @example {
+                 *       "scenario": "septic"
+                 *     }
+                 */
+                "application/json": components["schemas"]["VitalsSimRequest"];
+            };
+        };
+        responses: {
+            /** @description The simulator is running */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_sepsis_partial",
+                     *       "scenario": "septic",
+                     *       "frames": 31,
+                     *       "simulated": true
+                     *     }
+                     */
+                    "application/json": components["schemas"]["VitalsSimStarted"];
                 };
             };
             401: components["responses"]["Unauthorized"];
