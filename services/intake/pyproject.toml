@@ -1,10 +1,19 @@
 [project]
 name = "careflow-intake"
-version = "0.0.0"
+version = "0.1.0"
 description = "CareFlow LangGraph intake graph."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+  "careflow-contracts",
+  "langgraph==1.2.12",
+  "langgraph-checkpoint-postgres>=3.1.2,<3.2",
+  "psycopg[binary,pool]>=3.3,<3.4",
+  "pydantic>=2.13,<3",
+]
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]

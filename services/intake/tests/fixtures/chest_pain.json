@@ -1,0 +1,11 @@
+{
+  "description": "Synthetic scripted intake: an adult with chest pain. Research prototype; synthetic data only.",
+  "session_id": "ses_chest_pain_01",
+  "clinic_id": "clinic_a",
+  "questions": [
+    {"question_id": "q_complaint", "text": "What brings you in today?", "key": "chief_complaint"},
+    {"question_id": "q_chest_pain", "text": "Do you have chest pain?", "key": "chest_pain.present"},
+    {"question_id": "q_fever", "text": "Have you had a fever?", "key": "infection.fever_reported"}
+  ],
+  "answers": ["Tight chest since this morning", "Yes", "No"]
+}
