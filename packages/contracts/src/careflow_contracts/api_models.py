@@ -142,6 +142,7 @@ class LoginRequest(BaseModel):
 class DeviceType(StrEnum):
     kiosk = "kiosk"
     board = "board"
+    integration = "integration"
 
 
 class DeviceTokenRequest(BaseModel):
@@ -624,12 +625,9 @@ class Status2(StrEnum):
     ok = "ok"
 
 
-class Health(BaseModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    status: Status2
-    version: str
+class ComponentStatus(StrEnum):
+    ok = "ok"
+    down = "down"
 
 
 type EventEnvelopeModel = EventEnvelope
@@ -725,3 +723,14 @@ class DecisionResult(BaseModel):
     )
     decision: NurseDecisionModel
     token: QueueToken | None
+
+
+class Health(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    status: Status2
+    version: str
+    db: ComponentStatus
+    redis: ComponentStatus
+    fhir: ComponentStatus
