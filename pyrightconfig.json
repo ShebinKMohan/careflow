@@ -1,0 +1,9 @@
+{
+  "include": ["packages", "services", "scripts"],
+  "exclude": ["**/node_modules", "**/__pycache__", "**/.venv", "**/.next", "**/dist"],
+  "pythonVersion": "3.12",
+  "venvPath": ".",
+  "venv": ".venv",
+  "typeCheckingMode": "standard",
+  "strict": ["packages/contracts", "services/rules"]
+}
