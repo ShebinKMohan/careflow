@@ -1,0 +1,106 @@
+# KTAS dataset -> StructuredFacts (M1-04). Source: Moon S-H, Shim JL, Park K-S, Park C-S (2019),
+# "Triage accuracy and causes of mistriage using the Korean Triage and Acuity Scale", PLOS ONE
+# 14(9): e0216972, doi:10.1371/journal.pone.0216972 (CC BY 4.0), S1 Appendix (1,267 rows).
+#
+# Every code was checked on 27 Sep 2026 by matching the dataset's counts with the paper's Table 1
+# (and its Results text); `verified` records the evidence. No row is ever committed.
+label: KTAS_expert        # the triage experts' KTAS level (target)
+comparator: KTAS_RN       # the triage nurses' KTAS level (the human comparator)
+
+columns:
+  Age:
+    path: patient.age_years
+    kind: integer
+    verified: "Data: 15.5-95.8 (years, some with a decimal; truncated to whole years). Paper: mean 54.39 +- 19.72."
+  Sex:
+    path: patient.sex
+    kind: sex
+    codes: {1: female, 2: male}
+    verified: "Table 1 Female 606 / Male 661 = data code 1: 606, code 2: 661."
+  Arrival mode:
+    path: arrival_mode
+    kind: arrival_mode
+    codes: {1: walking, 2: public_ambulance, 3: private_vehicle, 4: private_ambulance, 5: other, 6: other, 7: other}
+    verified: "Table 1 Walking 79, Private vehicle 753, Public ambulance 266, Private ambulance 155, Other 14 = data 1: 79, 3: 753, 2: 266, 4: 155, 5-7: 14."
+  Injury:
+    path: injury
+    kind: tristate
+    codes: {1: "no", 2: "yes"}
+    verified: "Table 1 Injury 244 / Non-injury 1023 = data 2: 244, 1: 1023."
+  Mental:
+    path: vitals.acvpu
+    kind: acvpu
+    codes: {1: A, 2: V, 3: P, 4: U}
+    verified: "Table 1 Alert 1187, Verbal 39, Pain 28, Unresponsive 13 = data 1-4. KTAS records no 'new confusion' (C)."
+  Pain:
+    path: pain_present
+    kind: tristate
+    codes: {0: "no", 1: "yes"}
+    verified: "Table 1 Pain yes 714 / no 553 = data 1: 714, 0: 553."
+  NRS_pain:
+    path: pain_score
+    kind: integer
+    missing: ["#NULL!"]
+    verified: "0-10 numeric rating scale (paper). '#NULL!' in 556 rows = not recorded."
+  SBP:
+    path: vitals.systolic_bp
+    kind: number
+    missing: ["측불"]
+    verified: "mm Hg. '측불' (Korean abbreviation of 'unmeasurable') in 25 rows."
+  DBP:
+    path: vitals.diastolic_bp
+    kind: number
+    missing: ["측불"]
+    verified: "mm Hg. '측불' in 29 rows."
+  HR:
+    path: vitals.heart_rate
+    kind: number
+    missing: ["측불"]
+    verified: "/min. '측불' in 20 rows."
+  RR:
+    path: vitals.respiratory_rate
+    kind: number
+    missing: ["측불"]
+    verified: "/min. '측불' in 22 rows."
+  BT:
+    path: vitals.temperature_c
+    kind: number
+    missing: ["측불"]
+    verified: "Degrees Celsius. '측불' in 18 rows. The PLOS xlsx has decimal points; the Kaggle CSV has decimal commas (the loader accepts both)."
+  Saturation:
+    path: vitals.spo2
+    kind: number
+    missing: ["측불"]
+    verified: "%. Empty in 688 rows (every row of Group 1, the local ED) and '측불' in 9. Assumption: the local ED did not record SpO2."
+  Chief_complain:
+    path: complaint_category
+    kind: complaint
+    verified: "Free text (English, often abbreviated). Mapped by the keyword rules below, written from the dataset's phrases. The categories are CareFlow's (complaint-category CodeSystem), not KTAS's: an assumption."
+
+# Never features: the outcome, the nurses' and experts' levels, and anything known after triage.
+leakage: [KTAS_RN, KTAS_expert, Diagnosis in ED, Disposition, Error_group, Length of stay_min, KTAS duration_min, mistriage]
+# Not features: the ED and its load describe the hospital, not the patient at the kiosk.
+context: [Group, Patients number per hour]
+
+# First matching rule wins. A keyword matches the start of a word in the lower-cased text ("abd"
+# matches "abdominal", "burn" does not match "heartburn"); a keyword ending in a space must be the
+# whole word.
+complaint_categories:
+  - {code: palpitation, display: Palpitations, keywords: [palpitation]}
+  - {code: chest_pain, display: Chest pain, keywords: [chest]}
+  - {code: breathing_difficulty, display: Breathing difficulty, keywords: [dyspnea, dyspnoea, breath, "sob ", wheez, hemoptysis, cough]}
+  - {code: injury, display: Injury or wound, keywords: [injury, wound, laceration, fracture, fall, trauma, burn, bite, contusion, sprain, abrasion]}
+  - {code: neurological, display: Neurological symptoms, keywords: [mental, seizure, convulsion, dysarthria, motor, syncope, palsy, numb, unconscious, aphasia]}
+  - {code: abdominal_pain, display: Abdominal pain, keywords: [abd, abdom, epigastric, flank, ruq, rlq, llq, luq]}
+  - {code: gastrointestinal, display: "Vomiting, diarrhoea or GI bleeding", keywords: [vomit, nausea, diarrhea, hematemesis, melena, hematochezia, distension, constipation]}
+  - {code: headache, display: Headache, keywords: [headache, "ha "]}
+  - {code: dizziness, display: Dizziness, keywords: [dizz, vertigo]}
+  - {code: fever, display: Fever, keywords: [fever, chill]}
+  - {code: bleeding, display: Bleeding, keywords: [bleeding, epistaxis, hematuria]}
+  - {code: skin_allergy, display: Rash or allergy, keywords: [rash, urticaria, itching, pruritus, swelling, allerg]}
+  - {code: eye_ent, display: "Eye, ear, nose or throat", keywords: [ocular, eye, throat, "ear ", visual]}
+  - {code: urinary, display: Urinary symptoms, keywords: [dysuria, urinary, urine, voiding]}
+  - {code: psychiatric, display: Mental health, keywords: [anxiety, depress, suicid, psych, agitation]}
+  - {code: general_weakness, display: General weakness, keywords: [weakness, fatigue, general]}
+  - {code: musculoskeletal, display: Musculoskeletal pain, keywords: [back, leg, "arm ", shoulder, knee, joint, myalgia, lbp, neck]}
+  - {code: other, display: Other, keywords: []}

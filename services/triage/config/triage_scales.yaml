@@ -1,0 +1,8 @@
+# Display mapping for a suggested level (M1-04). The scales are not clinically equivalent: this
+# only relabels KTAS 1-5 for sites that speak another scale. Research prototype.
+note: "display mapping; scales are not clinically equivalent"
+scales:
+  KTAS: {1: "KTAS 1", 2: "KTAS 2", 3: "KTAS 3", 4: "KTAS 4", 5: "KTAS 5"}
+  ESI: {1: "ESI 1", 2: "ESI 2", 3: "ESI 3", 4: "ESI 4", 5: "ESI 5"}
+  CTAS: {1: Resuscitation, 2: Emergent, 3: Urgent, 4: Less urgent, 5: Non-urgent}
+  MTS: {1: Red, 2: Orange, 3: Yellow, 4: Green, 5: Blue}
