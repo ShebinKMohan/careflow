@@ -7,8 +7,8 @@
 # loaded at a time (docs/AGENT_RUNBOOK.md section 6).
 #
 # Environment overrides:
-#   CAREFLOW_LLM_MODEL     HF repo to serve (default mlx-community/Qwen3.5-9B-MLX-4bit)
-#   CAREFLOW_LLM_REVISION  pinned revision; the snapshot is downloaded and served from disk
+#   CAREFLOW_LLM_MODEL     HF repo to serve (default mlx-community/Qwen3.5-9B-MLX-4bit, pinned)
+#   CAREFLOW_LLM_REVISION  revision to serve; the snapshot is downloaded and served from disk
 #   MLX_PORT               port (default 8081)
 #   WITH_LLM_WAIT_S        readiness timeout in seconds (default 600)
 # The command sees CAREFLOW_LOCAL_LLM_BASE_URL=http://127.0.0.1:<port>/v1.
@@ -22,8 +22,14 @@ fi
 
 host=127.0.0.1
 port="${MLX_PORT:-8081}"
-model="${CAREFLOW_LLM_MODEL:-mlx-community/Qwen3.5-9B-MLX-4bit}"
-revision="${CAREFLOW_LLM_REVISION:-}"
+default_model=mlx-community/Qwen3.5-9B-MLX-4bit
+default_revision=938d8919941c6e7efd3c7150eff7fe9d12afa631 # pinned in M0-06 (ADR-013)
+model="${CAREFLOW_LLM_MODEL:-$default_model}"
+if [[ "$model" == "$default_model" ]]; then
+  revision="${CAREFLOW_LLM_REVISION:-$default_revision}"
+else
+  revision="${CAREFLOW_LLM_REVISION:-}"
+fi
 mlx_lm_version="${MLX_LM_VERSION:-0.31.3}"
 hf_hub_version="${HF_HUB_VERSION:-2.0.0}"
 wait_s="${WITH_LLM_WAIT_S:-600}"
