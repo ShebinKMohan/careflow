@@ -1,0 +1,9 @@
+id: ng143-red-respiratory-rate-over-60
+description: "3-month-old breathing at 64 per minute (no amber rate applies under 6 months)."
+covers: [red:vitals.respiratory_rate]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 3, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.respiratory_rate, value: 64, provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: [NG143_RED_FLAG]

@@ -1,0 +1,10 @@
+id: fast-face-droop
+description: "67-year-old; face drooping on one side since 08:30."
+covers: [fast:fast.face_droop]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 67, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: fast.face_droop, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+  - {path: fast.last_known_well, value: "2026-09-26T08:30:00Z", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [FAST_STROKE]

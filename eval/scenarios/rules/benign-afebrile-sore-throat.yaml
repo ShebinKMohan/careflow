@@ -1,0 +1,10 @@
+id: benign-afebrile-sore-throat
+description: "35-year-old with a sore throat and no fever."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 35, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: symptoms, value: "sore_throat", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+  - {path: vitals.temperature_c, value: 36.9, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.heart_rate, value: 72, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: []

@@ -1,0 +1,9 @@
+id: ng143-amber-decreased-activity
+description: "18-month-old; much less active than usual."
+covers: [amber:child_amber.decreased_activity]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.decreased_activity, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

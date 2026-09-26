@@ -1,0 +1,11 @@
+id: benign-child-normal-vitals
+description: "30-month-old with normal vitals."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 30, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.heart_rate, value: 120, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.respiratory_rate, value: 30, provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+  - {path: vitals.spo2, value: 98, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.temperature_c, value: 37.2, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: []

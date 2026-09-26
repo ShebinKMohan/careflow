@@ -1,0 +1,9 @@
+id: ng143-amber-rigors
+description: "30-month-old; shaking chills."
+covers: [amber:infection.rigors]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 30, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: infection.rigors, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

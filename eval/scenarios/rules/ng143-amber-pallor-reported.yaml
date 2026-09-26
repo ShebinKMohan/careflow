@@ -1,0 +1,9 @@
+id: ng143-amber-pallor-reported
+description: "18-month-old; the parent has noticed pale skin."
+covers: [amber:child_amber.pallor_reported]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.pallor_reported, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

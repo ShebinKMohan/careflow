@@ -1,0 +1,11 @@
+id: benign-child-3y-temp-38-2
+description: "3-year-old with a temperature of 38.2 C and no other features."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 3, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.temperature_c, value: 38.2, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: []
+expect_needed:
+  - child_danger.hard_to_wake
+  - child_danger.grunting

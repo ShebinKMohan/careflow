@@ -1,0 +1,9 @@
+id: ng143-amber-cap-refill-3s-or-more
+description: "18-month-old; capillary refill of 3 seconds."
+covers: [amber:child_amber.cap_refill_3s_or_more]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.cap_refill_3s_or_more, value: "yes", provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

@@ -1,0 +1,9 @@
+id: ng143-amber-wakes-only-with-prolonged-stimulation
+description: "18-month-old; wakes only after a long time."
+covers: [amber:child_amber.wakes_only_with_prolonged_stimulation]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.wakes_only_with_prolonged_stimulation, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

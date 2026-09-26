@@ -1,0 +1,8 @@
+id: benign-young-infant-38-8
+description: "4-month-old with a temperature of 38.8 C (below the 39 C amber threshold)."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 4, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.temperature_c, value: 38.8, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: []

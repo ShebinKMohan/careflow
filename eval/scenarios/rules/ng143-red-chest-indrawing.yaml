@@ -1,0 +1,9 @@
+id: ng143-red-chest-indrawing
+description: "18-month-old; the nurse sees moderate chest indrawing."
+covers: [red:child_danger.chest_indrawing]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.chest_indrawing, value: "yes", provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: [NG143_RED_FLAG]

@@ -1,0 +1,9 @@
+id: benign-infant-at-the-limits
+description: "8-month-old at the limits: heart rate 160, breathing 50 per minute."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 8, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.heart_rate, value: 160, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.respiratory_rate, value: 50, provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: []

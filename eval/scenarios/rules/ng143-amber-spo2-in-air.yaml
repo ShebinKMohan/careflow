@@ -1,0 +1,10 @@
+id: ng143-amber-spo2-in-air
+description: "18-month-old with SpO2 95% in air."
+covers: [amber:vitals.spo2]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 18, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: vitals.spo2, value: 95, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.on_supplemental_o2, value: "no", provenance: NURSE_CONFIRMED, recorded_at: "2026-09-26T09:04:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

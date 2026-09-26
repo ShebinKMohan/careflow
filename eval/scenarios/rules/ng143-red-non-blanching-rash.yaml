@@ -1,0 +1,9 @@
+id: ng143-red-non-blanching-rash
+description: "30-month-old; a rash that does not fade under a glass."
+covers: [red:child_danger.non_blanching_rash]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 30, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.non_blanching_rash, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_RED_FLAG]

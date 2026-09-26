@@ -1,0 +1,11 @@
+id: benign-ankle-sprain
+description: "28-year-old with a twisted ankle and normal vitals."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 28, provenance: EHR, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: symptoms, value: "ankle_pain", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+  - {path: vitals.heart_rate, value: 78, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.spo2, value: 99, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+  - {path: vitals.temperature_c, value: 36.8, provenance: DEVICE_MEASURED, recorded_at: "2026-09-26T09:03:00Z"}
+expect_alerts: []
