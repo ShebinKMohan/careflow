@@ -1,0 +1,37 @@
+# Fixed alert lines rendered by the rules engine into Alert.display_text, and by UIs from rule_id
+# when display_text is absent. Never built from patient words; no PHI; at most 160 characters
+# including qualifiers. Arabic lines are machine-written and machine-checked only (no native
+# review; not an accuracy claim). Research prototype. Synthetic data only. Not for clinical use.
+version: 1
+rules:
+  FAST_STROKE:
+    required_action: stroke_team_now
+    en: "Possible stroke: FAST screen positive. Immediate stroke assessment."
+    ar: "سكتة دماغية محتملة: فحص FAST إيجابي. تقييم فوري للسكتة الدماغية."
+  CHEST_PAIN_ECG_10MIN:
+    required_action: ecg_within_10_min
+    en: "Chest pain: ECG within 10 minutes of arrival."
+    ar: "ألم في الصدر: تخطيط القلب خلال 10 دقائق من الوصول."
+  SEPSIS_NEWS2:
+    required_action: sepsis_review_now
+    en: "Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review."
+    ar: "إنتان محتمل: اشتباه بعدوى مع NEWS2 بقيمة 5 أو أكثر. مراجعة عاجلة."
+  NG143_RED_FLAG:
+    required_action: paediatric_review_now
+    en: "Child red flag (NICE NG143). Urgent medical review."
+    ar: "علامة خطر حمراء لدى الطفل (NICE NG143). مراجعة طبية عاجلة."
+  NG143_AMBER_FLAG:
+    required_action: paediatric_assessment_soon
+    en: "Child amber flag (NICE NG143). Prompt clinical assessment."
+    ar: "علامة تحذير برتقالية لدى الطفل (NICE NG143). تقييم سريري سريع."
+  CHILD_HARD_TO_WAKE:
+    required_action: paediatric_review_now
+    en: "Child hard to wake. Urgent medical review."
+    ar: "يصعب إيقاظ الطفل. مراجعة طبية عاجلة."
+qualifiers:
+  parent_unsure:
+    en: "parent unsure"
+    ar: "ولي الأمر غير متأكد"
+  partial_news2:
+    en: "partial NEWS2 (kiosk vitals only)"
+    ar: "NEWS2 جزئي (قياسات الكشك فقط)"

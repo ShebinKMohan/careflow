@@ -1,0 +1,462 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://careflow.example/schemas/fact.schema.json",
+  "title": "FactSchema",
+  "description": "Identifiers, provenance, source references and the typed facts. Every fact carries a provenance and a source (safety rule 4). Research prototype; synthetic data only.",
+  "$defs": {
+    "Identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "description": "Opaque identifier: letters, digits and _ . : - only. Never contains PHI."
+    },
+    "FactId": {
+      "type": "string",
+      "pattern": "^f_[0-9A-HJKMNP-TV-Z]{26}$",
+      "description": "Fact id: 'f_' followed by a ULID (Crockford base32, upper case)."
+    },
+    "Provenance": {
+      "type": "string",
+      "enum": [
+        "EHR",
+        "PATIENT_STATED",
+        "DEVICE_MEASURED",
+        "NURSE_CONFIRMED",
+        "MODEL_INFERRED"
+      ],
+      "description": "Where a fact came from. Each value pairs with exactly one source kind: EHR-fhir, PATIENT_STATED-transcript_span, DEVICE_MEASURED-device, NURSE_CONFIRMED-nurse, MODEL_INFERRED-model."
+    },
+    "TranscriptSpanSource": {
+      "type": "object",
+      "description": "The patient's own words: character offsets [start, end) into one conversation turn, with end greater than start.",
+      "properties": {
+        "kind": {
+          "const": "transcript_span"
+        },
+        "turn_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "kind",
+        "turn_id",
+        "start",
+        "end",
+        "quote"
+      ],
+      "additionalProperties": false
+    },
+    "FhirSource": {
+      "type": "object",
+      "description": "A FHIR R4 resource in the hospital EHR.",
+      "properties": {
+        "kind": {
+          "const": "fhir"
+        },
+        "resource_type": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z]{1,63}$"
+        },
+        "id": {
+          "$ref": "#/$defs/Identifier"
+        }
+      },
+      "required": [
+        "kind",
+        "resource_type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "DeviceSource": {
+      "type": "object",
+      "description": "A reading from a (simulated) vitals device.",
+      "properties": {
+        "kind": {
+          "const": "device"
+        },
+        "device_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "reading_id": {
+          "$ref": "#/$defs/Identifier"
+        }
+      },
+      "required": [
+        "kind",
+        "device_id",
+        "reading_id"
+      ],
+      "additionalProperties": false
+    },
+    "NurseSource": {
+      "type": "object",
+      "description": "Entered or confirmed by a nurse.",
+      "properties": {
+        "kind": {
+          "const": "nurse"
+        },
+        "staff_user_id": {
+          "$ref": "#/$defs/Identifier"
+        }
+      },
+      "required": [
+        "kind",
+        "staff_user_id"
+      ],
+      "additionalProperties": false
+    },
+    "ModelSource": {
+      "type": "object",
+      "description": "Inferred by a model; never shown without this tag.",
+      "properties": {
+        "kind": {
+          "const": "model"
+        },
+        "model_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "model_version": {
+          "$ref": "#/$defs/Identifier"
+        }
+      },
+      "required": [
+        "kind",
+        "model_id",
+        "model_version"
+      ],
+      "additionalProperties": false
+    },
+    "SourceRef": {
+      "description": "Where exactly a fact came from, discriminated by `kind`.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TranscriptSpanSource"
+        },
+        {
+          "$ref": "#/$defs/FhirSource"
+        },
+        {
+          "$ref": "#/$defs/DeviceSource"
+        },
+        {
+          "$ref": "#/$defs/NurseSource"
+        },
+        {
+          "$ref": "#/$defs/ModelSource"
+        }
+      ],
+      "discriminator": {
+        "propertyName": "kind",
+        "mapping": {
+          "transcript_span": "#/$defs/TranscriptSpanSource",
+          "fhir": "#/$defs/FhirSource",
+          "device": "#/$defs/DeviceSource",
+          "nurse": "#/$defs/NurseSource",
+          "model": "#/$defs/ModelSource"
+        }
+      }
+    },
+    "FactBase": {
+      "type": "object",
+      "description": "Common fields of every fact. The provenance must match the source kind (enforced here with if/then and again by careflow_contracts.validators.check_provenance).",
+      "properties": {
+        "fact_id": {
+          "$ref": "#/$defs/FactId"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "fact_id",
+        "provenance",
+        "source",
+        "recorded_at"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "const": "PATIENT_STATED"
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {
+                    "const": "transcript_span"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "const": "EHR"
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {
+                    "const": "fhir"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "const": "DEVICE_MEASURED"
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {
+                    "const": "device"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "const": "NURSE_CONFIRMED"
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {
+                    "const": "nurse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provenance": {
+                "const": "MODEL_INFERRED"
+              }
+            },
+            "required": [
+              "provenance"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {
+                    "const": "model"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "TextFact": {
+      "description": "A fact whose value is short text.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/FactBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "IntegerFact": {
+      "description": "A fact whose value is an integer.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/FactBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "NumberFact": {
+      "description": "A measured quantity with a UCUM unit.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/FactBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "description": "UCUM unit code, e.g. /min, %, Cel, mm[Hg]."
+            }
+          },
+          "required": [
+            "value",
+            "unit"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "TriState": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ],
+      "description": "An answer that may legitimately be unknown (e.g. the patient is unsure)."
+    },
+    "TriStateFact": {
+      "description": "A yes/no/unknown fact.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/FactBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/TriState"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Coding": {
+      "type": "object",
+      "description": "A code from a code system (FHIR Coding shape).",
+      "properties": {
+        "system": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^[a-z][a-z0-9+.-]*:\\S+$",
+          "description": "Code system URI, e.g. http://snomed.info/sct (kept verbatim, never normalised)."
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "display": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "CodeFact": {
+      "description": "A coded fact: the value is a Coding {system, code, display}.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/FactBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/Coding"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

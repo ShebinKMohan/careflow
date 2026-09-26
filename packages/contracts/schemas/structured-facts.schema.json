@@ -1,0 +1,718 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://careflow.example/schemas/structured-facts.schema.json",
+  "title": "StructuredFacts",
+  "description": "Everything known about one check-in, as typed facts with provenance. Every leaf fact is optional: a missing fact means the question was not asked yet. Research prototype; synthetic data only.",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "fact.schema.json#/$defs/Identifier"
+    },
+    "clinic_id": {
+      "$ref": "fact.schema.json#/$defs/Identifier"
+    },
+    "language": {
+      "$ref": "#/$defs/Language"
+    },
+    "patient": {
+      "$ref": "#/$defs/Patient"
+    },
+    "chief_complaint": {
+      "$ref": "fact.schema.json#/$defs/TextFact",
+      "description": "The main reason for the visit, in the patient's words or a short summary."
+    },
+    "complaint_category": {
+      "$ref": "fact.schema.json#/$defs/CodeFact",
+      "description": "Coded complaint category (a triage model feature)."
+    },
+    "symptoms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Symptom"
+      },
+      "maxItems": 30
+    },
+    "pain_score": {
+      "$ref": "#/$defs/PainScoreFact"
+    },
+    "fast": {
+      "$ref": "#/$defs/Fast"
+    },
+    "chest_pain": {
+      "$ref": "#/$defs/ChestPain"
+    },
+    "infection": {
+      "$ref": "#/$defs/Infection"
+    },
+    "child_danger": {
+      "$ref": "#/$defs/ChildDanger"
+    },
+    "child_amber": {
+      "$ref": "#/$defs/ChildAmber"
+    },
+    "vitals": {
+      "$ref": "#/$defs/Vitals"
+    },
+    "ehr_context": {
+      "$ref": "#/$defs/EhrContext"
+    },
+    "extraction_status": {
+      "$ref": "#/$defs/ExtractionStatus"
+    }
+  },
+  "required": [
+    "session_id",
+    "clinic_id",
+    "language",
+    "extraction_status"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "ar"
+      ],
+      "description": "Session language, chosen up front."
+    },
+    "ExtractionStatus": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "incomplete"
+      ],
+      "description": "incomplete when extraction failed validation twice: the rules still run and the nurse sees 'extraction incomplete'."
+    },
+    "SymptomSeverity": {
+      "type": "string",
+      "enum": [
+        "mild",
+        "moderate",
+        "severe"
+      ]
+    },
+    "AgeYearsFact": {
+      "description": "Age in whole years.",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/IntegerFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 150
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "AgeMonthsFact": {
+      "description": "Total age in whole months (used for young children, e.g. under 5).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/IntegerFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1800
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "PainScoreFact": {
+      "description": "Pain on a 0-10 numeric rating scale.",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/IntegerFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "HeartRateFact": {
+      "description": "Pulse / heart rate in beats per minute (UCUM /min).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/NumberFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "/min"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "RespiratoryRateFact": {
+      "description": "Respiratory rate in breaths per minute (UCUM /min).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/NumberFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "/min"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Spo2Fact": {
+      "description": "Oxygen saturation in percent (UCUM %).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/NumberFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "unit": {
+              "const": "%"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "TemperatureFact": {
+      "description": "Body temperature in degrees Celsius (UCUM Cel).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/NumberFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "unit": {
+              "const": "Cel"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "BloodPressureFact": {
+      "description": "Blood pressure in millimetres of mercury (UCUM mm[Hg]).",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/NumberFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "mm[Hg]"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "AcvpuCoding": {
+      "description": "ACVPU level: A alert, C new confusion, V responds to voice, P responds to pain, U unresponsive.",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/Coding"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "$ref": "#/$defs/AcvpuCode"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "AcvpuFact": {
+      "description": "Level of consciousness on the ACVPU scale.",
+      "allOf": [
+        {
+          "$ref": "fact.schema.json#/$defs/CodeFact"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/AcvpuCoding"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Patient": {
+      "type": "object",
+      "description": "Who the patient is. Demographics are facts so the briefing can show their source.",
+      "properties": {
+        "fhir_patient_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier",
+          "description": "FHIR Patient.id in the hospital EHR, when matched."
+        },
+        "age_years": {
+          "$ref": "#/$defs/AgeYearsFact"
+        },
+        "age_months": {
+          "$ref": "#/$defs/AgeMonthsFact"
+        },
+        "sex": {
+          "$ref": "fact.schema.json#/$defs/CodeFact",
+          "description": "Administrative gender (http://hl7.org/fhir/administrative-gender)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Symptom": {
+      "type": "object",
+      "description": "One reported symptom.",
+      "properties": {
+        "name": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "snake_case symptom key when known (e.g. productive_cough, dysuria), else short text."
+        },
+        "onset": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "When it started: an ISO 8601 duration (e.g. PT2H) or a date-time."
+        },
+        "severity": {
+          "$ref": "#/$defs/SymptomSeverity"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "Fast": {
+      "type": "object",
+      "description": "FAST stroke screen.",
+      "properties": {
+        "face_droop": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Face drooping on one side."
+        },
+        "arm_weakness": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Weakness or numbness in one arm."
+        },
+        "speech_difficulty": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Slurred or strange speech, or trouble understanding."
+        },
+        "last_known_well": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "When the patient was last known well: an ISO 8601 date-time or duration."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChestPain": {
+      "type": "object",
+      "description": "Chest pain screen.",
+      "properties": {
+        "present": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Chest pain now or in the last hours."
+        },
+        "radiates": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Pain spreads to the arm, jaw, neck or back."
+        },
+        "sweating": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Sweating with the pain."
+        },
+        "short_of_breath": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Short of breath with the pain."
+        },
+        "onset": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "When the pain started: an ISO 8601 duration or date-time."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Infection": {
+      "type": "object",
+      "description": "Infection screen (sepsis rule input).",
+      "properties": {
+        "suspected": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Infection suspected (typically a nurse fact)."
+        },
+        "fever_reported": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Fever reported by the patient or parent."
+        },
+        "rigors": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Shaking chills (rigors)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChildDanger": {
+      "type": "object",
+      "description": "NICE NG143 red features: parent answers and nurse-assessed signs.",
+      "properties": {
+        "hard_to_wake": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: the child is hard to wake, or does not stay awake (NG143 red)."
+        },
+        "no_response_to_social_cues": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: no response to social cues (NG143 red)."
+        },
+        "weak_high_pitched_or_continuous_cry": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: weak, high-pitched or continuous cry (NG143 red)."
+        },
+        "pale_mottled_ashen_or_blue": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: pale, mottled, ashen or blue skin, lips or tongue (NG143 red)."
+        },
+        "grunting": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: grunting (NG143 red)."
+        },
+        "non_blanching_rash": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: non-blanching rash (NG143 red)."
+        },
+        "neck_stiffness": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: neck stiffness (NG143 red)."
+        },
+        "seizure": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Parent: seizure / fit (NG143 red)."
+        },
+        "appears_ill_to_hcp": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Nurse-assessed: appears ill to a healthcare professional (NG143 red)."
+        },
+        "chest_indrawing": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Nurse-assessed: moderate or severe chest indrawing (NG143 red)."
+        },
+        "reduced_skin_turgor": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Nurse-assessed: reduced skin turgor (NG143 red)."
+        },
+        "bulging_fontanelle": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Nurse-assessed: bulging fontanelle (NG143 red)."
+        },
+        "focal_neuro_signs": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Nurse-assessed: focal neurological signs or focal seizures (NG143 red)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChildAmber": {
+      "type": "object",
+      "description": "NICE NG143 amber features.",
+      "properties": {
+        "pallor_reported": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Pallor of skin, lips or tongue reported by parent or carer (NG143 amber)."
+        },
+        "decreased_activity": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Decreased activity (NG143 amber)."
+        },
+        "wakes_only_with_prolonged_stimulation": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Wakes only with prolonged stimulation (NG143 amber)."
+        },
+        "nasal_flaring": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Nasal flaring (NG143 amber)."
+        },
+        "crackles": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Crackles in the chest (NG143 amber)."
+        },
+        "cap_refill_3s_or_more": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Capillary refill time 3 seconds or more (NG143 amber)."
+        },
+        "dry_mucous_membranes": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Dry mucous membranes (NG143 amber)."
+        },
+        "poor_feeding": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Poor feeding in infants (NG143 amber)."
+        },
+        "reduced_urine_output": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Reduced urine output (NG143 amber)."
+        },
+        "fever_5_days_or_more": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Fever for 5 days or more (NG143 amber)."
+        },
+        "limb_or_joint_swelling": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Swelling of a limb or joint (NG143 amber)."
+        },
+        "non_weight_bearing": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "Non-weight bearing limb or not using an extremity (NG143 amber)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Vitals": {
+      "type": "object",
+      "description": "Vital signs. One current fact per path; a nurse fact replaces a device fact at the same path.",
+      "properties": {
+        "heart_rate": {
+          "$ref": "#/$defs/HeartRateFact"
+        },
+        "spo2": {
+          "$ref": "#/$defs/Spo2Fact"
+        },
+        "temperature_c": {
+          "$ref": "#/$defs/TemperatureFact"
+        },
+        "respiratory_rate": {
+          "$ref": "#/$defs/RespiratoryRateFact"
+        },
+        "systolic_bp": {
+          "$ref": "#/$defs/BloodPressureFact"
+        },
+        "diastolic_bp": {
+          "$ref": "#/$defs/BloodPressureFact"
+        },
+        "acvpu": {
+          "$ref": "#/$defs/AcvpuFact"
+        },
+        "on_supplemental_o2": {
+          "$ref": "fact.schema.json#/$defs/TriStateFact",
+          "description": "On supplemental oxygen (NEWS2 'air or oxygen')."
+        }
+      },
+      "additionalProperties": false
+    },
+    "EhrContext": {
+      "type": "object",
+      "description": "Context read from the hospital EHR.",
+      "properties": {
+        "allergies": {
+          "type": "array",
+          "items": {
+            "$ref": "fact.schema.json#/$defs/CodeFact"
+          },
+          "maxItems": 100
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "fact.schema.json#/$defs/CodeFact"
+          },
+          "maxItems": 200
+        },
+        "medications": {
+          "type": "array",
+          "items": {
+            "$ref": "fact.schema.json#/$defs/CodeFact"
+          },
+          "maxItems": 200
+        }
+      },
+      "additionalProperties": false
+    },
+    "FactKey": {
+      "type": "string",
+      "enum": [
+        "patient.age_years",
+        "patient.age_months",
+        "patient.sex",
+        "chief_complaint",
+        "complaint_category",
+        "symptoms",
+        "pain_score",
+        "fast.face_droop",
+        "fast.arm_weakness",
+        "fast.speech_difficulty",
+        "fast.last_known_well",
+        "chest_pain.present",
+        "chest_pain.radiates",
+        "chest_pain.sweating",
+        "chest_pain.short_of_breath",
+        "chest_pain.onset",
+        "infection.suspected",
+        "infection.fever_reported",
+        "infection.rigors",
+        "child_danger.hard_to_wake",
+        "child_danger.no_response_to_social_cues",
+        "child_danger.weak_high_pitched_or_continuous_cry",
+        "child_danger.pale_mottled_ashen_or_blue",
+        "child_danger.grunting",
+        "child_danger.non_blanching_rash",
+        "child_danger.neck_stiffness",
+        "child_danger.seizure",
+        "child_danger.appears_ill_to_hcp",
+        "child_danger.chest_indrawing",
+        "child_danger.reduced_skin_turgor",
+        "child_danger.bulging_fontanelle",
+        "child_danger.focal_neuro_signs",
+        "child_amber.pallor_reported",
+        "child_amber.decreased_activity",
+        "child_amber.wakes_only_with_prolonged_stimulation",
+        "child_amber.nasal_flaring",
+        "child_amber.crackles",
+        "child_amber.cap_refill_3s_or_more",
+        "child_amber.dry_mucous_membranes",
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_amber.fever_5_days_or_more",
+        "child_amber.limb_or_joint_swelling",
+        "child_amber.non_weight_bearing",
+        "vitals.heart_rate",
+        "vitals.spo2",
+        "vitals.temperature_c",
+        "vitals.respiratory_rate",
+        "vitals.systolic_bp",
+        "vitals.diastolic_bp",
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2",
+        "ehr_context.allergies",
+        "ehr_context.conditions",
+        "ehr_context.medications"
+      ],
+      "description": "Every leaf fact path in StructuredFacts (list-valued paths name the list). Used for question keys, needed facts, missing inputs, FHIR mapping keys and Questionnaire linkIds."
+    },
+    "NeededFact": {
+      "type": "object",
+      "description": "A fact the conversation (patient) or the nurse should collect next.",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/FactKey"
+        },
+        "audience": {
+          "$ref": "#/$defs/NeededFactAudience"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Short machine-readable or templated reason, never patient words."
+        }
+      },
+      "required": [
+        "key",
+        "audience",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "Turn": {
+      "type": "object",
+      "description": "One conversation turn. Transcripts are kept for the session only.",
+      "properties": {
+        "turn_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "role": {
+          "$ref": "#/$defs/TurnRole"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "question_key": {
+          "$ref": "#/$defs/FactKey",
+          "description": "The fact this turn asks about or answers, when known."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "turn_id",
+        "role",
+        "text",
+        "created_at"
+      ],
+      "additionalProperties": false
+    },
+    "AcvpuCode": {
+      "type": "string",
+      "enum": [
+        "A",
+        "C",
+        "V",
+        "P",
+        "U"
+      ],
+      "description": "A alert, C new confusion, V responds to voice, P responds to pain, U unresponsive."
+    },
+    "NeededFactAudience": {
+      "type": "string",
+      "enum": [
+        "patient",
+        "nurse"
+      ],
+      "description": "Who should provide the fact."
+    },
+    "TurnRole": {
+      "type": "string",
+      "enum": [
+        "patient",
+        "assistant"
+      ],
+      "description": "Who spoke: the person at the kiosk (patient or parent) or the CareFlow assistant."
+    }
+  }
+}
