@@ -1,0 +1,15 @@
+# Which provider serves each AI task (docs/CONVENTIONS.md). One line per task: switching a task to
+# another provider is a one-line change, e.g.
+#   extraction: { provider: api, vendor: anthropic, model: <model id> }
+# API providers are off unless the owner adds a key to .env; without it the task raises
+# ProviderUnavailable and callers fall back to local/replay or mark the work not_run.
+tasks:
+  conversation: { provider: local, model: qwen3.5-9b-4bit }
+  extraction:   { provider: local, model: qwen3.5-9b-4bit }
+  summary:      { provider: local, model: qwen3.5-9b-4bit }   # api is an optional override
+  eval_judge:   { provider: cli,   tool: codex }   # offline only; fallback local; never the same model as the generator
+  test_data:    { provider: cli,   tool: codex }   # offline only; or the coding agent writes the data in-session
+  translation_check: { provider: local, model: qwen3.5-9b-4bit }   # offline only (M2-01); cli or api optional
+speech:
+  stt: { provider: mlx-whisper, by_language: { en: mlx-whisper, ar: mlx-whisper } }   # cohere-transcribe-arabic is gated on HF: use only if downloadable
+  tts: { provider: kokoro, by_language: { en: kokoro, ar: silma } }   # Kokoro has no Arabic
