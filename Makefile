@@ -10,7 +10,7 @@ export UV_LOCKED := 1
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke \
-	llm-local
+	llm-local api migrate seed-dev
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -109,3 +109,13 @@ LLM_REVISION := 938d8919941c6e7efd3c7150eff7fe9d12afa631
 llm-local: ## Serve the pinned local model on 127.0.0.1:8081 in the foreground (Ctrl-C stops it)
 	uv run mlx_lm.server --host 127.0.0.1 --port 8081 --model "$$(uvx --from 'huggingface_hub==2.0.0' \
 		hf download $(LLM_MODEL) --revision $(LLM_REVISION) --quiet)"
+
+# --- API (M0-07) ---------------------------------------------------------------------------------
+api: ## Run the API on :8000 (needs `make up` and `make migrate`)
+	uv run uvicorn careflow_api.main:create_app --factory --host 127.0.0.1 --port 8000
+
+migrate: ## Apply the Alembic migrations as careflow_migrator
+	cd services/api && uv run alembic upgrade head
+
+seed-dev: ## Create the development clinics, staff and devices (secrets from .env)
+	uv run careflow-api seed-dev

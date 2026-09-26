@@ -4,7 +4,31 @@ version = "0.0.0"
 description = "CareFlow public REST API and WebSocket events (FastAPI)."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+  "careflow-contracts",
+  "fastapi>=0.141,<0.142",
+  "uvicorn>=0.54,<0.55",
+  "sqlalchemy[asyncio]>=2.1,<2.2",
+  "psycopg[binary]>=3.3,<3.4",
+  "alembic>=1.20,<2",
+  "pydantic>=2.13,<3",
+  "pydantic-settings>=2.15,<3",
+  "pyjwt>=2.15,<3",
+  "bcrypt>=5.0,<6",
+  "redis>=8.1,<9",
+  "httpx>=0.28,<0.29",
+  "typer>=0.27,<0.28",
+  "opentelemetry-api>=1.45,<2",
+  "opentelemetry-sdk>=1.45,<2",
+  "opentelemetry-instrumentation-fastapi>=0.66b0,<0.67",
+  "opentelemetry-exporter-otlp>=1.45,<2",
+]
+
+[project.scripts]
+careflow-api = "careflow_api.cli:main"
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]

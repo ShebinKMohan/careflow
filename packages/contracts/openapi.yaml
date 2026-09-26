@@ -65,6 +65,9 @@ paths:
               example:
                 status: ok
                 version: 0.1.0
+                db: ok
+                redis: ok
+                fhir: down
   /v1/auth/login:
     post:
       operationId: login
@@ -869,6 +872,7 @@ paths:
       - nurse
       x-careflow-roles:
       - nurse
+      - admin
       responses:
         '200':
           description: Nurse worklist
@@ -1702,7 +1706,8 @@ components:
       additionalProperties: false
     DeviceTokenRequest:
       type: object
-      description: A kiosk or queue-board device exchanges its provisioned secret for a device token.
+      description: A kiosk, queue-board device or integration service account (M4-01, M4-02) exchanges
+        its provisioned secret for a token (roles kiosk_device, board or integration).
       properties:
         device_id: *id005
         device_type:
@@ -1710,6 +1715,7 @@ components:
           enum:
           - kiosk
           - board
+          - integration
         device_secret:
           type: string
           minLength: 16
@@ -2431,6 +2437,7 @@ components:
       additionalProperties: false
     Health:
       type: object
+      description: Liveness plus the reachability of each dependency. The process answering means status ok.
       properties:
         status:
           type: string
@@ -2438,10 +2445,24 @@ components:
           - ok
         version:
           type: string
+        db:
+          $ref: '#/components/schemas/ComponentStatus'
+        redis:
+          $ref: '#/components/schemas/ComponentStatus'
+        fhir:
+          $ref: '#/components/schemas/ComponentStatus'
       required:
       - status
       - version
+      - db
+      - redis
+      - fhir
       additionalProperties: false
+    ComponentStatus:
+      type: string
+      enum:
+      - ok
+      - down
     EventEnvelope:
       $ref: ./events/envelope.schema.json#/$defs/EventEnvelope
     AlertRaisedData:

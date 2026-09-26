@@ -56,6 +56,7 @@ GENERATORS: dict[str, Callable[[], str]] = {
     # API auth (M0-07): JWT signing, seeded dev users, one-time WebSocket tickets.
     "CAREFLOW_JWT_SECRET": _hex(32),
     "CAREFLOW_DEV_PASSWORD": _password,
+    "CAREFLOW_DEV_DEVICE_SECRET": _password,
     "CAREFLOW_WS_TICKET_SECRET": _hex(32),
     # Signing keys: QR hand-over tokens (M2-06), webhooks (M4-03), audit-chain anchors (M5-01).
     "CAREFLOW_HANDOVER_SIGNING_KEY": _hex(32),

@@ -956,11 +956,11 @@ export interface components {
             username: string;
             password: string;
         };
-        /** @description A kiosk or queue-board device exchanges its provisioned secret for a device token. */
+        /** @description A kiosk, queue-board device or integration service account (M4-01, M4-02) exchanges its provisioned secret for a token (roles kiosk_device, board or integration). */
         DeviceTokenRequest: {
             device_id: components["schemas"]["Identifier"];
             /** @enum {string} */
-            device_type: "kiosk" | "board";
+            device_type: "kiosk" | "board" | "integration";
             device_secret: string;
         };
         TokenResponse: {
@@ -1243,11 +1243,17 @@ export interface components {
             ruleset_version: string;
             services: components["schemas"]["ServiceStatus"][];
         };
+        /** @description Liveness plus the reachability of each dependency. The process answering means status ok. */
         Health: {
             /** @enum {string} */
             status: "ok";
             version: string;
+            db: components["schemas"]["ComponentStatus"];
+            redis: components["schemas"]["ComponentStatus"];
+            fhir: components["schemas"]["ComponentStatus"];
         };
+        /** @enum {string} */
+        ComponentStatus: "ok" | "down";
         /**
          * EventEnvelope
          * @description Standard Webhooks payload {type, timestamp, data}. The same envelope frames WebSocket messages. The event id travels in the webhook-id header. data always carries clinic_id and session_id and never a name, a date of birth or free text.
@@ -1925,7 +1931,10 @@ export interface operations {
                     /**
                      * @example {
                      *       "status": "ok",
-                     *       "version": "0.1.0"
+                     *       "version": "0.1.0",
+                     *       "db": "ok",
+                     *       "redis": "ok",
+                     *       "fhir": "down"
                      *     }
                      */
                     "application/json": components["schemas"]["Health"];
