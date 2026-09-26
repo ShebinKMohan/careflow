@@ -6,8 +6,44 @@ packages:
 # One exact version per shared tool; packages refer to these with "catalog:".
 catalog:
   "@eslint/js": 10.0.1
-  "@types/node": 24.19.0
+  "@playwright/test": 1.63.0
+  "@tailwindcss/postcss": 4.3.3
+  "@testing-library/dom": 10.4.2
+  "@testing-library/jest-dom": 7.0.1
+  "@testing-library/react": 16.3.3
+  "@testing-library/user-event": 14.6.7
+  "@types/node": 24.13.6
+  "@types/react": 19.2.18
+  "@types/react-dom": 19.2.7
+  "@vitejs/plugin-react": 6.1.1
   eslint: 10.11.0
+  eslint-config-next: 16.3.6
+  jsdom: 30.1.1
+  next: 16.3.6
+  next-intl: 4.14.7
+  openapi-fetch: 0.17.0
+  react: 19.2.8
+  react-dom: 19.2.8
+  tailwindcss: 4.3.3
   typescript: 6.0.3
   typescript-eslint: 8.70.1
+  vite: 8.3.1
   vitest: 5.0.2
+  zod: 4.6.5
+
+# Install scripts stay off. sharp, unrs-resolver, @swc/core and @parcel/watcher ship prebuilt
+# binaries through optional dependencies (next, eslint-config-next, next-intl); @scarf/scarf is
+# install telemetry (from @stoplight/prism-cli) and must never run.
+allowBuilds:
+  "@parcel/watcher": false
+  "@scarf/scarf": false
+  "@swc/core": false
+  sharp: false
+  unrs-resolver: false
+
+# postman-collection 4.5.0 (Prism -> @stoplight/http-spec) pins lodash and uuid releases with known
+# advisories (osv-scanner); these are the fixed releases, already used elsewhere in the tree. Its
+# @faker-js/faker 5.5.3 cannot move (faker 10 breaks the module at load); see osv-scanner.toml.
+overrides:
+  "postman-collection>lodash": 4.18.1
+  "postman-collection>uuid": 11.1.1

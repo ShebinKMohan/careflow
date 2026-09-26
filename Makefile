@@ -10,7 +10,7 @@ export UV_LOCKED := 1
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke \
-	llm-local api migrate seed-dev
+	llm-local api migrate seed-dev mock e2e
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -119,3 +119,10 @@ migrate: ## Apply the Alembic migrations as careflow_migrator
 
 seed-dev: ## Create the development clinics, staff and devices (secrets from .env)
 	uv run careflow-api seed-dev
+
+# --- Apps (M0-08) --------------------------------------------------------------------------------
+mock: ## Serve the OpenAPI examples with Prism on :4010 (static examples, deterministic)
+	pnpm exec prism mock packages/contracts/openapi.yaml --port 4010
+
+e2e: ## Playwright smoke suites for kiosk, staff and companion (each starts its own mock and app)
+	pnpm test:e2e

@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "title": "CareFlow companion",
+    "description": "Your visit on your phone after the kiosk hand-over. Research prototype."
+  },
+  "header": {
+    "app": "CareFlow"
+  },
+  "claim": {
+    "title": "Continue on your phone",
+    "intro": "Enter the code from the kiosk QR screen to continue your visit on this phone.",
+    "code": "Hand-over code",
+    "submit": "Continue",
+    "working": "Connecting…",
+    "invalid": "The code has at least 16 characters.",
+    "failed": "This code did not work. It may have expired; ask at the kiosk for a new one.",
+    "welcome": "Connected, {initials}",
+    "status": "See my place in the queue"
+  },
+  "status": {
+    "title": "Your place in the queue",
+    "position": "Position: {position}",
+    "wait": "Estimated wait: about {minutes} minutes",
+    "token": "Your number: {code}",
+    "noToken": "You do not have a queue number yet.",
+    "unauthorized": "Your session has ended. Scan the kiosk QR code again.",
+    "claimLink": "Enter a code",
+    "loading": "Loading…",
+    "failed": "Your status could not be loaded."
+  }
+}
