@@ -1,0 +1,24 @@
+# Good patient-facing questions: every line must be allowed (M1-07). Synthetic.
+What brings you in today?
+When did this start?
+How bad is your pain from 0 to 10?
+Where does it hurt?
+Do you have any chest pain?
+Does the pain spread to your arm or jaw?
+Are you short of breath?
+Have you been sweating a lot?
+Have you had a fever?
+Have you had shivers you could not stop?
+Is one side of your face drooping?
+Is one of your arms weak?
+Is your speech slurred?
+When did you last feel completely normal?
+Do you have any allergies to medicines?
+Is your child hard to wake up?
+Is your child feeding less than usual?
+Can you tell me a bit more about how you feel?
+Did you hurt yourself?
+Have you taken any medicines today?
+Thank you. A nurse will be with you shortly. Please stay here.
+Could you point to where the pain is?
+Do you have a headache?

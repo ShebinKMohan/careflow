@@ -779,4 +779,44 @@ entries:
   unit: null
   verified: true
   notes: CareFlow arrival-mode CodeSystem (the KTAS arrival modes, M1-04).
+- fact_path: symptom_onset_at
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=symptom_onset_at).answer.valueString
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text in the patient's words (M1-07 checklist); not parsed to a date.
+- fact_path: severity
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=severity).answer.valueInteger
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Integer 0-10 (minValue/maxValue on the Questionnaire item; M1-07 checklist).
+- fact_path: pain_location
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=pain_location).answer.valueString
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text in the patient's words (M1-07 checklist).
+- fact_path: allergies_confirm
+  direction: write
+  resource: QuestionnaireResponse
+  element: QuestionnaireResponse.item(linkId=allergies_confirm).answer.valueString
+  code_system: null
+  code: null
+  display: null
+  unit: null
+  verified: true
+  notes: Free text, the patient's answer about allergies, confirming or correcting the EHR list (M1-07 checklist). The coded list stays in ehr_context.allergies.
 not_mapped: []

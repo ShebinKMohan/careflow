@@ -7,7 +7,7 @@ from typing import Any, Final, Literal
 
 from langgraph.types import interrupt
 
-from careflow_contracts.generated.structured_facts_schema import Turn, TurnRole
+from careflow_contracts.generated.structured_facts_schema import FactKey, Turn, TurnRole
 from careflow_intake.nodes import Update
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState
@@ -37,18 +37,25 @@ def next_turn_id(state: IntakeState) -> str:
 
 
 async def ask(state: IntakeState, ports: IntakePorts, settings: IntakeSettings) -> Update:
-    """Store the next question (and its assistant turn), or mark the conversation complete."""
+    """Store the next question and its assistant turns (a notice first, if any), or mark the
+    conversation complete."""
     question = await ports.conversation.next_question(state)
     if question is None:
         return {"pending_question": None, "conversation_complete": True, "node_trace": ["ask"]}
-    turn = Turn(
-        turn_id=next_turn_id(state),
-        role=TurnRole.assistant,
-        text=question.text,
-        question_key=question.key,
-        created_at=ports.clock(),
-    )
-    return {"pending_question": question, "turns": [turn], "node_trace": ["ask"]}
+    now, number = ports.clock(), len(state.get("turns", [])) + 1
+    texts: list[tuple[str, FactKey | None]] = [(question.notice, None)] if question.notice else []
+    texts.append((question.text, question.key))
+    turns = [
+        Turn(
+            turn_id=f"trn_{number + offset:03d}",
+            role=TurnRole.assistant,
+            text=text,
+            question_key=key,
+            created_at=now,
+        )
+        for offset, (text, key) in enumerate(texts)
+    ]
+    return {"pending_question": question, "turns": turns, "node_trace": ["ask"]}
 
 
 def route_after_ask(state: IntakeState) -> Literal["await_answer", "run_rules"]:

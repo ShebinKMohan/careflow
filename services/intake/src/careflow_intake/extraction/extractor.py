@@ -66,8 +66,12 @@ def _fact_value(key: FactKey, verified: VerifiedFact) -> Any:
     if issubclass(cls, IntegerFact):
         number = numeric_value(value)
         return int(number) if number is not None and number.is_integer() else None
-    if issubclass(cls, TextFact | Symptom) and isinstance(value, str) and value.strip():
-        return value.strip()
+    if issubclass(cls, TextFact | Symptom):
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        # A yes/no given for a free-text answer ("No, none that I know of" to the allergy
+        # question): keep the patient's own verified words.
+        return verified.quote.strip() or None
     return None
 
 

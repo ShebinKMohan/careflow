@@ -53,6 +53,13 @@ class PainScoreFact(IntegerFact):
     value: Annotated[int, Field(ge=0, le=10)]
 
 
+class SeverityFact(IntegerFact):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    value: Annotated[int, Field(ge=0, le=10)]
+
+
 class HeartRateFact(NumberFact):
     model_config = ConfigDict(
         extra="forbid",
@@ -361,10 +368,14 @@ class FactKey(StrEnum):
     chief_complaint = "chief_complaint"
     complaint_category = "complaint_category"
     symptoms = "symptoms"
+    symptom_onset_at = "symptom_onset_at"
+    severity = "severity"
     pain_score = "pain_score"
     pain_present = "pain_present"
+    pain_location = "pain_location"
     injury = "injury"
     arrival_mode = "arrival_mode"
+    allergies_confirm = "allergies_confirm"
     fast_face_droop = "fast.face_droop"
     fast_arm_weakness = "fast.arm_weakness"
     fast_speech_difficulty = "fast.speech_difficulty"
@@ -517,15 +528,31 @@ class StructuredFacts(BaseModel):
         Field(description="Coded complaint category (a triage model feature)."),
     ] = None
     symptoms: Annotated[list[Symptom] | None, Field(max_length=30)] = None
+    symptom_onset_at: Annotated[
+        fact_schema.TextFact | None,
+        Field(
+            description='When the main problem started, in the patient\'s words (e.g. "since this morning").'
+        ),
+    ] = None
+    severity: SeverityFact | None = None
     pain_score: PainScoreFact | None = None
     pain_present: Annotated[
         fact_schema.TriStateFact | None,
         Field(description="The patient reports pain now (the 0-10 score may be missing)."),
     ] = None
+    pain_location: Annotated[
+        fact_schema.TextFact | None, Field(description="Where the pain is, in the patient's words.")
+    ] = None
     injury: Annotated[
         fact_schema.TriStateFact | None, Field(description="The visit is for an injury (trauma).")
     ] = None
     arrival_mode: ArrivalModeFact | None = None
+    allergies_confirm: Annotated[
+        fact_schema.TextFact | None,
+        Field(
+            description="The patient's answer about allergies, in their words: confirming or correcting the EHR list, or naming allergies when the EHR has none. Free text on purpose: a yes/no would mean different things for the two questions."
+        ),
+    ] = None
     fast: Fast | None = None
     chest_pain: ChestPain | None = None
     infection: Infection | None = None

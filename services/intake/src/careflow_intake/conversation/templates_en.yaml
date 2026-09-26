@@ -1,0 +1,36 @@
+# Approved plain-English questions for the kiosk intake (M1-07). Research prototype; synthetic data only.
+# One question per key, named by its StructuredFacts fact path (M0-02). The LLM may only rephrase
+# these; every string, including these templates, passes the patient-facing output filter.
+version: templates_en_v1
+nurse_coming: "Thank you. A nurse will be with you shortly. Please stay here."
+questions:
+  # The intake checklist.
+  chief_complaint: "What is the main reason for your visit today?"
+  symptom_onset_at: "When did this start?"
+  pain_score: "On a scale from 0 to 10, how bad is your pain right now?"
+  severity: "On a scale from 0 to 10, how bad is it right now?"
+  pain_location: "Where is the pain?"
+  allergies_confirm:
+    with_record: "Your record lists {allergies}. Is that still correct?"
+    without_record: "Are you allergic to any medicines?"
+  # FAST screen (M1-02).
+  fast.face_droop: "Is one side of your face drooping or numb?"
+  fast.arm_weakness: "Is one of your arms weak or numb?"
+  fast.speech_difficulty: "Is your speech slurred or hard to get out?"
+  fast.last_known_well: "When did you last feel completely normal?"
+  # Chest pain screen (M1-02).
+  chest_pain.present: "Do you have any pain or tightness in your chest?"
+  chest_pain.radiates: "Does the pain spread to your arm, neck, jaw or back?"
+  chest_pain.short_of_breath: "Are you short of breath?"
+  chest_pain.sweating: "Have you been sweating a lot with the pain?"
+  chest_pain.onset: "When did the chest pain start?"
+  # Fever and shivering (M1-01).
+  infection.fever_reported: "Have you had a fever?"
+  infection.rigors: "Have you had shaking or shivering that you could not stop?"
+  # NICE NG143 parent screen (M1-02), asked of the parent or carer.
+  child_danger.hard_to_wake: "Is your child very hard to wake up?"
+  child_danger.pale_mottled_ashen_or_blue: "Does your child look very pale, blotchy, grey or blue?"
+  child_danger.grunting: "Is your child making a grunting noise when breathing?"
+  child_danger.non_blanching_rash: "Does your child have spots that do not fade when you press a glass on them?"
+  child_amber.poor_feeding: "Is your child feeding or drinking much less than usual?"
+  child_amber.reduced_urine_output: "Has your child had fewer wet nappies or passed less urine than usual?"

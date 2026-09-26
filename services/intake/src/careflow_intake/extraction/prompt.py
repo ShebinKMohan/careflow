@@ -12,7 +12,7 @@ from careflow_contracts.generated.structured_facts_schema import FactKey, Sympto
 from careflow_intake.facts import fact_class
 from careflow_providers.base import Message
 
-PROMPT_VERSION: Final = "extraction_v1"
+PROMPT_VERSION: Final = "extraction_v2"
 PROMPT_DIR: Final = Path(__file__).parent / "prompts"
 
 

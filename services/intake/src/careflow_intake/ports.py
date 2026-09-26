@@ -41,6 +41,8 @@ class Question(BaseModel):
     text: Annotated[str, Field(min_length=1, max_length=500)]
     key: FactKey | None = None
     source: Literal["llm", "template"] = "template"  # who phrased the text (M1-07)
+    # Shown before the question, e.g. the fixed nurse-coming message after a critical alert.
+    notice: Annotated[str, Field(min_length=1, max_length=500)] | None = None
 
 
 class ExtractionResult(BaseModel):

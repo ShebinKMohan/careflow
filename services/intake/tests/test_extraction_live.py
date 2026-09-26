@@ -18,12 +18,12 @@ from careflow_contracts.generated.fact_schema import Provenance, TranscriptSpanS
 from careflow_intake.extraction import LlmExtractor
 from careflow_intake.extraction.record import (
     Case,
-    live_config,
     load_case,
     recorded_provider,
     warm_up,
 )
 from careflow_intake.ports import ExtractionResult
+from careflow_intake.wiring import providers_config
 
 LIVE_CASES = ("live/chest_pain", "live/fever", "live/ankle")
 
@@ -51,7 +51,7 @@ def check(case: Case, result: ExtractionResult) -> None:
     reason="needs CAREFLOW_LIVE_LLM=1 and mlx_lm.server (run through scripts/with_llm.sh)",
 )
 async def test_live_extraction_on_three_transcripts() -> None:
-    extractor = LlmExtractor.from_config(live_config())
+    extractor = LlmExtractor.from_config(providers_config())
     cold = await warm_up(extractor.provider)  # the first request after the server starts
     seconds = []
     for name in LIVE_CASES:

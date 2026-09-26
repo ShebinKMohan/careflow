@@ -1,0 +1,22 @@
+{
+  "15fb761886f1c08d1189a0003a6d6d7241b0cf9615faaea9a5505627c772634d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning.\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t5\", \"quote\": \"Yes, it goes down my left arm\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t7\", \"quote\": \"Yes, a little\", \"negated\": false}]}"
+  },
+  "6bb799ee5dc217f1a51fb5633bd0d2b9318679558262ddf4f5503f78c7d0228b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning.\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"since this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t5\", \"quote\": \"Yes, it goes down my left arm.\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t7\", \"quote\": \"Yes, a little.\", \"negated\": false}, {\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t9\", \"quote\": \"No\", \"negated\": true}]}"
+  },
+  "7917b041aed47fbb0af20f7711ec050125b7221fcc08d1eeca1b3208e0601e62": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}]}"
+  },
+  "a394690de0dd884848cca87d0b00961181caadc3f7197e092090013844b32de8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning.\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t5\", \"quote\": \"Yes, it goes down my left arm.\", \"negated\": false}]}"
+  }
+}

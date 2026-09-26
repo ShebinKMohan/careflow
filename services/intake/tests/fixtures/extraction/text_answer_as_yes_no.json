@@ -1,0 +1,76 @@
+{
+  "description": "A yes/no given for a free-text key: the patient's verified words become the value.",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "What brings you in today?",
+      "question_key": "chief_complaint",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "I've had chest pain since this morning.",
+      "question_key": "chief_complaint",
+      "created_at": "2026-09-27T09:00:10Z"
+    },
+    {
+      "turn_id": "trn_003",
+      "role": "assistant",
+      "text": "Does the pain spread to your arm, neck or jaw?",
+      "question_key": "chest_pain.radiates",
+      "created_at": "2026-09-27T09:00:15Z"
+    },
+    {
+      "turn_id": "trn_004",
+      "role": "patient",
+      "text": "Yes, down my left arm.",
+      "question_key": "chest_pain.radiates",
+      "created_at": "2026-09-27T09:00:20Z"
+    },
+    {
+      "turn_id": "trn_005",
+      "role": "assistant",
+      "text": "Have you been sweating?",
+      "question_key": "chest_pain.sweating",
+      "created_at": "2026-09-27T09:00:25Z"
+    },
+    {
+      "turn_id": "trn_006",
+      "role": "patient",
+      "text": "No.",
+      "question_key": "chest_pain.sweating",
+      "created_at": "2026-09-27T09:00:30Z"
+    },
+    {
+      "turn_id": "trn_007",
+      "role": "assistant",
+      "text": "Are you allergic to any medicines?",
+      "question_key": "allergies_confirm",
+      "created_at": "2026-09-27T09:00:35Z"
+    },
+    {
+      "turn_id": "trn_008",
+      "role": "patient",
+      "text": "No, none that I know of.",
+      "question_key": "allergies_confirm",
+      "created_at": "2026-09-27T09:00:40Z"
+    }
+  ],
+  "responses": [
+    "{\"facts\": [{\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No, none that I know of\", \"negated\": true}]}"
+  ],
+  "expected": {
+    "facts": [
+      {
+        "key": "allergies_confirm",
+        "value": "No, none that I know of",
+        "turn_id": "trn_008",
+        "quote": "No, none that I know of"
+      }
+    ],
+    "dropped_count": 0,
+    "extraction_incomplete": false
+  }
+}

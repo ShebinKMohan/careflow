@@ -16,7 +16,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
-import os
 import sys
 import time
 from collections.abc import AsyncIterator, Sequence
@@ -29,9 +28,9 @@ from careflow_contracts.generated.structured_facts_schema import FactKey, Turn, 
 from careflow_intake.extraction.extractor import DEFAULT_CONFIG, TASK, LlmExtractor
 from careflow_intake.extraction.prompt import build_messages
 from careflow_intake.ports import ExtractionResult
+from careflow_intake.wiring import providers_config
 from careflow_providers.adapters.replay import ReplayProvider
 from careflow_providers.base import ChatProvider, ChatResult, Message, schema_instruction
-from careflow_providers.config import LocalTaskConfig, ProvidersConfig, load_config
 from careflow_providers.factory import build_provider
 
 FIXTURES: Final = Path(__file__).resolve().parents[3] / "tests" / "fixtures" / "extraction"
@@ -112,17 +111,6 @@ def recorded_provider(case: Case, *, cassette: Path | None = None) -> ReplayProv
     return ReplayProvider(inner, task=TASK, model=SCRIPTED_MODEL, cassette=cassette, mode="record")
 
 
-def live_config(config: Path = DEFAULT_CONFIG) -> ProvidersConfig:
-    """providers.yaml, with the local server URL from scripts/with_llm.sh when it is set."""
-    providers = load_config(config)
-    base_url = os.environ.get("CAREFLOW_LOCAL_LLM_BASE_URL")
-    task_config = providers.tasks[TASK]
-    if base_url and isinstance(task_config, LocalTaskConfig):
-        updated = task_config.model_copy(update={"base_url": base_url})
-        providers = providers.model_copy(update={"tasks": {**providers.tasks, TASK: updated}})
-    return providers
-
-
 async def warm_up(provider: ChatProvider) -> float:
     """One untimed request that starts with the extraction system prompt (and its schema), so a
     freshly started server has loaded the model and cached that prefix before timed calls. The
@@ -140,7 +128,7 @@ async def warm_up(provider: ChatProvider) -> float:
 async def record(name: str, *, config: Path = DEFAULT_CONFIG) -> tuple[ExtractionResult, float]:
     """Run the configured model on the case and save its replies to the case's cassette."""
     case = load_case(name)
-    providers = live_config(config)
+    providers = providers_config(config)
     inner = build_provider(TASK, providers)
     await warm_up(inner)
     provider = ReplayProvider(
