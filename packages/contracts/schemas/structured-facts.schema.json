@@ -1,72 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://careflow.example/schemas/structured-facts.schema.json",
-  "title": "StructuredFacts",
-  "description": "Everything known about one check-in, as typed facts with provenance. Every leaf fact is optional: a missing fact means the question was not asked yet. Research prototype; synthetic data only.",
-  "type": "object",
-  "properties": {
-    "session_id": {
-      "$ref": "fact.schema.json#/$defs/Identifier"
-    },
-    "clinic_id": {
-      "$ref": "fact.schema.json#/$defs/Identifier"
-    },
-    "language": {
-      "$ref": "#/$defs/Language"
-    },
-    "patient": {
-      "$ref": "#/$defs/Patient"
-    },
-    "chief_complaint": {
-      "$ref": "fact.schema.json#/$defs/TextFact",
-      "description": "The main reason for the visit, in the patient's words or a short summary."
-    },
-    "complaint_category": {
-      "$ref": "fact.schema.json#/$defs/CodeFact",
-      "description": "Coded complaint category (a triage model feature)."
-    },
-    "symptoms": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/Symptom"
-      },
-      "maxItems": 30
-    },
-    "pain_score": {
-      "$ref": "#/$defs/PainScoreFact"
-    },
-    "fast": {
-      "$ref": "#/$defs/Fast"
-    },
-    "chest_pain": {
-      "$ref": "#/$defs/ChestPain"
-    },
-    "infection": {
-      "$ref": "#/$defs/Infection"
-    },
-    "child_danger": {
-      "$ref": "#/$defs/ChildDanger"
-    },
-    "child_amber": {
-      "$ref": "#/$defs/ChildAmber"
-    },
-    "vitals": {
-      "$ref": "#/$defs/Vitals"
-    },
-    "ehr_context": {
-      "$ref": "#/$defs/EhrContext"
-    },
-    "extraction_status": {
-      "$ref": "#/$defs/ExtractionStatus"
-    }
-  },
-  "required": [
-    "session_id",
-    "clinic_id",
-    "language",
-    "extraction_status"
-  ],
-  "additionalProperties": false,
+  "description": "StructuredFacts: see $defs/StructuredFacts. Everything known about one check-in, as typed facts with provenance. Every leaf fact is optional: a missing fact means the question was not asked yet. Research prototype; synthetic data only.",
+  "$ref": "#/$defs/StructuredFacts",
   "$defs": {
     "Language": {
       "type": "string",
@@ -713,6 +648,74 @@
         "assistant"
       ],
       "description": "Who spoke: the person at the kiosk (patient or parent) or the CareFlow assistant."
+    },
+    "StructuredFacts": {
+      "title": "StructuredFacts",
+      "description": "Everything known about one check-in, as typed facts with provenance. Every leaf fact is optional: a missing fact means the question was not asked yet. Research prototype; synthetic data only.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "clinic_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "language": {
+          "$ref": "#/$defs/Language"
+        },
+        "patient": {
+          "$ref": "#/$defs/Patient"
+        },
+        "chief_complaint": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "The main reason for the visit, in the patient's words or a short summary."
+        },
+        "complaint_category": {
+          "$ref": "fact.schema.json#/$defs/CodeFact",
+          "description": "Coded complaint category (a triage model feature)."
+        },
+        "symptoms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Symptom"
+          },
+          "maxItems": 30
+        },
+        "pain_score": {
+          "$ref": "#/$defs/PainScoreFact"
+        },
+        "fast": {
+          "$ref": "#/$defs/Fast"
+        },
+        "chest_pain": {
+          "$ref": "#/$defs/ChestPain"
+        },
+        "infection": {
+          "$ref": "#/$defs/Infection"
+        },
+        "child_danger": {
+          "$ref": "#/$defs/ChildDanger"
+        },
+        "child_amber": {
+          "$ref": "#/$defs/ChildAmber"
+        },
+        "vitals": {
+          "$ref": "#/$defs/Vitals"
+        },
+        "ehr_context": {
+          "$ref": "#/$defs/EhrContext"
+        },
+        "extraction_status": {
+          "$ref": "#/$defs/ExtractionStatus"
+        }
+      },
+      "required": [
+        "session_id",
+        "clinic_id",
+        "language",
+        "extraction_status"
+      ],
+      "additionalProperties": false
     }
   }
 }

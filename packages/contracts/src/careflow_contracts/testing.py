@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 from functools import cache
 from pathlib import Path
-from typing import Final, Literal, cast
+from typing import Any, Final, Literal, cast
 
 from jsonschema import Draft202012Validator, ValidationError
 from pydantic import BaseModel
@@ -24,6 +24,7 @@ from careflow_contracts.generated.urgency_suggestion_schema import UrgencySugges
 
 CONTRACTS_DIR: Final = Path(__file__).resolve().parents[2]
 SCHEMAS_DIR: Final = CONTRACTS_DIR / "schemas"
+EVENTS_DIR: Final = CONTRACTS_DIR / "events"
 FIXTURES_DIR: Final = CONTRACTS_DIR / "fixtures"
 
 # Fixture files are named `<case>.<schema name>.json`; the schema name picks schema and model.
@@ -47,41 +48,53 @@ def schema_files() -> dict[str, Path]:
     return {p.name.removesuffix(".schema.json"): p for p in sorted(SCHEMAS_DIR.glob("*.json"))}
 
 
-def load_schema(schema_name: str) -> dict[str, Schema]:
-    contents: object = json.loads(schema_files()[schema_name].read_text(encoding="utf-8"))
+def _read_schema(path: Path) -> dict[str, Schema]:
+    contents: object = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(contents, dict):
-        raise ValueError(f"{schema_name}: a schema must be a JSON object")
-    schema = cast(dict[str, Schema], contents)
-    if not isinstance(schema.get("$id"), str):
-        raise ValueError(f"{schema_name}: a schema needs a string $id")
-    return schema
+        raise ValueError(f"{path.name}: a schema must be a JSON object")
+    return cast(dict[str, Schema], contents)
+
+
+def load_schema(schema_name: str) -> dict[str, Schema]:
+    return _read_schema(schema_files()[schema_name])
 
 
 @cache
 def registry() -> SchemaRegistry:
-    """All schemas, addressable by their `$id`, so cross-file `$ref`s resolve."""
-    resources: list[tuple[str, Resource[Schema]]] = []
-    for name in schema_files():
-        contents = load_schema(name)
-        resource = Resource.from_contents(contents, default_specification=DRAFT202012)
-        resources.append((str(contents["$id"]), resource))
+    """Every schema and event schema keyed by its file URI, so relative `$ref`s resolve the way
+    they do for Redocly, openapi-typescript and datamodel-codegen (the schemas carry no `$id`)."""
+    paths = [*SCHEMAS_DIR.glob("*.json"), *EVENTS_DIR.glob("*.json")]
+    resources = [
+        (path.as_uri(), Resource.from_contents(_read_schema(path), DRAFT202012))
+        for path in sorted(paths)
+    ]
     return SchemaRegistry().with_resources(resources)
 
 
-def validator(schema_name: str) -> Draft202012Validator:
+def validator_for_file(path: Path) -> Draft202012Validator:
+    """Validator for any schema file; its relative `$ref`s resolve against its own location."""
     return Draft202012Validator(
-        load_schema(schema_name),
+        {"$ref": path.as_uri()},
         registry=registry(),
         format_checker=Draft202012Validator.FORMAT_CHECKER,
     )
 
 
-def schema_errors(schema_name: str, instance: Json) -> list[str]:
-    """JSON Schema errors for `instance`, as short `path: message` lines."""
+def validator(schema_name: str) -> Draft202012Validator:
+    return validator_for_file(schema_files()[schema_name])
+
+
+def error_messages(validator: Draft202012Validator, instance: Any) -> list[str]:
+    """Validation errors for `instance`, as short `path: message` lines."""
     errors: list[ValidationError] = list(
-        validator(schema_name).iter_errors(instance)  # pyright: ignore[reportUnknownMemberType]
+        validator.iter_errors(instance)  # pyright: ignore[reportUnknownMemberType]
     )
     return [f"{'/'.join(str(p) for p in e.absolute_path) or '<root>'}: {e.message}" for e in errors]
+
+
+def schema_errors(schema_name: str, instance: Json) -> list[str]:
+    """JSON Schema errors for `instance` against a named schema."""
+    return error_messages(validator(schema_name), instance)
 
 
 def schema_name_of(fixture: Path) -> str:

@@ -1,86 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://careflow.example/schemas/nurse-decision.schema.json",
-  "title": "NurseDecision",
-  "description": "The nurse confirms or overrides every urgency level. An override needs a reason code (checked here with if/then and again by careflow_contracts.validators.check_nurse_decision).",
-  "type": "object",
-  "properties": {
-    "decision_id": {
-      "$ref": "fact.schema.json#/$defs/Identifier"
-    },
-    "session_id": {
-      "$ref": "fact.schema.json#/$defs/Identifier"
-    },
-    "suggestion_id": {
-      "oneOf": [
-        {
-          "$ref": "fact.schema.json#/$defs/Identifier"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "The suggestion decided on; null only when no urgency suggestion was available (e.g. the model failed), so the nurse sets the level alone."
-    },
-    "action": {
-      "$ref": "#/$defs/DecisionAction"
-    },
-    "final_level": {
-      "$ref": "urgency-suggestion.schema.json#/$defs/UrgencyLevel"
-    },
-    "scale": {
-      "$ref": "urgency-suggestion.schema.json#/$defs/TriageScale"
-    },
-    "override_reason_code": {
-      "$ref": "#/$defs/OverrideReasonCode"
-    },
-    "override_note": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 500
-    },
-    "nurse_user_id": {
-      "$ref": "fact.schema.json#/$defs/Identifier"
-    },
-    "acknowledged_alert_ids": {
-      "type": "array",
-      "items": {
-        "$ref": "fact.schema.json#/$defs/Identifier"
-      },
-      "uniqueItems": true,
-      "default": []
-    },
-    "decided_at": {
-      "type": "string",
-      "format": "date-time"
-    }
-  },
-  "required": [
-    "decision_id",
-    "session_id",
-    "suggestion_id",
-    "action",
-    "final_level",
-    "scale",
-    "nurse_user_id",
-    "decided_at"
-  ],
-  "additionalProperties": false,
-  "if": {
-    "properties": {
-      "action": {
-        "const": "OVERRIDE"
-      }
-    },
-    "required": [
-      "action"
-    ]
-  },
-  "then": {
-    "required": [
-      "override_reason_code"
-    ]
-  },
+  "description": "NurseDecision: see $defs/NurseDecision. The nurse confirms or overrides every urgency level. An override needs a reason code (checked here with if/then and again by careflow_contracts.validators.check_nurse_decision).",
+  "$ref": "#/$defs/NurseDecision",
   "$defs": {
     "DecisionAction": {
       "type": "string",
@@ -98,6 +19,93 @@
         "model_error",
         "other"
       ]
+    },
+    "NurseDecision": {
+      "title": "NurseDecision",
+      "description": "The nurse confirms or overrides every urgency level. An override needs a reason code (checked here with if/then and again by careflow_contracts.validators.check_nurse_decision).",
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "suggestion_id": {
+          "oneOf": [
+            {
+              "$ref": "fact.schema.json#/$defs/Identifier"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The suggestion decided on; null only when no urgency suggestion was available (e.g. the model failed), so the nurse sets the level alone."
+        },
+        "action": {
+          "$ref": "#/$defs/DecisionAction"
+        },
+        "final_level": {
+          "$ref": "urgency-suggestion.schema.json#/$defs/UrgencyLevel"
+        },
+        "scale": {
+          "$ref": "urgency-suggestion.schema.json#/$defs/TriageScale"
+        },
+        "override_reason_code": {
+          "$ref": "#/$defs/OverrideReasonCode"
+        },
+        "override_note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "nurse_user_id": {
+          "$ref": "fact.schema.json#/$defs/Identifier"
+        },
+        "acknowledged_alert_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "fact.schema.json#/$defs/Identifier"
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "decision_id",
+        "session_id",
+        "suggestion_id",
+        "action",
+        "final_level",
+        "scale",
+        "nurse_user_id",
+        "decided_at"
+      ],
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "action": {
+            "const": "OVERRIDE"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "then": {
+        "properties": {
+          "override_reason_code": {
+            "$ref": "#/$defs/OverrideReasonCode"
+          }
+        },
+        "required": [
+          "override_reason_code"
+        ]
+      }
     }
   }
 }
