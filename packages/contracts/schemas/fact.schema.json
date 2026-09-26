@@ -1,7 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://careflow.example/schemas/fact.schema.json",
-  "title": "FactSchema",
   "description": "Identifiers, provenance, source references and the typed facts. Every fact carries a provenance and a source (safety rule 4). Research prototype; synthetic data only.",
   "$defs": {
     "Identifier": {
@@ -161,14 +159,7 @@
         }
       ],
       "discriminator": {
-        "propertyName": "kind",
-        "mapping": {
-          "transcript_span": "#/$defs/TranscriptSpanSource",
-          "fhir": "#/$defs/FhirSource",
-          "device": "#/$defs/DeviceSource",
-          "nurse": "#/$defs/NurseSource",
-          "model": "#/$defs/ModelSource"
-        }
+        "propertyName": "kind"
       }
     },
     "FactBase": {

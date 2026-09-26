@@ -1,0 +1,8 @@
+# Deliberate exceptions to Redocly's recommended rules (keep this list short).
+openapi.yaml:
+  # The local development server is the only server.
+  no-server-example.com:
+    - '#/servers/0/url'
+  # Liveness has no auth and no client input, so it has no 4xx response.
+  operation-4xx-response:
+    - '#/paths/~1health/get/responses'

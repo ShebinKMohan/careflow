@@ -8,6 +8,9 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from jsonschema import Draft202012Validator
+from pydantic import ValidationError
+
 from careflow_contracts import StructuredFacts
 from careflow_contracts.testing import (
     MODEL_FOR_SCHEMA,
@@ -18,8 +21,6 @@ from careflow_contracts.testing import (
     schema_files,
     schema_name_of,
 )
-from jsonschema import Draft202012Validator
-from pydantic import ValidationError
 
 PERSONAS = ("chest_pain", "stroke", "child_drowsy", "sepsis_partial", "routine")
 INVALID = {

@@ -1,0 +1,22 @@
+{
+  "name": "@careflow/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Typed CareFlow API contract: paths, components and webhooks generated from openapi.yaml.",
+  "type": "module",
+  "exports": {
+    ".": "./ts/index.ts"
+  },
+  "scripts": {
+    "generate": "openapi-typescript openapi.yaml -o ts/openapi.d.ts",
+    "lint": "redocly lint openapi.yaml",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@redocly/cli": "2.54.3",
+    "openapi-typescript": "7.13.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

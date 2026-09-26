@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "EventEnvelope: see $defs/EventEnvelope. Standard Webhooks payload {type, timestamp, data}. The same envelope frames WebSocket messages. The event id travels in the webhook-id header. data always carries clinic_id and session_id and never a name, a date of birth or free text.",
+  "$ref": "#/$defs/EventEnvelope",
+  "$defs": {
+    "EventType": {
+      "type": "string",
+      "enum": [
+        "alert.raised",
+        "triage.suggested",
+        "triage.confirmed",
+        "token.called",
+        "intake.completed",
+        "patient.feels_worse",
+        "nurse.flag"
+      ],
+      "description": "Event type, in the Standard Webhooks dotted style."
+    },
+    "EventEnvelope": {
+      "title": "EventEnvelope",
+      "description": "Standard Webhooks payload {type, timestamp, data}. The same envelope frames WebSocket messages. The event id travels in the webhook-id header. data always carries clinic_id and session_id and never a name, a date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the event happened (UTC)."
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "clinic_id": {
+              "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+            },
+            "session_id": {
+              "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+            }
+          },
+          "required": [
+            "clinic_id",
+            "session_id"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "timestamp",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

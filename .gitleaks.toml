@@ -1,0 +1,8 @@
+# gitleaks config: the default rules plus narrow allowlists for known false positives.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "StructuredFacts paths (NeededFact.key, FactKey) are field names, not secrets"
+regexTarget = "line"
+regexes = ['''\bkey"?:\s*"?(patient|vitals|chest_pain|fast|infection|child_danger|child_amber|ehr_context|symptoms|pain_score|chief_complaint|complaint_category)(\.[a-z0-9_]+)?"?,?\s*$''']

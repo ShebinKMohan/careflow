@@ -22,6 +22,8 @@ env:
   GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
   OSV_SCANNER_VERSION: "2.6.0"
   OSV_SCANNER_SHA256: "ca69b3d3cd08f889a49dc0a383122f71cc528b83803671df5fd874d97485b108"
+  OASDIFF_VERSION: "1.32.1"
+  OASDIFF_SHA256: "7c8939fc49b75ee11fec66a5b83b37a2fca6aee109fed85013b1ba2ac2a1ee7f"
 
 jobs:
   python:
@@ -36,11 +38,6 @@ jobs:
           cache-dependency-glob: uv.lock
       - name: Install
         run: make install-py
-      - name: Contracts are regenerated and committed
-        run: |
-          make contracts
-          git diff --exit-code
-          test -z "$(git status --porcelain --untracked-files=all)"
       - name: Lint
         run: make lint-py
       - name: Typecheck
@@ -66,6 +63,37 @@ jobs:
         run: make typecheck-node
       - name: Test
         run: make test-node
+
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Fetch main for the breaking-change base
+        run: git fetch --no-tags --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.14"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install oasdiff (checksum-verified)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fsSLo oasdiff.tar.gz \
+            "https://github.com/oasdiff/oasdiff/releases/download/v${OASDIFF_VERSION}/oasdiff_${OASDIFF_VERSION}_linux_amd64.tar.gz"
+          echo "${OASDIFF_SHA256}  oasdiff.tar.gz" | sha256sum -c -
+          tar -xzf oasdiff.tar.gz oasdiff
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Install
+        run: make install
+      - name: Redocly lint, regenerate-and-diff, oasdiff breaking
+        run: make contracts-check
 
   security:
     runs-on: ubuntu-24.04

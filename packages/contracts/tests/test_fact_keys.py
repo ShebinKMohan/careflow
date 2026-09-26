@@ -38,7 +38,7 @@ def leaf_paths() -> set[str]:
             elif name and "properties" in defs.get(name, {}):
                 walk(defs[name]["properties"], f"{path}.")
 
-    walk(schema["properties"], "")
+    walk(defs["StructuredFacts"]["properties"], "")
     return paths
 
 

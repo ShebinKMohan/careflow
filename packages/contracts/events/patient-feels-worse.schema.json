@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "PatientFeelsWorseData: see $defs/PatientFeelsWorseData. The waiting patient pressed 'I feel worse' on their phone. The note stays in the API, never in the event. No name, date of birth or free text.",
+  "$ref": "#/$defs/PatientFeelsWorseData",
+  "$defs": {
+    "PatientFeelsWorseData": {
+      "title": "PatientFeelsWorseData",
+      "description": "The waiting patient pressed 'I feel worse' on their phone. The note stays in the API, never in the event. No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "flag_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "reported_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "flag_id",
+        "reported_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_routine",
+          "flag_id": "flg_routine_01",
+          "reported_at": "2026-09-26T09:40:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "TriageConfirmedData: see $defs/TriageConfirmedData. The nurse confirmed or overrode the urgency level; the level is now final. The override note is not included (free text). No name, date of birth or free text.",
+  "$ref": "#/$defs/TriageConfirmedData",
+  "$defs": {
+    "TriageConfirmedData": {
+      "title": "TriageConfirmedData",
+      "description": "The nurse confirmed or overrode the urgency level; the level is now final. The override note is not included (free text). No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "decision_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "suggestion_id": {
+          "oneOf": [
+            {
+              "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action": {
+          "$ref": "../schemas/nurse-decision.schema.json#/$defs/DecisionAction"
+        },
+        "final_level": {
+          "$ref": "../schemas/urgency-suggestion.schema.json#/$defs/UrgencyLevel"
+        },
+        "scale": {
+          "$ref": "../schemas/urgency-suggestion.schema.json#/$defs/TriageScale"
+        },
+        "override_reason_code": {
+          "$ref": "../schemas/nurse-decision.schema.json#/$defs/OverrideReasonCode"
+        },
+        "nurse_user_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "decision_id",
+        "suggestion_id",
+        "action",
+        "final_level",
+        "scale",
+        "nurse_user_id",
+        "decided_at"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_child_drowsy",
+          "decision_id": "dec_child_drowsy",
+          "suggestion_id": "sug_child_drowsy",
+          "action": "OVERRIDE",
+          "final_level": 1,
+          "scale": "KTAS",
+          "override_reason_code": "clinical_judgement",
+          "nurse_user_id": "nurse_demo_01",
+          "decided_at": "2026-09-26T09:06:00Z"
+        }
+      ]
+    }
+  }
+}

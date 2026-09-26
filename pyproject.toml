@@ -30,8 +30,12 @@ dev = [
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# First-party packages live under packages/*/src and services/*/src.
+src = ["packages/*/src", "services/*/src", "scripts"]
 # Generated code is checked by `make contracts && git diff --exit-code`, not by the linter.
-extend-exclude = ["**/node_modules", "**/.next", "**/dist", "**/generated"]
+extend-exclude = [
+  "**/node_modules", "**/.next", "**/dist", "**/generated", "**/careflow_contracts/api_models.py",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S", "ASYNC"]
