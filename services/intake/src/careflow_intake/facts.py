@@ -8,6 +8,7 @@ urgency model read.
 
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Iterable, Sequence
 from datetime import datetime
 from functools import cache
@@ -25,6 +26,8 @@ from careflow_contracts.generated.structured_facts_schema import (
     Symptom,
 )
 
+CROCKFORD: Final = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+
 # Keys whose StructuredFacts field is a list: every entry is kept, not only the current one.
 LIST_KEYS: Final = frozenset(
     {
@@ -34,6 +37,17 @@ LIST_KEYS: Final = frozenset(
         FactKey.ehr_context_medications,
     }
 )
+
+
+def stable_fact_id(*parts: str) -> str:
+    """A contract fact id (`f_` + 26 Crockford base32 characters) derived from `parts`, so the same
+    statement always gets the same id."""
+    number = int.from_bytes(hashlib.sha256("|".join(parts).encode()).digest()[:17], "big")
+    chars = []
+    for _ in range(26):
+        chars.append(CROCKFORD[number & 31])
+        number >>= 5
+    return "f_" + "".join(reversed(chars))
 
 
 def _models_in(annotation: Any) -> list[type[BaseModel]]:
@@ -177,5 +191,6 @@ __all__ = [
     "current_entries",
     "fact_class",
     "merge_facts_by_id",
+    "stable_fact_id",
     "to_structured_facts",
 ]
