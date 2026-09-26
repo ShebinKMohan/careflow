@@ -56,6 +56,8 @@ The issue's fields are kept, with a few additions:
 
 The port protocols are `Identifier`, `EhrReader`, `Conversation`, `Extractor`, `RulesRunner`, `UrgencyModel`, `QueueService`, `Writeback`, `BriefingBuilder` and `EventSink`, all collected in `IntakePorts`. `IntakePorts` also carries an injected `clock`, which keeps the tests deterministic.
 
+- **`Extractor.extract`** takes `(turns, existing_facts, question_keys)` and returns `ExtractionResult`. Its fields are `facts`, `dropped_count`, `extraction_incomplete`, `error_code`, `prompt_version`, `model_id` and `provider`. The signature is the one the M1-06 issue expects. Fact ids should be stable for the same statement, so a re-extraction replaces a fact rather than duplicating it.
+- **`Conversation.next_question(state)`** returns a `Question`: `question_id`, `text`, `key`, and `source` (`llm` or `template`, as in M1-07).
 - **`RulesRunner.run`** takes `StructuredFacts`, `now` and `arrived_at`.
 - **`UrgencyModel.predict`** has the M1-04 signature. It raises `NoSuggestion` when it cannot suggest; M1-07 maps the triage `OutOfScopeError` to it.
 - **Sync and async.** The pure CPU ports (rules, model) are synchronous. The I/O ports are async.
