@@ -6,7 +6,10 @@ Inference follows the M1-05 port.
 from __future__ import annotations
 
 import json
+import os
+import statistics
 import time
+import warnings
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -22,6 +25,12 @@ from careflow_triage.report import write_model_card, write_reports
 from careflow_triage.train import train
 
 NOW = datetime(2026, 9, 27, 9, 0, tzinfo=UTC)
+LATENCY_BUDGET_S = 0.020  # M1-04: under 20 ms per call, measured on the reference machine (M3 Pro)
+
+
+def reference_machine() -> bool:
+    """Speed targets are measured on the dev machine and are never CI gates (CONVENTIONS)."""
+    return os.environ.get("CI") != "true"
 
 
 def test_fixture_artifacts_are_labelled_and_complete(trained) -> None:  # noqa: ANN001
@@ -98,7 +107,17 @@ def test_predict_returns_three_reasons_fast(trained, fixture_csv: Path, kind: st
         assert own_ids <= {
             fact_id for fact_id in f.model_dump_json().split('"') if fact_id.startswith("f_")
         }
-    assert max(timings) < 0.020, f"slowest predict {max(timings) * 1000:.1f} ms"
+    slowest = max(timings)
+    measured = (
+        f"predict[{kind}]: p50 {statistics.median(timings) * 1000:.2f} ms, "
+        f"slowest {slowest * 1000:.2f} ms over {len(timings)} calls"
+    )
+    if reference_machine():
+        assert slowest < LATENCY_BUDGET_S, measured
+    elif slowest >= LATENCY_BUDGET_S:
+        warnings.warn(
+            f"{measured}: over the 20 ms budget on this runner (not a CI gate)", stacklevel=1
+        )
 
 
 def test_display_labels_follow_the_scale(trained, fixture_csv: Path) -> None:  # noqa: ANN001

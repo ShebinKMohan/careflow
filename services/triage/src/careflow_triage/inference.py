@@ -12,7 +12,7 @@ import hashlib
 import json
 import math
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Final
@@ -20,7 +20,7 @@ from typing import Any, Final
 import joblib
 import numpy as np
 import shap
-from threadpoolctl import threadpool_limits
+from threadpoolctl import ThreadpoolController
 
 from careflow_contracts import StructuredFacts
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
@@ -105,6 +105,12 @@ class UrgencyModel:
     model: Any
     meta: dict[str, Any]
     background: np.ndarray
+    _threads: ThreadpoolController = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        # Built once the model's libraries (OpenMP) are loaded: building one per call
+        # (`threadpool_limits`) costs about 1 ms.
+        self._threads = ThreadpoolController()
 
     @classmethod
     def load(cls, path: Path) -> UrgencyModel:
@@ -148,8 +154,8 @@ class UrgencyModel:
         if (reason := out_of_scope_reason(facts)) is not None:
             raise OutOfScopeError(reason)
         x = facts_to_features(facts).reshape(1, -1)
-        # One row: OpenMP thread overhead costs more than the prediction (hgb median 20 ms -> 5 ms).
-        with threadpool_limits(limits=1):
+        # One row: OpenMP thread overhead costs more than the prediction (hgb median 20 ms -> 4 ms).
+        with self._threads.limit(limits=1):
             logits = self.model.decision_function(x)
             probs = probabilities(np.atleast_2d(logits), float(self.meta["temperature"]))[0]
             best = int(probs.argmax())
