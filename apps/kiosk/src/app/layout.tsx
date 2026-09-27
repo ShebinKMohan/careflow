@@ -3,6 +3,8 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 import { AppDocument } from "@/components/AppDocument";
+import { IdleGuard } from "@/components/IdleGuard";
+import { KioskProvider } from "@/lib/session";
 
 import { fontVariables } from "./fonts";
 import "./globals.css";
@@ -16,7 +18,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
   return (
     <AppDocument locale={locale} messages={messages} className={fontVariables}>
-      {children}
+      <KioskProvider>
+        {children}
+        <IdleGuard />
+      </KioskProvider>
     </AppDocument>
   );
 }

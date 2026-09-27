@@ -29,16 +29,39 @@
     "clear": "Clear",
     "submit": "Check in",
     "working": "Checking in…",
-    "welcome": "Welcome, {initials}",
-    "session": "Session {id}",
-    "continue": "Continue",
-    "failed": "We could not find that keypad ID. Please try again or ask a nurse.",
+    "failed": "We couldn't find a match. Please try again or see reception.",
     "needsSetup": "This kiosk is not signed in yet.",
-    "setupLink": "Kiosk setup (staff)"
+    "setupLink": "Kiosk setup (staff)",
+    "seeReception": "Please see reception.",
+    "backspace": "Delete the last digit"
   },
   "intake": {
     "title": "Your visit",
-    "placeholder": "The intake questions arrive in a later version. Please take a seat; a nurse will see you."
+    "greeting": "Welcome, {initials}",
+    "firstQuestion": "What is the main reason for your visit today?",
+    "needsCheckin": "Please check in first.",
+    "checkinLink": "Check in",
+    "tapLabel": "Tap an answer",
+    "scaleLabel": "Tap a number from 0 to 10",
+    "scaleHint": "0 means none, 10 means the worst you can imagine.",
+    "typeLabel": "Or type your answer",
+    "send": "Send",
+    "sending": "Sending…",
+    "failed": "That did not go through. Please try again, or ask a nurse.",
+    "mic": "Speak your answer",
+    "listening": "Listening…",
+    "answers": {
+      "yes": "Yes",
+      "no": "No",
+      "notSure": "Not sure",
+      "ok": "OK",
+      "chestPain": "Chest pain",
+      "breathing": "Breathing problems",
+      "fever": "Fever",
+      "injury": "Injury",
+      "pain": "Pain",
+      "other": "Something else"
+    }
   },
   "vitals": {
     "title": "Your vital signs",
@@ -57,6 +80,22 @@
     "skinTone": "Pulse oximeter: warns about known skin-tone limits",
     "noSession": "Check in first to measure your vital signs.",
     "checkinLink": "Check in",
-    "failed": "The vitals device could not start. Please ask a nurse."
+    "failed": "The vitals device could not start. Please ask a nurse.",
+    "continue": "Continue",
+    "skip": "Skip"
+  },
+  "done": {
+    "title": "Thank you",
+    "seat": "Please take a seat. A nurse will review your details.",
+    "tokenLabel": "Your number",
+    "room": "Please go to {room}.",
+    "waiting": "We will call your number soon.",
+    "estimate": "About {minutes} minutes (an estimate).",
+    "noSession": "Please check in first."
+  },
+  "idle": {
+    "title": "Are you still there?",
+    "countdown": "Starting over in {seconds} seconds.",
+    "stay": "I'm still here"
   }
 }
