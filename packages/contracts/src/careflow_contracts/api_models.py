@@ -225,6 +225,12 @@ class KeypadCheckinRequest(BaseModel):
             description="Keypad ID. Only ever in the body, never in a URL.", pattern="^[0-9]{6}$"
         ),
     ]
+    language: Annotated[
+        LanguageModel | None,
+        Field(
+            description="The language the patient picked on the kiosk's first screen (M2-01). The session keeps it; it never changes mid-session. English when absent."
+        ),
+    ] = None
 
 
 class IdTapCheckinRequest(BaseModel):
