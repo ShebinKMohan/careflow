@@ -356,6 +356,25 @@ def test_keypad_to_token_on_the_real_stack(
     ).json()
     assert encounters.get("total", len(encounters.get("entry", []))) == 1  # written once
 
+    if os.environ.get("CAREFLOW_EVIDENCE") == "1":  # the observations docs/evidence quotes
+        print(  # noqa: T201
+            "\nEVIDENCE",
+            {
+                "session_id": session_id,
+                "turns": [(mode, key) for mode, key in answers],
+                "alerts": sorted(rules),
+                "news2": {k: view["news2"].get(k) for k in ("total", "partial", "band")},
+                "suggestion": view["suggestion"],
+                "decision_rows": [tuple(r) for r in decision_rows(database, clinics.a, session_id)],
+                "token_code": token["token_code"],
+                "status_keys": sorted(status),
+                "ecg_done": ecg_done["provenance"],
+                "hapi_task": (fhir_task, hapi_task["status"]),
+                "hapi_encounters": encounters.get("total"),
+                "fhir": fhir_base(),
+            },
+        )
+
     # Clinic isolation: another clinic's nurse sees nothing of it.
     other_nurse, _ = staff(client, clinics, "nurse", "b")
     others = client.get("/v1/nurse/worklist", headers=other_nurse).json()

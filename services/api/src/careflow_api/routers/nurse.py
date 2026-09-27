@@ -293,7 +293,9 @@ async def complete_task(
         )
         try:
             await handler.complete_task(str(principal.clinic_id), session_id, fhir_task.resource_id)
-        except (UnknownTask, Exception) as exc:  # the fact stands; the FHIR Task is retried later
+        # The fact stands. The FHIR Task stays open until a later completion call: nothing
+        # retries it yet (durable outbound retries are SHE-283 [M4-03]).
+        except (UnknownTask, Exception) as exc:
             logger.warning("nurse.task_fhir", extra={"error": type(exc).__name__})
         finally:
             await handler.client.aclose()
