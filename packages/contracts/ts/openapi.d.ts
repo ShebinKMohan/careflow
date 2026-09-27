@@ -698,7 +698,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Service status */
+        /**
+         * Service status
+         * @description The services, then every intake port's implementation (`port:<name>`; degraded when a stand-in is in use), the urgency model version (`urgency-model`) and the provider and model of every AI task (`ai:<task>`), M1-12.
+         */
         get: operations["getAdminStatus"];
         put?: never;
         post?: never;
@@ -1792,7 +1795,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "TranscriptSpanSource";
+            kind: "transcript_span";
             turn_id: components["schemas"]["Identifier"];
             start: number;
             end: number;
@@ -1804,7 +1807,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "FhirSource";
+            kind: "fhir";
             resource_type: string;
             id: components["schemas"]["Identifier"];
             /** @description The resource's meta.versionId when the fact was read, if the EHR gives one. */
@@ -1816,7 +1819,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "DeviceSource";
+            kind: "device";
             device_id: components["schemas"]["Identifier"];
             reading_id: components["schemas"]["Identifier"];
         };
@@ -1826,7 +1829,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "NurseSource";
+            kind: "nurse";
             staff_user_id: components["schemas"]["Identifier"];
         };
         /** @description Inferred by a model; never shown without this tag. */
@@ -1835,7 +1838,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "ModelSource";
+            kind: "model";
             model_id: components["schemas"]["Identifier"];
             model_version: components["schemas"]["Identifier"];
         };
@@ -4204,10 +4207,14 @@ export interface operations {
                     /**
                      * @example {
                      *       "api_version": "0.1.0",
-                     *       "ruleset_version": "2026.1.0",
+                     *       "ruleset_version": "2026.2.0",
                      *       "services": [
                      *         {
                      *           "name": "postgres",
+                     *           "status": "ok"
+                     *         },
+                     *         {
+                     *           "name": "valkey",
                      *           "status": "ok"
                      *         },
                      *         {
@@ -4215,9 +4222,79 @@ export interface operations {
                      *           "status": "ok"
                      *         },
                      *         {
-                     *           "name": "mlx-lm",
-                     *           "status": "down",
-                     *           "detail": "not started"
+                     *           "name": "port:identifier",
+                     *           "status": "ok",
+                     *           "detail": "check-in (keypad)"
+                     *         },
+                     *         {
+                     *           "name": "port:ehr",
+                     *           "status": "ok",
+                     *           "detail": "FHIR R4 reader (M1-08)"
+                     *         },
+                     *         {
+                     *           "name": "port:conversation",
+                     *           "status": "ok",
+                     *           "detail": "checklist; phrasing: local qwen3.5-9b-4bit"
+                     *         },
+                     *         {
+                     *           "name": "port:extractor",
+                     *           "status": "ok",
+                     *           "detail": "LLM extractor (M1-06); local qwen3.5-9b-4bit"
+                     *         },
+                     *         {
+                     *           "name": "port:rules",
+                     *           "status": "ok",
+                     *           "detail": "careflow_rules; 2026.2.0"
+                     *         },
+                     *         {
+                     *           "name": "port:urgency",
+                     *           "status": "degraded",
+                     *           "detail": "none (no suggestion); TRIAGE_MODEL_PATH has no model"
+                     *         },
+                     *         {
+                     *           "name": "port:queue",
+                     *           "status": "ok",
+                     *           "detail": "queue (M1-10)"
+                     *         },
+                     *         {
+                     *           "name": "port:writeback",
+                     *           "status": "ok",
+                     *           "detail": "FHIR write-back (M1-09)"
+                     *         },
+                     *         {
+                     *           "name": "port:briefing",
+                     *           "status": "ok",
+                     *           "detail": "briefing (M1-16); summary: local qwen3.5-9b-4bit"
+                     *         },
+                     *         {
+                     *           "name": "port:events",
+                     *           "status": "ok",
+                     *           "detail": "transactional outbox (M1-11)"
+                     *         },
+                     *         {
+                     *           "name": "urgency-model",
+                     *           "status": "ok",
+                     *           "detail": "none"
+                     *         },
+                     *         {
+                     *           "name": "ai:conversation",
+                     *           "status": "ok",
+                     *           "detail": "local qwen3.5-9b-4bit"
+                     *         },
+                     *         {
+                     *           "name": "ai:extraction",
+                     *           "status": "ok",
+                     *           "detail": "local qwen3.5-9b-4bit"
+                     *         },
+                     *         {
+                     *           "name": "ai:summary",
+                     *           "status": "ok",
+                     *           "detail": "local qwen3.5-9b-4bit"
+                     *         },
+                     *         {
+                     *           "name": "ai:eval_judge",
+                     *           "status": "ok",
+                     *           "detail": "cli codex"
                      *         }
                      *       ]
                      *     }
