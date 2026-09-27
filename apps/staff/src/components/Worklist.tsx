@@ -80,7 +80,7 @@ export function Worklist() {
                 <tbody>
                   {rows.map((item) => (
                     <tr key={item.session_id} data-session={item.session_id}>
-                      <td className={CELL}>{format.dateTime(new Date(item.arrived_at), { timeStyle: "short" })}</td>
+                      <td className={CELL}>{format.dateTime(new Date(item.arrived_at), { timeStyle: "short", numberingSystem: "latn" })}</td>
                       <td className={`${CELL} font-semibold`}>
                         <Link href={`/nurse/${encodeURIComponent(item.session_id)}`} className="text-primary underline">
                           {item.patient_display}

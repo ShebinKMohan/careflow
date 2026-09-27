@@ -132,8 +132,8 @@ export function TriageCard({
           <p className="text-title font-bold">{t("confirmedLevel", { label: levelLabel(decided.scale, decided.final_level) })}</p>
           {result?.token ? (
             <p className="text-title">
-              {t("token", { code: result.token.token_code })}
-              {result.token.room ? ` · ${t("room", { room: result.token.room })}` : ""}
+              {t.rich("token", { code: result.token.token_code, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}
+              {result.token.room ? <> · {t.rich("room", { room: result.token.room, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</> : null}
             </p>
           ) : result ? (
             <p>{t("noToken")}</p>

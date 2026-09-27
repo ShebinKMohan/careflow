@@ -41,7 +41,7 @@
     "level": "{scale} {level}",
     "noLevel": "Not assessed",
     "sessionTitle": "Triage",
-    "session": "Session {id}",
+    "session": "Session <ltr>{id}</ltr>",
     "ageSex": "Age, sex",
     "complaint": "Complaint",
     "levelColumn": "Level",
@@ -72,7 +72,7 @@
   },
   "doctor": {
     "title": "Doctor briefing",
-    "session": "Session {id}",
+    "session": "Session <ltr>{id}</ltr>",
     "listTitle": "Confirmed patients",
     "none": "No confirmed patients yet today.",
     "token": "Number",
@@ -163,8 +163,8 @@
     "failed": "The decision was not saved. Try again.",
     "confirmedTitle": "Decision",
     "confirmedLevel": "{label}, set by the nurse",
-    "token": "Number {code}",
-    "room": "Room {room}",
+    "token": "Number <ltr>{code}</ltr>",
+    "room": "Room <ltr>{room}</ltr>",
     "noToken": "No queue number yet.",
     "warnings": {
       "extraction_incomplete": "Extraction incomplete. Check answers with the patient.",

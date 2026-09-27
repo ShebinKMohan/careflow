@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import { expect, type Page, test } from "@playwright/test";
 
 const FOOTER_EN = "Research prototype. Synthetic data only. Not for clinical use.";
+const DISCLAIMER_EN = "Arabic supported; not validated by native speakers.";
 const EVIDENCE_DIR = new URL("../../../../docs/evidence/M0-08/", import.meta.url).pathname;
 
 async function claim(page: Page) {
@@ -26,7 +27,8 @@ async function cachedUrls(page: Page): Promise<string[]> {
 test("the footer is visible on every page", async ({ page }) => {
   for (const path of ["/", "/status"]) {
     await page.goto(path);
-    await expect(page.getByRole("contentinfo"), path).toHaveText(FOOTER_EN);
+    await expect(page.getByTestId("prototype-footer"), path).toHaveText(FOOTER_EN);
+    await expect(page.getByTestId("arabic-disclaimer"), path).toHaveText(DISCLAIMER_EN);
     await expect(page.getByRole("contentinfo"), path).toBeVisible();
   }
 });

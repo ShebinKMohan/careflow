@@ -21,7 +21,7 @@
     "title": "Your place in the queue",
     "position": "Position: {position}",
     "wait": "Estimated wait: about {minutes} minutes",
-    "token": "Your number: {code}",
+    "token": "Your number: <ltr>{code}</ltr>",
     "noToken": "You do not have a queue number yet.",
     "unauthorized": "Your session has ended. Scan the kiosk QR code again.",
     "claimLink": "Enter a code",

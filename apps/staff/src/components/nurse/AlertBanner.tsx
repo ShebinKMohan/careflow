@@ -82,7 +82,7 @@ export function AlertBanner({
           <p>{t("evidenceLoading")}</p>
         )}
       </div>
-      <p className="text-label">{t("raised", { time: format.dateTime(new Date(alert.raised_at), { timeStyle: "short" }) })}</p>
+      <p className="text-label">{t("raised", { time: format.dateTime(new Date(alert.raised_at), { timeStyle: "short", numberingSystem: "latn" }) })}</p>
       {alert.rule_id === ECG_RULE && alert.deadline_at ? (
         // On a light panel, so the red of an urgent countdown never sits on the red banner.
         <div className="rounded-control bg-surface p-3 text-ink">

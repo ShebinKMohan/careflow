@@ -76,7 +76,7 @@ export function SourcePopover({ item, triage }: { item: BriefingItem; triage: Br
 function SourceDetails({ item, triage }: { item: BriefingItem; triage: BriefingTriage }) {
   const t = useTranslations("source");
   const format = useFormatter();
-  const when = format.dateTime(new Date(item.recorded_at), { dateStyle: "medium", timeStyle: "short" });
+  const when = format.dateTime(new Date(item.recorded_at), { dateStyle: "medium", timeStyle: "short", numberingSystem: "latn" });
   const source = item.source;
   return (
     <div className="flex flex-col gap-2">
