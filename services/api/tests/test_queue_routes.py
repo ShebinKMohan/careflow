@@ -6,6 +6,7 @@ Needs Postgres (`make up`); skipped without it.
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import time
 import uuid
@@ -215,3 +216,44 @@ async def test_queue_frames_go_to_the_tests_own_stream(
         await asyncio.sleep(0.05)
     assert [fields["type"] for _, fields in frames] == ["queue.status", "queue.status"]
     assert {fields["clinic_id"] for _, fields in frames} == {str(clinic)}
+
+
+async def test_a_seen_or_no_show_patients_phone_learns_its_final_state(
+    app: FastAPI,
+    client: AsyncClient,
+    database: Engine,
+    clinic: uuid.UUID,
+    redis_client: Redis,
+    stream: str,
+) -> None:
+    """Closing a token, or its second no-show, sends that session's own phone its final state.
+    The broadcast reaches only waiting and called tokens, so before M2-01 a seen patient's phone
+    kept saying "go to room ..."."""
+    nurse = bearer("nurse", clinic)
+    seen, missed = await queued(database, app, clinic, [2, 3])
+
+    async def final_state(session_id: str) -> str:
+        deadline = time.monotonic() + 5
+        while True:
+            for _, fields in await xrange(redis_client, stream):
+                data = json.loads(fields["payload"])["data"]
+                if fields["session_id"] == session_id and data["state"] in {"closed", "no_show"}:
+                    assert data["position"] is None
+                    return str(data["state"])
+            assert time.monotonic() < deadline, f"no final queue.status frame for {session_id}"
+            await asyncio.sleep(0.05)
+
+    async def call(expected: str) -> str:
+        response = await client.post("/v1/queue/emergency/call-next", headers=nurse)
+        token = response.json()["token"]
+        assert token["session_id"] == expected
+        return str(token["token_id"])
+
+    closed = await client.post(f"/v1/queue/tokens/{await call(seen)}/close", headers=nurse)
+    assert closed.status_code == 200
+    assert await final_state(seen) == "closed"
+
+    for _ in range(2):  # the first miss re-queues the patient; the second is a no-show
+        marked = await client.post(f"/v1/queue/tokens/{await call(missed)}/no-show", headers=nurse)
+        assert marked.status_code == 200
+    assert await final_state(missed) == "no_show"

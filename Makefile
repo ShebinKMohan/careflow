@@ -11,7 +11,7 @@ export UV_LOCKED := 1
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down infra infra-down test-stack \
 	test-stack-down test-integration seed ps logs nuke \
-	llm-local api migrate seed-dev mock e2e e2e-apps rag-ingest voice-models voice
+	llm-local api migrate seed-dev mock e2e e2e-apps rtl rag-ingest voice-models voice
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -29,6 +29,7 @@ lint: lint-py lint-node ## Ruff (lint + format check) and ESLint
 lint-py:
 	uv run ruff check .
 	uv run ruff format --check .
+	uv run python scripts/i18n/backtranslate.py --check
 
 lint-node:
 	pnpm -r lint
@@ -159,3 +160,9 @@ e2e: ## The three MVP journeys (M1-19) on the running stack: start it with `E2E=
 	pnpm --filter @careflow/e2e journeys
 e2e-apps: ## Playwright suites for kiosk, staff and companion against Prism mocks (each starts its own)
 	pnpm test:e2e
+
+# The apps build and serve on E2E_PORT (default each app's dev port; set it beside a running stack).
+# RTL_ARGS=--update-snapshots writes new baselines, from the same pinned browser.
+rtl: ## The @rtl tests of the three apps; screenshots from the browser in the pinned Playwright image
+	scripts/playwright_image.sh sh -c 'for app in kiosk staff companion; do \
+	  pnpm --filter $$app exec playwright test --grep @rtl $(RTL_ARGS) || exit 1; done'

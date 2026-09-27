@@ -57,6 +57,7 @@ export function TriageCard({
   onDecided: (result: DecisionResult) => void;
 }) {
   const t = useTranslations("triage");
+  const tSafety = useTranslations("safety.triage");
   const suggestion = triage.suggestion;
   const [changing, setChanging] = useState(suggestion === null);
   const [level, setLevel] = useState<Level | null>(null);
@@ -101,7 +102,7 @@ export function TriageCard({
         <ul className="mb-4 flex flex-col gap-2" data-testid="triage-warnings">
           {warnings.map((warning) => (
             <li key={warning} className="rounded-control border-2 border-danger px-3 py-2 font-semibold text-danger">
-              {t(`warnings.${warning}`)}
+              {tSafety(`warnings.${warning}`)}
             </li>
           ))}
         </ul>
@@ -109,7 +110,7 @@ export function TriageCard({
 
       {suggestion ? (
         <section className="mb-4 flex flex-col gap-2 rounded-card border-2 border-dashed border-border p-gutter" aria-label={t("suggestion")}>
-          <p className="text-label font-semibold uppercase">{t("notFinal")}</p>
+          <p className="text-label font-semibold uppercase">{tSafety("notFinal")}</p>
           <p className="text-title font-bold">
             {t("suggested", { label: suggestion.display_label ?? levelLabel(suggestion.scale, suggestion.level) })}
           </p>

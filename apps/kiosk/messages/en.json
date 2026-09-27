@@ -43,7 +43,7 @@
   },
   "intake": {
     "title": "Your visit",
-    "greeting": "Welcome, {initials}",
+    "greeting": "Welcome, <ltr>{initials}</ltr>",
     "firstQuestion": "What is the main reason for your visit today?",
     "needsCheckin": "Please check in first.",
     "checkinLink": "Check in",

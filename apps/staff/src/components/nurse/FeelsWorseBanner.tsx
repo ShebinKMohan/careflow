@@ -21,7 +21,7 @@ export function FeelsWorseBanner({
   patient?: string;
   report: Report | undefined;
 }) {
-  const t = useTranslations("nurse.feelsWorse");
+  const t = useTranslations("safety.feelsWorse");
   const format = useFormatter();
   if (!report) return null;
   const when = format.dateTime(new Date(report.last_reported_at), { timeStyle: "short", numberingSystem: "latn" });
@@ -36,7 +36,7 @@ export function FeelsWorseBanner({
       <span aria-hidden="true" className="mt-1 size-4 shrink-0 rounded-full bg-danger motion-safe:animate-pulse" />
       <div className="flex flex-col gap-1">
         <p className="text-title font-bold text-danger">
-          {patient ? t("title", { patient }) : t("titleHere")}{" "}
+          {patient ? t.rich("title", { patient, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> }) : t("titleHere")}{" "}
           <span className="rounded-control border-2 border-danger px-2 text-body" data-testid="feels-worse-count">
             {t("count", { count: report.press_count })}
           </span>

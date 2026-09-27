@@ -25,7 +25,14 @@ const channel = process.env.PLAYWRIGHT_CHANNEL ?? "chrome";
 // and Playwright's shutdown would leave them running.
 const NEXT = "./node_modules/.bin/next";
 
+// Screenshots (the @rtl tests, M2-01) are compared only when the browser runs in the pinned
+// Playwright image: `make rtl` connects to it. Baselines differ by OS, so elsewhere
+// toHaveScreenshot is skipped and every other assertion still runs.
+const pinnedBrowser = Boolean(process.env.PW_TEST_CONNECT_WS_ENDPOINT);
+
 export default defineConfig({
+  snapshotPathTemplate: "{testDir}/__screenshots__/{testFileName}/{arg}{ext}",
+  ignoreSnapshots: !pinnedBrowser,
   testDir: "./tests/e2e",
   retries: 0,
   reporter: [["list"]],

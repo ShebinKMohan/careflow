@@ -5,3 +5,4 @@ max_turns: 8              # the conversation stops after this many patient answe
 max_seconds: 120          # ... or after this long (intake_truncated)
 briefing_summary: true  # M1-16: an optional model summary that may only rephrase cited facts (false = plain list only)
 summary_timeout_s: 60   # ... the summary provider gets this long, else the summary is disabled
+extraction_timeout_s: 20  # the extractor gets this long per answer, else the facts so far are kept (incomplete)

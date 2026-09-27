@@ -34,6 +34,8 @@ dev = [
   "schemathesis==4.28.0",
   # `make up` runs the API, the apps and the voice service with it (M1-19).
   "honcho==2.0.0",
+  # chrF for the Arabic back-translation drift check (M2-01, scripts/i18n/backtranslate.py).
+  "sacrebleu==2.6.0",
   # Local LLM server (Apple silicon only); scripts/with_llm.sh and `make llm-local` use it.
   "mlx-lm==0.31.3; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]

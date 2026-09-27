@@ -7,3 +7,5 @@ max_turns: 8
 max_seconds: 300
 briefing_summary: false
 summary_timeout_s: 60
+# Recording (E2E_RECORD) waits for the local model; a replayed reply comes at once.
+extraction_timeout_s: 90

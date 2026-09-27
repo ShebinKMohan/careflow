@@ -6,3 +6,10 @@ useDefault = true
 description = "StructuredFacts paths (NeededFact.key, FactKey) are field names, not secrets"
 regexTarget = "line"
 regexes = ['''\bkey"?:\s*"?(patient|vitals|chest_pain|fast|infection|child_danger|child_amber|ehr_context|symptoms|pain_score|chief_complaint|complaint_category)(\.[a-z0-9_]+)?"?,?\s*$''']
+
+[[allowlists]]
+description = "UI message keys in the Arabic back-translation report (M2-01) are identifiers, not secrets"
+condition = "AND"
+paths = ['''^eval/reports/i18n_backtranslation\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"key": "[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_-]+)+",$''']

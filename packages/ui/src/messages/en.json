@@ -1,0 +1,8 @@
+{
+  "safety": {
+    "footer": {
+      "prototype": "Research prototype. Synthetic data only. Not for clinical use.",
+      "arabicDisclaimer": "Arabic supported; not validated by native speakers."
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "كيرفلو - الموظفون",
-    "description": "محطة التمريض وملخص الطبيب ولوحة الانتظار والإدارة. نموذج بحثي."
+    "description": "محطة التمريض وملخص الطبيب ولوحة الانتظار والإدارة. نموذج أولي للبحث."
   },
   "header": {
     "app": "كيرفلو للموظفين"
@@ -57,45 +57,17 @@
     "sex": {
       "male": "ذكر",
       "female": "أنثى",
-      "other": "آخر",
+      "other": "غير ذلك",
       "unknown": "غير معروف"
     },
     "states": {
-      "intake": "قيد الاستقبال",
+      "intake": "في استبيان الاستقبال",
       "awaiting_nurse": "بانتظار الممرض",
       "queued": "في الطابور",
       "called": "تم النداء",
       "arrived": "حضر",
       "no_show": "لم يحضر",
       "closed": "مغلق"
-    },
-    "feelsWorse": {
-      "region": "مرضى يشعرون أنهم أسوأ",
-      "title": "{patient} يشعر أنه أسوأ",
-      "count": "×{count}",
-      "noAnswers": "لم يُحدَّد أي جواب خطر",
-      "at": "ضُغط في {time}",
-      "note": "ملاحظة:",
-      "codes": {
-        "chest_pain": "ألم في الصدر",
-        "short_of_breath": "ضيق في التنفس",
-        "face_droop": "ارتخاء في الوجه",
-        "arm_weakness": "ضعف في الذراع",
-        "speech_difficulty": "صعوبة في الكلام",
-        "drowsy_or_confused": "نعاس أو ارتباك",
-        "drowsy_or_confused_unsure": "غير متأكد من النعاس أو الارتباك"
-      },
-      "titleHere": "ضغط «أشعر أنني أسوأ»"
-    },
-    "medicalQuestions": {
-      "region": "أسئلة طبية من الهواتف",
-      "title": "{count, plural, one {سأل {patient} سؤالًا طبيًا} other {سأل {patient} # أسئلة طبية}}",
-      "asked": "سُئل في {time}، باللغة {language}",
-      "refused": "لم يُجب المساعد. أُبلغ المريض بأن أحد أفراد التمريض سيتحدث معه.",
-      "language": {
-        "en": "الإنجليزية",
-        "ar": "العربية"
-      }
     },
     "queue": {
       "title": "قائمة الانتظار",
@@ -143,41 +115,79 @@
     "stale": "انقطع الاتصال. قد لا تكون هذه اللوحة محدّثة (آخر تحديث {time})."
   },
   "admin": {
-    "title": "مزودو النماذج",
+    "title": "مزودو نماذج الذكاء الاصطناعي",
     "task": "المهمة",
     "provider": "المزوّد",
-    "model": "النموذج أو الأداة",
+    "model": "نموذج الذكاء الاصطناعي أو الأداة",
     "available": "متاح",
     "yes": "نعم",
     "no": "لا",
     "statusLink": "حالة النظام"
   },
-  "alerts": {
-    "title": "التنبيهات النشطة",
-    "rules": {
-      "FAST_STROKE": "فحص FAST للسكتة",
-      "CHEST_PAIN_ECG_10MIN": "ألم الصدر: تخطيط قلب خلال 10 دقائق",
-      "SEPSIS_NEWS2": "إنتان محتمل (NEWS2)",
-      "NG143_RED_FLAG": "علامة حمراء لدى طفل",
-      "NG143_AMBER_FLAG": "علامة برتقالية لدى طفل",
-      "CHILD_HARD_TO_WAKE": "طفل يصعب إيقاظه"
+  "safety": {
+    "alerts": {
+      "title": "التنبيهات النشطة",
+      "rules": {
+        "FAST_STROKE": "مسح FAST للسكتة الدماغية",
+        "CHEST_PAIN_ECG_10MIN": "ألم الصدر: تخطيط قلب خلال 10 دقائق",
+        "SEPSIS_NEWS2": "إنتان محتمل (NEWS2)",
+        "NG143_RED_FLAG": "علامة حمراء لدى طفل",
+        "NG143_AMBER_FLAG": "علامة بلون الكهرمان لدى الطفل (Child amber flag)",
+        "CHILD_HARD_TO_WAKE": "الطفل يصعب إيقاظه"
+      },
+      "severity": {
+        "critical": "درجة حرجة",
+        "high": "مرتفع"
+      },
+      "patient": "المريض <ltr>{name}</ltr>",
+      "partial": "NEWS2 جزئي",
+      "evidence": "الأدلة",
+      "evidenceLoading": "جارٍ تحميل الأدلة…",
+      "raised": "رُفع التنبيه {time}",
+      "ecgDue": "تخطيط القلب مستحق في",
+      "overdue": "متجاوز للمهلة +{time} (Overdue +{time})",
+      "ecgDone": "تم إجراء تخطيط القلب (ECG done)",
+      "ecgDoneAt": "تم تخطيط القلب {time}",
+      "ecgFailed": "لم يُسجَّل تخطيط القلب. حاول مرة أخرى.",
+      "openCard": "فتح الفرز",
+      "afterDecision": "جديد منذ القرار"
     },
-    "severity": {
-      "critical": "حرج",
-      "high": "مرتفع"
+    "feelsWorse": {
+      "region": "مرضى يشعرون أنهم أسوأ",
+      "title": "<ltr>{patient}</ltr> يشعر أنه أسوأ",
+      "count": "×{count}",
+      "noAnswers": "لم يُؤشَّر على أي جواب خطر",
+      "at": "ضُغط الساعة {time}",
+      "note": "ملاحظة:",
+      "codes": {
+        "chest_pain": "ألم في الصدر",
+        "short_of_breath": "ضيق النفَس",
+        "face_droop": "ارتخاء في الوجه",
+        "arm_weakness": "ضعف في الذراع",
+        "speech_difficulty": "صعوبة في الكلام",
+        "drowsy_or_confused": "نعاس أو ارتباك",
+        "drowsy_or_confused_unsure": "غير متأكد إن كان ناعساً أو مرتبكاً"
+      },
+      "titleHere": "ضغط «أشعر أنني أسوأ»"
     },
-    "patient": "المريض {name}",
-    "partial": "NEWS2 جزئي",
-    "evidence": "الأدلة",
-    "evidenceLoading": "جارٍ تحميل الأدلة…",
-    "raised": "صدر {time}",
-    "ecgDue": "تخطيط القلب مستحق خلال",
-    "overdue": "متأخر +{time}",
-    "ecgDone": "تم تخطيط القلب",
-    "ecgDoneAt": "تم تخطيط القلب {time}",
-    "ecgFailed": "لم يُسجَّل تخطيط القلب. حاول مرة أخرى.",
-    "openCard": "فتح الفرز",
-    "afterDecision": "جديد بعد القرار"
+    "medicalQuestions": {
+      "region": "أسئلة طبية من الهواتف",
+      "title": "{count, plural, one {<ltr>{patient}</ltr> سأل سؤالًا طبيًا} other {<ltr>{patient}</ltr> سأل # أسئلة طبية}}",
+      "asked": "سُئل في {time}، باللغة {language}",
+      "refused": "لم يُجب المساعد. أُبلغ المريض بأن أحد أفراد التمريض سيتحدث معه.",
+      "language": {
+        "en": "الإنجليزية",
+        "ar": "العربية"
+      }
+    },
+    "triage": {
+      "notFinal": "اقتراح فقط. أنت تقرر.",
+      "warnings": {
+        "extraction_incomplete": "الاستخلاص غير مكتمل. راجع الإجابات مع المريض.",
+        "ehr_unavailable": "السجل الصحي غير متاح عند تسجيل الوصول",
+        "intake_stopped_early": "توقف استبيان الاستقبال مبكراً (Intake stopped early)"
+      }
+    }
   },
   "provenance": {
     "EHR": "السجل الصحي",
@@ -190,7 +200,6 @@
   "triage": {
     "title": "الفرز",
     "suggestion": "اقتراح النموذج",
-    "notFinal": "اقتراح فقط. القرار لك.",
     "suggested": "مقترح {label}",
     "confidence": "الثقة {percent}%",
     "model": "النموذج {version}",
@@ -213,15 +222,10 @@
     "cancel": "إلغاء",
     "failed": "لم يُحفظ القرار. حاول مرة أخرى.",
     "confirmedTitle": "القرار",
-    "confirmedLevel": "{label}، حدده الممرض",
+    "confirmedLevel": "{label}، تم تحديده من قِبل الممرض",
     "token": "الرقم <ltr>{code}</ltr>",
     "room": "الغرفة <ltr>{room}</ltr>",
     "noToken": "لا يوجد رقم انتظار بعد.",
-    "warnings": {
-      "extraction_incomplete": "الاستخلاص غير مكتمل. راجع الإجابات مع المريض.",
-      "ehr_unavailable": "السجل الصحي غير متاح عند تسجيل الوصول",
-      "intake_stopped_early": "توقف الاستقبال مبكراً"
-    },
     "facts": "الحقائق",
     "noFacts": "لا توجد حقائق بعد."
   },
@@ -245,7 +249,7 @@
       "temperature_c": "الحرارة",
       "on_supplemental_o2": "الأكسجين"
     },
-    "missing": "ناقص",
+    "missing": "مفقود",
     "rr": "معدل التنفس (/دقيقة)",
     "sbp": "ضغط الدم الانقباضي (ملم زئبق)",
     "fromDevice": "من الجهاز، يرجى التأكيد",
@@ -273,22 +277,22 @@
     "ehr": "سجل المريض: {type} {id} (الإصدار {version}).",
     "openEhr": "افتح في السجل الصحي",
     "device": "الجهاز {device}، القراءة {reading}، {when}. جهاز محاكاة.",
-    "nurse": "أدخلها الممرض {nurse}، {when}.",
+    "nurse": "أُدخل من قِبل الممرض {nurse}، {when}.",
     "model": "النموذج {model}، الإصدار {version}.",
     "confidence": "الثقة {value}٪.",
-    "suggestionOnly": "اقتراح فقط. أكّد الممرض المستوى {scale} {level}."
+    "suggestionOnly": "اقتراح. تم تأكيد المستوى {scale} {level} من قِبل الممرض."
   },
   "briefing": {
     "triage": "الفرز",
     "confirmed": "{scale} {level}",
     "setByNurse": "حدده الممرض",
-    "confirmedByNurse": "أكّده الممرض",
+    "confirmedByNurse": "تم تأكيده من قِبل الممرض",
     "suggested": "اقتراح النموذج: {label} (ثقة {confidence}٪). اقتراح فقط.",
-    "noSuggestion": "لا يوجد اقتراح من النموذج: حدد الممرض المستوى.",
+    "noSuggestion": "لا يوجد اقتراح من نموذج الذكاء الاصطناعي: الممرض هو من حدد المستوى.",
     "reason": "السبب: {code}. {note}",
     "summaryDropped": "الملخص غير متاح. تُعرض الحقائق المتحقق منها فقط.",
     "summary": "الملخص",
-    "summaryNote": "كتبه نموذج من الحقائق أدناه؛ كل جملة تذكر حقائقها.",
+    "summaryNote": "كُتب بواسطة نموذج اعتماداً على الحقائق أدناه؛ كل جملة تذكر حقائقها.",
     "cites": "{count, plural, one {اعرض الحقيقة} other {اعرض # حقائق}}"
   },
   "adminStatus": {
@@ -297,25 +301,25 @@
     "versions": "الإصدارات",
     "api": "واجهة البرمجة",
     "ruleset": "قواعد السلامة",
-    "urgencyModel": "نموذج الأولوية",
+    "urgencyModel": "نموذج الذكاء الاصطناعي لتقدير الأولوية",
     "unknown": "غير معروف",
     "services": "الخدمات",
     "ports": "أجزاء الاستقبال",
     "aiTasks": "مهام الذكاء الاصطناعي",
     "speech": "الكلام (خدمة الصوت)",
-    "providers": "مزودو النماذج",
+    "providers": "مزودو نماذج الذكاء الاصطناعي",
     "task": "المهمة",
     "provider": "المزود",
-    "model": "النموذج أو الأداة",
+    "model": "نموذج الذكاء الاصطناعي أو الأداة",
     "available": "متاح",
     "yes": "نعم",
     "no": "لا",
     "name": "الاسم",
     "status": "الحالة",
-    "detail": "المستخدم",
+    "detail": "قيد الاستخدام",
     "state": {
       "ok": "سليم",
-      "degraded": "متراجع",
+      "degraded": "متدهور",
       "down": "متوقف"
     },
     "stub": "بديل مؤقت"

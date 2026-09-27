@@ -1,7 +1,6 @@
 "use client";
 
-import { setLocaleCookie } from "@careflow/ui/i18n";
-import { useRouter } from "next/navigation";
+import { readLocaleCookie, setLocaleCookie } from "@careflow/ui/i18n";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -14,16 +13,22 @@ export function usePhoneVisit(fromLink = false) {
   const operation = useRef<Promise<PhoneVisit> | null>(null);
   const retryAction = useRef<() => Promise<PhoneVisit>>(resumeVisit);
   const working = useRef(false);
-  const router = useRouter();
   const locale = useLocale();
 
   const apply = useCallback((next: PhoneVisit) => {
-    setVisit(next);
     if (next.status === "ready" && next.session.language !== locale) {
       setLocaleCookie(next.session.language);
-      router.refresh();
+      // One full load in the session's language, which resumes this tab's visit. Not
+      // router.refresh(): the claim takes its one-time code out of the address bar before Next's
+      // router takes over history, and the refresh put the router's own URL, code included, back,
+      // so a later reload claimed a used code (M2-01). Only once the cookie is set: no loop.
+      if (readLocaleCookie() === next.session.language) {
+        window.location.replace(window.location.pathname + window.location.search);
+        return;
+      }
     }
-  }, [locale, router]);
+    setVisit(next);
+  }, [locale]);
 
   useEffect(() => {
     let active = true;

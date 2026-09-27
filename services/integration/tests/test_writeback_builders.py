@@ -15,11 +15,12 @@ from typing import Any
 
 import pytest
 
+from careflow_contracts.generated.structured_facts_schema import FactKey
 from careflow_integration.adapters.loader import HospitalAdapter
 from careflow_integration.fhir.client import FhirError, canonical_json
 from careflow_integration.fhir.writeback.builders import build_resources
 from careflow_integration.fhir.writeback.bundle import build_transaction, written_resources
-from careflow_integration.fhir.writeback.record import TriageRecord
+from careflow_integration.fhir.writeback.record import News2Summary, TriageRecord
 
 type Json = dict[str, Any]
 type Load = Callable[[str], TriageRecord]
@@ -207,6 +208,31 @@ def test_a_partial_news2_is_preliminary_with_the_missing_inputs(
         }
     ]
     assert partial["category"][0]["coding"][0]["code"] == "survey"
+
+
+def test_a_news2_with_nothing_measured_is_left_out_and_the_rest_is_written(
+    triage_record: Load, adapter: HospitalAdapter
+) -> None:
+    """A patient who hands over to the phone before the kiosk's vitals has no vital sign, but the
+    rules keep a partial NEWS2 with every input missing. That total derives from nothing, so it
+    has no provenance: writing it made the whole Bundle fail (safety rule 4) and the nurse's level
+    never reached the EHR (found by the M2-07 journeys, fixed in M2-01)."""
+    routine = triage_record("routine")
+    unmeasured = [key for key in FactKey if key.value.startswith("vitals.")]
+    record = routine.model_copy(
+        update={
+            "facts": routine.facts.model_copy(update={"vitals": None}),
+            "news2": News2Summary(
+                total=0, partial=True, missing=unmeasured, scored_at=routine.arrived_at
+            ),
+        }
+    )
+    bundle = build_transaction(record, adapter)
+    local_ids = [e["request"]["ifNoneExist"].rsplit(":", 1)[-1] for e in bundle["entry"]]
+    assert "obs-news2" not in local_ids
+    assert {i for i in local_ids if i.startswith("obs-")} <= {"obs-triage-level", "obs-pain-score"}
+    assert one(bundle, ":obs-triage-level")["valueInteger"] == int(record.decision.final_level)
+    assert by_type(bundle, "Encounter")
 
 
 def test_the_questionnaire_response_holds_only_what_the_patient_said(

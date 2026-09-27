@@ -21,6 +21,9 @@ from careflow_intake.briefing.summary import TASK as SUMMARY_TASK
 from careflow_intake.briefing.summary import Summarizer
 from careflow_intake.conversation import ChecklistConversation
 from careflow_intake.conversation.phrasing import DEFAULT_TIMEOUT_SECONDS, Phraser
+from careflow_intake.extraction.extractor import (
+    DEFAULT_TIMEOUT_SECONDS as DEFAULT_EXTRACTION_TIMEOUT,
+)
 from careflow_intake.extraction.extractor import LlmExtractor
 from careflow_intake.ports import IntakePorts, RulesOutcome, utc_now
 from careflow_intake.state import IntakeSettings
@@ -57,6 +60,7 @@ class IntakeConfig:
     max_seconds: float = 120.0
     briefing_summary: bool = True
     summary_timeout_s: float = DEFAULT_SUMMARY_TIMEOUT
+    extraction_timeout_s: float = DEFAULT_EXTRACTION_TIMEOUT
 
     @property
     def settings(self) -> IntakeSettings:
@@ -80,6 +84,7 @@ def load_intake_config(path: Path | None = None) -> IntakeConfig:
         max_seconds=float(body.get("max_seconds", 120)),
         briefing_summary=bool(body.get("briefing_summary", True)),
         summary_timeout_s=float(body.get("summary_timeout_s", DEFAULT_SUMMARY_TIMEOUT)),
+        extraction_timeout_s=float(body.get("extraction_timeout_s", DEFAULT_EXTRACTION_TIMEOUT)),
     )
 
 
@@ -135,10 +140,11 @@ def build_real_ports(settings: RealPortsSettings | None = None, **stubs: Any) ->
     settings = settings or RealPortsSettings()
     config = load_intake_config(settings.intake)
     providers = providers_config(settings.providers)
+    timeout = config.extraction_timeout_s
     if settings.extraction_provider is not None:
-        extractor = LlmExtractor(settings.extraction_provider)
+        extractor = LlmExtractor(settings.extraction_provider, timeout_seconds=timeout)
     else:
-        extractor = LlmExtractor.from_config(providers)
+        extractor = LlmExtractor.from_config(providers, timeout_seconds=timeout)
     phrasing = config.llm_phrasing if settings.llm_phrasing is None else settings.llm_phrasing
     provider = settings.conversation_provider
     if provider is None and phrasing:

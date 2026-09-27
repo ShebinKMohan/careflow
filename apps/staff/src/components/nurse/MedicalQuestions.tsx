@@ -12,7 +12,7 @@ type Item = Schema<"WorklistItem">;
  * not an alarm: no sound, no vibration, no pulse.
  */
 export function MedicalQuestions({ item }: { item: Item }) {
-  const t = useTranslations("nurse.medicalQuestions");
+  const t = useTranslations("safety.medicalQuestions");
   const format = useFormatter();
   const questions = item.medical_questions ?? [];
   if (!questions.length) return null;
@@ -23,7 +23,7 @@ export function MedicalQuestions({ item }: { item: Item }) {
       data-session-id={item.session_id}
     >
       <p className="text-title font-bold text-prov-patient">
-        {t("title", { patient: item.token_code ?? item.patient_display, count: questions.length })}
+        {t.rich("title", { patient: item.token_code ?? item.patient_display, count: questions.length, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}
       </p>
       <ul className="flex flex-col gap-2">
         {questions.map((question) => (

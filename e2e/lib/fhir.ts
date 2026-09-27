@@ -16,7 +16,10 @@ export class Hapi {
   private constructor(private readonly api: APIRequestContext) {}
 
   static async open(): Promise<Hapi> {
-    return new Hapi(await request.newContext({ baseURL: `${STACK.fhir}/`, extraHTTPHeaders: { Accept: "application/fhir+json" } }));
+    // `no-cache`: HAPI reuses a search's results for 60 s, so a search made before the write-back
+    // landed would keep answering "none" to a poll (M2-01's Arabic journey searched that early).
+    const headers = { Accept: "application/fhir+json", "Cache-Control": "no-cache" };
+    return new Hapi(await request.newContext({ baseURL: `${STACK.fhir}/`, extraHTTPHeaders: headers }));
   }
 
   async close(): Promise<void> {

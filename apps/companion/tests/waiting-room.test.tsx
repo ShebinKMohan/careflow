@@ -48,9 +48,9 @@ class FakeSocket {
   }
 }
 
-function show() {
+function show(locale: "en" | "ar" = "en") {
   return render(
-    <NextIntlClientProvider locale="en" messages={MESSAGES.en} timeZone="UTC">
+    <NextIntlClientProvider locale={locale} messages={MESSAGES[locale]} timeZone="UTC">
       <WaitingRoom />
     </NextIntlClientProvider>,
   );
@@ -124,5 +124,30 @@ describe("the waiting room's safety button", () => {
     expect(screen.getByTestId("position")).toHaveTextContent("Position: 1");
     expect(post.mock.calls.filter(([path]) => path === "/v1/ws-ticket")).toHaveLength(2);
     expect(FakeSocket.all.every((socket) => !socket.url.includes("phone-token"))).toBe(true);
+  });
+});
+
+describe("the end of the visit (M2-01)", () => {
+  const closed = { ...STATUS, state: "closed", position: null, wait_estimate_minutes: null, token: { ...STATUS.token, status: "closed" } };
+
+  it("says the visit has ended when the nurse's close arrives live, and keeps the safety button", async () => {
+    get.mockResolvedValue(reply(STATUS));
+    show();
+    await settle();
+    act(() => FakeSocket.all[0]!.open());
+    await settle();
+    expect(screen.queryByTestId("visit-ended")).not.toBeInTheDocument();
+
+    act(() => FakeSocket.all[0]!.onmessage?.({ data: JSON.stringify({ type: "queue.status", data: closed }) } as MessageEvent<unknown>));
+    expect(screen.getByTestId("visit-ended")).toHaveTextContent("This visit has ended. If you feel worse, tell the reception desk now.");
+    expect(screen.queryByTestId("position")).not.toBeInTheDocument();
+    expect(screen.getByTestId("feels-worse")).toBeInTheDocument();
+  });
+
+  it("sends a no-show to the reception desk, in the session's language", async () => {
+    get.mockResolvedValue(reply({ ...closed, state: "no_show", token: { ...STATUS.token, status: "no_show" } }));
+    show("ar");
+    await settle();
+    expect(screen.getByTestId("visit-ended")).toHaveTextContent(MESSAGES.ar.safety.status.missed);
   });
 });

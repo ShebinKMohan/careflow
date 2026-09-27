@@ -13,7 +13,7 @@ const CELL = "border-b border-border px-3 py-3 text-start";
 /** GET /v1/doctor/sessions: today's confirmed sessions, each linking to its briefing. */
 export function DoctorSessionsView() {
   const t = useTranslations("doctor");
-  const tAlerts = useTranslations("alerts");
+  const tAlerts = useTranslations("safety.alerts");
   const format = useFormatter();
   const state = useApiData(() => api.GET("/v1/doctor/sessions"), "doctor-sessions");
   return (

@@ -49,3 +49,24 @@ def test_real_ports_read_the_real_clock() -> None:
     assert before - timedelta(seconds=1) <= now <= datetime.now(UTC) + timedelta(seconds=1)
     stepping = SteppingClock()
     assert build_real_ports(clock=stepping).clock is stepping  # a test may still pin time
+
+
+def test_the_extraction_timeout_is_a_setting(tmp_path: Path) -> None:
+    """20 s in production (the patient waits); the E2E config waits longer only because recording
+    its cassette calls the local model, while a replayed reply comes at once (M2-01)."""
+    from careflow_intake.wiring import REPO, RealPortsSettings, build_real_ports
+    from careflow_providers import ReplayProvider
+
+    assert load_intake_config(INTAKE_CONFIG).extraction_timeout_s == 20.0
+    assert load_intake_config(REPO / "e2e" / "config" / "intake.yaml").extraction_timeout_s == 90.0
+    unset = tmp_path / "unset.yaml"
+    unset.write_text("llm_phrasing: false\n")
+    assert load_intake_config(unset).extraction_timeout_s == 20.0  # the extractor's default
+
+    config = tmp_path / "intake.yaml"
+    config.write_text("llm_phrasing: false\nbriefing_summary: false\nextraction_timeout_s: 45\n")
+    cassette = tmp_path / "cassette.json"
+    provider = ReplayProvider(None, task="extraction", model="m", cassette=cassette, mode="replay")
+    ports = build_real_ports(RealPortsSettings(intake=config, extraction_provider=provider))
+    assert isinstance(ports.extractor, LlmExtractor)
+    assert ports.extractor.timeout_seconds == 45.0

@@ -81,6 +81,7 @@ async def _change(
     except InvalidTransition as exc:
         raise conflict(exc) from exc
     after_commit(db, lambda: service.broadcast(principal.clinic_id, token.department))
+    after_commit(db, lambda: service.tell(principal.clinic_id, token))  # its own phone, even closed
     return token
 
 
