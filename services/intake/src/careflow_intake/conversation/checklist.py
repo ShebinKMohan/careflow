@@ -39,6 +39,9 @@ class Templates:
     list_last_separator: str = " and "
     # The child question bank's wording (M2-04), keyed like `questions`.
     child_questions: dict[str, str] = field(default_factory=dict[str, str])
+    # Fixed replies to a question asked mid-intake (M2-10): medical_refusal, ask_on_phone,
+    # finish_first and dont_know.
+    messages: dict[str, str] = field(default_factory=dict[str, str])
 
     def keys(self) -> set[FactKey]:
         return {FactKey(key) for key in self.questions}
@@ -85,6 +88,7 @@ def load_templates(path: Path = TEMPLATES_PATH) -> Templates:
         list_separator=str(joins.get("separator", ", ")),
         list_last_separator=str(joins.get("last", " and ")),
         child_questions={str(k): str(v) for k, v in (body.get("child_questions") or {}).items()},
+        messages={str(k): str(v) for k, v in (body.get("messages") or {}).items()},
     )
 
 

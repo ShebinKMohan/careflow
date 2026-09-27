@@ -102,7 +102,8 @@ def next_prompt(reply: TurnResponse) -> tuple[str, dict[str, Any] | None, bool]:
         if question is None:
             return reply.assistant_text.strip(), None, True
         spoken = f"{question.notice} {question.text}" if question.notice else question.text
-        return spoken, question.model_dump(mode="json"), False
+        # The question as the API sent it: newer fields (notice_kind, M2-10) pass through.
+        return spoken, question.model_dump(mode="json", exclude_unset=True), False
     if reply.done:
         return reply.assistant_text.strip(), None, True
     fallback = {

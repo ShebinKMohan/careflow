@@ -15,15 +15,18 @@ export const COMPANION_URL = (process.env.NEXT_PUBLIC_COMPANION_URL ?? "http://l
 export const HANDED_OVER_MS = 5_000;
 
 const BUTTON = "min-h-touch rounded-control border-2 border-primary px-6 text-title font-semibold text-primary";
+// After "ask this on your phone" (M2-10): the same button, filled, so it is easy to find.
+const HIGHLIGHTED = "min-h-touch rounded-control border-4 border-primary bg-primary px-6 text-title font-semibold text-on-primary";
 
 /**
  * "Continue on your phone" (M2-06): a one-time QR code for this session, 120 seconds, renewed when
  * it runs out. The code is `…/claim#t=<token>`: in the URL fragment, so the phone never sends it in
  * a request. When the phone claims it, the session's channel sends `session.handed_over`; the kiosk
  * says "Continued on your phone" for 5 s, then forgets the patient and returns to the welcome
- * screen.
+ * screen. `highlight` fills the button after the patient asked a question the phone can answer
+ * (M2-10).
  */
-export function ContinueOnPhone() {
+export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) {
   const t = useTranslations("intake.phone");
   const router = useRouter();
   const { patient, wipe } = useKiosk();
@@ -101,12 +104,13 @@ export function ContinueOnPhone() {
     return (
       <button
         type="button"
-        className={BUTTON}
+        className={highlight ? HIGHLIGHTED : BUTTON}
         onClick={() => {
           setOpen(true);
           void fetchCode();
         }}
         data-testid="continue-on-phone"
+        data-highlighted={highlight ? "true" : undefined}
       >
         {t("button")}
       </button>

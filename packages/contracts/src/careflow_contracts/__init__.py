@@ -70,6 +70,7 @@ from careflow_contracts.generated.structured_facts_schema import (
     TurnRole,
     Vitals,
 )
+from careflow_contracts.generated.turn_intent_schema import TurnIntent
 from careflow_contracts.generated.urgency_suggestion_schema import (
     SuggestionReason,
     TriageScale,
@@ -108,6 +109,7 @@ __all__ = [
     "ClinicAnswer",
     "IntentVerdict",
     "ToolPlan",
+    "TurnIntent",
     "ExtractionStatus",
     "FactBase",
     "FactKey",

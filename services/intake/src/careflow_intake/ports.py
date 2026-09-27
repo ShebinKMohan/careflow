@@ -22,6 +22,7 @@ from careflow_contracts.generated.structured_facts_schema import (
     StructuredFacts,
     Turn,
 )
+from careflow_contracts.generated.turn_intent_schema import TurnIntent
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
 from careflow_intake.facts import FactEntry
 
@@ -31,6 +32,12 @@ if TYPE_CHECKING:
 type OpaqueId = Annotated[
     str, Field(min_length=1, max_length=64, pattern=r"^[A-Za-z0-9][A-Za-z0-9_.:-]*$")
 ]
+#: What a question's notice is (M2-10): a reply to a side question, or the nurse-coming message.
+type NoticeKind = Literal[
+    "nurse_coming", "medical_refusal", "clinic_answer", "ask_on_phone", "finish_first"
+]
+#: Which layer called a question medical (M2-09 categories).
+type MedicalCategory = Literal["lexicon", "model", "fail_safe"]
 
 
 class Question(BaseModel):
@@ -42,8 +49,12 @@ class Question(BaseModel):
     text: Annotated[str, Field(min_length=1, max_length=500)]
     key: FactKey | None = None
     source: Literal["llm", "template"] = "template"  # who phrased the text (M1-07)
-    # Shown before the question, e.g. the fixed nurse-coming message after a critical alert.
+    # Shown before the question, e.g. the fixed nurse-coming message after a critical alert, or
+    # the reply to a question the patient asked mid-intake (M2-10).
     notice: Annotated[str, Field(min_length=1, max_length=500)] | None = None
+    notice_kind: NoticeKind | None = None
+    # The handbook citations of a `clinic_answer` notice: {doc_id, title, chunk_id}.
+    citations: list[dict[str, str]] = []
 
 
 class ExtractionResult(BaseModel):
@@ -155,6 +166,59 @@ class BriefingBuilder(Protocol):
         ...
 
 
+class Classified(BaseModel):
+    """A patient turn's intent (M2-10) and, for a medical question, which layer said so."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    intent: TurnIntent
+    category: MedicalCategory | None = None
+
+
+class IntentClassifier(Protocol):
+    async def classify(self, text: str, language: Language, asked: str | None) -> Classified:
+        """What the patient's turn holds: an answer, a clinic question, a medical question, or
+        several. `asked` is the question they were answering. Must not raise: a failure is an
+        answer and a medical question (fail safe)."""
+        ...
+
+
+class ClinicReply(BaseModel):
+    """The ask-the-clinic agent's reply (M2-09) to a question asked mid-intake on the phone."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    answer: str
+    citations: list[dict[str, str]] = []
+    refused_medical: bool = False
+    dont_know: bool = False
+
+
+class ClinicQA(Protocol):
+    async def ask(
+        self, *, session_id: str, clinic_id: str, question: str, language: Language
+    ) -> ClinicReply:
+        """A short cited answer from the clinic's handbook or the patient's own queue."""
+        ...
+
+
+class NurseFlags(Protocol):
+    async def flag(
+        self,
+        *,
+        session_id: str,
+        clinic_id: str,
+        turn_id: str,
+        question: str,
+        language: Language,
+        category: MedicalCategory,
+    ) -> str:
+        """Keep the question for the nurse and publish `nurse.flag` (reason
+        `medical_question_intake`, idempotency key `{session_id}:{turn_id}:nurse_flag`, no
+        words); the flag id. The same turn twice is one flag."""
+        ...
+
+
 class EventSink(Protocol):
     async def emit(self, event_type: EventType, data: BaseModel, idempotency_key: str) -> None:
         """Publish an event's `data`. A repeated idempotency key must not publish twice."""
@@ -177,12 +241,18 @@ class IntakePorts:
     writeback: Writeback
     briefing: BriefingBuilder
     events: EventSink
+    intents: IntentClassifier
+    clinic_qa: ClinicQA
+    nurse_flags: NurseFlags
     clock: Callable[[], datetime] = field(default=utc_now)
 
 
 __all__ = [
     "Assignment",
     "BriefingBuilder",
+    "Classified",
+    "ClinicQA",
+    "ClinicReply",
     "Conversation",
     "EhrReader",
     "EventSink",
@@ -190,7 +260,11 @@ __all__ = [
     "Extractor",
     "Identifier",
     "IntakePorts",
+    "IntentClassifier",
+    "MedicalCategory",
     "NoSuggestion",
+    "NoticeKind",
+    "NurseFlags",
     "QueueService",
     "Question",
     "RulesOutcome",

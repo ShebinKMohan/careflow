@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "TurnIntent: what a patient's intake turn holds (M2-10). Multi-label: one turn can answer the question and ask one too. A classifier failure counts as an answer and a medical question (fail safe). Research prototype; synthetic data only.",
+  "$ref": "#/$defs/TurnIntent",
+  "$defs": {
+    "TurnIntent": {
+      "type": "object",
+      "description": "`intake_answer`: the turn answers the intake question or says anything about the patient's health. `clinic_question`: it asks a practical question about the clinic or the visit. `medical_question`: it asks for medical information or advice, a diagnosis, or whether something is serious.",
+      "properties": {
+        "intake_answer": {
+          "type": "boolean"
+        },
+        "clinic_question": {
+          "type": "boolean"
+        },
+        "medical_question": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "intake_answer",
+        "clinic_question",
+        "medical_question"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

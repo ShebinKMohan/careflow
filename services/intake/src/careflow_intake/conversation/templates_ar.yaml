@@ -6,6 +6,12 @@
 version: templates_ar_v1
 list_join: { separator: "، ", last: " و" }
 nurse_coming: "شكراً لك. سيأتي إليك أحد أفراد فريق التمريض قريباً. يرجى البقاء هنا."
+# Fixed replies to a question asked mid-intake (M2-10), mirroring templates_en.yaml.
+messages:
+  medical_refusal: "لا يمكنني الإجابة عن الأسئلة الطبية. لقد أبلغتُ فريق التمريض، وسيتحدث إليك أحدهم."
+  ask_on_phone: "يمكنك طرح هذا السؤال على هاتفك: اضغط على «المتابعة على هاتفك» وامسح الرمز."
+  finish_first: "لننهِ هذه الأسئلة أولاً. يمكنك السؤال في مكتب الاستقبال بعد ذلك."
+  dont_know: "لا أعرف إجابة هذا السؤال. يرجى السؤال في مكتب الاستقبال."
 questions:
   # The intake checklist.
   chief_complaint: "ما السبب الرئيسي لزيارتك اليوم؟"
