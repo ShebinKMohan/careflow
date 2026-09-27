@@ -2,10 +2,15 @@
 description: The seven synthetic demo personas (one per E2E journey). Read by the vitals simulator (M1-03), the
   eval scenarios (M1-18) and the E2E tests (M1-19, M2-12). Bundles in personas/<id>.json use PUT with fixed ids.
 keypad_identifier_system: https://careflow.example/fhir/sid/keypad-id
+# The simulated ID-card tap (M2-05): synthetic Emirates ID-style numbers (784-YYYY-NNNNNNN-C;
+# the year is the birth year, the serial seeded random (seed 7), C a Luhn check digit). Never a
+# real ID. infra/seed/add_mock_ids.py writes them onto the HAPI Patients.
+mock_national_id_system: https://careflow.example/fhir/sid/mock-national-id
 personas:
 - id: chest-pain
   fhir_patient_id: persona-chest-pain
   keypad_id: '100001'
+  mock_national_id: 784-1968-5433012-1
   birth_date: '1968-03-14'
   sex: male
   scenario: Crushing chest pain radiating to the left arm with sweating, about an hour.
@@ -14,6 +19,7 @@ personas:
 - id: stroke
   fhir_patient_id: persona-stroke
   keypad_id: '100002'
+  mock_national_id: 784-1955-2530829-2
   birth_date: '1955-06-02'
   sex: female
   scenario: Face droop, right arm weakness and slurred speech; last known well at 08:15.
@@ -22,6 +28,7 @@ personas:
 - id: child-drowsy
   fhir_patient_id: persona-child-drowsy
   keypad_id: '100003'
+  mock_national_id: 784-2024-6624039-1
   birth_date: '2024-07-20'
   sex: male
   scenario: 2-year-old, hard to wake since this morning, fever last night; parent answers.
@@ -30,6 +37,7 @@ personas:
 - id: sepsis
   fhir_patient_id: persona-sepsis
   keypad_id: '100004'
+  mock_national_id: 784-1960-0810111-3
   birth_date: '1960-01-11'
   sex: male
   scenario: Fever, rigors and productive cough; kiosk vitals pulse 125, temp 39.4, SpO2 93 (partial NEWS2 6).
@@ -38,6 +46,7 @@ personas:
 - id: routine
   fhir_patient_id: persona-routine
   keypad_id: '100005'
+  mock_national_id: 784-1992-1215279-9
   birth_date: '1992-04-18'
   sex: female
   scenario: 'Routine walk-in with an appointment today: improving sore throat for five days.'
@@ -46,6 +55,7 @@ personas:
 - id: qr-phone
   fhir_patient_id: persona-qr-phone
   keypad_id: '100006'
+  mock_national_id: 784-1997-8990608-0
   birth_date: '1997-02-09'
   sex: male
   scenario: Checks in at the kiosk, then continues on his phone through the QR hand-over.
@@ -54,6 +64,7 @@ personas:
 - id: no-show
   fhir_patient_id: persona-no-show
   keypad_id: '100007'
+  mock_national_id: 784-1981-1579240-4
   birth_date: '1981-05-23'
   sex: female
   scenario: Appointment today; called but does not come to the room within the grace window.
