@@ -18,7 +18,7 @@ from sqlalchemy import select, update
 from careflow_api.config import Settings, get_settings
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
-from careflow_api.intake.runtime import IntakeRuntime
+from careflow_api.intake.runtime import IntakeRuntime, PatientAlreadySet
 from careflow_api.intake.views import patient_status, triage_view
 from careflow_api.models import PatientSession
 from careflow_api.ratelimit import failure_limit
@@ -29,6 +29,9 @@ from careflow_contracts.api_models import (
     DeviceVitalsReading,
     IntakeQuestion,
     KeypadCheckinRequest,
+    PatientDetails,
+    PatientDetailsRequest,
+    PatientType,
     SessionStatus,
     TriageView,
     TurnRequest,
@@ -228,7 +231,7 @@ async def post_turn(
     own_session(principal, session_id)
     await session_row(principal, session_id)
     try:
-        result = await intake.submit_turn(session_id, body.text)
+        result = await intake.submit_turn(session_id, body.text, body.input_mode.value)
     except NotWaiting as exc:
         raise HTTPException(
             status.HTTP_409_CONFLICT, detail="This session is not waiting for an answer."
@@ -246,6 +249,52 @@ async def post_turn(
         assistant_text=question.text if question is not None else DONE_TEXT,
         done=question is None,
         next_question=question,
+    )
+
+
+@router.post(
+    "/v1/sessions/{session_id}/patient",
+    response_model=PatientDetails,
+    response_model_exclude_none=True,
+)
+async def set_patient_details(
+    session_id: str,
+    body: PatientDetailsRequest,
+    principal: Annotated[Principal, Depends(require_roles("patient_session"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+) -> PatientDetails:
+    """The kiosk's "Who is the patient?" answer (M2-04). A child's age is required and becomes
+    PATIENT_STATED age facts; the intake then asks the child question bank."""
+    own_session(principal, session_id)
+    await session_row(principal, session_id)
+    child = body.patient_type is PatientType.child
+    if child and body.age_years is None:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="A child's age is required."
+        )
+    if not child and (body.age_years is not None or body.age_months is not None):
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="An adult's age comes from the record."
+        )
+    try:
+        await intake.set_patient(
+            session_id,
+            patient_type=body.patient_type.value,
+            age_years=body.age_years,
+            age_months=body.age_months,
+        )
+    except NotWaiting as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Session not found.") from exc
+    except PatientAlreadySet as exc:
+        raise HTTPException(
+            status.HTTP_409_CONFLICT, detail="Who the patient is was already answered."
+        ) from exc
+    await touch(principal.clinic_id, session_id)
+    return PatientDetails(
+        session_id=session_id,
+        patient_type=body.patient_type,
+        age_years=body.age_years,
+        age_months=body.age_months,
     )
 
 
