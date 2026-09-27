@@ -6,16 +6,43 @@ CareFlow is a triage check-in kiosk and clinic workflow prototype. A patient che
 
 ## Quick start
 
-Requires macOS (Apple silicon) or Linux with [uv](https://docs.astral.sh/uv/), Node 24+ and pnpm. On a Mac, `scripts/bootstrap_mac.sh` installs the missing tools (no sudo).
+Requires macOS (Apple silicon) or Linux with Docker, [uv](https://docs.astral.sh/uv/), Node 24+ and pnpm. On a Mac, `scripts/bootstrap_mac.sh` installs the missing tools (no sudo).
 
 ```bash
-make install && make check
+make up      # everything, then "CareFlow is up"
+make down    # stops it all; the data volumes stay
 ```
 
-- `make install`: `uv sync --locked` and `pnpm install --frozen-lockfile`.
-- `make check`: ruff, pyright, pytest, ESLint, tsc, Vitest and the banned-dependency check.
-- `uv run python scripts/gen_dev_env.py` creates the gitignored `.env` with random local dev secrets.
-- `make mock` serves the API contract's examples with Prism on :4010; `pnpm -F kiosk dev` (3000), `staff` (3001) and `companion` (3002) run the apps against it, and `make e2e` runs their Playwright smoke tests ([`apps/README.md`](apps/README.md)).
+`make up` checks the prerequisites and the ports, then:
+
+1. starts Postgres, Valkey and HAPI FHIR in Docker;
+2. installs the locked dependencies;
+3. migrates the database;
+4. loads the seven synthetic personas and the demo clinics, staff and devices;
+5. trains an urgency model if none is installed (on the synthetic fixture, labelled `fixture-*`, when the KTAS data has not been downloaded);
+6. starts the API and the three apps with honcho, and returns once every one answers.
+
+| What | Where |
+|---|---|
+| Kiosk | http://localhost:3000 |
+| Staff | http://localhost:3001: `/nurse`, `/doctor`, `/board?department=ed`, `/admin/status` |
+| Companion (phone) | http://localhost:3002 |
+| API | http://localhost:8000/health |
+| HAPI FHIR | http://localhost:8080/fhir |
+
+- **Demo sign-in.** The staff are `nurse.a@careflow.example`, `doctor.a@careflow.example` and `admin.a@careflow.example`, with the dev password that `scripts/gen_dev_env.py` wrote to the gitignored `.env` (`CAREFLOW_DEV_PASSWORD`). The same file holds the kiosk device secret.
+- **Options:**
+  - `SEED_SYNTHEA=0` loads the personas only;
+  - `LOCAL_LLM=1` also serves the pinned local model (Qwen3.5-9B, MLX 4-bit) on :8081 for the conversation, extraction and summary;
+  - `VOICE=0` leaves the voice service out. It runs on :8090 when `make voice-models` has run and the port is free.
+- **Everyday commands:**
+  - `make logs` follows the processes;
+  - `make infra` starts only the Docker services, which the database and HAPI tests need;
+  - `make check` runs ruff, pyright, pytest, ESLint, tsc, Vitest and the banned-dependency check.
+- **Switching a model is one line** in [`config/providers.yaml`](config/providers.yaml). For example, `extraction: { provider: api, vendor: anthropic, model: <model id> }` moves extraction to an API provider, once its key is in `.env`.
+- **Without the backend.** `make mock` serves the API contract's examples with Prism on :4010, so the apps can run against it (`pnpm -F staff dev`), and `make e2e` runs their Playwright smoke tests ([`apps/README.md`](apps/README.md)).
+
+**Limitations.** The hospital (HAPI FHIR) and the vitals device are simulated, and every patient is synthetic. The urgency model is trained on the public Korean KTAS dataset, which is not a local population. Not for clinical use.
 
 **Languages:** English and Arabic, with right-to-left layout. Arabic supported; not validated by native speakers.
 

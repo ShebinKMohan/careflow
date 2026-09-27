@@ -33,11 +33,19 @@ from careflow_rules import RULESET_VERSION
 logger = logging.getLogger("careflow_api.intake")
 
 REPO: Final = Path(__file__).resolve().parents[5]
-DEFAULT_TRIAGE_MODEL: Final = REPO / "services" / "triage" / "artifacts" / "ktas-hgb-ebf31b5e-s42"
+ARTIFACTS: Final = REPO / "services" / "triage" / "artifacts"
 
 
 def triage_model_path() -> Path:
-    return Path(os.environ.get("TRIAGE_MODEL_PATH") or DEFAULT_TRIAGE_MODEL)
+    """TRIAGE_MODEL_PATH, else the newest installed hgb model, one trained on the real KTAS data
+    before a `fixture-*` one (M1-19 trains one when none is installed)."""
+    if configured := os.environ.get("TRIAGE_MODEL_PATH"):
+        return Path(configured)
+    found = [p for p in ARTIFACTS.glob("*hgb*") if (p / "model.joblib").exists()]
+    if not found:
+        return ARTIFACTS / "none"
+    found.sort(key=lambda p: (not p.name.startswith("fixture-"), p.stat().st_mtime))
+    return found[-1]
 
 
 @dataclass(frozen=True)
