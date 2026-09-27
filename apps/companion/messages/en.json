@@ -15,7 +15,9 @@
     "invalid": "The code has at least 16 characters.",
     "failed": "This code did not work. It may have expired; ask at the kiosk for a new one.",
     "welcome": "Connected, {initials}",
-    "status": "See my place in the queue"
+    "status": "See my place in the queue",
+    "noCode": "This page needs the QR code from the kiosk. Scan it again, or enter the code.",
+    "enterCode": "Enter a code"
   },
   "status": {
     "title": "Your place in the queue",
@@ -27,5 +29,27 @@
     "claimLink": "Enter a code",
     "loading": "Loading…",
     "failed": "Your status could not be loaded."
+  },
+  "intake": {
+    "greeting": "Welcome, {initials}.",
+    "typeAnswer": "Or type your answer",
+    "send": "Send",
+    "sending": "Sending…",
+    "failed": "Your answer did not go through. Please try again.",
+    "scale": "Tap a number from 0 to 10",
+    "done": "Thank you. A nurse will see you shortly. Please stay in the waiting area.",
+    "status": "See my place in the queue",
+    "answers": {
+      "yes": "Yes",
+      "no": "No",
+      "notSure": "Not sure",
+      "ok": "OK",
+      "chestPain": "Chest pain",
+      "breathing": "Breathing problems",
+      "fever": "Fever",
+      "injury": "Injury",
+      "pain": "Pain",
+      "other": "Something else"
+    }
   }
 }
