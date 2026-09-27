@@ -228,18 +228,20 @@ class IdTapCheckinRequest(BaseModel):
     ]
 
 
-class CheckinResult(BaseModel):
+type Key = Annotated[str, Field(pattern="^[a-z][a-z0-9_.]{0,63}$")]
+
+
+type Notice = Annotated[str, Field(max_length=300, min_length=1)]
+
+
+class IntakeQuestion(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    session_id: Identifier
-    session_token: Annotated[
-        str, Field(description="Bearer JWT with role patient_session, scoped to this session.")
-    ]
-    patient_display: Annotated[
-        str, Field(description="Initials only, e.g. 'M. S.'.", max_length=8, min_length=1)
-    ]
-    language: LanguageModel
+    question_id: Identifier
+    text: Annotated[str, Field(max_length=500, min_length=1)]
+    key: Key | None
+    notice: Notice | None = None
 
 
 class QrToken(BaseModel):
@@ -297,6 +299,10 @@ class TurnResponse(BaseModel):
     turn_id: Identifier
     assistant_text: Annotated[str, Field(max_length=2000)]
     done: bool
+    next_question: Annotated[
+        IntakeQuestion | None,
+        Field(description="What to ask next; null when the conversation is done."),
+    ] = None
 
 
 class SessionState(StrEnum):
@@ -759,6 +765,21 @@ class NurseFlagEvent(BaseModel):
     type: Literal["nurse.flag"]
     timestamp: AwareDatetime
     data: NurseFlagDataModel
+
+
+class CheckinResult(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: Identifier
+    session_token: Annotated[
+        str, Field(description="Bearer JWT with role patient_session, scoped to this session.")
+    ]
+    patient_display: Annotated[
+        str, Field(description="Initials only, e.g. 'M. S.'.", max_length=8, min_length=1)
+    ]
+    language: LanguageModel
+    first_question: IntakeQuestion | None = None
 
 
 class SessionStatus(BaseModel):

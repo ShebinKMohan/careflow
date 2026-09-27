@@ -239,6 +239,11 @@ paths:
                 session_token: example-session-token-chest-pain
                 patient_display: M. S.
                 language: en
+                first_question:
+                  question_id: q_chief_complaint_1
+                  text: What is the main reason for your visit today?
+                  key: chief_complaint
+                  notice: null
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -413,6 +418,11 @@ paths:
                 turn_id: turn_02
                 assistant_text: Thank you. On a scale of 0 to 10, how bad is the pain?
                 done: false
+                next_question:
+                  question_id: q_pain_score_1
+                  text: Thank you. On a scale of 0 to 10, how bad is the pain?
+                  key: pain_score
+                  notice: null
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1967,11 +1977,41 @@ components:
           description: Initials only, e.g. 'M. S.'.
         language:
           $ref: '#/components/schemas/Language'
+        first_question:
+          $ref: '#/components/schemas/IntakeQuestion'
       required:
       - session_id
       - session_token
       - patient_display
       - language
+      additionalProperties: false
+    IntakeQuestion:
+      type: object
+      description: The next thing the kiosk shows the patient (M1-13). `key` is the StructuredFacts
+        path the question asks about, which picks the tap answers; null for a message the patient
+        only acknowledges. `notice` is shown before the question (e.g. the nurse-coming message).
+        Never a level, an alert or model output that did not pass the output filter (M1-07).
+      properties:
+        question_id: *id005
+        text:
+          type: string
+          minLength: 1
+          maxLength: 500
+        key:
+          oneOf:
+          - type: string
+            pattern: ^[a-z][a-z0-9_.]{0,63}$
+          - type: 'null'
+        notice:
+          oneOf:
+          - type: string
+            minLength: 1
+            maxLength: 300
+          - type: 'null'
+      required:
+      - question_id
+      - text
+      - key
       additionalProperties: false
     QrToken:
       type: object
@@ -2049,6 +2089,11 @@ components:
           maxLength: 2000
         done:
           type: boolean
+        next_question:
+          description: What to ask next; null when the conversation is done.
+          oneOf:
+          - $ref: '#/components/schemas/IntakeQuestion'
+          - type: 'null'
       required:
       - turn_id
       - assistant_text

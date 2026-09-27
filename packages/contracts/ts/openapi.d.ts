@@ -1099,6 +1099,14 @@ export interface components {
             /** @description Initials only, e.g. 'M. S.'. */
             patient_display: string;
             language: components["schemas"]["Language"];
+            first_question?: components["schemas"]["IntakeQuestion"];
+        };
+        /** @description The next thing the kiosk shows the patient (M1-13). `key` is the StructuredFacts path the question asks about, which picks the tap answers; null for a message the patient only acknowledges. `notice` is shown before the question (e.g. the nurse-coming message). Never a level, an alert or model output that did not pass the output filter (M1-07). */
+        IntakeQuestion: {
+            question_id: components["schemas"]["Identifier"];
+            text: string;
+            key: string | null;
+            notice?: string | null;
         };
         /** @description One-time token shown as a QR code on the kiosk. */
         QrToken: {
@@ -1130,6 +1138,8 @@ export interface components {
             turn_id: components["schemas"]["Identifier"];
             assistant_text: string;
             done: boolean;
+            /** @description What to ask next; null when the conversation is done. */
+            next_question?: components["schemas"]["IntakeQuestion"] | null;
         };
         /** @enum {string} */
         SessionState: "intake" | "awaiting_nurse" | "queued" | "called" | "arrived" | "no_show" | "closed";
@@ -2309,7 +2319,13 @@ export interface operations {
                      *       "session_id": "ses_chest_pain",
                      *       "session_token": "example-session-token-chest-pain",
                      *       "patient_display": "M. S.",
-                     *       "language": "en"
+                     *       "language": "en",
+                     *       "first_question": {
+                     *         "question_id": "q_chief_complaint_1",
+                     *         "text": "What is the main reason for your visit today?",
+                     *         "key": "chief_complaint",
+                     *         "notice": null
+                     *       }
                      *     }
                      */
                     "application/json": components["schemas"]["CheckinResult"];
@@ -2520,7 +2536,13 @@ export interface operations {
                      * @example {
                      *       "turn_id": "turn_02",
                      *       "assistant_text": "Thank you. On a scale of 0 to 10, how bad is the pain?",
-                     *       "done": false
+                     *       "done": false,
+                     *       "next_question": {
+                     *         "question_id": "q_pain_score_1",
+                     *         "text": "Thank you. On a scale of 0 to 10, how bad is the pain?",
+                     *         "key": "pain_score",
+                     *         "notice": null
+                     *       }
                      *     }
                      */
                     "application/json": components["schemas"]["TurnResponse"];
