@@ -103,6 +103,9 @@ def test_a_live_kiosk_session_reports_p50_p95_and_writes_nothing(
         TestClient(app) as client,
     ):
         api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=reply)
+        consent = {"session_id": SESSION, "camera": False, "voice": True, "data_use": True}
+        consent |= {"consent_version": "2026-09-27.1", "recorded_at": "2026-09-27T09:00:00Z"}
+        api.get(f"/v1/sessions/{SESSION}/consent").respond(200, json=consent)
         with disk_writes, client.websocket_connect("/kiosk/audio") as ws:
             ws.send_text(
                 json.dumps(
