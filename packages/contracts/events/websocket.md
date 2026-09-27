@@ -1,11 +1,13 @@
 # Live channels (WebSocket)
 
-Two channels push the same event envelope as the webhooks ([README.md](README.md), [`envelope.schema.json`](envelope.schema.json)). Each frame is one JSON envelope `{type, timestamp, data}`.
+Two channels push the same event envelope as the webhooks ([README.md](README.md), [`envelope.schema.json`](envelope.schema.json)). Each frame is one JSON envelope with its stream id: `{id, type, timestamp, data}`. After 20 seconds without an event, the server sends `{"type": "heartbeat", "timestamp": ...}`.
 
-| Channel | Clients (roles) | Carries |
+| Channel | Clients (roles) | Carries (always only the caller's clinic) |
 |---|---|---|
-| `/v1/ws/staff` | nurse station, doctor screen, queue board (`nurse`, `doctor`, `board`) | Every event for the caller's clinic. The board receives only `token.called` and `token.no_show`. |
-| `/v1/ws/sessions/{session_id}` | kiosk and companion phone (`kiosk_device`, `patient_session`) | Events for that session only, filtered for patients: never an alert or an urgency level (patients see status, token and room). |
+| `/v1/ws/staff` | nurse station, doctor screen, queue board, admin (`nurse`, `doctor`, `board`, `admin`) | Nurse: `alert.*`, `triage.*`, `token.*`, `intake.*`, `patient.feels_worse`, `nurse.flag`. Doctor: `triage.confirmed`, `intake.completed`. Board: `token.called`, `token.no_show`. Admin: every event type. |
+| `/v1/ws/sessions/{session_id}` | kiosk and companion phone (`kiosk_device`, `patient_session`) | That session's `token.called`, `token.no_show` and `intake.completed` only: never an alert, a suggestion or an urgency level (patients see status, token and room). |
+
+Internal events (for example `fhir.write.completed`) never reach a socket.
 
 ## Authentication: one-time tickets
 
@@ -17,6 +19,6 @@ A JWT or session token **never** goes in a URL or in a WebSocket frame; only the
 
 ## Delivery
 
-Frames are best-effort and ordered per session. After a reconnect, clients re-read state through the REST API (`GET /v1/nurse/worklist`, `GET /v1/sessions/{session_id}/status`) rather than relying on missed frames.
+Every event is first written to the transactional outbox, then relayed to a Redis Stream that each API process reads (M1-11). Frames are best-effort and ordered per session. A reconnecting client may pass `?last_event_id=<id of the last frame it saw>` to replay what it missed, up to 5 minutes back. It should still re-read state through the REST API (`GET /v1/nurse/worklist`, `GET /v1/sessions/{session_id}/status`), which stays the source of truth when the live channel is down.
 
 Research prototype. Synthetic data only. Not for clinical use.
