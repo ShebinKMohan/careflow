@@ -3,11 +3,11 @@
 import type { Schema } from "@careflow/contracts";
 import { Card } from "@careflow/ui";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useSyncExternalStore } from "react";
+import { useState } from "react";
 
-import { readPatientSession } from "@/lib/session";
+import { useKiosk } from "@/lib/session";
 
 import { VitalsPanel } from "./VitalsPanel";
 
@@ -17,14 +17,17 @@ function isScenario(value: string | null): value is Schema<"VitalsScenario"> {
   return value !== null && (SCENARIOS as readonly string[]).includes(value);
 }
 
-const noSubscription = () => () => undefined;
-
-/** `/vitals`: the panel for the checked-in session (`?session=` and `?scenario=` for dev and E2E). */
+/**
+ * `/vitals`: the panel for the checked-in patient (`?session=` and `?scenario=` for dev and E2E).
+ * The patient continues once a reading is in, or skips.
+ */
 export function VitalsPage() {
   const t = useTranslations("vitals");
+  const router = useRouter();
   const params = useSearchParams();
-  const stored = useSyncExternalStore(noSubscription, () => readPatientSession()?.sessionId ?? null, () => null);
-  const sessionId = params.get("session") ?? stored;
+  const { patient } = useKiosk();
+  const [measured, setMeasured] = useState(false);
+  const sessionId = params.get("session") ?? patient?.sessionId ?? null;
   const requested = params.get("scenario");
   const scenario = isScenario(requested) ? requested : null;
 
@@ -38,5 +41,16 @@ export function VitalsPage() {
       </Card>
     );
   }
-  return <VitalsPanel sessionId={sessionId} scenario={scenario} autoStart={scenario !== null} />;
+  return (
+    <div className="flex flex-col gap-6">
+      <VitalsPanel sessionId={sessionId} scenario={scenario} autoStart={scenario !== null} onReading={() => setMeasured(true)} />
+      <button
+        type="button"
+        className="min-h-touch rounded-control border-2 border-border bg-surface px-6 text-title font-semibold text-ink"
+        onClick={() => router.push("/done")}
+      >
+        {measured ? t("continue") : t("skip")}
+      </button>
+    </div>
+  );
 }

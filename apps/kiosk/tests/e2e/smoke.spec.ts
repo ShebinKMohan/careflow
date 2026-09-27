@@ -15,14 +15,14 @@ async function signInKiosk(page: Page) {
 }
 
 test("the footer is visible on every page", async ({ page }) => {
-  for (const path of ["/", "/setup", "/checkin", "/intake", "/vitals"]) {
+  for (const path of ["/", "/setup", "/checkin", "/intake", "/vitals", "/done"]) {
     await page.goto(path);
     await expect(page.getByRole("contentinfo"), path).toHaveText(FOOTER_EN);
     await expect(page.getByRole("contentinfo"), path).toBeVisible();
   }
 });
 
-test("keypad 100001 shows the mocked session within 1 s", async ({ page }) => {
+test("keypad 100001 opens the mocked session's first question within 1 s", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("main").getByRole("button", { name: "English" }).click();
   await expect(page).toHaveURL(/\/checkin$/);
@@ -30,12 +30,13 @@ test("keypad 100001 shows the mocked session within 1 s", async ({ page }) => {
   for (const digit of "100001") await page.getByRole("button", { name: digit, exact: true }).click();
   const started = Date.now();
   await page.getByRole("button", { name: "Check in" }).click();
-  await expect(page.getByRole("heading", { name: "Welcome, M. S." })).toBeVisible({ timeout: 1_000 });
+  await expect(page.getByText("Welcome, M. S.")).toBeVisible({ timeout: 1_000 });
   const elapsed = Date.now() - started;
   test.info().annotations.push({ type: "keypad-to-session-ms", description: String(elapsed) });
   console.log(`keypad submit -> mocked session shown in ${elapsed} ms`);
   expect(elapsed).toBeLessThan(1_000);
-  await expect(page.getByText("Session ses_chest_pain")).toBeVisible();
+  await expect(page).toHaveURL(/\/intake$/);
+  await expect(page.getByRole("heading", { name: "What is the main reason for your visit today?" })).toBeVisible();
 });
 
 test("choosing Arabic switches the page to right-to-left", async ({ page }) => {

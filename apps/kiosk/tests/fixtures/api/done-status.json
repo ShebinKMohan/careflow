@@ -1,0 +1,4 @@
+[
+  { "state": "awaiting_nurse" },
+  { "state": "called", "token_code": "A-014", "room": "Resus 2" }
+]

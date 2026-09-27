@@ -18,6 +18,8 @@ export interface VitalsPanelProps {
   scenario?: Schema<"VitalsScenario"> | null;
   /** Start measuring on mount (used when a scenario is given in the URL). */
   autoStart?: boolean;
+  /** Called on each reading, so the page can offer "Continue". */
+  onReading?: () => void;
 }
 
 function Tile({ label, value, unit, children }: { label: string; value: string; unit: string; children?: ReactNode }) {
@@ -37,11 +39,16 @@ function Tile({ label, value, unit, children }: { label: string; value: string; 
  * pressure. "Measure vitals" starts the dev simulator; readings come from the session status,
  * polled every second until live updates arrive (M1-11). Every reading is labelled simulated.
  */
-export function VitalsPanel({ sessionId, scenario, autoStart = false }: VitalsPanelProps) {
+export function VitalsPanel({ sessionId, scenario, autoStart = false, onReading }: VitalsPanelProps) {
   const t = useTranslations("vitals");
   const [vitals, setVitals] = useState<Vitals | null>(null);
   const [status, setStatus] = useState<"idle" | "measuring" | "failed">("idle");
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reading = useRef(onReading);
+
+  useEffect(() => {
+    reading.current = onReading;
+  }, [onReading]);
 
   const stop = useCallback(() => {
     if (timer.current) clearInterval(timer.current);
@@ -66,7 +73,10 @@ export function VitalsPanel({ sessionId, scenario, autoStart = false }: VitalsPa
       const { data } = await api.GET("/v1/sessions/{session_id}/status", {
         params: { path: { session_id: sessionId } },
       });
-      if (data?.vitals) setVitals(data.vitals);
+      if (data?.vitals) {
+        setVitals(data.vitals);
+        reading.current?.();
+      }
     };
     void poll();
     timer.current = setInterval(() => void poll(), POLL_MS);

@@ -1,0 +1,11 @@
+{
+  "state": "intake",
+  "vitals": {
+    "heart_rate": 96,
+    "spo2": 97,
+    "temperature_c": 36.8,
+    "measured_at": "2026-09-26T09:03:00Z",
+    "device_id": "sim_vitals_01",
+    "simulated": true
+  }
+}

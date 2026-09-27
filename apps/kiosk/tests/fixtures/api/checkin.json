@@ -1,0 +1,12 @@
+{
+  "session_id": "ses_e2e",
+  "session_token": "example-session-token-e2e",
+  "patient_display": "M. S.",
+  "language": "en",
+  "first_question": {
+    "question_id": "q_chief_complaint_1",
+    "text": "What is the main reason for your visit today?",
+    "key": "chief_complaint",
+    "notice": null
+  }
+}
