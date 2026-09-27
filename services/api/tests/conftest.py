@@ -116,6 +116,9 @@ def database() -> Iterator[Engine]:
     config = Config(str(API_DIR / "alembic.ini"))
     os.environ["ALEMBIC_DATABASE_URL"] = os.environ["DATABASE_URL_MIGRATOR"]
     command.upgrade(config, "head")
+    from careflow_api.cli import setup_checkpoints
+
+    setup_checkpoints()  # as `make migrate` does: the intake graph's checkpoint tables
     engine = create_engine(_sync(os.environ["DATABASE_URL_MIGRATOR"]))
     yield engine
     engine.dispose()

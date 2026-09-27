@@ -2343,6 +2343,40 @@ export interface components {
                 "application/problem+json": components["schemas"]["Problem"];
             };
         };
+        /** @description The body is not valid JSON (or not the declared content type) */
+        BadRequest: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                /**
+                 * @example {
+                 *       "type": "about:blank",
+                 *       "title": "Bad Request",
+                 *       "status": 400,
+                 *       "detail": "There was an error parsing the body"
+                 *     }
+                 */
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
+        /** @description Too many attempts from this client or kiosk; wait and try again */
+        TooManyRequests: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                /**
+                 * @example {
+                 *       "type": "about:blank",
+                 *       "title": "Too Many Requests",
+                 *       "status": 429,
+                 *       "detail": "Too many attempts. Please wait a minute and try again."
+                 *     }
+                 */
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
     };
     parameters: {
         /**
@@ -2438,8 +2472,10 @@ export interface operations {
                     "application/json": components["schemas"]["TokenResponse"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
         };
     };
     deviceToken: {
@@ -2480,8 +2516,10 @@ export interface operations {
                     "application/json": components["schemas"]["TokenResponse"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
         };
     };
     getMe: {
@@ -2549,6 +2587,7 @@ export interface operations {
                     "application/json": components["schemas"]["WsTicket"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             422: components["responses"]["Unprocessablecontent"];
@@ -2597,10 +2636,12 @@ export interface operations {
                     "application/json": components["schemas"]["CheckinResult"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
             422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
         };
     };
     checkinIdTap: {
@@ -2644,11 +2685,13 @@ export interface operations {
                     "application/json": components["schemas"]["CheckinResult"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
             409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
         };
     };
     issueQrToken: {
@@ -2722,9 +2765,11 @@ export interface operations {
                     "application/json": components["schemas"]["CheckinResult"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
         };
     };
     getConsent: {
@@ -2812,6 +2857,7 @@ export interface operations {
                     "application/json": components["schemas"]["ConsentRecord"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -2861,6 +2907,7 @@ export interface operations {
                     "application/json": components["schemas"]["PatientDetails"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -2917,6 +2964,7 @@ export interface operations {
                     "application/json": components["schemas"]["TurnResponse"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -3202,6 +3250,7 @@ export interface operations {
                     "application/json": components["schemas"]["VitalsAccepted"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -3316,6 +3365,7 @@ export interface operations {
                     "application/json": components["schemas"]["TriageView"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -3363,6 +3413,7 @@ export interface operations {
                     "application/json": components["schemas"]["VitalsSimStarted"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -3566,6 +3617,7 @@ export interface operations {
                     "application/json": components["schemas"]["DecisionResult"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
@@ -4305,6 +4357,7 @@ export interface operations {
             };
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
         };
     };
     postFeelsWorse: {
@@ -4348,8 +4401,10 @@ export interface operations {
                     "application/json": components["schemas"]["FeelsWorseAck"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };
@@ -4395,8 +4450,10 @@ export interface operations {
                     "application/json": components["schemas"]["AskResponse"];
                 };
             };
+            400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };

@@ -102,7 +102,7 @@ async def device_token(
     )
 
 
-@router.get("/me", response_model=Me)
+@router.get("/me", response_model=Me, response_model_exclude_none=True)
 async def me(principal: Annotated[Principal, Depends(get_principal)]) -> Me:
     return Me.model_validate(
         {

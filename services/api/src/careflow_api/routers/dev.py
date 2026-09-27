@@ -65,6 +65,14 @@ async def start_vitals_simulation(
     request: Request,
     body: VitalsSimRequest | None = None,
 ) -> VitalsSimStarted:
+    # The contract's body is optional but, when sent, an object whose scenario is a name; leaving
+    # it (or the scenario) out means "normal". A JSON null is neither.
+    null_body = body is None and (await request.body()).strip() == b"null"
+    null_scenario = body is not None and "scenario" in body.model_fields_set and not body.scenario
+    if null_body or null_scenario:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="Send a scenario name, or no body."
+        )
     name = chosen_scenario(body)
     device = SimulatedSerialDevice(load_scenario(name), speed=settings.vitals_sim_speed)
     background.add_task(run_simulation, device, session_sink(request, session_id))
