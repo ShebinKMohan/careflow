@@ -1,0 +1,77 @@
+{
+  "case_receipts": {
+    "breathing-low-oxygen-no-infection": "17dba857ea4da0acae50089b60890b3e265e47664520f31236855841c7f3b750",
+    "breathing-mild-focused-screen": "f14485630392d08fa53650e3acf45c636d99a8c243f2574b75c653944a597c94",
+    "breathing-moderate-no-infection": "26b154bebf9f83864c6468ff77e27ec5ac46f9623b563ae8aecd8bc87f7fdd10",
+    "breathing-persistent-no-chest-pain": "95695930b72b6308c710532ae8a192dd1a725bf44a169f49fc10749d3c4c9cba",
+    "chest-pain-localised": "36b972accf93319f981926c26a1cc0bbf850fd15f82ecd14fb46eb1633c48d5b",
+    "chest-pain-no-breathlessness": "c36ac110b2043275c26eb7eafbca73f8735981b1616369dbffe6ee70cc418580",
+    "chest-pain-radiating-arm": "8aea5958ab165d1f9e1bb2c5bb5bcde4f7795dce301d72bc8a8b730629e3f1a8",
+    "chest-pain-screen-negative": "e5da68e77499a43b3c810e0b982c0c1d750f96cc8c943cb16223ed6b08663101",
+    "chest-pain-screen-uncertain": "43db06df0b99c55a0693e758522b9ecb0122af215fc7dc442616c568e7ad395e",
+    "chest-pain-sweating": "a518337a69f874aa7812de3038986b057e892cbbd1b6bf0b84afa945b3d5d4ea",
+    "chest-pain-unsure-radiation": "38a975b448fe121116c968f91ce66e1bcd79dd9270d716f5331689a0d325f05e",
+    "chest-pain-with-jaw-radiation": "996f7616108517ee65214c256a6e9b3549bb08c45dfbff836c1ea26e9f0da1c7",
+    "child-feeding-and-urine-amber": "27e618735fd1cf687deaa7ce7b89e0c41d06a2ea56520989cf2e61ba96c48f39",
+    "child-grunting-and-poor-feeding": "4852daf913350d3223afa9158dad7e6b49a100af0c9d5f83696e20d70d9b93d3",
+    "child-hard-to-wake-under-five": "08b7aade1f03be096b639fc753991d77b9c2ee35d5af8f0a0f115c01352666ec",
+    "child-non-blanching-rash": "6c4ad8c3bd5d2a40a4d45261b6e7c90d181d010fcb1f9002a44a92af38b51ca5",
+    "child-older-hard-to-wake": "7e815dd8cf61792f15e485db712868ffdc40a3126c99359c26f391e2976f806e",
+    "child-parent-unsure-waking": "cef0c7c5d250bb1a56ecb8f3b5c18525fa4bea5c3a8a98a0e48f4b3b293dc5b0",
+    "routine-01-wrist-ache": "313e67220c6e1032299547771eb7a779a517e5c883ee71e28a2485c2ea2a0153",
+    "routine-02-ankle-soreness": "632a344d5e6860120e8f3869a4574c31d4539938b2ce65e1e0c129528ac184d9",
+    "routine-03-knee-ache": "a241a69be2f9e11c3f1ead00d991102970b95317b8d54dec3338d470196f88fd",
+    "routine-04-shoulder-stiffness": "83d4986278cfae70f6611229a743faabe6b529e08455724c37a11f2daf3d0a84",
+    "routine-05-elbow-tenderness": "d7f9a391d4070935f149c35be695cf6a1ee5e1500e54eb120fad1d935840f6f5",
+    "routine-06-heel-discomfort": "1bd8d9d54869453571246ef1842326b10482fb7b85b0fb258f803188ba549bdf",
+    "routine-07-finger-ache": "3acdac19dcff5429d7bd1e71b71781f7b31c5b194983cd20b28de2004804f60b",
+    "routine-08-dry-skin": "f5857b64d5321798647900cbe3257e4a97e9ab10567db89630f21b9a44f1a213",
+    "routine-09-scalp-itch": "c33cbc03a5ff7ac1d0a08d9afbb64fa499874d7848100da95cfdc651786f7c9f",
+    "routine-10-flaky-skin": "808a6a707258c0121436cdea05f0cd75c05516ecdc1e84bdf36260501838fe8e",
+    "routine-11-ear-itch": "7b69d1816e8af61da7e168111fd4ce4441982e5540c79097e290d5bcbe82da16",
+    "routine-12-blocked-ear": "8e3bfb596f87fd3d7da609776ae39aab1d131847009f33b6ddd5dea6910648f3",
+    "routine-13-bloating": "ef5f758b6117f857acb78ff64a86af7b873419faca16af8cfda7d45d2f50bbe3",
+    "routine-14-constipation": "93e912df44354124f272cda00747bd71dcb51ff7514f430e01d4277f9b22e701",
+    "routine-15-queasiness": "0685f1f008e15fbc1acf51c7b27210d02e732eab199302dffdce08046fd3cf65",
+    "routine-16-toenail-irritation": "a8e4e2273fc2816415d5ef390686d4b8dda7bee4d7543307b49da7c57c4775a4",
+    "routine-17-foot-blister": "fa969786b53e28e2f6c132584acce0fdc9895c88d238f0bca44f7b58fa96401d",
+    "routine-18-dry-lips": "e77778d7e1aefbfffb440fb26493d201b14554be4bff82557b69489b6779bad5",
+    "sepsis-kiosk-below-threshold": "724860b4c41545761023ffdcf4d0b8cb589e16f1e1bbc0fe25ed29444b8638ef",
+    "sepsis-kiosk-high-fever": "ab4bd6e5ae72760eb9d82d186da078150403c934e640eabb8e7b60f90c17262b",
+    "sepsis-kiosk-threshold-five": "d2d42e93c52b021ef7ac6af2964f000cb27c1a99da0fef959ae6252205e6133f",
+    "sepsis-low-measured-temperature": "44a798603a7134b3776a9f6285aa04b1b9fbf22d1f4c7c2ceb3bb7135fff2667",
+    "sepsis-measured-fever-denied": "58271e16989dbcc6acc103b201eab463de1b875e15350564cb4bc7b861d22ba7",
+    "sepsis-nurse-completes-high-score": "2f7d9e1465bd97a2c2d7949e1d4952a4442fcc42656f422dae70f1c402f193c0",
+    "sepsis-nurse-confirms-threshold": "1df8b981587583144aa20e8fe2e07824ddd7529f3b03cadab1632dff7fd844b5",
+    "sepsis-rigors-with-normal-temperature": "9e400d18c26b1a9c991c0a7d64220241bacad2613073060873ef378aea97384f",
+    "stroke-arm-positive": "411f4c85465d0aca924d4ee1241654d942ee8fb9944797d1bfc115af7858cf13",
+    "stroke-face-positive": "4404b1d85c5ff96ea6113eda5ae79ad7a8c749122eae6806c3109d2e42687d65",
+    "stroke-last-known-well-unknown": "bc46c5171ce0b05413e899ee80b72c635d432bb2bb96ad1b06db7a6899f1c8cb",
+    "stroke-multiple-signs": "19e9d7d82910ae6b1fb6cb19f5d74429d694810705513a4fb2f67e28e5dba7ca",
+    "stroke-screen-unsure": "4a9cb7c0e23235b0348619848fd23d85f74f7702de19d1d85c84799bb64638a7",
+    "stroke-speech-positive": "7408d45a05c3de0399e58a1c08f2839635f3138ac09c7b310ffff5f5eb45a036"
+  },
+  "model_receipt_sha256": "328566153f1148c243a5f9c675fe1f88277eaafaa99ff453613121f056747f35",
+  "observations": [
+    {
+      "base_url": "http://127.0.0.1:8081/v1",
+      "checked_at": "2026-09-27T09:43:32.262721+00:00",
+      "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "server_model_ids": [
+        "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+        "mlx-community/SmolLM2-135M-Instruct-8bit"
+      ]
+    },
+    {
+      "base_url": "http://127.0.0.1:8081/v1",
+      "checked_at": "2026-09-27T09:51:28.223849+00:00",
+      "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "server_model_ids": [
+        "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+        "mlx-community/SmolLM2-135M-Instruct-8bit"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "status": "verified"
+}

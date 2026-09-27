@@ -1,0 +1,36 @@
+id: routine-17-foot-blister
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting a mildly uncomfortable foot blister without a stated injury mechanism."
+patient:
+  age_years: 19
+  sex: female
+turns:
+  - question_key: chief_complaint
+    patient_text: "Blister on my left foot"
+  - question_key: symptom_onset_at
+    patient_text: "Yesterday morning"
+  - question_key: pain_score
+    patient_text: "1"
+  - question_key: pain_location
+    patient_text: "Left foot"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Blister on my left foot"
+    symptom_onset_at: "Yesterday morning"
+    pain_score: 1
+    pain_location: "Left foot"
+    infection.fever_reported: "no"
+    pain_present: "yes"
+    symptoms: ["Blister on my left foot"]
+  alerts: []
+  level: 5
+  level_rationale: "Draft synthetic level 5 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

@@ -1,0 +1,44 @@
+synthetic: true
+id: routine-04-shoulder-stiffness
+category: routine
+language: en
+description: Synthetic case. Adult reporting low-intensity shoulder stiffness and
+  denying chest pain.
+patient:
+  age_years: 37
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: Right shoulder stiffness
+- question_key: symptom_onset_at
+  patient_text: Since Tuesday
+- question_key: severity
+  patient_text: '2'
+- question_key: chest_pain.present
+  patient_text: 'no'
+- question_key: allergies_confirm
+  patient_text: I do not know
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Right shoulder stiffness
+    symptom_onset_at: Since Tuesday
+    severity: 2
+    chest_pain.present: 'no'
+    allergies_confirm: I do not know
+    symptoms:
+    - Right shoulder stiffness
+  alerts: []
+  level: 4
+  level_rationale: Draft synthetic level 4 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:13:48.051065Z'
+review_method: automated
+reviewed_content_sha256: 1ea87565b66c62e0746c904d9692b8726b39abf23b6c0593922be7a088932af4

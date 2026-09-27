@@ -1,0 +1,38 @@
+speech:
+  stt:
+    by_language:
+      ar: mlx-whisper
+      en: mlx-whisper
+    provider: mlx-whisper
+  tts:
+    by_language:
+      ar: mms-tts-ara
+      en: kokoro
+    provider: kokoro
+tasks:
+  conversation:
+    base_url: http://127.0.0.1:8081/v1
+    model: qwen3.5-9b-4bit
+    provider: local
+    served_model: default_model
+  eval_judge:
+    provider: cli
+    tool: codex
+  extraction:
+    base_url: http://127.0.0.1:8081/v1
+    model: qwen3.5-9b-4bit
+    provider: local
+    served_model: /Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631
+  summary:
+    base_url: http://127.0.0.1:8081/v1
+    model: qwen3.5-9b-4bit
+    provider: local
+    served_model: default_model
+  test_data:
+    provider: cli
+    tool: codex
+  translation_check:
+    base_url: http://127.0.0.1:8081/v1
+    model: qwen3.5-9b-4bit
+    provider: local
+    served_model: default_model

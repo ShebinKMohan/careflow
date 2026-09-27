@@ -1,0 +1,7 @@
+{
+  "f3680f6e968e0dc38b90eb91be25eba7912c0d21f95643b722a6d6099eb87d15": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My words are hard to get out\", \"turn_id\": \"t2\", \"quote\": \"My words are hard to get out\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"Yes, speaking is difficult\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"Before breakfast\", \"turn_id\": \"t10\", \"quote\": \"Before breakfast\", \"negated\": false}]}"
+  }
+}

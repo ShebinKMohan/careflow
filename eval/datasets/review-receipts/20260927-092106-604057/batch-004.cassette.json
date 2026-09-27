@@ -1,0 +1,7 @@
+{
+  "75c6b9f848c57ad519f61df1da31bfb43e5c42bd6745e3d83822f2629bfef70e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"chest-pain-screen-negative\",\n      \"content_sha256\": \"462a9642ae9c4698e4101eb8540bdb86c8aaf662d2c477b95fedf2a77c51\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

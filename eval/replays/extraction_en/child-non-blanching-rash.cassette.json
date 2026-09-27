@@ -1,0 +1,7 @@
+{
+  "b6108dbef12389e13a23b0cc6d46ed00456006760281303582f5881a2d332dcc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My child needs to be checked\", \"turn_id\": \"t2\", \"quote\": \"My child needs to be checked\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"child_danger.non_blanching_rash\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, the spots do not fade when pressed\", \"negated\": false}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}]}"
+  }
+}

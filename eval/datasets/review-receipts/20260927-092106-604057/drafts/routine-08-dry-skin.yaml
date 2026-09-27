@@ -1,0 +1,35 @@
+id: routine-08-dry-skin
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting dry skin with little subjective impact."
+patient:
+  age_years: 52
+  sex: male
+turns:
+  - question_key: chief_complaint
+    patient_text: "Dry skin"
+  - question_key: symptom_onset_at
+    patient_text: "Two weeks ago"
+  - question_key: severity
+    patient_text: "1"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+  - question_key: allergies_confirm
+    patient_text: "No known drug allergies"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Dry skin"
+    symptom_onset_at: "Two weeks ago"
+    severity: 1
+    infection.fever_reported: "no"
+    allergies_confirm: "No known drug allergies"
+    symptoms: ["Dry skin"]
+  alerts: []
+  level: 5
+  level_rationale: "Draft synthetic level 5 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

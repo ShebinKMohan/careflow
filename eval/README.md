@@ -1,6 +1,194 @@
-# Eval
+# CareFlow evaluation
 
-Synthetic datasets, the eval harness and reports (markdown + JSON) arrive in `[M1-18]`.
+The `careflow-eval` workspace package evaluates the actual rules engine and English fact
+extractor. Its patients are explicitly synthetic. Dataset review is automated and is **not
+clinician review or clinical validation**. Expected urgency levels are scenario metadata,
+not evidence that a model is safe for triage.
 
-- `scenarios/rules/`: the safety rules scenario suite (M1-02), checked by `services/rules/tests/test_scenarios.py`.
-- `reports/`: benchmark and evaluation reports; `reports/queue/` holds the queue simulation (M1-10).
+Install the workspace with `uv sync --locked --all-packages`, then:
+
+```sh
+uv run careflow-eval list
+uv run careflow-eval validate intake_en
+uv run careflow-eval run rules
+uv run careflow-eval run extraction_en --replay
+```
+
+`rules` runs the existing YAML scenarios in `eval/scenarios/rules/` without loading a model.
+`extraction_en` builds approved question/answer turns, invokes the production `LlmExtractor`,
+and evaluates rules using extracted facts plus the supplied demographic and vital context.
+Expected facts enter scoring only; they are never passed to the extractor.
+
+## Data and admission
+
+`eval/datasets/intake_en/` contains the English corpus: eight chest-pain, six stroke, eight sepsis,
+six child, four breathing, and eighteen routine cases. Each YAML file must match
+`eval/schemas/scenario.schema.json`, including `synthetic: true`, patient demographics, patient
+turns, device/nurse vital inputs, generation provenance and expected facts/alerts. Explicit
+patient statements are gold even when the patient volunteers them in an answer to a different
+question. Device and demographic inputs are context, not transcript extraction targets.
+
+The default loader requires a distinct known model family for automated review, a review
+timestamp and an exact content hash. Editing a reviewed case invalidates approval. Named
+device scenarios are resolved into the hashed review content, so changing their values also
+invalidates approval. Duplicate keys, unsupported gold, invalid facts, PHI denylist matches,
+and disagreement with the actual rule engine fail validation. The denylist is a limited
+screening check; synthetic authorship and review remain required.
+
+Drafts live under `_inbox/`. `--include-unreviewed` is an explicit diagnostic option and is
+recorded in reports. It does not approve a dataset. Review decisions and raw model outputs
+are retained in `eval/datasets/review-log.jsonl` and `eval/datasets/review-receipts/`; the
+repository-level
+`datasets/REVIEW.md` records the pre-baseline gold audit.
+
+## Live recording and replay
+
+Start the one local model only through the repository wrapper:
+
+```sh
+mkdir -p .run
+scripts/with_llm.sh uv run python scripts/eval_local.py baseline \
+  --launch-log .run/baseline-launch.log \
+  --record-root eval/replays --output-root eval/reports 2> .run/baseline-launch.log
+```
+
+Use a fresh launch-log file for each attempt. Existing recordings are never overwritten;
+choose a new record/output root for later baselines. The helper observes the actual endpoint,
+selects the exact pinned snapshot, retains its resolved configuration and launch evidence,
+and warms the production extraction prompt/schema with an empty transcript before timing
+cases. It does not use any scenario or gold in warm-up. Evidence is retained under
+`<output-root>/local-runs/<timestamp>-baseline/`. The helper starts no server itself.
+
+For custom providers, use the lower-level `careflow-eval run extraction_en --config ...`
+with an observed `--model-receipt ...` and `--record ...` directory.
+
+A model receipt identifies the actual Hugging Face model and pinned revision, launch source,
+configured `base_url`, requested `served_model`, and observed `server_model_ids`. A logical
+alias such as `qwen3.5-9b-4bit` alone does not prove which weights were served. Preserve the
+launch evidence and inspect `/v1/models` for the current process. Warm the model before a
+timed baseline and record that warm-up separately. The wrapper stops only a server it starts.
+
+`--record DIR` and `--replay DIR` both use `DIR/<suite>/`. Bare `--replay` uses
+`eval/replays/<suite>/`. Recording refuses to overwrite existing evidence. Cassettes use the
+canonical provider's request keys and retain raw responses, including invalid model JSON.
+Receipts bind inputs, prompt, ruleset, normalization, model, outputs and historical duration.
+Missing or changed required cassettes fail; replay never silently calls a live model.
+
+Successful model calls replay their raw replies through the canonical `ReplayProvider`.
+A confirmed terminal timeout has a separate, explicitly labelled replay path. It is currently
+limited to the production extractor's 20-second bound (`DEFAULT_TIMEOUT_SECONDS`): a
+timeout recorded with any other `--timeout` value stays `not_run`. It requires a receipt
+bound to that limit, a recorded case duration of at least 20 seconds whose finite call
+timings fit inside it, one failed final request recorded as `CancelledError`, and recorded
+replies for every earlier request (at most one: the structured-output correction). Cassette
+hashes (or proven absence for a first-request timeout) must still verify, as must the
+endpoint completion manifest when the original local recording required one. Unknown or
+unproven failures remain `not_run`, make the replay incomplete, and mark its metrics as not
+comparable with a complete baseline. `eval/tests/test_timeout_replay.py` changes each of these
+properties on a copy of the real recording and checks the outcome.
+
+For an eligible timeout, replay raises `TimeoutError` immediately at the recorded provider
+call through the production extractor, then checks the ordered calls and extraction/rules
+output hash. It does not invent a model reply or wait for another live timeout. The row says
+`replay_method: confirmed_timeout_event` and `failure_event_replayed: true`; successful reply
+rows say `replay_method: recorded_replies`. Metadata includes `failure_event_replay_count`.
+The original receipt's `replayable: false` and row's `recording_replayable: false` are preserved:
+they describe reply-only replayability. This additional failure-event handling does not
+rewrite historical recordings or baseline results.
+
+Replay preserves historical case latency separately from its own wall time. `replay_exact`
+means the recorded outcomes and ordered calls matched, not that model execution speed was
+measured again. A timeout observed during a live evaluation remains an incomplete extraction
+in that evaluation's quality metrics, even when its recorded failure outcome is reproducible.
+
+## Metrics and reports
+
+Reports go to `eval/reports/<suite>/<UTC timestamp>.json` and `.md`, with a separate `LATEST.md`
+for each suite. `--output DIR` changes the report root, not the suite subdirectory. Reports
+include source and dataset provenance, prompt/ruleset/model identity, per-case results,
+per-key extraction scores, per-rule alert counts, and failing scenario IDs.
+Source provenance includes the Git SHA, dirty-worktree flag and relevant source hashes;
+replay retains the original recording's provenance alongside the current replay source.
+Local recording verifies the observed model endpoint before and after the batch and binds
+the completion manifest to the retained case receipts.
+
+Field precision/recall/F1 use micro counts. A wrong value contributes one false positive and
+one false negative; duplicates cannot reuse one matching gold value. Matching treats booleans
+distinctly, tolerates numeric differences up to 0.1, normalizes text case/spacing, and uses a
+small versioned chief-complaint synonym map. Alert metrics include recall and the false-alert
+rate on benign cases. Other metrics include extraction incompleteness, dropped facts and
+p50/p95 extractor latency (including retry and recording overhead). Undefined metrics remain
+`null`/`n/a`, not zero.
+
+The CLI exits nonzero for invalid data, failed review, operational failure or incomplete
+execution. A completed evaluation can report poor quality and still exit zero: completion
+describes execution, not a clinical pass. CI asserts the fixed recorded baseline separately:
+`eval/tests/test_baseline_replay.py` replays all 50 extraction cases and the 56 rule
+scenarios from `eval/replays/`, with no model server, and requires every case output, every
+metric and the historical latency percentiles to equal the committed baseline reports.
+
+## Observed English extraction baseline
+
+The [27 September 2026 baseline JSON](reports/extraction_en/20260927-095128.json)
+records all 50 scenarios using local Qwen3.5-9B MLX 4-bit, prompt `extraction_v2`, and a
+20-second per-case timeout. Its source Git SHA is
+`989981b5c265a70ac2fb466459694ca9b6dad968`; the report retains the exact source, dataset,
+model-revision and launch evidence. These measurements describe that recorded run only.
+
+| Metric | Observed result |
+| --- | --- |
+| Field precision | 0.802521 |
+| Field recall | 0.689531 |
+| Field F1 | 0.741748 |
+| Alert recall | 0.96 (24 of 25 expected alerts) |
+| False-alert rate on benign scenarios | 0 |
+| Incomplete extraction rate | 0.02 (1 of 50 scenarios) |
+| Scenarios with dropped facts | 0.06 (3 of 50 scenarios) |
+| Extractor latency p50 | 9,113.42 ms |
+| Extractor latency p95 | 12,284.61 ms |
+
+`child-parent-unsure-waking` hit the 20-second timeout and missed its expected alert. Its
+`error_code: timeout`, incomplete extraction, failed rule expectation and historical latency
+are retained in the JSON and surfaced by subsequent report renders. Successful completion
+of the 50-case loop does not make this an acceptable safety result. Automated scenario review
+and a synthetic benchmark do not establish clinical performance. The original baseline JSON
+and Markdown remain unchanged, and `reports/extraction_en/LATEST.md` stays the live
+baseline. Replay verification is written separately, to
+`reports/replay-verification/extraction_en/` (`careflow-eval run extraction_en --replay
+--output eval/reports/replay-verification`); those reports explain the confirmed
+timeout-event replay.
+
+## Authoring and independent review
+
+In-session coding-agent authorship is supported. Alternatively, generation uses the configured
+subscription CLI only in the offline runtime:
+
+```sh
+CAREFLOW_RUNTIME=offline uv run careflow-eval generate \
+  --suite intake_en --n 50 --writer-model <actual-supported-model-id>
+CAREFLOW_RUNTIME=offline uv run careflow-eval review --judge cli \
+  --config config/providers.eval-claude.yaml --reviewer-model claude-sonnet-5
+```
+
+Generation writes drafts and clears approval fields. An unspecified CLI default has no
+established model identity and cannot establish reviewer independence. The local review
+option uses a different model family and checks wording, fact support/completeness,
+rule consistency and synthetic privacy. Model identity is checked against the live endpoint;
+approval is bound to the exact content sent. Rejected or concurrently edited drafts remain
+unapproved. Keep concrete rejection reasons and review revised content again.
+
+The offline Claude review option requires an existing subscription login and an explicit
+model ID. Tools, skills and MCP are disabled; inputs go through stdin in a temporary working
+directory. API credentials and alternate-provider overrides are removed from the child
+environment. Retained CLI evidence verifies the selected model against principal token
+accounting and reports auxiliary model usage separately. The repository's 200-CLI-call
+per-issue limit includes retries; the operator must track totals across separate invocations.
+
+For local review, use the wrapper/helper with `review --batch-size 1 --timeout 300` and a
+fresh `--launch-log`. The first corpus exposed repeated incorrect rule interpretations in
+Qwen's automated reviews; rejected cases were preserved and escalated to the independent
+offline reviewer. A successful structured response alone is never sufficient for approval.
+
+This package does not implement Arabic/RAG evaluation, train urgency models, or use an LLM
+as the extraction scorer. Those are separate milestones. Existing `eval/reports/queue/` artifacts
+belong to the queue simulation. File paths in this document are relative to the repository root.

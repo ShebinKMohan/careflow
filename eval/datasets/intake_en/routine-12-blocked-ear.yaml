@@ -1,0 +1,40 @@
+synthetic: true
+id: routine-12-blocked-ear
+category: routine
+language: en
+description: Synthetic case. Adult reporting a mildly troublesome blocked-ear sensation.
+patient:
+  age_years: 48
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: Blocked right ear
+- question_key: symptom_onset_at
+  patient_text: Since Monday
+- question_key: severity
+  patient_text: '2'
+- question_key: infection.fever_reported
+  patient_text: 'no'
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Blocked right ear
+    symptom_onset_at: Since Monday
+    severity: 2
+    infection.fever_reported: 'no'
+    symptoms:
+    - Blocked right ear
+  alerts: []
+  level: 5
+  level_rationale: Draft synthetic level 5 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:32:25.137203Z'
+review_method: automated
+reviewed_content_sha256: 9ebe0cda8c9fdde775f1b77e0bcf520632f5d70f02427621b73639c88b333dc5

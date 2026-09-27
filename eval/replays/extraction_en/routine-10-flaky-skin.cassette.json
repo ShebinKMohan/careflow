@@ -1,0 +1,7 @@
+{
+  "f4aac366e7027a35b4d6b8de17cbc34bf99b5b0b9fd9f3e69d3fb46aba10138c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Flaky skin patch\", \"turn_id\": \"t2\", \"quote\": \"Flaky skin patch\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"About ten days ago\", \"turn_id\": \"t4\", \"quote\": \"About ten days ago\", \"negated\": false}, {\"key\": \"severity\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"1\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"Unknown\", \"turn_id\": \"t10\", \"quote\": \"Unknown\", \"negated\": false}]}"
+  }
+}

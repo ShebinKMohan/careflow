@@ -1,0 +1,35 @@
+id: routine-01-wrist-ache
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting a low-intensity wrist ache."
+patient:
+  age_years: 28
+  sex: female
+turns:
+  - question_key: chief_complaint
+    patient_text: "Left wrist ache"
+  - question_key: symptom_onset_at
+    patient_text: "Three days ago"
+  - question_key: pain_score
+    patient_text: "2"
+  - question_key: pain_location
+    patient_text: "Left wrist"
+  - question_key: allergies_confirm
+    patient_text: "No known medicine allergies"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Left wrist ache"
+    symptom_onset_at: "Three days ago"
+    pain_score: 2
+    pain_location: "Left wrist"
+    allergies_confirm: "No known medicine allergies"
+    pain_present: "yes"
+  alerts: []
+  level: 4
+  level_rationale: "Draft synthetic level 4 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

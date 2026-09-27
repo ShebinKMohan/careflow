@@ -1,0 +1,32 @@
+id: "chest-pain-no-breathlessness"
+category: "chest_pain"
+language: "en"
+synthetic: true
+description: "Ongoing chest pain with no breathlessness or sweating and a numerical pain answer."
+patient:
+  age_years: 73
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My chest hurts."}
+  - {"question_key": "chest_pain.present", "patient_text": "Yes, it hurts at the moment."}
+  - {"question_key": "chest_pain.short_of_breath", "patient_text": "No, I am not short of breath."}
+  - {"question_key": "chest_pain.sweating", "patient_text": "No."}
+  - {"question_key": "pain_score", "patient_text": "Six out of ten."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My chest hurts."
+    chest_pain.present: "yes"
+    chest_pain.short_of_breath: "no"
+    chest_pain.sweating: "no"
+    pain_score: 6
+    pain_present: "yes"
+    pain_location: "chest"
+  alerts:
+    - "CHEST_PAIN_ECG_10MIN"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: Ongoing chest pain still needs prompt assessment when breathlessness and sweating are denied."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

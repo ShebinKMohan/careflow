@@ -1,0 +1,7 @@
+{
+  "e2cc840f8834977f7e47cefc8b46d0287cff7ab2187873736ba8b7d75fa78e5f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"There is pain in my chest\", \"turn_id\": \"t2\", \"quote\": \"There is pain in my chest\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, it spreads to my jaw\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"Yes\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"Ten minutes ago\", \"turn_id\": \"t10\", \"quote\": \"Ten minutes ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 9, \"turn_id\": \"t12\", \"quote\": \"Nine out of ten\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,42 @@
+synthetic: true
+id: stroke-multiple-signs
+category: stroke
+language: en
+description: Multiple positive FAST answers must produce one alert for the rule.
+patient:
+  age_years: 61
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: I need help with these new symptoms.
+- question_key: fast.face_droop
+  patient_text: Yes.
+- question_key: fast.arm_weakness
+  patient_text: Yes, one arm is weak.
+- question_key: fast.speech_difficulty
+  patient_text: Yes, my speech is slurred.
+- question_key: fast.last_known_well
+  patient_text: Twenty minutes ago.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I need help with these new symptoms.
+    fast.face_droop: 'yes'
+    fast.arm_weakness: 'yes'
+    fast.speech_difficulty: 'yes'
+    fast.last_known_well: Twenty minutes ago.
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: Multiple positive
+    FAST signs strengthen the need for immediate assessment but should not duplicate
+    the rule alert.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:17:24.099132Z'
+review_method: automated
+reviewed_content_sha256: ce68f652d6b46c6315dbed4bbd794de42c832b88aab06bd552f3e98fb0da7c06

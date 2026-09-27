@@ -1,0 +1,34 @@
+id: "chest-pain-sweating"
+category: "chest_pain"
+language: "en"
+synthetic: true
+description: "Current chest discomfort and sweating with explicit denial of radiation."
+patient:
+  age_years: 64
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "I have discomfort in my chest."}
+  - {"question_key": "chest_pain.present", "patient_text": "Yes, it is still there."}
+  - {"question_key": "chest_pain.radiates", "patient_text": "No, it does not spread anywhere."}
+  - {"question_key": "chest_pain.sweating", "patient_text": "Yes, I have been sweating a lot."}
+  - {"question_key": "pain_score", "patient_text": "Seven out of ten."}
+  - {"question_key": "chest_pain.onset", "patient_text": "This morning."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "I have discomfort in my chest."
+    chest_pain.present: "yes"
+    chest_pain.radiates: "no"
+    chest_pain.sweating: "yes"
+    pain_score: 7
+    chest_pain.onset: "This morning."
+    pain_present: "yes"
+    pain_location: "chest"
+  alerts:
+    - "CHEST_PAIN_ECG_10MIN"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: Persistent chest discomfort with sweating needs prompt nurse assessment even without radiation."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

@@ -1,0 +1,45 @@
+synthetic: true
+id: child-non-blanching-rash
+category: child
+language: en
+description: Parent reports a non-blanching rash with other focused red answers denied.
+patient:
+  age_years: 4
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: My child needs to be checked.
+- question_key: child_danger.hard_to_wake
+  patient_text: No.
+- question_key: child_danger.non_blanching_rash
+  patient_text: Yes, the spots do not fade when pressed.
+- question_key: child_danger.grunting
+  patient_text: No.
+- question_key: child_amber.poor_feeding
+  patient_text: No.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child needs to be checked.
+    child_danger.hard_to_wake: 'no'
+    child_danger.non_blanching_rash: 'yes'
+    child_danger.grunting: 'no'
+    child_amber.poor_feeding: 'no'
+  alerts:
+  - NG143_RED_FLAG
+  level: 2
+  level_rationale: Synthetic illustrative urgency level 2 is distinct from the rule
+    alert severity critical. Age 4 years corresponds to 48 through 59 months, below
+    the NG143 upper boundary of 60 months. The positive non-blanching-rash answer
+    is independently a red feature, so NG143_RED_FLAG is raised. Negative waking,
+    grunting and feeding answers do not cancel a positive red feature. This is a rule-consistency
+    example, not a clinically validated urgency label.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:22:43.335089Z'
+review_method: automated
+reviewed_content_sha256: 159a893b93cf78e3c091e1a676c629a9410783b6e7b3a8013e532b3cd29ee6f9

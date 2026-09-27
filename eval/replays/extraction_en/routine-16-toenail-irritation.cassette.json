@@ -1,0 +1,7 @@
+{
+  "44c55bdb508f6c088718bea76f1e8262fef6f3d40a426e8b965e5e1355136fcd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Left big toenail irritation\", \"turn_id\": \"t2\", \"quote\": \"Left big toenail irritation\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"One week ago\", \"turn_id\": \"t4\", \"quote\": \"One week ago\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"I do not know\", \"turn_id\": \"t10\", \"quote\": \"I do not know\", \"negated\": false}]}"
+  }
+}

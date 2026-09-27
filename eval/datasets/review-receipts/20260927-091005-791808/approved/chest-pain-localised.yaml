@@ -1,0 +1,48 @@
+synthetic: true
+id: chest-pain-localised
+category: chest_pain
+language: en
+description: Localised current chest pain still activates the chest rule despite negative
+  associated signs.
+patient:
+  age_years: 29
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: I have pain in my chest.
+- question_key: chest_pain.present
+  patient_text: Yes.
+- question_key: chest_pain.radiates
+  patient_text: No.
+- question_key: chest_pain.short_of_breath
+  patient_text: No, my breathing feels normal.
+- question_key: chest_pain.sweating
+  patient_text: No, I have not been sweating.
+- question_key: pain_score
+  patient_text: Four out of ten.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I have pain in my chest.
+    chest_pain.present: 'yes'
+    chest_pain.radiates: 'no'
+    chest_pain.short_of_breath: 'no'
+    chest_pain.sweating: 'no'
+    pain_score: 4
+    pain_present: 'yes'
+    pain_location: chest
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: A low pain score
+    and negative associated signs do not cancel the current-chest-pain alert or replace
+    nurse review.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:11:05.133675Z'
+review_method: automated
+reviewed_content_sha256: 142e38164ebb393e0de014d26442a8e56fa20e21d56a35e6fd8f8ea83e53d5c7

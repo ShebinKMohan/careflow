@@ -1,0 +1,42 @@
+synthetic: true
+id: routine-03-knee-ache
+category: routine
+language: en
+description: Synthetic case. Adult reporting a mild knee ache over several days.
+patient:
+  age_years: 56
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: Left knee ache
+- question_key: symptom_onset_at
+  patient_text: Five days ago
+- question_key: pain_score
+  patient_text: '3'
+- question_key: pain_location
+  patient_text: Left knee
+- question_key: allergies_confirm
+  patient_text: None that I know of
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Left knee ache
+    symptom_onset_at: Five days ago
+    pain_score: 3
+    pain_location: Left knee
+    allergies_confirm: None that I know of
+    pain_present: 'yes'
+  alerts: []
+  level: 4
+  level_rationale: Draft synthetic level 4 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:13:48.033738Z'
+review_method: automated
+reviewed_content_sha256: 1bfa1719f3d7c1027aa6d74017d1b1130df3e7793e17e262764d2d1807eb84d4

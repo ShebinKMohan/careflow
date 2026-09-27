@@ -1,0 +1,7 @@
+{
+  "f0a4210739ca1de4e748f61737f9d660162c753f9f223a6e8866f5230dfd29e6": {
+    "model": "claude-sonnet-5",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"id\": \"chest-pain-unsure-radiation\", \"content_sha256\": \"bf7a815ea15d594fe4351f4cceeee02eaa552fadfbce0af151ec5a62be249164\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"routine-11-ear-itch\", \"content_sha256\": \"261b30983547afc4ac6bd509f97db224e8f00e10e6af170bb99ef7b1c8d0fb24\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"routine-12-blocked-ear\", \"content_sha256\": \"9ebe0cda8c9fdde775f1b77e0bcf520632f5d70f02427621b73639c88b333dc5\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"routine-13-bloating\", \"content_sha256\": \"7c7260bb3d81066eb5961b1fc5f875c703f6265e74e2b3b1742efb763a802811\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"routine-14-constipation\", \"content_sha256\": \"f030cb7b95d9e410d4ebfbf740b84aa34f961303d7990c7c0c4fda0bd1cecd32\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}]}"
+  }
+}

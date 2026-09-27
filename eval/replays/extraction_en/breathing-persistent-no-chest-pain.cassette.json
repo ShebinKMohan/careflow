@@ -1,0 +1,7 @@
+{
+  "9056612b64a87c756ead0a62d5d79c0c620ebfdbadc0c3436f711dcd17428b3a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I am short of breath\", \"turn_id\": \"t2\", \"quote\": \"I am short of breath\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No, there is no chest pain or tightness\", \"negated\": true}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"symptom_onset_at\", \"value\": \"Since yesterday\", \"turn_id\": \"t12\", \"quote\": \"Since yesterday\", \"negated\": false}]}"
+  }
+}

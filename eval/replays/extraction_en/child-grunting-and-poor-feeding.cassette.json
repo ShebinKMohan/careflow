@@ -1,0 +1,7 @@
+{
+  "958345eb946cbe7a3fc174ed010816aae37d002b01f83f801467f5eeb58c33dc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My child is not well\", \"turn_id\": \"t2\", \"quote\": \"My child is not well\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No, he wakes normally\", \"negated\": true}, {\"key\": \"child_danger.grunting\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, he makes a grunting noise\", \"negated\": false}, {\"key\": \"child_amber.poor_feeding\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"Yes, he is drinking much less\", \"negated\": false}, {\"key\": \"child_amber.reduced_urine_output\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}]}"
+  }
+}

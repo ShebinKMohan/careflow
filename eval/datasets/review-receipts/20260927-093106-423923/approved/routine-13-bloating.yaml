@@ -1,0 +1,43 @@
+synthetic: true
+id: routine-13-bloating
+category: routine
+language: en
+description: Synthetic case. Adult reporting low-intensity bloating.
+patient:
+  age_years: 35
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: Bloating
+- question_key: symptom_onset_at
+  patient_text: Since yesterday afternoon
+- question_key: severity
+  patient_text: '2'
+- question_key: infection.fever_reported
+  patient_text: 'no'
+- question_key: allergies_confirm
+  patient_text: I am not sure
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Bloating
+    symptom_onset_at: Since yesterday afternoon
+    severity: 2
+    infection.fever_reported: 'no'
+    allergies_confirm: I am not sure
+    symptoms:
+    - Bloating
+  alerts: []
+  level: 5
+  level_rationale: Draft synthetic level 5 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:32:25.144293Z'
+review_method: automated
+reviewed_content_sha256: 7c7260bb3d81066eb5961b1fc5f875c703f6265e74e2b3b1742efb763a802811

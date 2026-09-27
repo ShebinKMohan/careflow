@@ -1,0 +1,42 @@
+synthetic: true
+id: routine-06-heel-discomfort
+category: routine
+language: en
+description: Synthetic case. Adult reporting low-intensity heel discomfort.
+patient:
+  age_years: 33
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: Right heel discomfort
+- question_key: symptom_onset_at
+  patient_text: Four days ago
+- question_key: pain_score
+  patient_text: '1'
+- question_key: pain_location
+  patient_text: Right heel
+- question_key: allergies_confirm
+  patient_text: I have no medicine allergies
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Right heel discomfort
+    symptom_onset_at: Four days ago
+    pain_score: 1
+    pain_location: Right heel
+    allergies_confirm: I have no medicine allergies
+    pain_present: 'yes'
+  alerts: []
+  level: 5
+  level_rationale: Draft synthetic level 5 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:13:48.069621Z'
+review_method: automated
+reviewed_content_sha256: 4cfea8b756b91129ebacda885c45494025cdfac6fee75313607fccfa3164bd64

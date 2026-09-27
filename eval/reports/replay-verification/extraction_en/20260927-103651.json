@@ -1,0 +1,4764 @@
+{
+  "failed_ids": [
+    "breathing-low-oxygen-no-infection",
+    "breathing-mild-focused-screen",
+    "breathing-moderate-no-infection",
+    "breathing-persistent-no-chest-pain",
+    "chest-pain-localised",
+    "chest-pain-no-breathlessness",
+    "chest-pain-radiating-arm",
+    "chest-pain-screen-negative",
+    "chest-pain-screen-uncertain",
+    "chest-pain-sweating",
+    "chest-pain-unsure-radiation",
+    "chest-pain-with-jaw-radiation",
+    "child-feeding-and-urine-amber",
+    "child-grunting-and-poor-feeding",
+    "child-hard-to-wake-under-five",
+    "child-non-blanching-rash",
+    "child-older-hard-to-wake",
+    "child-parent-unsure-waking",
+    "routine-01-wrist-ache",
+    "routine-02-ankle-soreness",
+    "routine-03-knee-ache",
+    "routine-04-shoulder-stiffness",
+    "routine-05-elbow-tenderness",
+    "routine-06-heel-discomfort",
+    "routine-07-finger-ache",
+    "routine-08-dry-skin",
+    "routine-09-scalp-itch",
+    "routine-10-flaky-skin",
+    "routine-11-ear-itch",
+    "routine-12-blocked-ear",
+    "routine-13-bloating",
+    "routine-14-constipation",
+    "routine-15-queasiness",
+    "routine-16-toenail-irritation",
+    "routine-17-foot-blister",
+    "routine-18-dry-lips",
+    "sepsis-kiosk-below-threshold",
+    "sepsis-kiosk-high-fever",
+    "sepsis-kiosk-threshold-five",
+    "sepsis-low-measured-temperature",
+    "sepsis-measured-fever-denied",
+    "sepsis-nurse-completes-high-score",
+    "sepsis-nurse-confirms-threshold",
+    "sepsis-rigors-with-normal-temperature",
+    "stroke-arm-positive",
+    "stroke-face-positive",
+    "stroke-last-known-well-unknown",
+    "stroke-multiple-signs",
+    "stroke-screen-unsure",
+    "stroke-speech-positive"
+  ],
+  "metadata": {
+    "case_count": 50,
+    "completed_count": 50,
+    "dataset_sha256": "b8e3c26807e65a4d634c29bbb4fa783e78f5880eb22399c1bcd019e49d4f0bc9",
+    "failure_event_replay_count": 1,
+    "git_sha": "d87c4213d6ff9387dc960b014503ebe9fe791eb5",
+    "include_unreviewed": false,
+    "latency_source": [
+      "recorded_live"
+    ],
+    "logical_model": "qwen3.5-9b-4bit",
+    "metrics_comparable": true,
+    "missing_ids": [],
+    "mode": "replay",
+    "model_endpoint_checks": [],
+    "model_receipt": {
+      "base_url": "http://127.0.0.1:8081/v1",
+      "identity_limit": "Launch-log attribution and endpoint observations, not weight attestation",
+      "launch_evidence": "with_llm: starting mlx_lm.server (mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631) on http://127.0.0.1:8081; log /var/folders/wz/1j18wyv50vb_g1hlhd5zz_yw0000gn/T//careflow-mlx-lm-server.log",
+      "launch_log_sha256": "dcc03ac93963e3fc3dc97a05960c0c8046af10225a2b6a37b97b34710937c7d9",
+      "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit",
+      "observed_at": "2026-09-27T09:43:21.478636+00:00",
+      "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "server_model_ids": [
+        "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+        "mlx-community/SmolLM2-135M-Instruct-8bit"
+      ],
+      "source": "Fresh scripts/with_llm.sh launch from the pinned Hugging Face snapshot"
+    },
+    "normalization_version": "field-values-v1",
+    "prompt_sha256": "48ad75cc29e5218bf9890b5368e27b70753a251c0f5b86931e7fa743a21d6583",
+    "prompt_version": "extraction_v2",
+    "provider": "local",
+    "recording_provenance": {
+      "git_sha": "989981b5c265a70ac2fb466459694ca9b6dad968",
+      "source_sha256": "14f9d06f89630764aedd6d67613bb5192e8b7fa31d1aec79c764fcdc5dfb9542",
+      "worktree_dirty": true
+    },
+    "replay_exact": true,
+    "replay_exact_scope": "outputs_quality_metrics_and_recorded_latency",
+    "rules_validation": false,
+    "ruleset_version": "2026.3.0",
+    "source_sha256": "bc22606199810f819c0dbb2deb11af8c2954f612b380649f58cb358f9f749733",
+    "synthetic_only": true,
+    "timeout_seconds": 20.0,
+    "wall_ms": 284.62233301252127,
+    "worktree_dirty": false
+  },
+  "metrics": {
+    "alert_recall": {
+      "details": {
+        "benign_cases": 26,
+        "case_count": 50,
+        "detected_alerts": 24,
+        "expected_alerts": 25,
+        "false_alert_cases": 0,
+        "false_alert_rate": 0.0,
+        "missed_alerts": 1,
+        "per_rule": {
+          "CHEST_PAIN_ECG_10MIN": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 6,
+            "expected": 6,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "CHILD_HARD_TO_WAKE": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 1,
+            "expected": 1,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "FAST_STROKE": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 5,
+            "expected": 5,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_AMBER_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 2,
+            "expected": 2,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_RED_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 3,
+            "expected": 4,
+            "missed": 1,
+            "recall": 0.75,
+            "unexpected": 0
+          },
+          "SEPSIS_NEWS2": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 7,
+            "expected": 7,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          }
+        },
+        "recall": 0.96,
+        "unexpected_alerts": 0
+      },
+      "value": 0.96
+    },
+    "dropped_fact_rate": {
+      "details": {
+        "candidate_rejection_rate": null,
+        "case_count": 50,
+        "cases_with_dropped_facts": 3,
+        "definition": "fraction_of_cases_with_at_least_one_rejected_candidate",
+        "denominator": "all_cases",
+        "dropped_total": 3
+      },
+      "value": 0.06
+    },
+    "extraction_field_f1": {
+      "details": {
+        "case_count": 50,
+        "expected_facts": 277,
+        "f1": 0.7417475728155339,
+        "fn": 86,
+        "fp": 47,
+        "normalization_version": "field-values-v1",
+        "per_key": {
+          "allergies_confirm": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "chest_pain.onset": {
+            "f1": 0.0,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "chest_pain.present": {
+            "f1": 0.9230769230769231,
+            "fn": 1,
+            "fp": 1,
+            "precision": 0.9230769230769231,
+            "recall": 0.9230769230769231,
+            "tp": 12
+          },
+          "chest_pain.radiates": {
+            "f1": 0.7692307692307693,
+            "fn": 2,
+            "fp": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.7142857142857143,
+            "tp": 5
+          },
+          "chest_pain.short_of_breath": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "chest_pain.sweating": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "chief_complaint": {
+            "f1": 0.36363636363636365,
+            "fn": 32,
+            "fp": 31,
+            "precision": 0.3673469387755102,
+            "recall": 0.36,
+            "tp": 18
+          },
+          "child_amber.poor_feeding": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_amber.reduced_urine_output": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "child_danger.grunting": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_danger.hard_to_wake": {
+            "f1": 0.9090909090909091,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8333333333333334,
+            "tp": 5
+          },
+          "child_danger.non_blanching_rash": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2
+          },
+          "child_danger.pale_mottled_ashen_or_blue": {
+            "f1": 0.0,
+            "fn": 1,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "fast.arm_weakness": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.face_droop": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.last_known_well": {
+            "f1": 0.3333333333333333,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.3333333333333333,
+            "recall": 0.3333333333333333,
+            "tp": 2
+          },
+          "fast.speech_difficulty": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "infection.fever_reported": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 25
+          },
+          "infection.rigors": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "pain_location": {
+            "f1": 0.7368421052631579,
+            "fn": 5,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.5833333333333334,
+            "tp": 7
+          },
+          "pain_present": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "pain_score": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "severity": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 19
+          },
+          "symptom_onset_at": {
+            "f1": 0.75,
+            "fn": 6,
+            "fp": 6,
+            "precision": 0.75,
+            "recall": 0.75,
+            "tp": 18
+          },
+          "symptoms": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          }
+        },
+        "precision": 0.8025210084033614,
+        "predicted_facts": 238,
+        "recall": 0.6895306859205776,
+        "tp": 191
+      },
+      "value": 0.7417475728155339
+    },
+    "extraction_incomplete_rate": {
+      "details": {
+        "case_count": 50,
+        "denominator": "all_cases",
+        "incomplete_cases": 1
+      },
+      "value": 0.02
+    },
+    "false_alert_rate": {
+      "details": {
+        "benign_cases": 26,
+        "case_count": 50,
+        "detected_alerts": 24,
+        "expected_alerts": 25,
+        "false_alert_cases": 0,
+        "false_alert_rate": 0.0,
+        "missed_alerts": 1,
+        "per_rule": {
+          "CHEST_PAIN_ECG_10MIN": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 6,
+            "expected": 6,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "CHILD_HARD_TO_WAKE": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 1,
+            "expected": 1,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "FAST_STROKE": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 5,
+            "expected": 5,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_AMBER_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 2,
+            "expected": 2,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_RED_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 3,
+            "expected": 4,
+            "missed": 1,
+            "recall": 0.75,
+            "unexpected": 0
+          },
+          "SEPSIS_NEWS2": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 7,
+            "expected": 7,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          }
+        },
+        "recall": 0.96,
+        "unexpected_alerts": 0
+      },
+      "value": 0.0
+    },
+    "field_f1": {
+      "details": {
+        "case_count": 50,
+        "expected_facts": 277,
+        "f1": 0.7417475728155339,
+        "fn": 86,
+        "fp": 47,
+        "normalization_version": "field-values-v1",
+        "per_key": {
+          "allergies_confirm": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "chest_pain.onset": {
+            "f1": 0.0,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "chest_pain.present": {
+            "f1": 0.9230769230769231,
+            "fn": 1,
+            "fp": 1,
+            "precision": 0.9230769230769231,
+            "recall": 0.9230769230769231,
+            "tp": 12
+          },
+          "chest_pain.radiates": {
+            "f1": 0.7692307692307693,
+            "fn": 2,
+            "fp": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.7142857142857143,
+            "tp": 5
+          },
+          "chest_pain.short_of_breath": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "chest_pain.sweating": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "chief_complaint": {
+            "f1": 0.36363636363636365,
+            "fn": 32,
+            "fp": 31,
+            "precision": 0.3673469387755102,
+            "recall": 0.36,
+            "tp": 18
+          },
+          "child_amber.poor_feeding": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_amber.reduced_urine_output": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "child_danger.grunting": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_danger.hard_to_wake": {
+            "f1": 0.9090909090909091,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8333333333333334,
+            "tp": 5
+          },
+          "child_danger.non_blanching_rash": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2
+          },
+          "child_danger.pale_mottled_ashen_or_blue": {
+            "f1": 0.0,
+            "fn": 1,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "fast.arm_weakness": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.face_droop": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.last_known_well": {
+            "f1": 0.3333333333333333,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.3333333333333333,
+            "recall": 0.3333333333333333,
+            "tp": 2
+          },
+          "fast.speech_difficulty": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "infection.fever_reported": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 25
+          },
+          "infection.rigors": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "pain_location": {
+            "f1": 0.7368421052631579,
+            "fn": 5,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.5833333333333334,
+            "tp": 7
+          },
+          "pain_present": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "pain_score": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "severity": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 19
+          },
+          "symptom_onset_at": {
+            "f1": 0.75,
+            "fn": 6,
+            "fp": 6,
+            "precision": 0.75,
+            "recall": 0.75,
+            "tp": 18
+          },
+          "symptoms": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          }
+        },
+        "precision": 0.8025210084033614,
+        "predicted_facts": 238,
+        "recall": 0.6895306859205776,
+        "tp": 191
+      },
+      "value": 0.7417475728155339
+    },
+    "field_precision": {
+      "details": {
+        "case_count": 50,
+        "expected_facts": 277,
+        "f1": 0.7417475728155339,
+        "fn": 86,
+        "fp": 47,
+        "normalization_version": "field-values-v1",
+        "per_key": {
+          "allergies_confirm": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "chest_pain.onset": {
+            "f1": 0.0,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "chest_pain.present": {
+            "f1": 0.9230769230769231,
+            "fn": 1,
+            "fp": 1,
+            "precision": 0.9230769230769231,
+            "recall": 0.9230769230769231,
+            "tp": 12
+          },
+          "chest_pain.radiates": {
+            "f1": 0.7692307692307693,
+            "fn": 2,
+            "fp": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.7142857142857143,
+            "tp": 5
+          },
+          "chest_pain.short_of_breath": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "chest_pain.sweating": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "chief_complaint": {
+            "f1": 0.36363636363636365,
+            "fn": 32,
+            "fp": 31,
+            "precision": 0.3673469387755102,
+            "recall": 0.36,
+            "tp": 18
+          },
+          "child_amber.poor_feeding": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_amber.reduced_urine_output": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "child_danger.grunting": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_danger.hard_to_wake": {
+            "f1": 0.9090909090909091,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8333333333333334,
+            "tp": 5
+          },
+          "child_danger.non_blanching_rash": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2
+          },
+          "child_danger.pale_mottled_ashen_or_blue": {
+            "f1": 0.0,
+            "fn": 1,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "fast.arm_weakness": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.face_droop": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.last_known_well": {
+            "f1": 0.3333333333333333,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.3333333333333333,
+            "recall": 0.3333333333333333,
+            "tp": 2
+          },
+          "fast.speech_difficulty": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "infection.fever_reported": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 25
+          },
+          "infection.rigors": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "pain_location": {
+            "f1": 0.7368421052631579,
+            "fn": 5,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.5833333333333334,
+            "tp": 7
+          },
+          "pain_present": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "pain_score": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "severity": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 19
+          },
+          "symptom_onset_at": {
+            "f1": 0.75,
+            "fn": 6,
+            "fp": 6,
+            "precision": 0.75,
+            "recall": 0.75,
+            "tp": 18
+          },
+          "symptoms": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          }
+        },
+        "precision": 0.8025210084033614,
+        "predicted_facts": 238,
+        "recall": 0.6895306859205776,
+        "tp": 191
+      },
+      "value": 0.8025210084033614
+    },
+    "field_recall": {
+      "details": {
+        "case_count": 50,
+        "expected_facts": 277,
+        "f1": 0.7417475728155339,
+        "fn": 86,
+        "fp": 47,
+        "normalization_version": "field-values-v1",
+        "per_key": {
+          "allergies_confirm": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "chest_pain.onset": {
+            "f1": 0.0,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.0,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "chest_pain.present": {
+            "f1": 0.9230769230769231,
+            "fn": 1,
+            "fp": 1,
+            "precision": 0.9230769230769231,
+            "recall": 0.9230769230769231,
+            "tp": 12
+          },
+          "chest_pain.radiates": {
+            "f1": 0.7692307692307693,
+            "fn": 2,
+            "fp": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.7142857142857143,
+            "tp": 5
+          },
+          "chest_pain.short_of_breath": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "chest_pain.sweating": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "chief_complaint": {
+            "f1": 0.36363636363636365,
+            "fn": 32,
+            "fp": 31,
+            "precision": 0.3673469387755102,
+            "recall": 0.36,
+            "tp": 18
+          },
+          "child_amber.poor_feeding": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_amber.reduced_urine_output": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 3
+          },
+          "child_danger.grunting": {
+            "f1": 0.8888888888888888,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8,
+            "tp": 4
+          },
+          "child_danger.hard_to_wake": {
+            "f1": 0.9090909090909091,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.8333333333333334,
+            "tp": 5
+          },
+          "child_danger.non_blanching_rash": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2
+          },
+          "child_danger.pale_mottled_ashen_or_blue": {
+            "f1": 0.0,
+            "fn": 1,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "fast.arm_weakness": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.face_droop": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "fast.last_known_well": {
+            "f1": 0.3333333333333333,
+            "fn": 4,
+            "fp": 4,
+            "precision": 0.3333333333333333,
+            "recall": 0.3333333333333333,
+            "tp": 2
+          },
+          "fast.speech_difficulty": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 6
+          },
+          "infection.fever_reported": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 25
+          },
+          "infection.rigors": {
+            "f1": 0.9523809523809523,
+            "fn": 1,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "tp": 10
+          },
+          "pain_location": {
+            "f1": 0.7368421052631579,
+            "fn": 5,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 0.5833333333333334,
+            "tp": 7
+          },
+          "pain_present": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          },
+          "pain_score": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 13
+          },
+          "severity": {
+            "f1": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 19
+          },
+          "symptom_onset_at": {
+            "f1": 0.75,
+            "fn": 6,
+            "fp": 6,
+            "precision": 0.75,
+            "recall": 0.75,
+            "tp": 18
+          },
+          "symptoms": {
+            "f1": 0.0,
+            "fn": 13,
+            "fp": 0,
+            "precision": null,
+            "recall": 0.0,
+            "tp": 0
+          }
+        },
+        "precision": 0.8025210084033614,
+        "predicted_facts": 238,
+        "recall": 0.6895306859205776,
+        "tp": 191
+      },
+      "value": 0.6895306859205776
+    },
+    "latency_p50_ms": {
+      "details": {
+        "case_count": 50,
+        "method": "nearest_rank",
+        "missing_count": 0,
+        "percentile": 50,
+        "sample_count": 50,
+        "units": "ms"
+      },
+      "value": 9113.418707973324
+    },
+    "latency_p95_ms": {
+      "details": {
+        "case_count": 50,
+        "method": "nearest_rank",
+        "missing_count": 0,
+        "percentile": 95,
+        "sample_count": 50,
+        "units": "ms"
+      },
+      "value": 12284.610874950886
+    }
+  },
+  "results": [
+    {
+      "category": "breathing",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Breathing is difficult."
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 8
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8333333333333334,
+      "id": "breathing-low-oxygen-no-infection",
+      "latency_source": "recorded_live",
+      "output_sha256": "7c49c2a01fdffb2c9f66e826215080746ce5dbe10e84b517bf38910364b6456c",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Breathing is difficult"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 8
+          }
+        ],
+        "latency_ms": 10844.795709010214
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 3.0489169294014573,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "breathing",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel a little short of breath."
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 3
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6666666666666666,
+      "id": "breathing-mild-focused-screen",
+      "latency_source": "recorded_live",
+      "output_sha256": "f7f63a973a3c36d0fff648b8e8f911f93b13b28cfd5a20b44cb9df920ed3960e",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 1,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel a little short of breath"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 3
+          }
+        ],
+        "latency_ms": 9548.693374963477
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0512080043554306,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "breathing",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel short of breath."
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 5
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8333333333333334,
+      "id": "breathing-moderate-no-infection",
+      "latency_source": "recorded_live",
+      "output_sha256": "f0fd17783204816e21501f336a0ffaad7c8d78ac6de4e824def4f8d4cb244697",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel short of breath"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 5
+          }
+        ],
+        "latency_ms": 11015.781041933224
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9439170826226473,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "breathing",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I am short of breath."
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since yesterday."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6666666666666666,
+      "id": "breathing-persistent-no-chest-pain",
+      "latency_source": "recorded_live",
+      "output_sha256": "7d919659d0b34e2541d0496421a47f8657d0d7329c87aaa1f8d9d8b411dd9fce",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I am short of breath"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since yesterday"
+          }
+        ],
+        "latency_ms": 11401.062749908306
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9087909711524844,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I have pain in my chest."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.sweating",
+            "value": "no"
+          },
+          {
+            "key": "pain_score",
+            "value": 4
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "pain_location",
+            "value": "chest"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.7142857142857143,
+      "id": "chest-pain-localised",
+      "latency_source": "recorded_live",
+      "output_sha256": "cb47acc704df6983c4f2c97a1813cf410d3c7a61cbc0628d0ffb50e396b7eba4",
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I have pain in my chest"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.sweating",
+            "value": "no"
+          },
+          {
+            "key": "pain_score",
+            "value": 4
+          }
+        ],
+        "latency_ms": 11450.131042045541
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0810419917106628,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My chest hurts."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.sweating",
+            "value": "no"
+          },
+          {
+            "key": "pain_score",
+            "value": 6
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "pain_location",
+            "value": "chest"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6666666666666666,
+      "id": "chest-pain-no-breathlessness",
+      "latency_source": "recorded_live",
+      "output_sha256": "45b1585e6bda69304c826666e708d5a159d91fb6a3f6bf11edacff4532c14685",
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My chest hurts"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.sweating",
+            "value": "no"
+          },
+          {
+            "key": "pain_score",
+            "value": 6
+          }
+        ],
+        "latency_ms": 9771.48908295203
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8895420469343662,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My chest feels tight."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "pain_score",
+            "value": 8
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "About twenty minutes ago."
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "pain_location",
+            "value": "chest"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5714285714285714,
+      "id": "chest-pain-radiating-arm",
+      "latency_source": "recorded_live",
+      "output_sha256": "bd9f025a6c1e005e3a68ec7f877def183c952de1890f98755607554e3847ee93",
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My chest feels tight"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "pain_score",
+            "value": 8
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "About twenty minutes ago"
+          }
+        ],
+        "latency_ms": 12284.610874950886
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9522079490125179,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I need to speak with a nurse."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "pain_score",
+            "value": 0
+          },
+          {
+            "key": "pain_present",
+            "value": "no"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.7272727272727273,
+      "id": "chest-pain-screen-negative",
+      "latency_source": "recorded_live",
+      "output_sha256": "8b38dde4c68e5e76b75ca391c9a5659c47a04d2bc9b5ae9e85e0b9a6ebafa7dc",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I need to speak with a nurse"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "pain_score",
+            "value": 0
+          }
+        ],
+        "latency_ms": 9845.31716699712
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.2261660303920507,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel unwell."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "unknown"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "unknown"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 5
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.4,
+      "id": "chest-pain-screen-uncertain",
+      "latency_source": "recorded_live",
+      "output_sha256": "c3acc64d84bdcdd01cece6885e2d8a7250590a9fdf20438a0bd20e6b451e1e94",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel unwell"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 5
+          }
+        ],
+        "latency_ms": 9365.001457976177
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.1811669683083892,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I have discomfort in my chest."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.sweating",
+            "value": "yes"
+          },
+          {
+            "key": "pain_score",
+            "value": 7
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "This morning."
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "pain_location",
+            "value": "chest"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5714285714285714,
+      "id": "chest-pain-sweating",
+      "latency_source": "recorded_live",
+      "output_sha256": "12c5fb3d6e79cd12a772258b5e61984b54b1f8f7972cca42b237e0aa63ead7f8",
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "discomfort in my chest"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.sweating",
+            "value": "yes"
+          },
+          {
+            "key": "pain_score",
+            "value": 7
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "This morning"
+          }
+        ],
+        "latency_ms": 12330.220791976899
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9456250118091702,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My chest is tight."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "unknown"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "An hour ago."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.4444444444444444,
+      "id": "chest-pain-unsure-radiation",
+      "latency_source": "recorded_live",
+      "output_sha256": "7eeb5c961b1334e9f3ed13ee2ab64cef72e16c8322051f75638fc8558da476e9",
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 1,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My chest is tight"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "no"
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "An hour ago"
+          }
+        ],
+        "latency_ms": 9898.17820803728
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8775419555604458,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "chest_pain",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "There is pain in my chest."
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "Ten minutes ago."
+          },
+          {
+            "key": "pain_score",
+            "value": 9
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "pain_location",
+            "value": "chest"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5714285714285714,
+      "id": "chest-pain-with-jaw-radiation",
+      "latency_source": "recorded_live",
+      "output_sha256": "8054cd0fb16feead541645be92e71352413cb5ea59c28b0699c1671c497941b5",
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "There is pain in my chest"
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.radiates",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.short_of_breath",
+            "value": "yes"
+          },
+          {
+            "key": "chest_pain.onset",
+            "value": "Ten minutes ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 9
+          }
+        ],
+        "latency_ms": 11317.84570903983
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9446250041946769,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "child",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child seems poorly."
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.non_blanching_rash",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "yes"
+          },
+          {
+            "key": "child_amber.reduced_urine_output",
+            "value": "yes"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8333333333333334,
+      "id": "child-feeding-and-urine-amber",
+      "latency_source": "recorded_live",
+      "output_sha256": "c5fac950ca1483b5fefa5e147ebcf0bd53572c8d53ae93071e6843c0f188857d",
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child seems poorly"
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.non_blanching_rash",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "yes"
+          },
+          {
+            "key": "child_amber.reduced_urine_output",
+            "value": "yes"
+          }
+        ],
+        "latency_ms": 11826.786209014244
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8730420377105474,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "child",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG",
+          "NG143_RED_FLAG"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child is not well."
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "yes"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "yes"
+          },
+          {
+            "key": "child_amber.reduced_urine_output",
+            "value": "no"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8,
+      "id": "child-grunting-and-poor-feeding",
+      "latency_source": "recorded_live",
+      "output_sha256": "c616304ff219589690e9e67e0b310d751f3e6789dae005a951207d665c7d7896",
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG",
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child is not well"
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "yes"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "yes"
+          },
+          {
+            "key": "child_amber.reduced_urine_output",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 10293.150374898687
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8306250674650073,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "child",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child is unwell."
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "yes"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.reduced_urine_output",
+            "value": "no"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8,
+      "id": "child-hard-to-wake-under-five",
+      "latency_source": "recorded_live",
+      "output_sha256": "159a9876c7d0a3aec0e5ee009eb177522c93a2416327da5d3dcee33feee92b0b",
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child is unwell"
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "yes"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.reduced_urine_output",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 10236.031915992498
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8387920679524541,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "child",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child needs to be checked."
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.non_blanching_rash",
+            "value": "yes"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "no"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8,
+      "id": "child-non-blanching-rash",
+      "latency_source": "recorded_live",
+      "output_sha256": "cb6f979bdc171f3a8964305c2a82574fd972e8f8971ad65e561e097a36215be1",
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child needs to be checked"
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.non_blanching_rash",
+            "value": "yes"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 9846.259291982278
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0998749639838934,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "child",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "CHILD_HARD_TO_WAKE"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child is unwell."
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "yes"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "This afternoon."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5,
+      "id": "child-older-hard-to-wake",
+      "latency_source": "recorded_live",
+      "output_sha256": "508adf034b660039572d7c3de93403d53187f4a7e1715f5f41d238a3f498a857",
+      "prediction": {
+        "alerts": [
+          "CHILD_HARD_TO_WAKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child is unwell"
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "yes"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "This afternoon"
+          }
+        ],
+        "latency_ms": 9716.339041944593
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.4512499328702688,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "child",
+      "error_code": "timeout",
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My child seems unwell."
+          },
+          {
+            "key": "child_danger.hard_to_wake",
+            "value": "unknown"
+          },
+          {
+            "key": "child_danger.pale_mottled_ashen_or_blue",
+            "value": "no"
+          },
+          {
+            "key": "child_danger.grunting",
+            "value": "no"
+          },
+          {
+            "key": "child_amber.poor_feeding",
+            "value": "no"
+          }
+        ]
+      },
+      "failure_event_replayed": true,
+      "field_f1": 0.0,
+      "id": "child-parent-unsure-waking",
+      "latency_source": "recorded_live",
+      "output_sha256": "1e4b9832772b30536462f435e1e24d2b80c0a8233b086001a9b2bbb8f83affec",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": true,
+        "facts": [],
+        "latency_ms": 20015.33337496221
+      },
+      "quality_passed": false,
+      "recording_replayable": false,
+      "replay_exact": true,
+      "replay_method": "confirmed_timeout_event",
+      "replay_wall_ms": 1.88829202670604,
+      "rules_validation": false,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left wrist ache"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Three days ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Left wrist"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known medicine allergies"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-01-wrist-ache",
+      "latency_source": "recorded_live",
+      "output_sha256": "ab7d1360009714255c953f05abd7c3c6ce59f391c89f417b61c7eaceec7117d2",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left wrist ache"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Three days ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Left wrist"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known medicine allergies"
+          }
+        ],
+        "latency_ms": 9762.993416981772
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9761250112205744,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right ankle soreness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since last weekend"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Right ankle"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-02-ankle-soreness",
+      "latency_source": "recorded_live",
+      "output_sha256": "3a093f0a54c64d108d89e60e9015a2ad0130253467431b96c15d4445d7dd6d7d",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right ankle soreness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since last weekend"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Right ankle"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 8926.69945792295
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9052921086549759,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left knee ache"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Five days ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 3
+          },
+          {
+            "key": "pain_location",
+            "value": "Left knee"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "None that I know of"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-03-knee-ache",
+      "latency_source": "recorded_live",
+      "output_sha256": "a12e4be1a3ddc293676111ff673040c9818872eb5805014eb9f4393b3a40b6dc",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left knee ache"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Five days ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 3
+          },
+          {
+            "key": "pain_location",
+            "value": "Left knee"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "None that I know of"
+          }
+        ],
+        "latency_ms": 9488.450458971784
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8929170435294509,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right shoulder stiffness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since Tuesday"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I do not know"
+          },
+          {
+            "key": "symptoms",
+            "value": "Right shoulder stiffness"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-04-shoulder-stiffness",
+      "latency_source": "recorded_live",
+      "output_sha256": "d6ec4984e9a1dc9eafa7e679c86b5ce34ec6f0ae60af0b524010f0c8fb1357ff",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right shoulder stiffness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since Tuesday"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "chest_pain.present",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I do not know"
+          }
+        ],
+        "latency_ms": 9113.418707973324
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.1152910301461816,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left elbow tenderness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "About a week ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Left elbow"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "symptoms",
+            "value": "Left elbow tenderness"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8333333333333334,
+      "id": "routine-05-elbow-tenderness",
+      "latency_source": "recorded_live",
+      "output_sha256": "3baebd091bc0a46ba754c77e4add419230a8302f27ba70fa93a71350e7b9bd42",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left elbow tenderness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "About a week ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Left elbow"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 8859.029000042938
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0745830368250608,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right heel discomfort"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Four days ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 1
+          },
+          {
+            "key": "pain_location",
+            "value": "Right heel"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I have no medicine allergies"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-06-heel-discomfort",
+      "latency_source": "recorded_live",
+      "output_sha256": "ef9f62ab7f205c3fe5f078a45f8ceb5fb1934d97fb34d3b5cf821a6f872d0f03",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right heel discomfort"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Four days ago"
+          },
+          {
+            "key": "pain_score",
+            "value": 1
+          },
+          {
+            "key": "pain_location",
+            "value": "Right heel"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I have no medicine allergies"
+          }
+        ],
+        "latency_ms": 8763.87191703543
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9177919710054994,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right index finger ache"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since yesterday"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Right index finger"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-07-finger-ache",
+      "latency_source": "recorded_live",
+      "output_sha256": "a27a1ec00fd8bf3c30968d7284e8644a31ec40f3ce7eef37a979f4f12f11a574",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Right index finger ache"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since yesterday"
+          },
+          {
+            "key": "pain_score",
+            "value": 2
+          },
+          {
+            "key": "pain_location",
+            "value": "Right index finger"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 8847.361167077906
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8704160572960973,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Dry skin"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Two weeks ago"
+          },
+          {
+            "key": "severity",
+            "value": 1
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known drug allergies"
+          },
+          {
+            "key": "symptoms",
+            "value": "Dry skin"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-08-dry-skin",
+      "latency_source": "recorded_live",
+      "output_sha256": "9296510af5f89308c9946e6b13e27379146bfeef2e361c3d1e90addeec1a5169",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Dry skin"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Two weeks ago"
+          },
+          {
+            "key": "severity",
+            "value": 1
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known drug allergies"
+          }
+        ],
+        "latency_ms": 9015.285125002265
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.877415994182229,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Itchy scalp"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Six days ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No medicine allergies that I know of"
+          },
+          {
+            "key": "symptoms",
+            "value": "Itchy scalp"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8888888888888888,
+      "id": "routine-09-scalp-itch",
+      "latency_source": "recorded_live",
+      "output_sha256": "155477d4ace964294ebc93bd08d62b0c22d5f9607f61e68b6c49d5775ae072f1",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Itchy scalp"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Six days ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No medicine allergies that I know of"
+          }
+        ],
+        "latency_ms": 7591.947208973579
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8632909739390016,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Flaky skin patch"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "About ten days ago"
+          },
+          {
+            "key": "severity",
+            "value": 1
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "Unknown"
+          },
+          {
+            "key": "symptoms",
+            "value": "Flaky skin patch"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-10-flaky-skin",
+      "latency_source": "recorded_live",
+      "output_sha256": "61287720233ec1d00fcfee77d4b054f37d51dcaf98bc1869e8224c4e6a0e61a9",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Flaky skin patch"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "About ten days ago"
+          },
+          {
+            "key": "severity",
+            "value": 1
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "Unknown"
+          }
+        ],
+        "latency_ms": 8905.073250061832
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.2202078942209482,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left ear itch"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Two days ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known medicine allergies"
+          },
+          {
+            "key": "symptoms",
+            "value": "Left ear itch"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-11-ear-itch",
+      "latency_source": "recorded_live",
+      "output_sha256": "afb0a56aeb5556aca64e1313c0004f5752da1ed231877246abd61e36fb80ec6a",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left ear itch"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Two days ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known medicine allergies"
+          }
+        ],
+        "latency_ms": 9139.532917062752
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0173750342801213,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Blocked right ear"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since Monday"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "symptoms",
+            "value": "Blocked right ear"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8888888888888888,
+      "id": "routine-12-blocked-ear",
+      "latency_source": "recorded_live",
+      "output_sha256": "88372beee06c642b5bbf36939b87db9a5c9d08d2d3bc7b29ce65c96f9f99229f",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Blocked right ear"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since Monday"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 7296.187291969545
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0265829041600227,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Bloating"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since yesterday afternoon"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I am not sure"
+          },
+          {
+            "key": "symptoms",
+            "value": "Bloating"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-13-bloating",
+      "latency_source": "recorded_live",
+      "output_sha256": "66a3d2fd49d7f46f502b7994eee1ce27e1dd332d8ce3ba26b5863c6bdd1a656d",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Bloating"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since yesterday afternoon"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I am not sure"
+          }
+        ],
+        "latency_ms": 8869.32166700717
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0678339749574661,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Constipation"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Three days ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known medicine allergies"
+          },
+          {
+            "key": "symptoms",
+            "value": "Constipation"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-14-constipation",
+      "latency_source": "recorded_live",
+      "output_sha256": "495ceddeca3056fd7a6890dba1fffb3c379805ffcef4cca1cc5a8023c4ff7f11",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Constipation"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Three days ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known medicine allergies"
+          }
+        ],
+        "latency_ms": 8688.60662507359
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.971833011135459,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Queasiness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since this morning"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "None that I know of"
+          },
+          {
+            "key": "symptoms",
+            "value": "Queasiness"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-15-queasiness",
+      "latency_source": "recorded_live",
+      "output_sha256": "aad38ba1afdb761a7a8b8590bd96133aa8fc8f89c18f86164afe57b3c1ac1be0",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Queasiness"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since this morning"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "None that I know of"
+          }
+        ],
+        "latency_ms": 8773.364332970232
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9901250014081597,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left big toenail irritation"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "One week ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I do not know"
+          },
+          {
+            "key": "symptoms",
+            "value": "Left big toenail irritation"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.9090909090909091,
+      "id": "routine-16-toenail-irritation",
+      "latency_source": "recorded_live",
+      "output_sha256": "80416f68e362adbf2f8090cf5d32a3787e7c7d7b50fdecd7309d766f3a9683d7",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Left big toenail irritation"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "One week ago"
+          },
+          {
+            "key": "severity",
+            "value": 2
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "I do not know"
+          }
+        ],
+        "latency_ms": 8786.652915994637
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8438749937340617,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Blister on my left foot"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Yesterday morning"
+          },
+          {
+            "key": "pain_score",
+            "value": 1
+          },
+          {
+            "key": "pain_location",
+            "value": "Left foot"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "pain_present",
+            "value": "yes"
+          },
+          {
+            "key": "symptoms",
+            "value": "Blister on my left foot"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8333333333333334,
+      "id": "routine-17-foot-blister",
+      "latency_source": "recorded_live",
+      "output_sha256": "15aec638dddc8a81a064230266a4635345af5ce67050a70bbf223099890df238",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Blister on my left foot"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Yesterday morning"
+          },
+          {
+            "key": "pain_score",
+            "value": 1
+          },
+          {
+            "key": "pain_location",
+            "value": "Left foot"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          }
+        ],
+        "latency_ms": 8856.330291950144
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.1697500012814999,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "routine",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Dry lips"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Four days ago"
+          },
+          {
+            "key": "severity",
+            "value": 1
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known drug allergies"
+          },
+          {
+            "key": "symptoms",
+            "value": "Dry lips"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8888888888888888,
+      "id": "routine-18-dry-lips",
+      "latency_source": "recorded_live",
+      "output_sha256": "7ae30305b07a3bcbacf9bde4dfe2ddbedb514583be06f79495611c9fb03b8ced",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Dry lips"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Four days ago"
+          },
+          {
+            "key": "severity",
+            "value": 1
+          },
+          {
+            "key": "allergies_confirm",
+            "value": "No known drug allergies"
+          }
+        ],
+        "latency_ms": 7327.753082965501
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0219579562544823,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel unwell today."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 5
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.75,
+      "id": "sepsis-kiosk-below-threshold",
+      "latency_source": "recorded_live",
+      "output_sha256": "f0f5e47accb7e1d1ae2bb1c8ff2d86102ee732d6d7eedc5ef9c8dc4572c97d85",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel unwell today"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 5
+          }
+        ],
+        "latency_ms": 7279.529790976085
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0848749661818147,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel ill."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "yes"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Yesterday evening."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5,
+      "id": "sepsis-kiosk-high-fever",
+      "latency_source": "recorded_live",
+      "output_sha256": "324d17da2d9c3d80151ab2af4b96cc071d5084200e155be167be4625fada06da",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel ill"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "yes"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Yesterday evening"
+          }
+        ],
+        "latency_ms": 8034.9255840992555
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.04358303360641,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I am feeling poorly."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 6
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.75,
+      "id": "sepsis-kiosk-threshold-five",
+      "latency_source": "recorded_live",
+      "output_sha256": "9b793f093655607f5e14b05a044dcc057d71f2802a43de644f2ccc92425814e0",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I am feeling poorly"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 6
+          }
+        ],
+        "latency_ms": 7612.611958058551
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.942415907047689,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel poorly."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "unknown"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since last night."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.2857142857142857,
+      "id": "sepsis-low-measured-temperature",
+      "latency_source": "recorded_live",
+      "output_sha256": "8b5b82ffbdacc6fc1075bab09f4cb26f27db951fd621a16fd2ada57d9cd0bfaf",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 1,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel poorly"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Since last night"
+          }
+        ],
+        "latency_ms": 7656.901834066957
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8812500163912773,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I do not feel right."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 7
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.75,
+      "id": "sepsis-measured-fever-denied",
+      "latency_source": "recorded_live",
+      "output_sha256": "75f4e250bd2d45e89622a07c4819640b3022252fe78a8e22ddb3a06ff1d1c993",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I do not feel right"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "severity",
+            "value": 7
+          }
+        ],
+        "latency_ms": 7967.323207994923
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9045000188052654,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel very ill."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "yes"
+          },
+          {
+            "key": "severity",
+            "value": 8
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.75,
+      "id": "sepsis-nurse-completes-high-score",
+      "latency_source": "recorded_live",
+      "output_sha256": "df366bc539c5a496e1b24d3b9fa1cf38a977d9e8a856cf80f692331f72928161",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel very ill"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "yes"
+          },
+          {
+            "key": "severity",
+            "value": 8
+          }
+        ],
+        "latency_ms": 7381.118249963038
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8284999057650566,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel sick."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Two days ago."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5,
+      "id": "sepsis-nurse-confirms-threshold",
+      "latency_source": "recorded_live",
+      "output_sha256": "dccaffc87d50414410f25688e6b43958f094160e5254fcec492b51ef4d3e4259",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel sick"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "yes"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "no"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Two days ago"
+          }
+        ],
+        "latency_ms": 7531.752459006384
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.8079999824985862,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "sepsis",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel very unwell."
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "yes"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Early this morning."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.5,
+      "id": "sepsis-rigors-with-normal-temperature",
+      "latency_source": "recorded_live",
+      "output_sha256": "2f9e67b117f0622409214e8b432b80f3d05f4139391087217d3eebfaf6af6c4a",
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I feel very unwell"
+          },
+          {
+            "key": "infection.fever_reported",
+            "value": "no"
+          },
+          {
+            "key": "infection.rigors",
+            "value": "yes"
+          },
+          {
+            "key": "symptom_onset_at",
+            "value": "Early this morning"
+          }
+        ],
+        "latency_ms": 7996.697249938734
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.846249982714653,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "stroke",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My left arm feels weak."
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "yes"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "About an hour ago."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6,
+      "id": "stroke-arm-positive",
+      "latency_source": "recorded_live",
+      "output_sha256": "df235caf2325e18b6eb5b70f8dc3f6b374ddcd0006b47e1874c6844be7dcaa16",
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My left arm feels weak"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "yes"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "About an hour ago"
+          }
+        ],
+        "latency_ms": 9363.273916998878
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 1.0925410315394402,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "stroke",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "One side of my face is drooping."
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "yes"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "no"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "Half an hour ago."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6,
+      "id": "stroke-face-positive",
+      "latency_source": "recorded_live",
+      "output_sha256": "3f4a1119220d7aeb47ad775e41faea336af53dccf4a2d15d83e639d321383b23",
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "One side of my face is drooping"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "yes"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "no"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "Half an hour ago"
+          }
+        ],
+        "latency_ms": 10063.685165951028
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9632090805098414,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "stroke",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My right arm is weak."
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "yes"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "unknown"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8,
+      "id": "stroke-last-known-well-unknown",
+      "latency_source": "recorded_live",
+      "output_sha256": "dad33b7113dae89aa375e779eee5e379051f678c4e979f5a738fb07dc6756605",
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My right arm is weak"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "yes"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "unknown"
+          }
+        ],
+        "latency_ms": 9013.193667051382
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9840420680120587,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "stroke",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I need help with these new symptoms."
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "yes"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "yes"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "yes"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "Twenty minutes ago."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6,
+      "id": "stroke-multiple-signs",
+      "latency_source": "recorded_live",
+      "output_sha256": "1b9af7c8b5168f72a73aa921edf59c5ae1da11aa21f2cc4785b7dda618419d93",
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "I need help with these new symptoms"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "yes"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "yes"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "yes"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "Twenty minutes ago"
+          }
+        ],
+        "latency_ms": 9626.05312501546
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9195409948006272,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "stroke",
+      "error_code": null,
+      "expected": {
+        "alerts": [],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Something feels different."
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "unknown"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "unknown"
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.8,
+      "id": "stroke-screen-unsure",
+      "latency_source": "recorded_live",
+      "output_sha256": "aa0f62614756651d58ba3033c1c3f148ffd7dc058508df14c9c1b9eb80a47f47",
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "Something feels different"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "unknown"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "no"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "unknown"
+          }
+        ],
+        "latency_ms": 8811.779416981153
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.9512080578133464,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "category": "stroke",
+      "error_code": null,
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My words are hard to get out."
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "no"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "yes"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "Before breakfast."
+          }
+        ]
+      },
+      "failure_event_replayed": false,
+      "field_f1": 0.6,
+      "id": "stroke-speech-positive",
+      "latency_source": "recorded_live",
+      "output_sha256": "ce1873d3a789a5407c26e6bbf5cf1119aeffd95247f889e2cc8335a6e9018862",
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [
+          {
+            "key": "chief_complaint",
+            "value": "My words are hard to get out"
+          },
+          {
+            "key": "fast.face_droop",
+            "value": "no"
+          },
+          {
+            "key": "fast.arm_weakness",
+            "value": "no"
+          },
+          {
+            "key": "fast.speech_difficulty",
+            "value": "yes"
+          },
+          {
+            "key": "fast.last_known_well",
+            "value": "Before breakfast"
+          }
+        ],
+        "latency_ms": 9305.75370893348
+      },
+      "quality_passed": false,
+      "recording_replayable": true,
+      "replay_exact": true,
+      "replay_method": "recorded_replies",
+      "replay_wall_ms": 0.974792055785656,
+      "rules_validation": true,
+      "status": "completed"
+    }
+  ],
+  "schema_version": 1,
+  "status": "completed",
+  "suite": "extraction_en"
+}

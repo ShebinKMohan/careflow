@@ -1,0 +1,7 @@
+{
+  "3c27b97f0eba1107911d514795ea27a2007741fcb56ad9ff0b8cee4ff786cad0": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Right shoulder stiffness\", \"turn_id\": \"t2\", \"quote\": \"Right shoulder stiffness\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Since Tuesday\", \"turn_id\": \"t4\", \"quote\": \"Since Tuesday\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"I do not know\", \"turn_id\": \"t10\", \"quote\": \"I do not know\", \"negated\": false}]}"
+  }
+}

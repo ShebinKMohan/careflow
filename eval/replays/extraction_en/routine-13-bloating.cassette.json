@@ -1,0 +1,7 @@
+{
+  "385529a3548e3da4d5819e0a204976bf9c0f060de4404a5a6423277dc53cf60b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Bloating\", \"turn_id\": \"t2\", \"quote\": \"Bloating\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Since yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Since yesterday afternoon\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"I am not sure\", \"turn_id\": \"t10\", \"quote\": \"I am not sure\", \"negated\": false}]}"
+  }
+}

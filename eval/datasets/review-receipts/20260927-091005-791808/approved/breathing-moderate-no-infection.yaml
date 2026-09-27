@@ -1,0 +1,48 @@
+synthetic: true
+id: breathing-moderate-no-infection
+category: breathing
+language: en
+description: Breathlessness without positive chest or infection answers has no dedicated
+  rule alert.
+patient:
+  age_years: 33
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: I feel short of breath.
+- question_key: chest_pain.short_of_breath
+  patient_text: Yes.
+- question_key: chest_pain.present
+  patient_text: No, I have no chest pain.
+- question_key: infection.fever_reported
+  patient_text: No.
+- question_key: infection.rigors
+  patient_text: No.
+- question_key: severity
+  patient_text: Five out of ten.
+device_vitals:
+  heart_rate: 98
+  spo2: 96
+  temperature_c: 36.8
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel short of breath.
+    chest_pain.short_of_breath: 'yes'
+    chest_pain.present: 'no'
+    infection.fever_reported: 'no'
+    infection.rigors: 'no'
+    severity: 5
+  alerts: []
+  level: 3
+  level_rationale: 'Synthetic draft label for independent review: Breathlessness still
+    needs nurse assessment; the current rules have no isolated-breathlessness alert
+    when chest pain and infection evidence are absent.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:11:05.120249Z'
+review_method: automated
+reviewed_content_sha256: ff09dca8d610c2a5de034568d8ea02f189c419d958e7b6291d09d6e80f270107

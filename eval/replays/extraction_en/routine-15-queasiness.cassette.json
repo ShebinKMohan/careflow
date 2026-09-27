@@ -1,0 +1,7 @@
+{
+  "b418ef6164e28990e26e2e1a6c5036c115439ff44886a8676d8d982b8f4cce1f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Queasiness\", \"turn_id\": \"t2\", \"quote\": \"Queasiness\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Since this morning\", \"turn_id\": \"t4\", \"quote\": \"Since this morning\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"None that I know of\", \"turn_id\": \"t10\", \"quote\": \"None that I know of\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,47 @@
+synthetic: true
+id: chest-pain-with-jaw-radiation
+category: chest_pain
+language: en
+description: Current chest pain radiating to the jaw with precise onset words.
+patient:
+  age_years: 51
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: There is pain in my chest.
+- question_key: chest_pain.present
+  patient_text: Yes.
+- question_key: chest_pain.radiates
+  patient_text: Yes, it spreads to my jaw.
+- question_key: chest_pain.short_of_breath
+  patient_text: Yes.
+- question_key: chest_pain.onset
+  patient_text: Ten minutes ago.
+- question_key: pain_score
+  patient_text: Nine out of ten.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: There is pain in my chest.
+    chest_pain.present: 'yes'
+    chest_pain.radiates: 'yes'
+    chest_pain.short_of_breath: 'yes'
+    chest_pain.onset: Ten minutes ago.
+    pain_score: 9
+    pain_present: 'yes'
+    pain_location: chest
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: Current radiating
+    chest pain and breathlessness require prompt nurse assessment; this is a draft
+    triage label rather than a diagnosis.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:12:33.999488Z'
+review_method: automated
+reviewed_content_sha256: 178609e06aa91330c85786d1753e9b547614af359e62312d4389f7615e37c066

@@ -1,0 +1,7 @@
+{
+  "a70d041e636ca546e9f2c4a35bc357c2996bb1c46d2b5f65f8b05815ddd0c50c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I need to speak with a nurse\", \"turn_id\": \"t2\", \"quote\": \"I need to speak with a nurse\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No, I have no chest pain or tightness\", \"negated\": true}, {\"key\": \"chest_pain.radiates\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"chest_pain.short_of_breath\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"pain_score\", \"value\": 0, \"turn_id\": \"t10\", \"quote\": \"Zero out of ten\", \"negated\": false}]}"
+  }
+}

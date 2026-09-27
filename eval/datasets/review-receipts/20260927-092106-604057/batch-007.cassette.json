@@ -1,0 +1,7 @@
+{
+  "b5c982a8a928d3944d0c8d2542b89369c806752bfa4d1f98e93f4b7300763236": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"chest-pain-unsure-radiation\",\n      \"content_sha256\": \"bf7a815ea15d594fe4351f4cceeee02eaa552fadfbce0af151ec5a62be249164\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 is invalid; rule defines severity as critical with no numeric levels.\",\n        \"Alert evidence missing chest_pain_present; rule requires chest pain present to trigger.\"\n      ]\n    }\n  ]\n}"
+  }
+}

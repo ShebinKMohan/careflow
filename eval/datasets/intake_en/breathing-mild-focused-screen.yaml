@@ -1,0 +1,45 @@
+synthetic: true
+id: breathing-mild-focused-screen
+category: breathing
+language: en
+description: Mild reported breathlessness with normal kiosk measurements and negative
+  chest and fever answers.
+patient:
+  age_years: 25
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: I feel a little short of breath.
+- question_key: chest_pain.short_of_breath
+  patient_text: Yes, a little.
+- question_key: chest_pain.present
+  patient_text: No.
+- question_key: infection.fever_reported
+  patient_text: No.
+- question_key: severity
+  patient_text: Three out of ten.
+device_vitals:
+  heart_rate: 84
+  spo2: 98
+  temperature_c: 36.6
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel a little short of breath.
+    chest_pain.short_of_breath: 'yes'
+    chest_pain.present: 'no'
+    infection.fever_reported: 'no'
+    severity: 3
+  alerts: []
+  level: 3
+  level_rationale: 'Synthetic draft label for independent review: A nurse should assess
+    reported breathlessness even with these normal measurements; the absence of a
+    matching deterministic rule is not a diagnosis.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:11:05.113103Z'
+review_method: automated
+reviewed_content_sha256: e40642cac84cfa2b5a80806f6800804c5a9d06b29ebbd9c519bdb7440149a89c

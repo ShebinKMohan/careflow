@@ -1,0 +1,7 @@
+{
+  "d273f8fd3791d18a514817fcc3d18c76a0bf5be1bdb37dd5d0e3eda526e39be4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I do not feel right\", \"turn_id\": \"t2\", \"quote\": \"I do not feel right\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No, I have not felt feverish\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No, I have not had shivering fits\", \"negated\": true}, {\"key\": \"severity\", \"value\": 7, \"turn_id\": \"t8\", \"quote\": \"Seven out of ten\", \"negated\": false}]}"
+  }
+}

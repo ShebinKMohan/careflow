@@ -1,0 +1,7 @@
+{
+  "1e2a8c89c99dd393fff2d495bd6a6aa6e5bb445e396053996b6aa96b96cb0c14": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Breathing is difficult\", \"turn_id\": \"t2\", \"quote\": \"Breathing is difficult\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, I am short of breath\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"severity\", \"value\": 8, \"turn_id\": \"t12\", \"quote\": \"Eight out of ten\", \"negated\": false}]}"
+  }
+}

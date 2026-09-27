@@ -1,0 +1,40 @@
+synthetic: true
+id: routine-18-dry-lips
+category: routine
+language: en
+description: Synthetic case. Adult reporting dry lips with little subjective impact.
+patient:
+  age_years: 39
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: Dry lips
+- question_key: symptom_onset_at
+  patient_text: Four days ago
+- question_key: severity
+  patient_text: '1'
+- question_key: allergies_confirm
+  patient_text: No known drug allergies
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Dry lips
+    symptom_onset_at: Four days ago
+    severity: 1
+    allergies_confirm: No known drug allergies
+    symptoms:
+    - Dry lips
+  alerts: []
+  level: 5
+  level_rationale: Draft synthetic level 5 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:16:03.920573Z'
+review_method: automated
+reviewed_content_sha256: 5f260913c33f1cfacdf6c7209d425279a212da191e0dd0a3db0603d2e5d64952

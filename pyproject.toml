@@ -3,6 +3,7 @@
 
 [tool.uv.workspace]
 members = [
+  "eval",
   "packages/contracts",
   "packages/providers",
   "services/api",
@@ -39,7 +40,7 @@ dev = [
 line-length = 100
 target-version = "py312"
 # First-party packages live under packages/*/src and services/*/src.
-src = ["packages/*/src", "services/*/src", "scripts"]
+src = ["packages/*/src", "services/*/src", "eval/src", "scripts"]
 # Generated code is checked by `make contracts && git diff --exit-code`, not by the linter.
 extend-exclude = [
   "**/node_modules", "**/.next", "**/dist", "**/generated", "**/careflow_contracts/api_models.py",
@@ -55,7 +56,7 @@ select = ["E", "F", "I", "B", "UP", "S", "ASYNC"]
 [tool.pytest.ini_options]
 # importlib mode lets every package keep a tests/test_import.py without name clashes.
 addopts = ["--import-mode=importlib", "-ra", "--strict-markers"]
-testpaths = ["packages", "services", "scripts"]
+testpaths = ["packages", "services", "scripts", "eval"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = [

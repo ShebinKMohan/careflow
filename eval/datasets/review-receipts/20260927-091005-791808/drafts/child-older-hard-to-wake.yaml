@@ -1,0 +1,28 @@
+id: "child-older-hard-to-wake"
+category: "child"
+language: "en"
+synthetic: true
+description: "An older child uses the dedicated hard-to-wake rule rather than NG143."
+patient:
+  age_years: 8
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My child is unwell."}
+  - {"question_key": "child_danger.hard_to_wake", "patient_text": "Yes, he is very difficult to wake."}
+  - {"question_key": "infection.fever_reported", "patient_text": "No."}
+  - {"question_key": "symptom_onset_at", "patient_text": "This afternoon."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My child is unwell."
+    child_danger.hard_to_wake: "yes"
+    infection.fever_reported: "no"
+    symptom_onset_at: "This afternoon."
+  alerts:
+    - "CHILD_HARD_TO_WAKE"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: Difficulty waking at age eight activates the dedicated ages-five-to-fifteen rule; NG143 and adult NEWS2 must not be applied."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

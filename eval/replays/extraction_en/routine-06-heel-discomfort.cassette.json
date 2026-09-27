@@ -1,0 +1,7 @@
+{
+  "307e96731417338f3799bd89be6a6167bb3237980924709a27ad7c11d22f4c5a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Right heel discomfort\", \"turn_id\": \"t2\", \"quote\": \"Right heel discomfort\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Four days ago\", \"turn_id\": \"t4\", \"quote\": \"Four days ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"1\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Right heel\", \"turn_id\": \"t8\", \"quote\": \"Right heel\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"I have no medicine allergies\", \"turn_id\": \"t10\", \"quote\": \"I have no medicine allergies\", \"negated\": false}]}"
+  }
+}

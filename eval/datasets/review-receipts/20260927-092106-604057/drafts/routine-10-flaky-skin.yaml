@@ -1,0 +1,35 @@
+id: routine-10-flaky-skin
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting a mildly troublesome flaky skin patch."
+patient:
+  age_years: 62
+  sex: male
+turns:
+  - question_key: chief_complaint
+    patient_text: "Flaky skin patch"
+  - question_key: symptom_onset_at
+    patient_text: "About ten days ago"
+  - question_key: severity
+    patient_text: "1"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+  - question_key: allergies_confirm
+    patient_text: "Unknown"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Flaky skin patch"
+    symptom_onset_at: "About ten days ago"
+    severity: 1
+    infection.fever_reported: "no"
+    allergies_confirm: "Unknown"
+    symptoms: ["Flaky skin patch"]
+  alerts: []
+  level: 5
+  level_rationale: "Draft synthetic level 5 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

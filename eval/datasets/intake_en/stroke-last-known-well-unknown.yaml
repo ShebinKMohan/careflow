@@ -1,0 +1,41 @@
+synthetic: true
+id: stroke-last-known-well-unknown
+category: stroke
+language: en
+description: A positive FAST sign still alerts when last-known-well is unknown.
+patient:
+  age_years: 79
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: My right arm is weak.
+- question_key: fast.arm_weakness
+  patient_text: Yes.
+- question_key: fast.face_droop
+  patient_text: No.
+- question_key: fast.speech_difficulty
+  patient_text: No.
+- question_key: fast.last_known_well
+  patient_text: unknown
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My right arm is weak.
+    fast.arm_weakness: 'yes'
+    fast.face_droop: 'no'
+    fast.speech_difficulty: 'no'
+    fast.last_known_well: unknown
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: Unknown last-known-well
+    must be preserved for follow-up and must not suppress a positive FAST alert.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:17:24.092449Z'
+review_method: automated
+reviewed_content_sha256: 65aa89276da6d0a81511f4760ca34bd91d647a036b4ec460679a90261e493b54

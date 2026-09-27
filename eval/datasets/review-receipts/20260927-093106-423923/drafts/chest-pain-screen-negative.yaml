@@ -1,0 +1,30 @@
+id: "chest-pain-screen-negative"
+category: "chest_pain"
+language: "en"
+synthetic: true
+description: "Chest-pain screen with all symptoms explicitly denied; absence of this rule is not reassurance."
+patient:
+  age_years: 36
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "I need to speak with a nurse."}
+  - {"question_key": "chest_pain.present", "patient_text": "No, I have no chest pain or tightness."}
+  - {"question_key": "chest_pain.radiates", "patient_text": "No."}
+  - {"question_key": "chest_pain.short_of_breath", "patient_text": "No."}
+  - {"question_key": "pain_score", "patient_text": "Zero out of ten."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "I need to speak with a nurse."
+    chest_pain.present: "no"
+    chest_pain.radiates: "no"
+    chest_pain.short_of_breath: "no"
+    pain_score: 0
+    pain_present: "no"
+  alerts: []
+  level: 4
+  level_rationale: "Synthetic draft label for independent review: This focused negative screen contains no positive alert trigger; a nurse must still establish the reason for attendance and confirm urgency."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

@@ -1,0 +1,35 @@
+id: routine-11-ear-itch
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting low-intensity itching in one ear."
+patient:
+  age_years: 26
+  sex: female
+turns:
+  - question_key: chief_complaint
+    patient_text: "Left ear itch"
+  - question_key: symptom_onset_at
+    patient_text: "Two days ago"
+  - question_key: severity
+    patient_text: "2"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+  - question_key: allergies_confirm
+    patient_text: "No known medicine allergies"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Left ear itch"
+    symptom_onset_at: "Two days ago"
+    severity: 2
+    infection.fever_reported: "no"
+    allergies_confirm: "No known medicine allergies"
+    symptoms: ["Left ear itch"]
+  alerts: []
+  level: 5
+  level_rationale: "Draft synthetic level 5 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

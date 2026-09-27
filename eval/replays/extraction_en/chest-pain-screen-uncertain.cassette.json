@@ -1,0 +1,7 @@
+{
+  "575161188e2849c098ad239ad0534d51d89f4f9a503816e5f33fc352b795b48b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I feel unwell\", \"turn_id\": \"t2\", \"quote\": \"I feel unwell\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"I am not sure\", \"negated\": true}, {\"key\": \"chest_pain.radiates\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"I do not know\", \"negated\": true}, {\"key\": \"chest_pain.short_of_breath\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"severity\", \"value\": 5, \"turn_id\": \"t10\", \"quote\": \"Five out of ten\", \"negated\": false}]}"
+  }
+}

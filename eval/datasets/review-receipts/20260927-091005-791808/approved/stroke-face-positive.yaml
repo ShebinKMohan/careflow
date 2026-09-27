@@ -1,0 +1,42 @@
+synthetic: true
+id: stroke-face-positive
+category: stroke
+language: en
+description: Isolated positive face sign with the other FAST signs explicitly denied.
+patient:
+  age_years: 68
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: One side of my face is drooping.
+- question_key: fast.face_droop
+  patient_text: Yes, one side is drooping.
+- question_key: fast.arm_weakness
+  patient_text: No, neither arm feels weak or numb.
+- question_key: fast.speech_difficulty
+  patient_text: No, my speech feels normal.
+- question_key: fast.last_known_well
+  patient_text: Half an hour ago.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: One side of my face is drooping.
+    fast.face_droop: 'yes'
+    fast.arm_weakness: 'no'
+    fast.speech_difficulty: 'no'
+    fast.last_known_well: Half an hour ago.
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: A positive FAST
+    face sign warrants immediate nurse escalation even when the other FAST answers
+    are negative.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:17:24.082882Z'
+review_method: automated
+reviewed_content_sha256: 3558cb7a93cf81db44fcfed3dc9729a39f4eccf31d299cb5e6a39f5c2c161184

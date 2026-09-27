@@ -1,0 +1,36 @@
+id: "sepsis-nurse-completes-high-score"
+category: "sepsis"
+language: "en"
+synthetic: true
+description: "Nurse measurements complete a high NEWS2 after limited kiosk vitals."
+patient:
+  age_years: 59
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "I feel very ill."}
+  - {"question_key": "infection.fever_reported", "patient_text": "Yes."}
+  - {"question_key": "infection.rigors", "patient_text": "Yes, I have had shaking chills."}
+  - {"question_key": "severity", "patient_text": "Eight out of ten."}
+device_vitals:
+  heart_rate: 105
+  spo2: 96
+  temperature_c: 38.4
+nurse_vitals:
+  respiratory_rate: 26
+  systolic_bp: 98
+  acvpu: "A"
+  on_supplemental_o2: "no"
+expected:
+  facts:
+    chief_complaint: "I feel very ill."
+    infection.fever_reported: "yes"
+    infection.rigors: "yes"
+    severity: 8
+  alerts:
+    - "SEPSIS_NEWS2"
+  level: 2
+  level_rationale: "Synthetic illustrative urgency level 2 is not a rule output. In this case the patient reports fever yes AND rigors yes; neither is denied. Temperature 38.4 independently also supplies infection evidence. Nurse readings complete the score: respiratory rate 26 scores 3, SpO2 96 scores 0, systolic pressure 98 scores 2, heart rate 105 scores 1, alert consciousness A scores 0, temperature 38.4 scores 1 and no supplemental oxygen scores 0. Complete NEWS2 totals 7 and raises SEPSIS_NEWS2. The explicitly spoken severity 8 remains a separate extraction fact."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

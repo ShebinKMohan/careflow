@@ -13,6 +13,28 @@ Date: 27 September 2026. This is an implementation and verification plan, not a 
 - This audit inspected source, configuration, ADRs and checked-in reports. Historical commands, smoke checks and metrics quoted below were reported by earlier work; this document does not claim to have rerun them.
 - First implementation on this branch: **phone intake refresh recovery — implemented and locally verified**. It includes revision-protected answer retries, terminal-session reconnection and called-room recovery. The whole QR handover milestone still needs its real-stack acceptance checks; see [evidence](evidence/TAKEOVER-phone-recovery.md).
 
+## Verified takeover progress
+
+- Phone recovery is merged in private PR [#38](https://github.com/ShebinKMohan/careflow/pull/38),
+  main commit `f1966952d56e0e005edc434175edb38464c4c9e0`. The preserved ONNX and DLQ
+  checkouts were not overwritten.
+- SHE-314 / M1-18 is now In Progress. The initial board inventory above therefore becomes
+  23 Backlog, 2 In Progress, 14 In Review and 23 Done, assuming no unrelated owner changes.
+  An In Review implementation is not yet counted as verified complete.
+- The new evaluation source and 50 independently reviewed synthetic English scenarios are
+  committed at `989981b5c265a70ac2fb466459694ca9b6dad968`. A complete repository check
+  passed 2,197 Python and 103 TypeScript tests; six skipped and 13 HAPI tests were excluded.
+- The live local-Qwen baseline evaluated all 50 scenarios: field F1 0.7417475728155339,
+  expected alerts 24/25, no unexpected alerts, one extraction timeout, p50 9.11 s and p95
+  12.28 s. The missed child alert and all raw evidence are retained. These are whole scripted
+  transcript measurements; no complete live journey or clinical readiness is claimed.
+  See [M1-18 evidence](evidence/M1-18.md) for exact source, model and dataset identities.
+- M1-12 and M1-19 acceptance text was read in the local Linear UI. M1-19's root `e2e/`
+  journey package is absent, and current app browser tests target Prism. Startup also fixes
+  shared ports/Compose identity and routes some FHIR operations to port 8080 regardless of
+  `FHIR_BASE_URL`. Supported isolation must precede real-stack checks, preserving the
+  owner's running services. HTTP-only startup health does not prove dependency readiness.
+
 ## Product mission and scope
 
 CareFlow collects a patient's story once, privately, brings danger signs to a nurse's attention, supports the nurse's urgency decision, manages the wait, and gives the doctor a briefing whose facts have traceable sources. The problems are repeated forms, private details spoken in a lobby, language barriers, missed deterioration while waiting, and fragmented clinical handover.

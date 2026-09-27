@@ -1,0 +1,31 @@
+id: "child-grunting-and-poor-feeding"
+category: "child"
+language: "en"
+synthetic: true
+description: "Independent red and amber parent answers require both alerts."
+patient:
+  age_years: 1
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My child is not well."}
+  - {"question_key": "child_danger.hard_to_wake", "patient_text": "No, he wakes normally."}
+  - {"question_key": "child_danger.grunting", "patient_text": "Yes, he makes a grunting noise."}
+  - {"question_key": "child_amber.poor_feeding", "patient_text": "Yes, he is drinking much less."}
+  - {"question_key": "child_amber.reduced_urine_output", "patient_text": "No."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My child is not well."
+    child_danger.hard_to_wake: "no"
+    child_danger.grunting: "yes"
+    child_amber.poor_feeding: "yes"
+    child_amber.reduced_urine_output: "no"
+  alerts:
+    - "NG143_RED_FLAG"
+    - "NG143_AMBER_FLAG"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: Reported grunting triggers red and poor feeding triggers amber independently; one alert must not suppress the other."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

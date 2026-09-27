@@ -1,0 +1,34 @@
+id: "breathing-persistent-no-chest-pain"
+category: "breathing"
+language: "en"
+synthetic: true
+description: "Persistent breathing concern with explicitly negative chest-pain and infection screens."
+patient:
+  age_years: 49
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "I am short of breath."}
+  - {"question_key": "chest_pain.short_of_breath", "patient_text": "Yes."}
+  - {"question_key": "chest_pain.present", "patient_text": "No, there is no chest pain or tightness."}
+  - {"question_key": "infection.fever_reported", "patient_text": "No."}
+  - {"question_key": "infection.rigors", "patient_text": "No."}
+  - {"question_key": "symptom_onset_at", "patient_text": "Since yesterday."}
+device_vitals:
+  heart_rate: 102
+  spo2: 95
+  temperature_c: 37.1
+expected:
+  facts:
+    chief_complaint: "I am short of breath."
+    chest_pain.short_of_breath: "yes"
+    chest_pain.present: "no"
+    infection.fever_reported: "no"
+    infection.rigors: "no"
+    symptom_onset_at: "Since yesterday."
+  alerts: []
+  level: 3
+  level_rationale: "Synthetic draft label for independent review: Persistent breathlessness requires nurse review; no current chest-pain, FAST, child or sepsis trigger is present in the supplied facts."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

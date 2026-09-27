@@ -1,0 +1,7 @@
+{
+  "f0ef39bcc607355ff34ed69af215db1908f9a2178fea24d8869e0386b12d9580": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Left elbow tenderness\", \"turn_id\": \"t2\", \"quote\": \"Left elbow tenderness\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"About a week ago\", \"turn_id\": \"t4\", \"quote\": \"About a week ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Left elbow\", \"turn_id\": \"t8\", \"quote\": \"Left elbow\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"no\", \"negated\": true}]}"
+  }
+}

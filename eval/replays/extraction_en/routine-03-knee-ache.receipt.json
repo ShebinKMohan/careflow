@@ -1,0 +1,51 @@
+{
+  "bindings": {
+    "dataset_sha256": "b8e3c26807e65a4d634c29bbb4fa783e78f5880eb22399c1bcd019e49d4f0bc9",
+    "normalization_version": "field-values-v1",
+    "prompt_sha256": "48ad75cc29e5218bf9890b5368e27b70753a251c0f5b86931e7fa743a21d6583",
+    "prompt_version": "extraction_v2",
+    "ruleset_version": "2026.3.0",
+    "timeout_seconds": 20.0
+  },
+  "calls": [
+    {
+      "request_sha256": "097fa4a498484eb9c77d5b0f482493519ba996e5121eab59c6a03d158dadb7e3",
+      "response_model": "qwen3.5-9b-4bit",
+      "status": "ok",
+      "wall_ms": 9485.511499922723
+    }
+  ],
+  "case_id": "routine-03-knee-ache",
+  "cassette_sha256": "86d49b93c80361e23c595f2599270867f60bb631d64b26046e65082e46e7ce33",
+  "duration_ms": 9488.450458971784,
+  "failure_code": null,
+  "logical_model": "qwen3.5-9b-4bit",
+  "model_endpoint_verification_required": true,
+  "model_receipt": {
+    "base_url": "http://127.0.0.1:8081/v1",
+    "identity_limit": "Launch-log attribution and endpoint observations, not weight attestation",
+    "launch_evidence": "with_llm: starting mlx_lm.server (mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631) on http://127.0.0.1:8081; log /var/folders/wz/1j18wyv50vb_g1hlhd5zz_yw0000gn/T//careflow-mlx-lm-server.log",
+    "launch_log_sha256": "dcc03ac93963e3fc3dc97a05960c0c8046af10225a2b6a37b97b34710937c7d9",
+    "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit",
+    "observed_at": "2026-09-27T09:43:21.478636+00:00",
+    "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631",
+    "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+    "server_model_ids": [
+      "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "mlx-community/SmolLM2-135M-Instruct-8bit"
+    ],
+    "source": "Fresh scripts/with_llm.sh launch from the pinned Hugging Face snapshot"
+  },
+  "output_sha256": "a12e4be1a3ddc293676111ff673040c9818872eb5805014eb9f4393b3a40b6dc",
+  "provider_kind": "local",
+  "replayable": true,
+  "response_models": [
+    "qwen3.5-9b-4bit"
+  ],
+  "schema_version": 1,
+  "source_provenance": {
+    "git_sha": "989981b5c265a70ac2fb466459694ca9b6dad968",
+    "source_sha256": "14f9d06f89630764aedd6d67613bb5192e8b7fa31d1aec79c764fcdc5dfb9542",
+    "worktree_dirty": true
+  }
+}

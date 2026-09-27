@@ -1,0 +1,7 @@
+{
+  "0f23a4b2d8029400e84ca906c1f34a20665d169c6bec21a04673c9a5c420c3e0": {
+    "model": "claude-sonnet-5",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"id\": \"routine-15-queasiness\", \"content_sha256\": \"0cf7da32b60b495d3d3b9e3b1c929af907bf1e4ab5d6a43a28c3e54a3c611eed\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"routine-16-toenail-irritation\", \"content_sha256\": \"fffac2c38cc3ea3e5f16bc215f9d843cdb3b02aed1356f012deb0cd2d1f107dc\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"routine-17-foot-blister\", \"content_sha256\": \"e88674272c20f85ec4399a5dd078957099c37eaf4ca50150786e89b2dd1d785d\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"sepsis-kiosk-below-threshold\", \"content_sha256\": \"27e7c6a7aa0711033b772304aefdb02cabd198737c9890d7d489cbc58990d0ae\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"sepsis-kiosk-high-fever\", \"content_sha256\": \"d238e6fc2cc98b4fce7c6e36e7809ea46854c09b432459afbefdd80c308629a9\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}]}"
+  }
+}

@@ -1,0 +1,32 @@
+[project]
+name = "careflow-eval"
+version = "0.0.0"
+description = "Reproducible evaluation of CareFlow extraction and safety rules on synthetic scenarios."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "careflow-contracts",
+  "careflow-providers",
+  "careflow-intake",
+  "careflow-rules",
+  "pydantic>=2.13,<3",
+  "pyyaml>=6.0.3,<7",
+  "jsonschema>=4.26,<5",
+  "httpx>=0.28.1,<0.29",
+]
+
+[project.scripts]
+careflow-eval = "careflow_eval.cli:main"
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
+careflow-providers = { workspace = true }
+careflow-intake = { workspace = true }
+careflow-rules = { workspace = true }
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/careflow_eval"]

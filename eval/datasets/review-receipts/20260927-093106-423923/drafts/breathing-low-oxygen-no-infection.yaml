@@ -1,0 +1,34 @@
+id: "breathing-low-oxygen-no-infection"
+category: "breathing"
+language: "en"
+synthetic: true
+description: "Low oxygen saturation exposes the absence of a stand-alone adult respiratory rule."
+patient:
+  age_years: 60
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "Breathing is difficult."}
+  - {"question_key": "chest_pain.short_of_breath", "patient_text": "Yes, I am short of breath."}
+  - {"question_key": "chest_pain.present", "patient_text": "No."}
+  - {"question_key": "infection.fever_reported", "patient_text": "No."}
+  - {"question_key": "infection.rigors", "patient_text": "No."}
+  - {"question_key": "severity", "patient_text": "Eight out of ten."}
+device_vitals:
+  heart_rate: 118
+  spo2: 90
+  temperature_c: 36.8
+expected:
+  facts:
+    chief_complaint: "Breathing is difficult."
+    chest_pain.short_of_breath: "yes"
+    chest_pain.present: "no"
+    infection.fever_reported: "no"
+    infection.rigors: "no"
+    severity: 8
+  alerts: []
+  level: 2
+  level_rationale: "Synthetic illustrative urgency level 2 is not a rule output. Age 60 years excludes NG143, which applies below 60 months. SpO2 90 scores 3, heart rate 118 scores 2 and temperature 36.8 scores 0: partial NEWS2 is 5, with respiratory rate, systolic pressure, consciousness and oxygen-support status unmeasured. SEPSIS_NEWS2 requires infection evidence AND score at least 5. Fever and rigors are denied, measured temperature is normal, and no infectious symptom is stated, so infection evidence is absent and this rule does not alert. Empty alerts document the missing standalone adult respiratory rule, not a safe clinical state; the reported breathing difficulty and low measured oxygen still warrant prompt nurse assessment."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

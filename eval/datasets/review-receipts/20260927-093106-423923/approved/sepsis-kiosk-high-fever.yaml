@@ -1,0 +1,46 @@
+synthetic: true
+id: sepsis-kiosk-high-fever
+category: sepsis
+language: en
+description: Infection answers plus kiosk vitals yield partial NEWS2 6.
+patient:
+  age_years: 66
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: I feel ill.
+- question_key: infection.fever_reported
+  patient_text: Yes, I have had a fever.
+- question_key: infection.rigors
+  patient_text: Yes, I have been shivering uncontrollably.
+- question_key: symptom_onset_at
+  patient_text: Yesterday evening.
+device_vitals:
+  heart_rate: 125
+  spo2: 93
+  temperature_c: 39.4
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel ill.
+    infection.fever_reported: 'yes'
+    infection.rigors: 'yes'
+    symptom_onset_at: Yesterday evening.
+  alerts:
+  - SEPSIS_NEWS2
+  level: 2
+  level_rationale: 'Synthetic illustrative urgency level 2 is not a rule output. Patient
+    fever yes, rigors yes and measured temperature 39.4 supply infection evidence.
+    SpO2 93 scores 2, heart rate 125 scores 2 and temperature 39.4 scores 2: partial
+    NEWS2 totals 6, meeting the sepsis threshold of 5. The expected SEPSIS_NEWS2 alert
+    is partial because respiratory rate, systolic pressure, consciousness and oxygen-support
+    status are missing. This scenario contains an onset answer and no severity answer
+    or severity gold.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:33:10.282537Z'
+review_method: automated
+reviewed_content_sha256: d238e6fc2cc98b4fce7c6e36e7809ea46854c09b432459afbefdd80c308629a9
