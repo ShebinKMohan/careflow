@@ -67,9 +67,16 @@ export interface CheckedIn {
   patientToken: string;
 }
 
+/** A child's age as the parent enters it on the kiosk (M2-04): years, and months under 2. */
+export interface ChildAge {
+  years: number;
+  months?: number;
+}
+
 /** The keypad check-in of a persona, in `locale` (picked on the first screen); the session comes
- * from the keypad's response. */
-export async function checkIn(page: Page, digits: string, locale: Locale = "en"): Promise<CheckedIn> {
+ * from the keypad's response. "Who is the patient?" is answered "Me", or "My child" with `child`'s
+ * age. */
+export async function checkIn(page: Page, digits: string, locale: Locale = "en", child?: ChildAge): Promise<CheckedIn> {
   await page.goto("/");
   await page.getByRole("main").getByRole("button", { name: msg("kiosk", "en", locale === "en" ? "home.english" : "home.arabic") }).click();
   await expect(page).toHaveURL(/\/consent$/);
@@ -84,9 +91,31 @@ export async function checkIn(page: Page, digits: string, locale: Locale = "en")
   expect(answer.status(), "the persona is found in the stack's HAPI").toBe(200);
   const started = await answer.json();
   await expect(page).toHaveURL(/\/patient$/);
-  await page.getByRole("button", { name: msg("kiosk", locale, "safety.child.me"), exact: true }).click();
+  const sessionId = String(started.session_id);
+  if (child) {
+    await enterChild(page, sessionId, locale, child);
+  } else {
+    await page.getByRole("button", { name: msg("kiosk", locale, "safety.child.me"), exact: true }).click();
+  }
   await expect(page).toHaveURL(/\/intake$/);
-  return { sessionId: String(started.session_id), patientToken: String(started.session_token) };
+  return { sessionId, patientToken: String(started.session_token) };
+}
+
+/** "My child", the age, then "Continue": the kiosk sends it once to POST /v1/sessions/{id}/patient. */
+async function enterChild(page: Page, sessionId: string, locale: Locale, child: ChildAge): Promise<void> {
+  const t = (key: string) => msg("kiosk", locale, key);
+  await page.getByTestId("patient-child").click();
+  const years = page.getByRole("group", { name: t("safety.child.yearsLabel") });
+  await years.getByRole("button", { name: child.years === 0 ? t("safety.child.underOne") : String(child.years), exact: true }).click();
+  if (child.years < 2) {
+    const months = page.getByRole("group", { name: t("safety.child.monthsLabel") });
+    await months.getByRole("button", { name: String(child.months ?? 0), exact: true }).click();
+  }
+  const sent = page.waitForResponse(
+    (response) => response.url().endsWith(`/v1/sessions/${sessionId}/patient`) && response.request().method() === "POST",
+  );
+  await page.getByRole("button", { name: t("safety.child.continue"), exact: true }).click();
+  expect((await sent).status(), "the kiosk records the child and the age").toBe(200);
 }
 
 /** The kiosk's device token (the device sign-in the kiosk keeps in session storage). */

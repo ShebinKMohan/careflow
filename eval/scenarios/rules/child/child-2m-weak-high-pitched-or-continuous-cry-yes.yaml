@@ -1,0 +1,9 @@
+id: child-2m-weak-high-pitched-or-continuous-cry-yes
+description: "2-month-old; the parent answers yes to child_danger.weak_high_pitched_or_continuous_cry (M2-04, generated)."
+covers: [red:child_danger.weak_high_pitched_or_continuous_cry]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 2, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.weak_high_pitched_or_continuous_cry, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_RED_FLAG]

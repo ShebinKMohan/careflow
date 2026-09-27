@@ -19,7 +19,8 @@ from careflow_rules.rules.child_ng143 import AMBER_ANSWERS, RED_ANSWERS
 from careflow_rules.testing import facts_from_entries
 
 SCENARIOS_DIR: Final = Path(__file__).resolve().parents[3] / "eval" / "scenarios" / "rules"
-SCENARIOS: Final = sorted(SCENARIOS_DIR.glob("*.yaml"))
+# child/: the generated M2-04 answer scenarios (scripts/child_scenarios.py, SHE-293).
+SCENARIOS: Final = sorted([*SCENARIOS_DIR.glob("*.yaml"), *SCENARIOS_DIR.glob("child/*.yaml")])
 MEASURED_RED: Final = ("vitals.respiratory_rate", "vitals.temperature_c")
 MEASURED_AMBER: Final = (
     "vitals.respiratory_rate",
@@ -58,6 +59,13 @@ def run(scenario: dict[str, Any]) -> Any:
 def test_the_suite_has_at_least_45_scenarios_and_10_benign() -> None:
     assert len(SCENARIOS) >= 45
     assert sum(1 for p in SCENARIOS if not load(p)["expect_alerts"]) >= 10
+
+
+def test_the_child_answer_scenarios_are_all_there() -> None:
+    """M2-04: 16 questions x yes/unsure x 3 ages, and 5 all-no controls."""
+    child = [p for p in SCENARIOS if p.parent.name == "child"]
+    assert len(child) == 16 * 2 * 3 + 5
+    assert sum(1 for p in child if not load(p)["expect_alerts"]) >= 5
 
 
 @pytest.mark.parametrize("path", SCENARIOS, ids=lambda p: p.stem)

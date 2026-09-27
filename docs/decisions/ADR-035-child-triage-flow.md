@@ -4,6 +4,8 @@
 
 Accepted, 27 Sep 2026 ([M2-04]). This is the core build. The scenario files, the Hypothesis property test, the `-k child` intake tests and the Playwright parent-path test follow in the test phase.
 
+The test phase is done (SHE-293, docs/evidence/M2-04.md). It changed how answers are read, not the rules: ADR-052.
+
 ## Context
 
 A parent checking in a feverish small child went through the adult steps, and three gaps made a missed NICE NG143 red flag possible:

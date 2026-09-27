@@ -1,0 +1,9 @@
+id: child-3y-non-weight-bearing-yes
+description: "3-year-old; the parent answers yes to child_amber.non_weight_bearing (M2-04, generated)."
+covers: [amber:child_amber.non_weight_bearing]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 3, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.non_weight_bearing, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

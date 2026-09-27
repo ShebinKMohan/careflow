@@ -1,0 +1,9 @@
+id: child-2m-limb-or-joint-swelling-yes
+description: "2-month-old; the parent answers yes to child_amber.limb_or_joint_swelling (M2-04, generated)."
+covers: [amber:child_amber.limb_or_joint_swelling]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_months, value: 2, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.limb_or_joint_swelling, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

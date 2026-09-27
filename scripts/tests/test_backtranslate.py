@@ -280,3 +280,24 @@ def test_served_models_names_snapshots_without_local_paths() -> None:
 
     served = bt.served_models(Local())  # type: ignore[arg-type]
     assert served == ["org/Model-4bit@abc123"]  # the loaded snapshot only
+
+
+def test_the_nurses_alert_lines_are_checked_as_safety_keys(repo: Path) -> None:
+    """packages/contracts/alert_templates.yaml holds both locales of the alert banner lines and
+    their qualifiers (SHE-293); each becomes a `safety.` string of the "alerts" source."""
+    bt.messages("alerts", "en").write_text(
+        "rules:\n  NG143_RED_FLAG:\n    en: Child red flag.\n    ar: علامة حمراء لدى الطفل.\n"
+        "qualifiers:\n  parent_unsure:\n    en: parent unsure\n    ar: ولي الأمر غير متأكد\n",
+        encoding="utf-8",
+    )
+    assert bt.load_messages("alerts", "en") == {
+        "safety.alerts.NG143_RED_FLAG": "Child red flag.",
+        "safety.qualifiers.parent_unsure": "parent unsure",
+    }
+    _, todo = bt.pending_rows(None, recheck_all=False)
+    alerts = [pending for pending in todo if pending[0] == "alerts"]
+    assert alerts == [
+        ("alerts", "safety.alerts.NG143_RED_FLAG", "Child red flag.", "علامة حمراء لدى الطفل."),
+        ("alerts", "safety.qualifiers.parent_unsure", "parent unsure", "ولي الأمر غير متأكد"),
+    ]
+    assert all(bt.is_safety(key) for _, key, _, _ in alerts)

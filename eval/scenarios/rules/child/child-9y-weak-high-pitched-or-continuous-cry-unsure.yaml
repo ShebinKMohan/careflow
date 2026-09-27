@@ -1,0 +1,8 @@
+id: child-9y-weak-high-pitched-or-continuous-cry-unsure
+description: "9-year-old; the parent answers not sure (unknown) to child_danger.weak_high_pitched_or_continuous_cry (M2-04, generated)."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 9, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.weak_high_pitched_or_continuous_cry, value: "unknown", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: []

@@ -1,0 +1,9 @@
+id: child-3y-seizure-yes
+description: "3-year-old; the parent answers yes to child_danger.seizure (M2-04, generated)."
+covers: [red:child_danger.seizure]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 3, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.seizure, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_RED_FLAG]
