@@ -23,10 +23,13 @@ from careflow_api.events.bus import EventBus
 from careflow_api.events.outbox import OutboxPublisher
 from careflow_api.events.relay import OutboxRelay
 from careflow_api.events.ws import LiveHub
+from careflow_api.intake.consumers import WRITEBACK_GROUP, writeback_consumer
+from careflow_api.intake.runtime import IntakeRuntime
+from careflow_api.intake.wiring import build_ports
 from careflow_api.queue import router as queue_router
 from careflow_api.queue.rooms import rooms
 from careflow_api.queue.service import QueueService, run_grace_expiry
-from careflow_api.routers import admin, auth, dev, health, nurse
+from careflow_api.routers import admin, auth, dev, health, nurse, sessions
 from careflow_api.writeback_store import SqlWritebackStore
 from careflow_intake.wiring import briefing_summarizer
 from careflow_integration.fhir.client import FhirClient
@@ -38,16 +41,28 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     every 10 s, the outbox relay every 100 ms and the live WebSocket fan-out."""
     settings = get_settings()
     tasks: list[asyncio.Task[None]] = []
-    if settings.queue_grace_task:
-        tasks.append(asyncio.create_task(run_grace_expiry(app.state.queue)))
-    if settings.outbox_relay:
-        tasks.append(asyncio.create_task(app.state.relay.run()))
-    if settings.live_events:
-        tasks.append(asyncio.create_task(app.state.hub.run()))
-    yield
-    for task in tasks:
-        task.cancel()
-    await asyncio.gather(*tasks, return_exceptions=True)
+    async with contextlib.AsyncExitStack() as stack:
+        if settings.intake_runtime:
+            wiring = build_ports(queue=app.state.queue, briefing=app.state.briefings)
+            runtime = await stack.enter_async_context(
+                IntakeRuntime.open(settings.database_url, wiring.ports)
+            )
+            app.state.wiring, app.state.intake = wiring, runtime
+            app.state.briefings.states = runtime  # the briefing builds on demand from the graph
+            if settings.writeback_consumer:
+                handler = writeback_consumer(runtime, wiring.ports.writeback)  # type: ignore[arg-type]
+                tasks.append(app.state.bus.subscribe(WRITEBACK_GROUP, handler))
+        if settings.queue_grace_task:
+            tasks.append(asyncio.create_task(run_grace_expiry(app.state.queue)))
+        if settings.outbox_relay:
+            tasks.append(asyncio.create_task(app.state.relay.run()))
+        if settings.live_events:
+            tasks.append(asyncio.create_task(app.state.hub.run()))
+        yield
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        await app.state.briefings.drain()
     await app.state.redis.aclose()
 
 
@@ -80,7 +95,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         fhir=lambda: FhirClient(settings.fhir_base_url),
         summarizer=briefing_summarizer(),
     )
-    for module in (health, auth, nurse, doctor, admin, queue_router, tickets, ws):
+    for module in (health, auth, sessions, nurse, doctor, admin, queue_router, tickets, ws):
         app.include_router(module.router)
     if settings.env == "dev":  # test hooks exist only in development (otherwise: 404)
         app.include_router(dev.router)

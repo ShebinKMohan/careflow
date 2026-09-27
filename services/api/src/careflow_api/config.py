@@ -40,6 +40,14 @@ class Settings(BaseSettings):
     event_stream: str = Field(
         default="careflow:events", validation_alias=AliasChoices("CAREFLOW_EVENT_STREAM")
     )
+    #: Run the intake graph behind the patient and nurse routes (M1-12).
+    intake_runtime: bool = Field(
+        default=True, validation_alias=AliasChoices("CAREFLOW_INTAKE_RUNTIME")
+    )
+    #: Consume `triage.confirmed` as the `fhir-writeback` group (M1-09 write-back safety net).
+    writeback_consumer: bool = Field(
+        default=True, validation_alias=AliasChoices("CAREFLOW_WRITEBACK_CONSUMER")
+    )
     ws_heartbeat_seconds: float = Field(
         default=20.0, gt=0, validation_alias=AliasChoices("CAREFLOW_WS_HEARTBEAT_S")
     )

@@ -114,8 +114,9 @@ llm-local: ## Serve the pinned local model on 127.0.0.1:8081 in the foreground (
 api: ## Run the API on :8000 (needs `make up` and `make migrate`)
 	uv run uvicorn careflow_api.main:create_app --factory --host 127.0.0.1 --port 8000
 
-migrate: ## Apply the Alembic migrations as careflow_migrator
+migrate: ## Apply the Alembic migrations and the intake checkpoint tables as careflow_migrator
 	cd services/api && uv run alembic upgrade head
+	uv run careflow-api setup-checkpoints
 
 seed-dev: ## Create the development clinics, staff and devices (secrets from .env)
 	uv run careflow-api seed-dev

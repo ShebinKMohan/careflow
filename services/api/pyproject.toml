@@ -8,11 +8,13 @@ dependencies = [
   "careflow-contracts",
   "careflow-intake",
   "careflow-integration",
+  "careflow-rules",
+  "careflow-triage",
   "fastapi>=0.141,<0.142",
   "uvicorn>=0.54,<0.55",
   "websockets>=16.1,<17",
   "sqlalchemy[asyncio]>=2.1,<2.2",
-  "psycopg[binary]>=3.3,<3.4",
+  "psycopg[binary,pool]>=3.3,<3.4",
   "alembic>=1.20,<2",
   "pydantic>=2.13,<3",
   "pydantic-settings>=2.15,<3",
@@ -36,6 +38,8 @@ careflow-vitals-sim = "careflow_api.devices.cli:main"
 careflow-contracts = { workspace = true }
 careflow-intake = { workspace = true }
 careflow-integration = { workspace = true }
+careflow-rules = { workspace = true }
+careflow-triage = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]
