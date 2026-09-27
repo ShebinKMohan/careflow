@@ -47,6 +47,8 @@ def clean_env(monkeypatch: pytest.MonkeyPatch) -> pytest.MonkeyPatch:
         "VOICE_AGENT_DEEPGRAM_API_KEY",
         "CAREFLOW_JWT_SECRET",
         "JWT_SECRET",
+        "VOICE_PORT",  # scripts/stack.py exports a stack's own port
+        "VOICE_HOST",
     ):
         monkeypatch.delenv(name, raising=False)
     return monkeypatch
