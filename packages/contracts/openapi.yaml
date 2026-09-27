@@ -363,7 +363,10 @@ paths:
         401; a spent token, or a closed or already handed-over session, is a 409. The result is a
         phone-channel patient token for that one session and the question the intake is waiting
         on; the kiosk's tokens for the session stop working and the kiosk receives the
-        `session.handed_over` WebSocket frame.
+        `session.handed_over` WebSocket frame. A phone whose claim succeeded but whose answer was
+        lost sends the same qr_token with the same `claim_key` again, while the code is still
+        valid, and gets a new credential for the session it claimed; a spent code without that
+        key is still a 409.
       x-careflow-roles: []
       security: []
       requestBody:
@@ -374,6 +377,7 @@ paths:
               $ref: '#/components/schemas/QrClaimRequest'
             example:
               qr_token: qr-example-token-routine
+              claim_key: example-claim-key-for-docs-000000000000000000000000
       responses:
         '200':
           description: Claim the QR hand-over on the phone
@@ -759,6 +763,39 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/Notfound'
+  /v1/sessions/{session_id}/renew:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: renewSessionToken
+      summary: Renew the phone's session token
+      description: The phone swaps its still-valid phone-channel patient token (M2-06) for a new
+        30-minute one while the patient waits, so a long wait does not shut them out of the waiting
+        room or "I feel worse" (M2-07). Only a phone token of this session may renew (a kiosk-channel
+        token or a device gets 403; an expired or revoked token 401). A closed or no-show session,
+        or one checked in more than 12 hours ago, is a 409; the patient then asks at the desk.
+      tags:
+      - checkin
+      x-careflow-roles:
+      - patient_session
+      responses:
+        '200':
+          description: Renew the phone's session token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionRenewal'
+              example:
+                session_token: example-session-token-renewed
+                expires_at: '2026-09-26T09:35:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /v1/sessions/{session_id}/vitals:
     parameters:
     - $ref: '#/components/parameters/SessionId'
@@ -2509,8 +2546,27 @@ components:
         qr_token:
           type: string
           minLength: 16
+        claim_key:
+          type: string
+          pattern: ^[A-Za-z0-9_-]{43,128}$
+          description: A random secret the phone makes once per code (32 or more random bytes,
+            base64url) and never stores or puts in a URL. Sending the same code with the same key
+            again proves the retry comes from the phone that claimed it.
       required:
       - qr_token
+      additionalProperties: false
+    SessionRenewal:
+      type: object
+      description: A new phone-channel patient token for the same session (M2-06).
+      properties:
+        session_token:
+          type: string
+          description: Bearer JWT with role patient_session and channel phone, scoped to this
+            session.
+        expires_at: *id006
+      required:
+      - session_token
+      - expires_at
       additionalProperties: false
     ConsentRequest:
       type: object

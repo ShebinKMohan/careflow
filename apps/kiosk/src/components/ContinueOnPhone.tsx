@@ -23,8 +23,9 @@ const HIGHLIGHTED = "min-h-touch rounded-control border-4 border-primary bg-prim
  * it runs out. The code is `…/claim#t=<token>`: in the URL fragment, so the phone never sends it in
  * a request. When the phone claims it, the session's channel sends `session.handed_over`; the kiosk
  * says "Continued on your phone" for 5 s, then forgets the patient and returns to the welcome
- * screen. `highlight` fills the button after the patient asked a question the phone can answer
- * (M2-10).
+ * screen. It listens from the first code on, also after the patient closes the panel (a code shown
+ * can still be claimed); `RevokedGuard` covers a missed frame. `highlight` fills the button after
+ * the patient asked a question the phone can answer (M2-10).
  */
 export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) {
   const t = useTranslations("intake.phone");
@@ -35,6 +36,8 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
   const [now, setNow] = useState(() => Date.now());
   const [failed, setFailed] = useState(false);
   const [handedOver, setHandedOver] = useState(false);
+  // Once a code was shown it may be claimed until it runs out, whether or not the panel is open.
+  const [listening, setListening] = useState(false);
   const token = patient?.token;
   const sessionId = patient?.sessionId;
   const expiresAt = useRef<number | null>(null);
@@ -55,6 +58,7 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
     }
     expiresAt.current = Date.parse(data.expires_at);
     setFailed(false);
+    setListening(true);
     setCode({ token: data.qr_token, expiresAt: expiresAt.current });
   }, [token, sessionId]);
 
@@ -69,7 +73,7 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
     return () => clearInterval(timer);
   }, [open, fetchCode]);
   useEffect(() => {
-    if (!open || !token || !sessionId) return undefined;
+    if (!listening || !token || !sessionId) return undefined;
     let close: (() => void) | null = null;
     let active = true;
     void watchSession(token, sessionId, (type) => {
@@ -82,7 +86,7 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
       active = false;
       close?.();
     };
-  }, [open, token, sessionId]);
+  }, [listening, token, sessionId]);
   useEffect(() => {
     if (!handedOver) return undefined;
     const reset = setTimeout(() => {

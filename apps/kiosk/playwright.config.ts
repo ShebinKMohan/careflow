@@ -5,7 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Kiosk e2e: Prism serves the contract's examples on MOCK_PORT and the app runs a production build.
 // E2E_SERVER=dev uses `next dev` instead (e.g. with `make mock` and `pnpm -F kiosk dev` running).
-const PORT = 3000;
+const PORT = Number(process.env.E2E_PORT ?? "3000"); // E2E_PORT: beside a running dev stack
 const MOCK_PORT = 4010;
 const dev = process.env.E2E_SERVER === "dev";
 // VOICE_E2E=1 adds the real voice service (M1-14, needs its models and the mlx-whisper extra) and

@@ -38,3 +38,17 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   adds a `warning` annotation with the measured time when it is over, instead of failing.
 - **Still asserted in CI.** The chip appears on this session's row of the already open worklist
   (live, no reload) before any level exists, and every other check of the journey.
+
+## `services/api/tests/test_events_ws.py::test_heartbeats_and_replay_after_a_reconnect` (M1-11)
+
+- **What happened.** During SHE-300 [M2-06] on 27 September 2026, one full `make check` failed
+  this test at its first `next_event` (no event within 5 s of publishing one 0.3 s after the
+  nurse's socket connected). The machine was running three stacks' apps and the local model at
+  the time. Alone, the test file passed three runs out of three (4 passed each, about 16 s); the
+  M2-06 changes do not touch the event path.
+- **Suspected cause.** The test gives the server 0.3 s to register the new connection before it
+  publishes; a fresh connection (no `last_event_id`) only receives events dispatched after it is
+  registered, so under heavy load the event can land before the registration.
+- **Handling.** Not retried, not weakened. SHE-302 [M2-07] makes clients reload an authoritative
+  snapshot on (re)connect instead of relying on events that arrive in the first moments; revisit
+  this test's 0.3 s window there. A red run is investigated, not re-run until green.

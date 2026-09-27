@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { claimVisit, type PhoneVisit, resumeVisit } from "./phoneVisit";
+import { claimVisit, newClaimKey, type PhoneVisit, resumeVisit } from "./phoneVisit";
 import { clearSession } from "./session";
 
 /** Share the first promise across Strict Mode's effect replay: a one-time QR code is claimed once. */
@@ -31,7 +31,8 @@ export function usePhoneVisit(fromLink = false) {
       const code = fromLink ? new URLSearchParams(window.location.hash.slice(1)).get("t") : null;
       if (code) {
         window.history.replaceState(null, "", window.location.pathname + window.location.search);
-        retryAction.current = () => claimVisit(code, () => { retryAction.current = resumeVisit; });
+        const key = newClaimKey(); // one per code: a retry proves it is this phone again
+        retryAction.current = () => claimVisit(code, key, () => { retryAction.current = resumeVisit; });
       }
       operation.current = retryAction.current();
     }
@@ -54,7 +55,10 @@ export function usePhoneVisit(fromLink = false) {
 
   return {
     visit,
-    claim: (code: string) => run(() => claimVisit(code, () => { retryAction.current = resumeVisit; })),
+    claim: (code: string) => {
+      const key = newClaimKey();
+      return run(() => claimVisit(code, key, () => { retryAction.current = resumeVisit; }));
+    },
     retry: () => run(retryAction.current),
     reset: () => {
       clearSession();

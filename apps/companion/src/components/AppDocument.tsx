@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import { ServiceWorkerRegistrar } from "./ServiceWorkerRegistrar";
 import { SiteHeader } from "./SiteHeader";
+import { TokenRenewer } from "./TokenRenewer";
 
 export interface AppDocumentProps {
   locale: Locale;
@@ -14,8 +15,8 @@ export interface AppDocumentProps {
 }
 
 /**
- * The <html> shell: lang and dir follow the locale, every page gets the prototype footer, and the
- * service worker (static shell only) is registered.
+ * The <html> shell: lang and dir follow the locale, every page gets the prototype footer, the
+ * service worker (static shell only) is registered, and the phone's session token is kept alive.
  */
 export function AppDocument({ locale, messages, className, children }: AppDocumentProps) {
   return (
@@ -26,6 +27,7 @@ export function AppDocument({ locale, messages, className, children }: AppDocume
           <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-gutter py-8">{children}</main>
           <PrototypeFooter locale={locale} />
           <ServiceWorkerRegistrar />
+          <TokenRenewer />
         </NextIntlClientProvider>
       </body>
     </html>

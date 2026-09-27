@@ -76,6 +76,32 @@ def test_offset_zero_reproduces_the_dev_urls() -> None:
     )
 
 
+def test_by_default_the_apps_and_the_api_stay_on_localhost() -> None:
+    env = stack.stack_env("careflow", 0, SECRETS)
+    assert env["CAREFLOW_API_HOST"] == "127.0.0.1"
+    assert "CAREFLOW_PUBLIC_HOST" not in env
+    assert env["NEXT_PUBLIC_API_BASE_URL"] == "http://localhost:8000"
+    assert env["NEXT_PUBLIC_COMPANION_URL"] == "http://localhost:3002"
+
+
+def test_a_public_host_makes_the_qr_code_and_the_api_reachable_from_a_phone() -> None:
+    env = stack.stack_env("careflow", 0, SECRETS, public_host="192.168.1.20")
+    assert env["NEXT_PUBLIC_COMPANION_URL"] == "http://192.168.1.20:3002"  # in the QR code
+    assert env["NEXT_PUBLIC_API_BASE_URL"] == "http://192.168.1.20:8000"
+    assert "http://192.168.1.20:3002" in env["CAREFLOW_CORS_ORIGINS"].split(",")
+    assert "http://localhost:3000" in env["CAREFLOW_CORS_ORIGINS"].split(",")
+    assert env["CAREFLOW_API_HOST"] == "0.0.0.0"  # noqa: S104 - the opt-in LAN binding
+    assert env["CAREFLOW_PUBLIC_HOST"] == "192.168.1.20"
+    assert env["CAREFLOW_API_URL"] == "http://localhost:8000"  # local tools stay local
+    assert env["NEXT_PUBLIC_VOICE_WS_URL"].startswith("ws://localhost:")  # the kiosk's voice
+
+
+@pytest.mark.parametrize("host", ["http://192.168.1.20", "a b", "host:3002", "x/", "", "-a"])
+def test_a_public_host_is_only_a_name_or_address(host: str) -> None:
+    with pytest.raises(stack.StackError, match="CAREFLOW_PUBLIC_HOST"):
+        stack.stack_env("careflow", 0, SECRETS, public_host=host)
+
+
 @pytest.mark.parametrize("name", ["Careflow", "c", "care_flow", "-care", "a" * 41])
 def test_stack_names_are_simple(name: str) -> None:
     with pytest.raises(stack.StackError, match="stack name"):

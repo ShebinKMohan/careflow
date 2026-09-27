@@ -21,8 +21,12 @@ export function readToken(): string | null {
   }
 }
 
+/** A new token was stored in this tab (a claim or a renewal); `TokenRenewer` listens. */
+export const TOKEN_SAVED = "careflow:token-saved";
+
 export function saveToken(token: string): void {
   window.sessionStorage.setItem(TOKEN_KEY, token);
+  window.dispatchEvent(new Event(TOKEN_SAVED));
 }
 
 export function readSession(): PhoneSession | null {

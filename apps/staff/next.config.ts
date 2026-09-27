@@ -7,6 +7,8 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig: NextConfig = {
   transpilePackages: ["@careflow/ui", "@careflow/contracts"],
   poweredByHeader: false,
+  // A real phone reaches the dev server at the computer's address (CAREFLOW_PUBLIC_HOST, M2-06).
+  allowedDevOrigins: process.env.CAREFLOW_PUBLIC_HOST ? [process.env.CAREFLOW_PUBLIC_HOST] : [],
   // No generated AGENTS.md/CLAUDE.md: agent rules live in docs/AGENT_RUNBOOK.md.
   agentRules: false,
 };

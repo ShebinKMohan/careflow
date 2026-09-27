@@ -278,6 +278,26 @@ class QrClaimRequest(BaseModel):
         extra="forbid",
     )
     qr_token: Annotated[str, Field(min_length=16)]
+    claim_key: Annotated[
+        str | None,
+        Field(
+            description="A random secret the phone makes once per code (32 or more random bytes, base64url) and never stores or puts in a URL. Sending the same code with the same key again proves the retry comes from the phone that claimed it.",
+            pattern="^[A-Za-z0-9_-]{43,128}$",
+        ),
+    ] = None
+
+
+class SessionRenewal(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_token: Annotated[
+        str,
+        Field(
+            description="Bearer JWT with role patient_session and channel phone, scoped to this session."
+        ),
+    ]
+    expires_at: AwareDatetime
 
 
 class ConsentRequest(BaseModel):
