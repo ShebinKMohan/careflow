@@ -168,6 +168,7 @@ class QueuePort:
                 .where(PatientSession.id == uuid.UUID(session_id))
                 .values(status="queued")
             )
+        await self.queue.broadcast(clinic, assignment.department)  # the new token's place (M2-07)
         return Assignment(token=assignment.token_code, room=assignment.room_hint)
 
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import uuid
-from collections.abc import Callable, Iterable
+from collections.abc import Awaitable, Callable, Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Final
@@ -33,7 +33,7 @@ from careflow_api.queue.core import ACTIVE, QueueCore, Status, Token
 from careflow_api.queue.rooms import Department, RoomsConfig
 from careflow_api.queue.wait import estimate_wait
 from careflow_api.rls import clinic_session
-from careflow_contracts.api_models import BoardEntry, QueueToken
+from careflow_contracts.api_models import BoardEntry, CompanionStatus, QueueToken, SessionState
 from careflow_contracts.events import EventType, TokenCalledData, TokenNoShowData
 
 logger = logging.getLogger("careflow_api.queue")
@@ -85,6 +85,19 @@ def to_token(row: QueueTokenRow) -> Token:
     )
 
 
+#: Sends each session its place (`queue.status`, M2-07): `(clinic_id, [(session_id, status)])`.
+type Notify = Callable[[uuid.UUID, list[tuple[str, CompanionStatus]]], Awaitable[None]]
+
+#: A token's status as the patient's session state.
+TOKEN_STATES: Final = {
+    Status.waiting: SessionState.queued,
+    Status.called: SessionState.called,
+    Status.arrived: SessionState.arrived,
+    Status.no_show: SessionState.no_show,
+    Status.closed: SessionState.closed,
+}
+
+
 class QueueService:
     def __init__(
         self,
@@ -92,8 +105,10 @@ class QueueService:
         events: EventPublisher,
         *,
         clock: Callable[[], datetime] = utc_now,
+        notify: Notify | None = None,
     ) -> None:
         self.rooms, self.events, self.clock = rooms, events, clock
+        self.notify = notify
 
     # -- helpers ---------------------------------------------------------------------------
 
@@ -378,6 +393,66 @@ class QueueService:
             for t in [*called, *core.waiting()]
         ]
 
+    def status_of(self, token: Token, core: QueueCore, department: Department) -> CompanionStatus:
+        """What the patient's phone shows for a token (M2-07): never a level."""
+        waiting = token.status is Status.waiting
+        order = [t.token_id for t in core.waiting()]
+        return CompanionStatus(
+            state=TOKEN_STATES.get(token.status, SessionState.queued),
+            position=order.index(token.token_id) + 1
+            if waiting and token.token_id in order
+            else None,
+            wait_estimate_minutes=(
+                estimate_wait(token, core, self.rooms.service_minutes) if waiting else None
+            ),
+            token=self.to_api(token, department),
+            room=self.room_name(department, token.room_id),
+        )
+
+    async def companion_status(
+        self, db: AsyncSession, *, session_id: str, session_state: str
+    ) -> CompanionStatus:
+        """The waiting room's status for one session: its place when it holds an active token,
+        else its session state with no position."""
+        token = await self.session_token(db, session_id=session_id)
+        if token is not None and token.status.value in ACTIVE_VALUES:
+            department = self.rooms.department(token.department)
+            core = await self._core(db, department)
+            found = core.tokens.get(token.token_id)
+            if found is not None:
+                return self.status_of(found, core, department)
+        try:
+            state = SessionState(session_state)
+        except ValueError:
+            state = SessionState.intake
+        if token is not None:
+            state = TOKEN_STATES.get(Status(token.status.value), state)
+        return CompanionStatus(
+            state=state,
+            position=None,
+            wait_estimate_minutes=None,
+            token=token,
+            room=token.room if token is not None else None,
+        )
+
+    async def broadcast(self, clinic_id: uuid.UUID, department: str) -> None:
+        """Send every waiting or called session of the department its place (`queue.status`),
+        after a change has committed. Best effort: the phone also polls."""
+        if self.notify is None:
+            return
+        try:
+            target = self.rooms.department(department)
+            async with clinic_session(clinic_id) as db:
+                core = await self._core(db, target)
+            statuses = [
+                (token.session_id, self.status_of(token, core, target))
+                for token in core.tokens.values()
+                if token.status in (Status.waiting, Status.called)
+            ]
+            await self.notify(clinic_id, statuses)
+        except Exception:
+            logger.exception("queue.broadcast_failed")
+
     async def session_token(self, db: AsyncSession, *, session_id: str) -> QueueToken | None:
         """The session's active token, or its latest one."""
         try:
@@ -407,7 +482,9 @@ async def run_grace_expiry(
                 clinic_ids = list((await db.execute(select(Clinic.id))).scalars())
             for clinic_id in clinic_ids:
                 async with clinic_session(clinic_id) as db:
-                    await service.expire_grace(db, clinic_id=clinic_id)
+                    changed = await service.expire_grace(db, clinic_id=clinic_id)
+                for department in {token.department for token in changed}:
+                    await service.broadcast(clinic_id, department)
         except Exception:  # keep running: the next tick retries
             logger.exception("queue.grace_expiry_failed")
         await asyncio.sleep(interval)
