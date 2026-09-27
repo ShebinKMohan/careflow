@@ -2,6 +2,11 @@
 
 Every threshold or rule change bumps `RULESET_VERSION` (`src/careflow_rules/version.py`) and gets an entry here. Alerts carry the version that raised them.
 
+## 2026.3.0 (M2-04)
+
+- `NG143_RED_FLAG`: a parent's "Not sure" (unknown) on a red question they can answer counts as red: hard to wake, no response, weak/high-pitched/continuous cry, pale/mottled/ashen/blue, grunting, non-blanching rash, stiff neck, seizure. When only unsure answers raise it, the alert carries the fixed `parent_unsure` qualifier. Nurse-assessed red signs and amber answers still need a yes.
+- `CHILD_HARD_TO_WAKE` (critical, new): a child aged 5 to 15 whose `child_danger.hard_to_wake` is yes or unknown (unknown adds `parent_unsure`). Under 5, and without a known age, `NG143_RED_FLAG` raises the same answer, so a hard-to-wake child alerts at any age under 16. NG143 has no table for ages 5 to 15; that gap is recorded in ADR-035.
+
 ## 2026.2.0 (M1-02)
 
 - `FAST_STROKE` (critical): any FAST sign is yes. The alert carries `fast.last_known_well` as evidence when it is known; when it is missing or recorded as unknown, the patient is asked for it. Stroke-like symptoms (weakness, numbness, confusion, sudden severe headache, vision loss, speech difficulty) bring up the FAST screen questions.

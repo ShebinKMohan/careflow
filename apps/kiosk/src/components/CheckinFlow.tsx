@@ -18,7 +18,7 @@ const LINK = "inline-flex min-h-touch items-center rounded-control bg-primary px
 
 const noSubscription = () => () => undefined;
 
-/** The silent keypad -> POST /v1/checkin/keypad (digits only in the body) -> /intake. */
+/** The silent keypad -> POST /v1/checkin/keypad (digits only in the body) -> /patient. */
 export function CheckinFlow() {
   const t = useTranslations("checkin");
   const locale = useLocale() === "ar" ? "ar" : "en";
@@ -48,7 +48,7 @@ export function CheckinFlow() {
       key: "chief_complaint",
       notice: null,
     });
-    router.push("/intake");
+    router.push("/patient");
   }
 
   if (!hasDevice) {

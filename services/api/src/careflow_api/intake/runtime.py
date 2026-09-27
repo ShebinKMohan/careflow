@@ -39,12 +39,17 @@ from careflow_intake.graph import (
     thread_config,
     waiting_at,
 )
+from careflow_intake.patient_details import PatientType, patient_turns_and_facts
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState, structured_facts
 
 logger = logging.getLogger("careflow_api.intake")
 
 type Result = dict[str, Any]
+
+
+class PatientAlreadySet(RuntimeError):
+    """The session already has a different answer to "Who is the patient?"."""
 
 
 class IntakeRuntime:
@@ -121,10 +126,43 @@ class IntakeRuntime:
         async with self.serialized(session_id):
             return await self.graph.ainvoke(state, thread_config(session_id))
 
-    async def submit_turn(self, session_id: str, text: str) -> Result:
-        """The patient's answer; raises `NotWaiting` or `InvalidAnswer`."""
+    async def submit_turn(self, session_id: str, text: str, input_mode: str = "text") -> Result:
+        """The patient's answer and how it came; raises `NotWaiting` or `InvalidAnswer`."""
         async with self.serialized(session_id):
-            return await answer(self.graph, session_id, text)
+            return await answer(self.graph, session_id, text, input_mode)
+
+    async def set_patient(
+        self,
+        session_id: str,
+        *,
+        patient_type: PatientType,
+        age_years: int | None = None,
+        age_months: int | None = None,
+    ) -> IntakeState:
+        """The kiosk's "Who is the patient?" answer (M2-04), once: its turns, a child's stated age
+        facts and `patient_type`, then the safety rules at once. The same answer again changes
+        nothing; a different one raises `PatientAlreadySet`. Raises `NotWaiting` without a
+        checkpoint."""
+        async with self.serialized(session_id):
+            config = thread_config(session_id)
+            state = cast(IntakeState, (await self.graph.aget_state(config)).values)
+            if not state:
+                raise NotWaiting(f"session {session_id} has no intake")
+            existing = state.get("patient_type")
+            if existing is not None:
+                if existing != patient_type:
+                    raise PatientAlreadySet(f"session {session_id} is already {existing}")
+                return state
+            turns, facts = patient_turns_and_facts(
+                language=state["language"],
+                turn_number=len(state.get("turns", [])) + 1,
+                patient_type=patient_type,
+                age_years=age_years,
+                age_months=age_months,
+                now=self.ports.clock(),
+            )
+            values = {"patient_type": patient_type, "turns": turns, "facts": facts}
+            return await self._merge_and_evaluate(session_id, values)
 
     async def add_facts(self, session_id: str, facts: Sequence[FactEntry]) -> None:
         async with self.serialized(session_id):
@@ -137,32 +175,34 @@ class IntakeRuntime:
         (safety rule 1): new alerts go into the state and out as `alert.raised`, one per rule id
         (idempotency key `{session_id}:{rule_id}`, as the graph's own rules node uses)."""
         async with self.serialized(session_id):
-            config = thread_config(session_id)
-            await self.graph.aupdate_state(config, {"facts": list(facts)})
-            state = cast(IntakeState, (await self.graph.aget_state(config)).values)
-            now = self.ports.clock()
-            outcome = self.ports.rules.run(
-                structured_facts(state), now=now, arrived_at=state.get("arrived_at")
-            )
-            known = {alert.rule_id for alert in state.get("alerts", [])}
-            await self.graph.aupdate_state(
-                config,
-                {
-                    "alerts": list(outcome.alerts),
-                    "needed_facts": list(outcome.needed_facts),
-                    "ruleset_version": outcome.ruleset_version,
-                },
-            )
-            for alert in outcome.alerts:
-                if alert.rule_id in known:
-                    continue
-                known.add(alert.rule_id)
-                data = AlertRaisedData(
-                    clinic_id=state["clinic_id"], session_id=session_id, alert=alert
-                )
-                key = f"{session_id}:{alert.rule_id.value}"
-                await self.ports.events.emit(EventType.alert_raised, data, key)
-            return cast(IntakeState, (await self.graph.aget_state(config)).values)
+            return await self._merge_and_evaluate(session_id, {"facts": list(facts)})
+
+    async def _merge_and_evaluate(self, session_id: str, values: dict[str, Any]) -> IntakeState:
+        """Under the session's lock: merge `values`, then run the rules and emit new alerts."""
+        config = thread_config(session_id)
+        await self.graph.aupdate_state(config, values)
+        state = cast(IntakeState, (await self.graph.aget_state(config)).values)
+        now = self.ports.clock()
+        outcome = self.ports.rules.run(
+            structured_facts(state), now=now, arrived_at=state.get("arrived_at")
+        )
+        known = {alert.rule_id for alert in state.get("alerts", [])}
+        await self.graph.aupdate_state(
+            config,
+            {
+                "alerts": list(outcome.alerts),
+                "needed_facts": list(outcome.needed_facts),
+                "ruleset_version": outcome.ruleset_version,
+            },
+        )
+        for alert in outcome.alerts:
+            if alert.rule_id in known:
+                continue
+            known.add(alert.rule_id)
+            data = AlertRaisedData(clinic_id=state["clinic_id"], session_id=session_id, alert=alert)
+            key = f"{session_id}:{alert.rule_id.value}"
+            await self.ports.events.emit(EventType.alert_raised, data, key)
+        return cast(IntakeState, (await self.graph.aget_state(config)).values)
 
     async def update(self, session_id: str, values: IntakeState | dict[str, Any]) -> None:
         """Merge values into the session's state (the channels' reducers apply)."""
@@ -197,4 +237,4 @@ class IntakeRuntime:
         return state
 
 
-__all__ = ["IntakeRuntime", "NotWaiting"]
+__all__ = ["IntakeRuntime", "NotWaiting", "PatientAlreadySet"]

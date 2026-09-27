@@ -42,12 +42,15 @@ export interface PatientSession {
   language: Schema<"Language">;
   /** The question on screen; null once the conversation is done. */
   question: IntakeQuestion | null;
+  /** Who the patient is (M2-04): a parent checking in a child skips the adult sensor steps. */
+  patientType: "adult" | "child";
 }
 
 interface KioskContext {
   patient: PatientSession | null;
   start: (result: Schema<"CheckinResult">, fallback: IntakeQuestion) => void;
   setQuestion: (question: IntakeQuestion | null) => void;
+  setPatientType: (patientType: "adult" | "child") => void;
   /** Forget the patient and stop anything running for them (e.g. a voice stream). */
   wipe: () => void;
   /** Register a clean-up to run on the next wipe; returns the unregister function. */
@@ -67,7 +70,11 @@ export function KioskProvider({ children }: { children: ReactNode }) {
       display: result.patient_display,
       language: result.language,
       question: result.first_question ?? fallback,
+      patientType: "adult",
     });
+  }, []);
+  const setPatientType = useCallback((patientType: "adult" | "child") => {
+    setPatient((current) => (current ? { ...current, patientType } : current));
   }, []);
   const setQuestion = useCallback((question: IntakeQuestion | null) => {
     setPatient((current) => (current ? { ...current, question } : current));
@@ -84,7 +91,10 @@ export function KioskProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const value = useMemo(() => ({ patient, start, setQuestion, wipe, onWipe }), [patient, start, setQuestion, wipe, onWipe]);
+  const value = useMemo(
+    () => ({ patient, start, setQuestion, setPatientType, wipe, onWipe }),
+    [patient, start, setQuestion, setPatientType, wipe, onWipe],
+  );
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 

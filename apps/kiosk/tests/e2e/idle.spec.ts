@@ -13,6 +13,8 @@ async function checkIn(page: Page) {
   await page.goto("/checkin");
   for (const digit of "100001") await page.getByRole("button", { name: digit, exact: true }).click();
   await page.getByRole("button", { name: "Check in" }).click();
+  await expect(page).toHaveURL(/\/patient$/);
+  await page.getByRole("button", { name: "Me", exact: true }).click();
   await expect(page).toHaveURL(/\/intake$/);
   await expect(page.getByText("Welcome, M. S.")).toBeVisible();
 }

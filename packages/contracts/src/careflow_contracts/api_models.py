@@ -296,6 +296,30 @@ class ConsentRecord(BaseModel):
     recorded_at: AwareDatetime
 
 
+class PatientType(StrEnum):
+    adult = "adult"
+    child = "child"
+
+
+class PatientDetailsRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    patient_type: PatientType
+    age_years: Annotated[int | None, Field(ge=0, le=15)] = None
+    age_months: Annotated[int | None, Field(ge=0, le=11)] = None
+
+
+class PatientDetails(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: Identifier
+    patient_type: PatientType
+    age_years: Annotated[int | None, Field(ge=0, le=15)] = None
+    age_months: Annotated[int | None, Field(ge=0, le=11)] = None
+
+
 class InputMode(StrEnum):
     tap = "tap"
     text = "text"

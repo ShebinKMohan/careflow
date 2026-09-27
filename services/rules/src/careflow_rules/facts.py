@@ -45,6 +45,11 @@ def is_yes(fact: FactBase | None) -> bool:
     return isinstance(fact, TriStateFact) and fact.value is TriState.yes
 
 
+def is_unsure(fact: FactBase | None) -> bool:
+    """A "Not sure" answer (TriState unknown)."""
+    return isinstance(fact, TriStateFact) and fact.value is TriState.unknown
+
+
 def stated_symptoms(facts: StructuredFacts) -> dict[str, str]:
     """Patient-stated symptom names mapped to their fact ids."""
     return {

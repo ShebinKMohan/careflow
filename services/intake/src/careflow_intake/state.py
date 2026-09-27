@@ -10,7 +10,7 @@ import operator
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Annotated, Any, Required, TypedDict
+from typing import Annotated, Any, Literal, Required, TypedDict
 
 from careflow_contracts.generated.alert_schema import Alert
 from careflow_contracts.generated.ehr_fetch_schema import (
@@ -73,6 +73,9 @@ class IntakeState(TypedDict, total=False):
     clinic_id: Required[str]
     language: Required[Language]
     arrived_at: Required[datetime]
+    # Who the patient is (M2-04): "child" (under 16) when a parent checks in a child; absent is an
+    # adult. Set once, by the kiosk's "Who is the patient?" answer.
+    patient_type: Literal["adult", "child"]
     # Set by the nodes.
     started_at: datetime
     patient_identifier: PatientIdentifier | None
@@ -84,6 +87,7 @@ class IntakeState(TypedDict, total=False):
     turns: Annotated[list[Turn], operator.add]
     turn_count: int
     pending_question: Question | None
+    last_answer_mode: str | None  # how the latest answer came: "tap", "text" or "voice"
     conversation_complete: bool
     facts: Annotated[list[FactEntry], merge_facts_by_id]
     alerts: Annotated[list[Alert], merge_alerts_by_rule_id]

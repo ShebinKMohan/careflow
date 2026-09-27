@@ -8,7 +8,7 @@ import { useKiosk } from "@/lib/session";
 import { useIdle } from "@/lib/useIdle";
 
 /** Screens that belong to one patient; the welcome and staff setup screens do not time out. */
-const PATIENT_ROUTES = ["/checkin", "/intake", "/vitals", "/done"];
+const PATIENT_ROUTES = ["/checkin", "/patient", "/intake", "/vitals", "/done"];
 
 /** After 60 s without input: "Are you still there?" with a 15 s countdown, then wipe and restart. */
 export function IdleGuard() {

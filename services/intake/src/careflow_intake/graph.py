@@ -144,12 +144,14 @@ async def _waiting_at(graph: IntakeGraph, session_id: str, node: str) -> StateSn
     return snapshot
 
 
-async def answer(graph: IntakeGraph, session_id: str, text: str) -> dict[str, Any]:
-    """Resume with the patient's answer. Raises `InvalidAnswer` before touching the graph."""
+async def answer(
+    graph: IntakeGraph, session_id: str, text: str, input_mode: str = "text"
+) -> dict[str, Any]:
+    """Resume with the patient's answer and how it came (tap, text or voice). Raises
+    `InvalidAnswer` before touching the graph."""
     await _waiting_at(graph, session_id, "await_answer")
-    return await graph.ainvoke(
-        Command(resume={"text": answer_text(text)}), thread_config(session_id)
-    )
+    resume = {"text": answer_text(text), "input_mode": input_mode}
+    return await graph.ainvoke(Command(resume=resume), thread_config(session_id))
 
 
 async def decide(

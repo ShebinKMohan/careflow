@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cache
 from pathlib import Path
 from typing import Any, Final
@@ -37,6 +37,8 @@ class Templates:
     # How a list is joined ("A, B and C"; Arabic "A، B وC").
     list_separator: str = ", "
     list_last_separator: str = " and "
+    # The child question bank's wording (M2-04), keyed like `questions`.
+    child_questions: dict[str, str] = field(default_factory=dict[str, str])
 
     def keys(self) -> set[FactKey]:
         return {FactKey(key) for key in self.questions}
@@ -55,6 +57,10 @@ class Templates:
         if not allergies:
             return str(template["without_record"])
         return str(template["with_record"]).replace("{allergies}", self._joined(allergies))
+
+    def render_child(self, key: FactKey) -> str:
+        """The approved parent-facing question for a child bank key."""
+        return str(self.child_questions.get(key.value) or self.questions[key.value])
 
     def fallback(self, key: FactKey) -> str | None:
         """A second approved wording, used when the first one does not pass the filter."""
@@ -78,6 +84,7 @@ def load_templates(path: Path = TEMPLATES_PATH) -> Templates:
         questions=dict(body["questions"]),
         list_separator=str(joins.get("separator", ", ")),
         list_last_separator=str(joins.get("last", " and ")),
+        child_questions={str(k): str(v) for k, v in (body.get("child_questions") or {}).items()},
     )
 
 

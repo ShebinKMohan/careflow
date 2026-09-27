@@ -192,6 +192,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/sessions/{session_id}/patient": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Say who the patient is
+         * @description The kiosk's "Who is the patient?" answer (M2-04), once per session. For a child (under 16), the parent's stated age becomes PATIENT_STATED age facts, which replace an EHR age, and the intake asks the fixed child question bank. The same answer again is accepted; a different one is a conflict.
+         */
+        post: operations["setPatientDetails"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/sessions/{session_id}/turns": {
         parameters: {
             query?: never;
@@ -1138,6 +1164,20 @@ export interface components {
             voice: boolean;
             /** Format: date-time */
             recorded_at: string;
+        };
+        /** @description Who the patient is. A child's age is required; months are the months beyond `age_years` and are asked when the child is under 2. */
+        PatientDetailsRequest: {
+            /** @enum {string} */
+            patient_type: "adult" | "child";
+            age_years?: number;
+            age_months?: number;
+        };
+        PatientDetails: {
+            session_id: components["schemas"]["Identifier"];
+            /** @enum {string} */
+            patient_type: "adult" | "child";
+            age_years?: number;
+            age_months?: number;
         };
         TurnRequest: {
             /** @enum {string} */
@@ -2627,6 +2667,56 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
+            422: components["responses"]["Unprocessablecontent"];
+        };
+    };
+    setPatientDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /**
+                 * @example {
+                 *       "patient_type": "child",
+                 *       "age_years": 1,
+                 *       "age_months": 4
+                 *     }
+                 */
+                "application/json": components["schemas"]["PatientDetailsRequest"];
+            };
+        };
+        responses: {
+            /** @description Say who the patient is */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_routine",
+                     *       "patient_type": "child",
+                     *       "age_years": 1,
+                     *       "age_months": 4
+                     *     }
+                     */
+                    "application/json": components["schemas"]["PatientDetails"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };
