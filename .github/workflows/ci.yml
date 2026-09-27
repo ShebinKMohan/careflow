@@ -60,6 +60,16 @@ jobs:
           done
           docker logs careflow-pg
           exit 1
+      - name: Start Valkey (the event bus, M1-11; the same image as infra/docker-compose.yml)
+        run: |
+          docker run -d --name careflow-valkey -p 6379:6379 \
+            valkey/valkey:8.1.10@sha256:640c5e62cea04b6d6f2084232651d0cc70362d31f4f805e7be94dbed6855e8f2
+          for _ in $(seq 1 30); do
+            docker exec careflow-valkey valkey-cli ping && exit 0
+            sleep 1
+          done
+          docker logs careflow-valkey
+          exit 1
       - name: Lint
         run: make lint-py
       - name: Typecheck
@@ -68,6 +78,8 @@ jobs:
         run: make test-py
         env:
           CAREFLOW_REQUIRE_DB: "1"
+          CAREFLOW_REQUIRE_REDIS: "1"
+          REDIS_URL: redis://localhost:6379/0
           CAREFLOW_TEST_ADMIN_URL: postgresql+psycopg://postgres:ci-postgres-pw@localhost:5432/postgres
           DATABASE_URL: postgresql://careflow_app:ci-app-pw@localhost:5432/careflow
           DATABASE_URL_MIGRATOR: postgresql://careflow_migrator:ci-migrator-pw@localhost:5432/careflow

@@ -212,6 +212,7 @@ dependencies = [
     { name = "sqlalchemy", extra = ["asyncio"] },
     { name = "typer" },
     { name = "uvicorn" },
+    { name = "websockets" },
 ]
 
 [package.metadata]
@@ -235,6 +236,7 @@ requires-dist = [
     { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.1,<2.2" },
     { name = "typer", specifier = ">=0.27,<0.28" },
     { name = "uvicorn", specifier = ">=0.54,<0.55" },
+    { name = "websockets", specifier = ">=16.1,<17" },
 ]
 
 [[package]]

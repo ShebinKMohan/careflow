@@ -33,6 +33,16 @@ class Settings(BaseSettings):
     queue_grace_task: bool = Field(
         default=True, validation_alias=AliasChoices("CAREFLOW_QUEUE_GRACE_TASK")
     )
+    #: Run the outbox relay in the API process; off when `careflow-api relay` runs it (M1-11).
+    outbox_relay: bool = Field(default=True, validation_alias=AliasChoices("CAREFLOW_OUTBOX_RELAY"))
+    #: Push live events to this process's WebSocket clients (M1-11).
+    live_events: bool = Field(default=True, validation_alias=AliasChoices("CAREFLOW_LIVE_EVENTS"))
+    event_stream: str = Field(
+        default="careflow:events", validation_alias=AliasChoices("CAREFLOW_EVENT_STREAM")
+    )
+    ws_heartbeat_seconds: float = Field(
+        default=20.0, gt=0, validation_alias=AliasChoices("CAREFLOW_WS_HEARTBEAT_S")
+    )
 
 
 @lru_cache

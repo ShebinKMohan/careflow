@@ -181,6 +181,7 @@ paths:
       - nurse
       - doctor
       - board
+      - admin
       requestBody:
         required: true
         content:

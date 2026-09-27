@@ -40,5 +40,6 @@ def build_tracer_provider(
 
 
 def instrument(app: FastAPI, provider: TracerProvider) -> None:
-    # Health probes would flood the console; everything else is traced.
-    FastAPIInstrumentor.instrument_app(app, tracer_provider=provider, excluded_urls="health")
+    # Health probes would flood the console, and a WebSocket URL carries its one-time ticket
+    # (M1-11): neither is traced. Everything else is.
+    FastAPIInstrumentor.instrument_app(app, tracer_provider=provider, excluded_urls="health,v1/ws/")

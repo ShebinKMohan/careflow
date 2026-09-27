@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import os
 import uuid
-from collections.abc import AsyncIterator, Iterator
+from collections.abc import AsyncIterator, Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
@@ -19,6 +19,7 @@ import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
+from redis.asyncio import Redis
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 
@@ -158,6 +159,46 @@ def clinics(database: Engine) -> Clinics:
                 {"c": clinic_id},
             )
     return Clinics(a=ids["a"], b=ids["b"], staff=staff, devices=devices)
+
+
+@pytest.fixture
+async def redis_client() -> AsyncIterator[Redis]:
+    """Valkey from compose (M0-05). Skipped when it does not answer, unless
+    CAREFLOW_REQUIRE_REDIS=1 (CI), where the tests fail instead."""
+    client = Redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
+    try:
+        await client.ping()
+    except Exception as exc:  # noqa: BLE001
+        await client.aclose()
+        if os.environ.get("CAREFLOW_REQUIRE_REDIS") == "1":
+            raise
+        pytest.skip(f"requires_redis: {type(exc).__name__} (run `make up`)")
+    yield client
+    await client.aclose()
+
+
+@pytest.fixture
+async def stream(redis_client: Redis) -> AsyncIterator[str]:
+    """A stream of the test's own, deleted afterwards."""
+    name = f"careflow:test:{uuid.uuid4().hex}"
+    yield name
+    await redis_client.delete(name)
+
+
+@pytest.fixture
+def new_clinic(database: Engine) -> Callable[[], uuid.UUID]:
+    """Make a fresh clinic, so a test's rows never mix with another's."""
+
+    def make() -> uuid.UUID:
+        clinic_id = uuid.uuid4()
+        with database.begin() as connection:
+            connection.execute(
+                text("INSERT INTO clinic (id, name, timezone) VALUES (:id, :name, 'Asia/Dubai')"),
+                {"id": clinic_id, "name": f"events-{clinic_id.hex[:10]}"},
+            )
+        return clinic_id
+
+    return make
 
 
 @pytest.fixture
