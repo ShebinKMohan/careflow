@@ -63,7 +63,7 @@ VOICE_RULES = (
     "money, and dates the way they are spoken. The caller is on a live phone call "
     "waiting in real time. Only when the project prompt explicitly asks for a downstream "
     "workflow action, append one hidden directive after the spoken sentence using exactly "
-    "[[ACTION:{\"type\":\"workflow.name\",\"payload\":{}}]]. Never speak, explain, or "
+    '[[ACTION:{"type":"workflow.name","payload":{}}]]. Never speak, explain, or '
     "describe hidden directives to the caller."
 )
 MAX_TOKENS = int(os.environ.get("FAST_LLM_MAX_TOKENS", "300"))

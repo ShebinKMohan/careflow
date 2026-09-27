@@ -214,9 +214,7 @@ class KokoroTextToSpeech:
             if key in _WARMED_ENGINES:
                 return
             try:
-                engine.create(
-                    _WARMUP_TEXT, voice=self._voice, speed=self._speed, lang=self._lang
-                )
+                engine.create(_WARMUP_TEXT, voice=self._voice, speed=self._speed, lang=self._lang)
             except Exception:
                 logger.warning("Kokoro warmup synthesis failed.", exc_info=True)
                 return
@@ -234,8 +232,11 @@ class KokoroTextToSpeech:
         text: str,
         audio_format: PlivoAudioFormat,
     ) -> AsyncIterator[bytes]:
-        if audio_format is not PlivoAudioFormat.L16_16KHZ:
-            raise ValueError("Kokoro adapter is configured for PCM16 16kHz Plivo streams.")
+        if audio_format not in (PlivoAudioFormat.L16_16KHZ, PlivoAudioFormat.L16_24KHZ):
+            raise ValueError(
+                "Kokoro adapter is configured for PCM16 16kHz Plivo streams "
+                "or PCM16 24kHz kiosk streams."
+            )
         units = split_synthesis_units(
             text,
             self._max_unit_chars,

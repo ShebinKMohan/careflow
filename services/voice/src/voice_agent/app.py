@@ -298,9 +298,7 @@ def create_app(
     async def metrics() -> Response:
         # Unauthenticated so a Prometheus scraper can read it (unlike /latency/summary).
         registry = cast(MetricsRegistry, app.state.metrics)
-        active_sessions = len(
-            cast("set[ActiveMediaRunner]", app.state.active_media_runners)
-        )
+        active_sessions = len(cast("set[ActiveMediaRunner]", app.state.active_media_runners))
         return Response(
             content=registry.render(active_media_sessions=active_sessions),
             media_type=METRICS_CONTENT_TYPE,
@@ -326,8 +324,8 @@ def create_app(
         luxtts_sidecar_is_healthy = True
         provider_details: dict[str, object] = {}
         if resolved_settings.tts_provider == "luxtts":
-            luxtts_sidecar_is_healthy, luxtts_sidecar_detail = (
-                await _luxtts_sidecar_readiness(resolved_settings)
+            luxtts_sidecar_is_healthy, luxtts_sidecar_detail = await _luxtts_sidecar_readiness(
+                resolved_settings
             )
             provider_details["luxtts_sidecar"] = luxtts_sidecar_detail
         missing_local_speech_models = _missing_local_speech_model_files(resolved_settings)
@@ -344,21 +342,15 @@ def create_app(
         checks = {
             "call_event_store": "ok" if event_store_is_healthy else "unhealthy",
             "call_session_store": "ok" if session_store_is_healthy else "unhealthy",
-            "per_call_config_store": (
-                "ok" if per_call_config_store_is_healthy else "unhealthy"
-            ),
+            "per_call_config_store": ("ok" if per_call_config_store_is_healthy else "unhealthy"),
             "accepting_calls": "no" if is_shutting_down else "yes",
         }
         if resolved_settings.tts_provider == "luxtts":
-            checks["luxtts_sidecar"] = (
-                "ok" if luxtts_sidecar_is_healthy else "unhealthy"
-            )
+            checks["luxtts_sidecar"] = "ok" if luxtts_sidecar_is_healthy else "unhealthy"
         if missing_local_speech_models is not None:
             checks["local_speech_models"] = "ok" if local_speech_is_healthy else "unhealthy"
             if missing_local_speech_models:
-                provider_details["local_speech_models"] = {
-                    "missing": missing_local_speech_models
-                }
+                provider_details["local_speech_models"] = {"missing": missing_local_speech_models}
         response_body: dict[str, object] = {
             "status": "ready" if is_ready else "not_ready",
             "providers": _provider_status(resolved_settings),
@@ -481,8 +473,7 @@ def create_app(
         # Dry-run (dev/test only) simulates the dial so the whole chain is testable without
         # placing a real call; production always dials for real.
         dry_run = (
-            resolved_settings.outbound_dry_run
-            and resolved_settings.environment != "production"
+            resolved_settings.outbound_dry_run and resolved_settings.environment != "production"
         )
         if from_number is None or (call_client is None and not dry_run):
             raise HTTPException(
@@ -533,9 +524,7 @@ def create_app(
                 # the per-call config we must finalize that reservation as failed instead of
                 # leaving it orphaned in "creating" until the 30-day TTL (which would poison
                 # the key and reject every retry). Mirrors the Plivo-rejection handling below.
-                logger.exception(
-                    "Per-call config storage failed while preparing outbound call."
-                )
+                logger.exception("Per-call config storage failed while preparing outbound call.")
                 await _best_effort_mark_outbound_create_failed(
                     session_store=session_store,
                     idempotency_key=idempotency_key,
@@ -580,7 +569,8 @@ def create_app(
                 },
             )
         # Not dry-run: the guard above guaranteed a real client.
-        assert call_client is not None
+        if call_client is None:
+            raise RuntimeError("No outbound call client is configured.")
         callback_error = await _outbound_callback_url_error(
             app=app,
             call_client=call_client,
@@ -960,9 +950,7 @@ def create_app(
                 data = await _receive_plivo_media_json(
                     websocket,
                     start_timeout_seconds=(
-                        resolved_settings.media_start_timeout_seconds
-                        if runner is None
-                        else None
+                        resolved_settings.media_start_timeout_seconds if runner is None else None
                     ),
                     max_message_bytes=resolved_settings.media_message_max_bytes,
                 )
@@ -1014,9 +1002,7 @@ def create_app(
                         status="media_started",
                         event="media_start",
                     )
-                    config_store = cast(
-                        PerCallConfigStore, app.state.per_call_config_store
-                    )
+                    config_store = cast(PerCallConfigStore, app.state.per_call_config_store)
                     cfg_id = websocket.query_params.get("cfg")
                     per_call_config = await config_store.get(cfg_id) if cfg_id else None
                     try:
@@ -1028,9 +1014,7 @@ def create_app(
                             llm_provider_override=(
                                 per_call_config.provider if per_call_config else None
                             ),
-                            llm_model_override=(
-                                per_call_config.model if per_call_config else None
-                            ),
+                            llm_model_override=(per_call_config.model if per_call_config else None),
                             llm_system_prompt_override=(
                                 per_call_config.system_prompt if per_call_config else None
                             ),
@@ -1043,12 +1027,8 @@ def create_app(
                             behavior_override=(
                                 per_call_config.behavior if per_call_config else None
                             ),
-                            stt_override=(
-                                per_call_config.stt if per_call_config else None
-                            ),
-                            tts_override=(
-                                per_call_config.tts if per_call_config else None
-                            ),
+                            stt_override=(per_call_config.stt if per_call_config else None),
+                            tts_override=(per_call_config.tts if per_call_config else None),
                             latency_observer=_build_voice_turn_latency_observer(
                                 cast(CallEventStore, app.state.call_event_store),
                                 cast(MetricsRegistry, app.state.metrics),
@@ -1244,6 +1224,13 @@ def _missing_local_speech_model_files(settings: Settings) -> list[str] | None:
         required.append(Path(settings.sherpa_stt_vad_model_path))
         if settings.sherpa_stt_smart_turn_model_path:
             required.append(Path(settings.sherpa_stt_smart_turn_model_path))
+    if settings.stt_provider == "mlx-whisper":
+        required.append(Path(settings.sherpa_stt_vad_model_path))
+        if settings.sherpa_stt_smart_turn_model_path:
+            required.append(Path(settings.sherpa_stt_smart_turn_model_path))
+        whisper = Path(settings.mlx_whisper_model)
+        if whisper.is_absolute():  # a local model directory (CareFlow); a repo id is not checked
+            required.extend((whisper / "config.json", whisper / "weights.safetensors"))
     if settings.tts_provider == "kokoro":
         required.append(Path(settings.kokoro_model_path))
         required.append(Path(settings.kokoro_voices_path))
@@ -1278,9 +1265,7 @@ async def _fetch_luxtts_sidecar_readiness(
     readyz_url = _luxtts_readyz_url(settings.luxtts_tts_url)
     headers = {"accept": "application/json"}
     if settings.luxtts_api_key is not None:
-        headers["authorization"] = (
-            f"Bearer {settings.luxtts_api_key.get_secret_value()}"
-        )
+        headers["authorization"] = f"Bearer {settings.luxtts_api_key.get_secret_value()}"
     timeout = httpx.Timeout(settings.readiness_check_timeout_seconds)
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
@@ -1723,9 +1708,7 @@ def _decode_query_callback_payload(request: Request) -> dict[str, str]:
             ) from exc
     else:
         query_payload = str(query_string)
-    return _unique_callback_pairs_to_dict(
-        parse_qsl(query_payload, keep_blank_values=True)
-    )
+    return _unique_callback_pairs_to_dict(parse_qsl(query_payload, keep_blank_values=True))
 
 
 def _is_json_content_type(content_type: str) -> bool:
@@ -1899,7 +1882,7 @@ def _validate_plivo_request(
         return False
 
     string_params = {key: str(value) for key, value in params.items()}
-    https_url = settings.public_base_url + request.url.path
+    https_url = settings.plivo_base_url + request.url.path
     if request.url.query:
         https_url = f"{https_url}?{request.url.query}"
     nonce = request.headers.get("X-Plivo-Signature-V3-Nonce")
@@ -1940,8 +1923,7 @@ def _validate_stream_status_callback_method(request: Request, settings: Settings
         raise HTTPException(
             status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
             detail=(
-                "Plivo status callback method must be "
-                f"{settings.stream_status_callback_method}."
+                f"Plivo status callback method must be {settings.stream_status_callback_method}."
             ),
         )
 
@@ -2128,7 +2110,7 @@ def _public_websocket_upgrade_url(websocket: WebSocket, settings: Settings) -> s
         query_text = query_string.decode("ascii")
     else:
         query_text = str(query_string)
-    public_url = settings.public_base_url + websocket.url.path
+    public_url = settings.plivo_base_url + websocket.url.path
     if query_text:
         public_url = f"{public_url}?{query_text}"
     return public_url
@@ -2487,15 +2469,14 @@ def _build_call_transcript_observer(
     interval_seconds: float = 0.0,
 ) -> Callable[[str], None]:
     if interval_seconds <= 0:
+
         def observe_immediately(transcript: str) -> None:
             task = asyncio.create_task(_record_call_transcript(store, call_id, transcript))
             task.add_done_callback(_consume_call_transcript_record_result)
 
         return observe_immediately
 
-    writer = _DebouncedTranscriptWriter(
-        store, call_id=call_id, interval_seconds=interval_seconds
-    )
+    writer = _DebouncedTranscriptWriter(store, call_id=call_id, interval_seconds=interval_seconds)
     return writer.submit
 
 
@@ -2566,9 +2547,7 @@ async def _record_voice_turn_latency_event(
             "response_plan_confidence": snapshot.response_plan_confidence,
             "response_plan_reason": snapshot.response_plan_reason,
             "media_start_to_first_audio_ms": snapshot.media_start_to_first_audio_ms,
-            "first_audio_to_last_voice_frame_ms": (
-                snapshot.first_audio_to_last_voice_frame_ms
-            ),
+            "first_audio_to_last_voice_frame_ms": (snapshot.first_audio_to_last_voice_frame_ms),
             "last_voice_frame_to_turn_committed_ms": (
                 snapshot.last_voice_frame_to_turn_committed_ms
             ),
@@ -2578,9 +2557,7 @@ async def _record_voice_turn_latency_event(
             ),
             "first_audio_to_speech_final_ms": snapshot.first_audio_to_speech_final_ms,
             "speech_final_to_turn_committed_ms": snapshot.speech_final_to_turn_committed_ms,
-            "turn_committed_to_llm_first_chunk_ms": (
-                snapshot.turn_committed_to_llm_first_chunk_ms
-            ),
+            "turn_committed_to_llm_first_chunk_ms": (snapshot.turn_committed_to_llm_first_chunk_ms),
             "turn_committed_to_first_reply_chunk_ms": (
                 snapshot.turn_committed_to_first_reply_chunk_ms
             ),
@@ -2599,9 +2576,7 @@ async def _record_voice_turn_latency_event(
             "turn_committed_to_first_play_audio_ms": (
                 snapshot.turn_committed_to_first_play_audio_ms
             ),
-            "first_audio_to_first_play_audio_ms": (
-                snapshot.first_audio_to_first_play_audio_ms
-            ),
+            "first_audio_to_first_play_audio_ms": (snapshot.first_audio_to_first_play_audio_ms),
             "answer_first_play_audio_to_llm_stream_completed_ms": (
                 snapshot.answer_first_play_audio_to_llm_stream_completed_ms
             ),
@@ -2620,12 +2595,8 @@ async def _record_voice_turn_latency_event(
             "speculative_response_tts_first_audio_to_commit_ms": (
                 snapshot.speculative_response_tts_first_audio_to_commit_ms
             ),
-            "speculative_response_started_count": (
-                snapshot.speculative_response_started_count
-            ),
-            "speculative_response_discarded_count": (
-                snapshot.speculative_response_discarded_count
-            ),
+            "speculative_response_started_count": (snapshot.speculative_response_started_count),
+            "speculative_response_discarded_count": (snapshot.speculative_response_discarded_count),
         }
     )
 

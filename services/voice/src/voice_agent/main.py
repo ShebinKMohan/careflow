@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import uvicorn
+from fastapi import FastAPI
 
-from voice_agent.app import create_app
+from voice_agent.careflow_app import create_careflow_app
 from voice_agent.config.settings import get_settings
 from voice_agent.logging_config import configure_logging, resolve_log_level
 
-app = create_app()
+
+def build_app() -> FastAPI:
+    return create_careflow_app(preload=True)
 
 
 def run() -> None:
@@ -15,19 +18,19 @@ def run() -> None:
         level=resolve_log_level(settings.log_level),
         json_format=settings.log_format == "json",
     )
-    # A single worker per process is intentional: media-session state lives in-process, so
-    # scale horizontally (more containers) rather than with --workers. timeout_graceful_shutdown
-    # lets uvicorn keep serving in-flight media WebSockets on SIGTERM (rolling deploy, scale-in)
-    # until they finish or the grace window elapses, instead of cancelling live calls.
+    # A single worker per process is intentional: session state lives in-process, so scale
+    # horizontally rather than with --workers. timeout_graceful_shutdown lets uvicorn keep
+    # serving in-flight WebSockets on SIGTERM until they finish or the grace window elapses.
     uvicorn.run(
-        "voice_agent.main:app",
-        host="0.0.0.0",
-        port=8080,
+        "voice_agent.main:build_app",
+        factory=True,
+        host=settings.host,
+        port=settings.port,
         reload=False,
+        ws="auto",
         timeout_graceful_shutdown=int(settings.shutdown_grace_seconds),
     )
 
 
 if __name__ == "__main__":
     run()
-

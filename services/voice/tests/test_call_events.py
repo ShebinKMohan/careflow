@@ -36,9 +36,7 @@ async def test_redis_call_event_store_reads_recent_events() -> None:
 
     events = await store.recent(count=2)
 
-    assert fake_redis.xrevrange_calls == [
-        {"stream_name": "plivo:call_events", "count": 2}
-    ]
+    assert fake_redis.xrevrange_calls == [{"stream_name": "plivo:call_events", "count": 2}]
     assert events == [
         {"event": "voice_turn_latency", "turn_committed_to_llm_first_chunk_ms": "42"},
         {"event": "media_start"},

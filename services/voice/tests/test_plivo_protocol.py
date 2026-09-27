@@ -25,7 +25,7 @@ def test_build_answer_xml_starts_bidirectional_l16_stream() -> None:
         noise_cancellation_level=85,
     )
 
-    assert '<Response>' in xml
+    assert "<Response>" in xml
     assert 'bidirectional="true"' in xml
     assert 'keepCallAlive="true"' in xml
     assert 'contentType="audio/x-l16;rate=16000"' in xml
@@ -33,7 +33,7 @@ def test_build_answer_xml_starts_bidirectional_l16_stream() -> None:
     assert 'statusCallbackUrl="https://voice.example.com/plivo/status"' in xml
     assert 'statusCallbackMethod="POST"' in xml
     assert "noiseCancellation" not in xml
-    assert '>wss://voice.example.com/plivo/media</Stream>' in xml
+    assert ">wss://voice.example.com/plivo/media</Stream>" in xml
 
 
 def test_build_answer_xml_can_enable_plivo_noise_cancellation() -> None:

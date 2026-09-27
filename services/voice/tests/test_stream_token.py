@@ -217,16 +217,11 @@ def test_stream_token_binds_cfg_into_signature() -> None:
     assert claims is not None and claims.call_id == "call-1"
     # A swapped cfg invalidates the signature (cannot point the call at another config).
     assert (
-        verify_stream_token(
-            token=token, signing_secret="stream-secret", cfg="cfg-other", now=1_100
-        )
+        verify_stream_token(token=token, signing_secret="stream-secret", cfg="cfg-other", now=1_100)
         is None
     )
     # Dropping the cfg entirely is also a mismatch.
-    assert (
-        verify_stream_token(token=token, signing_secret="stream-secret", now=1_100)
-        is None
-    )
+    assert verify_stream_token(token=token, signing_secret="stream-secret", now=1_100) is None
 
 
 def test_stream_token_without_cfg_is_backward_compatible() -> None:
@@ -241,9 +236,7 @@ def test_stream_token_without_cfg_is_backward_compatible() -> None:
     assert verify_stream_token(token=token, signing_secret="stream-secret", now=1_100)
     # ...but an attacker cannot graft a cfg onto an unsigned-cfg token.
     assert (
-        verify_stream_token(
-            token=token, signing_secret="stream-secret", cfg="cfg-x", now=1_100
-        )
+        verify_stream_token(token=token, signing_secret="stream-secret", cfg="cfg-x", now=1_100)
         is None
     )
 

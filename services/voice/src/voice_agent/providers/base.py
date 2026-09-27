@@ -17,6 +17,8 @@ class TranscriptEvent:
     # Deepgram emits several is_final segments before one speech_final; collapsing
     # them is the classic "agent talks over the caller" bug.
     speech_final: bool = False
+    # Monotonic time when the caller's speech ended, if the engine knows it (turn latency).
+    speech_ended_at: float | None = None
 
 
 class SpeechToText(Protocol):

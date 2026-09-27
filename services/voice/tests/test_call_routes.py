@@ -285,9 +285,7 @@ def test_readyz_reports_unready_when_luxtts_sidecar_is_unhealthy(
             "accepting_calls": "yes",
             "luxtts_sidecar": "unhealthy",
         },
-        "provider_details": {
-            "luxtts_sidecar": {"status": "http_error", "http_status": 503}
-        },
+        "provider_details": {"luxtts_sidecar": {"status": "http_error", "http_status": 503}},
     }
 
 
@@ -643,9 +641,7 @@ def test_plivo_status_callback_is_recorded_for_audit() -> None:
 
     assert response.status_code == 200
     assert response.json() == {"status": "accepted"}
-    assert app.state.call_event_store.events == [
-        {"CallUUID": "call-1", "CallStatus": "completed"}
-    ]
+    assert app.state.call_event_store.events == [{"CallUUID": "call-1", "CallStatus": "completed"}]
 
 
 def test_plivo_status_callback_returns_503_when_event_store_record_fails() -> None:
@@ -1466,8 +1462,7 @@ def test_plivo_status_callback_rejects_unsafe_from_number_value_before_audit() -
 
     assert response.status_code == 400
     assert response.json()["detail"] == (
-        "Plivo callback from number value must be 1-128 characters using safe endpoint "
-        "characters."
+        "Plivo callback from number value must be 1-128 characters using safe endpoint characters."
     )
     assert event_store.events == []
 
@@ -1599,10 +1594,13 @@ def test_production_plivo_status_callback_rejects_get_when_post_configured() -> 
     assert response.status_code == 405
     assert response.json()["detail"] == "Plivo status callback method must be POST."
     assert event_store.events == []
-    assert client.get(
-        "/calls/call-1",
-        headers={"Authorization": "Bearer control-secret-0123456789abcdef012345"},
-    ).status_code == 404
+    assert (
+        client.get(
+            "/calls/call-1",
+            headers={"Authorization": "Bearer control-secret-0123456789abcdef012345"},
+        ).status_code
+        == 404
+    )
 
 
 def test_production_plivo_status_callback_rejects_post_when_get_configured() -> None:
@@ -1636,10 +1634,13 @@ def test_production_plivo_status_callback_rejects_post_when_get_configured() -> 
     assert response.status_code == 405
     assert response.json()["detail"] == "Plivo status callback method must be GET."
     assert event_store.events == []
-    assert client.get(
-        "/calls/call-1",
-        headers={"Authorization": "Bearer control-secret-0123456789abcdef012345"},
-    ).status_code == 404
+    assert (
+        client.get(
+            "/calls/call-1",
+            headers={"Authorization": "Bearer control-secret-0123456789abcdef012345"},
+        ).status_code
+        == 404
+    )
 
 
 def test_plivo_status_callback_rejects_wrong_method_before_body_parsing() -> None:
@@ -2261,15 +2262,10 @@ async def test_public_callback_url_resolver_rejects_unhealthy_public_origin(
 
     monkeypatch.setattr("voice_agent.app.httpx.AsyncClient", FakeAsyncClient)
 
-    error = await _resolve_public_callback_url(
-        "https://localhost:8443/plivo/answer?cfg=abc"
-    )
+    error = await _resolve_public_callback_url("https://localhost:8443/plivo/answer?cfg=abc")
 
     assert requested_urls == ["https://localhost:8443/healthz"]
-    assert (
-        error
-        == "Public callback health check https://localhost:8443/healthz returned HTTP 502."
-    )
+    assert error == "Public callback health check https://localhost:8443/healthz returned HTTP 502."
 
 
 def _production_settings(

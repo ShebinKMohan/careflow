@@ -33,6 +33,7 @@ services/triage/artifacts/
 eval/private/
 *.onnx.tmp
 models/cache/
+services/voice/models/
 
 # Playwright
 test-results/

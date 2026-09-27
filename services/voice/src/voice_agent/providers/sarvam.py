@@ -158,9 +158,7 @@ class SarvamTextToSpeech:
                 continue
             total += len(chunk)
             if total > self._max_response_bytes:
-                raise SarvamTextToSpeechError(
-                    "Sarvam response exceeded configured size limit."
-                )
+                raise SarvamTextToSpeechError("Sarvam response exceeded configured size limit.")
             chunks.append(chunk)
         return b"".join(chunks)
 
@@ -269,9 +267,7 @@ class SarvamStreamingTextToSpeech:
         ws_base = base.replace("https://", "wss://", 1).replace("http://", "ws://", 1)
         # The model id contains a colon (bulbul:v3); a raw colon is valid in a query
         # and is what the live API accepts, so build the query without percent-encoding.
-        self._url = (
-            f"{ws_base}/text-to-speech/ws?model={self._model}&send_completion_event=true"
-        )
+        self._url = f"{ws_base}/text-to-speech/ws?model={self._model}&send_completion_event=true"
         self._ssl_context = ssl.create_default_context(cafile=certifi.where())
         self._connection: Any | None = None
         self._connection_lock = asyncio.Lock()
@@ -296,9 +292,7 @@ class SarvamStreamingTextToSpeech:
         async with self._synthesis_lock:
             connection = await self._ensure_connected(audio_format)
             try:
-                await connection.send(
-                    json.dumps({"type": "text", "data": {"text": clean_text}})
-                )
+                await connection.send(json.dumps({"type": "text", "data": {"text": clean_text}}))
                 await connection.send(json.dumps({"type": "flush"}))
 
                 total = 0
@@ -327,8 +321,7 @@ class SarvamStreamingTextToSpeech:
                         return
                     elif message_type == "error":
                         raise SarvamTextToSpeechError(
-                            "Sarvam streaming error: "
-                            f"{data.get('message') or 'unknown error'}."
+                            f"Sarvam streaming error: {data.get('message') or 'unknown error'}."
                         )
             except BaseException:
                 await self._drop_connection(connection)
@@ -418,9 +411,7 @@ class SarvamStreamingTextToSpeech:
         try:
             chunk = base64.b64decode(payload, validate=True)
         except ValueError as exc:
-            raise SarvamTextToSpeechError(
-                "Sarvam audio payload was not valid base64."
-            ) from exc
+            raise SarvamTextToSpeechError("Sarvam audio payload was not valid base64.") from exc
         if len(chunk) % 2:
             raise SarvamTextToSpeechError("Sarvam returned an incomplete PCM16 sample.")
         return chunk

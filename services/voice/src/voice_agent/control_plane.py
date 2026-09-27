@@ -67,9 +67,7 @@ class ControlPlaneClient:
         tts = data.get("tts")
         config = PerCallLLMConfig(
             provider=(
-                provider.strip().lower()
-                if isinstance(provider, str) and provider.strip()
-                else None
+                provider.strip().lower() if isinstance(provider, str) and provider.strip() else None
             ),
             model=model.strip() if isinstance(model, str) and model.strip() else None,
             system_prompt=prompt.strip() if isinstance(prompt, str) and prompt.strip() else None,
@@ -151,9 +149,7 @@ def _event_to_ingest_payload(event: dict[str, Any]) -> dict[str, Any] | None:
         or _clean_text(event.get("provider_call_id"))
         or _clean_text(event.get("CallUUID"))
     )
-    request_uuid = _clean_text(event.get("request_uuid")) or _clean_text(
-        event.get("RequestUUID")
-    )
+    request_uuid = _clean_text(event.get("request_uuid")) or _clean_text(event.get("RequestUUID"))
     idempotency_key = _clean_text(event.get("idempotency_key"))
     if not event_type:
         return None

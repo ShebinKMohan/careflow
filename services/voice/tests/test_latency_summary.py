@@ -43,10 +43,7 @@ def test_summarize_voice_turn_latency_events_identifies_dominant_stage() -> None
     assert summary["answer_first_audio"]["p50_ms"] == 2340.0
     assert summary["reply_streaming"]["first_reply_chunk"]["p50_ms"] == 2120.0
     assert summary["reply_streaming"]["llm_to_first_reply_chunk"]["p50_ms"] == 120.0
-    assert (
-        summary["reply_streaming"]["first_reply_chunk_to_tts_first_audio"]["p50_ms"]
-        == 170.0
-    )
+    assert summary["reply_streaming"]["first_reply_chunk_to_tts_first_audio"]["p50_ms"] == 170.0
     assert summary["bottleneck"] == {
         "stage": "llm_first_chunk",
         "label": "LLM first chunk",
@@ -62,8 +59,7 @@ def test_summarize_voice_turn_latency_events_identifies_dominant_stage() -> None
     ]
 
 
-def test_summarize_voice_turn_latency_events_recommends_orchestrator_first_token_tuning(
-) -> None:
+def test_summarize_voice_turn_latency_events_recommends_orchestrator_first_token_tuning() -> None:
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -110,8 +106,9 @@ def test_summarize_voice_turn_latency_events_recommends_orchestrator_first_token
     ]
 
 
-def test_summarize_voice_turn_latency_events_skips_llm_tuning_when_answer_is_strongly_fast(
-) -> None:
+def test_summarize_voice_turn_latency_events_skips_llm_tuning_when_answer_is_strongly_fast() -> (
+    None
+):
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -138,8 +135,7 @@ def test_summarize_voice_turn_latency_events_skips_llm_tuning_when_answer_is_str
     ]
 
 
-def test_summarize_voice_turn_latency_events_allows_moderate_llm_latency_with_overlap(
-) -> None:
+def test_summarize_voice_turn_latency_events_allows_moderate_llm_latency_with_overlap() -> None:
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -195,8 +191,9 @@ def test_summarize_voice_turn_latency_events_bottleneck_uses_post_speech_delay()
     ]
 
 
-def test_summarize_voice_turn_latency_events_does_not_treat_speculative_wait_as_plivo_send(
-) -> None:
+def test_summarize_voice_turn_latency_events_does_not_treat_speculative_wait_as_plivo_send() -> (
+    None
+):
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -423,7 +420,7 @@ def test_summarize_voice_turn_latency_events_recommends_tuning_wasteful_speculat
                 "VOICE_AGENT_SPECULATIVE_RESPONSE_STABILITY_MS, or disable prewarm "
                 "for this project."
             ),
-        }
+        },
     ]
 
 
@@ -476,9 +473,7 @@ def test_summarize_voice_turn_latency_events_recommends_preserving_useful_specul
             "category": "speculative_response",
             "action": "keep_enabled",
             "targets": ["VOICE_AGENT_SPECULATIVE_RESPONSE_PREWARM"],
-            "reason": (
-                "reuse_rate_at_or_above_75_percent_with_first_audio_lead_at_or_above_50ms"
-            ),
+            "reason": ("reuse_rate_at_or_above_75_percent_with_first_audio_lead_at_or_above_50ms"),
             "evidence": {
                 "started_count": 3,
                 "reuse_rate": 1.0,
@@ -561,8 +556,7 @@ def test_summarize_voice_turn_latency_events_recommends_more_audio_lead() -> Non
     )
 
 
-def test_summarize_voice_turn_latency_events_recommends_audio_lead_for_single_proof(
-) -> None:
+def test_summarize_voice_turn_latency_events_recommends_audio_lead_for_single_proof() -> None:
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -607,8 +601,7 @@ def test_summarize_voice_turn_latency_events_recommends_audio_lead_for_single_pr
     ]
 
 
-def test_summarize_voice_turn_latency_events_does_not_block_fast_speculative_proof(
-) -> None:
+def test_summarize_voice_turn_latency_events_does_not_block_fast_speculative_proof() -> None:
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -631,8 +624,7 @@ def test_summarize_voice_turn_latency_events_does_not_block_fast_speculative_pro
     assert summary["tuning_actions"] == []
 
 
-def test_summarize_voice_turn_latency_events_recommends_preserving_fast_final_source(
-) -> None:
+def test_summarize_voice_turn_latency_events_recommends_preserving_fast_final_source() -> None:
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -721,8 +713,9 @@ def test_summarize_voice_turn_latency_events_recommends_preserving_fast_final_so
     ]
 
 
-def test_summarize_voice_turn_latency_events_recommends_tightening_unhelpful_interim_source(
-) -> None:
+def test_summarize_voice_turn_latency_events_recommends_tightening_unhelpful_interim_source() -> (
+    None
+):
     summary = summarize_voice_turn_latency_events(
         [
             {
@@ -902,9 +895,10 @@ def test_summarize_voice_turn_latency_events_reports_source_answer_first_audio()
             "max_ms": 640.0,
         },
     }
-    assert summary["turn_commit_sources"]["interim_local_silence"]["answer_first_audio"][
-        "p50_ms"
-    ] == 1180.0
+    assert (
+        summary["turn_commit_sources"]["interim_local_silence"]["answer_first_audio"]["p50_ms"]
+        == 1180.0
+    )
     assert summary["turn_commit_sources"]["local_silence"]["answer_first_audio"] == {
         "label": "Answer first playAudio",
         "field": "turn_committed_to_answer_first_play_audio_ms",

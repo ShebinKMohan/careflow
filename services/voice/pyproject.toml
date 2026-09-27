@@ -1,65 +1,44 @@
-[build-system]
-requires = ["hatchling>=1.25"]
-build-backend = "hatchling.build"
-
 [project]
-name = "plivo-voice-agent"
+name = "careflow-voice"
 version = "0.1.0"
-description = "In-house AI voice-call backend using Plivo bidirectional audio streaming."
+description = "CareFlow voice service: the kiosk's ears and mouth (VAD, smart-turn, STT, Kokoro TTS)."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
-  "certifi>=2024.2.2",
-  "fastapi>=0.116,<1.0",
-  "google-genai>=1.0,<2.0",
-  "httpx>=0.28,<1.0",
-  "orjson>=3.10,<4.0",
-  "pydantic-settings>=2.7,<3.0",
-  "redis>=5.2,<6.0",
-  "uvicorn[standard]>=0.35,<1.0",
-  "websockets>=14.2,<16.0",
+  "careflow-contracts",
+  "certifi>=2026.7.22",
+  "fastapi>=0.141,<0.142",
+  "httpx>=0.28,<0.29",
+  "orjson>=3.12,<4",
+  "pydantic>=2.13,<3",
+  "pydantic-settings>=2.15,<3",
+  "pyjwt>=2.15,<3",
+  "pyyaml>=6.0,<7",
+  "redis>=8.1,<9",
+  "uvicorn>=0.54,<0.55",
+  "websockets>=16.1,<17",
+  # The in-process speech stack: Silero VAD and smart-turn (onnxruntime), Kokoro TTS.
+  "kokoro-onnx>=0.6.1,<0.7",
+  "numpy>=2.5,<3",
+  "onnxruntime>=1.30,<2",
+  "soxr>=1.1,<2",
 ]
 
 [project.optional-dependencies]
-dev = [
-  "mypy>=1.14,<2.0",
-  "pytest>=8.3,<9.0",
-  "pytest-asyncio>=0.25,<1.0",
-  "ruff>=0.9,<1.0",
-]
-# CPU-local speech stack (stt_provider=sherpa, tts_provider=kokoro). Model files are
-# downloaded separately into models/ — see .env.example for the expected layout.
-local-speech = [
-  "kokoro-onnx>=0.5,<1.0",
-  "numpy>=2.0,<3.0",
-  "onnxruntime>=1.20,<2.0",
-  "sherpa-onnx>=1.12,<2.0",
-  "soxr>=0.5",
+# The default speech-to-text engine. Apple silicon only: CI and other machines use the fake STT.
+mlx-whisper = [
+  "mlx-whisper>=0.4.3,<0.5; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
 
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
+
 [project.scripts]
-voice-agent = "voice_agent.main:run"
+careflow-voice = "voice_agent.main:run"
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/voice_agent"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-asyncio_mode = "auto"
-
-[tool.ruff]
-line-length = 100
-target-version = "py312"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC", "RUF"]
-
-[tool.mypy]
-python_version = "3.12"
-strict = true
-plugins = ["pydantic.mypy"]
-files = ["src", "tests"]
-
-[[tool.mypy.overrides]]
-module = ["kokoro_onnx.*", "sherpa_onnx.*", "soxr.*", "onnxruntime.*"]
-ignore_missing_imports = true

@@ -17,6 +17,27 @@ _STAGES: tuple[tuple[str, str, str], ...] = (
     ("tts_first_audio", "TTS first audio", "llm_first_chunk_to_tts_first_audio_ms"),
     ("plivo_first_play", "Plivo first playAudio", "tts_first_audio_to_first_play_audio_ms"),
 )
+# The kiosk browser channel (M1-14): end of speech -> final transcript -> intake API response ->
+# first TTS byte. Recorded per turn by voice_agent.kiosk.loop as "kiosk_turn_latency" events.
+KIOSK_TURN_LATENCY_EVENT = "kiosk_turn_latency"
+_KIOSK_STAGES: tuple[tuple[str, str, str], ...] = (
+    (
+        "speech_end_to_transcript",
+        "End of speech to final transcript",
+        "speech_end_to_transcript_ms",
+    ),
+    (
+        "transcript_to_api_response",
+        "Final transcript to intake API response",
+        "transcript_to_api_response_ms",
+    ),
+    (
+        "api_response_to_first_tts_byte",
+        "API response to first TTS byte",
+        "api_response_to_first_tts_byte_ms",
+    ),
+    ("total", "End of speech to first TTS byte", "speech_end_to_first_tts_byte_ms"),
+)
 _SOURCE_RECOMMENDATION_MIN_COUNT = 3
 _SOURCE_RECOMMENDATION_MIN_ADVANTAGE_MS = 250.0
 _LLM_FIRST_CHUNK_RECOMMENDATION_MIN_P50_MS = 750.0
@@ -34,9 +55,10 @@ def summarize_voice_turn_latency_events(
     clean_call_id = call_id.strip() if isinstance(call_id, str) else None
     if clean_call_id == "":
         clean_call_id = None
+    events_list = list(events)
     voice_turns = [
         event
-        for event in events
+        for event in events_list
         if event.get("event") == "voice_turn_latency"
         and (clean_call_id is None or event.get("call_id") == clean_call_id)
     ]
@@ -61,11 +83,7 @@ def summarize_voice_turn_latency_events(
         "started_count": speculative_response_started_count,
         "used_count": speculative_response_used_count,
         "discarded_count": speculative_response_discarded_count,
-        "used_rate": (
-            speculative_response_used_count / turn_count
-            if turn_count
-            else 0.0
-        ),
+        "used_rate": (speculative_response_used_count / turn_count if turn_count else 0.0),
         "reuse_rate": (
             speculative_response_used_count / speculative_response_started_count
             if speculative_response_started_count
@@ -84,9 +102,7 @@ def summarize_voice_turn_latency_events(
                 for event in speculative_response_events
                 if (
                     value := _as_non_negative_float(
-                        event.get(
-                            "speculative_response_generation_started_to_commit_ms"
-                        )
+                        event.get("speculative_response_generation_started_to_commit_ms")
                     )
                 )
                 is not None
@@ -124,6 +140,7 @@ def summarize_voice_turn_latency_events(
     )
     return {
         "turn_count": turn_count,
+        "kiosk": summarize_kiosk_turn_latency_events(events_list),
         "outcomes": _outcome_summary(voice_turns),
         "ack_used_count": ack_used_count,
         "ack_used_rate": (ack_used_count / turn_count) if turn_count else 0.0,
@@ -146,6 +163,27 @@ def summarize_voice_turn_latency_events(
             bottleneck,
             tuning_actions=tuning_actions,
         ),
+    }
+
+
+def summarize_kiosk_turn_latency_events(
+    events: Iterable[Mapping[str, Any]],
+    *,
+    session_id: str | None = None,
+) -> dict[str, Any]:
+    """p50/p95/max per kiosk turn stage (milliseconds)."""
+    turns = [
+        event
+        for event in events
+        if event.get("event") == KIOSK_TURN_LATENCY_EVENT
+        and (session_id is None or event.get("session_id") == session_id)
+    ]
+    return {
+        "turn_count": len(turns),
+        "stages": {
+            key: _summarize_stage(label=label, field=field, events=turns)
+            for key, label, field in _KIOSK_STAGES
+        },
     }
 
 
@@ -341,9 +379,7 @@ def _summarize_stage(
     field: str,
     events: list[Mapping[str, Any]],
 ) -> dict[str, Any]:
-    values = sorted(
-        value for event in events if (value := _stage_value(event, field)) is not None
-    )
+    values = sorted(value for event in events if (value := _stage_value(event, field)) is not None)
     if not values:
         return _empty_summary(label=label, field=field)
     return _summarize_values(label=label, field=field, values=values)
@@ -351,9 +387,8 @@ def _summarize_stage(
 
 def _stage_value(event: Mapping[str, Any], field: str) -> float | None:
     value = _as_non_negative_float(event.get(field))
-    if (
-        field == "tts_first_audio_to_first_play_audio_ms"
-        and _as_bool(event.get("speculative_response_used"))
+    if field == "tts_first_audio_to_first_play_audio_ms" and _as_bool(
+        event.get("speculative_response_used")
     ):
         committed_to_play = _as_non_negative_float(
             event.get("turn_committed_to_first_play_audio_ms")
@@ -368,18 +403,12 @@ def _pre_response_ack_summary(
     events: list[Mapping[str, Any]],
     turn_count: int,
 ) -> dict[str, Any]:
-    ack_events = [
-        event for event in events if _as_bool(event.get("pre_response_ack_used"))
-    ]
+    ack_events = [event for event in events if _as_bool(event.get("pre_response_ack_used"))]
     used_count = len(ack_events)
     ack_delay_values = [
         value
         for event in ack_events
-        if (
-            value := _as_non_negative_float(
-                event.get("turn_committed_to_pre_response_ack_ms")
-            )
-        )
+        if (value := _as_non_negative_float(event.get("turn_committed_to_pre_response_ack_ms")))
         is not None
     ]
     answer_delay_values = [
@@ -394,9 +423,7 @@ def _pre_response_ack_summary(
     ]
     estimated_savings_values: list[float] = []
     for event in ack_events:
-        ack_delay = _as_non_negative_float(
-            event.get("turn_committed_to_pre_response_ack_ms")
-        )
+        ack_delay = _as_non_negative_float(event.get("turn_committed_to_pre_response_ack_ms"))
         answer_delay = _as_non_negative_float(
             event.get("turn_committed_to_answer_first_play_audio_ms")
         )
@@ -428,9 +455,7 @@ def _pre_response_ack_summary(
 
 
 def _answer_first_audio_summary(events: list[Mapping[str, Any]]) -> dict[str, Any]:
-    values = [
-        value for event in events if (value := _answer_first_audio_value(event)) is not None
-    ]
+    values = [value for event in events if (value := _answer_first_audio_value(event)) is not None]
     return _summarize_values(
         label="Answer first playAudio",
         field="turn_committed_to_answer_first_play_audio_ms",
@@ -450,9 +475,7 @@ def _speculative_response_discarded_count(event: Mapping[str, Any]) -> int:
 
 
 def _answer_first_audio_value(event: Mapping[str, Any]) -> float | None:
-    answer_value = _as_non_negative_float(
-        event.get("turn_committed_to_answer_first_play_audio_ms")
-    )
+    answer_value = _as_non_negative_float(event.get("turn_committed_to_answer_first_play_audio_ms"))
     if answer_value is not None:
         return answer_value
     return _as_non_negative_float(event.get("turn_committed_to_first_play_audio_ms"))
@@ -597,8 +620,7 @@ def _bottleneck_tuning_action(
         )
         or (
             overlapped_count > 0
-            and llm_first_chunk_p50
-            < _LLM_FIRST_CHUNK_RECOMMENDATION_MIN_P50_WITH_OVERLAP_MS
+            and llm_first_chunk_p50 < _LLM_FIRST_CHUNK_RECOMMENDATION_MIN_P50_WITH_OVERLAP_MS
         )
         or (
             overlapped_count <= 0
@@ -800,8 +822,7 @@ def _speculative_response_tuning_action(
         and generation_lead_p50 > 0
         and (
             first_audio_lead_p50 is None
-            or first_audio_lead_p50
-            < _SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS
+            or first_audio_lead_p50 < _SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS
         )
     ):
         return {
@@ -819,9 +840,7 @@ def _speculative_response_tuning_action(
                 "reuse_rate": reuse_rate,
                 "generation_lead_p50_ms": generation_lead_p50,
                 "first_audio_lead_p50_ms": first_audio_lead_p50,
-                "min_first_audio_lead_ms": (
-                    _SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS
-                ),
+                "min_first_audio_lead_ms": (_SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS),
             },
             "recommendation": (
                 "Speculative prewarm is reused, but TTS first audio is not ready far "
@@ -836,8 +855,7 @@ def _speculative_response_tuning_action(
         and generation_lead_p50 > 0
         and (
             first_audio_lead_p50 is None
-            or first_audio_lead_p50
-            < _SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS
+            or first_audio_lead_p50 < _SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS
         )
     ):
         return {
@@ -855,9 +873,7 @@ def _speculative_response_tuning_action(
                 "reuse_rate": reuse_rate,
                 "generation_lead_p50_ms": generation_lead_p50,
                 "first_audio_lead_p50_ms": first_audio_lead_p50,
-                "min_first_audio_lead_ms": (
-                    _SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS
-                ),
+                "min_first_audio_lead_ms": (_SPECULATIVE_RECOMMENDATION_MIN_FIRST_AUDIO_LEAD_MS),
             },
             "recommendation": (
                 "Speculative generation starts before commit, but TTS first audio is not "
@@ -880,9 +896,7 @@ def _speculative_response_tuning_action(
             "category": "speculative_response",
             "action": "keep_enabled",
             "targets": ["VOICE_AGENT_SPECULATIVE_RESPONSE_PREWARM"],
-            "reason": (
-                "reuse_rate_at_or_above_75_percent_with_first_audio_lead_at_or_above_50ms"
-            ),
+            "reason": ("reuse_rate_at_or_above_75_percent_with_first_audio_lead_at_or_above_50ms"),
             "evidence": {
                 "started_count": started_count,
                 "reuse_rate": reuse_rate,

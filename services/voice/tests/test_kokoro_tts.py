@@ -186,9 +186,7 @@ async def test_synthesize_rejects_non_l16_16khz_format() -> None:
     provider = _provider(FakeKokoroEngine())
 
     with pytest.raises(ValueError, match="PCM16 16kHz"):
-        async for _ in provider.synthesize(
-            text="Hi.", audio_format=PlivoAudioFormat.MULAW_8KHZ
-        ):
+        async for _ in provider.synthesize(text="Hi.", audio_format=PlivoAudioFormat.MULAW_8KHZ):
             pass
 
 
@@ -197,9 +195,7 @@ async def test_synthesize_rejects_blank_text() -> None:
     provider = _provider(FakeKokoroEngine())
 
     with pytest.raises(KokoroTextToSpeechError, match="must not be blank"):
-        async for _ in provider.synthesize(
-            text="   ", audio_format=PlivoAudioFormat.L16_16KHZ
-        ):
+        async for _ in provider.synthesize(text="   ", audio_format=PlivoAudioFormat.L16_16KHZ):
             pass
 
 
@@ -261,3 +257,25 @@ async def test_voice_speed_and_lang_are_passed_through_to_engine() -> None:
     assert call["voice"] == "am_adam"
     assert call["speed"] == 1.3
     assert call["lang"] == "en-gb"
+
+
+class NativeKokoroEngine(FakeKokoroEngine):
+    """Kokoro's real native rate, 24kHz (the kiosk channel's output rate)."""
+
+    def create(self, text: str, *, voice: str, speed: float, lang: str) -> tuple[Any, int]:
+        waveform, _ = super().create(text, voice=voice, speed=speed, lang=lang)
+        return waveform, 24000
+
+
+@pytest.mark.anyio
+async def test_synthesize_yields_native_24khz_pcm16_for_the_kiosk_without_resampling() -> None:
+    np = pytest.importorskip("numpy")
+    engine = NativeKokoroEngine(waveforms=[np.array([0.0, 0.5, -1.0], dtype=np.float32)])
+    provider = _provider(engine)
+
+    chunks = [
+        chunk
+        async for chunk in provider.synthesize(text="Hi.", audio_format=PlivoAudioFormat.L16_24KHZ)
+    ]
+
+    assert chunks == [struct.pack("<3h", 0, 16383, -32767)]

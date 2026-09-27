@@ -49,12 +49,7 @@ def validate_v3_signature(
     clean_url = _normalise_field(url)
     clean_nonce = _normalise_field(nonce)
     clean_auth_token = _normalise_field(auth_token)
-    if (
-        clean_method is None
-        or clean_url is None
-        or clean_nonce is None
-        or clean_auth_token is None
-    ):
+    if clean_method is None or clean_url is None or clean_nonce is None or clean_auth_token is None:
         return False
     expected = build_v3_signature(
         method=clean_method,

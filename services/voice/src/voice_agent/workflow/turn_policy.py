@@ -7,27 +7,107 @@ from typing import Literal
 TERMINAL_PUNCTUATION: frozenset[str] = frozenset(".?!।")  # incl. Hindi danda
 FILLER_WORDS: frozenset[str] = frozenset(
     {
-        "um", "umm", "uh", "uhh", "hmm", "hmmm", "er", "erm", "so", "like", "and",
-        "but", "actually", "because", "well", "matlab", "mtlb", "haan", "accha",
-        "acha", "theek", "thik", "na", "ki", "toh", "aur",
-        "मतलब", "तो", "और", "लेकिन", "क्योंकि", "अच्छा",
+        "um",
+        "umm",
+        "uh",
+        "uhh",
+        "hmm",
+        "hmmm",
+        "er",
+        "erm",
+        "so",
+        "like",
+        "and",
+        "but",
+        "actually",
+        "because",
+        "well",
+        "matlab",
+        "mtlb",
+        "haan",
+        "accha",
+        "acha",
+        "theek",
+        "thik",
+        "na",
+        "ki",
+        "toh",
+        "aur",
+        "मतलब",
+        "तो",
+        "और",
+        "लेकिन",
+        "क्योंकि",
+        "अच्छा",
     }
 )
 BACKCHANNEL_WORDS: frozenset[str] = frozenset(
     {
-        "haan", "haa", "ha", "hmm", "hm", "mhm", "mm", "yeah", "yep", "yes", "ok",
-        "okay", "right", "accha", "acha", "theek", "thik", "sahi", "cool", "sure",
-        "uhhuh", "na", "ya", "yup", "alright",
-        "ठीक", "है", "जी", "हाँ",
+        "haan",
+        "haa",
+        "ha",
+        "hmm",
+        "hm",
+        "mhm",
+        "mm",
+        "yeah",
+        "yep",
+        "yes",
+        "ok",
+        "okay",
+        "right",
+        "accha",
+        "acha",
+        "theek",
+        "thik",
+        "sahi",
+        "cool",
+        "sure",
+        "uhhuh",
+        "na",
+        "ya",
+        "yup",
+        "alright",
+        "ठीक",
+        "है",
+        "जी",
+        "हाँ",
     }
 )
-UNSAFE_FAST_FINAL_END_WORDS: frozenset[str] = frozenset(
-    {
-        "a", "an", "and", "are", "as", "at", "because", "but", "by", "for", "from",
-        "if", "in", "is", "of", "on", "or", "the", "then", "to", "was", "were",
-        "when", "while", "with", "want", "need",
-    }
-) | FILLER_WORDS
+UNSAFE_FAST_FINAL_END_WORDS: frozenset[str] = (
+    frozenset(
+        {
+            "a",
+            "an",
+            "and",
+            "are",
+            "as",
+            "at",
+            "because",
+            "but",
+            "by",
+            "for",
+            "from",
+            "if",
+            "in",
+            "is",
+            "of",
+            "on",
+            "or",
+            "the",
+            "then",
+            "to",
+            "was",
+            "were",
+            "when",
+            "while",
+            "with",
+            "want",
+            "need",
+        }
+    )
+    | FILLER_WORDS
+)
 MAX_FAST_FINAL_TURN_CHARS = 90
 MAX_FAST_FINAL_TURN_WORDS = 8
 
@@ -105,8 +185,7 @@ class TurnPolicy:
     ) -> Literal["local_silence", "fast_final_local_silence"]:
         if (
             is_fast_final_turn_candidate(committed_text)
-            and self.fast_final_end_of_turn_silence_seconds
-            < self.local_end_of_turn_silence_seconds
+            and self.fast_final_end_of_turn_silence_seconds < self.local_end_of_turn_silence_seconds
         ):
             return "fast_final_local_silence"
         return "local_silence"

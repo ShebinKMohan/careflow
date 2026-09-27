@@ -598,9 +598,12 @@ def test_production_media_websocket_rejects_raw_stream_secret() -> None:
     client = TestClient(app)
     path = "/plivo/media?token=stream-secret-0123456789abcdef012345"
 
-    with pytest.raises(WebSocketDisconnect) as exc_info, client.websocket_connect(
-        path,
-        headers=_plivo_websocket_headers(path),
+    with (
+        pytest.raises(WebSocketDisconnect) as exc_info,
+        client.websocket_connect(
+            path,
+            headers=_plivo_websocket_headers(path),
+        ),
     ):
         pass
 
@@ -612,9 +615,12 @@ def test_production_media_websocket_rejects_tampered_stream_token_before_start()
     client = TestClient(app)
     path = "/plivo/media?token=v1.4102445100.call-1.nonce-1.invalid"
 
-    with pytest.raises(WebSocketDisconnect) as exc_info, client.websocket_connect(
-        path,
-        headers=_plivo_websocket_headers(path),
+    with (
+        pytest.raises(WebSocketDisconnect) as exc_info,
+        client.websocket_connect(
+            path,
+            headers=_plivo_websocket_headers(path),
+        ),
     ):
         pass
 
@@ -1035,9 +1041,7 @@ def test_stream_token_single_use_rejects_replay() -> None:
             stream_token_single_use=True,
         )
     )
-    token = build_stream_token(
-        signing_secret=secret, ttl_seconds=300, call_id="call-1", cfg=""
-    )
+    token = build_stream_token(signing_secret=secret, ttl_seconds=300, call_id="call-1", cfg="")
     client = TestClient(app)
 
     # First use of the token is accepted.
@@ -1048,8 +1052,9 @@ def test_stream_token_single_use_rejects_replay() -> None:
         websocket.send_json({"event": "stop"})
 
     # Replaying the same token is rejected before the socket is accepted.
-    with pytest.raises(WebSocketDisconnect) as exc_info, client.websocket_connect(
-        f"/plivo/media?token={token}"
+    with (
+        pytest.raises(WebSocketDisconnect) as exc_info,
+        client.websocket_connect(f"/plivo/media?token={token}"),
     ):
         pass
     assert exc_info.value.code == 1008

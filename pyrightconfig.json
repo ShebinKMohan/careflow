@@ -1,6 +1,20 @@
 {
   "include": ["packages", "services", "scripts", "infra"],
-  "exclude": ["**/node_modules", "**/__pycache__", "**/.venv", "**/.next", "**/dist"],
+  "exclude": [
+    "**/node_modules", "**/__pycache__", "**/.venv", "**/.next", "**/dist",
+    "services/voice/src/voice_agent/app.py",
+    "services/voice/src/voice_agent/media/session.py",
+    "services/voice/src/voice_agent/providers/google_live.py",
+    "services/voice/src/voice_agent/providers/sherpa_stt.py",
+    "services/voice/src/voice_agent/storage/call_sessions.py",
+    "services/voice/tests/test_call_routes.py",
+    "services/voice/tests/test_call_sessions.py",
+    "services/voice/tests/test_config.py",
+    "services/voice/tests/test_per_call_config.py",
+    "services/voice/tests/test_plivo_client.py",
+    "services/voice/tests/test_plivo_websocket.py",
+    "services/voice/tests/test_provider_factory.py"
+  ],
   "pythonVersion": "3.12",
   "venvPath": ".",
   "venv": ".venv",

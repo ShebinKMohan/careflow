@@ -1168,9 +1168,7 @@ def test_stt_provider_sherpa_accepted_with_default_model_paths() -> None:
     settings = Settings(**_local_speech_args())
 
     assert settings.stt_provider == "sherpa"
-    assert settings.sherpa_stt_model_dir == (
-        "models/sherpa-onnx-streaming-zipformer-en-2023-06-26"
-    )
+    assert settings.sherpa_stt_model_dir == ("models/sherpa-onnx-streaming-zipformer-en-2023-06-26")
     assert settings.sherpa_stt_vad_model_path == "models/silero_vad.onnx"
     assert settings.sherpa_stt_smart_turn_model_path == "models/smart-turn-v3.2-cpu.onnx"
 

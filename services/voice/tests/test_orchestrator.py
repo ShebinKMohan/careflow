@@ -38,8 +38,7 @@ async def test_stream_swallows_provider_errors(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("FAST_LLM_PROVIDER", raising=False)
     chunks = [
-        chunk
-        async for chunk in orchestrator._stream("anthropic", "claude-haiku-4-5", "sys", "hi")
+        chunk async for chunk in orchestrator._stream("anthropic", "claude-haiku-4-5", "sys", "hi")
     ]
     assert chunks == ["data: [DONE]\n\n"]
     assert all("error" not in chunk.lower() for chunk in chunks)
@@ -248,9 +247,7 @@ def test_voice_respond_requires_bearer_when_key_set(monkeypatch: pytest.MonkeyPa
         == 401
     )
     # Correct bearer -> 200.
-    ok = client.post(
-        "/voice/respond", json=body, headers={"Authorization": "Bearer shh-secret"}
-    )
+    ok = client.post("/voice/respond", json=body, headers={"Authorization": "Bearer shh-secret"})
     assert ok.status_code == 200
     assert ok.text == "data: [DONE]\n\n"
 

@@ -7,7 +7,7 @@ import secrets
 import time
 from dataclasses import dataclass
 
-TOKEN_VERSION = "v1"
+TOKEN_VERSION = "v1"  # noqa: S105 - the token format version, not a secret
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,9 +57,7 @@ def validate_stream_token(
     expected_call_id = _normalise_token_field(call_id)
     if expected_call_id is None:
         return False
-    claims = verify_stream_token(
-        token=token, signing_secret=signing_secret, cfg=cfg, now=now
-    )
+    claims = verify_stream_token(token=token, signing_secret=signing_secret, cfg=cfg, now=now)
     return claims is not None and claims.call_id == expected_call_id
 
 
@@ -103,9 +101,7 @@ def verify_stream_token(
     expected_signature = _signature(clean_signing_secret, _signing_input(token_body, cfg))
     if not _signature_matches(supplied_signature, expected_signature):
         return None
-    return StreamTokenClaims(
-        call_id=clean_call_id, expires_at=expires_at, nonce=clean_nonce
-    )
+    return StreamTokenClaims(call_id=clean_call_id, expires_at=expires_at, nonce=clean_nonce)
 
 
 def _token_body(*, expires_at: int, call_id: str, nonce: str) -> str:

@@ -26,8 +26,7 @@ from voice_agent.telephony.plivo import PlivoAudioFormat
 
 def _valid_luxtts_pcm(samples: int = 1600, amplitude: int = 6000) -> bytes:
     return b"".join(
-        struct.pack("<h", amplitude if index % 2 else -amplitude)
-        for index in range(samples)
+        struct.pack("<h", amplitude if index % 2 else -amplitude) for index in range(samples)
     )
 
 
@@ -579,11 +578,7 @@ async def test_orchestrator_client_accepts_sse_delta_contract() -> None:
         return httpx.Response(
             200,
             headers={"content-type": "text/event-stream"},
-            content=(
-                'data: {"delta":"Hello"}\n\n'
-                'data: {"delta":" there"}\n\n'
-                "data: [DONE]\n\n"
-            ),
+            content=('data: {"delta":"Hello"}\n\ndata: {"delta":" there"}\n\ndata: [DONE]\n\n'),
         )
 
     client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
@@ -670,11 +665,7 @@ async def test_orchestrator_client_accepts_multiline_sse_data_event() -> None:
         return httpx.Response(
             200,
             headers={"content-type": "text/event-stream"},
-            content=(
-                'data: {"delta":\n'
-                'data: "Hello caller"}\n\n'
-                "data: [DONE]\n\n"
-            ),
+            content=('data: {"delta":\ndata: "Hello caller"}\n\ndata: [DONE]\n\n'),
         )
 
     client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
@@ -693,11 +684,7 @@ async def test_orchestrator_client_stops_reading_sse_after_done_event() -> None:
         return httpx.Response(
             200,
             headers={"content-type": "text/event-stream"},
-            content=(
-                'data: {"delta":"Hello"}\n\n'
-                "data: [DONE]\n\n"
-                "data: not-json-after-done\n\n"
-            ),
+            content=('data: {"delta":"Hello"}\n\ndata: [DONE]\n\ndata: not-json-after-done\n\n'),
         )
 
     client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
@@ -1242,9 +1229,7 @@ async def test_deepgram_stt_close_does_not_block_when_transcript_queue_is_full()
     )
 
     await asyncio.wait_for(
-        stt._read_transcripts(
-            FakeDeepgramSocket([_deepgram_transcript_message("queued request")])
-        ),
+        stt._read_transcripts(FakeDeepgramSocket([_deepgram_transcript_message("queued request")])),
         timeout=0.2,
     )
     await asyncio.wait_for(stt.close(), timeout=0.2)
@@ -2090,8 +2075,10 @@ class FakeSarvamSocket:
 
 def _sarvam_audio_event(pcm: bytes) -> str:
     return json.dumps(
-        {"type": "audio", "data": {"content_type": "audio/pcm",
-                                   "audio": base64.b64encode(pcm).decode("ascii")}}
+        {
+            "type": "audio",
+            "data": {"content_type": "audio/pcm", "audio": base64.b64encode(pcm).decode("ascii")},
+        }
     )
 
 

@@ -250,9 +250,7 @@ def test_constructor_rejects_blank_and_invalid_configuration() -> None:
     with pytest.raises(ValueError, match="vad_model_path must not be blank"):
         SherpaStreamingSpeechToText(model_dir="models/x", vad_model_path="   ")
     with pytest.raises(ValueError, match="num_threads must be at least 1"):
-        SherpaStreamingSpeechToText(
-            model_dir="models/x", vad_model_path="vad.onnx", num_threads=0
-        )
+        SherpaStreamingSpeechToText(model_dir="models/x", vad_model_path="vad.onnx", num_threads=0)
     with pytest.raises(ValueError, match="transcript_queue_max_size must be positive"):
         SherpaStreamingSpeechToText(
             model_dir="models/x", vad_model_path="vad.onnx", transcript_queue_max_size=0

@@ -24,7 +24,7 @@ if redis.call("get", KEYS[1]) == ARGV[1] then
   return redis.call("del", KEYS[1])
 end
 return 0
-"""
+"""  # noqa: S105 - a Lua script, not a secret
 TERMINAL_CALL_STATUSES = frozenset(
     {"busy", "canceled", "cancelled", "completed", "failed", "no-answer", "no_answer"}
 )

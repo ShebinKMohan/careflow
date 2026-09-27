@@ -61,9 +61,7 @@ def configure_logging(*, level: int = logging.INFO, json_format: bool = True) ->
     if json_format:
         handler.setFormatter(JsonLogFormatter())
     else:
-        handler.setFormatter(
-            logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s")
-        )
+        handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
     package_logger = logging.getLogger("voice_agent")
     package_logger.handlers = [handler]
     package_logger.setLevel(level)

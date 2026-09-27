@@ -95,9 +95,7 @@ class TurnEndpointConfig:
         if self.semantic_check_silence_seconds <= 0:
             raise ValueError("semantic_check_silence_seconds must be positive.")
         if self.endpoint_silence_seconds < self.semantic_check_silence_seconds:
-            raise ValueError(
-                "endpoint_silence_seconds must be >= semantic_check_silence_seconds."
-            )
+            raise ValueError("endpoint_silence_seconds must be >= semantic_check_silence_seconds.")
         if self.hard_silence_seconds < self.endpoint_silence_seconds:
             raise ValueError("hard_silence_seconds must be >= endpoint_silence_seconds.")
         if not 0.0 < self.speech_release_probability <= self.speech_trigger_probability < 1.0:
@@ -198,17 +196,13 @@ def _resolve_transducer_files(model_dir: str) -> tuple[str, str, str, str]:
     """
     directory = Path(model_dir)
     if not directory.is_dir():
-        raise SherpaSpeechToTextError(
-            f"sherpa STT model directory does not exist: {directory}"
-        )
+        raise SherpaSpeechToTextError(f"sherpa STT model directory does not exist: {directory}")
 
     def pick(pattern: str, *, prefer_int8: bool) -> Path:
         candidates = sorted(directory.glob(pattern))
         candidates = [path for path in candidates if path.suffix == ".onnx"]
         if not candidates:
-            raise SherpaSpeechToTextError(
-                f"No {pattern} model found in {directory}."
-            )
+            raise SherpaSpeechToTextError(f"No {pattern} model found in {directory}.")
         int8 = [path for path in candidates if "int8" in path.name]
         fp32 = [path for path in candidates if "int8" not in path.name]
         if prefer_int8:
@@ -509,9 +503,7 @@ class SherpaStreamingSpeechToText:
             usable = len(item) - (len(item) % 2)
             if usable == 0:
                 continue
-            samples = (
-                np.frombuffer(item[:usable], dtype="<i2").astype(np.float32) / 32768.0
-            )
+            samples = np.frombuffer(item[:usable], dtype="<i2").astype(np.float32) / 32768.0
             with decode_lock:
                 stream.accept_waveform(SAMPLE_RATE, samples)
                 while recognizer.is_ready(stream):
@@ -530,9 +522,7 @@ class SherpaStreamingSpeechToText:
 
             if text and text != last_partial:
                 last_partial = text
-                self._emit_event(
-                    TranscriptEvent(text=text, is_final=False, speech_final=False)
-                )
+                self._emit_event(TranscriptEvent(text=text, is_final=False, speech_final=False))
 
             has_text = bool(text)
             if tracker.wants_semantic_check(audio_time, has_text=has_text):
@@ -574,9 +564,7 @@ class SherpaStreamingSpeechToText:
 
         with decode_lock:
             if self._flush_padding_seconds > 0:
-                padding = np.zeros(
-                    int(self._flush_padding_seconds * SAMPLE_RATE), dtype=np.float32
-                )
+                padding = np.zeros(int(self._flush_padding_seconds * SAMPLE_RATE), dtype=np.float32)
                 stream.accept_waveform(SAMPLE_RATE, padding)
                 while recognizer.is_ready(stream):
                     recognizer.decode_stream(stream)

@@ -1733,9 +1733,7 @@ async def test_redis_call_session_upsert_sets_ttl_on_all_session_aliases() -> No
         )
     )
 
-    session_ttls = {
-        key: value for key, value in fake_redis.ttls.items() if ":locks:" not in key
-    }
+    session_ttls = {key: value for key, value in fake_redis.ttls.items() if ":locks:" not in key}
     assert session_ttls == {
         "voice_agent:call_sessions:workflow-call-1": 42,
         "voice_agent:call_sessions:call-1": 42,

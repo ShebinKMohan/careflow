@@ -68,9 +68,7 @@ class LuxTTSHttpTextToSpeech:
         if speed <= 0:
             raise ValueError("speed must be positive.")
         self._url = _required_config_string(url, "url")
-        self._api_key = (
-            _required_config_string(api_key, "api_key") if api_key is not None else None
-        )
+        self._api_key = _required_config_string(api_key, "api_key") if api_key is not None else None
         self._voice = _optional_config_string(voice)
         self._model = _optional_config_string(model)
         self._num_steps = num_steps
@@ -195,9 +193,7 @@ def _reject_oversized_content_length(
     try:
         audio_size = int(content_length)
     except ValueError as exc:
-        raise LuxTTSTextToSpeechError(
-            "LuxTTS response Content-Length was not an integer."
-        ) from exc
+        raise LuxTTSTextToSpeechError("LuxTTS response Content-Length was not an integer.") from exc
     if audio_size <= 0:
         raise LuxTTSTextToSpeechError("LuxTTS response Content-Length must be positive.")
     if audio_size > max_audio_bytes:
@@ -267,28 +263,20 @@ def _validate_sidecar_quality_headers(
         )
     clean_duration_gate = duration_gate.strip().lower()
     if clean_duration_gate not in {"true", "false"}:
-        raise LuxTTSTextToSpeechError(
-            "LuxTTS response X-Duration-Gate-Passed was not a boolean."
-        )
+        raise LuxTTSTextToSpeechError("LuxTTS response X-Duration-Gate-Passed was not a boolean.")
     if clean_duration_gate != "true":
         raise LuxTTSTextToSpeechError(
             "LuxTTS sidecar duration gate failed; refusing truncated audio."
         )
     audio_seconds_header = response.headers.get("x-audio-seconds")
     if audio_seconds_header is None:
-        raise LuxTTSTextToSpeechError(
-            "LuxTTS response missing X-Audio-Seconds quality header."
-        )
+        raise LuxTTSTextToSpeechError("LuxTTS response missing X-Audio-Seconds quality header.")
     try:
         reported_audio_seconds = float(audio_seconds_header)
     except ValueError as exc:
-        raise LuxTTSTextToSpeechError(
-            "LuxTTS response X-Audio-Seconds was not numeric."
-        ) from exc
+        raise LuxTTSTextToSpeechError("LuxTTS response X-Audio-Seconds was not numeric.") from exc
     if reported_audio_seconds <= 0:
-        raise LuxTTSTextToSpeechError(
-            "LuxTTS response X-Audio-Seconds must be positive."
-        )
+        raise LuxTTSTextToSpeechError("LuxTTS response X-Audio-Seconds must be positive.")
     actual_audio_seconds = len(audio) / (sample_rate * 2)
     if abs(reported_audio_seconds - actual_audio_seconds) > _AUDIO_SECONDS_HEADER_TOLERANCE:
         raise LuxTTSTextToSpeechError(
@@ -307,17 +295,11 @@ class _AudioQualityMetrics:
 def _validate_audio_quality(audio: bytes) -> None:
     quality = _audio_quality_metrics(audio)
     if quality.peak_ratio < MIN_AUDIO_PEAK_RATIO:
-        raise LuxTTSTextToSpeechError(
-            f"LuxTTS audio peak too low: {quality.peak_ratio:.3f}."
-        )
+        raise LuxTTSTextToSpeechError(f"LuxTTS audio peak too low: {quality.peak_ratio:.3f}.")
     if quality.rms_dbfs < MIN_AUDIO_RMS_DBFS:
-        raise LuxTTSTextToSpeechError(
-            f"LuxTTS audio RMS too low: {quality.rms_dbfs:.1f} dBFS."
-        )
+        raise LuxTTSTextToSpeechError(f"LuxTTS audio RMS too low: {quality.rms_dbfs:.1f} dBFS.")
     if quality.rms_dbfs > MAX_AUDIO_RMS_DBFS:
-        raise LuxTTSTextToSpeechError(
-            f"LuxTTS audio RMS too hot: {quality.rms_dbfs:.1f} dBFS."
-        )
+        raise LuxTTSTextToSpeechError(f"LuxTTS audio RMS too hot: {quality.rms_dbfs:.1f} dBFS.")
     if quality.clipping_ratio > MAX_AUDIO_CLIPPING_RATIO:
         raise LuxTTSTextToSpeechError(
             f"LuxTTS audio clipping ratio too high: {quality.clipping_ratio:.3f}."
@@ -352,6 +334,4 @@ def _audio_quality_metrics(audio: bytes) -> _AudioQualityMetrics:
 
 
 def _audio_too_large() -> LuxTTSTextToSpeechError:
-    return LuxTTSTextToSpeechError(
-        "LuxTTS audio response exceeded configured audio size limit."
-    )
+    return LuxTTSTextToSpeechError("LuxTTS audio response exceeded configured audio size limit.")

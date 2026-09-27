@@ -69,15 +69,18 @@ def test_retry_after_parses_delta_seconds_and_ignores_dates() -> None:
 async def test_stream_with_retry_retries_on_503_then_succeeds() -> None:
     client, state = _client([_ok(503), _ok(200, content=b"hello")])
     sleeper = _RecordingSleeper()
-    async with client, stream_with_retry(
+    async with (
         client,
-        "POST",
-        "https://example.test/respond",
-        max_attempts=2,
-        backoff_seconds=0.5,
-        max_backoff_seconds=2.0,
-        sleep=sleeper,
-    ) as response:
+        stream_with_retry(
+            client,
+            "POST",
+            "https://example.test/respond",
+            max_attempts=2,
+            backoff_seconds=0.5,
+            max_backoff_seconds=2.0,
+            sleep=sleeper,
+        ) as response,
+    ):
         body = await response.aread()
     assert body == b"hello"
     assert state["calls"] == 2
@@ -87,15 +90,18 @@ async def test_stream_with_retry_retries_on_503_then_succeeds() -> None:
 async def test_stream_with_retry_retries_on_connect_error() -> None:
     client, state = _client([_connect_error(), _ok(200, content=b"ok")])
     sleeper = _RecordingSleeper()
-    async with client, stream_with_retry(
+    async with (
         client,
-        "POST",
-        "https://example.test/respond",
-        max_attempts=2,
-        backoff_seconds=0.1,
-        max_backoff_seconds=2.0,
-        sleep=sleeper,
-    ) as response:
+        stream_with_retry(
+            client,
+            "POST",
+            "https://example.test/respond",
+            max_attempts=2,
+            backoff_seconds=0.1,
+            max_backoff_seconds=2.0,
+            sleep=sleeper,
+        ) as response,
+    ):
         body = await response.aread()
     assert body == b"ok"
     assert state["calls"] == 2
@@ -103,19 +109,20 @@ async def test_stream_with_retry_retries_on_connect_error() -> None:
 
 
 async def test_stream_with_retry_honors_retry_after_header() -> None:
-    client, state = _client(
-        [_ok(503, headers={"retry-after": "1"}), _ok(200, content=b"x")]
-    )
+    client, state = _client([_ok(503, headers={"retry-after": "1"}), _ok(200, content=b"x")])
     sleeper = _RecordingSleeper()
-    async with client, stream_with_retry(
+    async with (
         client,
-        "POST",
-        "https://example.test/respond",
-        max_attempts=2,
-        backoff_seconds=0.5,
-        max_backoff_seconds=10.0,
-        sleep=sleeper,
-    ) as response:
+        stream_with_retry(
+            client,
+            "POST",
+            "https://example.test/respond",
+            max_attempts=2,
+            backoff_seconds=0.5,
+            max_backoff_seconds=10.0,
+            sleep=sleeper,
+        ) as response,
+    ):
         await response.aread()
     assert sleeper.delays == [1.0]
     assert state["calls"] == 2
@@ -160,9 +167,7 @@ async def test_stream_with_retry_raises_after_exhausting_attempts() -> None:
 
 
 async def test_orchestrator_retries_transient_5xx() -> None:
-    client, state = _client(
-        [_ok(503), _ok(200, json={"reply": "Hello from orchestration."})]
-    )
+    client, state = _client([_ok(503), _ok(200, json={"reply": "Hello from orchestration."})])
     llm = OrchestratorLLMClient(
         url="https://orchestrator.test/respond",
         client=client,
@@ -195,9 +200,7 @@ async def test_sarvam_rest_retries_transient_5xx() -> None:
     audio = b"".join(
         [
             chunk
-            async for chunk in tts.synthesize(
-                text="hello", audio_format=PlivoAudioFormat.L16_16KHZ
-            )
+            async for chunk in tts.synthesize(text="hello", audio_format=PlivoAudioFormat.L16_16KHZ)
         ]
     )
     assert audio == b"\x01\x02\x03\x04"
@@ -222,9 +225,7 @@ async def test_elevenlabs_retries_transient_5xx() -> None:
     audio = b"".join(
         [
             chunk
-            async for chunk in tts.synthesize(
-                text="hello", audio_format=PlivoAudioFormat.L16_16KHZ
-            )
+            async for chunk in tts.synthesize(text="hello", audio_format=PlivoAudioFormat.L16_16KHZ)
         ]
     )
     assert audio == b"\x01\x02\x03\x04"

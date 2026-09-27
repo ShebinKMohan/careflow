@@ -18,9 +18,7 @@ def test_sliding_window_rate_limiter_blocks_over_limit_then_recovers() -> None:
 
 
 def test_sliding_window_rate_limiter_is_per_key() -> None:
-    limiter = SlidingWindowRateLimiter(
-        max_requests=1, window_seconds=10.0, time_fn=lambda: 0.0
-    )
+    limiter = SlidingWindowRateLimiter(max_requests=1, window_seconds=10.0, time_fn=lambda: 0.0)
     assert limiter.allow("a") is True
     assert limiter.allow("b") is True
     assert limiter.allow("a") is False

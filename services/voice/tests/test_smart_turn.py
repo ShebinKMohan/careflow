@@ -35,9 +35,7 @@ def test_log_mel_features_values_stay_in_clamped_scaled_range() -> None:
 
 def test_log_mel_features_reject_two_dimensional_audio() -> None:
     with pytest.raises(ValueError, match="1-D audio"):
-        _whisper_features.compute_whisper_log_mel_features(
-            np.zeros((2, 400), dtype=np.float32)
-        )
+        _whisper_features.compute_whisper_log_mel_features(np.zeros((2, 400), dtype=np.float32))
 
 
 class FakeCompletionSession:
@@ -92,9 +90,9 @@ def test_smart_turn_probability_is_never_resquashed() -> None:
         model_path="models/fake-smart-turn.onnx",
         session_factory=lambda: FakeCompletionSession(probability=0.51),
     )
-    assert endpointer.predict_completion(
-        np.zeros(16000, dtype=np.float32)
-    ) == pytest.approx(0.51, abs=1e-6)
+    assert endpointer.predict_completion(np.zeros(16000, dtype=np.float32)) == pytest.approx(
+        0.51, abs=1e-6
+    )
 
 
 def test_smart_turn_clamps_out_of_range_outputs() -> None:

@@ -228,7 +228,8 @@ class GoogleLiveMediaSessionRunner:
         handoff_targets: Sequence[HandoffTarget] | None = None,
         handoff_client_factory: Callable[
             [HandoffTarget, str], tuple[RealtimeVoiceClient, str | None]
-        ] | None = None,
+        ]
+        | None = None,
     ) -> None:
         if google_output_sample_rate_hz <= 0:
             raise ValueError("google_output_sample_rate_hz must be positive.")
@@ -251,8 +252,8 @@ class GoogleLiveMediaSessionRunner:
         self._audio_ingest_timeout_seconds = audio_ingest_timeout_seconds
         self._plivo_send_timeout_seconds = plivo_send_timeout_seconds
         self._provider_close_timeout_seconds = provider_close_timeout_seconds
-        self._max_play_audio_bytes = max_play_audio_bytes if max_play_audio_bytes % 2 == 0 else (
-            max_play_audio_bytes - 1
+        self._max_play_audio_bytes = (
+            max_play_audio_bytes if max_play_audio_bytes % 2 == 0 else (max_play_audio_bytes - 1)
         )
         self._latency_observer = latency_observer
         self._transcript_observer = transcript_observer
@@ -435,9 +436,7 @@ class GoogleLiveMediaSessionRunner:
             self._first_google_audio_at = None
             self._first_play_audio_at = None
         self._append_transcript_turn("user", text, turn=self._current_turn_epoch)
-        self._current_turn_transcript_chars = len(
-            self._turn_text("user", self._current_turn_epoch)
-        )
+        self._current_turn_transcript_chars = len(self._turn_text("user", self._current_turn_epoch))
 
     def _record_output_transcript(self, text: str) -> None:
         if not text.strip():
@@ -564,8 +563,7 @@ def convert_pcm16_sample_rate(audio: bytes, *, from_hz: int, to_hz: int) -> byte
     if from_hz == to_hz or not audio:
         return audio
     samples = [
-        int.from_bytes(audio[i : i + 2], "little", signed=True)
-        for i in range(0, len(audio), 2)
+        int.from_bytes(audio[i : i + 2], "little", signed=True) for i in range(0, len(audio), 2)
     ]
     output_count = max(1, int(len(samples) * to_hz / from_hz))
     output = bytearray()

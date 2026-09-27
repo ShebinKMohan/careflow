@@ -408,9 +408,10 @@ async def test_media_runner_splits_large_tts_audio_chunks_for_plivo() -> None:
         "playAudio",
         "playAudio",
     ]
-    assert [
-        base64.b64decode(message["media"]["payload"]) for message in transport.messages
-    ] == [b"\x01\x00\x02\x00", b"\x03\x00"]
+    assert [base64.b64decode(message["media"]["payload"]) for message in transport.messages] == [
+        b"\x01\x00\x02\x00",
+        b"\x03\x00",
+    ]
 
 
 def test_media_runner_rejects_misaligned_max_play_audio_bytes() -> None:
@@ -596,8 +597,7 @@ async def test_media_runner_stops_streaming_tts_after_caller_barge_in() -> None:
 
 
 @pytest.mark.anyio
-async def test_media_runner_emits_latency_when_barge_in_cancels_after_answer_audio(
-) -> None:
+async def test_media_runner_emits_latency_when_barge_in_cancels_after_answer_audio() -> None:
     transport = CapturingTransport()
     stt = DelayedSpeechToText()
     llm = GatedSecondChunkLLMClient(
@@ -1826,9 +1826,7 @@ async def test_media_runner_accumulates_streaming_segments_until_speech_final() 
     try:
         await runner.accept_audio(b"\x10\x00" * 200)  # starts the transcript loop
         await stt.emit(TranscriptEvent(text="I want to", is_final=True, speech_final=False))
-        await stt.emit(
-            TranscriptEvent(text="check my balance", is_final=True, speech_final=True)
-        )
+        await stt.emit(TranscriptEvent(text="check my balance", is_final=True, speech_final=True))
         await asyncio.wait_for(_wait_for_messages(transport, count=1), timeout=0.5)
     finally:
         await runner.close()
@@ -2283,9 +2281,7 @@ async def test_media_runner_defers_speculative_history_until_answer_is_used() ->
 async def test_media_runner_reuses_speculative_response_when_final_adds_punctuation() -> None:
     transport = CapturingTransport()
     stt = ScriptedStreamingSpeechToText()
-    llm = HistoryAwareRecordingLLMClient(
-        responses={"I need service": "Service response."}
-    )
+    llm = HistoryAwareRecordingLLMClient(responses={"I need service": "Service response."})
     tts = RecordingTextToSpeech()
     snapshots: list[VoiceTurnLatencySnapshot] = []
     runner = MediaSessionRunner(
@@ -2351,9 +2347,7 @@ async def test_media_runner_records_spoken_speculative_transcript_when_interrupt
     runner._speculative_response_generation_started_at = time.perf_counter()
 
     try:
-        play_task = asyncio.create_task(
-            runner._try_play_speculative_response("I need service", 1)
-        )
+        play_task = asyncio.create_task(runner._try_play_speculative_response("I need service", 1))
         await asyncio.wait_for(_wait_for_messages(transport, count=1), timeout=0.2)
 
         play_task.cancel()
@@ -2377,9 +2371,7 @@ async def test_media_runner_records_spoken_speculative_transcript_when_interrupt
 async def test_media_runner_keeps_speculative_response_for_punctuation_only_revision() -> None:
     transport = CapturingTransport()
     stt = ScriptedStreamingSpeechToText()
-    llm = HistoryAwareRecordingLLMClient(
-        responses={"I need service": "Service response."}
-    )
+    llm = HistoryAwareRecordingLLMClient(responses={"I need service": "Service response."})
     tts = RecordingTextToSpeech()
     snapshots: list[VoiceTurnLatencySnapshot] = []
     runner = MediaSessionRunner(
@@ -2874,9 +2866,7 @@ async def test_media_runner_drops_incomplete_action_directive_without_speaking_i
         stream_id="stream-1",
         audio_format=PlivoAudioFormat.L16_16KHZ,
         stt=SingleTranscriptSpeechToText(text="start workflow"),
-        llm=RecordingLLMClient(
-            response_text='I started it. [[ACTION:{"type":"workflow.start"'
-        ),
+        llm=RecordingLLMClient(response_text='I started it. [[ACTION:{"type":"workflow.start"'),
         tts=tts,
         transport=CapturingTransport(),
         voice_action_observer=actions.append,

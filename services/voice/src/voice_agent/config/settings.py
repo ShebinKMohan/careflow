@@ -6,14 +6,14 @@ from ipaddress import ip_address
 from typing import Literal
 from urllib.parse import urlsplit
 
-from pydantic import Field, SecretStr, model_validator
+from pydantic import AliasChoices, Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from voice_agent.media.limits import MAX_PRE_RESPONSE_ACK_CHARS
 
 Environment = Literal["local", "test", "production"]
 SessionBackend = Literal["memory", "redis"]
-STTProvider = Literal["local", "deepgram", "sherpa"]
+STTProvider = Literal["local", "deepgram", "sherpa", "mlx-whisper"]
 LLMProvider = Literal["local", "orchestrator", "google_live"]
 TTSProvider = Literal["local", "elevenlabs", "sarvam", "luxtts", "kokoro"]
 HTTPMethod = Literal["GET", "POST"]
@@ -52,6 +52,11 @@ DEFAULT_KOKORO_MIN_FIRST_CHUNK_CHARS = 24
 DEFAULT_KOKORO_MIN_SOFT_CHUNK_CHARS = 36
 DEFAULT_KOKORO_MAX_SOFT_CHUNK_CHARS = 96
 DEFAULT_KOKORO_FIRST_UNIT_MAX_CHARS = 20
+DEFAULT_MLX_WHISPER_MODEL = "mlx-community/whisper-large-v3-turbo"
+DEFAULT_MLX_WHISPER_LANGUAGE = "en"
+DEFAULT_CAREFLOW_API_BASE_URL = "http://127.0.0.1:8000"
+DEFAULT_KIOSK_START_TIMEOUT_SECONDS = 5.0
+DEFAULT_KIOSK_API_TIMEOUT_SECONDS = 10.0
 DEFAULT_DEEPGRAM_ENDPOINTING_MS = 150
 DEFAULT_DEEPGRAM_UTTERANCE_END_MS = 1000
 DEFAULT_DEEPGRAM_TRANSCRIPT_QUEUE_MAX_SIZE = 100
@@ -82,7 +87,10 @@ class Settings(BaseSettings):
     )
 
     environment: Environment = "local"
-    public_base_url: str = Field(..., description="Public HTTPS base URL for Plivo callbacks.")
+    # Only the Plivo phone channel needs it (required when plivo_enabled).
+    public_base_url: str | None = Field(
+        default=None, description="Public HTTPS base URL for Plivo callbacks."
+    )
 
     # Structured logging. log_format="json" emits one JSON object per line (call_id/stream_id
     # carried through), "text" is human-friendly for local dev.
@@ -146,9 +154,7 @@ class Settings(BaseSettings):
     local_end_of_turn_silence_ms: int = DEFAULT_LOCAL_END_OF_TURN_SILENCE_MS
     fast_final_end_of_turn_silence_ms: int = DEFAULT_FAST_FINAL_END_OF_TURN_SILENCE_MS
     interim_transcript_stability_ms: int = DEFAULT_INTERIM_TRANSCRIPT_STABILITY_MS
-    interim_local_silence_commit_enabled: bool = (
-        DEFAULT_INTERIM_LOCAL_SILENCE_COMMIT_ENABLED
-    )
+    interim_local_silence_commit_enabled: bool = DEFAULT_INTERIM_LOCAL_SILENCE_COMMIT_ENABLED
     speculative_response_prewarm: bool = DEFAULT_SPECULATIVE_RESPONSE_PREWARM
     speculative_response_stability_ms: int = DEFAULT_SPECULATIVE_RESPONSE_STABILITY_MS
     speculative_response_min_chars: int = DEFAULT_SPECULATIVE_RESPONSE_MIN_CHARS
@@ -185,7 +191,13 @@ class Settings(BaseSettings):
     stream_token_single_use: bool = False
     webhook_replay_protection: bool = False
     webhook_nonce_ttl_seconds: int = 300
-    deepgram_api_key: SecretStr | None = None
+    # Optional (never set by the unattended run): also read from the shared DEEPGRAM_API_KEY.
+    deepgram_api_key: SecretStr | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "VOICE_AGENT_DEEPGRAM_API_KEY", "DEEPGRAM_API_KEY", "deepgram_api_key"
+        ),
+    )
     deepgram_endpointing_ms: int = DEFAULT_DEEPGRAM_ENDPOINTING_MS
     deepgram_utterance_end_ms: int = DEFAULT_DEEPGRAM_UTTERANCE_END_MS
     deepgram_connect_timeout_seconds: float = 10.0
@@ -200,9 +212,7 @@ class Settings(BaseSettings):
     orchestrator_first_chunk_timeout_seconds: float = (
         DEFAULT_ORCHESTRATOR_FIRST_CHUNK_TIMEOUT_SECONDS
     )
-    orchestrator_require_streaming_response: bool = (
-        DEFAULT_ORCHESTRATOR_REQUIRE_STREAMING_RESPONSE
-    )
+    orchestrator_require_streaming_response: bool = DEFAULT_ORCHESTRATOR_REQUIRE_STREAMING_RESPONSE
     orchestrator_max_response_bytes: int = DEFAULT_ORCHESTRATOR_MAX_RESPONSE_BYTES
     # Per-project agent config forwarded to the orchestration LLM.
     orchestrator_system_prompt: str | None = None
@@ -269,6 +279,30 @@ class Settings(BaseSettings):
     # Cap on the first synthesis unit inside each TTS call (0 disables); smaller
     # first units trade a little prosody for materially faster first audio.
     kokoro_first_unit_max_chars: int = DEFAULT_KOKORO_FIRST_UNIT_MAX_CHARS
+
+    # CareFlow (M1-14). mlx-whisper reuses the local-speech VAD, smart-turn and silence
+    # settings above (sherpa_stt_vad_model_path, sherpa_stt_smart_turn_*, sherpa_stt_*_ms).
+    mlx_whisper_model: str = DEFAULT_MLX_WHISPER_MODEL
+    mlx_whisper_language: str = DEFAULT_MLX_WHISPER_LANGUAGE
+    # The Plivo phone channel (/plivo/*, /calls/*, /preview/*) stays off unless this is true.
+    plivo_enabled: bool = Field(
+        default=False, validation_alias=AliasChoices("VOICE_PLIVO_ENABLED", "plivo_enabled")
+    )
+    # The kiosk channel posts intake turns to the CareFlow API with the patient's session token,
+    # checked here with the API's JWT secret (M0-07).
+    careflow_api_base_url: str = Field(
+        default=DEFAULT_CAREFLOW_API_BASE_URL,
+        validation_alias=AliasChoices("CAREFLOW_API_BASE_URL", "careflow_api_base_url"),
+    )
+    careflow_jwt_secret: SecretStr | None = Field(
+        default=None,
+        validation_alias=AliasChoices("CAREFLOW_JWT_SECRET", "JWT_SECRET", "careflow_jwt_secret"),
+    )
+    # Where the service listens (CareFlow runs it on 127.0.0.1:8090 next to the kiosk).
+    host: str = Field(default="127.0.0.1", validation_alias=AliasChoices("VOICE_HOST", "host"))
+    port: int = Field(default=8090, validation_alias=AliasChoices("VOICE_PORT", "port"))
+    kiosk_start_timeout_seconds: float = DEFAULT_KIOSK_START_TIMEOUT_SECONDS
+    kiosk_api_timeout_seconds: float = DEFAULT_KIOSK_API_TIMEOUT_SECONDS
     stream_status_callback_method: HTTPMethod = "POST"
     # By default an unverifiable Plivo media-stream status callback (one carrying a StreamID,
     # which signs in a form that cannot be reliably reconstructed) is acknowledged without
@@ -313,10 +347,22 @@ class Settings(BaseSettings):
         _normalize_optional_string_field(self, "orchestrator_system_prompt")
         _normalize_optional_string_field(self, "orchestrator_model")
 
+        if self.public_base_url is not None:
+            object.__setattr__(
+                self,
+                "public_base_url",
+                _normalize_https_base_url("public_base_url", self.public_base_url),
+            )
+        elif self.plivo_enabled or self.environment == "production":
+            raise ValueError("public_base_url is required for the Plivo phone channel.")
+        if self.kiosk_start_timeout_seconds <= 0:
+            raise ValueError("kiosk_start_timeout_seconds must be positive.")
+        if self.kiosk_api_timeout_seconds <= 0:
+            raise ValueError("kiosk_api_timeout_seconds must be positive.")
         object.__setattr__(
             self,
-            "public_base_url",
-            _normalize_https_base_url("public_base_url", self.public_base_url),
+            "careflow_api_base_url",
+            _normalize_http_endpoint_url("careflow_api_base_url", self.careflow_api_base_url),
         )
         object.__setattr__(
             self,
@@ -451,9 +497,7 @@ class Settings(BaseSettings):
         if self.luxtts_min_soft_chunk_chars <= 0:
             raise ValueError("luxtts_min_soft_chunk_chars must be positive.")
         if self.luxtts_max_soft_chunk_chars < self.luxtts_min_soft_chunk_chars:
-            raise ValueError(
-                "luxtts_max_soft_chunk_chars must be >= luxtts_min_soft_chunk_chars."
-            )
+            raise ValueError("luxtts_max_soft_chunk_chars must be >= luxtts_min_soft_chunk_chars.")
         if self.barge_in_min_frames < 1:
             raise ValueError("barge_in_min_frames must be at least 1.")
         if self.barge_in_energy_threshold < 0:
@@ -479,9 +523,7 @@ class Settings(BaseSettings):
             "ERROR",
             "CRITICAL",
         }:
-            raise ValueError(
-                "log_level must be one of DEBUG, INFO, WARNING, ERROR, CRITICAL."
-            )
+            raise ValueError("log_level must be one of DEBUG, INFO, WARNING, ERROR, CRITICAL.")
         if self.callback_max_body_bytes <= 0:
             raise ValueError("callback_max_body_bytes must be positive.")
         if self.control_max_body_bytes <= 0:
@@ -591,9 +633,7 @@ class Settings(BaseSettings):
             if _is_blank(self.sherpa_stt_model_dir):
                 raise ValueError("sherpa_stt_model_dir is required when stt_provider=sherpa.")
             if _is_blank(self.sherpa_stt_vad_model_path):
-                raise ValueError(
-                    "sherpa_stt_vad_model_path is required when stt_provider=sherpa."
-                )
+                raise ValueError("sherpa_stt_vad_model_path is required when stt_provider=sherpa.")
         if self.sherpa_stt_num_threads <= 0:
             raise ValueError("sherpa_stt_num_threads must be positive.")
         if self.sherpa_stt_semantic_silence_ms <= 0:
@@ -607,9 +647,7 @@ class Settings(BaseSettings):
                 "sherpa_stt_hard_silence_ms must be >= sherpa_stt_endpoint_silence_ms."
             )
         if not 0.0 < self.sherpa_stt_smart_turn_threshold < 1.0:
-            raise ValueError(
-                "sherpa_stt_smart_turn_threshold must be between 0 and 1 (exclusive)."
-            )
+            raise ValueError("sherpa_stt_smart_turn_threshold must be between 0 and 1 (exclusive).")
         if self.tts_provider == "kokoro" and not using_google_live:
             if _is_blank(self.kokoro_model_path):
                 raise ValueError("kokoro_model_path is required when tts_provider=kokoro.")
@@ -626,9 +664,7 @@ class Settings(BaseSettings):
         if self.kokoro_min_soft_chunk_chars <= 0:
             raise ValueError("kokoro_min_soft_chunk_chars must be positive.")
         if self.kokoro_max_soft_chunk_chars < self.kokoro_min_soft_chunk_chars:
-            raise ValueError(
-                "kokoro_max_soft_chunk_chars must be >= kokoro_min_soft_chunk_chars."
-            )
+            raise ValueError("kokoro_max_soft_chunk_chars must be >= kokoro_min_soft_chunk_chars.")
         if self.kokoro_first_unit_max_chars < 0:
             raise ValueError("kokoro_first_unit_max_chars must be non-negative.")
         if self.sarvam_pace <= 0:
@@ -658,15 +694,21 @@ class Settings(BaseSettings):
 
     @property
     def media_websocket_url(self) -> str:
-        return self.public_base_url.replace("https://", "wss://", 1) + "/plivo/media"
+        return self.plivo_base_url.replace("https://", "wss://", 1) + "/plivo/media"
 
     @property
     def status_callback_url(self) -> str:
-        return self.public_base_url + "/plivo/status"
+        return self.plivo_base_url + "/plivo/status"
 
     @property
     def answer_callback_url(self) -> str:
-        return self.public_base_url + "/plivo/answer"
+        return self.plivo_base_url + "/plivo/answer"
+
+    @property
+    def plivo_base_url(self) -> str:
+        if self.public_base_url is None:
+            raise RuntimeError("public_base_url is required for the Plivo phone channel.")
+        return self.public_base_url
 
     @property
     def should_validate_plivo_signature(self) -> bool:
@@ -675,7 +717,10 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    return Settings()
+    # CareFlow's settings: speech providers from config/providers.yaml, local defaults.
+    from voice_agent.config.careflow import CareflowSettings
+
+    return CareflowSettings()
 
 
 def _validate_internal_secret_strength(name: str, secret: SecretStr | None) -> None:

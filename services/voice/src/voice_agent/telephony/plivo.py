@@ -19,6 +19,8 @@ class PlivoAudioFormat(StrEnum):
     MULAW_8KHZ = "audio/x-mulaw;rate=8000"
     L16_8KHZ = "audio/x-l16;rate=8000"
     L16_16KHZ = "audio/x-l16;rate=16000"
+    # The kiosk browser channel (M1-14): Kokoro's native rate, no resampling.
+    L16_24KHZ = "audio/x-l16;rate=24000"
 
     @property
     def content_type(self) -> str:
@@ -86,12 +88,7 @@ def build_answer_xml(
 def build_hangup_xml(message: str | None = None) -> str:
     clean_message = message.strip() if message is not None else ""
     speak = f"<Speak>{escape(clean_message)}</Speak>" if clean_message else ""
-    return (
-        '<?xml version="1.0" encoding="UTF-8"?>'
-        "<Response>"
-        f"{speak}<Hangup/>"
-        "</Response>"
-    )
+    return f'<?xml version="1.0" encoding="UTF-8"?><Response>{speak}<Hangup/></Response>'
 
 
 def play_audio_message(audio: bytes, audio_format: PlivoAudioFormat) -> dict[str, Any]:
@@ -224,9 +221,7 @@ def _validate_l16_audio_frame(
     audio: bytes,
     audio_format: PlivoAudioFormat | None,
 ) -> None:
-    if audio_format in {PlivoAudioFormat.L16_8KHZ, PlivoAudioFormat.L16_16KHZ} and (
-        len(audio) % 2
-    ):
+    if audio_format in {PlivoAudioFormat.L16_8KHZ, PlivoAudioFormat.L16_16KHZ} and (len(audio) % 2):
         raise PlivoProtocolError("Plivo 16-bit PCM media payload has an incomplete sample.")
 
 

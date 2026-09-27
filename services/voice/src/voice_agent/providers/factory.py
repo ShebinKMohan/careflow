@@ -402,9 +402,7 @@ async def build_media_session_runner(
         transcript_observer=transcript_observer,
         voice_action_observer=voice_action_observer,
         handoff_targets=handoff_targets,
-        handoff_llm_factory=(
-            _build_handoff_llm_factory(settings) if handoff_targets else None
-        ),
+        handoff_llm_factory=(_build_handoff_llm_factory(settings) if handoff_targets else None),
         transport=transport,
         turn_timeout_seconds=_as_float(
             behavior.get("turn_timeout_seconds"), settings.turn_timeout_seconds
@@ -805,9 +803,7 @@ def _build_tts(settings: Settings, override: dict[str, object] | None = None) ->
         return LuxTTSHttpTextToSpeech(
             url=settings.luxtts_tts_url,
             api_key=(
-                settings.luxtts_api_key.get_secret_value()
-                if settings.luxtts_api_key
-                else None
+                settings.luxtts_api_key.get_secret_value() if settings.luxtts_api_key else None
             ),
             voice=voice or settings.luxtts_voice,
             model=tts_model or settings.luxtts_model,
@@ -874,8 +870,6 @@ def _build_google_live_runner(
         transcript_observer=transcript_observer,
         handoff_targets=handoff_targets,
         handoff_client_factory=(
-            _build_google_live_handoff_client_factory(settings)
-            if handoff_targets
-            else None
+            _build_google_live_handoff_client_factory(settings) if handoff_targets else None
         ),
     )

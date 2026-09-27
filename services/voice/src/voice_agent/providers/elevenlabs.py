@@ -98,9 +98,7 @@ class ElevenLabsTextToSpeech:
                     yield audio[:complete_sample_length]
                 pending = audio[complete_sample_length:]
             if pending:
-                raise ElevenLabsTextToSpeechError(
-                    "ElevenLabs returned an incomplete PCM16 sample."
-                )
+                raise ElevenLabsTextToSpeechError("ElevenLabs returned an incomplete PCM16 sample.")
             if not has_audio:
                 raise ElevenLabsTextToSpeechError("ElevenLabs returned no audio chunks.")
 
@@ -131,9 +129,7 @@ def _reject_oversized_content_length(
             "ElevenLabs response Content-Length was not an integer."
         ) from exc
     if audio_size <= 0:
-        raise ElevenLabsTextToSpeechError(
-            "ElevenLabs response Content-Length must be positive."
-        )
+        raise ElevenLabsTextToSpeechError("ElevenLabs response Content-Length must be positive.")
     if audio_size > max_audio_bytes:
         raise _audio_too_large()
 

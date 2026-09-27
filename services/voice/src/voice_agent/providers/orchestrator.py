@@ -57,9 +57,7 @@ class OrchestratorLLMClient:
         self._model = (model or "").strip() or None
         self._temperature = temperature
         self._url = _required_endpoint_url(url, "url")
-        self._api_key = (
-            _required_config_string(api_key, "api_key") if api_key is not None else None
-        )
+        self._api_key = _required_config_string(api_key, "api_key") if api_key is not None else None
         self._timeout_seconds = timeout_seconds
         self._first_chunk_timeout_seconds = first_chunk_timeout_seconds
         self._max_response_bytes = max_response_bytes
@@ -129,8 +127,7 @@ class OrchestratorLLMClient:
                 return
             if self._require_streaming_response:
                 raise OrchestratorClientError(
-                    "Orchestrator response must use text/event-stream when streaming "
-                    "is required."
+                    "Orchestrator response must use text/event-stream when streaming is required."
                 )
 
             payload = await _read_limited_response_body(
@@ -205,9 +202,7 @@ async def _iter_sse_text(
         try:
             chunk = await _read_next_response_chunk(
                 byte_iterator,
-                first_chunk_deadline_at=(
-                    None if yielded_text else first_chunk_deadline_at
-                ),
+                first_chunk_deadline_at=(None if yielded_text else first_chunk_deadline_at),
             )
         except StopAsyncIteration:
             break
@@ -219,9 +214,7 @@ async def _iter_sse_text(
         try:
             buffered_text += decoder.decode(chunk)
         except UnicodeDecodeError as exc:
-            raise OrchestratorClientError(
-                "Orchestrator SSE response was not valid UTF-8."
-            ) from exc
+            raise OrchestratorClientError("Orchestrator SSE response was not valid UTF-8.") from exc
         while True:
             line_end = buffered_text.find("\n")
             if line_end < 0:
@@ -242,9 +235,7 @@ async def _iter_sse_text(
     try:
         buffered_text += decoder.decode(b"", final=True)
     except UnicodeDecodeError as exc:
-        raise OrchestratorClientError(
-            "Orchestrator SSE response was not valid UTF-8."
-        ) from exc
+        raise OrchestratorClientError("Orchestrator SSE response was not valid UTF-8.") from exc
     if buffered_text:
         done, text = _consume_sse_line(buffered_text, data_lines)
         if text:
@@ -252,9 +243,7 @@ async def _iter_sse_text(
             yield text
         if done:
             if not yielded_text:
-                raise OrchestratorClientError(
-                    "Orchestrator response did not include reply text."
-                )
+                raise OrchestratorClientError("Orchestrator response did not include reply text.")
             return
     if data_lines:
         _done, text = _parse_sse_event(data_lines)
@@ -337,17 +326,13 @@ def _reject_oversized_content_length(
                 "Orchestrator response Content-Length was not an integer."
             ) from exc
         if body_size <= 0:
-            raise OrchestratorClientError(
-                "Orchestrator response Content-Length must be positive."
-            )
+            raise OrchestratorClientError("Orchestrator response Content-Length must be positive.")
         if body_size > max_response_bytes:
             raise _response_too_large()
 
 
 def _response_too_large() -> OrchestratorClientError:
-    return OrchestratorClientError(
-        "Orchestrator response exceeded configured size limit."
-    )
+    return OrchestratorClientError("Orchestrator response exceeded configured size limit.")
 
 
 def _first_chunk_timeout() -> OrchestratorClientError:

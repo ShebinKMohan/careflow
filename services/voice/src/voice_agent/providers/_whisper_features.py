@@ -128,9 +128,7 @@ def compute_whisper_log_mel_features(
     if x.size < WINDOW_SAMPLES:
         x = np.pad(x, (0, WINDOW_SAMPLES - x.size), mode="constant")
 
-    magnitudes = _power_spectrogram(
-        x.astype(np.float64), _HANN_WINDOW, _N_FFT, _HOP_LENGTH
-    )
+    magnitudes = _power_spectrogram(x.astype(np.float64), _HANN_WINDOW, _N_FFT, _HOP_LENGTH)
     mel_spec = np.maximum(_MEL_FLOOR, _MEL_FILTERS.T @ magnitudes)
     log_spec = np.log10(mel_spec)
     log_spec = log_spec[:, :-1]

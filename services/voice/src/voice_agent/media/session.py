@@ -87,16 +87,45 @@ _SAFE_SHORT_REPLY_PHRASES = frozenset(
     }
 )
 _GENERIC_ACKNOWLEDGEMENT_PREFIXES = _SAFE_SHORT_REPLY_PHRASES
-_GENERIC_ACKNOWLEDGEMENT_BOUNDARY_CHARS = (
-    _REPLY_PHRASE_BOUNDARY_CHARS | _TERMINAL_PUNCTUATION
+_GENERIC_ACKNOWLEDGEMENT_BOUNDARY_CHARS = _REPLY_PHRASE_BOUNDARY_CHARS | _TERMINAL_PUNCTUATION
+_UNSAFE_REPLY_PHRASE_END_WORDS = (
+    frozenset(
+        {
+            "a",
+            "an",
+            "and",
+            "are",
+            "as",
+            "at",
+            "be",
+            "because",
+            "but",
+            "by",
+            "for",
+            "from",
+            "if",
+            "in",
+            "is",
+            "let",
+            "me",
+            "of",
+            "on",
+            "or",
+            "our",
+            "the",
+            "their",
+            "then",
+            "to",
+            "was",
+            "were",
+            "when",
+            "while",
+            "with",
+            "your",
+        }
+    )
+    | _FILLER_WORDS
 )
-_UNSAFE_REPLY_PHRASE_END_WORDS = frozenset(
-    {
-        "a", "an", "and", "are", "as", "at", "be", "because", "but", "by", "for", "from",
-        "if", "in", "is", "let", "me", "of", "on", "or", "our", "the", "their", "then",
-        "to", "was", "were", "when", "while", "with", "your",
-    }
-) | _FILLER_WORDS
 MAX_EARLY_REPLY_PHRASE_CHARS = 90
 MIN_SOFT_REPLY_PHRASE_CHARS = 32
 MAX_SOFT_REPLY_PHRASE_CHARS = 64
@@ -444,9 +473,7 @@ class MediaSessionRunner:
         interim_transcript_stability_seconds: float = (
             DEFAULT_INTERIM_TRANSCRIPT_STABILITY_SECONDS
         ),
-        interim_local_silence_commit_enabled: bool = (
-            DEFAULT_INTERIM_LOCAL_SILENCE_COMMIT_ENABLED
-        ),
+        interim_local_silence_commit_enabled: bool = (DEFAULT_INTERIM_LOCAL_SILENCE_COMMIT_ENABLED),
         speculative_response_prewarm: bool = True,
         speculative_response_stability_seconds: float = (
             DEFAULT_SPECULATIVE_RESPONSE_STABILITY_SECONDS
@@ -516,9 +543,7 @@ class MediaSessionRunner:
             raise ValueError("barge_in_energy_threshold must be non-negative.")
         if not isinstance(reply_chunking_config, ReplyChunkingConfig):
             raise TypeError("reply_chunking_config must be a ReplyChunkingConfig.")
-        clean_closing_message = (
-            closing_message.strip() if closing_message is not None else None
-        )
+        clean_closing_message = closing_message.strip() if closing_message is not None else None
         if clean_closing_message is not None and not clean_closing_message:
             clean_closing_message = None
         if (
@@ -917,14 +942,10 @@ class MediaSessionRunner:
                         committed
                     )
                 else:
-                    silence_seconds = (
-                        self._turn_policy.interim_local_silence_seconds_for_candidate(
-                            self._interim_candidate_text or ""
-                        )
+                    silence_seconds = self._turn_policy.interim_local_silence_seconds_for_candidate(
+                        self._interim_candidate_text or ""
                     )
-                remaining_silence_seconds = silence_seconds - (
-                    now - self._last_voice_frame_at
-                )
+                remaining_silence_seconds = silence_seconds - (now - self._last_voice_frame_at)
                 remaining_seconds = remaining_silence_seconds
                 if not self._utterance_buffer and self._interim_candidate_updated_at is not None:
                     remaining_stability_seconds = (
@@ -1087,9 +1108,7 @@ class MediaSessionRunner:
             )
             for reply_chunk in reply_chunks:
                 if self._speculative_response_first_reply_chunk_ready_at is None:
-                    self._speculative_response_first_reply_chunk_ready_at = (
-                        time.perf_counter()
-                    )
+                    self._speculative_response_first_reply_chunk_ready_at = time.perf_counter()
                 spoken_chars += len(reply_chunk)
                 first_audio_at = await self._append_synthesized_speculative_audio(
                     text=reply_chunk,
@@ -1258,9 +1277,7 @@ class MediaSessionRunner:
             last_voice_frame_at=self._last_voice_frame_at,
             speech_final_at=speech_final_at,
             turn_committed_at=time.perf_counter(),
-            speculative_response_started_count=(
-                self._pending_speculative_response_started_count
-            ),
+            speculative_response_started_count=(self._pending_speculative_response_started_count),
             speculative_response_discarded_count=(
                 self._pending_speculative_response_discarded_count
             ),
@@ -1273,8 +1290,7 @@ class MediaSessionRunner:
         )
         if len(user_text) > self._max_transcript_chars:
             logger.warning(
-                "Rejecting oversized transcript for call_id=%s stream_id=%s "
-                "chars=%d max_chars=%d.",
+                "Rejecting oversized transcript for call_id=%s stream_id=%s chars=%d max_chars=%d.",
                 self._call_id,
                 self._stream_id,
                 len(user_text),
@@ -1344,9 +1360,7 @@ class MediaSessionRunner:
     def _should_ignore_backchannel(self, text: str) -> bool:
         if not self._turn_policy.should_ignore_backchannel(text):
             return False
-        return not (
-            self._allow_first_backchannel_turn and self._transcript_turn_index == 0
-        )
+        return not (self._allow_first_backchannel_turn and self._transcript_turn_index == 0)
 
     async def _recover_rejected_transcript(self, turn_epoch: int) -> None:
         try:
@@ -1515,8 +1529,7 @@ class MediaSessionRunner:
             raise
         except LLMReplyTooLargeError as exc:
             logger.warning(
-                "Rejecting oversized LLM reply for call_id=%s stream_id=%s "
-                "chars=%d max_chars=%d.",
+                "Rejecting oversized LLM reply for call_id=%s stream_id=%s chars=%d max_chars=%d.",
                 self._call_id,
                 self._stream_id,
                 exc.chars,
@@ -1933,9 +1946,7 @@ class MediaSessionRunner:
                 turn_epoch,
                 started,
                 delay_seconds=(
-                    self._pre_response_ack_delay_seconds
-                    if delay_seconds is None
-                    else delay_seconds
+                    self._pre_response_ack_delay_seconds if delay_seconds is None else delay_seconds
                 ),
             )
         )
@@ -2028,9 +2039,7 @@ class MediaSessionRunner:
                 self._pre_response_ack_audio = cached_audio
                 self._pre_response_ack_audio_cache_hit = True
                 return
-            audio = await self._synthesize_pre_response_ack_audio(
-                self._pre_response_ack_text
-            )
+            audio = await self._synthesize_pre_response_ack_audio(self._pre_response_ack_text)
             if audio and not self._closed:
                 self._pre_response_ack_audio = audio
                 self._pre_response_ack_audio_cache_hit = False
@@ -2362,9 +2371,7 @@ class MediaSessionRunner:
                 else latency.turn_committed_at
             )
         if latency.llm_stream_completed_at is None:
-            latency.llm_stream_completed_at = (
-                self._speculative_response_llm_stream_completed_at
-            )
+            latency.llm_stream_completed_at = self._speculative_response_llm_stream_completed_at
         if latency.tts_first_audio_at is None:
             speculative_tts_first_audio_at = self._speculative_response_tts_first_audio_at
             if (
@@ -2440,10 +2447,7 @@ class MediaSessionRunner:
         return latency
 
     def _emit_turn_latency_if_ready(self, latency: _TurnLatency) -> None:
-        if (
-            latency.answer_first_play_audio_at is None
-            or latency.llm_stream_completed_at is None
-        ):
+        if latency.answer_first_play_audio_at is None or latency.llm_stream_completed_at is None:
             return
         self._emit_turn_latency(latency)
 
@@ -2949,12 +2953,9 @@ def _split_first_safe_reply_phrase(
         if not _is_reply_phrase_boundary(text, index):
             continue
         phrase = text[: index + 1].strip()
-        if (
-            len(phrase) >= chunking_config.min_first_phrase_chars
-            and _is_safe_reply_phrase(
-                phrase,
-                max_chars=chunking_config.max_early_phrase_chars,
-            )
+        if len(phrase) >= chunking_config.min_first_phrase_chars and _is_safe_reply_phrase(
+            phrase,
+            max_chars=chunking_config.max_early_phrase_chars,
         ):
             return phrase, text[index + 1 :]
     terminal_phrase = text.strip()
@@ -3000,13 +3001,10 @@ def _split_first_soft_reply_phrase(
             return None, text
         phrase = text[:index].strip()
         remainder = text[index:]
-        if (
-            _is_safe_reply_phrase(
-                phrase,
-                max_chars=chunking_config.max_early_phrase_chars,
-            )
-            and not _blocks_soft_reply_flush(remainder)
-        ):
+        if _is_safe_reply_phrase(
+            phrase,
+            max_chars=chunking_config.max_early_phrase_chars,
+        ) and not _blocks_soft_reply_flush(remainder):
             return phrase, remainder
     return None, text
 
@@ -3053,11 +3051,7 @@ def _blocks_soft_reply_flush(remainder: str) -> bool:
     words = _word_tokens(remainder)
     if not words:
         return False
-    return (
-        len(words) == 1
-        or words[-1].isdigit()
-        or words[-1] in _UNSAFE_REPLY_PHRASE_END_WORDS
-    )
+    return len(words) == 1 or words[-1].isdigit() or words[-1] in _UNSAFE_REPLY_PHRASE_END_WORDS
 
 
 def _reply_phrase_matches_text(phrase: str, text: str | None) -> bool:
