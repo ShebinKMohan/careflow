@@ -68,6 +68,23 @@
       "arrived": "Arrived",
       "no_show": "No-show",
       "closed": "Closed"
+    },
+    "feelsWorse": {
+      "region": "Patients who feel worse",
+      "title": "{patient} feels worse",
+      "count": "×{count}",
+      "noAnswers": "No danger answer ticked",
+      "at": "Pressed at {time}",
+      "note": "Note:",
+      "codes": {
+        "chest_pain": "Chest pain",
+        "short_of_breath": "Short of breath",
+        "face_droop": "Face drooping",
+        "arm_weakness": "Arm weak",
+        "speech_difficulty": "Speech difficult",
+        "drowsy_or_confused": "Drowsy or confused",
+        "drowsy_or_confused_unsure": "Not sure if drowsy or confused"
+      }
     }
   },
   "doctor": {

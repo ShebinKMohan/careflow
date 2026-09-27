@@ -11,7 +11,7 @@ import type { ApiState } from "./useApiData";
 /** While the live channel is down, the worklist is re-read this often. */
 export const POLL_MS = 5_000;
 const REFETCH_DEBOUNCE_MS = 150;
-const REFETCH_EVENTS = /^(alert|triage|token|intake)\./;
+const REFETCH_EVENTS = /^(alert|triage|token|intake|patient)\./; // patient.feels_worse (M2-07)
 
 export type AlertRaised = Schema<"AlertRaisedData">;
 

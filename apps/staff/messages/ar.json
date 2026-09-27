@@ -68,6 +68,23 @@
       "arrived": "حضر",
       "no_show": "لم يحضر",
       "closed": "مغلق"
+    },
+    "feelsWorse": {
+      "region": "مرضى يشعرون أنهم أسوأ",
+      "title": "{patient} يشعر أنه أسوأ",
+      "count": "×{count}",
+      "noAnswers": "لم يُحدَّد أي جواب خطر",
+      "at": "ضُغط في {time}",
+      "note": "ملاحظة:",
+      "codes": {
+        "chest_pain": "ألم في الصدر",
+        "short_of_breath": "ضيق في التنفس",
+        "face_droop": "ارتخاء في الوجه",
+        "arm_weakness": "ضعف في الذراع",
+        "speech_difficulty": "صعوبة في الكلام",
+        "drowsy_or_confused": "نعاس أو ارتباك",
+        "drowsy_or_confused_unsure": "غير متأكد من النعاس أو الارتباك"
+      }
     }
   },
   "doctor": {

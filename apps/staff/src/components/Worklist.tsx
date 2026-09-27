@@ -9,6 +9,7 @@ import { useSessionAlerts } from "@/lib/useSessionAlerts";
 
 import { ApiStatus } from "./ApiStatus";
 import { AlertBanner } from "./nurse/AlertBanner";
+import { FeelsWorseBanner } from "./nurse/FeelsWorseBanner";
 import { LevelChip } from "./nurse/LevelChip";
 
 const CELL = "border-b border-border px-3 py-3 text-start align-top";
@@ -44,6 +45,16 @@ export function Worklist() {
           >
             {live === "live" ? t("live") : live === "paused" ? t("paused") : t("connecting")}
           </p>
+          {rows.some((row) => row.feels_worse) ? (
+            <div className="flex flex-col gap-3" role="region" aria-label={t("feelsWorse.region")}>
+              {rows
+                .filter((row) => row.feels_worse)
+                .sort((a, b) => (b.feels_worse?.last_reported_at ?? "").localeCompare(a.feels_worse?.last_reported_at ?? ""))
+                .map((row) => (
+                  <FeelsWorseBanner key={row.session_id} item={row} />
+                ))}
+            </div>
+          ) : null}
           {sessions.length ? (
             <div className="sticky top-0 z-10 flex flex-col gap-3" aria-label={tAlerts("title")} role="region">
               {sessions.flatMap((session) =>
