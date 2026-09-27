@@ -1,15 +1,19 @@
 # Ask the clinic (M2-09) over the handbook retrieval (M2-08). Research prototype; synthetic data only.
 retrieval:
-  # dense | bm25 | hybrid. Provisional: in a 14-question scratch check (not the eval), dense put the
-  # right section first for 13 and hybrid for 9; both had it in the top 5 for all 14. The M2-08
-  # retrieval eval (test phase) decides.
+  # dense | bm25 | hybrid. The M2-08 retrieval eval (eval/reports/rag_retrieval.md, 60 held-out
+  # questions): dense hit@5 1.000 in English and Arabic, MRR 0.967 / 0.922; hybrid 0.967 / 1.000,
+  # MRR 0.877 / 0.917; bm25 0.800 / 0.933. Dense stays.
   mode: dense
   k: 5                 # chunks the answer may quote
   embedder: qwen       # qwen: Qwen3-Embedding-0.6B (the rag `embeddings` extra); hash: tests and CI only
 ask:
   # A retrieve-only question whose best dense cosine is below this gets "I don't know" with no
-  # model call. Provisional: in a 22-question scratch check (not the eval), clinic questions scored
-  # 0.48 to 0.77 and unrelated ones 0.15 to 0.43. The M2-08 eval's cosine distribution replaces it.
-  min_score: 0.45
+  # model call. From the M2-08 eval's distribution (SHE-306, ADR-054): the 60 answerable questions
+  # scored 0.351 to 0.848, the 10 out-of-scope ones 0.175 to 0.347. At 0.30 every answerable one is
+  # answered (0.45 refused 9 of 60), and all but one out-of-scope question (Arabic, 0.347) stay
+  # below; that one reaches the answer model, still bound by the sources, the citations and the
+  # output gate. A medical question never depends on this: the classifier and the gate refuse it.
+  # services/rag/tests/test_agent.py checks it against the report.
+  min_score: 0.30
   llm_timeout_s: 20    # each model call gets this long; a classify that times out refuses (fail safe)
   history_turns: 3     # answered turns kept per session, in the API's memory only

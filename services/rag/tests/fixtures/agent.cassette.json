@@ -1,0 +1,182 @@
+{
+  "035ab3f919280965b6e05d13dca9892b752d5c4a68622aa6e3ac5f579e196d05": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "03e78c0023cc575f2699674df42092cb3b0bed281b5123123f699612e1c3a810": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "065db8ff2112d0206cf6222db2cc86c7a59c8bca69e475366263ffa1721b5edc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "07c02bdba8a92b5e57dc536c2a4535f9faf7f6009f821b01b3f84dfd84b89564": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"يمكنك ركن سيارتك في موقف السيارات أمام المدخل الرئيسي، حيث تتوفر 120 موقفاً.\", \"cited_section_ids\": [\"parking.car_park\"]}"
+  },
+  "0e607f2f972e23af45df72ba71908c558689bd47c6f57677d1241e18d8c28454": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "1573ae85b1636a8392aa54f02e8fc13a2baaa2e6cdeba22ece93105796580a0d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"تفتح الصيدلية من الساعة 8:00 حتى 22:00 يومياً، وتغلق مبكراً في العطل الرسمية عند الساعة 20:00.\", \"cited_section_ids\": [\"pharmacy.hours\"]}"
+  },
+  "1eb1db82b0a074ed04d746df9152d6e9ad6732a31ce7f91b75283c72c85ddebc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"The pharmacy is open from 8:00 to 22:00 every day, and until 20:00 on public holidays.\", \"cited_section_ids\": [\"pharmacy.hours\"]}"
+  },
+  "213e337cd3df07cd54b76f378192af13abca7b283eeffed6128f5830d2ab9d0a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "28c91f5973156c7399b43ad249a780568a2f9c374af42ac5b270d0d85fb4977e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "2a0710bdefe01f76b5ae2febc40504b6e66817dbb67135aa465aeec60c4a65b3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "321e83d49ade76c493e13fa640c8c2a79d9b3c26bdc59d91d39aa7725a5c732d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "339c9361d62ce1d3033fc099e767f1607d97e86d3c5d3e1d1b4ffabf1096016e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "3ea94989bbe24337c3822097a9e09e7c552341dfdbb5dcb17602c172eb2281e4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "4c557d8e3b6724135e82557b82067c4b0a7c2a108fe2d4f250e0987212d95fde": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"نعم، تتوفر خدمة الإنترنت اللاسلكي مجاناً في كل أنحاء العيادة. يمكنك الاتصال بالشبكة CareFlow-Guest دون الحاجة إلى كلمة مرور.\", \"cited_section_ids\": [\"facilities.wifi\"]}"
+  },
+  "50525e69a27c9f01bb72aa8c614255b208db171e2b9d88a455c3139b2236a881": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "57e9aa5f5ac85065aeb2f6d16a011353692c73f1720a71fc0301f6cb8059a50a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "60b54e1912696d385482997d12e9eb4f2a6abdc6e07fa9824e2a252d5a96864b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"The clinic works directly with Insurer A, Insurer B, and Insurer C.\", \"cited_section_ids\": [\"insurance.accepted\"]}"
+  },
+  "64fe47a4511fdfe68ab4246b7b45f75f8fa89f49359d237d3f063bfcefff2168": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"There are two prayer rooms on the ground floor, one for men and one for women, located at the end of the corridor past the cafe.\", \"cited_section_ids\": [\"facilities.prayer_room\"]}"
+  },
+  "6e33088c7eded0522ca8dbc0c82dc2dd738397866f0af611d06f8d3883e45e2e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"تعامل العيادة مع شركات التأمين A و B و C. إذا كان لديك تأمين لدى إحداها، يرجى إظهار البطاقة في مكتب الاستقبال.\", \"cited_section_ids\": [\"insurance.accepted\"]}"
+  },
+  "7c21c4f1e36d6802ebff541366fa83bbcad23a9b259d220628d0c3693ab8556c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "80ad2e665aa1791ab858aa0b1e385b63291441fd68a1f0b722ccd5e5a3827edb": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"يمكنك زيارة زوجك في العيادة العامة حتى الساعة 22:00، وفي قسم الطوارئ في أي وقت.\", \"cited_section_ids\": [\"hours.opening\", \"visitors.hours\"]}"
+  },
+  "81e638a238c3d356e47cbc38ca1ed8371d90f8f933e22dd2f2e6ea2c55e7fa42": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "8471c58fac321e261683c977703de5ac56b3c0fca0b3f8f8ad9ec67da2f85fee": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "8ea26ce8d75cfdb2e98d7fcfbcd6f24106734fd2edfad2f13de816c1f048c46d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "9531051208dbc78f2545072ee8f85d03979b2e823e4e8f906547616fab3a4799": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "a76a971aa775161da76d130bf6887d780c90ace1e09387bb9d22bc4c7cbb2f6e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "b24c624211c64129f4fc328beed13b0230588d550d91712954d0cf4db20c0221": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "c4cecdbdb2a5901fd59d12b95d849c484e3ca43aabfdbe310deb2102123b3db1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "c59277841c66a355aeb6ce1c461318d796c91ae73c5a08c479c4761b2f9241f3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"توجد غرفتا صلاة في الطابق الأرضي، واحدة للرجال وواحدة للنساء، في نهاية الممر بعد المقهى. وأماكن الوضوء بجانبهما.\", \"cited_section_ids\": [\"facilities.prayer_room\", \"directions.ground_floor\"]}"
+  },
+  "d27f9d8d2e0d4cd2f25b190a96a8ed721e43c79628b85279f0a17afe19f3e55c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "d59fae068da5b92e42d5cf7fde407588892dad39a196149361cf281bb53ca822": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"Visitors are welcome until 21:00 every day.\", \"cited_section_ids\": [\"visitors.hours\"]}"
+  },
+  "d9d8c83d92bb3bbe494a2bad5c3874174d764ad4a3af687d2f88477fa2b95656": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "e868e040901c69b49a296cba167e84a9f4a81eee88dd8e905c05cf3066c9d2ca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"tools\": [\"retrieve\"]}"
+  },
+  "e8b686de4b93b9a7f5857ee4dfe296765cda9bf9e31bcc7f01cec50626a5ab39": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"You can park in the car park located in front of the main entrance, which has 120 spaces. The first two hours are free, and any additional time costs a small hourly fee paid at the exit machine. Alternatively, you may use the drop-off area for up to 10 minutes to help a patient exit their vehicle.\", \"cited_section_ids\": [\"parking.car_park\", \"parking.drop_off\"]}"
+  },
+  "fa13d48df664f7b3ef508a9a927ca3f1c6ecc4441aaf9c9e8fe08aa952f1f61e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"intent\": \"clinic\"}"
+  },
+  "feb92558f2cfa97d189e398dac58e64dc38f60a3bb61f3575948eab5bdc9f696": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "conversation",
+    "text": "{\"answer\": \"Yes, free Wi-Fi is available everywhere in the clinic. You can join the network 'CareFlow-Guest' without a password.\", \"cited_section_ids\": [\"facilities.wifi\"]}"
+  }
+}

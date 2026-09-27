@@ -5,7 +5,7 @@
   "$defs": {
     "RagRefusedData": {
       "title": "RagRefusedData",
-      "description": "Internal only: a medical question was refused and flagged to the nurse (M2-09). `category` says which classifier layer decided. No question text.",
+      "description": "Internal only: a medical question was refused and flagged to the nurse (M2-09). `category` says which layer decided: the lexicon, the model, a failure (fail safe), or the output gate that blocked a generated answer (SHE-306). No question text.",
       "type": "object",
       "properties": {
         "clinic_id": {
@@ -22,7 +22,8 @@
           "enum": [
             "lexicon",
             "model",
-            "fail_safe"
+            "fail_safe",
+            "output_gate"
           ]
         }
       },
