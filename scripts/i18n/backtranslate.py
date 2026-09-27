@@ -3,7 +3,9 @@
 There is no native Arabic reviewer, so meaning drift is caught by machine, and the report says so.
 Each Arabic string of the three apps, of the shared footer and of the nurse's alert lines
 (packages/contracts/alert_templates.yaml: `Alert.display_text` and its qualifiers, checked as
-`safety.alerts.<rule>` and `safety.qualifiers.<name>`, SHE-293) is translated back to English by the
+`safety.alerts.<rule>` and `safety.qualifiers.<name>`, SHE-293), and each section of the clinic
+handbook (services/rag/handbook, checked as `handbook.<section_id>`: title and body, M2-08) is
+translated back to English by the
 provider configured for the `translation_check` task (the local Qwen3.5-9B by default: offline,
 zero cost). The model does not see the English while it translates. Then the back-translation is
 compared with the English original twice: by the model's judgement, and by chrF (sacrebleu). A key
@@ -49,10 +51,11 @@ from careflow_providers import (
     load_config,
     structured,
 )
+from careflow_rag.handbook import parse
 
 REPO: Final = Path(__file__).resolve().parents[2]
 # The three apps' messages, and the shared footer's (packages/ui: "Not for clinical use").
-APPS: Final = ("kiosk", "staff", "companion", "ui", "alerts")
+APPS: Final = ("kiosk", "staff", "companion", "ui", "alerts", "handbook")
 REPORT_JSON: Final = REPO / "eval" / "reports" / "i18n_backtranslation.json"
 REPORT_MD: Final = REPO / "eval" / "reports" / "i18n_backtranslation.md"
 UNRESOLVED: Final = REPO / "docs" / "i18n" / "unresolved.md"
@@ -128,18 +131,35 @@ def leaves(value: Any, prefix: str = "") -> dict[str, str]:
 
 
 def messages(app: str, locale: str) -> Path:
-    """The file with `app`'s strings in `locale`; the alert lines hold both locales in one file."""
+    """The file with `app`'s strings in `locale`; the alert lines hold both locales in one file,
+    and the handbook is a folder of Markdown files per locale."""
     if app == "alerts":
         return REPO / "packages" / "contracts" / "alert_templates.yaml"
+    if app == "handbook":
+        return REPO / "services" / "rag" / "handbook" / locale
     folder = REPO / "packages" / "ui" / "src" if app == "ui" else REPO / "apps" / app
     return folder / "messages" / f"{locale}.json"
 
 
 def load_messages(app: str, locale: str) -> dict[str, str]:
+    if app == "handbook":
+        return handbook_sections(messages(app, locale), locale)
     text = messages(app, locale).read_text(encoding="utf-8")
     if app == "alerts":
         return alert_lines(yaml.safe_load(text) or {}, locale)
     return leaves(json.loads(text))
+
+
+def handbook_sections(folder: Path, locale: str) -> dict[str, str]:
+    """The clinic handbook's sections in `locale`, title then body, as `handbook.<section_id>`.
+    They are practical information, not safety text: a flagged section fails the handbook's own
+    review (careflow_rag.review), not this gate."""
+    sections: dict[str, str] = {}
+    for path in sorted(folder.glob("*.md")):
+        for section in parse(path.read_text(encoding="utf-8"), "ar" if locale == "ar" else "en"):
+            body = "\n\n".join(section.paragraphs)
+            sections[f"handbook.{section.section_id}"] = f"{section.title}\n\n{body}"
+    return sections
 
 
 def alert_lines(templates: dict[str, Any], locale: str) -> dict[str, str]:
@@ -154,7 +174,13 @@ def alert_lines(templates: dict[str, Any], locale: str) -> dict[str, str]:
 
 
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """The file's SHA-256; for a folder, over its files' names and contents, in name order."""
+    if not path.is_dir():
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    for child in sorted(path.glob("*.md")):
+        digest.update(child.name.encode() + b"\0" + child.read_bytes() + b"\0")
+    return digest.hexdigest()
 
 
 def is_safety(key: str) -> bool:

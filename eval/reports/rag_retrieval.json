@@ -1,0 +1,3874 @@
+{
+  "generated_at": "2026-09-27T18:38:39+00:00",
+  "dataset": {
+    "path": "eval/datasets/rag/retrieval.jsonl",
+    "sha256": "371708d0e7fec701f79fe66e299f5fe806295be564c5ca36ba1f68a73fb18635",
+    "answerable": {
+      "en": 30,
+      "ar": 30
+    },
+    "out_of_scope": {
+      "en": 5,
+      "ar": 5
+    },
+    "written_by": "agent:claude-code/claude-opus-5-5 (not real users' questions)"
+  },
+  "handbook": {
+    "version": "cdbc0b73e771d50b",
+    "chunks": 50,
+    "sections_per_language": 25,
+    "ingest_seconds": 15.3
+  },
+  "embedder": {
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "device": "mps",
+    "sentence_transformers": "5.7.0",
+    "transformers": "5.17.0",
+    "torch": "2.14.0"
+  },
+  "postgres_extensions": {
+    "vector": "0.8.6",
+    "pg_textsearch": "1.4.0"
+  },
+  "settings": {
+    "k": 5,
+    "candidates": 20,
+    "rrf_k": 60,
+    "mrr_depth": 20,
+    "configured_mode": "dense",
+    "configured_min_score": 0.45
+  },
+  "results": {
+    "en": {
+      "dense": {
+        "n": 30,
+        "hit_at_5": 1.0,
+        "hit_at_1": 0.933,
+        "mrr": 0.967,
+        "missed_at_5": [],
+        "median_ms": 34.3
+      },
+      "bm25": {
+        "n": 30,
+        "hit_at_5": 0.8,
+        "hit_at_1": 0.433,
+        "mrr": 0.586,
+        "missed_at_5": [
+          "en-05",
+          "en-07",
+          "en-09",
+          "en-10",
+          "en-11",
+          "en-29"
+        ],
+        "median_ms": 1.6
+      },
+      "hybrid": {
+        "n": 30,
+        "hit_at_5": 0.967,
+        "hit_at_1": 0.8,
+        "mrr": 0.877,
+        "missed_at_5": [
+          "en-29"
+        ],
+        "median_ms": 32.9
+      }
+    },
+    "ar": {
+      "dense": {
+        "n": 30,
+        "hit_at_5": 1.0,
+        "hit_at_1": 0.867,
+        "mrr": 0.922,
+        "missed_at_5": [],
+        "median_ms": 33.4
+      },
+      "bm25": {
+        "n": 30,
+        "hit_at_5": 0.933,
+        "hit_at_1": 0.567,
+        "mrr": 0.719,
+        "missed_at_5": [
+          "ar-09",
+          "ar-30"
+        ],
+        "median_ms": 2.1
+      },
+      "hybrid": {
+        "n": 30,
+        "hit_at_5": 1.0,
+        "hit_at_1": 0.867,
+        "mrr": 0.917,
+        "missed_at_5": [],
+        "median_ms": 35.3
+      }
+    }
+  },
+  "dense_top_cosine": {
+    "en": {
+      "top1_hit": {
+        "n": 28,
+        "min": 0.37,
+        "median": 0.586,
+        "max": 0.794,
+        "values": [
+          0.37,
+          0.414,
+          0.44,
+          0.51,
+          0.518,
+          0.518,
+          0.529,
+          0.545,
+          0.549,
+          0.561,
+          0.57,
+          0.574,
+          0.578,
+          0.581,
+          0.59,
+          0.6,
+          0.601,
+          0.621,
+          0.627,
+          0.629,
+          0.635,
+          0.661,
+          0.674,
+          0.677,
+          0.746,
+          0.751,
+          0.774,
+          0.794
+        ]
+      },
+      "top1_miss": {
+        "n": 2,
+        "min": 0.367,
+        "median": 0.387,
+        "max": 0.406,
+        "values": [
+          0.367,
+          0.406
+        ]
+      },
+      "out_of_scope": {
+        "n": 5,
+        "min": 0.175,
+        "median": 0.201,
+        "max": 0.253,
+        "values": [
+          0.175,
+          0.189,
+          0.201,
+          0.252,
+          0.253
+        ]
+      },
+      "answerable_below_0.45": 5,
+      "out_of_scope_at_or_above_0.45": 0
+    },
+    "ar": {
+      "top1_hit": {
+        "n": 26,
+        "min": 0.412,
+        "median": 0.636,
+        "max": 0.848,
+        "values": [
+          0.412,
+          0.462,
+          0.469,
+          0.542,
+          0.549,
+          0.558,
+          0.566,
+          0.567,
+          0.592,
+          0.595,
+          0.603,
+          0.625,
+          0.629,
+          0.643,
+          0.65,
+          0.663,
+          0.68,
+          0.686,
+          0.71,
+          0.748,
+          0.752,
+          0.788,
+          0.795,
+          0.795,
+          0.798,
+          0.848
+        ]
+      },
+      "top1_miss": {
+        "n": 4,
+        "min": 0.351,
+        "median": 0.388,
+        "max": 0.547,
+        "values": [
+          0.351,
+          0.377,
+          0.399,
+          0.547
+        ]
+      },
+      "out_of_scope": {
+        "n": 5,
+        "min": 0.193,
+        "median": 0.264,
+        "max": 0.347,
+        "values": [
+          0.193,
+          0.225,
+          0.264,
+          0.27,
+          0.347
+        ]
+      },
+      "answerable_below_0.45": 4,
+      "out_of_scope_at_or_above_0.45": 0
+    }
+  },
+  "target": {
+    "hybrid_hit_at_5": 0.9,
+    "met": true,
+    "note": "a target on these questions, not a claim"
+  },
+  "answers": [
+    {
+      "id": "en-01",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "hours.opening"
+      ],
+      "top5": [
+        "hours.opening",
+        "hours.holidays",
+        "visitors.hours",
+        "parking.car_park",
+        "departments.general"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7505418939712589,
+      "ms": 49.6
+    },
+    {
+      "id": "en-01",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "hours.opening"
+      ],
+      "top5": [
+        "hours.opening",
+        "hours.holidays",
+        "visitors.hours",
+        "departments.children",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 7.8
+    },
+    {
+      "id": "en-01",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "hours.opening"
+      ],
+      "top5": [
+        "hours.opening",
+        "hours.holidays",
+        "visitors.hours",
+        "pharmacy.hours",
+        "departments.general"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7505418939712589,
+      "ms": 35.0
+    },
+    {
+      "id": "en-02",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "hours.holidays",
+        "visitors.hours",
+        "departments.emergency",
+        "hours.opening"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7455399454059749,
+      "ms": 43.0
+    },
+    {
+      "id": "en-02",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "directions.rooms",
+        "departments.emergency",
+        "hours.emergency",
+        "hours.holidays",
+        "directions.ground_floor"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "en-02",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "hours.holidays",
+        "departments.emergency",
+        "directions.rooms",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7455399454059749,
+      "ms": 43.5
+    },
+    {
+      "id": "en-03",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "directions.rooms",
+        "parking.car_park",
+        "directions.ground_floor",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.4138038765505312,
+      "ms": 44.2
+    },
+    {
+      "id": "en-03",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "parking.drop_off",
+        "parking.car_park",
+        "directions.ground_floor",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 3.0
+    },
+    {
+      "id": "en-03",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "parking.car_park",
+        "directions.ground_floor",
+        "parking.drop_off",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.4138038765505312,
+      "ms": 39.2
+    },
+    {
+      "id": "en-04",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "hours.holidays"
+      ],
+      "top5": [
+        "hours.emergency",
+        "hours.holidays",
+        "visitors.hours",
+        "facilities.cafe",
+        "hours.opening"
+      ],
+      "rank": 2,
+      "top_cosine": 0.40618658670707897,
+      "ms": 41.0
+    },
+    {
+      "id": "en-04",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "hours.holidays"
+      ],
+      "top5": [
+        "pharmacy.hours",
+        "facilities.cafe",
+        "hours.holidays",
+        "hours.emergency",
+        "hours.opening"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 1.5
+    },
+    {
+      "id": "en-04",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "hours.holidays"
+      ],
+      "top5": [
+        "hours.emergency",
+        "hours.holidays",
+        "facilities.cafe",
+        "pharmacy.hours",
+        "hours.opening"
+      ],
+      "rank": 2,
+      "top_cosine": 0.40618658670707897,
+      "ms": 36.5
+    },
+    {
+      "id": "en-05",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "departments.emergency",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "departments.emergency",
+        "hours.emergency",
+        "directions.rooms",
+        "directions.lifts",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5447182374257296,
+      "ms": 37.2
+    },
+    {
+      "id": "en-05",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "departments.emergency",
+        "directions.ground_floor"
+      ],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "en-05",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "departments.emergency",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "departments.emergency",
+        "hours.emergency",
+        "directions.rooms",
+        "directions.lifts",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5447182374257296,
+      "ms": 32.1
+    },
+    {
+      "id": "en-06",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "departments.general"
+      ],
+      "top5": [
+        "departments.general",
+        "departments.emergency",
+        "directions.rooms",
+        "directions.first_floor",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5813720829791392,
+      "ms": 32.0
+    },
+    {
+      "id": "en-06",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "departments.general"
+      ],
+      "top5": [
+        "departments.general",
+        "departments.emergency",
+        "pharmacy.prescriptions",
+        "hours.opening",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "en-06",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "departments.general"
+      ],
+      "top5": [
+        "departments.general",
+        "departments.emergency",
+        "pharmacy.prescriptions",
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5813720829791392,
+      "ms": 32.5
+    },
+    {
+      "id": "en-07",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "departments.children",
+        "parking.drop_off",
+        "parking.car_park",
+        "visitors.rules",
+        "visitors.children"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5294651892941127,
+      "ms": 41.0
+    },
+    {
+      "id": "en-07",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.drop_off",
+        "directions.first_floor",
+        "departments.general",
+        "visitors.rules"
+      ],
+      "rank": 6,
+      "top_cosine": null,
+      "ms": 2.0
+    },
+    {
+      "id": "en-07",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.drop_off",
+        "departments.children",
+        "directions.first_floor",
+        "visitors.rules"
+      ],
+      "rank": 3,
+      "top_cosine": 0.5294651892941127,
+      "ms": 41.5
+    },
+    {
+      "id": "en-08",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "top5": [
+        "directions.rooms",
+        "directions.first_floor",
+        "directions.ground_floor",
+        "facilities.prayer_room",
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5613548775081868,
+      "ms": 44.6
+    },
+    {
+      "id": "en-08",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "top5": [
+        "directions.rooms",
+        "departments.emergency",
+        "facilities.toilets",
+        "directions.first_floor",
+        "departments.general"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.2
+    },
+    {
+      "id": "en-08",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "top5": [
+        "directions.rooms",
+        "directions.first_floor",
+        "facilities.toilets",
+        "departments.emergency",
+        "facilities.prayer_room"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5613548775081868,
+      "ms": 33.6
+    },
+    {
+      "id": "en-09",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "directions.lifts"
+      ],
+      "top5": [
+        "directions.lifts",
+        "facilities.toilets",
+        "directions.rooms",
+        "directions.ground_floor",
+        "facilities.prayer_room"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6006747044976186,
+      "ms": 37.8
+    },
+    {
+      "id": "en-09",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "directions.lifts"
+      ],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 2.8
+    },
+    {
+      "id": "en-09",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "directions.lifts"
+      ],
+      "top5": [
+        "directions.lifts",
+        "facilities.toilets",
+        "directions.rooms",
+        "directions.ground_floor",
+        "facilities.prayer_room"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6006747044976186,
+      "ms": 34.4
+    },
+    {
+      "id": "en-10",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "facilities.prayer_room"
+      ],
+      "top5": [
+        "facilities.prayer_room",
+        "facilities.wifi",
+        "directions.ground_floor",
+        "directions.rooms",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.56964058176199,
+      "ms": 31.0
+    },
+    {
+      "id": "en-10",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "facilities.prayer_room"
+      ],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.5
+    },
+    {
+      "id": "en-10",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.prayer_room"
+      ],
+      "top5": [
+        "facilities.prayer_room",
+        "facilities.wifi",
+        "directions.ground_floor",
+        "directions.rooms",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.56964058176199,
+      "ms": 32.0
+    },
+    {
+      "id": "en-11",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "facilities.cafe"
+      ],
+      "top5": [
+        "facilities.cafe",
+        "hours.holidays",
+        "pharmacy.hours",
+        "hours.opening",
+        "hours.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5896452792254675,
+      "ms": 36.8
+    },
+    {
+      "id": "en-11",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "facilities.cafe"
+      ],
+      "top5": [
+        "hours.holidays",
+        "hours.emergency"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.3
+    },
+    {
+      "id": "en-11",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.cafe"
+      ],
+      "top5": [
+        "hours.holidays",
+        "hours.emergency",
+        "facilities.cafe",
+        "pharmacy.hours",
+        "hours.opening"
+      ],
+      "rank": 3,
+      "top_cosine": 0.5896452792254675,
+      "ms": 38.0
+    },
+    {
+      "id": "en-12",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "facilities.wifi"
+      ],
+      "top5": [
+        "facilities.wifi",
+        "directions.rooms",
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5485780473959068,
+      "ms": 30.8
+    },
+    {
+      "id": "en-12",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "facilities.wifi"
+      ],
+      "top5": [
+        "facilities.wifi"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 3.1
+    },
+    {
+      "id": "en-12",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.wifi"
+      ],
+      "top5": [
+        "facilities.wifi",
+        "directions.rooms",
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5485780473959068,
+      "ms": 34.4
+    },
+    {
+      "id": "en-13",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "facilities.toilets"
+      ],
+      "top5": [
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "departments.children",
+        "directions.lifts",
+        "directions.rooms"
+      ],
+      "rank": 1,
+      "top_cosine": 0.44014250061022897,
+      "ms": 34.5
+    },
+    {
+      "id": "en-13",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "facilities.toilets"
+      ],
+      "top5": [
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.6
+    },
+    {
+      "id": "en-13",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.toilets"
+      ],
+      "top5": [
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "departments.children",
+        "directions.lifts",
+        "directions.rooms"
+      ],
+      "rank": 1,
+      "top_cosine": 0.44014250061022897,
+      "ms": 31.8
+    },
+    {
+      "id": "en-14",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents",
+        "directions.lifts",
+        "hours.holidays"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6350798137902421,
+      "ms": 30.7
+    },
+    {
+      "id": "en-14",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.7
+    },
+    {
+      "id": "en-14",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents",
+        "directions.lifts",
+        "hours.holidays"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6350798137902421,
+      "ms": 34.8
+    },
+    {
+      "id": "en-15",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents",
+        "visitors.children",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6214470961519538,
+      "ms": 36.3
+    },
+    {
+      "id": "en-15",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.7
+    },
+    {
+      "id": "en-15",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents",
+        "visitors.children",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6214470961519538,
+      "ms": 39.8
+    },
+    {
+      "id": "en-16",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.accepted",
+        "insurance.documents",
+        "visitors.children",
+        "visitors.rules"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6739748781489514,
+      "ms": 39.3
+    },
+    {
+      "id": "en-16",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.documents",
+        "insurance.accepted",
+        "insurance.no_insurance"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 4.3
+    },
+    {
+      "id": "en-16",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.documents",
+        "insurance.accepted",
+        "visitors.children",
+        "visitors.rules"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6739748781489514,
+      "ms": 39.1
+    },
+    {
+      "id": "en-17",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "facilities.wifi",
+        "insurance.documents",
+        "parking.drop_off",
+        "parking.car_park"
+      ],
+      "rank": 1,
+      "top_cosine": 0.3698444107371659,
+      "ms": 31.3
+    },
+    {
+      "id": "en-17",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.accepted"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.2
+    },
+    {
+      "id": "en-17",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.accepted",
+        "facilities.wifi",
+        "insurance.documents",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.3698444107371659,
+      "ms": 30.8
+    },
+    {
+      "id": "en-18",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "insurance.documents"
+      ],
+      "top5": [
+        "insurance.documents",
+        "visitors.rules",
+        "visitors.children",
+        "visitors.hours",
+        "insurance.no_insurance"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6605570395267725,
+      "ms": 36.7
+    },
+    {
+      "id": "en-18",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "insurance.documents"
+      ],
+      "top5": [
+        "visitors.rules",
+        "insurance.no_insurance",
+        "visitors.children",
+        "insurance.documents"
+      ],
+      "rank": 4,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "en-18",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.documents"
+      ],
+      "top5": [
+        "visitors.rules",
+        "insurance.documents",
+        "visitors.children",
+        "insurance.no_insurance",
+        "visitors.hours"
+      ],
+      "rank": 2,
+      "top_cosine": 0.6605570395267725,
+      "ms": 31.8
+    },
+    {
+      "id": "en-19",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "parking.car_park"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.accessible",
+        "parking.drop_off",
+        "facilities.wifi",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6271125070934298,
+      "ms": 33.8
+    },
+    {
+      "id": "en-19",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "parking.car_park"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.accessible",
+        "parking.drop_off",
+        "facilities.wifi"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.7
+    },
+    {
+      "id": "en-19",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "parking.car_park"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.accessible",
+        "parking.drop_off",
+        "facilities.wifi",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6271125070934298,
+      "ms": 31.6
+    },
+    {
+      "id": "en-20",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "parking.drop_off"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.accessible",
+        "parking.car_park",
+        "visitors.rules",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6289017927256628,
+      "ms": 35.8
+    },
+    {
+      "id": "en-20",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "parking.drop_off"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.accessible",
+        "directions.ground_floor",
+        "hours.emergency",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.3
+    },
+    {
+      "id": "en-20",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "parking.drop_off"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.accessible",
+        "directions.ground_floor",
+        "parking.car_park",
+        "hours.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6289017927256628,
+      "ms": 32.3
+    },
+    {
+      "id": "en-21",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "parking.car_park",
+        "parking.drop_off",
+        "directions.lifts",
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6000009598073612,
+      "ms": 30.5
+    },
+    {
+      "id": "en-21",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.accessible",
+        "parking.drop_off"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.1
+    },
+    {
+      "id": "en-21",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "parking.car_park",
+        "parking.drop_off",
+        "directions.lifts",
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6000009598073612,
+      "ms": 30.9
+    },
+    {
+      "id": "en-22",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "parking.drop_off",
+        "directions.lifts",
+        "insurance.documents",
+        "visitors.rules"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5175026137981529,
+      "ms": 31.1
+    },
+    {
+      "id": "en-22",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.0
+    },
+    {
+      "id": "en-22",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "parking.drop_off",
+        "directions.lifts",
+        "insurance.documents",
+        "visitors.rules"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5175026137981529,
+      "ms": 30.5
+    },
+    {
+      "id": "en-23",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "pharmacy.hours"
+      ],
+      "top5": [
+        "pharmacy.hours",
+        "hours.holidays",
+        "hours.opening",
+        "hours.emergency",
+        "visitors.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7936074611739323,
+      "ms": 29.9
+    },
+    {
+      "id": "en-23",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "pharmacy.hours"
+      ],
+      "top5": [
+        "hours.holidays",
+        "pharmacy.hours",
+        "hours.emergency",
+        "hours.opening",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.2
+    },
+    {
+      "id": "en-23",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "pharmacy.hours"
+      ],
+      "top5": [
+        "pharmacy.hours",
+        "hours.holidays",
+        "hours.opening",
+        "hours.emergency",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7936074611739323,
+      "ms": 31.8
+    },
+    {
+      "id": "en-24",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "insurance.documents",
+        "directions.lifts",
+        "parking.drop_off",
+        "insurance.accepted"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6769650326064911,
+      "ms": 31.3
+    },
+    {
+      "id": "en-24",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "insurance.documents",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.2
+    },
+    {
+      "id": "en-24",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "insurance.documents",
+        "directions.lifts",
+        "parking.drop_off",
+        "insurance.accepted"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6769650326064911,
+      "ms": 34.4
+    },
+    {
+      "id": "en-25",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "insurance.documents",
+        "pharmacy.hours",
+        "facilities.wifi",
+        "insurance.accepted"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5744498937686032,
+      "ms": 31.9
+    },
+    {
+      "id": "en-25",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.2
+    },
+    {
+      "id": "en-25",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "parking.drop_off",
+        "insurance.documents",
+        "pharmacy.hours",
+        "facilities.wifi"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5744498937686032,
+      "ms": 32.2
+    },
+    {
+      "id": "en-26",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "visitors.hours"
+      ],
+      "top5": [
+        "visitors.hours",
+        "visitors.rules",
+        "visitors.children",
+        "hours.opening",
+        "hours.holidays"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5178801558168566,
+      "ms": 32.9
+    },
+    {
+      "id": "en-26",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "visitors.hours"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "visitors.children",
+        "visitors.hours",
+        "visitors.rules",
+        "departments.children"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 2.0
+    },
+    {
+      "id": "en-26",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "visitors.hours"
+      ],
+      "top5": [
+        "visitors.hours",
+        "visitors.children",
+        "visitors.rules",
+        "insurance.no_insurance",
+        "departments.children"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5178801558168566,
+      "ms": 32.3
+    },
+    {
+      "id": "en-27",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "visitors.rules"
+      ],
+      "top5": [
+        "visitors.rules",
+        "visitors.hours",
+        "visitors.children",
+        "departments.general",
+        "directions.lifts"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7739464926419196,
+      "ms": 34.1
+    },
+    {
+      "id": "en-27",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "visitors.rules"
+      ],
+      "top5": [
+        "visitors.children",
+        "visitors.hours",
+        "visitors.rules",
+        "insurance.no_insurance",
+        "departments.emergency"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 1.3
+    },
+    {
+      "id": "en-27",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "visitors.rules"
+      ],
+      "top5": [
+        "visitors.rules",
+        "visitors.children",
+        "visitors.hours",
+        "directions.lifts",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7739464926419196,
+      "ms": 33.3
+    },
+    {
+      "id": "en-28",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "visitors.children"
+      ],
+      "top5": [
+        "visitors.children",
+        "visitors.rules",
+        "visitors.hours",
+        "departments.children",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5781490226201282,
+      "ms": 34.9
+    },
+    {
+      "id": "en-28",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "visitors.children"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "visitors.children",
+        "hours.emergency",
+        "pharmacy.hours",
+        "visitors.rules"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.7
+    },
+    {
+      "id": "en-28",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "visitors.children"
+      ],
+      "top5": [
+        "visitors.children",
+        "insurance.no_insurance",
+        "visitors.rules",
+        "hours.opening",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5781490226201282,
+      "ms": 36.6
+    },
+    {
+      "id": "en-29",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "departments.children",
+        "visitors.children",
+        "parking.drop_off",
+        "directions.first_floor",
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": 0.510283666771788,
+      "ms": 29.7
+    },
+    {
+      "id": "en-29",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "directions.first_floor",
+        "visitors.rules",
+        "facilities.wifi",
+        "departments.general"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.2
+    },
+    {
+      "id": "en-29",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "directions.first_floor",
+        "facilities.wifi",
+        "visitors.rules",
+        "departments.emergency"
+      ],
+      "rank": 7,
+      "top_cosine": 0.3510043257373813,
+      "ms": 31.0
+    },
+    {
+      "id": "en-30",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [
+        "insurance.no_insurance",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "facilities.wifi",
+        "directions.ground_floor",
+        "parking.car_park"
+      ],
+      "rank": 2,
+      "top_cosine": 0.366931690293665,
+      "ms": 29.7
+    },
+    {
+      "id": "en-30",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [
+        "insurance.no_insurance",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.1
+    },
+    {
+      "id": "en-30",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.no_insurance",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "facilities.wifi",
+        "directions.ground_floor",
+        "parking.car_park"
+      ],
+      "rank": 2,
+      "top_cosine": 0.366931690293665,
+      "ms": 30.4
+    },
+    {
+      "id": "ar-01",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "hours.opening"
+      ],
+      "top5": [
+        "hours.opening",
+        "hours.holidays",
+        "pharmacy.hours",
+        "visitors.hours",
+        "hours.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7875349108253197,
+      "ms": 35.4
+    },
+    {
+      "id": "ar-01",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "hours.opening"
+      ],
+      "top5": [
+        "hours.opening",
+        "directions.ground_floor",
+        "departments.emergency",
+        "departments.general",
+        "insurance.accepted"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 11.3
+    },
+    {
+      "id": "ar-01",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "hours.opening"
+      ],
+      "top5": [
+        "hours.opening",
+        "departments.general",
+        "hours.holidays",
+        "departments.emergency",
+        "parking.car_park"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7875349108253197,
+      "ms": 35.3
+    },
+    {
+      "id": "ar-02",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "hours.holidays",
+        "visitors.hours",
+        "departments.emergency",
+        "hours.opening"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7945039887580109,
+      "ms": 38.4
+    },
+    {
+      "id": "ar-02",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "directions.lifts",
+        "hours.emergency",
+        "hours.holidays",
+        "visitors.hours",
+        "pharmacy.hours"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "ar-02",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "hours.holidays",
+        "visitors.hours",
+        "directions.lifts",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7945039887580109,
+      "ms": 36.1
+    },
+    {
+      "id": "ar-03",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "directions.rooms",
+        "parking.drop_off",
+        "insurance.documents",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.4120452765918847,
+      "ms": 38.5
+    },
+    {
+      "id": "ar-03",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "insurance.accepted",
+        "visitors.children",
+        "insurance.no_insurance",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.5
+    },
+    {
+      "id": "ar-03",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "hours.emergency"
+      ],
+      "top5": [
+        "hours.emergency",
+        "insurance.documents",
+        "directions.ground_floor",
+        "parking.drop_off",
+        "insurance.no_insurance"
+      ],
+      "rank": 1,
+      "top_cosine": 0.4120452765918847,
+      "ms": 37.4
+    },
+    {
+      "id": "ar-04",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "hours.holidays"
+      ],
+      "top5": [
+        "hours.holidays",
+        "visitors.hours",
+        "hours.emergency",
+        "pharmacy.hours",
+        "hours.opening"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5921035010878223,
+      "ms": 32.2
+    },
+    {
+      "id": "ar-04",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "hours.holidays"
+      ],
+      "top5": [
+        "pharmacy.hours",
+        "facilities.cafe",
+        "hours.holidays",
+        "hours.emergency",
+        "hours.opening"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "ar-04",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "hours.holidays"
+      ],
+      "top5": [
+        "hours.holidays",
+        "pharmacy.hours",
+        "hours.emergency",
+        "facilities.cafe",
+        "hours.opening"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5921035010878223,
+      "ms": 31.9
+    },
+    {
+      "id": "ar-05",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "departments.emergency",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "departments.emergency",
+        "hours.emergency",
+        "directions.lifts",
+        "directions.ground_floor",
+        "directions.rooms"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7483492259016311,
+      "ms": 30.6
+    },
+    {
+      "id": "ar-05",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "departments.emergency",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "departments.emergency",
+        "directions.lifts",
+        "hours.emergency",
+        "visitors.hours",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.2
+    },
+    {
+      "id": "ar-05",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "departments.emergency",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "departments.emergency",
+        "hours.emergency",
+        "directions.lifts",
+        "directions.ground_floor",
+        "visitors.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7483492259016311,
+      "ms": 31.1
+    },
+    {
+      "id": "ar-06",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "departments.general"
+      ],
+      "top5": [
+        "departments.general",
+        "departments.emergency",
+        "directions.first_floor",
+        "directions.rooms",
+        "parking.car_park"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5672642030250467,
+      "ms": 33.5
+    },
+    {
+      "id": "ar-06",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "departments.general"
+      ],
+      "top5": [
+        "departments.general",
+        "pharmacy.prescriptions",
+        "directions.rooms",
+        "departments.emergency",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.3
+    },
+    {
+      "id": "ar-06",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "departments.general"
+      ],
+      "top5": [
+        "departments.general",
+        "departments.emergency",
+        "directions.rooms",
+        "directions.first_floor",
+        "facilities.wifi"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5672642030250467,
+      "ms": 35.5
+    },
+    {
+      "id": "ar-07",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "departments.children",
+        "visitors.rules",
+        "parking.car_park",
+        "departments.emergency"
+      ],
+      "rank": 2,
+      "top_cosine": 0.5470858692675267,
+      "ms": 37.2
+    },
+    {
+      "id": "ar-07",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "visitors.rules",
+        "directions.first_floor",
+        "departments.general",
+        "departments.children"
+      ],
+      "rank": 5,
+      "top_cosine": null,
+      "ms": 1.6
+    },
+    {
+      "id": "ar-07",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "visitors.rules",
+        "departments.children",
+        "directions.first_floor",
+        "visitors.children"
+      ],
+      "rank": 3,
+      "top_cosine": 0.5470858692675267,
+      "ms": 36.8
+    },
+    {
+      "id": "ar-08",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "top5": [
+        "directions.rooms",
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "directions.first_floor",
+        "departments.general"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6625901851292412,
+      "ms": 34.2
+    },
+    {
+      "id": "ar-08",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "top5": [
+        "directions.rooms",
+        "pharmacy.prescriptions",
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "ar-08",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "directions.rooms",
+        "directions.first_floor"
+      ],
+      "top5": [
+        "directions.rooms",
+        "facilities.prayer_room",
+        "directions.first_floor",
+        "directions.ground_floor",
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6625901851292412,
+      "ms": 35.3
+    },
+    {
+      "id": "ar-09",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "directions.lifts"
+      ],
+      "top5": [
+        "directions.lifts",
+        "facilities.toilets",
+        "parking.accessible",
+        "directions.rooms",
+        "facilities.prayer_room"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5493699046955803,
+      "ms": 29.7
+    },
+    {
+      "id": "ar-09",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "directions.lifts"
+      ],
+      "top5": [
+        "facilities.toilets",
+        "directions.rooms"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "ar-09",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "directions.lifts"
+      ],
+      "top5": [
+        "facilities.toilets",
+        "directions.rooms",
+        "directions.lifts",
+        "parking.accessible",
+        "facilities.prayer_room"
+      ],
+      "rank": 3,
+      "top_cosine": 0.5493699046955803,
+      "ms": 31.1
+    },
+    {
+      "id": "ar-10",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "facilities.prayer_room"
+      ],
+      "top5": [
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "parking.drop_off",
+        "parking.accessible",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6288903199438013,
+      "ms": 31.6
+    },
+    {
+      "id": "ar-10",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "facilities.prayer_room"
+      ],
+      "top5": [
+        "directions.lifts",
+        "facilities.prayer_room",
+        "departments.children",
+        "directions.ground_floor",
+        "directions.first_floor"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "ar-10",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.prayer_room"
+      ],
+      "top5": [
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "directions.lifts",
+        "directions.first_floor",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6288903199438013,
+      "ms": 34.4
+    },
+    {
+      "id": "ar-11",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "facilities.cafe"
+      ],
+      "top5": [
+        "facilities.cafe",
+        "hours.holidays",
+        "hours.emergency",
+        "hours.opening",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7099560152021027,
+      "ms": 32.0
+    },
+    {
+      "id": "ar-11",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "facilities.cafe"
+      ],
+      "top5": [
+        "hours.emergency",
+        "facilities.prayer_room",
+        "facilities.cafe"
+      ],
+      "rank": 3,
+      "top_cosine": null,
+      "ms": 2.5
+    },
+    {
+      "id": "ar-11",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.cafe"
+      ],
+      "top5": [
+        "facilities.cafe",
+        "hours.emergency",
+        "facilities.prayer_room",
+        "hours.holidays",
+        "hours.opening"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7099560152021027,
+      "ms": 34.6
+    },
+    {
+      "id": "ar-12",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "facilities.wifi"
+      ],
+      "top5": [
+        "facilities.wifi",
+        "directions.rooms",
+        "directions.ground_floor",
+        "departments.emergency",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.4693777808336228,
+      "ms": 31.6
+    },
+    {
+      "id": "ar-12",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "facilities.wifi"
+      ],
+      "top5": [
+        "facilities.wifi",
+        "parking.accessible",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.9
+    },
+    {
+      "id": "ar-12",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.wifi"
+      ],
+      "top5": [
+        "facilities.wifi",
+        "departments.emergency",
+        "parking.accessible",
+        "directions.rooms",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.4693777808336228,
+      "ms": 35.6
+    },
+    {
+      "id": "ar-13",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "facilities.toilets"
+      ],
+      "top5": [
+        "departments.children",
+        "facilities.toilets",
+        "parking.drop_off",
+        "visitors.children",
+        "parking.accessible"
+      ],
+      "rank": 2,
+      "top_cosine": 0.39939825478645075,
+      "ms": 36.5
+    },
+    {
+      "id": "ar-13",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "facilities.toilets"
+      ],
+      "top5": [
+        "facilities.toilets",
+        "departments.children",
+        "visitors.children",
+        "parking.drop_off",
+        "visitors.hours"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.7
+    },
+    {
+      "id": "ar-13",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "facilities.toilets"
+      ],
+      "top5": [
+        "departments.children",
+        "facilities.toilets",
+        "parking.drop_off",
+        "visitors.children",
+        "visitors.rules"
+      ],
+      "rank": 2,
+      "top_cosine": 0.39939825478645075,
+      "ms": 37.5
+    },
+    {
+      "id": "ar-14",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "hours.holidays",
+        "directions.lifts",
+        "parking.accessible"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7954742098766575,
+      "ms": 39.5
+    },
+    {
+      "id": "ar-14",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.documents",
+        "parking.accessible",
+        "directions.first_floor",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 3.1
+    },
+    {
+      "id": "ar-14",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "parking.accessible",
+        "insurance.documents",
+        "departments.emergency",
+        "departments.general"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7954742098766575,
+      "ms": 36.5
+    },
+    {
+      "id": "ar-15",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents",
+        "facilities.wifi",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5577418585203789,
+      "ms": 39.5
+    },
+    {
+      "id": "ar-15",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.documents",
+        "visitors.rules",
+        "departments.children",
+        "visitors.children"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 3.0
+    },
+    {
+      "id": "ar-15",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.accepted"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "insurance.documents",
+        "insurance.no_insurance",
+        "visitors.rules",
+        "pharmacy.prescriptions"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5577418585203789,
+      "ms": 39.6
+    },
+    {
+      "id": "ar-16",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.accepted",
+        "insurance.documents",
+        "facilities.wifi",
+        "departments.general"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6430409285968617,
+      "ms": 31.6
+    },
+    {
+      "id": "ar-16",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.accepted",
+        "visitors.rules",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.3
+    },
+    {
+      "id": "ar-16",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "insurance.accepted",
+        "departments.emergency",
+        "visitors.rules",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6430409285968617,
+      "ms": 34.6
+    },
+    {
+      "id": "ar-17",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "facilities.wifi",
+        "insurance.documents",
+        "insurance.no_insurance",
+        "directions.lifts",
+        "parking.accessible"
+      ],
+      "rank": 3,
+      "top_cosine": 0.3512676828049709,
+      "ms": 33.2
+    },
+    {
+      "id": "ar-17",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "directions.ground_floor",
+        "visitors.children",
+        "parking.drop_off",
+        "visitors.hours"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.6
+    },
+    {
+      "id": "ar-17",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.no_insurance"
+      ],
+      "top5": [
+        "insurance.no_insurance",
+        "directions.ground_floor",
+        "parking.drop_off",
+        "visitors.children",
+        "visitors.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.3168250466349274,
+      "ms": 33.5
+    },
+    {
+      "id": "ar-18",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "insurance.documents"
+      ],
+      "top5": [
+        "insurance.documents",
+        "visitors.rules",
+        "insurance.no_insurance",
+        "visitors.hours",
+        "visitors.children"
+      ],
+      "rank": 1,
+      "top_cosine": 0.624872690932351,
+      "ms": 35.2
+    },
+    {
+      "id": "ar-18",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "insurance.documents"
+      ],
+      "top5": [
+        "departments.children",
+        "insurance.documents",
+        "directions.first_floor",
+        "visitors.rules",
+        "insurance.no_insurance"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 2.7
+    },
+    {
+      "id": "ar-18",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.documents"
+      ],
+      "top5": [
+        "insurance.documents",
+        "visitors.rules",
+        "insurance.no_insurance",
+        "departments.children",
+        "visitors.children"
+      ],
+      "rank": 1,
+      "top_cosine": 0.624872690932351,
+      "ms": 36.2
+    },
+    {
+      "id": "ar-19",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "parking.car_park"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.accessible",
+        "parking.drop_off",
+        "facilities.wifi",
+        "hours.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6500552791743861,
+      "ms": 30.3
+    },
+    {
+      "id": "ar-19",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "parking.car_park"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.car_park",
+        "parking.accessible",
+        "facilities.wifi",
+        "hours.emergency"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 2.4
+    },
+    {
+      "id": "ar-19",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "parking.car_park"
+      ],
+      "top5": [
+        "parking.car_park",
+        "parking.drop_off",
+        "parking.accessible",
+        "facilities.wifi",
+        "hours.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6500552791743861,
+      "ms": 32.4
+    },
+    {
+      "id": "ar-20",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "parking.drop_off"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.accessible",
+        "parking.car_park",
+        "visitors.rules",
+        "directions.rooms"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6025858140826814,
+      "ms": 34.8
+    },
+    {
+      "id": "ar-20",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "parking.drop_off"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.car_park",
+        "visitors.children",
+        "visitors.hours",
+        "directions.rooms"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.8
+    },
+    {
+      "id": "ar-20",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "parking.drop_off"
+      ],
+      "top5": [
+        "parking.drop_off",
+        "parking.car_park",
+        "parking.accessible",
+        "visitors.rules",
+        "directions.rooms"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6025858140826814,
+      "ms": 38.7
+    },
+    {
+      "id": "ar-21",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "facilities.toilets",
+        "directions.lifts",
+        "parking.car_park",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.847857437069688,
+      "ms": 33.9
+    },
+    {
+      "id": "ar-21",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "directions.first_floor",
+        "directions.ground_floor"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 3.4
+    },
+    {
+      "id": "ar-21",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "directions.first_floor"
+      ],
+      "rank": 1,
+      "top_cosine": 0.847857437069688,
+      "ms": 36.7
+    },
+    {
+      "id": "ar-22",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "parking.drop_off",
+        "directions.lifts",
+        "insurance.documents",
+        "visitors.rules"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5419243629419453,
+      "ms": 31.1
+    },
+    {
+      "id": "ar-22",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "visitors.children",
+        "parking.drop_off",
+        "visitors.hours",
+        "visitors.rules"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.9
+    },
+    {
+      "id": "ar-22",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "parking.accessible"
+      ],
+      "top5": [
+        "parking.accessible",
+        "parking.drop_off",
+        "visitors.rules",
+        "visitors.children",
+        "visitors.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5419243629419453,
+      "ms": 32.8
+    },
+    {
+      "id": "ar-23",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "pharmacy.hours"
+      ],
+      "top5": [
+        "pharmacy.hours",
+        "hours.holidays",
+        "hours.opening",
+        "visitors.hours",
+        "hours.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7982802580983472,
+      "ms": 30.3
+    },
+    {
+      "id": "ar-23",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "pharmacy.hours"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "parking.accessible",
+        "departments.emergency",
+        "facilities.toilets",
+        "pharmacy.hours"
+      ],
+      "rank": 5,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "ar-23",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "pharmacy.hours"
+      ],
+      "top5": [
+        "pharmacy.hours",
+        "pharmacy.prescriptions",
+        "hours.holidays",
+        "departments.emergency",
+        "facilities.toilets"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7982802580983472,
+      "ms": 34.8
+    },
+    {
+      "id": "ar-24",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "insurance.documents",
+        "visitors.rules",
+        "departments.general",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6796879556028964,
+      "ms": 35.6
+    },
+    {
+      "id": "ar-24",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.9
+    },
+    {
+      "id": "ar-24",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "insurance.documents",
+        "visitors.rules",
+        "departments.general",
+        "departments.emergency"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6796879556028964,
+      "ms": 34.5
+    },
+    {
+      "id": "ar-25",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "pharmacy.hours",
+        "insurance.accepted",
+        "facilities.wifi",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6863277089547832,
+      "ms": 36.1
+    },
+    {
+      "id": "ar-25",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "insurance.no_insurance",
+        "parking.drop_off",
+        "visitors.hours",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 2.3
+    },
+    {
+      "id": "ar-25",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "pharmacy.prescriptions"
+      ],
+      "top5": [
+        "pharmacy.prescriptions",
+        "pharmacy.hours",
+        "hours.holidays",
+        "visitors.children",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.6863277089547832,
+      "ms": 38.5
+    },
+    {
+      "id": "ar-26",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "visitors.hours"
+      ],
+      "top5": [
+        "visitors.hours",
+        "hours.holidays",
+        "visitors.rules",
+        "hours.opening",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.566419523606996,
+      "ms": 30.0
+    },
+    {
+      "id": "ar-26",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "visitors.hours"
+      ],
+      "top5": [
+        "visitors.hours",
+        "visitors.children",
+        "parking.drop_off",
+        "insurance.no_insurance",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": null,
+      "ms": 1.9
+    },
+    {
+      "id": "ar-26",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "visitors.hours"
+      ],
+      "top5": [
+        "visitors.hours",
+        "parking.drop_off",
+        "hours.holidays",
+        "visitors.children",
+        "pharmacy.hours"
+      ],
+      "rank": 1,
+      "top_cosine": 0.566419523606996,
+      "ms": 34.0
+    },
+    {
+      "id": "ar-27",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "visitors.rules"
+      ],
+      "top5": [
+        "visitors.rules",
+        "visitors.hours",
+        "visitors.children",
+        "parking.drop_off",
+        "parking.car_park"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7521528985259796,
+      "ms": 32.8
+    },
+    {
+      "id": "ar-27",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "visitors.rules"
+      ],
+      "top5": [
+        "visitors.children",
+        "visitors.rules",
+        "visitors.hours",
+        "parking.drop_off",
+        "departments.children"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "ar-27",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "visitors.rules"
+      ],
+      "top5": [
+        "visitors.rules",
+        "visitors.children",
+        "visitors.hours",
+        "parking.drop_off",
+        "departments.children"
+      ],
+      "rank": 1,
+      "top_cosine": 0.7521528985259796,
+      "ms": 36.0
+    },
+    {
+      "id": "ar-28",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "visitors.children"
+      ],
+      "top5": [
+        "visitors.children",
+        "departments.children",
+        "visitors.rules",
+        "visitors.hours",
+        "insurance.documents"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5950048575358058,
+      "ms": 35.6
+    },
+    {
+      "id": "ar-28",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "visitors.children"
+      ],
+      "top5": [
+        "departments.children",
+        "visitors.children",
+        "visitors.rules",
+        "visitors.hours",
+        "insurance.accepted"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.9
+    },
+    {
+      "id": "ar-28",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "visitors.children"
+      ],
+      "top5": [
+        "visitors.children",
+        "departments.children",
+        "visitors.rules",
+        "visitors.hours",
+        "parking.drop_off"
+      ],
+      "rank": 1,
+      "top_cosine": 0.5950048575358058,
+      "ms": 38.9
+    },
+    {
+      "id": "ar-29",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "departments.children",
+        "facilities.toilets",
+        "parking.drop_off",
+        "directions.ground_floor",
+        "parking.accessible"
+      ],
+      "rank": 1,
+      "top_cosine": 0.46158746276075213,
+      "ms": 32.2
+    },
+    {
+      "id": "ar-29",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "facilities.toilets",
+        "departments.children",
+        "directions.first_floor",
+        "visitors.children",
+        "parking.drop_off"
+      ],
+      "rank": 2,
+      "top_cosine": null,
+      "ms": 1.8
+    },
+    {
+      "id": "ar-29",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "departments.children"
+      ],
+      "top5": [
+        "departments.children",
+        "facilities.toilets",
+        "parking.drop_off",
+        "directions.first_floor",
+        "visitors.children"
+      ],
+      "rank": 1,
+      "top_cosine": 0.46158746276075213,
+      "ms": 34.4
+    },
+    {
+      "id": "ar-30",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [
+        "insurance.no_insurance",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "facilities.wifi",
+        "insurance.no_insurance",
+        "pharmacy.prescriptions",
+        "departments.general"
+      ],
+      "rank": 3,
+      "top_cosine": 0.37687656848650186,
+      "ms": 30.7
+    },
+    {
+      "id": "ar-30",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [
+        "insurance.no_insurance",
+        "directions.ground_floor"
+      ],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 2.6
+    },
+    {
+      "id": "ar-30",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [
+        "insurance.no_insurance",
+        "directions.ground_floor"
+      ],
+      "top5": [
+        "insurance.accepted",
+        "facilities.wifi",
+        "insurance.no_insurance",
+        "pharmacy.prescriptions",
+        "departments.general"
+      ],
+      "rank": 3,
+      "top_cosine": 0.37687656848650186,
+      "ms": 33.7
+    },
+    {
+      "id": "en-out-01",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "directions.ground_floor",
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "directions.rooms",
+        "facilities.cafe"
+      ],
+      "rank": null,
+      "top_cosine": 0.2014973975668879,
+      "ms": 30.7
+    },
+    {
+      "id": "en-out-01",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 2.4
+    },
+    {
+      "id": "en-out-01",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "directions.ground_floor",
+        "facilities.toilets",
+        "facilities.prayer_room",
+        "directions.rooms",
+        "facilities.cafe"
+      ],
+      "rank": null,
+      "top_cosine": 0.2014973975668879,
+      "ms": 33.1
+    },
+    {
+      "id": "en-out-02",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "parking.drop_off",
+        "facilities.cafe",
+        "visitors.hours",
+        "directions.rooms",
+        "directions.ground_floor"
+      ],
+      "rank": null,
+      "top_cosine": 0.18861560497026408,
+      "ms": 31.0
+    },
+    {
+      "id": "en-out-02",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.6
+    },
+    {
+      "id": "en-out-02",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "parking.drop_off",
+        "facilities.cafe",
+        "visitors.hours",
+        "directions.rooms",
+        "directions.ground_floor"
+      ],
+      "rank": null,
+      "top_cosine": 0.18861560497026408,
+      "ms": 34.0
+    },
+    {
+      "id": "en-out-03",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "parking.accessible",
+        "directions.lifts",
+        "facilities.toilets",
+        "insurance.documents",
+        "directions.ground_floor"
+      ],
+      "rank": null,
+      "top_cosine": 0.2522563150555379,
+      "ms": 30.5
+    },
+    {
+      "id": "en-out-03",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 2.1
+    },
+    {
+      "id": "en-out-03",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "parking.accessible",
+        "directions.lifts",
+        "facilities.toilets",
+        "insurance.documents",
+        "directions.ground_floor"
+      ],
+      "rank": null,
+      "top_cosine": 0.2522563150555379,
+      "ms": 32.5
+    },
+    {
+      "id": "en-out-04",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "hours.opening",
+        "facilities.wifi",
+        "departments.general",
+        "facilities.cafe",
+        "hours.holidays"
+      ],
+      "rank": null,
+      "top_cosine": 0.2527025728249812,
+      "ms": 31.4
+    },
+    {
+      "id": "en-out-04",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.7
+    },
+    {
+      "id": "en-out-04",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "hours.opening",
+        "facilities.wifi",
+        "departments.general",
+        "facilities.cafe",
+        "hours.holidays"
+      ],
+      "rank": null,
+      "top_cosine": 0.2527025728249812,
+      "ms": 31.3
+    },
+    {
+      "id": "en-out-05",
+      "lang": "en",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "directions.rooms",
+        "directions.lifts",
+        "facilities.prayer_room",
+        "directions.ground_floor",
+        "insurance.accepted"
+      ],
+      "rank": null,
+      "top_cosine": 0.17480225827123586,
+      "ms": 30.0
+    },
+    {
+      "id": "en-out-05",
+      "lang": "en",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [
+        "hours.emergency",
+        "hours.opening"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.5
+    },
+    {
+      "id": "en-out-05",
+      "lang": "en",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "hours.emergency",
+        "hours.opening",
+        "directions.rooms",
+        "directions.lifts",
+        "facilities.prayer_room"
+      ],
+      "rank": null,
+      "top_cosine": 0.17480225827123586,
+      "ms": 30.3
+    },
+    {
+      "id": "ar-out-01",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "directions.ground_floor",
+        "hours.opening",
+        "parking.car_park",
+        "facilities.wifi",
+        "departments.emergency"
+      ],
+      "rank": null,
+      "top_cosine": 0.22468064743607963,
+      "ms": 30.6
+    },
+    {
+      "id": "ar-out-01",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [
+        "parking.accessible",
+        "departments.emergency"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "ar-out-01",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "departments.emergency",
+        "parking.accessible",
+        "directions.ground_floor",
+        "hours.opening",
+        "parking.car_park"
+      ],
+      "rank": null,
+      "top_cosine": 0.22468064743607963,
+      "ms": 31.4
+    },
+    {
+      "id": "ar-out-02",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "facilities.cafe",
+        "directions.ground_floor",
+        "parking.drop_off",
+        "visitors.rules",
+        "visitors.hours"
+      ],
+      "rank": null,
+      "top_cosine": 0.26996937767819484,
+      "ms": 39.2
+    },
+    {
+      "id": "ar-out-02",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [
+        "visitors.rules",
+        "visitors.children",
+        "parking.drop_off",
+        "insurance.accepted",
+        "visitors.hours"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 1.4
+    },
+    {
+      "id": "ar-out-02",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "visitors.rules",
+        "parking.drop_off",
+        "visitors.hours",
+        "visitors.children",
+        "facilities.cafe"
+      ],
+      "rank": null,
+      "top_cosine": 0.26996937767819484,
+      "ms": 35.6
+    },
+    {
+      "id": "ar-out-03",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "parking.accessible",
+        "directions.lifts",
+        "insurance.documents",
+        "visitors.children",
+        "facilities.cafe"
+      ],
+      "rank": null,
+      "top_cosine": 0.34656561486020254,
+      "ms": 36.4
+    },
+    {
+      "id": "ar-out-03",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [
+        "parking.drop_off",
+        "visitors.hours",
+        "visitors.children",
+        "visitors.rules",
+        "directions.rooms"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 3.3
+    },
+    {
+      "id": "ar-out-03",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "visitors.children",
+        "parking.drop_off",
+        "insurance.documents",
+        "facilities.cafe",
+        "directions.rooms"
+      ],
+      "rank": null,
+      "top_cosine": 0.2851645750560541,
+      "ms": 36.7
+    },
+    {
+      "id": "ar-out-04",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "hours.opening",
+        "visitors.hours",
+        "facilities.cafe",
+        "hours.emergency",
+        "hours.holidays"
+      ],
+      "rank": null,
+      "top_cosine": 0.2638346416929245,
+      "ms": 30.5
+    },
+    {
+      "id": "ar-out-04",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [
+        "visitors.rules"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 2.4
+    },
+    {
+      "id": "ar-out-04",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "visitors.rules",
+        "hours.opening",
+        "visitors.hours",
+        "facilities.cafe",
+        "hours.emergency"
+      ],
+      "rank": null,
+      "top_cosine": 0.2638346416929245,
+      "ms": 34.4
+    },
+    {
+      "id": "ar-out-05",
+      "lang": "ar",
+      "mode": "dense",
+      "gold": [],
+      "top5": [
+        "hours.holidays",
+        "hours.opening",
+        "hours.emergency",
+        "directions.ground_floor",
+        "facilities.cafe"
+      ],
+      "rank": null,
+      "top_cosine": 0.19315258426587234,
+      "ms": 33.0
+    },
+    {
+      "id": "ar-out-05",
+      "lang": "ar",
+      "mode": "bm25",
+      "gold": [],
+      "top5": [
+        "directions.rooms",
+        "pharmacy.hours",
+        "facilities.cafe",
+        "parking.drop_off",
+        "departments.general"
+      ],
+      "rank": null,
+      "top_cosine": null,
+      "ms": 2.3
+    },
+    {
+      "id": "ar-out-05",
+      "lang": "ar",
+      "mode": "hybrid",
+      "gold": [],
+      "top5": [
+        "facilities.cafe",
+        "hours.emergency",
+        "hours.holidays",
+        "directions.rooms",
+        "hours.opening"
+      ],
+      "rank": null,
+      "top_cosine": 0.19315258426587234,
+      "ms": 34.5
+    }
+  ]
+}

@@ -87,6 +87,10 @@ def repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """A repo where the kiosk's messages are EN and AR; the other sources are empty."""
     monkeypatch.setattr(bt, "REPO", tmp_path)
     for app in bt.APPS:
+        if app == "handbook":  # a folder of Markdown files per language
+            bt.messages(app, "en").mkdir(parents=True)
+            bt.messages(app, "ar").mkdir(parents=True)
+            continue
         english, arabic = (EN, AR) if app == "kiosk" else ({}, {})
         bt.messages(app, "en").parent.mkdir(parents=True)
         bt.messages(app, "en").write_text(json.dumps(english), encoding="utf-8")
@@ -301,3 +305,29 @@ def test_the_nurses_alert_lines_are_checked_as_safety_keys(repo: Path) -> None:
         ("alerts", "safety.qualifiers.parent_unsure", "parent unsure", "ولي الأمر غير متأكد"),
     ]
     assert all(bt.is_safety(key) for _, key, _, _ in alerts)
+
+
+def test_the_handbook_sections_are_checked_as_strings(repo: Path) -> None:
+    """services/rag/handbook: each section, title and body, is one `handbook.` string (M2-08)."""
+    bt.messages("handbook", "en").joinpath("hours.md").write_text(
+        "<!-- section: hours.opening -->\n## Opening\n\nOpen from 7:00.\n", encoding="utf-8"
+    )
+    bt.messages("handbook", "ar").joinpath("hours.md").write_text(
+        "<!-- section: hours.opening -->\n## ساعات العمل\n\nنفتح من 7:00.\n", encoding="utf-8"
+    )
+    assert bt.load_messages("handbook", "en") == {
+        "handbook.hours.opening": "Opening\n\nOpen from 7:00."
+    }
+    _, todo = bt.pending_rows(None, recheck_all=False)
+    assert [p for p in todo if p[0] == "handbook"] == [
+        (
+            "handbook",
+            "handbook.hours.opening",
+            "Opening\n\nOpen from 7:00.",
+            "ساعات العمل\n\nنفتح من 7:00.",
+        )
+    ]
+    assert not bt.is_safety("handbook.hours.opening")
+    before = bt.sha256(bt.messages("handbook", "ar"))
+    bt.messages("handbook", "ar").joinpath("hours.md").write_text("changed", encoding="utf-8")
+    assert bt.sha256(bt.messages("handbook", "ar")) != before  # an edit shows in the report check

@@ -1,0 +1,348 @@
+{
+  "reviewed_at": "2026-09-27T18:36:29+00:00",
+  "reviewed_by": "agent:local/qwen3.5-9b-4bit",
+  "served": [
+    "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631",
+    "mlx-community/SmolLM2-135M-Instruct-8bit"
+  ],
+  "written_by": "agent:claude-code/claude-opus-5-5",
+  "checklist": "services/rag/handbook/REVIEW.md",
+  "files": {
+    "departments.md": {
+      "en_sha256": "ba1f79f8175432b660effec208cb96b292225bd8854714255b390dfd21d84701",
+      "ar_sha256": "04eee96087391870761fc59aca76e03792ca691684727c2a0132d1a74edf3161",
+      "sections": [
+        "departments.emergency",
+        "departments.general",
+        "departments.children"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "departments.emergency",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 70.6,
+          "passed": true
+        },
+        {
+          "section_id": "departments.general",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 60.6,
+          "passed": true
+        },
+        {
+          "section_id": "departments.children",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 83.7,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "directions.md": {
+      "en_sha256": "35bfd5bc8a8e2f88217bbeb5a21ea41172bbe63111d77577e3d4b0913969b86d",
+      "ar_sha256": "295291c2bbd78af6bb91bb1f8fb261d97f51934544292dd5b246c23216fa488e",
+      "sections": [
+        "directions.ground_floor",
+        "directions.first_floor",
+        "directions.lifts",
+        "directions.rooms"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "directions.ground_floor",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 77.7,
+          "passed": true
+        },
+        {
+          "section_id": "directions.first_floor",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 67.2,
+          "passed": true
+        },
+        {
+          "section_id": "directions.lifts",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 60.0,
+          "passed": true
+        },
+        {
+          "section_id": "directions.rooms",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 76.5,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "facilities.md": {
+      "en_sha256": "77b4db3e3354529c83df47b8cff5e5159c1340404828f75f00ad3e4f907e090b",
+      "ar_sha256": "152d8ab2c485c12221045486c76a6628bd16ba29008208cbd36ac78e9c7ef5b2",
+      "sections": [
+        "facilities.prayer_room",
+        "facilities.cafe",
+        "facilities.wifi",
+        "facilities.toilets"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "facilities.prayer_room",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 80.8,
+          "passed": true
+        },
+        {
+          "section_id": "facilities.cafe",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 91.6,
+          "passed": true
+        },
+        {
+          "section_id": "facilities.wifi",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 68.7,
+          "passed": true
+        },
+        {
+          "section_id": "facilities.toilets",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 62.1,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "hours.md": {
+      "en_sha256": "408d76ba3cfc49b56152aa40e13851c77f4d7432ac76dbbf4d295273ccb16242",
+      "ar_sha256": "c1066c6c68cd50a26453b9bc1dbef87dc670ff61def533ecec5bd7ebf62f2cd1",
+      "sections": [
+        "hours.opening",
+        "hours.emergency",
+        "hours.holidays"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "hours.opening",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 66.0,
+          "passed": true
+        },
+        {
+          "section_id": "hours.emergency",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 86.4,
+          "passed": true
+        },
+        {
+          "section_id": "hours.holidays",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 82.0,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "insurance.md": {
+      "en_sha256": "2fede852cb76d0818af3843104a64d119ff057acc55639ada29837a93f98d0c0",
+      "ar_sha256": "8d57b2203b32f33a7b3b4d44acb5bbdebd0ebb7bb5e7f717d30e677e26e3960e",
+      "sections": [
+        "insurance.accepted",
+        "insurance.no_insurance",
+        "insurance.documents"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "insurance.accepted",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 64.8,
+          "passed": true
+        },
+        {
+          "section_id": "insurance.no_insurance",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 73.9,
+          "passed": true
+        },
+        {
+          "section_id": "insurance.documents",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 63.8,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "parking.md": {
+      "en_sha256": "bffcc33fd9ba74415534c17ef0e373259f1443cd77ebad2b048db4a97b44b3f3",
+      "ar_sha256": "77505578e704a9d77d52a535a7d04c750ffb70d86ae4bf97350f7e864fefda65",
+      "sections": [
+        "parking.car_park",
+        "parking.drop_off",
+        "parking.accessible"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "parking.car_park",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 61.3,
+          "passed": true
+        },
+        {
+          "section_id": "parking.drop_off",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 90.8,
+          "passed": true
+        },
+        {
+          "section_id": "parking.accessible",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 65.6,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "pharmacy.md": {
+      "en_sha256": "9669571fa17cd3118208ff51b047c5363e8731f04a0490b438ca3e1a1d459efe",
+      "ar_sha256": "1a7dd9eb3d707f6b08a6c3f1f8534ed15cc45177652c138b3c990b6291b3e7d0",
+      "sections": [
+        "pharmacy.hours",
+        "pharmacy.prescriptions"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "pharmacy.hours",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 88.5,
+          "passed": true
+        },
+        {
+          "section_id": "pharmacy.prescriptions",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 80.6,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    },
+    "visitors.md": {
+      "en_sha256": "ba73e43ba34cd466a8547cd8fe48ab4fa02b2b67a5e96c4ce0aee444adf60bec",
+      "ar_sha256": "1b4238fe1cdd66f78721531212b649ea8a5b6bc75671b0974d6ee3882b6964b9",
+      "sections": [
+        "visitors.hours",
+        "visitors.rules",
+        "visitors.children"
+      ],
+      "same_sections": true,
+      "denylist_hits": [],
+      "backtranslation": [
+        {
+          "section_id": "visitors.hours",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 86.8,
+          "passed": true
+        },
+        {
+          "section_id": "visitors.rules",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 79.0,
+          "passed": true
+        },
+        {
+          "section_id": "visitors.children",
+          "checked": true,
+          "same_meaning": true,
+          "chrf": 42.8,
+          "passed": true
+        }
+      ],
+      "judge": {
+        "fictional_only": true,
+        "practical_only": true,
+        "arabic_matches_english": true,
+        "issues": []
+      },
+      "passed": true
+    }
+  }
+}

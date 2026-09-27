@@ -4,6 +4,8 @@
 
 Accepted, 27 Sep 2026 ([M2-08]). This is the core build. The automated handbook review, the labelled retrieval eval and its report, and the unit tests follow in the test phase.
 
+The test phase is done (SHE-304, docs/evidence/M2-08.md): ADR-053 records the review gate, the eval and what it measured.
+
 ## Context
 
 "Ask the clinic" (M2-09) must answer from the clinic's own documents, with citations, and never from model memory. Retrieval quality caps answer quality, so retrieval is built and measured first.

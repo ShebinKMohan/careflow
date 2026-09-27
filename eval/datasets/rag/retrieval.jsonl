@@ -1,0 +1,70 @@
+{"id": "en-01", "lang": "en", "question": "What time does the clinic open in the morning?", "gold_section_ids": ["hours.opening"]}
+{"id": "en-02", "lang": "en", "question": "Is the emergency room open at 3 in the morning?", "gold_section_ids": ["hours.emergency"]}
+{"id": "en-03", "lang": "en", "question": "How do I get in at night when the front door is locked?", "gold_section_ids": ["hours.emergency"]}
+{"id": "en-04", "lang": "en", "question": "Are you open on Eid?", "gold_section_ids": ["hours.holidays"]}
+{"id": "en-05", "lang": "en", "question": "Where is the ER?", "gold_section_ids": ["departments.emergency", "directions.ground_floor"]}
+{"id": "en-06", "lang": "en", "question": "What does a queue number starting with G mean?", "gold_section_ids": ["departments.general"]}
+{"id": "en-07", "lang": "en", "question": "Can I leave my son alone in the waiting room while I park the car?", "gold_section_ids": ["departments.children"]}
+{"id": "en-08", "lang": "en", "question": "Which floor is room 3 on?", "gold_section_ids": ["directions.rooms", "directions.first_floor"]}
+{"id": "en-09", "lang": "en", "question": "Where are the elevators?", "gold_section_ids": ["directions.lifts"]}
+{"id": "en-10", "lang": "en", "question": "Is there somewhere I can pray?", "gold_section_ids": ["facilities.prayer_room"]}
+{"id": "en-11", "lang": "en", "question": "When does the coffee shop close?", "gold_section_ids": ["facilities.cafe"]}
+{"id": "en-12", "lang": "en", "question": "What's the wifi password?", "gold_section_ids": ["facilities.wifi"]}
+{"id": "en-13", "lang": "en", "question": "Where can I change my baby's nappy?", "gold_section_ids": ["facilities.toilets"]}
+{"id": "en-14", "lang": "en", "question": "Which insurance companies do you work with?", "gold_section_ids": ["insurance.accepted"]}
+{"id": "en-15", "lang": "en", "question": "Do I have to pay anything myself if my plan is with Insurer B?", "gold_section_ids": ["insurance.accepted"]}
+{"id": "en-16", "lang": "en", "question": "I don't have insurance, will I still be treated?", "gold_section_ids": ["insurance.no_insurance"]}
+{"id": "en-17", "lang": "en", "question": "Can I pay with cash?", "gold_section_ids": ["insurance.no_insurance"]}
+{"id": "en-18", "lang": "en", "question": "What documents should I bring to my visit?", "gold_section_ids": ["insurance.documents"]}
+{"id": "en-19", "lang": "en", "question": "Is parking free?", "gold_section_ids": ["parking.car_park"]}
+{"id": "en-20", "lang": "en", "question": "Can I stop at the entrance to drop off my mother?", "gold_section_ids": ["parking.drop_off"]}
+{"id": "en-21", "lang": "en", "question": "Are there disabled parking spaces?", "gold_section_ids": ["parking.accessible"]}
+{"id": "en-22", "lang": "en", "question": "Can I borrow a wheelchair?", "gold_section_ids": ["parking.accessible"]}
+{"id": "en-23", "lang": "en", "question": "What are the pharmacy's opening hours?", "gold_section_ids": ["pharmacy.hours"]}
+{"id": "en-24", "lang": "en", "question": "How do I pick up the medicine the doctor prescribed?", "gold_section_ids": ["pharmacy.prescriptions"]}
+{"id": "en-25", "lang": "en", "question": "Can I get my prescription filled somewhere else?", "gold_section_ids": ["pharmacy.prescriptions"]}
+{"id": "en-26", "lang": "en", "question": "Until what time can I visit my husband?", "gold_section_ids": ["visitors.hours"]}
+{"id": "en-27", "lang": "en", "question": "How many people can visit a patient at the same time?", "gold_section_ids": ["visitors.rules"]}
+{"id": "en-28", "lang": "en", "question": "Can my 8-year-old come with me to visit her grandmother?", "gold_section_ids": ["visitors.children"]}
+{"id": "en-29", "lang": "en", "question": "Is there a play area for kids?", "gold_section_ids": ["departments.children"]}
+{"id": "en-30", "lang": "en", "question": "Where do I pay my bill?", "gold_section_ids": ["insurance.no_insurance", "directions.ground_floor"]}
+{"id": "ar-01", "lang": "ar", "question": "متى تفتح العيادة أبوابها صباحاً؟", "gold_section_ids": ["hours.opening"]}
+{"id": "ar-02", "lang": "ar", "question": "هل قسم الطوارئ مفتوح الساعة الثالثة فجراً؟", "gold_section_ids": ["hours.emergency"]}
+{"id": "ar-03", "lang": "ar", "question": "كيف أدخل في الليل إذا كان الباب الرئيسي مغلقاً؟", "gold_section_ids": ["hours.emergency"]}
+{"id": "ar-04", "lang": "ar", "question": "هل تعملون في أيام العطل الرسمية؟", "gold_section_ids": ["hours.holidays"]}
+{"id": "ar-05", "lang": "ar", "question": "أين يقع قسم الطوارئ؟", "gold_section_ids": ["departments.emergency", "directions.ground_floor"]}
+{"id": "ar-06", "lang": "ar", "question": "ماذا يعني رقم الانتظار الذي يبدأ بحرف G؟", "gold_section_ids": ["departments.general"]}
+{"id": "ar-07", "lang": "ar", "question": "هل يمكنني ترك ابني وحده في غرفة الانتظار بينما أركن السيارة؟", "gold_section_ids": ["departments.children"]}
+{"id": "ar-08", "lang": "ar", "question": "في أي طابق توجد الغرفة رقم 3؟", "gold_section_ids": ["directions.rooms", "directions.first_floor"]}
+{"id": "ar-09", "lang": "ar", "question": "أين المصاعد؟", "gold_section_ids": ["directions.lifts"]}
+{"id": "ar-10", "lang": "ar", "question": "هل يوجد مكان أستطيع الصلاة فيه؟", "gold_section_ids": ["facilities.prayer_room"]}
+{"id": "ar-11", "lang": "ar", "question": "متى يغلق المقهى؟", "gold_section_ids": ["facilities.cafe"]}
+{"id": "ar-12", "lang": "ar", "question": "ما هي كلمة مرور شبكة الواي فاي؟", "gold_section_ids": ["facilities.wifi"]}
+{"id": "ar-13", "lang": "ar", "question": "أين يمكنني تغيير حفاض طفلي؟", "gold_section_ids": ["facilities.toilets"]}
+{"id": "ar-14", "lang": "ar", "question": "ما هي شركات التأمين التي تتعاملون معها؟", "gold_section_ids": ["insurance.accepted"]}
+{"id": "ar-15", "lang": "ar", "question": "هل عليّ أن أدفع شيئاً بنفسي إذا كان تأميني مع Insurer B؟", "gold_section_ids": ["insurance.accepted"]}
+{"id": "ar-16", "lang": "ar", "question": "ليس لدي تأمين، هل سيتم علاجي؟", "gold_section_ids": ["insurance.no_insurance"]}
+{"id": "ar-17", "lang": "ar", "question": "هل يمكنني الدفع نقداً؟", "gold_section_ids": ["insurance.no_insurance"]}
+{"id": "ar-18", "lang": "ar", "question": "ما الأوراق التي يجب أن أحضرها معي إلى الزيارة؟", "gold_section_ids": ["insurance.documents"]}
+{"id": "ar-19", "lang": "ar", "question": "هل موقف السيارات مجاني؟", "gold_section_ids": ["parking.car_park"]}
+{"id": "ar-20", "lang": "ar", "question": "هل يمكنني التوقف عند المدخل لإنزال والدتي؟", "gold_section_ids": ["parking.drop_off"]}
+{"id": "ar-21", "lang": "ar", "question": "هل توجد مواقف مخصصة لذوي الإعاقة؟", "gold_section_ids": ["parking.accessible"]}
+{"id": "ar-22", "lang": "ar", "question": "هل يمكنني استعارة كرسي متحرك؟", "gold_section_ids": ["parking.accessible"]}
+{"id": "ar-23", "lang": "ar", "question": "ما هي ساعات عمل الصيدلية؟", "gold_section_ids": ["pharmacy.hours"]}
+{"id": "ar-24", "lang": "ar", "question": "كيف أستلم الدواء الذي وصفه لي الطبيب؟", "gold_section_ids": ["pharmacy.prescriptions"]}
+{"id": "ar-25", "lang": "ar", "question": "هل يمكنني صرف الوصفة من صيدلية أخرى؟", "gold_section_ids": ["pharmacy.prescriptions"]}
+{"id": "ar-26", "lang": "ar", "question": "حتى أي ساعة يمكنني زيارة زوجي؟", "gold_section_ids": ["visitors.hours"]}
+{"id": "ar-27", "lang": "ar", "question": "كم شخصاً يمكنهم زيارة المريض في الوقت نفسه؟", "gold_section_ids": ["visitors.rules"]}
+{"id": "ar-28", "lang": "ar", "question": "هل يمكن لابنتي البالغة 8 سنوات أن تأتي معي لزيارة جدتها؟", "gold_section_ids": ["visitors.children"]}
+{"id": "ar-29", "lang": "ar", "question": "هل توجد منطقة لعب للأطفال؟", "gold_section_ids": ["departments.children"]}
+{"id": "ar-30", "lang": "ar", "question": "أين أدفع الفاتورة؟", "gold_section_ids": ["insurance.no_insurance", "directions.ground_floor"]}
+{"id": "en-out-01", "lang": "en", "question": "What is the capital of France?", "gold_section_ids": []}
+{"id": "en-out-02", "lang": "en", "question": "Can you recommend a good restaurant in the city?", "gold_section_ids": []}
+{"id": "en-out-03", "lang": "en", "question": "Where can I buy train tickets?", "gold_section_ids": []}
+{"id": "en-out-04", "lang": "en", "question": "What will the weather be like tomorrow?", "gold_section_ids": []}
+{"id": "en-out-05", "lang": "en", "question": "Who won the football match last night?", "gold_section_ids": []}
+{"id": "ar-out-01", "lang": "ar", "question": "ما هي عاصمة فرنسا؟", "gold_section_ids": []}
+{"id": "ar-out-02", "lang": "ar", "question": "هل يمكنك أن تنصحني بمطعم جيد في المدينة؟", "gold_section_ids": []}
+{"id": "ar-out-03", "lang": "ar", "question": "من أين يمكنني شراء تذاكر القطار؟", "gold_section_ids": []}
+{"id": "ar-out-04", "lang": "ar", "question": "كيف سيكون الطقس غداً؟", "gold_section_ids": []}
+{"id": "ar-out-05", "lang": "ar", "question": "من فاز في مباراة كرة القدم أمس؟", "gold_section_ids": []}

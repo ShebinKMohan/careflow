@@ -19,5 +19,17 @@ Research prototype. Synthetic data only. Not for clinical use.
   `medical_lexicon.yaml` plus the `conversation` model, and it fails safe: a medical question gets
   the fixed refusal and a nurse flag, never an answer. The API injects the tools (`AskPorts`);
   this package never imports `careflow_api`. Settings: `config/rag.yaml`. Phone only (ADR-006).
+- `careflow_rag.review`: the handbook's automated review gate (`REVIEW.md`): the section
+  structure, the real-name denylist (`handbook/denylist.txt`), the M2-01 back-translation of the
+  Arabic, and a judge from a different model than the writer. `--check` verifies the recorded
+  review without a model; `pytest services/rag` runs it.
+- `careflow_rag.scratch`: a throwaway database migrated like the API's, for the tests and the
+  retrieval eval (`eval/rag/run_retrieval.py`, report `eval/reports/rag_retrieval.md`).
 
 No patient data ever enters the handbook index.
+
+**The handbook is a labelled research demo.** Its clinic, insurers, hours, rules and rooms are
+invented, and its review is automated: it checks the Arabic against the English, not against a
+real clinic. A real deployment needs the clinic's own approved documents for its actual hours,
+policies, insurers and directions, each with its source. None has been supplied, so none is
+included, and the fictional text must never be presented as a real clinic's.
