@@ -21,7 +21,7 @@ from httpx import ASGITransport, AsyncClient
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from redis.asyncio import Redis
 from sqlalchemy import create_engine, text
-from sqlalchemy.engine import Engine
+from sqlalchemy.engine import Engine, make_url
 
 API_DIR = Path(__file__).resolve().parents[1]
 TEST_DB = "careflow_test"
@@ -89,6 +89,14 @@ def database() -> Iterator[Engine]:
             connection.execute(text(f"CREATE DATABASE {TEST_DB} OWNER careflow_migrator"))
             connection.execute(text(f"GRANT CONNECT ON DATABASE {TEST_DB} TO careflow_app"))
         admin.dispose()
+        # As infra/postgres/init/001-init.sql does for careflow: extensions need a superuser.
+        test_admin = create_engine(
+            make_url(_admin_url()).set(database=TEST_DB), isolation_level="AUTOCOMMIT"
+        )
+        with test_admin.connect() as connection:
+            connection.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+            connection.execute(text("CREATE EXTENSION IF NOT EXISTS pg_textsearch"))
+        test_admin.dispose()
     except Exception as exc:  # noqa: BLE001
         if os.environ.get("CAREFLOW_REQUIRE_DB") == "1":
             raise
