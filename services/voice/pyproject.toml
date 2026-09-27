@@ -9,6 +9,7 @@ dependencies = [
   "certifi>=2026.7.22",
   "fastapi>=0.141,<0.142",
   "httpx>=0.28,<0.29",
+  "huggingface-hub>=1.33,<2",  # model_info() before any model download (scripts/)
   "orjson>=3.12,<4",
   "pydantic>=2.13,<3",
   "pydantic-settings>=2.15,<3",
