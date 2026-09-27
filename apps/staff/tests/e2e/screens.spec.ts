@@ -118,6 +118,8 @@ test("the admin status lists every AI task, marks stubs, names a fixture model a
   await expect(urgencyPort.getByText("Stub")).toBeVisible();
   await expect(page.getByText(/NOT A RESULT/)).toBeVisible();
   await expect(page.locator('[data-row="hapi-fhir"]').getByText("Down")).toBeVisible();
+  await expect(page.locator('[data-row="fhir-writeback"]')).toContainText("2 failed write-backs in this clinic");
+  await expect(page.locator('[data-row="speech:stt"]')).toContainText("voice service not answering");
   await axe(page, "admin");
   await evidence(page, "admin-status");
 });

@@ -292,7 +292,9 @@ def create_app(
 
     @app.get("/healthz")
     async def healthz() -> dict[str, str]:
-        return {"status": "ok"}
+        # "service" tells CareFlow's voice service apart from another copy of the voice agent
+        # on the same port (the API's admin status probes it, M1-17).
+        return {"status": "ok", "service": "careflow-voice"}
 
     @app.get("/metrics")
     async def metrics() -> Response:

@@ -279,6 +279,7 @@
     "services": "Services",
     "ports": "Intake parts",
     "aiTasks": "AI tasks",
+    "speech": "Speech (the voice service)",
     "providers": "Model providers",
     "task": "Task",
     "provider": "Provider",

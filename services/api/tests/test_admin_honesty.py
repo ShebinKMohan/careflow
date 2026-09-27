@@ -86,3 +86,40 @@ def test_the_urgency_model_row_says_what_is_installed() -> None:
         "status": "ok",
         "detail": "ktas-hgb-ebf31b5e-s42",
     }
+
+
+SPEECH = {
+    "stt": {"provider": "mlx-whisper", "by_language": {"en": "mlx-whisper", "ar": "mlx-whisper"}},
+    "tts": {"provider": "kokoro", "by_language": {"en": "kokoro", "ar": "mms-tts-ara"}},
+}
+
+
+@respx.mock
+async def test_speech_is_up_only_when_careflow_voice_answers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config = CONFIG.model_copy(update={"speech": SPEECH})
+    monkeypatch.setattr("careflow_intake.wiring.providers_config", lambda *a, **k: config)
+    settings = SimpleNamespace(voice_base_url="http://voice.test")
+    health = respx.get("http://voice.test/healthz")
+
+    health.mock(side_effect=httpx.ConnectError("refused"))
+    down = {row["name"]: row for row in await admin.speech_rows(settings)}  # type: ignore[arg-type]
+    assert down["speech:stt"]["status"] == "down"
+    assert down["speech:stt"]["detail"].endswith("voice service not answering at http://voice.test")
+
+    # Another copy of the voice agent on the port answers /healthz, but it is not CareFlow's.
+    health.mock(return_value=httpx.Response(200, json={"status": "ok"}))
+    other = await admin.speech_rows(settings)  # type: ignore[arg-type]
+    assert {row["status"] for row in other} == {"down"}
+
+    health.mock(
+        return_value=httpx.Response(200, json={"status": "ok", "service": "careflow-voice"})
+    )
+    up = {row["name"]: row for row in await admin.speech_rows(settings)}  # type: ignore[arg-type]
+    assert up["speech:stt"] == {
+        "name": "speech:stt",
+        "status": "ok",
+        "detail": "mlx-whisper (en), mlx-whisper (ar)",
+    }
+    assert up["speech:tts"]["detail"] == "kokoro (en), mms-tts-ara (ar)"

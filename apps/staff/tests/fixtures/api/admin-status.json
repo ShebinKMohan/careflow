@@ -15,6 +15,11 @@
       "status": "down"
     },
     {
+      "name": "fhir-writeback",
+      "status": "degraded",
+      "detail": "consumer consuming; 2 failed write-backs in this clinic"
+    },
+    {
       "name": "port:ehr",
       "status": "ok",
       "detail": "FHIR R4 reader (M1-08)"
@@ -58,6 +63,16 @@
       "name": "ai:translation_check",
       "status": "ok",
       "detail": "local qwen3.5-9b-4bit"
+    },
+    {
+      "name": "speech:stt",
+      "status": "down",
+      "detail": "mlx-whisper (en), mlx-whisper (ar); voice service not answering at http://127.0.0.1:8090"
+    },
+    {
+      "name": "speech:tts",
+      "status": "down",
+      "detail": "kokoro (en), mms-tts-ara (ar); voice service not answering at http://127.0.0.1:8090"
     }
   ]
 }

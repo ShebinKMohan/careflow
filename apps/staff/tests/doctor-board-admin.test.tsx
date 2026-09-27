@@ -208,5 +208,14 @@ describe("AdminStatusView", () => {
     expect(screen.getByText(/NOT A RESULT/)).toBeInTheDocument();
     const hapi = document.querySelector('[data-row="hapi-fhir"]') as HTMLElement;
     expect(within(hapi).getByText("Down")).toBeInTheDocument();
+    // Configured is not running: the write-back's failures and the voice service's absence show.
+    const writeback = document.querySelector('[data-row="fhir-writeback"]') as HTMLElement;
+    expect(within(writeback).getByText("Degraded")).toBeInTheDocument();
+    expect(writeback).toHaveTextContent("2 failed write-backs in this clinic");
+    for (const kind of ["stt", "tts"]) {
+      const speech = document.querySelector(`[data-row="speech:${kind}"]`) as HTMLElement;
+      expect(within(speech).getByText("Down")).toBeInTheDocument();
+      expect(speech).toHaveTextContent("voice service not answering");
+    }
   });
 });

@@ -426,6 +426,13 @@ def test_admin_status_lists_ports_providers_and_versions(flow: TestClient, clini
     names = {service["name"]: service for service in body["services"]}
     assert body["ruleset_version"] and body["api_version"]
     assert {names[name]["status"] for name in ("postgres", "valkey", "hapi-fhir")} == {"ok"}
+    # The write-back consumer runs and this clinic's write-back succeeded.
+    assert names["fhir-writeback"]["status"] == "ok", names["fhir-writeback"]
+    assert (
+        names["fhir-writeback"]["detail"]
+        == "consumer consuming; 0 failed write-backs in this clinic"
+    )
+    assert {"speech:stt", "speech:tts"} <= set(names)  # down here: no CareFlow voice service
     assert names["urgency-model"]["status"] == "degraded"  # no triage model: no suggestion
     assert names["port:urgency"]["detail"].startswith("none (no suggestion)")
     extractor = names["port:extractor"]["detail"]

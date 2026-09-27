@@ -11,3 +11,17 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   2. The owner decisions (CONVENTIONS) say speed targets are measured and published, never CI gates. So the 20 ms assertion runs on the reference machine (any run without `CI=true`).
   3. On a CI runner, the test issues a warning with the p50 and slowest call when a call exceeds the budget, instead of failing.
 - **Still asserted in CI.** Every call must return a contract-valid `UrgencySuggestion` with 3 reasons and a `model_version`.
+
+## `apps/staff/tests/e2e/nurse.spec.ts` › "ECG done sends the task-complete request once and stops the countdown" (M1-15)
+
+- **What happened.** During SHE-313 [M1-17] on 27 September 2026, one full `pnpm --filter staff
+  test:e2e` run out of four failed this test at `expect(ecg-status).toContainText("07:00")`
+  (the 5 s expect timeout, 5.4 s in all). The other three full runs and three runs of the test
+  alone passed. The M1-17 changes do not touch the nurse screens.
+- **Suspected cause.** The test installs the fake clock at the alert time, loads the card, then
+  pauses the clock at alert + 3 min and expects the countdown to read 07:00. If the card's first
+  render (or its triage fetch) lands on either side of `pauseAt` differently from run to run, the
+  countdown may be computed before the pause and not recomputed within the timeout.
+- **Handling.** Not retried, not weakened. Reproduce and fix with SHE-302 [M2-07], which changes
+  the nurse card's refresh (the card must re-read alerts live). Until then the test runs as it
+  is in CI; a red run of it is investigated, not re-run until green.

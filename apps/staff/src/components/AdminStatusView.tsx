@@ -53,6 +53,7 @@ export function AdminStatusView() {
               <StatusTable title={t("services")} rows={infra} />
               <StatusTable title={t("ports")} rows={byPrefix("port:")} stubs />
               <StatusTable title={t("aiTasks")} rows={byPrefix("ai:")} />
+              <StatusTable title={t("speech")} rows={byPrefix("speech:")} />
             </>
           );
         }}
@@ -105,7 +106,7 @@ function StatusTable({ title, rows, stubs = false }: { title: string; rows: Serv
         <tbody>
           {rows.map((row) => (
             <tr key={row.name} data-row={row.name}>
-              <td className={`${CELL} font-mono`}>{row.name.replace(/^(port|ai):/, "")}</td>
+              <td className={`${CELL} font-mono`}>{row.name.replace(/^(port|ai|speech):/, "")}</td>
               <td className={CELL}>
                 <span className={row.status === "ok" ? "text-success" : "font-semibold text-danger"}>
                   {t(`state.${row.status}`)}

@@ -162,7 +162,7 @@ def test_health_routes_report_ready_for_local_stack() -> None:
     )
     client = TestClient(app)
 
-    assert client.get("/healthz").json() == {"status": "ok"}
+    assert client.get("/healthz").json() == {"status": "ok", "service": "careflow-voice"}
     assert client.get("/readyz").json() == {
         "status": "ready",
         "providers": {"stt": "local", "llm": "local", "tts": "local"},

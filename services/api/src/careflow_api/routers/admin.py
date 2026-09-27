@@ -9,14 +9,18 @@ from __future__ import annotations
 
 import os
 import shutil
+import uuid
 from pathlib import Path
 from typing import Annotated, Any
 
 import httpx
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy import func, select
 
 from careflow_api.config import Settings, get_settings
-from careflow_api.deps import require_roles
+from careflow_api.deps import Principal, require_roles
+from careflow_api.models import FhirWritebackStatus
+from careflow_api.rls import clinic_session
 from careflow_api.routers.health import component_status
 from careflow_contracts.api_models import AdminStatus, ProvidersResponse
 from careflow_providers.adapters.replay import provider_mode
@@ -41,7 +45,9 @@ def ruleset_version() -> str:
     dependencies=[Depends(require_roles("admin"))],
 )
 async def admin_status(
-    settings: Annotated[Settings, Depends(get_settings)], request: Request
+    settings: Annotated[Settings, Depends(get_settings)],
+    request: Request,
+    principal: Annotated[Principal, Depends(require_roles("admin"))],
 ) -> AdminStatus:
     """The services, then every intake port's implementation (M1-12), the AI tasks' providers
     and models, and the versions of the ruleset and the urgency model."""
@@ -49,6 +55,7 @@ async def admin_status(
     services: list[dict[str, str]] = [
         {"name": SERVICE_NAMES[key], "status": value} for key, value in components.items()
     ]
+    services.append(await writeback_row(request, principal.clinic_id))
     wiring = getattr(request.app.state, "wiring", None)
     if wiring is not None:
         for choice in wiring.choices:
@@ -69,6 +76,7 @@ async def admin_status(
         services.append(
             {"name": "intake", "status": "down", "detail": "intake runtime not started"}
         )
+    services.extend(await speech_rows(settings))
     for task in await provider_rows():
         uses = task.get("model") or task.get("tool") or ""
         services.append(
@@ -85,6 +93,64 @@ async def admin_status(
             "services": services,
         }
     )
+
+
+async def writeback_row(request: Request, clinic_id: uuid.UUID) -> dict[str, str]:
+    """The FHIR write-back as it runs: its bus consumer (ADR-043) and this clinic's write-backs
+    that failed for good (an outage stays pending and is retried, so it is not counted)."""
+    from careflow_api.intake.consumers import WRITEBACK_GROUP
+
+    bus = getattr(request.app.state, "bus", None)
+    consumer = bus.status.get(WRITEBACK_GROUP) if bus is not None else None
+    async with clinic_session(clinic_id) as db:
+        query = select(func.count()).select_from(FhirWritebackStatus)
+        failed = (
+            await db.execute(query.where(FhirWritebackStatus.status == "failed"))
+        ).scalar_one()
+    if consumer is None:
+        status = "down"
+    else:
+        status = "ok" if consumer == "consuming" and failed == 0 else "degraded"
+    detail = f"consumer {consumer or 'not running'}; {failed} failed write-backs in this clinic"
+    return {"name": "fhir-writeback", "status": status, "detail": detail}
+
+
+def voice_url(settings: Settings) -> str:
+    return settings.voice_base_url or f"http://127.0.0.1:{os.environ.get('VOICE_PORT', '8090')}"
+
+
+async def careflow_voice_answers(url: str) -> bool:
+    """Whether CareFlow's voice service answers at `url`: another copy of the voice agent on the
+    same port answers /healthz too, but without `service: careflow-voice`."""
+    try:
+        async with httpx.AsyncClient(timeout=LOCAL_PROBE_SECONDS) as client:
+            response = await client.get(f"{url.rstrip('/')}/healthz")
+        body = response.json() if response.status_code == 200 else {}
+    except (httpx.HTTPError, ValueError):
+        return False
+    return isinstance(body, dict) and body.get("service") == "careflow-voice"
+
+
+async def speech_rows(settings: Settings) -> list[dict[str, str]]:
+    """STT and TTS per language, from config/providers.yaml's speech section; "ok" only when the
+    CareFlow voice service that runs them answers."""
+    from careflow_intake.wiring import providers_config
+
+    speech = providers_config().speech or {}
+    url = voice_url(settings)
+    up = await careflow_voice_answers(url)
+    rows = []
+    for kind in ("stt", "tts"):
+        spec = speech.get(kind) or {}
+        by_language = spec.get("by_language") or {}
+        engines = ", ".join(f"{engine} ({lang})" for lang, engine in by_language.items())
+        detail = engines or str(spec.get("provider", "not configured"))
+        if not up:
+            detail = f"{detail}; voice service not answering at {url}"
+        rows.append(
+            {"name": f"speech:{kind}", "status": "ok" if up else "down", "detail": detail[:200]}
+        )
+    return rows
 
 
 def urgency_row(wiring: Any) -> dict[str, str]:
