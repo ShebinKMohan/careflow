@@ -92,7 +92,10 @@ async def test_a_synthea_patient_is_found_by_mr_number_with_its_allergies() -> N
     identifier system in the adapter."""
     adapter = load_adapter()
     async with FhirClient(adapter.fhir_base_url) as client:
-        first = (await client.search("AllergyIntolerance", {"clinical-status": "active"}))[0]
+        active = await client.search("AllergyIntolerance", {"clinical-status": "active"})
+        if not active:  # a personas-only HAPI (SEED_SYNTHEA=0, CI, the isolated test stack)
+            pytest.skip("needs the Synthea population in HAPI: make seed with SEED_SYNTHEA=1")
+        first = active[0]
         pid = first["patient"]["reference"].removeprefix("Patient/")
         patient = await client.read("Patient", pid)
         allergies = await client.search(

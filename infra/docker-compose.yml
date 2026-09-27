@@ -2,7 +2,9 @@
 # Default-profile services must fit in 6 GiB of memory in total (scripts/check_mem_budget.py).
 # Run through the Makefile (`make up`, `make seed`, `make down`), which passes --env-file .env.
 # Ports bind to 127.0.0.1 only. Research prototype. Synthetic data only. Not for clinical use.
-name: careflow
+# The project name and host ports come from scripts/stack.py for a second, isolated stack
+# (e.g. careflow-test on ports +10000); unset, they are the dev stack's CONVENTIONS defaults.
+name: ${CAREFLOW_STACK:-careflow}
 
 services:
   postgres:
@@ -16,7 +18,7 @@ services:
       CAREFLOW_DB_APP_PASSWORD: ${CAREFLOW_DB_APP_PASSWORD:?run scripts/gen_dev_env.py}
       HAPI_DB_PASSWORD: ${HAPI_DB_PASSWORD:?run scripts/gen_dev_env.py}
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:${CAREFLOW_POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     mem_limit: 1g
@@ -32,7 +34,7 @@ services:
     # maxmemory stays under the container limit; streams and tickets must never be evicted.
     command: ["valkey-server", "--maxmemory", "192mb", "--maxmemory-policy", "noeviction", "--save", "60", "1"]
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:${CAREFLOW_VALKEY_PORT:-6379}:6379"
     volumes:
       - valkeydata:/data
     mem_limit: 256m
@@ -60,7 +62,7 @@ services:
       spring.jpa.properties.hibernate.search.enabled: "false"
       JAVA_TOOL_OPTIONS: -Xmx1536m
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:${CAREFLOW_HAPI_PORT:-8080}:8080"
     mem_limit: 2560m
 
   # TODO(M4-01) Open Integration Engine: service `oie` under `profiles: [hl7]`, image pinned by
