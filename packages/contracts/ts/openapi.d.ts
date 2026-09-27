@@ -928,6 +928,7 @@ export interface components {
             child_danger?: components["schemas"]["ChildDanger"];
             child_amber?: components["schemas"]["ChildAmber"];
             vitals?: components["schemas"]["Vitals"];
+            tasks?: components["schemas"]["Tasks"];
             ehr_context?: components["schemas"]["EhrContext"];
             extraction_status: components["schemas"]["ExtractionStatus"];
         };
@@ -1044,7 +1045,7 @@ export interface components {
          * @description Every leaf fact path in StructuredFacts (list-valued paths name the list). Used for question keys, needed facts, missing inputs, FHIR mapping keys and Questionnaire linkIds.
          * @enum {string}
          */
-        FactKey: "patient.age_years" | "patient.age_months" | "patient.sex" | "chief_complaint" | "complaint_category" | "symptoms" | "symptom_onset_at" | "severity" | "pain_score" | "pain_present" | "pain_location" | "injury" | "arrival_mode" | "allergies_confirm" | "fast.face_droop" | "fast.arm_weakness" | "fast.speech_difficulty" | "fast.last_known_well" | "chest_pain.present" | "chest_pain.radiates" | "chest_pain.sweating" | "chest_pain.short_of_breath" | "chest_pain.onset" | "infection.suspected" | "infection.fever_reported" | "infection.rigors" | "child_danger.hard_to_wake" | "child_danger.no_response_to_social_cues" | "child_danger.weak_high_pitched_or_continuous_cry" | "child_danger.pale_mottled_ashen_or_blue" | "child_danger.grunting" | "child_danger.non_blanching_rash" | "child_danger.neck_stiffness" | "child_danger.seizure" | "child_danger.appears_ill_to_hcp" | "child_danger.chest_indrawing" | "child_danger.reduced_skin_turgor" | "child_danger.bulging_fontanelle" | "child_danger.focal_neuro_signs" | "child_amber.pallor_reported" | "child_amber.not_responding_normally" | "child_amber.decreased_activity" | "child_amber.wakes_only_with_prolonged_stimulation" | "child_amber.nasal_flaring" | "child_amber.crackles" | "child_amber.cap_refill_3s_or_more" | "child_amber.dry_mucous_membranes" | "child_amber.poor_feeding" | "child_amber.reduced_urine_output" | "child_amber.fever_5_days_or_more" | "child_amber.limb_or_joint_swelling" | "child_amber.non_weight_bearing" | "vitals.heart_rate" | "vitals.spo2" | "vitals.temperature_c" | "vitals.respiratory_rate" | "vitals.systolic_bp" | "vitals.diastolic_bp" | "vitals.acvpu" | "vitals.on_supplemental_o2" | "ehr_context.allergies" | "ehr_context.conditions" | "ehr_context.medications";
+        FactKey: "patient.age_years" | "patient.age_months" | "patient.sex" | "chief_complaint" | "complaint_category" | "symptoms" | "symptom_onset_at" | "severity" | "pain_score" | "pain_present" | "pain_location" | "injury" | "arrival_mode" | "allergies_confirm" | "fast.face_droop" | "fast.arm_weakness" | "fast.speech_difficulty" | "fast.last_known_well" | "chest_pain.present" | "chest_pain.radiates" | "chest_pain.sweating" | "chest_pain.short_of_breath" | "chest_pain.onset" | "infection.suspected" | "infection.fever_reported" | "infection.rigors" | "child_danger.hard_to_wake" | "child_danger.no_response_to_social_cues" | "child_danger.weak_high_pitched_or_continuous_cry" | "child_danger.pale_mottled_ashen_or_blue" | "child_danger.grunting" | "child_danger.non_blanching_rash" | "child_danger.neck_stiffness" | "child_danger.seizure" | "child_danger.appears_ill_to_hcp" | "child_danger.chest_indrawing" | "child_danger.reduced_skin_turgor" | "child_danger.bulging_fontanelle" | "child_danger.focal_neuro_signs" | "child_amber.pallor_reported" | "child_amber.not_responding_normally" | "child_amber.decreased_activity" | "child_amber.wakes_only_with_prolonged_stimulation" | "child_amber.nasal_flaring" | "child_amber.crackles" | "child_amber.cap_refill_3s_or_more" | "child_amber.dry_mucous_membranes" | "child_amber.poor_feeding" | "child_amber.reduced_urine_output" | "child_amber.fever_5_days_or_more" | "child_amber.limb_or_joint_swelling" | "child_amber.non_weight_bearing" | "vitals.heart_rate" | "vitals.spo2" | "vitals.temperature_c" | "vitals.respiratory_rate" | "vitals.systolic_bp" | "vitals.diastolic_bp" | "vitals.acvpu" | "vitals.on_supplemental_o2" | "tasks.ecg_done_at" | "ehr_context.allergies" | "ehr_context.conditions" | "ehr_context.medications";
         /** @description Staff login (dev users only; synthetic). */
         LoginRequest: {
             username: string;
@@ -1348,23 +1349,108 @@ export interface components {
             alert_chips: components["schemas"]["AlertChip"][];
         };
         DoctorSessions: components["schemas"]["DoctorSessionSummary"][];
-        /** @description Safety rule 4: every item carries its provenance and source. */
+        /**
+         * @description The briefing's fixed sections, always in this order: alerts and triage, presenting complaint, danger-screen answers, vitals and NEWS2, record (EHR), model output, data quality.
+         * @enum {string}
+         */
+        BriefingSectionId: "alerts_triage" | "presenting_complaint" | "danger_screens" | "vitals_news2" | "record" | "model_output" | "data_quality";
+        /** @description Safety rule 4: every item carries its provenance and source. The text comes from fixed templates over structured values, never from a model. A patient's words are in the transcript_span source's quote. */
         BriefingItem: {
             text: string;
             provenance: components["schemas"]["Provenance"];
             source: components["schemas"]["SourceRef"];
             fact_id?: components["schemas"]["FactId"];
+            /**
+             * Format: date-time
+             * @description When the fact was recorded (a device reading, a nurse's entry, an EHR read, the patient's answer), or when the nurse decided.
+             */
+            recorded_at: string;
+            /** @description True when the item's source failed the briefing check. Screens show "source missing" in red; it is logged as an error, and the tests require that no item has it. */
+            source_missing?: boolean;
+        };
+        /**
+         * @description What a note says: a data-quality warning (extraction_incomplete, intake_stopped_early, ehr_unavailable, ehr_partial, facts_dropped), no model suggestion (suggestion_unavailable), NEWS2 not applicable under 16 (news2_not_applicable), or nothing of a section's kind was recorded (none_recorded).
+         * @enum {string}
+         */
+        BriefingNoteCode: "extraction_incomplete" | "intake_stopped_early" | "ehr_unavailable" | "ehr_partial" | "facts_dropped" | "suggestion_unavailable" | "news2_not_applicable" | "none_recorded";
+        /** @description A fixed line about the briefing itself, not about the patient, so it has no provenance. Data-quality warnings, and a section where nothing of its kind was recorded, are notes. */
+        BriefingNote: {
+            code: components["schemas"]["BriefingNoteCode"];
+            text: string;
+            /** @description How many, for facts_dropped. */
+            count?: number;
         };
         BriefingSection: {
+            id: components["schemas"]["BriefingSectionId"];
             title: string;
             items: components["schemas"]["BriefingItem"][];
+            notes?: components["schemas"]["BriefingNote"][];
         };
-        /** @description Doctor briefing (extended by M1-16). */
+        BriefingSentence: {
+            text: string;
+            /** @description The facts this sentence rephrases. Every id must be an item's fact_id. */
+            fact_ids: components["schemas"]["FactId"][];
+        };
+        /** @description An optional model summary that may only rephrase cited items. The whole summary is dropped when any sentence cites no fact or an unknown fact, has a number that is not in its cited items, or reads as a diagnosis or advice (safety rule 2). */
+        BriefingSummary: {
+            sentences: components["schemas"]["BriefingSentence"][];
+        };
+        /**
+         * @description ok: a checked summary is attached. dropped: the model's summary failed the check and was discarded. disabled: summaries are switched off, or the summary provider is unavailable. The plain list is always complete.
+         * @enum {string}
+         */
+        SummaryStatus: "ok" | "dropped" | "disabled";
+        /** @enum {string} */
+        DecisionAction: "CONFIRM" | "OVERRIDE";
+        /** @enum {string} */
+        OverrideReasonCode: "clinical_judgement" | "new_information" | "patient_deteriorated" | "model_error" | "other";
+        /** @description The urgency model's suggestion. Only a suggestion; the nurse's level is in confirmed. */
+        BriefingSuggestion: {
+            level: components["schemas"]["UrgencyLevel"];
+            scale: components["schemas"]["TriageScale"];
+            display_label?: string;
+            confidence: number;
+            model_id: components["schemas"]["Identifier"];
+            model_version: components["schemas"]["Identifier"];
+        };
+        /** @description The level the nurse confirmed or set (safety rule 3). */
+        BriefingConfirmation: {
+            level: components["schemas"]["UrgencyLevel"];
+            scale: components["schemas"]["TriageScale"];
+            action: components["schemas"]["DecisionAction"];
+            nurse_user_id: components["schemas"]["Identifier"];
+            /** Format: date-time */
+            decided_at: string;
+        };
+        BriefingOverrideReason: {
+            code: components["schemas"]["OverrideReasonCode"];
+            note?: string;
+        };
+        /** @description The model's suggestion (null when there was none) always beside the nurse's decision. */
+        BriefingTriage: {
+            suggested: components["schemas"]["BriefingSuggestion"] | null;
+            confirmed: components["schemas"]["BriefingConfirmation"];
+            override_reason: components["schemas"]["BriefingOverrideReason"] | null;
+        };
+        /** @description What produced the briefing. Null when that part did not run. */
+        BriefingVersions: {
+            /** @description The safety ruleset version. */
+            ruleset: string | null;
+            /** @description The urgency model version behind the suggestion. */
+            model: components["schemas"]["Identifier"] | null;
+            /** @description The summary prompt version, when a summary was asked for. */
+            prompt: components["schemas"]["Identifier"] | null;
+        };
+        /** @description The doctor briefing (M1-16): seven fixed sections of sourced items, an optional checked summary, and the triage decision. Built after the nurse's decision. */
         Briefing: {
             session_id: components["schemas"]["Identifier"];
             /** Format: date-time */
             generated_at: string;
             sections: components["schemas"]["BriefingSection"][];
+            summary: components["schemas"]["BriefingSummary"] | null;
+            summary_status: components["schemas"]["SummaryStatus"];
+            triage: components["schemas"]["BriefingTriage"];
+            versions: components["schemas"]["BriefingVersions"];
         };
         CompanionStatus: {
             position: number;
@@ -1983,6 +2069,11 @@ export interface components {
             /** @description On supplemental oxygen (NEWS2 'air or oxygen'). */
             on_supplemental_o2?: components["schemas"]["TriStateFact"];
         };
+        /** @description Tasks a nurse completed (M1-12 task-complete route). NURSE_CONFIRMED facts only: never extracted from the patient's words. */
+        Tasks: {
+            /** @description When the 10-minute ECG was done: an ISO 8601 date-time, recorded by the nurse. */
+            ecg_done_at?: components["schemas"]["TextFact"];
+        };
         /** @description An allergy from the EHR: a coded fact, plus its criticality when the EHR records one. */
         AllergyFact: components["schemas"]["FactBase"] & {
             value: components["schemas"]["Coding"];
@@ -2013,10 +2104,6 @@ export interface components {
          * @enum {string}
          */
         NeededFactAudience: "patient" | "nurse";
-        /** @enum {string} */
-        OverrideReasonCode: "clinical_judgement" | "new_information" | "patient_deteriorated" | "model_error" | "other";
-        /** @enum {string} */
-        DecisionAction: "CONFIRM" | "OVERRIDE";
         /**
          * @description Event type, in the Standard Webhooks dotted style.
          * @enum {string}
@@ -3680,56 +3767,253 @@ export interface operations {
                     /**
                      * @example {
                      *       "session_id": "ses_chest_pain",
-                     *       "generated_at": "2026-09-26T09:07:00Z",
+                     *       "generated_at": "2026-09-27T09:09:00Z",
                      *       "sections": [
                      *         {
+                     *           "id": "alerts_triage",
+                     *           "title": "Alerts and triage",
+                     *           "items": [
+                     *             {
+                     *               "text": "Critical alert: Chest pain: ECG within 10 minutes of arrival. Raised 6 min after arrival. Acknowledged by the nurse.",
+                     *               "provenance": "NURSE_CONFIRMED",
+                     *               "source": {
+                     *                 "kind": "nurse",
+                     *                 "staff_user_id": "usr_nurse_01"
+                     *               },
+                     *               "recorded_at": "2026-09-27T09:08:00Z"
+                     *             },
+                     *             {
+                     *               "text": "Triage level: KTAS 2, set by the nurse (model suggested KTAS 3). Reason: clinical judgement. Note: \"Chest pain alert with radiation and sweating.\"",
+                     *               "provenance": "NURSE_CONFIRMED",
+                     *               "source": {
+                     *                 "kind": "nurse",
+                     *                 "staff_user_id": "usr_nurse_01"
+                     *               },
+                     *               "recorded_at": "2026-09-27T09:08:00Z"
+                     *             },
+                     *             {
+                     *               "text": "ECG done: 7 min after arrival.",
+                     *               "provenance": "NURSE_CONFIRMED",
+                     *               "source": {
+                     *                 "kind": "nurse",
+                     *                 "staff_user_id": "usr_nurse_01"
+                     *               },
+                     *               "fact_id": "f_YK9TR82CZK4JE6GKNJ1QQS9MD5",
+                     *               "recorded_at": "2026-09-27T09:07:00Z"
+                     *             }
+                     *           ]
+                     *         },
+                     *         {
+                     *           "id": "presenting_complaint",
                      *           "title": "Presenting complaint",
                      *           "items": [
                      *             {
-                     *               "text": "Crushing chest pain for about an hour",
+                     *               "text": "Age: 58 years.",
+                     *               "provenance": "EHR",
+                     *               "source": {
+                     *                 "kind": "fhir",
+                     *                 "resource_type": "Patient",
+                     *                 "id": "persona-chest-pain",
+                     *                 "version_id": "1"
+                     *               },
+                     *               "fact_id": "f_7DY0Z700BWJ5JASKFZWJ85K8YN",
+                     *               "recorded_at": "2026-09-27T09:00:20Z"
+                     *             },
+                     *             {
+                     *               "text": "Sex: Male.",
+                     *               "provenance": "EHR",
+                     *               "source": {
+                     *                 "kind": "fhir",
+                     *                 "resource_type": "Patient",
+                     *                 "id": "persona-chest-pain",
+                     *                 "version_id": "1"
+                     *               },
+                     *               "fact_id": "f_6JTSYS90Z0944MSNN1VMQAY2M5",
+                     *               "recorded_at": "2026-09-27T09:00:20Z"
+                     *             },
+                     *             {
+                     *               "text": "Chief complaint: crushing pain in my chest. Patient: \"crushing pain in my chest\"",
                      *               "provenance": "PATIENT_STATED",
                      *               "source": {
                      *                 "kind": "transcript_span",
-                     *                 "turn_id": "turn_01",
+                     *                 "turn_id": "trn_002",
                      *                 "start": 9,
                      *                 "end": 34,
                      *                 "quote": "crushing pain in my chest"
                      *               },
-                     *               "fact_id": "f_01M3EF2PM000000000035FW008"
+                     *               "fact_id": "f_150R58P1KFNAQ31VY0BXSSBE3F",
+                     *               "recorded_at": "2026-09-27T09:01:20Z"
                      *             }
                      *           ]
                      *         },
                      *         {
-                     *           "title": "Vital signs",
+                     *           "id": "danger_screens",
+                     *           "title": "Danger-screen answers",
                      *           "items": [
                      *             {
-                     *               "text": "Heart rate 104 /min",
+                     *               "text": "Chest pain: yes. Patient: \"crushing pain in my chest\"",
+                     *               "provenance": "PATIENT_STATED",
+                     *               "source": {
+                     *                 "kind": "transcript_span",
+                     *                 "turn_id": "trn_002",
+                     *                 "start": 9,
+                     *                 "end": 34,
+                     *                 "quote": "crushing pain in my chest"
+                     *               },
+                     *               "fact_id": "f_E3JM3BSSH14PFA5MWFSPS4K2KF",
+                     *               "recorded_at": "2026-09-27T09:01:20Z"
+                     *             },
+                     *             {
+                     *               "text": "Chest pain, radiates: yes. Patient: \"it goes down my left arm\"",
+                     *               "provenance": "PATIENT_STATED",
+                     *               "source": {
+                     *                 "kind": "transcript_span",
+                     *                 "turn_id": "trn_004",
+                     *                 "start": 5,
+                     *                 "end": 29,
+                     *                 "quote": "it goes down my left arm"
+                     *               },
+                     *               "fact_id": "f_1MZ3EE90CZQD1F3ZX9M5RXFFNG",
+                     *               "recorded_at": "2026-09-27T09:01:50Z"
+                     *             }
+                     *           ]
+                     *         },
+                     *         {
+                     *           "id": "vitals_news2",
+                     *           "title": "Vitals and NEWS2",
+                     *           "items": [
+                     *             {
+                     *               "text": "Heart rate: 104 /min.",
                      *               "provenance": "DEVICE_MEASURED",
                      *               "source": {
                      *                 "kind": "device",
                      *                 "device_id": "sim_vitals_01",
-                     *                 "reading_id": "rd_0001"
+                     *                 "reading_id": "rd_ses_chest_pain_01"
                      *               },
-                     *               "fact_id": "f_01M3EF2PM000000000035FW00B"
+                     *               "fact_id": "f_FM0KRYT3VWRE3DE4PCK0CZW0AP",
+                     *               "recorded_at": "2026-09-27T09:03:00Z"
+                     *             },
+                     *             {
+                     *               "text": "SpO2: 97 %.",
+                     *               "provenance": "DEVICE_MEASURED",
+                     *               "source": {
+                     *                 "kind": "device",
+                     *                 "device_id": "sim_vitals_01",
+                     *                 "reading_id": "rd_ses_chest_pain_01"
+                     *               },
+                     *               "fact_id": "f_E4QB53YWWP8M9KN56CSY8KYDFD",
+                     *               "recorded_at": "2026-09-27T09:03:00Z"
                      *             }
                      *           ]
                      *         },
                      *         {
-                     *           "title": "History",
+                     *           "id": "record",
+                     *           "title": "Record (EHR)",
                      *           "items": [
                      *             {
-                     *               "text": "Hypertension",
+                     *               "text": "Allergies (patient's answer): no allergies. Patient: \"no allergies\"",
+                     *               "provenance": "PATIENT_STATED",
+                     *               "source": {
+                     *                 "kind": "transcript_span",
+                     *                 "turn_id": "trn_012",
+                     *                 "start": 4,
+                     *                 "end": 16,
+                     *                 "quote": "no allergies"
+                     *               },
+                     *               "fact_id": "f_Z00DC1MN81JCDV7RXBXFKNCPGS",
+                     *               "recorded_at": "2026-09-27T09:03:50Z"
+                     *             },
+                     *             {
+                     *               "text": "Condition: Hypertensive disorder.",
                      *               "provenance": "EHR",
                      *               "source": {
                      *                 "kind": "fhir",
                      *                 "resource_type": "Condition",
-                     *                 "id": "persona-chest-pain-htn"
+                     *                 "id": "persona-chest-pain-condition-1",
+                     *                 "version_id": "1"
                      *               },
-                     *               "fact_id": "f_01M3EF2PM000000000035FW00G"
+                     *               "fact_id": "f_Q9X2FP01Q07CF4F16DQNEMDTH0",
+                     *               "recorded_at": "2026-09-27T09:00:20Z"
+                     *             }
+                     *           ]
+                     *         },
+                     *         {
+                     *           "id": "model_output",
+                     *           "title": "Model output",
+                     *           "items": [
+                     *             {
+                     *               "text": "Complaint category: Chest pain. Nurse's level: KTAS 2.",
+                     *               "provenance": "MODEL_INFERRED",
+                     *               "source": {
+                     *                 "kind": "model",
+                     *                 "model_id": "ktas_keyword_map",
+                     *                 "model_version": "1"
+                     *               },
+                     *               "fact_id": "f_4E7HZBV5GASHXR6P3DNY9RWT32",
+                     *               "recorded_at": "2026-09-27T09:01:20Z"
+                     *             },
+                     *             {
+                     *               "text": "Suggested KTAS 3 (confidence 0.59). Only a suggestion. Nurse's level: KTAS 2.",
+                     *               "provenance": "MODEL_INFERRED",
+                     *               "source": {
+                     *                 "kind": "model",
+                     *                 "model_id": "careflow-ktas-hgb",
+                     *                 "model_version": "ktas-hgb-ebf31b5e-s42"
+                     *               },
+                     *               "recorded_at": "2026-09-27T09:07:00Z"
+                     *             }
+                     *           ]
+                     *         },
+                     *         {
+                     *           "id": "data_quality",
+                     *           "title": "Data quality",
+                     *           "items": [],
+                     *           "notes": [
+                     *             {
+                     *               "code": "none_recorded",
+                     *               "text": "No data-quality problem was recorded."
                      *             }
                      *           ]
                      *         }
-                     *       ]
+                     *       ],
+                     *       "summary": {
+                     *         "sentences": [
+                     *           {
+                     *             "text": "Age 58 years; sex Male.",
+                     *             "fact_ids": [
+                     *               "f_7DY0Z700BWJ5JASKFZWJ85K8YN",
+                     *               "f_6JTSYS90Z0944MSNN1VMQAY2M5"
+                     *             ]
+                     *           }
+                     *         ]
+                     *       },
+                     *       "summary_status": "ok",
+                     *       "triage": {
+                     *         "suggested": {
+                     *           "level": 3,
+                     *           "scale": "KTAS",
+                     *           "display_label": "KTAS 3",
+                     *           "confidence": 0.5946511261441932,
+                     *           "model_id": "careflow-ktas-hgb",
+                     *           "model_version": "ktas-hgb-ebf31b5e-s42"
+                     *         },
+                     *         "confirmed": {
+                     *           "level": 2,
+                     *           "scale": "KTAS",
+                     *           "action": "OVERRIDE",
+                     *           "nurse_user_id": "usr_nurse_01",
+                     *           "decided_at": "2026-09-27T09:08:00Z"
+                     *         },
+                     *         "override_reason": {
+                     *           "code": "clinical_judgement",
+                     *           "note": "Chest pain alert with radiation and sweating."
+                     *         }
+                     *       },
+                     *       "versions": {
+                     *         "ruleset": "2026.2.0",
+                     *         "model": "ktas-hgb-ebf31b5e-s42",
+                     *         "prompt": "briefing-summary-v1"
+                     *       }
                      *     }
                      */
                     "application/json": components["schemas"]["Briefing"];

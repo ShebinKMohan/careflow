@@ -1,5 +1,5 @@
 {
-  "a5637706212ad8070b489b924579f913e184e07a665cc2dc08fb9ae27cff6bac": {
+  "11065918f1c744eb5e33eac7d6962311e0b39347a851c12ade8e5037b633d505": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football an hour ago\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football an hour ago\", \"negated\": false}, {\"key\": \"injury\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, I fell on it\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"Maybe a four\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}]}"

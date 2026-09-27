@@ -1,0 +1,12 @@
+{
+  "persona": "no-show",
+  "summary_status": "ok",
+  "reasons": [],
+  "sentences": [
+    "The patient reports a bad headache that started since yesterday evening.",
+    "The patient rates the pain as a 7.",
+    "The model infers the complaint category is Headache.",
+    "The nurse's level is KTAS 3.",
+    "Device measurements include a heart rate of 82 /min, SpO2 of 98 %, and a temperature of 36.8 °C."
+  ]
+}

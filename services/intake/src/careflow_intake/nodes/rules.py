@@ -37,6 +37,7 @@ async def run_rules(state: IntakeState, ports: IntakePorts, settings: IntakeSett
     update: Update = {
         "alerts": list(outcome.alerts),
         "needed_facts": list(outcome.needed_facts),
+        "ruleset_version": outcome.ruleset_version,
         "node_trace": ["run_rules"],
     }
     if not state.get("conversation_complete", False) and caps_reached(state, now, settings):

@@ -101,12 +101,31 @@ uv run pytest services/intake -k "conversation or scripts"          # scripted p
 scripts/with_llm.sh uv run python -m careflow_intake.scripts --record chest_pain
 ```
 
+## The doctor briefing (M1-16)
+
+`careflow_intake.briefing.make_briefing(state, now=..., summarizer=...)` builds the briefing after the nurse's decision (ADR-030):
+
+- **`builder`.** Seven fixed sections: alerts and triage, presenting complaint, danger-screen answers, vitals and NEWS2, record (EHR), model output, data quality.
+  - Every item comes from a fixed template over one fact (or an alert, the nurse's decision, NEWS2 or the suggestion) and carries its provenance and source.
+  - A model-inferred item always shows the nurse's level.
+  - Data-quality warnings and empty sections are notes, not items.
+- **`check`.** Fails closed: an item whose source cannot be verified in the session is kept, marked `source_missing` and logged as an error.
+- **`summary`.** Optional (`briefing_summary` in `config/intake.yaml`). The `summary` task writes at most 5 sentences that cite fact ids, and `check_summary` drops the whole summary if any sentence cites nothing or an unknown fact, adds a number, or reads as a diagnosis or advice. A missing or unreachable provider disables it. The plain list is always complete.
+
+The API stores it and writes the FHIR document (`careflow_api.briefing`); `careflow_intake.wiring.briefing_summarizer()` builds the summarizer from the config.
+
+```bash
+uv run pytest services/intake -k briefing                                    # the 7 personas, replayed summaries
+uv run python services/intake/tests/fixtures/briefing/generate.py           # rebuild the persona states
+scripts/with_llm.sh uv run python -m careflow_intake.briefing.record --persona all   # record the summaries
+```
+
 ## Tests
 
 ```bash
 uv run pytest services/intake    # the Postgres restart test runs when `make up` (or the CI container) is available
 ```
 
-Decisions are in ADR-020.
+Decisions are in ADR-020 and ADR-030.
 
 Research prototype. Synthetic data only. Not for clinical use.

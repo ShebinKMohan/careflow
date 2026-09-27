@@ -844,4 +844,16 @@ entries:
   unit: null
   verified: true
   notes: Free text, the patient's answer about allergies, confirming or correcting the EHR list (M1-07 checklist). The coded list stays in ehr_context.allergies.
+- fact_path: tasks.ecg_done_at
+  direction: write
+  resource: Task
+  element: Task.status (completed) / Task.lastModified
+  code_system: https://careflow.example/fhir/CodeSystem/task-kind
+  code: ecg_within_10_min
+  display: ECG within 10 minutes of arrival
+  unit: null
+  verified: true
+  notes: Set by the nurse through the task-complete route (M1-12); the write-back completes the ecg_within_10_min Task
+    (M1-09 complete_task). NURSE_CONFIRMED only, never extracted from the patient's words; the doctor briefing lists it
+    under Alerts and triage (M1-16).
 not_mapped: []

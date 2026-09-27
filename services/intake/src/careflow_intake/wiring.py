@@ -16,6 +16,9 @@ from typing import Any, Final
 import yaml
 
 from careflow_contracts.generated.structured_facts_schema import StructuredFacts
+from careflow_intake.briefing.summary import DEFAULT_TIMEOUT_SECONDS as DEFAULT_SUMMARY_TIMEOUT
+from careflow_intake.briefing.summary import TASK as SUMMARY_TASK
+from careflow_intake.briefing.summary import Summarizer
 from careflow_intake.conversation import ChecklistConversation
 from careflow_intake.conversation.phrasing import DEFAULT_TIMEOUT_SECONDS, Phraser
 from careflow_intake.extraction.extractor import LlmExtractor
@@ -39,7 +42,11 @@ class CareflowRules:
         self, facts: StructuredFacts, *, now: datetime, arrived_at: datetime | None
     ) -> RulesOutcome:
         result = evaluate(facts, now, arrived_at=arrived_at)
-        return RulesOutcome(alerts=list(result.alerts), needed_facts=list(result.needed_facts))
+        return RulesOutcome(
+            alerts=list(result.alerts),
+            needed_facts=list(result.needed_facts),
+            ruleset_version=result.ruleset_version,
+        )
 
 
 @dataclass(frozen=True)
@@ -48,6 +55,8 @@ class IntakeConfig:
     phrasing_timeout_s: float = DEFAULT_TIMEOUT_SECONDS
     max_turns: int = 8
     max_seconds: float = 120.0
+    briefing_summary: bool = True
+    summary_timeout_s: float = DEFAULT_SUMMARY_TIMEOUT
 
     @property
     def settings(self) -> IntakeSettings:
@@ -61,6 +70,24 @@ def load_intake_config(path: Path = INTAKE_CONFIG) -> IntakeConfig:
         phrasing_timeout_s=float(body.get("phrasing_timeout_s", DEFAULT_TIMEOUT_SECONDS)),
         max_turns=int(body.get("max_turns", 8)),
         max_seconds=float(body.get("max_seconds", 120)),
+        briefing_summary=bool(body.get("briefing_summary", True)),
+        summary_timeout_s=float(body.get("summary_timeout_s", DEFAULT_SUMMARY_TIMEOUT)),
+    )
+
+
+def briefing_summarizer(
+    config: IntakeConfig | None = None, providers: ProvidersConfig | None = None
+) -> Summarizer | None:
+    """The briefing's `Summarizer` for the `summary` task, or None when `briefing_summary` is
+    off. The provider is built on first use, so a missing API key disables the summary instead
+    of failing the briefing."""
+    config = config or load_intake_config()
+    if not config.briefing_summary:
+        return None
+    resolved = providers or providers_config()
+    return Summarizer(
+        provider=lambda: build_provider(SUMMARY_TASK, resolved),
+        timeout_seconds=config.summary_timeout_s,
     )
 
 
@@ -118,6 +145,7 @@ __all__ = [
     "CareflowRules",
     "IntakeConfig",
     "RealPortsSettings",
+    "briefing_summarizer",
     "build_real_ports",
     "load_intake_config",
     "providers_config",

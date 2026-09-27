@@ -14,6 +14,9 @@ from opentelemetry.sdk.trace import TracerProvider
 from redis.asyncio import Redis
 
 from careflow_api import problems, telemetry
+from careflow_api.briefing import router as doctor
+from careflow_api.briefing.service import BriefingService
+from careflow_api.briefing.store import SqlBriefingStore
 from careflow_api.config import get_settings
 from careflow_api.events import tickets, ws
 from careflow_api.events.bus import EventBus
@@ -24,6 +27,9 @@ from careflow_api.queue import router as queue_router
 from careflow_api.queue.rooms import rooms
 from careflow_api.queue.service import QueueService, run_grace_expiry
 from careflow_api.routers import admin, auth, dev, health, nurse
+from careflow_api.writeback_store import SqlWritebackStore
+from careflow_intake.wiring import briefing_summarizer
+from careflow_integration.fhir.client import FhirClient
 
 
 @contextlib.asynccontextmanager
@@ -68,7 +74,13 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     )
     # config/rooms.yaml is validated here, so a bad file stops the API at start.
     app.state.queue = QueueService(rooms(), app.state.events)
-    for module in (health, auth, nurse, admin, queue_router, tickets, ws):
+    app.state.briefings = BriefingService(
+        store=SqlBriefingStore(),
+        writebacks=SqlWritebackStore(),
+        fhir=lambda: FhirClient(settings.fhir_base_url),
+        summarizer=briefing_summarizer(),
+    )
+    for module in (health, auth, nurse, doctor, admin, queue_router, tickets, ws):
         app.include_router(module.router)
     if settings.env == "dev":  # test hooks exist only in development (otherwise: 404)
         app.include_router(dev.router)

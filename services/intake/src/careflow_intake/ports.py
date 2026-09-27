@@ -67,6 +67,7 @@ class RulesOutcome(BaseModel):
 
     alerts: list[Alert] = []
     needed_facts: list[NeededFact] = []
+    ruleset_version: str | None = None
 
 
 class Assignment(BaseModel):

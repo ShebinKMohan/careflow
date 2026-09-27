@@ -1,0 +1,7 @@
+{
+  "8e8deba70c184d0a2f9084db93230c0d57e12593ffd4c12c3f8caaff71c717f6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"fact_ids\":[\"f_YK9TR82CZK4JE6GKNJ1QQS9MD5\",\"f_E3SRG0NSG38HMV1X3E5GNATEHR\"],\"text\":\"ECG done 7 min after arrival; onset for 1 h.\"},{\"fact_ids\":[\"f_7DY0Z700BWJ5JASKFZWJ85K8YN\",\"f_6JTSYS90Z0944MSNN1VMQAY2M5\"],\"text\":\"Age 58 years; sex Male.\"},{\"fact_ids\":[\"f_150R58P1KFNAQ31VY0BXSSBE3F\",\"f_E3JM3BSSH14PFA5MWFSPS4K2KF\",\"f_1MZ3EE90CZQD1F3ZX9M5RXFFNG\",\"f_ZDKGX84PMFP0QVBZEMD3KAR4AQ\",\"f_PBPAGXHSE6FXZH7SZR6VBBAPYQ\"],\"text\":\"Chief complaint crushing pain in my chest; radiates down left arm; sweating yes; short of breath yes.\"},{\"fact_ids\":[\"f_MKHBEP42HH2BZ4SSP48ZP644SF\"],\"text\":\"Pain score 8/10.\"},{\"fact_ids\":[\"f_FM0KRYT3VWRE3DE4PCK0CZW0AP\",\"f_E4QB53YWWP8M9KN56CSY8KYDFD\",\"f_2QFXHKSH9J10TJSENVVTZZTR6R\",\"f_JN786F9NKNRZP7GYEQBH3AA24X\",\"f_QYT86MWPB8E2Y7AZZTWGT3GD32\",\"f_HDRHWRG3HD7TD6VD94W4G7Q64A\",\"f_RV927KH4KGNPQ96TVXZCD6X8B4\",\"f_MW8B73WDKW28FTSJP2Q8RYFH4Q\"],\"text\":\"Heart rate 104 /min; SpO2 97 %; Temperature 36.9 °C; Respiratory rate 20 /min; Systolic blood pressure 150 mmHg; Diastolic blood pressure 90 mmHg; ACVPU A; Supplemental oxygen no.\"}]}"
+  }
+}

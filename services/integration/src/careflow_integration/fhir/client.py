@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 from collections.abc import Awaitable, Callable, Mapping, Sequence
+from dataclasses import dataclass
 from typing import Any, Final
 
 import httpx
@@ -24,6 +26,21 @@ VALIDATION_STATUSES: Final = frozenset({400, 412, 422})
 
 type Json = dict[str, Any]
 type Sleep = Callable[[float], Awaitable[None]]
+
+
+#: `.../Bundle/123/_history/1` in a Location header.
+LOCATION: Final = re.compile(
+    r"(?P<type>[A-Z][A-Za-z]+)/(?P<id>[A-Za-z0-9\-.]{1,64})(?:/_history/|/?$)"
+)
+
+
+@dataclass(frozen=True)
+class Created:
+    """What a create answered: the stored id, whether it was new (201), and the resource."""
+
+    resource_id: str
+    created: bool
+    body: Json
 
 
 class FhirError(Exception):
@@ -133,6 +150,28 @@ class FhirClient:
         """POST a transaction Bundle to the base URL, once; returns the transaction-response."""
         return await self._request("POST", "", body=bundle, retry=False)
 
+    async def create(self, resource: Json, *, if_none_exist: str | None = None) -> Created:
+        """POST `resource` to its type, once (the caller owns retries). With `if_none_exist` (a
+        search such as `identifier=urn:x|1`) it is a conditional create: a server that already
+        holds a match answers 200 with it instead of storing a second copy (201)."""
+        headers = {"Content-Type": FHIR_JSON, "Prefer": "return=representation"}
+        if if_none_exist is not None:
+            headers["If-None-Exist"] = if_none_exist
+        try:
+            response = await self._client.post(
+                resource["resourceType"], content=canonical_json(resource), headers=headers
+            )
+        except httpx.TransportError as exc:
+            raise FhirError(type(exc).__name__) from exc
+        if response.is_error:
+            raise FhirError(f"HTTP {response.status_code}", status=response.status_code)
+        body: Json = response.json() if response.content else {}
+        found = LOCATION.search(response.headers.get("location", ""))
+        resource_id = str(body.get("id") or (found["id"] if found else ""))
+        if not resource_id:
+            raise FhirError("the server did not say where it stored the resource")
+        return Created(resource_id=resource_id, created=response.status_code == 201, body=body)
+
     async def update(self, resource: Json, *, version_id: str) -> Json:
         """PUT `resource` over version `version_id` only (`If-Match`); HAPI answers 412 when the
         resource changed since. Returns the stored resource."""
@@ -171,6 +210,7 @@ class FhirClient:
 
 __all__ = [
     "DEFAULT_TIMEOUT",
+    "Created",
     "FHIR_JSON",
     "MAX_PAGES",
     "PAGE_SIZE",

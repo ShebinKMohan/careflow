@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "careflow-contracts",
+  "careflow-intake",
   "careflow-integration",
   "fastapi>=0.141,<0.142",
   "uvicorn>=0.54,<0.55",
@@ -33,6 +34,7 @@ careflow-vitals-sim = "careflow_api.devices.cli:main"
 
 [tool.uv.sources]
 careflow-contracts = { workspace = true }
+careflow-intake = { workspace = true }
 careflow-integration = { workspace = true }
 
 [build-system]

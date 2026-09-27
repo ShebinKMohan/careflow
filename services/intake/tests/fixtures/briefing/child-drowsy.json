@@ -1,0 +1,366 @@
+{
+  "persona": "child-drowsy",
+  "description": "A 2-year-old, hard to wake since this morning, fever last night; the parent answers. No model suggestion (under 15); NEWS2 does not apply.",
+  "generated_by": "services/intake/tests/fixtures/briefing/generate.py",
+  "ruleset": "2026.2.0",
+  "urgency_model": "ktas-hgb-ebf31b5e-s42",
+  "state": {
+    "session_id": "ses_child_drowsy",
+    "clinic_id": "clinic_demo",
+    "language": "en",
+    "arrived_at": "2026-09-27T09:40:00+00:00",
+    "patient_ref": "Patient/persona-child-drowsy",
+    "ehr_status": "ok",
+    "ehr_errors": [],
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "facts": [
+      {
+        "key": "patient.age_years",
+        "fact": {
+          "fact_id": "f_MBWB2YBSEG065F81DT0C67W612",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-child-drowsy",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T09:40:20Z",
+          "value": 2
+        }
+      },
+      {
+        "key": "patient.age_months",
+        "fact": {
+          "fact_id": "f_VSY99W3D17RYTGFGWDXK2YENCH",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-child-drowsy",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T09:40:20Z",
+          "value": 26
+        }
+      },
+      {
+        "key": "patient.sex",
+        "fact": {
+          "fact_id": "f_7Y6P5RF9Z145QYJBM2JPYAC9BT",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-child-drowsy",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T09:40:20Z",
+          "value": {
+            "system": "http://hl7.org/fhir/administrative-gender",
+            "code": "male",
+            "display": "Male"
+          }
+        }
+      },
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_3MPGG7TF6D9C7EVZC7RZHR77XF",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 12,
+            "end": 48,
+            "quote": "very hard to wake since this morning"
+          },
+          "recorded_at": "2026-09-27T09:41:20Z",
+          "value": "very hard to wake since this morning"
+        }
+      },
+      {
+        "key": "child_danger.hard_to_wake",
+        "fact": {
+          "fact_id": "f_JMQSC2NN6VMKMM4VGR8NZHG5AQ",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 12,
+            "end": 29,
+            "quote": "very hard to wake"
+          },
+          "recorded_at": "2026-09-27T09:41:20Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "infection.fever_reported",
+        "fact": {
+          "fact_id": "f_R6YXJAQGFQE97FMGF56XRC7X5T",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 53,
+            "end": 78,
+            "quote": "he had a fever last night"
+          },
+          "recorded_at": "2026-09-27T09:41:20Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "symptom_onset_at",
+        "fact": {
+          "fact_id": "f_NZHTX7BMR6QDY19RCWJHDGMVD1",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 30,
+            "end": 48,
+            "quote": "since this morning"
+          },
+          "recorded_at": "2026-09-27T09:41:20Z",
+          "value": "since this morning"
+        }
+      },
+      {
+        "key": "complaint_category",
+        "fact": {
+          "fact_id": "f_0QQ6JD03RTN32MBX8Q9WXYH591",
+          "provenance": "MODEL_INFERRED",
+          "source": {
+            "kind": "model",
+            "model_id": "ktas_keyword_map",
+            "model_version": "1"
+          },
+          "recorded_at": "2026-09-27T09:41:20Z",
+          "value": {
+            "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+            "code": "other",
+            "display": "Other"
+          }
+        }
+      },
+      {
+        "key": "child_danger.non_blanching_rash",
+        "fact": {
+          "fact_id": "f_VTV58RCPXG40NPSV9DCWM3SYD4",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_004",
+            "start": 4,
+            "end": 11,
+            "quote": "no rash"
+          },
+          "recorded_at": "2026-09-27T09:41:50Z",
+          "value": "no"
+        }
+      },
+      {
+        "key": "child_danger.seizure",
+        "fact": {
+          "fact_id": "f_E62DZ7D3N35GTFSDAZBZQD0C49",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_006",
+            "start": 0,
+            "end": 2,
+            "quote": "No"
+          },
+          "recorded_at": "2026-09-27T09:42:20Z",
+          "value": "no"
+        }
+      },
+      {
+        "key": "allergies_confirm",
+        "fact": {
+          "fact_id": "f_470VM1W1N99A41Z9D1PEC7DWR7",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_008",
+            "start": 0,
+            "end": 18,
+            "quote": "Not that I know of"
+          },
+          "recorded_at": "2026-09-27T09:42:50Z",
+          "value": "none known"
+        }
+      },
+      {
+        "key": "vitals.heart_rate",
+        "fact": {
+          "fact_id": "f_1GW0T37PSDEJ15K4X3P45E6VG8",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_child_drowsy_01"
+          },
+          "recorded_at": "2026-09-27T09:43:00Z",
+          "value": 150.0,
+          "unit": "/min"
+        }
+      },
+      {
+        "key": "vitals.spo2",
+        "fact": {
+          "fact_id": "f_3ZK0Q18KKJYQM0RX7QX081857G",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_child_drowsy_01"
+          },
+          "recorded_at": "2026-09-27T09:43:00Z",
+          "value": 95.0,
+          "unit": "%"
+        }
+      },
+      {
+        "key": "vitals.temperature_c",
+        "fact": {
+          "fact_id": "f_FVQJ68Y4WP61M7HS3S7FCX8Y5A",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_child_drowsy_01"
+          },
+          "recorded_at": "2026-09-27T09:43:00Z",
+          "value": 38.9,
+          "unit": "Cel"
+        }
+      }
+    ],
+    "turns": [
+      {
+        "turn_id": "trn_001",
+        "role": "assistant",
+        "text": "What brings you in today?",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T09:41:00Z"
+      },
+      {
+        "turn_id": "trn_002",
+        "role": "patient",
+        "text": "He has been very hard to wake since this morning and he had a fever last night.",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T09:41:20Z"
+      },
+      {
+        "turn_id": "trn_003",
+        "role": "assistant",
+        "text": "Does he have a rash that does not fade when you press a glass on it?",
+        "question_key": "child_danger.non_blanching_rash",
+        "created_at": "2026-09-27T09:41:30Z"
+      },
+      {
+        "turn_id": "trn_004",
+        "role": "patient",
+        "text": "No, no rash.",
+        "question_key": "child_danger.non_blanching_rash",
+        "created_at": "2026-09-27T09:41:50Z"
+      },
+      {
+        "turn_id": "trn_005",
+        "role": "assistant",
+        "text": "Has he had a fit or seizure?",
+        "question_key": "child_danger.seizure",
+        "created_at": "2026-09-27T09:42:00Z"
+      },
+      {
+        "turn_id": "trn_006",
+        "role": "patient",
+        "text": "No.",
+        "question_key": "child_danger.seizure",
+        "created_at": "2026-09-27T09:42:20Z"
+      },
+      {
+        "turn_id": "trn_007",
+        "role": "assistant",
+        "text": "Do you know of any allergies to medicines?",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T09:42:30Z"
+      },
+      {
+        "turn_id": "trn_008",
+        "role": "patient",
+        "text": "Not that I know of.",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T09:42:50Z"
+      }
+    ],
+    "alerts": [
+      {
+        "alert_id": "alr_8c4ec829b09ad79d73fededf",
+        "session_id": "ses_child_drowsy",
+        "rule_id": "NG143_RED_FLAG",
+        "ruleset_version": "2026.2.0",
+        "severity": "critical",
+        "evidence_fact_ids": [
+          "f_JMQSC2NN6VMKMM4VGR8NZHG5AQ"
+        ],
+        "required_action": "paediatric_review_now",
+        "display_text": "Child red flag (NICE NG143). Urgent medical review.",
+        "partial": false,
+        "missing_inputs": [],
+        "raised_at": "2026-09-27T09:43:00Z",
+        "deadline_at": null
+      },
+      {
+        "alert_id": "alr_3190d40c1273dc4f03bf1f2c",
+        "session_id": "ses_child_drowsy",
+        "rule_id": "NG143_AMBER_FLAG",
+        "ruleset_version": "2026.2.0",
+        "severity": "high",
+        "evidence_fact_ids": [
+          "f_3ZK0Q18KKJYQM0RX7QX081857G",
+          "f_1GW0T37PSDEJ15K4X3P45E6VG8",
+          "f_VSY99W3D17RYTGFGWDXK2YENCH"
+        ],
+        "required_action": "paediatric_assessment_soon",
+        "display_text": "Child amber flag (NICE NG143). Prompt clinical assessment.",
+        "partial": false,
+        "missing_inputs": [],
+        "raised_at": "2026-09-27T09:43:00Z",
+        "deadline_at": null
+      }
+    ],
+    "ruleset_version": "2026.2.0",
+    "extraction": {
+      "dropped_count": 0,
+      "model_id": "qwen3.5-9b-4bit",
+      "prompt_version": "extraction_v2"
+    },
+    "flags": {},
+    "suggestion_unavailable": "age under 15: the KTAS training data are adults only",
+    "suggestion": null,
+    "nurse_decision": {
+      "decision_id": "dec_ses_child_drowsy",
+      "session_id": "ses_child_drowsy",
+      "suggestion_id": null,
+      "action": "OVERRIDE",
+      "final_level": 2,
+      "scale": "KTAS",
+      "override_reason_code": "other",
+      "override_note": "no model suggestion",
+      "nurse_user_id": "usr_nurse_01",
+      "acknowledged_alert_ids": [
+        "alr_8c4ec829b09ad79d73fededf",
+        "alr_3190d40c1273dc4f03bf1f2c"
+      ],
+      "decided_at": "2026-09-27T09:48:00Z"
+    }
+  }
+}

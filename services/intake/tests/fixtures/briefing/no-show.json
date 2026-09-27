@@ -1,0 +1,244 @@
+{
+  "persona": "no-show",
+  "description": "Appointment today; the EHR could not be read at check-in, so the allergy question is asked fresh. (The no-show happens later, in the queue.)",
+  "generated_by": "services/intake/tests/fixtures/briefing/generate.py",
+  "ruleset": "2026.2.0",
+  "urgency_model": "ktas-hgb-ebf31b5e-s42",
+  "state": {
+    "session_id": "ses_no_show",
+    "clinic_id": "clinic_demo",
+    "language": "en",
+    "arrived_at": "2026-09-27T11:00:00+00:00",
+    "patient_ref": null,
+    "ehr_status": "unavailable",
+    "ehr_errors": [
+      "connect timeout"
+    ],
+    "ehr_context": null,
+    "facts": [
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_1P8XZ7ZJ2BPRZ8M8NGQRFJB39W",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 9,
+            "end": 21,
+            "quote": "bad headache"
+          },
+          "recorded_at": "2026-09-27T11:01:20Z",
+          "value": "bad headache"
+        }
+      },
+      {
+        "key": "symptom_onset_at",
+        "fact": {
+          "fact_id": "f_M1G8X6HAF7V02GS9GRGTB2HTVV",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 22,
+            "end": 45,
+            "quote": "since yesterday evening"
+          },
+          "recorded_at": "2026-09-27T11:01:20Z",
+          "value": "since yesterday evening"
+        }
+      },
+      {
+        "key": "complaint_category",
+        "fact": {
+          "fact_id": "f_ZF5F58605JJXAQ53Y9FDMPRTT2",
+          "provenance": "MODEL_INFERRED",
+          "source": {
+            "kind": "model",
+            "model_id": "ktas_keyword_map",
+            "model_version": "1"
+          },
+          "recorded_at": "2026-09-27T11:01:20Z",
+          "value": {
+            "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+            "code": "headache",
+            "display": "Headache"
+          }
+        }
+      },
+      {
+        "key": "pain_score",
+        "fact": {
+          "fact_id": "f_R2609RSSDY9H0JP0VR0Q66ANDC",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_004",
+            "start": 5,
+            "end": 8,
+            "quote": "a 7"
+          },
+          "recorded_at": "2026-09-27T11:01:50Z",
+          "value": 7
+        }
+      },
+      {
+        "key": "allergies_confirm",
+        "fact": {
+          "fact_id": "f_P9T6XTQZ8CNJJ8R231AQRSTDC0",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_006",
+            "start": 4,
+            "end": 23,
+            "quote": "none that I know of"
+          },
+          "recorded_at": "2026-09-27T11:02:20Z",
+          "value": "none known"
+        }
+      },
+      {
+        "key": "vitals.heart_rate",
+        "fact": {
+          "fact_id": "f_SSA8Q68TAB8QZ315CXWV5GFKZK",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_no_show_01"
+          },
+          "recorded_at": "2026-09-27T11:03:00Z",
+          "value": 82.0,
+          "unit": "/min"
+        }
+      },
+      {
+        "key": "vitals.spo2",
+        "fact": {
+          "fact_id": "f_BQBBKJ2HNF6S0JBGCT1CM721P7",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_no_show_01"
+          },
+          "recorded_at": "2026-09-27T11:03:00Z",
+          "value": 98.0,
+          "unit": "%"
+        }
+      },
+      {
+        "key": "vitals.temperature_c",
+        "fact": {
+          "fact_id": "f_A9Q9F7CA840XXBKCY9S4P10EMQ",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_no_show_01"
+          },
+          "recorded_at": "2026-09-27T11:03:00Z",
+          "value": 36.8,
+          "unit": "Cel"
+        }
+      }
+    ],
+    "turns": [
+      {
+        "turn_id": "trn_001",
+        "role": "assistant",
+        "text": "What brings you in today?",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T11:01:00Z"
+      },
+      {
+        "turn_id": "trn_002",
+        "role": "patient",
+        "text": "I have a bad headache since yesterday evening.",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T11:01:20Z"
+      },
+      {
+        "turn_id": "trn_003",
+        "role": "assistant",
+        "text": "How bad is the pain now, from 0 to 10?",
+        "question_key": "pain_score",
+        "created_at": "2026-09-27T11:01:30Z"
+      },
+      {
+        "turn_id": "trn_004",
+        "role": "patient",
+        "text": "It's a 7.",
+        "question_key": "pain_score",
+        "created_at": "2026-09-27T11:01:50Z"
+      },
+      {
+        "turn_id": "trn_005",
+        "role": "assistant",
+        "text": "Do you have any allergies to medicines?",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T11:02:00Z"
+      },
+      {
+        "turn_id": "trn_006",
+        "role": "patient",
+        "text": "No, none that I know of.",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T11:02:20Z"
+      }
+    ],
+    "alerts": [],
+    "ruleset_version": "2026.2.0",
+    "extraction": {
+      "dropped_count": 0,
+      "model_id": "qwen3.5-9b-4bit",
+      "prompt_version": "extraction_v2"
+    },
+    "flags": {
+      "ehr_unavailable": true
+    },
+    "suggestion_unavailable": null,
+    "suggestion": {
+      "suggestion_id": "sug_f695ec9b1580409c44190445",
+      "session_id": "ses_no_show",
+      "level": 2,
+      "scale": "KTAS",
+      "display_label": "KTAS 2",
+      "confidence": 0.41615789493772776,
+      "reasons": [
+        {
+          "text": "Temperature 36.8 °C made KTAS 2 less likely",
+          "fact_ids": [
+            "f_A9Q9F7CA840XXBKCY9S4P10EMQ"
+          ]
+        },
+        {
+          "text": "Pain score 7/10 made KTAS 2 less likely",
+          "fact_ids": [
+            "f_R2609RSSDY9H0JP0VR0Q66ANDC"
+          ]
+        },
+        {
+          "text": "Arrival not recorded made KTAS 2 less likely",
+          "fact_ids": []
+        }
+      ],
+      "model_id": "careflow-ktas-hgb",
+      "model_version": "ktas-hgb-ebf31b5e-s42",
+      "created_at": "2026-09-27T11:07:00Z"
+    },
+    "nurse_decision": {
+      "decision_id": "dec_ses_no_show",
+      "session_id": "ses_no_show",
+      "suggestion_id": "sug_f695ec9b1580409c44190445",
+      "action": "OVERRIDE",
+      "final_level": 3,
+      "scale": "KTAS",
+      "override_reason_code": "clinical_judgement",
+      "nurse_user_id": "usr_nurse_01",
+      "acknowledged_alert_ids": [],
+      "decided_at": "2026-09-27T11:08:00Z"
+    }
+  }
+}

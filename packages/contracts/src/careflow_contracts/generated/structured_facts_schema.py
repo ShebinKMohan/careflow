@@ -368,6 +368,18 @@ class AllergyFact(FactBase):
     ] = None
 
 
+class Tasks(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    ecg_done_at: Annotated[
+        fact_schema.TextFact | None,
+        Field(
+            description="When the 10-minute ECG was done: an ISO 8601 date-time, recorded by the nurse."
+        ),
+    ] = None
+
+
 class EhrContext(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -442,6 +454,7 @@ class FactKey(StrEnum):
     vitals_diastolic_bp = "vitals.diastolic_bp"
     vitals_acvpu = "vitals.acvpu"
     vitals_on_supplemental_o2 = "vitals.on_supplemental_o2"
+    tasks_ecg_done_at = "tasks.ecg_done_at"
     ehr_context_allergies = "ehr_context.allergies"
     ehr_context_conditions = "ehr_context.conditions"
     ehr_context_medications = "ehr_context.medications"
@@ -575,5 +588,6 @@ class StructuredFacts(BaseModel):
     child_danger: ChildDanger | None = None
     child_amber: ChildAmber | None = None
     vitals: Vitals | None = None
+    tasks: Tasks | None = None
     ehr_context: EhrContext | None = None
     extraction_status: ExtractionStatus

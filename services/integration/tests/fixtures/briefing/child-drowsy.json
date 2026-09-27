@@ -1,0 +1,293 @@
+{
+  "patient_ref": "Patient/persona-child-drowsy",
+  "briefing": {
+    "session_id": "ses_child_drowsy",
+    "generated_at": "2026-09-27T09:49:00Z",
+    "sections": [
+      {
+        "id": "alerts_triage",
+        "title": "Alerts and triage",
+        "items": [
+          {
+            "text": "Critical alert: Child red flag (NICE NG143). Urgent medical review. Raised 3 min after arrival. Acknowledged by the nurse.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "recorded_at": "2026-09-27T09:48:00Z"
+          },
+          {
+            "text": "High alert: Child amber flag (NICE NG143). Prompt clinical assessment. Raised 3 min after arrival. Acknowledged by the nurse.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "recorded_at": "2026-09-27T09:48:00Z"
+          },
+          {
+            "text": "Triage level: KTAS 2, set by the nurse (no model suggestion). Reason: other. Note: \"no model suggestion\"",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "recorded_at": "2026-09-27T09:48:00Z"
+          }
+        ]
+      },
+      {
+        "id": "presenting_complaint",
+        "title": "Presenting complaint",
+        "items": [
+          {
+            "text": "Age: 2 years.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "Patient",
+              "id": "persona-child-drowsy",
+              "version_id": "1"
+            },
+            "fact_id": "f_MBWB2YBSEG065F81DT0C67W612",
+            "recorded_at": "2026-09-27T09:40:20Z"
+          },
+          {
+            "text": "Age: 26 months.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "Patient",
+              "id": "persona-child-drowsy",
+              "version_id": "1"
+            },
+            "fact_id": "f_VSY99W3D17RYTGFGWDXK2YENCH",
+            "recorded_at": "2026-09-27T09:40:20Z"
+          },
+          {
+            "text": "Sex: Male.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "Patient",
+              "id": "persona-child-drowsy",
+              "version_id": "1"
+            },
+            "fact_id": "f_7Y6P5RF9Z145QYJBM2JPYAC9BT",
+            "recorded_at": "2026-09-27T09:40:20Z"
+          },
+          {
+            "text": "Chief complaint: very hard to wake since this morning. Patient: \"very hard to wake since this morning\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 12,
+              "end": 48,
+              "quote": "very hard to wake since this morning"
+            },
+            "fact_id": "f_3MPGG7TF6D9C7EVZC7RZHR77XF",
+            "recorded_at": "2026-09-27T09:41:20Z"
+          },
+          {
+            "text": "Onset: since this morning. Patient: \"since this morning\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 30,
+              "end": 48,
+              "quote": "since this morning"
+            },
+            "fact_id": "f_NZHTX7BMR6QDY19RCWJHDGMVD1",
+            "recorded_at": "2026-09-27T09:41:20Z"
+          }
+        ]
+      },
+      {
+        "id": "danger_screens",
+        "title": "Danger-screen answers",
+        "items": [
+          {
+            "text": "Infection, fever reported: yes. Patient: \"he had a fever last night\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 53,
+              "end": 78,
+              "quote": "he had a fever last night"
+            },
+            "fact_id": "f_R6YXJAQGFQE97FMGF56XRC7X5T",
+            "recorded_at": "2026-09-27T09:41:20Z"
+          },
+          {
+            "text": "Child red flag, hard to wake: yes. Patient: \"very hard to wake\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 12,
+              "end": 29,
+              "quote": "very hard to wake"
+            },
+            "fact_id": "f_JMQSC2NN6VMKMM4VGR8NZHG5AQ",
+            "recorded_at": "2026-09-27T09:41:20Z"
+          },
+          {
+            "text": "Child red flag, non blanching rash: no. Patient: \"no rash\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_004",
+              "start": 4,
+              "end": 11,
+              "quote": "no rash"
+            },
+            "fact_id": "f_VTV58RCPXG40NPSV9DCWM3SYD4",
+            "recorded_at": "2026-09-27T09:41:50Z"
+          },
+          {
+            "text": "Child red flag, seizure: no. Patient: \"No\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_006",
+              "start": 0,
+              "end": 2,
+              "quote": "No"
+            },
+            "fact_id": "f_E62DZ7D3N35GTFSDAZBZQD0C49",
+            "recorded_at": "2026-09-27T09:42:20Z"
+          }
+        ]
+      },
+      {
+        "id": "vitals_news2",
+        "title": "Vitals and NEWS2",
+        "items": [
+          {
+            "text": "Heart rate: 150 /min.",
+            "provenance": "DEVICE_MEASURED",
+            "source": {
+              "kind": "device",
+              "device_id": "sim_vitals_01",
+              "reading_id": "rd_ses_child_drowsy_01"
+            },
+            "fact_id": "f_1GW0T37PSDEJ15K4X3P45E6VG8",
+            "recorded_at": "2026-09-27T09:43:00Z"
+          },
+          {
+            "text": "SpO2: 95 %.",
+            "provenance": "DEVICE_MEASURED",
+            "source": {
+              "kind": "device",
+              "device_id": "sim_vitals_01",
+              "reading_id": "rd_ses_child_drowsy_01"
+            },
+            "fact_id": "f_3ZK0Q18KKJYQM0RX7QX081857G",
+            "recorded_at": "2026-09-27T09:43:00Z"
+          },
+          {
+            "text": "Temperature: 38.9 °C.",
+            "provenance": "DEVICE_MEASURED",
+            "source": {
+              "kind": "device",
+              "device_id": "sim_vitals_01",
+              "reading_id": "rd_ses_child_drowsy_01"
+            },
+            "fact_id": "f_FVQJ68Y4WP61M7HS3S7FCX8Y5A",
+            "recorded_at": "2026-09-27T09:43:00Z"
+          }
+        ],
+        "notes": [
+          {
+            "code": "news2_not_applicable",
+            "text": "NEWS2 does not apply under 16 (NICE NG143 signs are in the danger screens)."
+          }
+        ]
+      },
+      {
+        "id": "record",
+        "title": "Record (EHR)",
+        "items": [
+          {
+            "text": "Allergies (patient's answer): none known. Patient: \"Not that I know of\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_008",
+              "start": 0,
+              "end": 18,
+              "quote": "Not that I know of"
+            },
+            "fact_id": "f_470VM1W1N99A41Z9D1PEC7DWR7",
+            "recorded_at": "2026-09-27T09:42:50Z"
+          }
+        ],
+        "notes": [
+          {
+            "code": "none_recorded",
+            "text": "The EHR lists no allergies, conditions or medications."
+          }
+        ]
+      },
+      {
+        "id": "model_output",
+        "title": "Model output",
+        "items": [
+          {
+            "text": "Complaint category: Other. Nurse's level: KTAS 2.",
+            "provenance": "MODEL_INFERRED",
+            "source": {
+              "kind": "model",
+              "model_id": "ktas_keyword_map",
+              "model_version": "1"
+            },
+            "fact_id": "f_0QQ6JD03RTN32MBX8Q9WXYH591",
+            "recorded_at": "2026-09-27T09:41:20Z"
+          }
+        ],
+        "notes": [
+          {
+            "code": "suggestion_unavailable",
+            "text": "No model suggestion: the nurse set the level without one."
+          }
+        ]
+      },
+      {
+        "id": "data_quality",
+        "title": "Data quality",
+        "items": [],
+        "notes": [
+          {
+            "code": "none_recorded",
+            "text": "No data-quality problem was recorded."
+          }
+        ]
+      }
+    ],
+    "summary_status": "disabled",
+    "triage": {
+      "confirmed": {
+        "level": 2,
+        "scale": "KTAS",
+        "action": "OVERRIDE",
+        "nurse_user_id": "usr_nurse_01",
+        "decided_at": "2026-09-27T09:48:00Z"
+      },
+      "override_reason": {
+        "code": "other",
+        "note": "no model suggestion"
+      },
+      "suggested": null
+    },
+    "versions": {
+      "ruleset": "2026.2.0",
+      "model": null,
+      "prompt": null
+    },
+    "summary": null
+  }
+}

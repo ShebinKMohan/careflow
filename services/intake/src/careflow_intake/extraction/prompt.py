@@ -24,12 +24,12 @@ def template(version: str = PROMPT_VERSION) -> str:
 @cache
 def extractable_keys() -> tuple[FactKey, ...]:
     """Keys a patient can state: yes/no answers, whole numbers (age, pain score), free text and
-    symptoms. Coded, EHR, model-inferred and vital-sign keys come from other sources (devices,
-    nurses, the EHR), never from the patient's words."""
+    symptoms. Coded, EHR, model-inferred, vital-sign and nurse-task keys come from other sources
+    (devices, nurses, the EHR), never from the patient's words."""
     return tuple(
         key
         for key in FactKey
-        if not key.value.startswith("vitals.")
+        if not key.value.startswith(("vitals.", "tasks."))
         and issubclass(fact_class(key), TriStateFact | TextFact | IntegerFact | Symptom)
     )
 

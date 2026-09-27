@@ -574,6 +574,17 @@
       ],
       "unevaluatedProperties": false
     },
+    "Tasks": {
+      "type": "object",
+      "description": "Tasks a nurse completed (M1-12 task-complete route). NURSE_CONFIRMED facts only: never extracted from the patient's words.",
+      "properties": {
+        "ecg_done_at": {
+          "$ref": "fact.schema.json#/$defs/TextFact",
+          "description": "When the 10-minute ECG was done: an ISO 8601 date-time, recorded by the nurse."
+        }
+      },
+      "additionalProperties": false
+    },
     "EhrContext": {
       "type": "object",
       "description": "Context read from the hospital EHR.",
@@ -665,6 +676,7 @@
         "vitals.diastolic_bp",
         "vitals.acvpu",
         "vitals.on_supplemental_o2",
+        "tasks.ecg_done_at",
         "ehr_context.allergies",
         "ehr_context.conditions",
         "ehr_context.medications"
@@ -832,6 +844,9 @@
         },
         "vitals": {
           "$ref": "#/$defs/Vitals"
+        },
+        "tasks": {
+          "$ref": "#/$defs/Tasks"
         },
         "ehr_context": {
           "$ref": "#/$defs/EhrContext"

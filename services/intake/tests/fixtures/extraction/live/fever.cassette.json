@@ -1,5 +1,5 @@
 {
-  "299d3fb906a214235300e12d082960d55a64f2d7f9fe4f8f86e46d9b1ab2ae1d": {
+  "16f6346e534dccfef66fb7ea66c31888e7b0713d0bc99eb71b031140bd0a7a16": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"high fever and chills\", \"turn_id\": \"t2\", \"quote\": \"I've had a high fever and chills for two days\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a high fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, really bad shivering last night\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No, no chest pain\", \"negated\": true}]}"

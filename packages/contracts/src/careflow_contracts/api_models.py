@@ -22,7 +22,11 @@ from careflow_contracts.generated.urgency_suggestion_schema import (
     UrgencySuggestion,
 )
 from careflow_contracts.generated.alert_schema import Alert, AlertSeverity, RuleId
-from careflow_contracts.generated.nurse_decision_schema import NurseDecision
+from careflow_contracts.generated.nurse_decision_schema import (
+    DecisionAction,
+    NurseDecision,
+    OverrideReasonCode,
+)
 from careflow_contracts.generated.fact_schema import FactId, Identifier, Provenance, SourceRef
 from careflow_contracts.generated.events.envelope_schema import EventEnvelope
 from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedData
@@ -49,7 +53,11 @@ from careflow_contracts.generated.urgency_suggestion_schema import (
     UrgencySuggestion,
 )
 from careflow_contracts.generated.alert_schema import Alert, AlertSeverity, RuleId
-from careflow_contracts.generated.nurse_decision_schema import NurseDecision
+from careflow_contracts.generated.nurse_decision_schema import (
+    DecisionAction,
+    NurseDecision,
+    OverrideReasonCode,
+)
 from careflow_contracts.generated.fact_schema import FactId, Identifier, Provenance, SourceRef
 from careflow_contracts.generated.events.envelope_schema import EventEnvelope
 from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedData
@@ -571,6 +579,16 @@ class DoctorSessionSummary(BaseModel):
 type DoctorSessions = list[DoctorSessionSummary]
 
 
+class BriefingSectionId(StrEnum):
+    alerts_triage = "alerts_triage"
+    presenting_complaint = "presenting_complaint"
+    danger_screens = "danger_screens"
+    vitals_news2 = "vitals_news2"
+    record = "record"
+    model_output = "model_output"
+    data_quality = "data_quality"
+
+
 class BriefingItem(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -579,14 +597,139 @@ class BriefingItem(BaseModel):
     provenance: ProvenanceModel
     source: SourceRefModel
     fact_id: FactId | None = None
+    recorded_at: Annotated[
+        AwareDatetime,
+        Field(
+            description="When the fact was recorded (a device reading, a nurse's entry, an EHR read, the patient's answer), or when the nurse decided."
+        ),
+    ]
+    source_missing: Annotated[
+        bool | None,
+        Field(
+            description='True when the item\'s source failed the briefing check. Screens show "source missing" in red; it is logged as an error, and the tests require that no item has it.'
+        ),
+    ] = None
+
+
+class BriefingNoteCode(StrEnum):
+    extraction_incomplete = "extraction_incomplete"
+    intake_stopped_early = "intake_stopped_early"
+    ehr_unavailable = "ehr_unavailable"
+    ehr_partial = "ehr_partial"
+    facts_dropped = "facts_dropped"
+    suggestion_unavailable = "suggestion_unavailable"
+    news2_not_applicable = "news2_not_applicable"
+    none_recorded = "none_recorded"
+
+
+class BriefingNote(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    code: BriefingNoteCode
+    text: Annotated[str, Field(max_length=300, min_length=1)]
+    count: Annotated[int | None, Field(description="How many, for facts_dropped.", ge=0)] = None
 
 
 class BriefingSection(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
+    id: BriefingSectionId
     title: Annotated[str, Field(max_length=80, min_length=1)]
     items: list[BriefingItem]
+    notes: list[BriefingNote] | None = None
+
+
+class BriefingSentence(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    text: Annotated[str, Field(max_length=400, min_length=1)]
+    fact_ids: Annotated[
+        list[FactId],
+        Field(
+            description="The facts this sentence rephrases. Every id must be an item's fact_id.",
+            max_length=20,
+            min_length=1,
+        ),
+    ]
+
+
+class BriefingSummary(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    sentences: Annotated[list[BriefingSentence], Field(max_length=5, min_length=1)]
+
+
+class SummaryStatus(StrEnum):
+    ok = "ok"
+    dropped = "dropped"
+    disabled = "disabled"
+
+
+type DecisionActionModel = DecisionAction
+
+
+type OverrideReasonCodeModel = OverrideReasonCode
+
+
+class BriefingSuggestion(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    level: UrgencyLevelModel
+    scale: TriageScaleModel
+    display_label: Annotated[str | None, Field(max_length=40, min_length=1)] = None
+    confidence: Annotated[float, Field(ge=0.0, le=1.0)]
+    model_id: Identifier
+    model_version: Identifier
+
+
+class BriefingConfirmation(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    level: UrgencyLevelModel
+    scale: TriageScaleModel
+    action: DecisionActionModel
+    nurse_user_id: Identifier
+    decided_at: AwareDatetime
+
+
+class BriefingOverrideReason(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    code: OverrideReasonCodeModel
+    note: Annotated[str | None, Field(max_length=500, min_length=1)] = None
+
+
+class BriefingTriage(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    suggested: BriefingSuggestion | None
+    confirmed: BriefingConfirmation
+    override_reason: BriefingOverrideReason | None
+
+
+type Ruleset = Annotated[str, Field(description="The safety ruleset version.", max_length=64)]
+
+
+class BriefingVersions(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    ruleset: Annotated[Ruleset | None, Field(description="The safety ruleset version.")]
+    model: Annotated[
+        Identifier | None, Field(description="The urgency model version behind the suggestion.")
+    ]
+    prompt: Annotated[
+        Identifier | None,
+        Field(description="The summary prompt version, when a summary was asked for."),
+    ]
 
 
 class Briefing(BaseModel):
@@ -595,7 +738,11 @@ class Briefing(BaseModel):
     )
     session_id: Identifier
     generated_at: AwareDatetime
-    sections: list[BriefingSection]
+    sections: Annotated[list[BriefingSection], Field(max_length=7, min_length=7)]
+    summary: BriefingSummary | None
+    summary_status: SummaryStatus
+    triage: BriefingTriage
+    versions: BriefingVersions
 
 
 class CompanionStatus(BaseModel):

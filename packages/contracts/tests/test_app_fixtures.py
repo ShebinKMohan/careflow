@@ -8,18 +8,12 @@ examples: the reference JSON Schema validator against its component schema.
 from __future__ import annotations
 
 import json
-from functools import cache
 from typing import Any
 
 import pytest
-import yaml
-from jsonschema import Draft202012Validator
-from referencing import Resource
-from referencing.jsonschema import DRAFT202012, SchemaRegistry
 
-from careflow_contracts.testing import CONTRACTS_DIR, error_messages, registry
+from careflow_contracts.testing import CONTRACTS_DIR, error_messages, openapi_validator
 
-OPENAPI = CONTRACTS_DIR / "openapi.yaml"
 APPS = CONTRACTS_DIR.parents[1] / "apps"
 
 #: fixture file (relative to apps/) → the component schema it holds; "[X]" is a list of X, and
@@ -40,17 +34,6 @@ FIXTURES: dict[str, str] = {
 }
 
 
-@cache
-def spec_registry() -> SchemaRegistry:
-    spec = yaml.safe_load(OPENAPI.read_text(encoding="utf-8"))
-    return registry().with_resource(OPENAPI.as_uri(), Resource.from_contents(spec, DRAFT202012))
-
-
-def validator(schema_name: str) -> Draft202012Validator:
-    ref = {"$ref": f"{OPENAPI.as_uri()}#/components/schemas/{schema_name}"}
-    return Draft202012Validator(ref, registry=spec_registry())
-
-
 def test_every_app_fixture_is_listed() -> None:
     found = {path.relative_to(APPS).as_posix() for path in APPS.glob("*/tests/fixtures/api/*.json")}
     assert found == set(FIXTURES)
@@ -67,7 +50,9 @@ def test_the_fixture_matches_the_contract(fixture: str, schema: str) -> None:
     items = data if schema.startswith("[") else [data]
     name = schema.strip("[]")
     for item in items:
-        assert error_messages(validator(name), item) == [], f"{fixture} is not a valid {name}"
+        assert error_messages(openapi_validator(name), item) == [], (
+            f"{fixture} is not a valid {name}"
+        )
 
 
 def test_a_broken_fixture_is_caught() -> None:
@@ -75,4 +60,4 @@ def test_a_broken_fixture_is_caught() -> None:
         (APPS / "staff/tests/fixtures/api/worklist.json").read_text(encoding="utf-8")
     )
     worklist[0]["suggested_level"] = 9
-    assert error_messages(validator("Worklist"), worklist) != []
+    assert error_messages(openapi_validator("Worklist"), worklist) != []

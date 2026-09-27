@@ -21,3 +21,12 @@ GET /v1/sessions/{session_id}/triage added the new `pain_location` enum value to
 GET /v1/sessions/{session_id}/triage added the new `pain_location` enum value to the `needed_facts/items/key` response property for the response status `200`
 GET /v1/sessions/{session_id}/triage added the new `allergies_confirm` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
 GET /v1/sessions/{session_id}/triage added the new `allergies_confirm` enum value to the `needed_facts/items/key` response property for the response status `200`
+#
+# M1-16 (ADR-030): tasks.ecg_done_at joins FactKey for the nurse's ECG-done fact (set by M1-12's
+# task-complete route, never extracted). FactKey grows with the facts; clients regenerate with the contract.
+POST /v1/nurse/sessions/{session_id}/vitals added the new `tasks.ecg_done_at` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `tasks.ecg_done_at` enum value to the `needed_facts/items/key` response property for the response status `200`
+POST /v1/nurse/sessions/{session_id}/vitals added the new `tasks.ecg_done_at` enum value to the `news2/oneOf[#/components/schemas/News2Score]/missing/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `tasks.ecg_done_at` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `tasks.ecg_done_at` enum value to the `needed_facts/items/key` response property for the response status `200`
+GET /v1/sessions/{session_id}/triage added the new `tasks.ecg_done_at` enum value to the `news2/oneOf[#/components/schemas/News2Score]/missing/items/` response property for the response status `200`

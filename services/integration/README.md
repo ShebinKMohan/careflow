@@ -25,6 +25,14 @@ When the nurse confirms a triage, `fhir/writeback/` writes it to the hospital's 
 - **`handler.py`.** `WritebackHandler.on_triage_confirmed` checks that the record is the confirmed decision (safety rule 3). It posts the Bundle, retries 3 times with backoff, records `ok`, `failed` or `skipped` through the `WritebackStore` port (Postgres in `careflow_api.writeback_store`), and publishes the internal `fhir.write.completed` event. `complete_task` completes a written Task with a versioned update.
 - **`validate.py`.** Runs the server's `$validate`, for tests and evidence.
 
+## The briefing document (M1-16, ADR-030)
+
+`fhir/writeback/composition.py` writes the doctor briefing as a FHIR document Bundle (`identifier` `urn:careflow:briefing|<session_id>`):
+
+- **The Composition comes first:** LOINC 54094-8, the subject, the encounter, a CareFlow Device as author, and one section per briefing section. Each section has an escaped XHTML narrative (one line per item, with its provenance tag) and entries for the resources behind it.
+- **The rest of the Bundle:** the Device, then every referenced resource as the server holds it. EHR copies are tagged `EHR`.
+- **`write_document`** reads those resources, builds the Bundle and posts it once with `If-None-Exist` (`FhirClient.create`), so a second post stores nothing new. It is skipped without an EHR patient or a write-back, and a FHIR error is recorded as `failed`, not raised.
+
 Test records and golden files live in `tests/fixtures/writeback/`. `generate.py` rebuilds the records; `CAREFLOW_UPDATE_GOLDEN=1` rewrites the golden files for review.
 
 FHIR model types (`fhir.resources`, R4B models for R4 data) stay inside this package. `tests/test_boundary.py` fails if the API, the intake or the rules import them.
