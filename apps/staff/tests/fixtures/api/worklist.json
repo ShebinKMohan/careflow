@@ -1,0 +1,30 @@
+[
+  {
+    "session_id": "ses_routine",
+    "patient_display": "L. K.",
+    "arrived_at": "2026-09-26T08:50:00Z",
+    "state": "awaiting_nurse",
+    "alerts": [],
+    "suggested_level": 5,
+    "scale": "KTAS",
+    "open_tasks": [],
+    "age_years": 34,
+    "sex": "female",
+    "complaint": "Sore throat for five days",
+    "warnings": []
+  },
+  {
+    "session_id": "ses_chest_pain",
+    "patient_display": "M. S.",
+    "arrived_at": "2026-09-26T09:00:00Z",
+    "state": "awaiting_nurse",
+    "alerts": [],
+    "suggested_level": 2,
+    "scale": "KTAS",
+    "open_tasks": [],
+    "age_years": 58,
+    "sex": "male",
+    "complaint": "Crushing chest pain for about an hour",
+    "warnings": []
+  }
+]

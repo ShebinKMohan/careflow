@@ -1,0 +1,80 @@
+{
+  "session_id": "ses_chest_pain",
+  "status": "awaiting_nurse",
+  "alerts": [
+    {
+      "alert_id": "alr_chest_pain",
+      "session_id": "ses_chest_pain",
+      "rule_id": "CHEST_PAIN_ECG_10MIN",
+      "ruleset_version": "2026.1.0",
+      "severity": "critical",
+      "evidence_fact_ids": [
+        "f_01M3EF2PM000000000035FWN01",
+        "f_01M3EF2PM000000000035FWN02"
+      ],
+      "required_action": "ecg_within_10_min",
+      "partial": false,
+      "raised_at": "2026-09-26T09:00:00Z",
+      "deadline_at": "2026-09-26T09:10:00Z"
+    }
+  ],
+  "suggestion": {
+    "suggestion_id": "sug_chest_pain",
+    "session_id": "ses_chest_pain",
+    "level": 2,
+    "scale": "KTAS",
+    "confidence": 0.71,
+    "reasons": [
+      {
+        "text": "Crushing chest pain for about an hour",
+        "fact_ids": [
+          "f_01M3EF2PM000000000035FWN01"
+        ]
+      },
+      {
+        "text": "Fast heart rate",
+        "fact_ids": [
+          "f_01M3EF2PM000000000035FWN02"
+        ]
+      },
+      {
+        "text": "Age over 50",
+        "fact_ids": [
+          "f_01M3EF2PM000000000035FWN03"
+        ]
+      }
+    ],
+    "model_id": "careflow-ktas-gbm",
+    "model_version": "0.1.0",
+    "created_at": "2026-09-26T09:04:00Z",
+    "display_label": "KTAS 2"
+  },
+  "needed_facts": [],
+  "news2": {
+    "total": 1,
+    "subscores": {
+      "spo2": 0,
+      "heart_rate": 1,
+      "systolic_bp": 0,
+      "temperature_c": 0
+    },
+    "missing": [
+      "vitals.respiratory_rate",
+      "vitals.acvpu",
+      "vitals.on_supplemental_o2"
+    ],
+    "partial": true,
+    "any_single_3": false,
+    "risk_band": "low"
+  },
+  "open_tasks": [
+    {
+      "task_id": "tsk_chest_pain_ecg",
+      "session_id": "ses_chest_pain",
+      "kind": "ecg_within_10_min",
+      "status": "open",
+      "due_at": "2026-09-26T09:10:00Z"
+    }
+  ],
+  "warnings": []
+}

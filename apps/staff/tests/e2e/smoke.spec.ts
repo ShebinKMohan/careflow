@@ -1,7 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
 const FOOTER_EN = "Research prototype. Synthetic data only. Not for clinical use.";
-const PAGES = ["/", "/login", "/nurse", "/doctor/ses_chest_pain", "/board?department=ed", "/admin"];
+const PAGES = ["/", "/login", "/nurse", "/nurse/ses_chest_pain", "/doctor/ses_chest_pain", "/board?department=ed", "/admin"];
 
 async function signIn(page: Page, next: string) {
   await page.goto(`/login?next=${encodeURIComponent(next)}`);
@@ -27,7 +27,7 @@ test("screens ask for sign-in without a token", async ({ page }) => {
 test("the nurse worklist renders the mocked sessions", async ({ page }) => {
   await signIn(page, "/nurse");
   const rows = page.getByRole("row");
-  await expect(rows.filter({ hasText: "M. S." })).toContainText("CHEST_PAIN_ECG_10MIN");
+  await expect(rows.filter({ hasText: "M. S." })).toContainText("Critical: Chest pain: ECG in 10 min");
   await expect(rows.filter({ hasText: "L. K." })).toBeVisible();
 });
 

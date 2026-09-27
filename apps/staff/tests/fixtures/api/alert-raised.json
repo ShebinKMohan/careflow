@@ -1,0 +1,24 @@
+{
+  "id": "1727341200000-0",
+  "type": "alert.raised",
+  "timestamp": "2026-09-26T09:00:00Z",
+  "data": {
+    "clinic_id": "clinic_demo",
+    "session_id": "ses_chest_pain",
+    "alert": {
+      "alert_id": "alr_chest_pain",
+      "session_id": "ses_chest_pain",
+      "rule_id": "CHEST_PAIN_ECG_10MIN",
+      "ruleset_version": "2026.1.0",
+      "severity": "critical",
+      "evidence_fact_ids": [
+        "f_01M3EF2PM000000000035FWN01",
+        "f_01M3EF2PM000000000035FWN02"
+      ],
+      "required_action": "ecg_within_10_min",
+      "partial": false,
+      "raised_at": "2026-09-26T09:00:00Z",
+      "deadline_at": "2026-09-26T09:10:00Z"
+    }
+  }
+}
