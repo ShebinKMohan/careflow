@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "RetrievedChunk: see $defs/RetrievedChunk. One chunk of the clinic handbook found for a question (M2-08), for the ask-the-clinic agent (M2-09). A citation is `doc_id = section_id`, `chunk_id = <section_id>#<chunk_no>`. The handbook is fictional and holds no patient data. Research prototype; synthetic data only.",
+  "$ref": "#/$defs/RetrievedChunk",
+  "$defs": {
+    "RetrievedChunk": {
+      "type": "object",
+      "description": "A handbook chunk with how each retrieval mode ranked it. Ranks, not raw scores, decide the hybrid order (reciprocal rank fusion).",
+      "properties": {
+        "section_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$",
+          "maxLength": 120,
+          "description": "The section's stable id, the same in every language (e.g. visitors.hours)."
+        },
+        "chunk_no": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "0 for a whole section; a long section is split at paragraph breaks into 0, 1, ..."
+        },
+        "lang": {
+          "$ref": "structured-facts.schema.json#/$defs/Language"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "dense_cosine": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": -1,
+          "maximum": 1,
+          "description": "Cosine similarity to the question; null when the dense search did not return the chunk."
+        },
+        "bm25_rank": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "description": "Rank in the keyword (BM25) search; null when it did not return the chunk."
+        },
+        "rrf_score": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Reciprocal rank fusion: the sum of 1/(60 + rank) over the modes that returned the chunk."
+        }
+      },
+      "required": [
+        "section_id",
+        "chunk_no",
+        "lang",
+        "title",
+        "body",
+        "dense_cosine",
+        "bm25_rank",
+        "rrf_score"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "section_id": "visitors.hours",
+          "chunk_no": 0,
+          "lang": "en",
+          "title": "Visiting hours",
+          "body": "Visitors are welcome from 10:00 to 21:00 every day.",
+          "dense_cosine": 0.71,
+          "bm25_rank": 1,
+          "rrf_score": 0.0328
+        }
+      ]
+    }
+  }
+}

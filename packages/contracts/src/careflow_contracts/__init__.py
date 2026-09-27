@@ -36,6 +36,7 @@ from careflow_contracts.generated.nurse_decision_schema import (
     NurseDecision,
     OverrideReasonCode,
 )
+from careflow_contracts.generated.retrieved_chunk_schema import RetrievedChunk
 from careflow_contracts.generated.structured_facts_schema import (
     AcvpuCode,
     AcvpuCoding,
@@ -102,6 +103,7 @@ __all__ = [
     "EhrStatus",
     "ExtractedFact",
     "ExtractionOutput",
+    "RetrievedChunk",
     "ExtractionStatus",
     "FactBase",
     "FactKey",

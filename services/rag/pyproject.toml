@@ -1,10 +1,29 @@
 [project]
 name = "careflow-rag"
-version = "0.0.0"
+version = "0.1.0"
 description = "CareFlow clinic knowledge ingest and hybrid retrieval."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+  "careflow-contracts",
+  "numpy>=2.5,<3",
+  "psycopg[binary,pool]>=3.3,<3.4",
+  "sqlalchemy[asyncio]>=2.1,<2.2",
+]
+
+[project.optional-dependencies]
+# The embedding model, Qwen3-Embedding-0.6B through sentence-transformers (M2-08). Apple silicon
+# only, like the voice extras: torch's Linux wheels would pull the CUDA stack. CI and tests use
+# the hash embedder.
+embeddings = [
+  "sentence-transformers>=5.1,<6; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+
+[project.scripts]
+careflow-rag-ingest = "careflow_rag.ingest:main"
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]
