@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Companion e2e: Prism serves the contract's examples and the app runs a production build.
 // Each app's suite starts its own mock port, so `pnpm -r test:e2e` can run the apps in parallel.
-const PORT = 3002;
+const PORT = Number(process.env.E2E_PORT ?? "3002");
 const MOCK_PORT = 4012;
 
 // Binaries are called directly, not through pnpm: pnpm starts children in their own process group,

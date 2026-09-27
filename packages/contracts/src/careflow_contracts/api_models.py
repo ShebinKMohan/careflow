@@ -342,6 +342,13 @@ class TurnRequest(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
+    expected_intake_revision: Annotated[
+        int | None,
+        Field(
+            description="The opaque revision returned by session status or the previous accepted turn. A stale revision returns 409 without submitting the answer. Optional for older clients; clients must not calculate or increment it themselves.",
+            ge=0,
+        ),
+    ] = None
     input_mode: InputMode
     text: Annotated[str, Field(max_length=2000, min_length=1)]
     language: LanguageModel
@@ -1076,6 +1083,13 @@ class TurnResponse(BaseModel):
         extra="forbid",
     )
     turn_id: Identifier
+    intake_revision: Annotated[
+        int,
+        Field(
+            description="Opaque server revision after this accepted turn. Use this value unchanged as expected_intake_revision for the next answer.",
+            ge=0,
+        ),
+    ]
     assistant_text: Annotated[str, Field(max_length=2000)]
     done: bool
     next_question: Annotated[
@@ -1089,6 +1103,19 @@ class SessionStatus(BaseModel):
         extra="forbid",
     )
     state: SessionState
+    intake_revision: Annotated[
+        int,
+        Field(
+            description="Opaque server revision of the intake, read together with the pending question. It can advance even when the question id is unchanged. Use it unchanged as expected_intake_revision when answering; never calculate it locally.",
+            ge=0,
+        ),
+    ]
+    current_question: Annotated[
+        IntakeQuestion | None,
+        Field(
+            description="The pending patient question from the current intake. Omitted or null when the session is not in intake or is not waiting for a patient answer."
+        ),
+    ] = None
     token_code: str | None = None
     room: str | None = None
     wait_estimate_min: Annotated[int | None, Field(ge=0)] = None

@@ -1,5 +1,6 @@
 {
   "state": "intake",
+  "intake_revision": 1,
   "vitals": {
     "heart_rate": 96,
     "spo2": 97,

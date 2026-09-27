@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from collections.abc import AsyncIterator, Callable, Sequence
+from collections.abc import AsyncIterator, Callable, Mapping, Sequence
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from typing import Any, cast
@@ -51,6 +51,20 @@ type Result = dict[str, Any]
 
 class PatientAlreadySet(RuntimeError):
     """The session already has a different answer to "Who is the patient?"."""
+
+
+class IntakeRevisionConflict(ValueError):
+    """The patient's answer was based on a revision the graph has already advanced beyond."""
+
+
+def intake_revision(state: Mapping[str, Any] | None) -> int:
+    """Opaque revision from append-only turns, including notices and pure side questions.
+
+    `turn_count` counts answers towards the conversation cap and excludes side questions, so it
+    cannot detect a repeated question after a side answer. Transcript length only increases and
+    works for existing checkpoints; clients must copy the returned revision, never count it.
+    """
+    return len((state or {}).get("turns", []))
 
 
 class IntakeRuntime:
@@ -127,9 +141,26 @@ class IntakeRuntime:
         async with self.serialized(session_id):
             return await self.graph.ainvoke(state, thread_config(session_id))
 
-    async def submit_turn(self, session_id: str, text: str, input_mode: str = "text") -> Result:
-        """The patient's answer and how it came; raises `NotWaiting` or `InvalidAnswer`."""
+    async def submit_turn(
+        self,
+        session_id: str,
+        text: str,
+        input_mode: str = "text",
+        *,
+        expected_intake_revision: int | None = None,
+    ) -> Result:
+        """Answer only the revision the patient saw; the comparison and advance share a lock.
+
+        Older clients without a revision retain their existing behavior. A stale retry raises
+        `IntakeRevisionConflict` before its text can be appended to the next question.
+        """
         async with self.serialized(session_id):
+            if expected_intake_revision is not None:
+                current = intake_revision(await self.state(session_id))
+                if expected_intake_revision != current:
+                    raise IntakeRevisionConflict(
+                        "The intake changed. Refresh the current question before answering."
+                    )
             return await answer(self.graph, session_id, text, input_mode)
 
     async def set_patient(
@@ -258,4 +289,10 @@ class IntakeRuntime:
         return state
 
 
-__all__ = ["IntakeRuntime", "NotWaiting", "PatientAlreadySet"]
+__all__ = [
+    "IntakeRevisionConflict",
+    "IntakeRuntime",
+    "NotWaiting",
+    "PatientAlreadySet",
+    "intake_revision",
+]

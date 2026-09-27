@@ -20,7 +20,12 @@ from careflow_api.config import Settings, get_settings
 from careflow_api.consent import get_consent
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
-from careflow_api.intake.runtime import IntakeRuntime, PatientAlreadySet
+from careflow_api.intake.runtime import (
+    IntakeRevisionConflict,
+    IntakeRuntime,
+    PatientAlreadySet,
+    intake_revision,
+)
 from careflow_api.intake.views import patient_status, triage_view
 from careflow_api.models import PatientSession
 from careflow_api.ratelimit import failure_limit
@@ -368,7 +373,14 @@ async def post_turn(
         if consent is None or not consent.voice:
             raise HTTPException(status.HTTP_403_FORBIDDEN, detail=VOICE_NOT_CONSENTED)
     try:
-        result = await intake.submit_turn(session_id, body.text, body.input_mode.value)
+        result = await intake.submit_turn(
+            session_id,
+            body.text,
+            body.input_mode.value,
+            expected_intake_revision=body.expected_intake_revision,
+        )
+    except IntakeRevisionConflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     except NotWaiting as exc:
         raise HTTPException(
             status.HTTP_409_CONFLICT, detail="This session is not waiting for an answer."
@@ -383,6 +395,7 @@ async def post_turn(
         await touch(principal.clinic_id, session_id, status="awaiting_nurse")
     return TurnResponse(
         turn_id=said.turn_id,
+        intake_revision=intake_revision(result),
         assistant_text=reply_text(question, result),
         done=question is None,
         next_question=question,
@@ -449,8 +462,16 @@ async def get_status(
     """The state, token, room and wait. Never a level or an alert."""
     own_session(principal, session_id)
     await session_row(principal, session_id)
-    state = await intake.state(session_id)
-    waiting, _ = await intake.waiting_for(session_id)
+    # An answer can advance the graph while a phone reloads. Read the state and its pending
+    # question in the same session lock so the response cannot mix two different turns.
+    async with intake.serialized(session_id):
+        state = await intake.state(session_id)
+        waiting, pause = await intake.waiting_for(session_id)
+        # QR hand-over updates the checkpoint's channel, which can clear the interrupt payload.
+        # Its pending question remains in state; use it only while the graph waits for an answer.
+        current_question = (
+            question_from(pause) or pending_question(state) if waiting == "await_answer" else None
+        )
     async with clinic_session(principal.clinic_id) as db:
         token = await request.app.state.queue.session_token(db, session_id=session_id)
     found = patient_status(
@@ -460,6 +481,7 @@ async def get_status(
         token_status=token.status.value if token else None,
         room=token.room if token else None,
         wait_estimate_min=None,
+        current_question=current_question,
     )
     vitals = latest_vitals.get(session_id)  # the kiosk's vitals panel: numbers only
     return found.model_copy(update={"vitals": vitals}) if vitals is not None else found

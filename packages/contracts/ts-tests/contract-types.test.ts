@@ -28,10 +28,23 @@ describe("generated contract types", () => {
 
   it("keeps the session status free of levels and alerts", () => {
     type Status = Schema<"SessionStatus">;
-    expectTypeOf<keyof Status>().toEqualTypeOf<"state" | "token_code" | "room" | "wait_estimate_min" | "vitals">();
+    expectTypeOf<keyof Status>().toEqualTypeOf<
+      "state" | "current_question" | "intake_revision" | "token_code" | "room" | "wait_estimate_min" | "vitals"
+    >();
     // The kiosk vitals panel (M1-03) gets measured numbers only.
     expectTypeOf<keyof Schema<"LatestVitals">>().toEqualTypeOf<
       "heart_rate" | "spo2" | "temperature_c" | "systolic_bp" | "diastolic_bp" | "measured_at" | "device_id" | "simulated"
+    >();
+  });
+
+  it("types recovery questions and server revisions without requiring older clients to send one", () => {
+    expectTypeOf<Schema<"SessionStatus">["current_question"]>().toEqualTypeOf<
+      Schema<"IntakeQuestion"> | null | undefined
+    >();
+    expectTypeOf<Schema<"SessionStatus">["intake_revision"]>().toEqualTypeOf<number>();
+    expectTypeOf<Schema<"TurnResponse">["intake_revision"]>().toEqualTypeOf<number>();
+    expectTypeOf<Schema<"TurnRequest">["expected_intake_revision"]>().toEqualTypeOf<
+      number | undefined
     >();
   });
 });

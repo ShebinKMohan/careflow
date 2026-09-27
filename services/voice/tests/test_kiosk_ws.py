@@ -34,6 +34,7 @@ NEXT_QUESTION = {
 def _reply(next_question: dict[str, Any] | None = NEXT_QUESTION, **extra: Any) -> dict[str, Any]:
     return {
         "turn_id": "turn_01",
+        "intake_revision": 3 if next_question else 2,
         "assistant_text": "When did this start?" if next_question else "Thank you.",
         "done": next_question is None,
         "next_question": next_question,

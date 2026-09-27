@@ -1,6 +1,7 @@
 [
   {
     "turn_id": "turn_01",
+    "intake_revision": 3,
     "assistant_text": "When did this start?",
     "done": false,
     "next_question": {
@@ -12,6 +13,7 @@
   },
   {
     "turn_id": "turn_02",
+    "intake_revision": 5,
     "assistant_text": "On a scale from 0 to 10, how bad is your pain right now?",
     "done": false,
     "next_question": {
@@ -23,6 +25,7 @@
   },
   {
     "turn_id": "turn_03",
+    "intake_revision": 6,
     "assistant_text": "Thank you.",
     "done": true,
     "next_question": null

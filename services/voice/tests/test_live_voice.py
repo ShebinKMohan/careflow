@@ -96,7 +96,13 @@ def test_a_live_kiosk_session_reports_p50_p95_and_writes_nothing(
         "key": "symptom_onset_at",
         "notice": None,
     }
-    reply = {"turn_id": "turn_01", "assistant_text": "", "done": False, "next_question": question}
+    reply = {
+        "turn_id": "turn_01",
+        "intake_revision": 3,
+        "assistant_text": "",
+        "done": False,
+        "next_question": question,
+    }
     transcripts: list[str] = []
     with (
         respx.mock(base_url=API, assert_all_called=False) as api,

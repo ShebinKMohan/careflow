@@ -98,7 +98,15 @@ def test_no_patient_identity_in_urls() -> None:
 
 def test_session_status_never_carries_a_level_or_alert() -> None:
     props = set(schema("SessionStatus")["properties"])
-    assert props == {"state", "token_code", "room", "wait_estimate_min", "vitals"}
+    assert props == {
+        "state",
+        "intake_revision",
+        "current_question",
+        "token_code",
+        "room",
+        "wait_estimate_min",
+        "vitals",
+    }
     # The kiosk vitals panel (M1-03) shows measured numbers only: no score, level or alert.
     vitals = set(schema("LatestVitals")["properties"])
     assert vitals == {

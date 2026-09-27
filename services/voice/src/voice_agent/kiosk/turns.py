@@ -57,7 +57,7 @@ class TurnsClient:
         try:
             response = await self._client.post(
                 url,
-                json=body.model_dump(mode="json"),
+                json=body.model_dump(mode="json", exclude_none=True),
                 headers={"Authorization": f"Bearer {session.token}"},
             )
         except httpx.HTTPError as exc:
