@@ -38,4 +38,10 @@ def after_commit(db: AsyncSession, run: Callable[[], Awaitable[None]]) -> None:
     event.listen(db.sync_session, "after_commit", schedule, once=True)
 
 
-__all__ = ["after_commit"]
+async def drain() -> None:
+    """Wait for the work already started on this event loop (a test's teardown)."""
+    loop = asyncio.get_running_loop()
+    await asyncio.gather(*[t for t in _running if t.get_loop() is loop], return_exceptions=True)
+
+
+__all__ = ["after_commit", "drain"]

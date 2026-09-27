@@ -146,6 +146,7 @@ async def test_hapi_down_fails_after_3_retries_and_nothing_raises(
         4,
         "ConnectError",
     )
+    assert outcome.retryable is True  # the bus consumer keeps the event pending (ADR-043)
     assert s.sleeps == [1.0, 2.0, 4.0]
     assert s.store.outcomes[(record.clinic_id, record.session_id)].status is WritebackStatus.failed
     assert (
@@ -177,7 +178,25 @@ async def test_a_503_is_retried_and_a_400_is_not(
         1,
         "HTTP 400",
     )
+    assert outcome.retryable is False  # a rejection: retrying cannot help
     assert s.sleeps == []
+
+
+@respx.mock
+async def test_a_server_that_stays_unavailable_is_a_retryable_failure(
+    triage_record: Load, adapter: HospitalAdapter
+) -> None:
+    record = triage_record("chest_pain")
+    respx.post(f"{adapter.fhir_base_url}/").mock(return_value=httpx.Response(503))
+    s = Setup(record, adapter)
+    outcome = await s.handler.on_triage_confirmed(confirmed(record))
+    assert (outcome.status, outcome.attempts, outcome.error, outcome.retryable) == (
+        WritebackStatus.failed,
+        4,
+        "HTTP 503",
+        True,
+    )
+    assert s.sleeps == [1.0, 2.0, 4.0]
 
 
 @respx.mock
@@ -205,7 +224,7 @@ async def test_only_the_confirmed_decision_is_ever_written(
     route = respx.post(f"{adapter.fhir_base_url}/").mock(side_effect=created)
     s = Setup(record, adapter)
     outcome = await s.handler.on_triage_confirmed(confirmed(record, **change))
-    assert (outcome.status, outcome.error) == (status, error)
+    assert (outcome.status, outcome.error, outcome.retryable) == (status, error, False)
     assert route.call_count == 0 and s.events.published == []
 
 
