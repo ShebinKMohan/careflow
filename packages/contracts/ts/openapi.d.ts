@@ -1167,6 +1167,13 @@ export interface components {
             text: string;
             key: string | null;
             notice?: string | null;
+            /**
+             * @description What the notice is (M2-10): the reply to a question the patient asked during the intake (`medical_refusal`, `clinic_answer`, `ask_on_phone`, `finish_first`), or the `nurse_coming` message. `ask_on_phone` tells the kiosk to highlight "Continue on your phone".
+             * @enum {string}
+             */
+            notice_kind?: "nurse_coming" | "medical_refusal" | "clinic_answer" | "ask_on_phone" | "finish_first";
+            /** @description The handbook sections a `clinic_answer` notice cites (M2-10). */
+            citations?: components["schemas"]["Citation"][];
         };
         /** @description One-time token shown as a QR code on the kiosk. */
         QrToken: {
@@ -1882,7 +1889,7 @@ export interface components {
         };
         /**
          * NurseFlagData
-         * @description Something needs a nurse's attention, e.g. the phone assistant refused a medical question. No name, date of birth or free text.
+         * @description Something needs a nurse's attention, e.g. the phone assistant refused a medical question (`medical_question`), or the patient asked one during the intake (`medical_question_intake`, M2-10). No name, date of birth or free text.
          * @example {
          *       "clinic_id": "clinic_demo",
          *       "session_id": "ses_routine",
@@ -1896,7 +1903,7 @@ export interface components {
             session_id: components["schemas"]["Identifier"];
             flag_id: components["schemas"]["Identifier"];
             /** @enum {string} */
-            reason: "medical_question" | "feels_worse" | "other";
+            reason: "medical_question" | "medical_question_intake" | "feels_worse" | "other";
             /** Format: date-time */
             raised_at: string;
         };

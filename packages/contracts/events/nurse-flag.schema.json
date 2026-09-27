@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "description": "NurseFlagData: see $defs/NurseFlagData. Something needs a nurse's attention, e.g. the phone assistant refused a medical question. No name, date of birth or free text.",
+  "description": "NurseFlagData: see $defs/NurseFlagData. Something needs a nurse's attention, e.g. the phone assistant refused a medical question (`medical_question`), or the patient asked one during the intake (`medical_question_intake`, M2-10). No name, date of birth or free text.",
   "$ref": "#/$defs/NurseFlagData",
   "$defs": {
     "NurseFlagData": {
       "title": "NurseFlagData",
-      "description": "Something needs a nurse's attention, e.g. the phone assistant refused a medical question. No name, date of birth or free text.",
+      "description": "Something needs a nurse's attention, e.g. the phone assistant refused a medical question (`medical_question`), or the patient asked one during the intake (`medical_question_intake`, M2-10). No name, date of birth or free text.",
       "type": "object",
       "properties": {
         "clinic_id": {
@@ -21,6 +21,7 @@
           "type": "string",
           "enum": [
             "medical_question",
+            "medical_question_intake",
             "feels_worse",
             "other"
           ]
