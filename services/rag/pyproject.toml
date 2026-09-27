@@ -1,13 +1,16 @@
 [project]
 name = "careflow-rag"
 version = "0.1.0"
-description = "CareFlow clinic knowledge ingest and hybrid retrieval."
+description = "CareFlow clinic knowledge ingest, hybrid retrieval and the ask-the-clinic agent."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "careflow-contracts",
+  "careflow-providers",
+  "langgraph==1.2.12",
   "numpy>=2.5,<3",
   "psycopg[binary,pool]>=3.3,<3.4",
+  "pyyaml>=6.0,<7",
   "sqlalchemy[asyncio]>=2.1,<2.2",
 ]
 
@@ -24,6 +27,7 @@ careflow-rag-ingest = "careflow_rag.ingest:main"
 
 [tool.uv.sources]
 careflow-contracts = { workspace = true }
+careflow-providers = { workspace = true }
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]

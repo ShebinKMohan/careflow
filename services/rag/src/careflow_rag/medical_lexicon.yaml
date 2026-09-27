@@ -1,0 +1,297 @@
+# Layer A of the ask-the-clinic medical-question classifier (M2-09). A question that matches any
+# entry here is medical, whatever the model says: the patient gets the fixed refusal and the nurse
+# gets a flag (safety rule 2). Both languages are checked for every question, whatever the session
+# language. When unsure, add the phrase: a false refusal costs the nurse a minute; a missed one
+# could put medical advice in front of a patient. Research prototype; synthetic data only.
+#
+# Kept out on purpose, because they are everyday clinic logistics: "prescription", "pharmacy",
+# "doctor", "nurse", "emergency" (the emergency department is in the handbook), "patient" and
+# "مريض" (a patient), "scan" (the QR code), "tablet" (a device), the verb "treat" ("Do you treat
+# children?"), and "go" or "wait" after "should I".
+version: 1
+
+en:
+  # Regular expressions, matched case-insensitively on the question as whole words: each one is
+  # wrapped in \b(?: ... )\b.
+  symptoms:
+    - symptoms?
+    - pain(s|ful)?
+    - ache[sd]?|aching
+    - hurts?|hurting
+    - sore
+    - fever(ish)?|temperature
+    - cough(s|ed|ing)?
+    - (have|has|got|caught) (a )?(cold|flu)|flu
+    - rash(es)?
+    - itch(y|ing|es)?
+    - swell(s|ed|ing)?|swollen
+    - bleed(s|ing)?|blood(y)?
+    - vomit(s|ed|ing)?|throw(ing)? up|threw up
+    - nause(a|ous)
+    - diarrh?(o)?ea
+    - constipat(ed|ion)
+    - dizz(y|iness)
+    - faint(s|ed|ing)?|passed out|pass out|blacked out
+    - headaches?|migraines?
+    - breath(e|es|ing|less|lessness)?|short of breath
+    - wheez(e|es|ed|ing|y)
+    - palpitations?
+    - chest
+    - heart
+    - strokes?
+    - seizures?|convulsions?|epilep(sy|tic)
+    - unconscious
+    - numb(ness)?|tingl(e|es|ing)
+    - weakness|feel(ing)? weak
+    - infect(ion|ions|ed)
+    - allerg(y|ies|ic)
+    - asthma
+    - diabet(es|ic)
+    - blood (sugar|pressure)|sugar levels?
+    - pregnan(t|cy)|miscarriage
+    - injur(y|ies|ed)|fracture[sd]?|sprain(s|ed)?|broken (arm|leg|bone|wrist|ankle|finger|toe|rib|nose|hand|foot)
+    - burn(s|ed|t)?
+    - wounds?|bruis(e|es|ed|ing)
+    - lumps?
+    - cancer|tumou?rs?
+    - covid|corona(virus)?|virus(es)?
+    - sick|ill|illness|unwell|not feeling well|feel(ing)? (bad|worse|terrible|awful)
+    - diseases?
+    - swallow(ing)?
+    - blurr(y|ed) vision|vision
+  body_and_pain:
+    - (stomach|tummy|belly|back|neck|ear|eye|tooth|throat|head|leg|arm|knee|foot|hand)(ache| ache| pain| hurts)
+    - earache|toothache|sore throat|stomach ?ache|bellyache
+  medicines:
+    - medicines?|medications?|meds|drugs?|pills?|tablets|capsules?|syrups?|injections?|jabs?|vaccin(e|es|ation|ations)?
+    - doses?|dosage|dosing|overdos(e|ed|es|ing)
+    - antibiotics?|antihistamines?|steroids?|inhalers?|pain ?killers?|sleeping pills?|antidepressants?|opioids?
+    - paracetamol|acetaminophen|panadol|tylenol|calpol|ibuprofen|advil|nurofen|brufen|aspirin|amoxicillin|augmentin|penicillin
+    - insulin|metformin|codeine|morphine|tramadol|diclofenac|voltaren|naproxen|omeprazole|salbutamol|ventolin|prednisolone|cetirizine|loratadine|warfarin
+  advice:
+    - should (i|we|he|she|they|my \w+)( still| really)? (take|use|stop|start|eat|drink|worry|be worried|be concerned|see a doctor)
+    - can (i|we|he|she|they|my \w+) (eat|drink)
+    - (eat|drink) (anything|something) (before|while)
+    - is (it|this|that) (serious|normal|dangerous|bad|contagious|infectious|urgent|an emergency|life[- ]threatening)
+    - am i (sick|ill|dying|ok|okay|going to be ok|going to be okay|going to die)
+    - will i (die|be ok|be okay|be fine|recover)
+    - what('s| is) wrong with (me|my|him|her|them)
+    - diagnos(e|ed|es|is|ing)
+    - treatments?
+    - cure[sd]?|remed(y|ies)
+    - side[- ]effects?
+    - (test|lab|blood|scan) results?
+    - blood tests?|urine (test|sample)|lab tests?
+    - ct scan|mri|x-?rays?|ultrasound|ecg|ekg|biopsy|stitches|surgery|operation (on|for)
+    - how (much|many) (should|can|do) (i|we|he|she|they) (take|give)
+    - what (should|can) (i|we) (take|do|give) (for|about)
+    - first aid
+    - worr(y|ied|ying) about (my|his|her|the) (health|symptoms?|child|baby|son|daughter|husband|wife|mother|father|mum|mom|dad)
+  mental_health:
+    - suicid(e|al)|kill (myself|himself|herself)|end my life|self[- ]harm|hurt(ing)? myself|want to die
+    - depress(ed|ion)|anxiety|panic attacks?|mental health
+
+ar:
+  # Words, compared after normalisation (diacritics and tatweel removed; أ إ آ ٱ -> ا, ى -> ي,
+  # ة -> ه, ؤ -> و, ئ -> ي) with one common prefix (و ف ب ك ل ال وال فال بال كال لل) and one
+  # common suffix (ي ك ه ها هم هن هما كم كن نا ني ات ين ون ان يه) removed.
+  words:
+    # pain
+    - ألم
+    - آلام
+    - وجع
+    - أوجاع
+    - يؤلم
+    - تؤلم
+    - يوجع
+    - توجع
+    - صداع
+    - مغص
+    # symptoms
+    - أعراض
+    - حمى
+    - حرارة
+    - سخونة
+    - سعال
+    - كحة
+    - زكام
+    - رشح
+    - انفلونزا
+    - إنفلونزا
+    - طفح
+    - حكة
+    - تورم
+    - ورم
+    - انتفاخ
+    - منتفخ
+    - نزيف
+    - ينزف
+    - دم
+    - دماء
+    - قيء
+    - تقيؤ
+    - استفراغ
+    - غثيان
+    - إسهال
+    - إمساك
+    - دوخة
+    - دوار
+    - دايخ
+    - إغماء
+    - غيبوبة
+    - تنفس
+    - اختناق
+    - صدر
+    - قلب
+    - خفقان
+    - نبض
+    - جلطة
+    - سكتة
+    - تشنج
+    - تشنجات
+    - صرع
+    - خدر
+    - تنميل
+    - عدوى
+    - التهاب
+    - ملتهب
+    - جرثومة
+    - بكتيريا
+    - فيروس
+    - كورونا
+    - كوفيد
+    - حساسية
+    - ربو
+    - سكري
+    - حامل
+    - إجهاض
+    - إصابة
+    - مصاب
+    - جرح
+    - جروح
+    - كسر
+    - مكسور
+    - التواء
+    - حرق
+    - حروق
+    - كدمة
+    - سرطان
+    - مرض
+    - أمراض
+    - تعبان
+    - بطن
+    # medicines
+    - دواء
+    - دوائي
+    - أدوية
+    - علاج
+    - حبوب
+    - حبة
+    - أقراص
+    - كبسولة
+    - كبسولات
+    - حقنة
+    - إبرة
+    - إبر
+    - لقاح
+    - تطعيم
+    - جرعة
+    - جرعات
+    - مسكنات
+    - بخاخ
+    - مرهم
+    - قطرة
+    - باراسيتامول
+    - بنادول
+    - بانادول
+    - تايلينول
+    - ايبوبروفين
+    - إيبوبروفين
+    - بروفين
+    - أسبرين
+    - أموكسيسيلين
+    - أوجمنتين
+    - بنسلين
+    - أنسولين
+    - إنسولين
+    - ميتفورمين
+    - كودايين
+    - مورفين
+    - ترامادول
+    - فولتارين
+    - ديكلوفيناك
+    - فنتولين
+    - سالبوتامول
+    - كورتيزون
+    # tests, diagnosis, treatment
+    - تشخيص
+    - تحليل
+    - تحاليل
+    - فحص
+    - أشعة
+    - سونار
+    - جراحة
+    - غرز
+    - خطير
+    - خطيرة
+    # mental health
+    - انتحار
+    - اكتئاب
+  # Phrases, compared word by word on the normalised question.
+  phrases:
+    - ضيق التنفس
+    - ضيق في التنفس
+    - ضغط الدم
+    - مستوى السكر
+    - مضاد حيوي
+    - مضادات حيوية
+    - فقدان الوعي
+    - آثار جانبية
+    - أعراض جانبية
+    - تخطيط القلب
+    - رنين مغناطيسي
+    - عملية جراحية
+    - نتيجة التحليل
+    - نتائج التحاليل
+    - نتيجة الفحص
+    - نتائج الفحص
+    - نوبة قلبية
+    - نوبة صرع
+    - نوبة ربو
+    - نوبة هلع
+    - نوبة تشنج
+    - أشعر بضعف
+    - ضعف عام
+    - مسكن للألم
+    - هل يجب أن آخذ
+    - هل يجب أن أتناول
+    - هل آخذ
+    - هل أتناول
+    - ماذا آخذ
+    - ماذا أتناول
+    - ما الدواء
+    - كم جرعة
+    - ما هي الجرعة
+    - هل هذا خطير
+    - هل هو خطير
+    - هل هي خطيرة
+    - هل هذا طبيعي
+    - هل هو طبيعي
+    - هل هي طبيعية
+    - هل هذا عادي
+    - ما خطبي
+    - ما مشكلتي
+    - ماذا بي
+    - هل أنا مريض
+    - هل أنا بخير
+    - ما الذي أصابني
+    - هل يمكنني الأكل
+    - هل يمكنني الشرب
+    - هل يمكنني أن آكل
+    - هل يمكنني أن أشرب
+    - هل أستطيع الأكل
+    - هل أستطيع أن آكل
+    - هل أستطيع أن أشرب
+    - أقتل نفسي
+    - أنهي حياتي
+    - أؤذي نفسي
