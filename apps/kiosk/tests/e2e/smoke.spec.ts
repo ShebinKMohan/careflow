@@ -17,7 +17,7 @@ async function signInKiosk(page: Page) {
 }
 
 test("the footer is visible on every page", async ({ page }) => {
-  for (const path of ["/", "/setup", "/checkin", "/intake", "/vitals", "/done"]) {
+  for (const path of ["/", "/setup", "/checkin", "/patient", "/intake", "/vitals", "/done"]) {
     await page.goto(path);
     await expect(page.getByTestId("prototype-footer"), path).toHaveText(FOOTER_EN);
     await expect(page.getByTestId("arabic-disclaimer"), path).toHaveText(DISCLAIMER_EN);
@@ -38,6 +38,8 @@ test("keypad 100001 opens the mocked session's first question within 1 s", async
   test.info().annotations.push({ type: "keypad-to-session-ms", description: String(elapsed) });
   console.log(`keypad submit -> mocked session shown in ${elapsed} ms`);
   expect(elapsed).toBeLessThan(1_000);
+  await expect(page).toHaveURL(/\/patient$/);
+  await page.getByRole("button", { name: "Me", exact: true }).click();
   await expect(page).toHaveURL(/\/intake$/);
   await expect(page.getByRole("heading", { name: "What is the main reason for your visit today?" })).toBeVisible();
 });

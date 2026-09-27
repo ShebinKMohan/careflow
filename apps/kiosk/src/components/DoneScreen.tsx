@@ -20,6 +20,7 @@ export const RESET_AFTER_TOKEN_MS = 30_000;
  */
 export function DoneScreen() {
   const t = useTranslations("done");
+  const tChild = useTranslations("safety.child");
   const router = useRouter();
   const { patient, wipe } = useKiosk();
   const [status, setStatus] = useState<Schema<"SessionStatus"> | null>(null);
@@ -64,6 +65,12 @@ export function DoneScreen() {
 
   return (
     <div className="flex flex-col gap-6" aria-live="polite">
+      {patient.patientType === "child" ? (
+        <div className="flex flex-col gap-2" data-testid="child-nurse">
+          <p className="text-title font-semibold">{tChild("nurseTold")}</p>
+          <p className="text-title">{tChild("nurseCheck")}</p>
+        </div>
+      ) : null}
       <p className="text-title">{t("seat")}</p>
       {tokenCode ? (
         <Card title={t("tokenLabel")}>

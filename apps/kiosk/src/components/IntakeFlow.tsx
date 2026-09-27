@@ -40,7 +40,8 @@ export function IntakeFlow() {
   useEffect(() => onWipe(() => voice.abort()), [onWipe, voice]);
   useEffect(() => () => voice.stop(), [voice]); // leaving the screen closes the microphone
   useEffect(() => {
-    if (patient && patient.question === null) router.push("/vitals");
+    // A child skips the adult sensor steps (M2-04): a nurse checks temperature and breathing.
+    if (patient && patient.question === null) router.push(patient.patientType === "child" ? "/done" : "/vitals");
   }, [patient, router]);
 
   if (!patient || !client) {

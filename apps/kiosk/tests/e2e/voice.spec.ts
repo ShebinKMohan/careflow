@@ -62,6 +62,8 @@ test("a spoken answer shows what was heard, then the next question, and the ques
   await page.goto("/checkin");
   for (const digit of "100001") await page.getByRole("button", { name: digit, exact: true }).click();
   await page.getByRole("button", { name: "Check in" }).click();
+  await expect(page).toHaveURL(/\/patient$/);
+  await page.getByRole("button", { name: "Me", exact: true }).click();
   await expect(page.getByRole("heading", { name: "What is the main reason for your visit today?" })).toBeVisible();
 
   await page.getByRole("button", { name: "Speak your answer" }).click();

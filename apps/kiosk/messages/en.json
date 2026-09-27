@@ -100,5 +100,20 @@
     "title": "Are you still there?",
     "countdown": "Starting over in {seconds} seconds.",
     "stay": "I'm still here"
+  },
+  "safety": {
+    "child": {
+      "title": "Who is the patient?",
+      "me": "Me",
+      "myChild": "My child",
+      "ageTitle": "How old is your child?",
+      "yearsLabel": "Years",
+      "underOne": "Under 1",
+      "monthsLabel": "And how many months?",
+      "continue": "Continue",
+      "failed": "Something went wrong. Please try again, or ask at reception.",
+      "nurseCheck": "A nurse will check your child's temperature and breathing.",
+      "nurseTold": "A nurse has been told. Please stay here."
+    }
   }
 }
