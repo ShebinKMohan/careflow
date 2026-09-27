@@ -74,6 +74,11 @@ class PatientSession(_ClinicScoped, Base):
         DateTime(timezone=True), server_default=func.now()
     )
     expires_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+    #: Initials only (e.g. "M. S."), for the staff screens (M1-12).
+    patient_display: Mapped[str | None] = mapped_column(String(8))
+    last_activity_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
 
 class EncounterState(_ClinicScoped, Base):
@@ -137,6 +142,28 @@ class BriefingRow(_ClinicScoped, Base):
     updated_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class NurseDecisionRow(_ClinicScoped, Base):
+    """One nurse decision (M1-12), for M5-02 and M5-03. Coded values only, never free text."""
+
+    __tablename__ = "nurse_decisions"
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id")
+    )
+    decision_id: Mapped[str] = mapped_column(String(64), unique=True)
+    nurse_id: Mapped[str] = mapped_column(String(64))
+    suggestion_id: Mapped[str | None] = mapped_column(String(64))
+    suggested_level: Mapped[int | None] = mapped_column(SmallInteger)
+    final_level: Mapped[int] = mapped_column(SmallInteger)
+    scale: Mapped[str] = mapped_column(String(8))
+    decision: Mapped[str] = mapped_column(String(16))  # confirm | override
+    override_reason_code: Mapped[str | None] = mapped_column(String(32))
+    model_version: Mapped[str | None] = mapped_column(String(64))
+    facts_snapshot: Mapped[dict[str, object]] = mapped_column(JSONB)
+    suggested_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+    decided_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+    presented_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class QueueTokenRow(_ClinicScoped, Base):
@@ -216,6 +243,7 @@ __all__ = [
     "EncounterState",
     "FhirWriteback",
     "FhirWritebackStatus",
+    "NurseDecisionRow",
     "OutboxEvent",
     "PatientSession",
     "ProcessedEvent",

@@ -108,6 +108,33 @@ def seed_dev() -> None:
         )
 
 
+CHECKPOINT_TABLES: Final = (
+    "checkpoint_migrations",
+    "checkpoints",
+    "checkpoint_blobs",
+    "checkpoint_writes",
+)
+
+
+@app.command("setup-checkpoints")
+def setup_checkpoints() -> None:
+    """Create or migrate the intake graph's checkpoint tables (as the migrator) and let the app
+    role use them (M1-12). Idempotent; `make migrate` runs it after Alembic."""
+    import asyncio
+
+    from careflow_intake.checkpoint import setup_postgres
+
+    settings = get_settings()
+    asyncio.run(setup_postgres(settings.database_url_migrator))
+    engine = create_engine(sqlalchemy_url(settings.database_url_migrator))
+    with engine.begin() as connection:
+        for table in CHECKPOINT_TABLES:
+            connection.execute(
+                text(f"GRANT SELECT, INSERT, UPDATE, DELETE ON {table} TO careflow_app")
+            )
+    typer.echo(f"setup-checkpoints: {len(CHECKPOINT_TABLES)} tables ready for careflow_app")
+
+
 def get_env_file_value(key: str) -> str | None:
     """Read one key from the repo .env without printing it (pydantic-settings reads .env too)."""
     from careflow_api.config import REPO_ROOT
