@@ -1,0 +1,39 @@
+# Approved plain Modern Standard Arabic questions for the kiosk intake (M2-03), mirroring
+# templates_en.yaml key for key. Research prototype; synthetic data only. Arabic supported; not
+# validated by native speakers. The wording avoids gendered verb forms where it can (the patient's
+# gender is not known), and numbers use Western digits (ADR-032). The LLM may only rephrase these;
+# every string, including these templates, passes the patient-facing output filter.
+version: templates_ar_v1
+list_join: { separator: "، ", last: " و" }
+nurse_coming: "شكراً لك. سيأتي إليك أحد أفراد فريق التمريض قريباً. يرجى البقاء هنا."
+questions:
+  # The intake checklist.
+  chief_complaint: "ما السبب الرئيسي لزيارتك اليوم؟"
+  symptom_onset_at: "متى بدأ ذلك؟"
+  pain_score: "من 0 إلى 10، ما شدة ألمك الآن؟"
+  severity: "من 0 إلى 10، ما شدة ذلك الآن؟"
+  pain_location: "أين مكان الألم؟"
+  allergies_confirm:
+    with_record: "يذكر ملفك {allergies}. هل هذا لا يزال صحيحاً؟"
+    without_record: "هل لديك حساسية من أي دواء؟"
+  # FAST screen (M1-02).
+  fast.face_droop: "هل يوجد ارتخاء أو خدر في أحد جانبي وجهك؟"
+  fast.arm_weakness: "هل لديك ضعف أو خدر في إحدى ذراعيك؟"
+  fast.speech_difficulty: "هل كلامك متلعثم أو صعب الخروج؟"
+  fast.last_known_well: "متى كانت آخر مرة كنت فيها بصحة طبيعية تماماً؟"
+  # Chest pain screen (M1-02).
+  chest_pain.present: "هل لديك ألم أو ضيق في صدرك؟"
+  chest_pain.radiates: "هل ينتشر الألم إلى ذراعك أو رقبتك أو فكك أو ظهرك؟"
+  chest_pain.short_of_breath: "هل لديك ضيق في التنفس؟"
+  chest_pain.sweating: "هل تعرقت كثيراً مع الألم؟"
+  chest_pain.onset: "متى بدأ ألم الصدر؟"
+  # Fever and shivering (M1-01).
+  infection.fever_reported: "هل أصابتك حمّى؟"
+  infection.rigors: "هل أصابتك رجفة أو قشعريرة لا يمكن إيقافها؟"
+  # NICE NG143 parent screen (M1-02), asked of the parent or carer.
+  child_danger.hard_to_wake: "هل يصعب جداً إيقاظ طفلك؟"
+  child_danger.pale_mottled_ashen_or_blue: "هل يبدو طفلك شاحباً جداً أو مبقّع الجلد أو رمادياً أو أزرق؟"
+  child_danger.grunting: "هل يصدر طفلك صوت أنين عند التنفس؟"
+  child_danger.non_blanching_rash: "هل لدى طفلك بقع لا تختفي عند الضغط عليها بكوب زجاجي؟"
+  child_amber.poor_feeding: "هل يرضع طفلك أو يشرب أقل بكثير من المعتاد؟"
+  child_amber.reduced_urine_output: "هل قلّت الحفاضات المبللة لطفلك أو قلّ تبوله عن المعتاد؟"

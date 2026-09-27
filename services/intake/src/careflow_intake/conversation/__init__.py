@@ -4,9 +4,15 @@ output filter checks every string that reaches the patient."""
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Mapping
 
-from careflow_contracts.generated.structured_facts_schema import EhrContext, FactKey, TurnRole
-from careflow_intake.conversation.checklist import Templates, load_templates
+from careflow_contracts.generated.structured_facts_schema import (
+    EhrContext,
+    FactKey,
+    Language,
+    TurnRole,
+)
+from careflow_intake.conversation.checklist import Templates, load_templates, templates_for
 from careflow_intake.conversation.output_filter import check_patient_facing
 from careflow_intake.conversation.phrasing import Phraser
 from careflow_intake.conversation.picker import has_critical_alert, pick_next_question
@@ -19,26 +25,39 @@ class ChecklistConversation:
 
     When a critical alert is raised, the next patient-facing text is the fixed nurse-coming message
     (as the question's `notice`, or on its own when no screen question is left); after it only the
-    remaining danger screens are asked.
+    remaining danger screens are asked. The session language picks the approved templates and the
+    phrasing prompt (M2-03).
     """
 
     def __init__(
-        self, *, templates: Templates | None = None, phraser: Phraser | None = None
+        self,
+        *,
+        templates: Templates | None = None,
+        phraser: Phraser | None = None,
+        templates_by_language: Mapping[Language, Templates] | None = None,
     ) -> None:
         self.templates = templates or load_templates()
+        self.by_language: dict[Language, Templates] = {
+            Language.en: self.templates,
+            Language.ar: templates_for(Language.ar),
+            **(templates_by_language or {}),
+        }
         self.phraser = phraser or Phraser(None, enabled=False)
 
-    def _approved(self, key: FactKey, ehr_context: EhrContext | None) -> str:
-        for text in (self.templates.render(key, ehr_context), self.templates.fallback(key)):
+    @staticmethod
+    def _approved(templates: Templates, key: FactKey, ehr_context: EhrContext | None) -> str:
+        for text in (templates.render(key, ehr_context), templates.fallback(key)):
             if text is not None and check_patient_facing(text).allowed:
                 return text
         raise RuntimeError(f"no approved wording for {key.value} passes the output filter")
 
     async def next_question(self, state: IntakeState) -> Question | None:
+        language = Language(state.get("language", Language.en))
+        templates = self.by_language[language]
         turns = state.get("turns", [])
         prompts = [turn for turn in turns if turn.role is TurnRole.assistant]
         asked = Counter(turn.question_key for turn in prompts if turn.question_key is not None)
-        nurse_coming = self.templates.nurse_coming
+        nurse_coming = templates.nurse_coming
         alerts = state.get("alerts", [])
         announced = any(turn.text == nurse_coming for turn in prompts)
         notice = nurse_coming if has_critical_alert(alerts) and not announced else None
@@ -48,13 +67,14 @@ class ChecklistConversation:
             asked,
             state.get("ehr_context"),
             alerts=alerts,
-            askable=self.templates.keys(),
+            askable=templates.keys(),
         )
         if key is None:
             if notice is None:
                 return None
             return Question(question_id="nurse_coming", text=notice, source="template")
-        text, source = await self.phraser.phrase(key, self._approved(key, state.get("ehr_context")))
+        approved = self._approved(templates, key, state.get("ehr_context"))
+        text, source = await self.phraser.phrase(key, approved, language)
         number = asked[key] + 1
         return Question(
             question_id=f"q_{key.value}_{number}", text=text, key=key, source=source, notice=notice
