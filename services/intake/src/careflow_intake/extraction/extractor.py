@@ -25,8 +25,9 @@ from careflow_contracts.generated.fact_schema import (
     TriState,
     TriStateFact,
 )
-from careflow_contracts.generated.structured_facts_schema import FactKey, Symptom, Turn
-from careflow_intake.extraction.prompt import PROMPT_VERSION, build_messages, extractable_keys
+from careflow_contracts.generated.structured_facts_schema import FactKey, Language, Symptom, Turn
+from careflow_intake import arabic
+from careflow_intake.extraction.prompt import build_messages, extractable_keys, prompt_version
 from careflow_intake.extraction.verify import VerifiedFact, numeric_value, verify_facts
 from careflow_intake.facts import LIST_KEYS, FactEntry, fact_class, stable_fact_id
 from careflow_intake.ports import ExtractionResult
@@ -47,13 +48,14 @@ type ErrorCode = Literal["timeout", "invalid_output", "provider_error"]
 
 
 def _tri_state(value: bool | int | float | str, negated: bool) -> str | None:
-    """yes/no/unknown, or None when the value is not a yes/no answer or contradicts `negated`."""
-    word = value if isinstance(value, bool) else str(value).strip().casefold()
-    if word is True or word in YES:
+    """yes/no/unknown, or None when the value is not a yes/no answer or contradicts `negated`.
+    An English or Arabic yes/no word counts, though the prompts ask for true or false."""
+    word = value if isinstance(value, bool) else arabic.normalise(str(value).strip())
+    if word is True or word in YES or word in arabic.YES:
         return None if negated else TriState.yes.value
-    if word is False or word in NO:
+    if word is False or word in NO or word in arabic.NO:
         return TriState.no.value
-    if word in UNSURE:
+    if word in UNSURE or word in arabic.UNSURE:
         return TriState.unknown.value
     return None
 
@@ -137,25 +139,32 @@ class LlmExtractor:
         kind = providers.tasks[TASK].provider
         return cls(provider, timeout_seconds=timeout_seconds, provider_kind=kind)
 
-    def _result(self, **fields: Any) -> ExtractionResult:
+    def _result(self, language: Language, **fields: Any) -> ExtractionResult:
         return ExtractionResult(
-            prompt_version=PROMPT_VERSION,
+            prompt_version=prompt_version(language),
             model_id=self.provider.model_name,
             provider=self.provider_kind,
             **fields,
         )
 
-    def _incomplete(self, existing: Sequence[FactEntry], code: ErrorCode) -> ExtractionResult:
-        return self._result(facts=list(existing), extraction_incomplete=True, error_code=code)
+    def _incomplete(
+        self, language: Language, existing: Sequence[FactEntry], code: ErrorCode
+    ) -> ExtractionResult:
+        return self._result(
+            language, facts=list(existing), extraction_incomplete=True, error_code=code
+        )
 
     async def extract(
         self,
         turns: Sequence[Turn],
         existing_facts: Sequence[FactEntry],
         question_keys: Mapping[str, FactKey],
+        language: Language = Language.en,
     ) -> ExtractionResult:
+        """PATIENT_STATED facts from the transcript, with the session language's prompt."""
+        language = Language(language)
         transcript = list(turns)
-        messages = build_messages(transcript, question_keys)
+        messages = build_messages(transcript, question_keys, language)
         try:
             outcome = await asyncio.wait_for(
                 structured(self.provider, messages, ExtractionOutput, temperature=0.0),
@@ -163,13 +172,13 @@ class LlmExtractor:
             )
         except TimeoutError:
             logger.warning("extraction.timeout after %.1f s", self.timeout_seconds)
-            return self._incomplete(existing_facts, "timeout")
+            return self._incomplete(language, existing_facts, "timeout")
         except Exception as exc:  # fail safe: provider down, no key, cassette miss
             logger.warning("extraction.provider_error: %s", type(exc).__name__)
-            return self._incomplete(existing_facts, "provider_error")
+            return self._incomplete(language, existing_facts, "provider_error")
         if isinstance(outcome, StructuredFailure):
             logger.warning("extraction.invalid_output after %d errors", len(outcome.errors))
-            return self._incomplete(existing_facts, "invalid_output")
+            return self._incomplete(language, existing_facts, "invalid_output")
 
         allowed = set(extractable_keys())
         usable = [fact for fact in outcome.value.facts if fact.key in allowed]
@@ -197,7 +206,7 @@ class LlmExtractor:
                 listed.append(entry)
             else:
                 latest[entry.key] = entry
-        return self._result(facts=[*listed, *latest.values()], dropped_count=unusable)
+        return self._result(language, facts=[*listed, *latest.values()], dropped_count=unusable)
 
 
 __all__ = ["DEFAULT_CONFIG", "TASK", "LlmExtractor"]

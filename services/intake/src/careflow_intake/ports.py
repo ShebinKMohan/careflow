@@ -17,6 +17,7 @@ from careflow_contracts.generated.ehr_fetch_schema import EhrFetch, PatientIdent
 from careflow_contracts.generated.events.envelope_schema import EventType
 from careflow_contracts.generated.structured_facts_schema import (
     FactKey,
+    Language,
     NeededFact,
     StructuredFacts,
     Turn,
@@ -107,10 +108,12 @@ class Extractor(Protocol):
         turns: Sequence[Turn],
         existing_facts: Sequence[FactEntry],
         question_keys: Mapping[str, FactKey],
+        language: Language = Language.en,
     ) -> ExtractionResult:
         """PATIENT_STATED facts from the transcript. `question_keys` maps each patient turn id to
-        the fact its question asked about. Fact ids should be stable for the same statement, so
-        extracting again replaces a fact instead of duplicating it."""
+        the fact its question asked about, and `language` is the session's (M2-03). Fact ids
+        should be stable for the same statement, so extracting again replaces a fact instead of
+        duplicating it."""
         ...
 
 

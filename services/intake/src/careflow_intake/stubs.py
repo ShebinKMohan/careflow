@@ -21,6 +21,7 @@ from careflow_contracts.generated.fact_schema import TextFact, TriState, TriStat
 from careflow_contracts.generated.structured_facts_schema import (
     EhrContext,
     FactKey,
+    Language,
     StructuredFacts,
     Turn,
     TurnRole,
@@ -146,6 +147,7 @@ class AnswerExtractor:
         turns: Sequence[Turn],
         existing_facts: Sequence[FactEntry],
         question_keys: Mapping[str, FactKey],
+        language: Language = Language.en,
     ) -> ExtractionResult:
         if self.fail:
             raise RuntimeError("the stub extractor failed")
