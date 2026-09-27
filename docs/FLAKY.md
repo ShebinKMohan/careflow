@@ -25,3 +25,16 @@ This file lists tests whose outcome depends on the machine or on timing, and how
 - **Handling.** Not retried, not weakened. Reproduce and fix with SHE-302 [M2-07], which changes
   the nurse card's refresh (the card must re-read alerts live). Until then the test runs as it
   is in CI; a red run of it is investigated, not re-run until green.
+
+## `e2e/journeys/chest-pain.spec.ts` alert-latency budget (M1-19)
+
+- **What it measures.** The time from the kiosk receiving the answer to the turn that raised
+  `CHEST_PAIN_ECG_10MIN` to the chip rendering on the nurse's open worklist; the issue's bound is
+  2 s. On the reference machine it was 689 to 1,215 ms in replay and 795 to 1,380 ms with the
+  local model (docs/evidence/M1-19.md).
+- **Why it is machine-dependent.** It is a speed budget, and a shared GitHub runner is slower and
+  noisier than the reference machine; speed targets are never CI gates (CONVENTIONS).
+- **Handling.** Asserted (<= 2,000 ms) on any run without `CI=true`; on a CI runner the journey
+  adds a `warning` annotation with the measured time when it is over, instead of failing.
+- **Still asserted in CI.** The chip appears on this session's row of the already open worklist
+  (live, no reload) before any level exists, and every other check of the journey.

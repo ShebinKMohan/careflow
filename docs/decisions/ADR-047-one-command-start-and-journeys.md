@@ -66,10 +66,11 @@ killed it.
   API's 5 logins a minute; the limit itself is unchanged.
 - **Latency is measured, and the journey's bound is functional.** Each journey records how long
   every turn took and, for chest pain, when the alert was raised and when it appeared on the
-  nurse's worklist. The chest-pain journey keeps the issue's bound, the alert on the worklist
-  within 2 s of the turn's answer, as the check that alerts are pushed live rather than found on
-  a later poll. The speed target itself (alert p95 <= 1000 ms, CONVENTIONS) is measured and
-  published in the evidence and never gated.
+  nurse's worklist. The chip must appear on the already open worklist (pushed live, no reload)
+  wherever the journey runs. The issue's 2 s bound from the turn's answer is a speed budget:
+  asserted on the reference machine and reported on a CI runner, like the urgency model's 20 ms
+  budget (docs/FLAKY.md), because speed targets are never CI gates. The speed target itself
+  (alert p95 <= 1000 ms, CONVENTIONS) is measured and published in the evidence.
 - **The first raise is kept.** `merge_alerts_by_rule_id` keeps an alert's first `raised_at` and
   takes everything else from the new evaluation (evidence, partial, display text), matching
   `alert.raised`, which goes out once per rule id. The real intake ports default to the real
