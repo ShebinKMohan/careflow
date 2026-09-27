@@ -19,6 +19,7 @@ from fastapi import FastAPI
 from starlette.routing import BaseRoute
 
 from voice_agent.app import create_app
+from voice_agent.config.careflow import LANGUAGES
 from voice_agent.config.settings import Settings, get_settings
 from voice_agent.kiosk.speech import KioskSpeech, LocalKioskSpeech
 from voice_agent.kiosk.turns import TurnPoster, TurnsClient
@@ -77,18 +78,25 @@ def create_careflow_app(
 
 
 async def _preload(speech: KioskSpeech) -> None:
-    """Load the engines once (they are cached process-wide) and release the per-call parts."""
+    """Load the engines once (they are cached process-wide) and release the per-call parts.
+
+    The English STT (mlx-whisper serves Arabic with the same model) and each language's TTS. A
+    configured Cohere Arabic STT (4 GB) loads on the first Arabic session instead.
+    """
     started = asyncio.get_running_loop().time()
-    stt = speech.stt()
-    tts = speech.tts()
+    providers = [speech.stt(), *(speech.tts(language) for language in LANGUAGES)]
     try:
-        for provider in (stt, tts):
+        for provider in providers:
             if isinstance(provider, StartableProvider):
-                await provider.start()
+                try:
+                    await provider.start()
+                except Exception:
+                    logger.exception(
+                        "Preloading %s failed; the kiosk channel will retry.",
+                        type(provider).__name__,
+                    )
         speech.vad().reset()
-    except Exception:
-        logger.exception("Preloading the speech engines failed; the kiosk channel will retry.")
     finally:
-        await stt.close()
-        await tts.close()
+        for provider in providers:
+            await provider.close()
     logger.info("Speech engines ready in %.1f s.", asyncio.get_running_loop().time() - started)

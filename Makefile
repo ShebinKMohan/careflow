@@ -133,7 +133,7 @@ voice-models: ## Download the voice models (~2 GB) into services/voice/models an
 	services/voice/scripts/download_models.sh
 
 voice: ## Run the voice service on 127.0.0.1:8090 (Apple silicon; needs `make voice-models`)
-	uv run --package careflow-voice --extra mlx-whisper careflow-voice
+	uv run --package careflow-voice --extra mlx-whisper --extra arabic-speech careflow-voice
 
 # --- Apps (M0-08) --------------------------------------------------------------------------------
 mock: ## Serve the OpenAPI examples with Prism on :4010 (static examples, deterministic)

@@ -38,7 +38,7 @@ class StartMessage(BaseModel):
     session_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     token: str = Field(min_length=1, max_length=4096)
     sample_rate: Literal[16000]
-    language: Literal["en"] = "en"
+    language: Literal["en", "ar"] = "en"  # the session's language (M2-01), spoken since M2-02
 
 
 class StopMessage(BaseModel):

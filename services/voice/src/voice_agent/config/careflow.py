@@ -23,10 +23,13 @@ REPO: Final = VOICE_ROOT.parents[1]
 PROVIDERS_CONFIG: Final = REPO / "config" / "providers.yaml"
 MODELS_DIR: Final = VOICE_ROOT / "models"
 LANGUAGE: Final = "en"
-"""M1 speaks English; Arabic STT and TTS arrive in M2-02 (`by_language.ar`)."""
+"""The default language; a kiosk session may pick Arabic (M2-01), and M2-02 speaks it."""
+LANGUAGES: Final = ("en", "ar")
 
-SpeechToTextName = Literal["mlx-whisper", "deepgram"]
-TextToSpeechName = Literal["kokoro"]
+SpeechToTextName = Literal["mlx-whisper", "deepgram", "cohere-transcribe-arabic"]
+TextToSpeechName = Literal["kokoro", "mms-tts-ara"]
+STT_NAMES: Final = ("mlx-whisper", "deepgram", "cohere-transcribe-arabic")
+TTS_NAMES: Final = ("kokoro", "mms-tts-ara")
 
 
 class _Engine(BaseModel):
@@ -49,15 +52,25 @@ class SpeechConfig(BaseModel):
 
     def stt_provider(self, language: str = LANGUAGE) -> SpeechToTextName:
         name = self.stt.for_language(language)
-        if name not in ("mlx-whisper", "deepgram"):
+        if name not in STT_NAMES:
             raise ValueError(f"speech.stt provider {name!r} is not supported by the voice service")
-        return name
+        if name == "cohere-transcribe-arabic" and language != "ar":
+            raise ValueError("speech.stt cohere-transcribe-arabic serves Arabic only")
+        return name  # type: ignore[return-value]
 
     def tts_provider(self, language: str = LANGUAGE) -> TextToSpeechName:
         name = self.tts.for_language(language)
-        if name != "kokoro":
+        if name not in TTS_NAMES:
             raise ValueError(f"speech.tts provider {name!r} is not supported by the voice service")
-        return "kokoro"
+        if name == "mms-tts-ara" and language != "ar":
+            raise ValueError("speech.tts mms-tts-ara speaks Arabic only")
+        return name  # type: ignore[return-value]
+
+    def validate_engines(self) -> None:
+        """Every language's engines, at startup: an unknown provider never falls back silently."""
+        for language in LANGUAGES:
+            self.stt_provider(language)
+            self.tts_provider(language)
 
 
 DEFAULT_SPEECH: Final = SpeechConfig(
@@ -93,6 +106,7 @@ def careflow_defaults(speech: SpeechConfig) -> dict[str, Any]:
         "mlx_whisper_language": LANGUAGE,
         "kokoro_model_path": str(MODELS_DIR / "kokoro-v1.0.onnx"),
         "kokoro_voices_path": str(MODELS_DIR / "voices-v1.0.bin"),
+        "mms_tts_model_path": str(MODELS_DIR / "mms-tts-ara"),
         "log_format": "text",
     }
 

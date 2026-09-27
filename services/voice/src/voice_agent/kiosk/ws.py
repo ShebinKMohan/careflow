@@ -97,8 +97,8 @@ async def kiosk_audio(websocket: WebSocket) -> None:
     try:
         loop = KioskTurnLoop(
             session=session,
-            stt=channel.speech.stt(),
-            tts=channel.speech.tts(),
+            stt=channel.speech.stt(start.language),
+            tts=channel.speech.tts(start.language),
             vad=channel.speech.vad(),
             turns=channel.turns,
             sender=sender,

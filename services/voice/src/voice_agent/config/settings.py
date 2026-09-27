@@ -54,6 +54,7 @@ DEFAULT_KOKORO_MAX_SOFT_CHUNK_CHARS = 96
 DEFAULT_KOKORO_FIRST_UNIT_MAX_CHARS = 20
 DEFAULT_MLX_WHISPER_MODEL = "mlx-community/whisper-large-v3-turbo"
 DEFAULT_MLX_WHISPER_LANGUAGE = "en"
+DEFAULT_MMS_TTS_MODEL_PATH = "models/mms-tts-ara"
 DEFAULT_CAREFLOW_API_BASE_URL = "http://127.0.0.1:8000"
 DEFAULT_KIOSK_START_TIMEOUT_SECONDS = 5.0
 DEFAULT_KIOSK_API_TIMEOUT_SECONDS = 10.0
@@ -284,6 +285,9 @@ class Settings(BaseSettings):
     # settings above (sherpa_stt_vad_model_path, sherpa_stt_smart_turn_*, sherpa_stt_*_ms).
     mlx_whisper_model: str = DEFAULT_MLX_WHISPER_MODEL
     mlx_whisper_language: str = DEFAULT_MLX_WHISPER_LANGUAGE
+    # CareFlow (M2-02): the Arabic TTS model directory (download_models.sh; never downloaded on
+    # first use). The gated Cohere Arabic STT loads from the local Hugging Face cache only.
+    mms_tts_model_path: str = DEFAULT_MMS_TTS_MODEL_PATH
     # The Plivo phone channel (/plivo/*, /calls/*, /preview/*) stays off unless this is true.
     plivo_enabled: bool = Field(
         default=False, validation_alias=AliasChoices("VOICE_PLIVO_ENABLED", "plivo_enabled")

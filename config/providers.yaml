@@ -12,4 +12,4 @@ tasks:
   translation_check: { provider: local, model: qwen3.5-9b-4bit }   # offline only (M2-01); cli or api optional
 speech:
   stt: { provider: mlx-whisper, by_language: { en: mlx-whisper, ar: mlx-whisper } }   # cohere-transcribe-arabic is gated on HF: use only if downloadable
-  tts: { provider: kokoro, by_language: { en: kokoro, ar: silma } }   # Kokoro has no Arabic
+  tts: { provider: kokoro, by_language: { en: kokoro, ar: mms-tts-ara } }   # Kokoro has no Arabic; SILMA cannot share numpy 2 (ADR-033)
