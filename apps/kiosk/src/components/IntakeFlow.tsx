@@ -24,6 +24,8 @@ const SCALE = "min-h-touch min-w-0 rounded-control border-2 border-border bg-sur
  * One question at a time, in large text, with three ways to answer that are always on screen:
  * tap choices for the question's key, a text box and (when enabled) the mic. Every answer goes to
  * POST /v1/sessions/{id}/turns; when there is no next question the patient moves on to vitals.
+ * A question the patient asks along the way gets its reply as the notice (M2-10); "ask this on
+ * your phone" highlights "Continue on your phone".
  */
 export function IntakeFlow() {
   const t = useTranslations("intake");
@@ -191,7 +193,7 @@ export function IntakeFlow() {
           {t("failed")}
         </p>
       ) : null}
-      <ContinueOnPhone />
+      <ContinueOnPhone highlight={question.notice_kind === "ask_on_phone"} />
     </div>
   );
 }

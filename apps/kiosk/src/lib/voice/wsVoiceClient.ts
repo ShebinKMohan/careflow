@@ -21,6 +21,11 @@ const questionSchema = z.object({
   text: z.string().min(1),
   key: z.string().nullable(),
   notice: z.string().nullable().optional(),
+  // What the notice is (M2-10): `ask_on_phone` highlights "Continue on your phone".
+  notice_kind: z
+    .enum(["nurse_coming", "medical_refusal", "clinic_answer", "ask_on_phone", "finish_first"])
+    .nullable()
+    .optional(),
 });
 
 const serverMessage = z.discriminatedUnion("type", [
