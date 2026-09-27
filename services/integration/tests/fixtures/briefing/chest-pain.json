@@ -1,0 +1,420 @@
+{
+  "patient_ref": "Patient/persona-chest-pain",
+  "briefing": {
+    "session_id": "ses_chest_pain",
+    "generated_at": "2026-09-27T09:09:00Z",
+    "sections": [
+      {
+        "id": "alerts_triage",
+        "title": "Alerts and triage",
+        "items": [
+          {
+            "text": "Critical alert: Chest pain: ECG within 10 minutes of arrival. Raised 6 min after arrival. Acknowledged by the nurse.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "recorded_at": "2026-09-27T09:08:00Z"
+          },
+          {
+            "text": "Triage level: KTAS 2, set by the nurse (model suggested KTAS 3). Reason: clinical judgement. Note: \"Chest pain alert with radiation and sweating.\"",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "recorded_at": "2026-09-27T09:08:00Z"
+          },
+          {
+            "text": "ECG done: 7 min after arrival.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "fact_id": "f_YK9TR82CZK4JE6GKNJ1QQS9MD5",
+            "recorded_at": "2026-09-27T09:07:00Z"
+          }
+        ]
+      },
+      {
+        "id": "presenting_complaint",
+        "title": "Presenting complaint",
+        "items": [
+          {
+            "text": "Age: 58 years.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "Patient",
+              "id": "persona-chest-pain",
+              "version_id": "1"
+            },
+            "fact_id": "f_7DY0Z700BWJ5JASKFZWJ85K8YN",
+            "recorded_at": "2026-09-27T09:00:20Z"
+          },
+          {
+            "text": "Sex: Male.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "Patient",
+              "id": "persona-chest-pain",
+              "version_id": "1"
+            },
+            "fact_id": "f_6JTSYS90Z0944MSNN1VMQAY2M5",
+            "recorded_at": "2026-09-27T09:00:20Z"
+          },
+          {
+            "text": "Chief complaint: crushing pain in my chest. Patient: \"crushing pain in my chest\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 9,
+              "end": 34,
+              "quote": "crushing pain in my chest"
+            },
+            "fact_id": "f_150R58P1KFNAQ31VY0BXSSBE3F",
+            "recorded_at": "2026-09-27T09:01:20Z"
+          },
+          {
+            "text": "Onset: about an hour ago. Patient: \"about an hour ago\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 47,
+              "end": 64,
+              "quote": "about an hour ago"
+            },
+            "fact_id": "f_F3XJ0GF31699SXEKKPG98DXHGZ",
+            "recorded_at": "2026-09-27T09:01:20Z"
+          },
+          {
+            "text": "Pain score: 8/10. Patient: \"an 8\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_010",
+              "start": 5,
+              "end": 9,
+              "quote": "an 8"
+            },
+            "fact_id": "f_MKHBEP42HH2BZ4SSP48ZP644SF",
+            "recorded_at": "2026-09-27T09:03:20Z"
+          }
+        ]
+      },
+      {
+        "id": "danger_screens",
+        "title": "Danger-screen answers",
+        "items": [
+          {
+            "text": "Chest pain: yes. Patient: \"crushing pain in my chest\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 9,
+              "end": 34,
+              "quote": "crushing pain in my chest"
+            },
+            "fact_id": "f_E3JM3BSSH14PFA5MWFSPS4K2KF",
+            "recorded_at": "2026-09-27T09:01:20Z"
+          },
+          {
+            "text": "Chest pain, radiates: yes. Patient: \"it goes down my left arm\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_004",
+              "start": 5,
+              "end": 29,
+              "quote": "it goes down my left arm"
+            },
+            "fact_id": "f_1MZ3EE90CZQD1F3ZX9M5RXFFNG",
+            "recorded_at": "2026-09-27T09:01:50Z"
+          },
+          {
+            "text": "Chest pain, sweating: yes. Patient: \"I'm sweating a lot\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_006",
+              "start": 5,
+              "end": 23,
+              "quote": "I'm sweating a lot"
+            },
+            "fact_id": "f_ZDKGX84PMFP0QVBZEMD3KAR4AQ",
+            "recorded_at": "2026-09-27T09:02:20Z"
+          },
+          {
+            "text": "Chest pain, short of breath: yes. Patient: \"A little, yes\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_008",
+              "start": 0,
+              "end": 13,
+              "quote": "A little, yes"
+            },
+            "fact_id": "f_PBPAGXHSE6FXZH7SZR6VBBAPYQ",
+            "recorded_at": "2026-09-27T09:02:50Z"
+          },
+          {
+            "text": "Chest pain onset: for 1 h. Patient: \"started about an hour ago\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 39,
+              "end": 64,
+              "quote": "started about an hour ago"
+            },
+            "fact_id": "f_E3SRG0NSG38HMV1X3E5GNATEHR",
+            "recorded_at": "2026-09-27T09:01:20Z"
+          }
+        ]
+      },
+      {
+        "id": "vitals_news2",
+        "title": "Vitals and NEWS2",
+        "items": [
+          {
+            "text": "Heart rate: 104 /min.",
+            "provenance": "DEVICE_MEASURED",
+            "source": {
+              "kind": "device",
+              "device_id": "sim_vitals_01",
+              "reading_id": "rd_ses_chest_pain_01"
+            },
+            "fact_id": "f_FM0KRYT3VWRE3DE4PCK0CZW0AP",
+            "recorded_at": "2026-09-27T09:03:00Z"
+          },
+          {
+            "text": "SpO2: 97 %.",
+            "provenance": "DEVICE_MEASURED",
+            "source": {
+              "kind": "device",
+              "device_id": "sim_vitals_01",
+              "reading_id": "rd_ses_chest_pain_01"
+            },
+            "fact_id": "f_E4QB53YWWP8M9KN56CSY8KYDFD",
+            "recorded_at": "2026-09-27T09:03:00Z"
+          },
+          {
+            "text": "Temperature: 36.9 °C.",
+            "provenance": "DEVICE_MEASURED",
+            "source": {
+              "kind": "device",
+              "device_id": "sim_vitals_01",
+              "reading_id": "rd_ses_chest_pain_01"
+            },
+            "fact_id": "f_2QFXHKSH9J10TJSENVVTZZTR6R",
+            "recorded_at": "2026-09-27T09:03:00Z"
+          },
+          {
+            "text": "Respiratory rate: 20 /min.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "fact_id": "f_JN786F9NKNRZP7GYEQBH3AA24X",
+            "recorded_at": "2026-09-27T09:06:00Z"
+          },
+          {
+            "text": "Systolic blood pressure: 150 mmHg.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "fact_id": "f_QYT86MWPB8E2Y7AZZTWGT3GD32",
+            "recorded_at": "2026-09-27T09:06:00Z"
+          },
+          {
+            "text": "Diastolic blood pressure: 90 mmHg.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "fact_id": "f_HDRHWRG3HD7TD6VD94W4G7Q64A",
+            "recorded_at": "2026-09-27T09:06:00Z"
+          },
+          {
+            "text": "ACVPU: A (alert).",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "fact_id": "f_RV927KH4KGNPQ96TVXZCD6X8B4",
+            "recorded_at": "2026-09-27T09:06:00Z"
+          },
+          {
+            "text": "Supplemental oxygen: no.",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "fact_id": "f_MW8B73WDKW28FTSJP2Q8RYFH4Q",
+            "recorded_at": "2026-09-27T09:06:00Z"
+          },
+          {
+            "text": "NEWS2 1 (low risk).",
+            "provenance": "NURSE_CONFIRMED",
+            "source": {
+              "kind": "nurse",
+              "staff_user_id": "usr_nurse_01"
+            },
+            "recorded_at": "2026-09-27T09:06:00Z"
+          }
+        ]
+      },
+      {
+        "id": "record",
+        "title": "Record (EHR)",
+        "items": [
+          {
+            "text": "Allergies (patient's answer): no allergies. Patient: \"no allergies\"",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_012",
+              "start": 4,
+              "end": 16,
+              "quote": "no allergies"
+            },
+            "fact_id": "f_Z00DC1MN81JCDV7RXBXFKNCPGS",
+            "recorded_at": "2026-09-27T09:03:50Z"
+          },
+          {
+            "text": "Condition: Hypertensive disorder.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "Condition",
+              "id": "persona-chest-pain-condition-1",
+              "version_id": "1"
+            },
+            "fact_id": "f_Q9X2FP01Q07CF4F16DQNEMDTH0",
+            "recorded_at": "2026-09-27T09:00:20Z"
+          },
+          {
+            "text": "Medication: amlodipine.",
+            "provenance": "EHR",
+            "source": {
+              "kind": "fhir",
+              "resource_type": "MedicationStatement",
+              "id": "persona-chest-pain-medication-1",
+              "version_id": "1"
+            },
+            "fact_id": "f_R1V9AN07VC0TQQE1BJA9CWNPNJ",
+            "recorded_at": "2026-09-27T09:00:20Z"
+          }
+        ]
+      },
+      {
+        "id": "model_output",
+        "title": "Model output",
+        "items": [
+          {
+            "text": "Complaint category: Chest pain. Nurse's level: KTAS 2.",
+            "provenance": "MODEL_INFERRED",
+            "source": {
+              "kind": "model",
+              "model_id": "ktas_keyword_map",
+              "model_version": "1"
+            },
+            "fact_id": "f_4E7HZBV5GASHXR6P3DNY9RWT32",
+            "recorded_at": "2026-09-27T09:01:20Z"
+          },
+          {
+            "text": "Suggested KTAS 3 (confidence 0.59). Only a suggestion. Nurse's level: KTAS 2.",
+            "provenance": "MODEL_INFERRED",
+            "source": {
+              "kind": "model",
+              "model_id": "careflow-ktas-hgb",
+              "model_version": "ktas-hgb-ebf31b5e-s42"
+            },
+            "recorded_at": "2026-09-27T09:07:00Z"
+          },
+          {
+            "text": "Reason: Temperature 36.9 °C made KTAS 3 more likely. Nurse's level: KTAS 2.",
+            "provenance": "MODEL_INFERRED",
+            "source": {
+              "kind": "model",
+              "model_id": "careflow-ktas-hgb",
+              "model_version": "ktas-hgb-ebf31b5e-s42"
+            },
+            "recorded_at": "2026-09-27T09:07:00Z"
+          },
+          {
+            "text": "Reason: Complaint: chest pain made KTAS 3 more likely. Nurse's level: KTAS 2.",
+            "provenance": "MODEL_INFERRED",
+            "source": {
+              "kind": "model",
+              "model_id": "careflow-ktas-hgb",
+              "model_version": "ktas-hgb-ebf31b5e-s42"
+            },
+            "recorded_at": "2026-09-27T09:07:00Z"
+          },
+          {
+            "text": "Reason: Systolic BP 150 mmHg made KTAS 3 more likely. Nurse's level: KTAS 2.",
+            "provenance": "MODEL_INFERRED",
+            "source": {
+              "kind": "model",
+              "model_id": "careflow-ktas-hgb",
+              "model_version": "ktas-hgb-ebf31b5e-s42"
+            },
+            "recorded_at": "2026-09-27T09:07:00Z"
+          }
+        ]
+      },
+      {
+        "id": "data_quality",
+        "title": "Data quality",
+        "items": [],
+        "notes": [
+          {
+            "code": "none_recorded",
+            "text": "No data-quality problem was recorded."
+          }
+        ]
+      }
+    ],
+    "summary_status": "disabled",
+    "triage": {
+      "suggested": {
+        "level": 3,
+        "scale": "KTAS",
+        "display_label": "KTAS 3",
+        "confidence": 0.5946511261441932,
+        "model_id": "careflow-ktas-hgb",
+        "model_version": "ktas-hgb-ebf31b5e-s42"
+      },
+      "confirmed": {
+        "level": 2,
+        "scale": "KTAS",
+        "action": "OVERRIDE",
+        "nurse_user_id": "usr_nurse_01",
+        "decided_at": "2026-09-27T09:08:00Z"
+      },
+      "override_reason": {
+        "code": "clinical_judgement",
+        "note": "Chest pain alert with radiation and sweating."
+      }
+    },
+    "versions": {
+      "ruleset": "2026.2.0",
+      "model": "ktas-hgb-ebf31b5e-s42",
+      "prompt": null
+    },
+    "summary": null
+  }
+}
