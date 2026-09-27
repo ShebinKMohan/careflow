@@ -12,6 +12,7 @@ from sqlalchemy import text
 
 from careflow_api.config import Settings, get_settings
 from careflow_api.db import get_engine
+from careflow_api.hospital import fhir_endpoint
 from careflow_contracts.api_models import Health
 
 router = APIRouter(tags=["health"])
@@ -51,7 +52,7 @@ async def check_fhir(base_url: str) -> Component:
 
 async def component_status(settings: Settings) -> dict[str, Component]:
     db, redis_status, fhir = await asyncio.gather(
-        check_db(), check_redis(settings.redis_url), check_fhir(settings.fhir_base_url)
+        check_db(), check_redis(settings.redis_url), check_fhir(fhir_endpoint())
     )
     return {"db": db, "redis": redis_status, "fhir": fhir}
 

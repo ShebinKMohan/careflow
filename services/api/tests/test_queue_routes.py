@@ -5,7 +5,9 @@ Needs Postgres (`make up`); skipped without it.
 
 from __future__ import annotations
 
+import asyncio
 import os
+import time
 import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any, cast
@@ -14,9 +16,11 @@ import pytest
 import yaml
 from fastapi import FastAPI
 from httpx import AsyncClient
+from redis.asyncio import Redis
 from sqlalchemy import text
 from sqlalchemy.engine import Engine
 
+from careflow_api.events.streams import xrange
 from careflow_api.queue.rooms import rooms
 from careflow_api.queue.service import QueueService
 from careflow_api.rls import clinic_session
@@ -189,3 +193,25 @@ async def test_a_patient_session_reads_only_its_own_token(
 
 async def test_the_app_validates_the_rooms_file_at_start(app: FastAPI) -> None:
     assert cast(QueueService, app.state.queue).rooms == rooms()
+
+
+async def test_queue_frames_go_to_the_tests_own_stream(
+    app: FastAPI,
+    client: AsyncClient,
+    database: Engine,
+    clinic: uuid.UUID,
+    redis_client: Redis,
+    stream: str,
+) -> None:
+    """`queue.status` frames skip the outbox: they go straight to `settings.event_stream`. Tests
+    once sent them to the dev `careflow:events`, where the dev API's consumer group retried their
+    unknown clinics forever (ADR-043)."""
+    await queued(database, app, clinic, [3, 2])
+    called = await client.post("/v1/queue/emergency/call-next", headers=bearer("nurse", clinic))
+    assert called.status_code == 200
+    deadline = time.monotonic() + 5
+    while len(frames := await xrange(redis_client, stream)) < 2:  # sent after the commit
+        assert time.monotonic() < deadline, "no queue.status frames in the test's own stream"
+        await asyncio.sleep(0.05)
+    assert [fields["type"] for _, fields in frames] == ["queue.status", "queue.status"]
+    assert {fields["clinic_id"] for _, fields in frames} == {str(clinic)}

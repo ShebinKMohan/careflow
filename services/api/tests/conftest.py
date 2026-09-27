@@ -8,6 +8,7 @@ CAREFLOW_REQUIRE_DB=1 (CI), where they fail instead.
 
 from __future__ import annotations
 
+import contextlib
 import os
 import uuid
 from collections.abc import AsyncIterator, Callable, Iterator
@@ -20,6 +21,7 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from redis.asyncio import Redis
+from redis.exceptions import RedisError
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, make_url
 
@@ -57,6 +59,9 @@ os.environ["DATABASE_URL"] = _with_db(_APP_URL, TEST_DB)
 os.environ["DATABASE_URL_MIGRATOR"] = _with_db(_MIGRATOR_URL, TEST_DB)
 os.environ.setdefault("REDIS_URL", _env("REDIS_URL") or "redis://localhost:6379/0")
 os.environ.setdefault("FHIR_BASE_URL", _env("FHIR_BASE_URL") or "http://localhost:8080/fhir")
+# Never the dev stream `careflow:events`: its consumer groups would get entries for clinics that
+# exist only in careflow_test (ADR-043). The `app` fixture gives each test a stream of its own.
+os.environ["CAREFLOW_EVENT_STREAM"] = "careflow:test:unscoped"
 
 
 def _admin_url() -> str:
@@ -111,13 +116,17 @@ def database() -> Iterator[Engine]:
     config = Config(str(API_DIR / "alembic.ini"))
     os.environ["ALEMBIC_DATABASE_URL"] = os.environ["DATABASE_URL_MIGRATOR"]
     command.upgrade(config, "head")
+    from careflow_api.cli import setup_checkpoints
+
+    setup_checkpoints()  # as `make migrate` does: the intake graph's checkpoint tables
     engine = create_engine(_sync(os.environ["DATABASE_URL_MIGRATOR"]))
     yield engine
     engine.dispose()
 
 
-@pytest.fixture(scope="session")
-def clinics(database: Engine) -> Clinics:
+def make_clinics(database: Engine) -> Clinics:
+    """Two new clinics, each with a nurse, doctor and admin, a kiosk, board and integration
+    device, and one patient session."""
     from careflow_api.security import hash_password
 
     password_hash, secret_hash = hash_password(TEST_PASSWORD), hash_password(TEST_DEVICE_SECRET)
@@ -169,6 +178,17 @@ def clinics(database: Engine) -> Clinics:
     return Clinics(a=ids["a"], b=ids["b"], staff=staff, devices=devices)
 
 
+@pytest.fixture(scope="session")
+def clinics(database: Engine) -> Clinics:
+    return make_clinics(database)
+
+
+@pytest.fixture(scope="session")
+def clinics_factory(database: Engine) -> Callable[[], Clinics]:
+    """Clinics of a test module's own, for tests that add sessions (the shared ones are counted)."""
+    return lambda: make_clinics(database)
+
+
 @pytest.fixture
 async def redis_client() -> AsyncIterator[Redis]:
     """Valkey from compose (M0-05). Skipped when it does not answer, unless
@@ -186,11 +206,17 @@ async def redis_client() -> AsyncIterator[Redis]:
 
 
 @pytest.fixture
-async def stream(redis_client: Redis) -> AsyncIterator[str]:
-    """A stream of the test's own, deleted afterwards."""
+async def stream() -> AsyncIterator[str]:
+    """A stream of the test's own, deleted afterwards with its dead letters. Needs no Redis: a
+    test without it wrote nothing, and the delete fails fast."""
+    from careflow_api.events.bus import DEAD_SUFFIX
+
     name = f"careflow:test:{uuid.uuid4().hex}"
     yield name
-    await redis_client.delete(name)
+    client = Redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
+    with contextlib.suppress(RedisError):
+        await client.delete(name, f"{name}{DEAD_SUFFIX}")
+    await client.aclose()
 
 
 @pytest.fixture
@@ -215,20 +241,26 @@ def spans() -> InMemorySpanExporter:
 
 
 @pytest.fixture
-async def app(spans: InMemorySpanExporter) -> AsyncIterator[FastAPI]:
-    """A fresh app (settings, engine and rate-limit buckets reset); tests may add probe routes."""
-    from careflow_api import db, ratelimit
+async def app(
+    spans: InMemorySpanExporter, stream: str, monkeypatch: pytest.MonkeyPatch
+) -> AsyncIterator[FastAPI]:
+    """A fresh app (settings, engine and rate-limit buckets reset) on the test's own event stream;
+    tests may add probe routes."""
+    from careflow_api import aftercommit, db, ratelimit
     from careflow_api.config import get_settings
     from careflow_api.main import create_app
     from careflow_api.telemetry import build_tracer_provider
 
+    monkeypatch.setenv("CAREFLOW_EVENT_STREAM", stream)
     get_settings.cache_clear()
     db.get_engine.cache_clear()
     db.get_sessionmaker.cache_clear()
     ratelimit.reset_memory()
     ratelimit.key_prefix = f"cf:test:{uuid.uuid4().hex}"
     yield create_app(tracer_provider=build_tracer_provider(exporter=spans))
+    await aftercommit.drain()  # queue broadcasts still in flight write to the stream before it goes
     await db.get_engine().dispose()
+    get_settings.cache_clear()  # the next test never sees this test's stream
 
 
 @pytest.fixture

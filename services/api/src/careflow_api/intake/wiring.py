@@ -31,6 +31,7 @@ from careflow_api.intake.side_questions import AgentClinicQA, SqlNurseFlags, Tur
 from careflow_api.queue.service import QueueService
 from careflow_intake.ports import IntakePorts
 from careflow_intake.wiring import build_real_ports, load_intake_config, providers_config
+from careflow_providers.adapters.replay import provider_mode
 from careflow_providers.factory import build_provider
 from careflow_rules import RULESET_VERSION
 
@@ -91,7 +92,10 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
         if spec is None:
             return "not configured"
         body = spec.model_dump()
-        return f"{body.get('provider')} {body.get('model') or body.get('tool') or ''}".strip()
+        described = f"{body.get('provider')} {body.get('model') or body.get('tool') or ''}".strip()
+        if provider_mode() == "replay":  # CAREFLOW_PROVIDER_MODE: recorded replies, no model
+            return f"replay (recorded from {described})"
+        return described
 
     no_model = isinstance(urgency, NoTriageModel)
     choices = (

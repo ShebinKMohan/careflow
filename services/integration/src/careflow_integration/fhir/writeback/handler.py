@@ -127,14 +127,15 @@ class WritebackHandler:
         except (ValidationError, ValueError, LookupError) as exc:
             reason = f"bundle not built: {describe(exc)}"
             return await self._finish(outcome(WritebackStatus.failed, reason))
-        attempts, error = 0, ""
+        attempts, error, retryable = 0, "", False
         for delay in [*self.retry_delays, None]:
             attempts += 1
             try:
                 resources = written_resources(bundle, await self.client.transaction(bundle))
             except FhirError as exc:
                 error = str(exc)
-                if delay is None or (exc.status is not None and exc.status not in RETRY_STATUSES):
+                retryable = exc.status is None or exc.status in RETRY_STATUSES
+                if delay is None or not retryable:
                     break
                 await self.sleep(delay)
                 continue
@@ -155,7 +156,15 @@ class WritebackHandler:
             )
             await self.events.publish(WRITE_COMPLETED, data)
             return written
-        return await self._finish(outcome(WritebackStatus.failed, error, attempts))
+        failed = WritebackOutcome(
+            event.clinic_id,
+            event.session_id,
+            WritebackStatus.failed,
+            attempts,
+            error=error,
+            retryable=retryable,
+        )
+        return await self._finish(failed)
 
     async def complete_task(self, clinic_id: str, session_id: str, task_id: str) -> WrittenResource:
         """Set a Task this session wrote to `completed`, as a versioned update (`If-Match`). An

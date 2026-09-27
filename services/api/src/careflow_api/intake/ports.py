@@ -25,6 +25,7 @@ from sqlalchemy import update
 
 from careflow_api.events.outbox import OutboxPublisher
 from careflow_api.events.publisher import Event
+from careflow_api.hospital import hospital_adapter
 from careflow_api.models import PatientSession
 from careflow_api.queue.service import QueueService as ApiQueue
 from careflow_api.rls import clinic_session
@@ -38,6 +39,7 @@ from careflow_intake.ports import Assignment, NoSuggestion
 from careflow_intake.state import IntakeState, structured_facts
 from careflow_integration.fhir.reader import FhirEhrReader
 from careflow_integration.fhir.writeback.handler import WritebackHandler
+from careflow_integration.fhir.writeback.ports import WritebackOutcome, WritebackStatus
 from careflow_integration.fhir.writeback.record import News2Summary, TriageRecord
 from careflow_rules.news2 import news2_inputs, score_news2
 
@@ -57,7 +59,7 @@ class CheckinIdentifier:
 class CachedEhrReader:
     """The FHIR reader; a lookup made at check-in is reused by the graph's first node."""
 
-    reader: FhirEhrReader = field(default_factory=FhirEhrReader)
+    reader: FhirEhrReader = field(default_factory=lambda: FhirEhrReader(hospital_adapter()))
     ttl_seconds: float = EHR_CACHE_SECONDS
     _cache: dict[tuple[str, str, str], tuple[float, EhrFetch]] = field(default_factory=dict)
 
@@ -225,11 +227,23 @@ class WritebackPort:
     store: SqlWritebackStore = field(default_factory=SqlWritebackStore)
 
     async def write(self, state: IntakeState) -> str:
+        return (await self.write_outcome(state)).status.value
+
+    async def write_outcome(self, state: IntakeState) -> WritebackOutcome:
+        """`write`, with the whole outcome: the bus consumer needs to know whether a failed write
+        may still succeed (`retryable`: the EHR was unreachable) or never will."""
         try:
             record = triage_record(state)
-        except ValueError as exc:
-            logger.warning("intake.writeback", extra={"error": str(exc)})
-            return "failed"
+        except ValueError as exc:  # a validation error's text can quote facts: log the type only
+            error = f"no triage record ({type(exc).__name__})"
+            logger.warning("intake.writeback", extra={"error": error})
+            return WritebackOutcome(
+                str(state.get("clinic_id") or ""),
+                str(state.get("session_id") or ""),
+                WritebackStatus.failed,
+                0,
+                error=error,
+            )
         decision = record.decision
         event = TriageConfirmedData(
             clinic_id=record.clinic_id,
@@ -243,12 +257,16 @@ class WritebackPort:
             nurse_user_id=decision.nurse_user_id,
             decided_at=decision.decided_at,
         )
-        handler = WritebackHandler(records=_Record(record), store=self.store, events=self.events)
+        handler = WritebackHandler(
+            records=_Record(record),
+            store=self.store,
+            events=self.events,
+            adapter=hospital_adapter(),
+        )
         try:
-            outcome = await handler.on_triage_confirmed(event)
+            return await handler.on_triage_confirmed(event)
         finally:
             await handler.client.aclose()
-        return outcome.status.value
 
 
 __all__ = [

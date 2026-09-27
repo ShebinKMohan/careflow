@@ -9,7 +9,8 @@ export UV_LOCKED := 1
 
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
-	contracts-drift contracts-breaking contracts-check up down infra infra-down seed ps logs nuke \
+	contracts-drift contracts-breaking contracts-check up down infra infra-down test-stack \
+	test-stack-down test-integration seed ps logs nuke \
 	llm-local api migrate seed-dev mock e2e rag-ingest voice-models voice
 
 help: ## List the targets
@@ -93,6 +94,13 @@ infra: ## Start only Postgres, Valkey and HAPI FHIR and wait until they are heal
 
 infra-down: ## Stop only the Docker services
 	$(COMPOSE) down
+test-stack: ## Start an isolated Postgres, Valkey and HAPI (project careflow-test, ports +10000) and seed the personas
+	python3 scripts/stack.py up --stack careflow-test
+test-stack-down: ## Stop the isolated test stack (only when this checkout started it); its data volumes stay
+	python3 scripts/stack.py down --stack careflow-test
+test-integration: ## Pytest for the API, intake and integration packages against the isolated test stack
+	CAREFLOW_REQUIRE_DB=1 CAREFLOW_REQUIRE_REDIS=1 python3 scripts/stack.py run --stack careflow-test -- \
+		uv run pytest services/api services/intake services/integration -rs
 
 seed: ## Load Synthea patients (SEED_SYNTHEA=0 skips them) and the 7 personas; FORCE=1 reloads
 	@if [ "$(SEED_SYNTHEA)" != "0" ]; then infra/seed/run_synthea.sh; fi

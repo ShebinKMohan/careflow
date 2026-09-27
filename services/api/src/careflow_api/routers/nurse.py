@@ -19,6 +19,7 @@ from sqlalchemy import select
 
 from careflow_api.deps import Principal, require_roles
 from careflow_api.feels_worse import summaries as feels_worse_summaries
+from careflow_api.hospital import hospital_adapter
 from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.intake.views import ECG_ACTION, tasks, triage_view, worklist_item
 from careflow_api.intake.views import task_id as ecg_task_id
@@ -147,7 +148,7 @@ async def decide(
     await session_row(principal, session_id)
     if decision.session_id != session_id:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="The decision is for another session."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="The decision is for another session."
         )
     if decision.nurse_user_id != principal.subject:
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="A decision is made as yourself.")
@@ -159,7 +160,7 @@ async def decide(
             status.HTTP_409_CONFLICT, detail="This session is not waiting for a nurse decision."
         ) from exc
     except InvalidNurseDecision as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
     suggestion = before.get("suggestion") if before else None
     async with clinic_session(principal.clinic_id) as db:
         db.add(
@@ -192,16 +193,17 @@ async def decide(
             "level": int(decision.final_level),
         },
     )
-    # Optional fields without a value are left out (a queued token has no room yet); the token
-    # itself is required and may be null.
-    body = {
-        "decision": decision.model_dump(mode="json", exclude_none=True),
-        "token": token.model_dump(mode="json", exclude_none=True) if token else None,
-    }
-    return JSONResponse(
-        DecisionResult.model_validate(body).model_dump(mode="json", exclude_none=True)
-        | {"token": body["token"]}
-    )
+    # Optional fields without a value are left out (a queued token has no room yet). The token and
+    # the decision's suggestion_id are required and may be null: without a triage model nothing
+    # was suggested, and dropping the null made this a 500 after the decision had taken effect.
+    decided = decision.model_dump(mode="json", exclude_none=True)
+    decided["suggestion_id"] = decision.suggestion_id
+    token_body = token.model_dump(mode="json", exclude_none=True) if token else None
+    result = DecisionResult.model_validate({"decision": decided, "token": token_body})
+    body = result.model_dump(mode="json", exclude_none=True)
+    body["decision"]["suggestion_id"] = decision.suggestion_id
+    body["token"] = token_body
+    return JSONResponse(body)
 
 
 def nurse_facts(session_id: str, principal: Principal, body: NurseVitalsRequest) -> list[FactEntry]:
@@ -286,10 +288,14 @@ async def complete_task(
     written = await store.resources(str(principal.clinic_id), session_id)
     fhir_task = next((w for w in written if w.local_id == f"task-{ECG_ACTION}"), None)
     if fhir_task is not None:
-        handler = WritebackHandler(records=_NoRecords(), store=store, events=_NoEvents())
+        handler = WritebackHandler(
+            records=_NoRecords(), store=store, events=_NoEvents(), adapter=hospital_adapter()
+        )
         try:
             await handler.complete_task(str(principal.clinic_id), session_id, fhir_task.resource_id)
-        except (UnknownTask, Exception) as exc:  # the fact stands; the FHIR Task is retried later
+        # The fact stands. The FHIR Task stays open until a later completion call: nothing
+        # retries it yet (durable outbound retries are SHE-283 [M4-03]).
+        except (UnknownTask, Exception) as exc:
             logger.warning("nurse.task_fhir", extra={"error": type(exc).__name__})
         finally:
             await handler.client.aclose()

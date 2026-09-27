@@ -20,6 +20,7 @@ from careflow_api.config import Settings, get_settings
 from careflow_api.consent import get_consent
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
+from careflow_api.hospital import fhir_endpoint, hospital_adapter
 from careflow_api.intake.runtime import (
     IntakeRevisionConflict,
     IntakeRuntime,
@@ -57,7 +58,6 @@ from careflow_intake.facts import FactEntry
 from careflow_intake.graph import NotWaiting, pending
 from careflow_intake.nodes.conversation import InvalidAnswer
 from careflow_intake.state import structured_facts
-from careflow_integration.adapters.loader import load_adapter
 from careflow_integration.fhir.client import FhirClient, FhirError
 
 logger = logging.getLogger("careflow_api.sessions")
@@ -109,7 +109,7 @@ async def patient_display(patient_ref: str | None) -> str:
     if patient_ref is None:
         return "Unknown"
     try:
-        async with FhirClient(load_adapter().fhir_base_url) as client:
+        async with FhirClient(fhir_endpoint()) as client:
             kind, rid = patient_ref.split("/", 1)
             return initials(await client.read(kind, rid))
     except (FhirError, ValueError):
@@ -226,7 +226,7 @@ async def keypad_checkin(
             status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Too many attempts. Please wait a few minutes or ask at the desk.",
         )
-    adapter = load_adapter()
+    adapter = hospital_adapter()
     identifier = PatientIdentifier(system=adapter.identifier_systems["keypad"], value=body.digits)
     fetch = await intake.ports.ehr.fetch_context(identifier, body.clinic_id)
     if fetch.status is EhrStatus.not_found:
@@ -324,7 +324,7 @@ async def id_tap_checkin(
             detail="Too many attempts. Please wait a few minutes or ask at the desk.",
         )
     card = body.mock_card_payload.id_number
-    system = load_adapter().identifier_systems["mock_national_id"]
+    system = hospital_adapter().identifier_systems["mock_national_id"]
     identifier = PatientIdentifier(system=system, value=card)
     fetch = await intake.ports.ehr.fetch_context(identifier, body.clinic_id)
     if fetch.status is EhrStatus.not_found:
@@ -386,7 +386,7 @@ async def post_turn(
             status.HTTP_409_CONFLICT, detail="This session is not waiting for an answer."
         ) from exc
     except InvalidAnswer as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
     await touch(principal.clinic_id, session_id)
     turns = result.get("turns", [])
     said = next(t for t in reversed(turns) if t.role is TurnRole.patient)
@@ -420,11 +420,11 @@ async def set_patient_details(
     child = body.patient_type is PatientType.child
     if child and body.age_years is None:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="A child's age is required."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="A child's age is required."
         )
     if not child and (body.age_years is not None or body.age_months is not None):
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="An adult's age comes from the record."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="An adult's age comes from the record."
         )
     try:
         await intake.set_patient(

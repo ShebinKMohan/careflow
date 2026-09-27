@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import shutil
+from pathlib import Path
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Request
@@ -12,6 +13,7 @@ from careflow_api.config import Settings, get_settings
 from careflow_api.deps import require_roles
 from careflow_api.routers.health import component_status
 from careflow_contracts.api_models import AdminStatus, ProvidersResponse
+from careflow_providers.adapters.replay import provider_mode
 
 router = APIRouter(prefix="/v1/admin", tags=["admin"])
 SERVICE_NAMES = {"db": "postgres", "redis": "valkey", "fhir": "hapi-fhir"}
@@ -55,8 +57,13 @@ async def admin_status(
                     "detail": detail[:200],
                 }
             )
+        no_model = any(c.port == "urgency" and c.degraded for c in wiring.choices)
         services.append(
-            {"name": "urgency-model", "status": "ok", "detail": wiring.urgency_model_version[:200]}
+            {
+                "name": "urgency-model",
+                "status": "degraded" if no_model else "ok",  # no suggestion: the nurse sets it
+                "detail": wiring.urgency_model_version[:200],
+            }
         )
     else:
         services.append(
@@ -104,6 +111,14 @@ def provider_rows() -> list[dict[str, Any]]:
             row["detail"] = "offline jobs only"
         else:
             row["available"] = True
+        mode = provider_mode()
+        if mode == "replay":  # CAREFLOW_PROVIDER_MODE: no model is called at all
+            cassette = os.environ.get("CAREFLOW_CASSETTE", "")
+            row["provider"] = "replay"
+            row["available"] = bool(cassette) and Path(cassette).is_file()
+            row["detail"] = "recorded responses only; no model is called"
+        elif mode == "record":
+            row["detail"] = "recording every response to a cassette"
         rows.append(row)
     return rows
 

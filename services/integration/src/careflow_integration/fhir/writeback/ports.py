@@ -46,6 +46,10 @@ class WritebackOutcome:
     #: Short reason for a failed or skipped write; never patient data.
     error: str | None = None
     resources: tuple[WrittenResource, ...] = ()
+    #: A failed write that may succeed later (the server was unreachable, timed out, or answered
+    #: 429, 502, 503 or 504 on every attempt), as opposed to one it rejected or that could not be
+    #: built.
+    retryable: bool = False
 
 
 class TriageRecordSource(Protocol):

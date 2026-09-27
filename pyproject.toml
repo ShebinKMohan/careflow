@@ -30,6 +30,8 @@ dev = [
   "fhir.resources==8.3.0",
   "httpx==0.28.1",
   "respx==0.23.1",
+  # Contract tests of the API against packages/contracts/openapi.yaml (M1-12).
+  "schemathesis==4.28.0",
   # `make up` runs the API, the apps and the voice service with it (M1-19).
   "honcho==2.0.0",
   # Local LLM server (Apple silicon only); scripts/with_llm.sh and `make llm-local` use it.

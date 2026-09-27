@@ -100,10 +100,14 @@ paths:
                 expires_in: 3600
                 role: nurse
                 clinic_id: clinic_demo
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/auth/device-token:
     post:
       operationId: deviceToken
@@ -135,10 +139,14 @@ paths:
                 expires_in: 43200
                 role: kiosk_device
                 clinic_id: clinic_demo
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/auth/me:
     get:
       operationId: getMe
@@ -203,6 +211,8 @@ paths:
                 channel: session
                 session_id: ses_routine
                 expires_at: '2026-09-26T09:01:30Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -244,6 +254,8 @@ paths:
                   text: What is the main reason for your visit today?
                   key: chief_complaint
                   notice: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -252,6 +264,8 @@ paths:
           $ref: '#/components/responses/Notfound'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/checkin/id-tap:
     post:
       operationId: checkinIdTap
@@ -290,6 +304,8 @@ paths:
                 session_token: example-session-token-stroke
                 patient_display: F. A.
                 language: en
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -300,6 +316,8 @@ paths:
           $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/sessions/{session_id}/qr:
     parameters:
     - $ref: '#/components/parameters/SessionId'
@@ -368,12 +386,16 @@ paths:
                 session_token: example-session-token-routine
                 patient_display: L. K.
                 language: en
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '409':
           $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/sessions/{session_id}/consent:
     parameters:
     - $ref: '#/components/parameters/SessionId'
@@ -440,6 +462,8 @@ paths:
                 data_use: true
                 consent_version: 2026-09-27.1
                 recorded_at: '2026-09-26T09:00:30Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -484,6 +508,8 @@ paths:
                 patient_type: child
                 age_years: 1
                 age_months: 4
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -534,6 +560,8 @@ paths:
                   text: Thank you. On a scale of 0 to 10, how bad is the pain?
                   key: pain_score
                   notice: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -767,6 +795,8 @@ paths:
                 - f_01M3EF2PM000000000035FW01D
                 - f_01M3EF2PM000000000035FW01E
                 - f_01M3EF2PM000000000035FW01F
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -858,6 +888,8 @@ paths:
                   risk_band: high
                 open_tasks: []
                 warnings: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -899,6 +931,8 @@ paths:
                 scenario: septic
                 frames: 31
                 simulated: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1026,6 +1060,8 @@ paths:
                   room: Resus 2
                   status: waiting
                   issued_at: '2026-09-26T09:06:05Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1591,6 +1627,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
   /v1/companion/feels-worse:
     post:
       operationId: postFeelsWorse
@@ -1624,10 +1662,14 @@ paths:
                 flag_id: flg_routine_01
                 received_at: '2026-09-26T09:40:00Z'
                 press_count: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
   /v1/companion/ask:
@@ -1667,10 +1709,14 @@ paths:
                   chunk_id: pharmacy.hours:0
                 refused_medical: false
                 dont_know: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
   /v1/admin/providers:
@@ -2106,6 +2152,28 @@ components:
             errors:
             - loc: body.digits
               msg: String should match pattern '^[0-9]{6}$'
+    BadRequest:
+      description: The body is not valid JSON (or not the declared content type)
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Bad Request
+            status: 400
+            detail: There was an error parsing the body
+    TooManyRequests:
+      description: Too many attempts from this client or kiosk; wait and try again
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Too Many Requests
+            status: 429
+            detail: Too many attempts. Please wait a minute and try again.
   schemas:
     Problem:
       type: object
@@ -2270,6 +2338,13 @@ components:
         session_id: *id005
       required:
       - channel
+      if:
+        properties:
+          channel:
+            const: session
+      then:
+        required:
+        - session_id
       additionalProperties: false
     WsTicket:
       type: object
