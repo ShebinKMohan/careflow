@@ -1,0 +1,7 @@
+{
+  "15f044d1802e9458846ca97f97ff015de12429ea924635cfd6fdd64aaf5cd1c4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Right index finger ache\", \"turn_id\": \"t2\", \"quote\": \"Right index finger ache\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Since yesterday\", \"turn_id\": \"t4\", \"quote\": \"Since yesterday\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Right index finger\", \"turn_id\": \"t8\", \"quote\": \"Right index finger\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"no\", \"negated\": true}]}"
+  }
+}

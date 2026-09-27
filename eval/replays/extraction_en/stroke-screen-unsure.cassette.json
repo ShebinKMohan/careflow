@@ -1,0 +1,7 @@
+{
+  "37df2909a90d625be36b21873b85854219bd8bcb0b41d99b669d03c27e060d0d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Something feels different\", \"turn_id\": \"t2\", \"quote\": \"Something feels different\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": \"unknown\", \"turn_id\": \"t6\", \"quote\": \"I am not sure\", \"negated\": false}, {\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.last_known_well\", \"value\": \"unknown\", \"turn_id\": \"t10\", \"quote\": \"unknown\", \"negated\": false}]}"
+  }
+}

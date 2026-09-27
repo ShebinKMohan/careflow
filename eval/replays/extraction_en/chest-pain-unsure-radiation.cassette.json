@@ -1,0 +1,7 @@
+{
+  "8fed811b25cc7e994b821ae03c1f4768ed11ac1a72dc5e8e61bbe9b29e8bc2aa": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My chest is tight\", \"turn_id\": \"t2\", \"quote\": \"My chest is tight\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, the tightness is here now\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": \"I am not sure\", \"turn_id\": \"t6\", \"quote\": \"I am not sure\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"chest_pain.onset\", \"value\": \"An hour ago\", \"turn_id\": \"t10\", \"quote\": \"An hour ago\", \"negated\": false}]}"
+  }
+}

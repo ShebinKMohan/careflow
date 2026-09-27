@@ -1,0 +1,7 @@
+{
+  "f3ae13bda05674942d7d407bb806e926642a6970922aa0c0c6e4ca34a66ec5cf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My child seems poorly\", \"turn_id\": \"t2\", \"quote\": \"My child seems poorly\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No, she wakes normally\", \"negated\": true}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"child_danger.non_blanching_rash\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": true, \"turn_id\": \"t10\", \"quote\": \"Yes, she is drinking much less\", \"negated\": false}, {\"key\": \"child_amber.reduced_urine_output\", \"value\": true, \"turn_id\": \"t12\", \"quote\": \"Yes, she is passing less urine\", \"negated\": false}]}"
+  }
+}

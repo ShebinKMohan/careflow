@@ -1,0 +1,1733 @@
+{
+  "failed_ids": [],
+  "metadata": {
+    "case_count": 56,
+    "completed_count": 56,
+    "dataset_sha256": "8d2b16d5585d0dd64c9b74bd183b5c0201516ed0624811498777795ac39edcef",
+    "git_sha": "989981b5c265a70ac2fb466459694ca9b6dad968",
+    "include_unreviewed": false,
+    "latency_source": [
+      "measured_rules_execution"
+    ],
+    "logical_model": null,
+    "metrics_comparable": true,
+    "missing_ids": [],
+    "mode": "record",
+    "model_endpoint_checks": [],
+    "model_receipt": null,
+    "normalization_version": "field-values-v1",
+    "prompt_sha256": null,
+    "prompt_version": null,
+    "provider": null,
+    "recording_provenance": {
+      "git_sha": "989981b5c265a70ac2fb466459694ca9b6dad968",
+      "source_sha256": "14f9d06f89630764aedd6d67613bb5192e8b7fa31d1aec79c764fcdc5dfb9542",
+      "worktree_dirty": true
+    },
+    "replay_exact": null,
+    "rules_validation": true,
+    "ruleset_version": "2026.3.0",
+    "source_sha256": "14f9d06f89630764aedd6d67613bb5192e8b7fa31d1aec79c764fcdc5dfb9542",
+    "synthetic_only": true,
+    "timeout_seconds": null,
+    "wall_ms": 115.83104101009667,
+    "worktree_dirty": true
+  },
+  "metrics": {
+    "alert_recall": {
+      "details": {
+        "benign_cases": 12,
+        "case_count": 56,
+        "detected_alerts": 44,
+        "expected_alerts": 44,
+        "false_alert_cases": 0,
+        "false_alert_rate": 0.0,
+        "missed_alerts": 0,
+        "per_rule": {
+          "CHEST_PAIN_ECG_10MIN": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 2,
+            "expected": 2,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "FAST_STROKE": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 4,
+            "expected": 4,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_AMBER_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 21,
+            "expected": 21,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_RED_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 15,
+            "expected": 15,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "SEPSIS_NEWS2": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 2,
+            "expected": 2,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          }
+        },
+        "recall": 1.0,
+        "unexpected_alerts": 0
+      },
+      "value": 1.0
+    },
+    "false_alert_rate": {
+      "details": {
+        "benign_cases": 12,
+        "case_count": 56,
+        "detected_alerts": 44,
+        "expected_alerts": 44,
+        "false_alert_cases": 0,
+        "false_alert_rate": 0.0,
+        "missed_alerts": 0,
+        "per_rule": {
+          "CHEST_PAIN_ECG_10MIN": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 2,
+            "expected": 2,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "FAST_STROKE": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 4,
+            "expected": 4,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_AMBER_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 21,
+            "expected": 21,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "NG143_RED_FLAG": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 15,
+            "expected": 15,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          },
+          "SEPSIS_NEWS2": {
+            "benign_false_alert_cases": 0,
+            "benign_false_alert_rate": 0.0,
+            "detected": 2,
+            "expected": 2,
+            "missed": 0,
+            "recall": 1.0,
+            "unexpected": 0
+          }
+        },
+        "recall": 1.0,
+        "unexpected_alerts": 0
+      },
+      "value": 0.0
+    },
+    "latency_p50_ms": {
+      "details": {
+        "case_count": 56,
+        "method": "nearest_rank",
+        "missing_count": 0,
+        "percentile": 50,
+        "sample_count": 56,
+        "units": "ms"
+      },
+      "value": 0.04600000102072954
+    },
+    "latency_p95_ms": {
+      "details": {
+        "case_count": 56,
+        "method": "nearest_rank",
+        "missing_count": 0,
+        "percentile": 95,
+        "sample_count": 56,
+        "units": "ms"
+      },
+      "value": 0.0779579859226942
+    }
+  },
+  "results": [
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-adult-fever-low-news2",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2",
+        "vitals.respiratory_rate",
+        "vitals.systolic_bp"
+      ],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.1402499619871378
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-afebrile-sore-throat",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.041458988562226295
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-ankle-sprain",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03333296626806259
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-chest-pain-no",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.027458067052066326
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-child-3y-temp-38-2",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.052999937906861305
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-child-normal-vitals",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04616600926965475
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-child-screen-answers-no",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04195794463157654
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-fast-all-no",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03950006794184446
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-headache",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.02875004429370165
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-infant-at-the-limits",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04687509499490261
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "benign-young-infant-38-8",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue",
+        "vitals.acvpu",
+        "vitals.heart_rate",
+        "vitals.on_supplemental_o2",
+        "vitals.respiratory_rate",
+        "vitals.spo2",
+        "vitals.systolic_bp"
+      ],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.06033398676663637
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": []
+      },
+      "id": "chest-pain-ecg-deadline",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "chest_pain.onset",
+        "chest_pain.radiates",
+        "chest_pain.short_of_breath",
+        "chest_pain.sweating"
+      ],
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.3119999310001731
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "facts": []
+      },
+      "id": "chest-pain-no-arrival-time",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "chest_pain.onset",
+        "chest_pain.short_of_breath",
+        "chest_pain.sweating"
+      ],
+      "prediction": {
+        "alerts": [
+          "CHEST_PAIN_ECG_10MIN"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04983297549188137
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": []
+      },
+      "id": "fast-arm-weakness",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03950006794184446
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": []
+      },
+      "id": "fast-face-droop",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03129092510789633
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": []
+      },
+      "id": "fast-onset-unknown",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "fast.last_known_well"
+      ],
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03445905167609453
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [],
+        "facts": []
+      },
+      "id": "fast-screen-from-symptom",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "fast.arm_weakness",
+        "fast.face_droop",
+        "fast.last_known_well",
+        "fast.speech_difficulty"
+      ],
+      "prediction": {
+        "alerts": [],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.028957962058484554
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "facts": []
+      },
+      "id": "fast-speech-difficulty",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "FAST_STROKE"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.0297910301014781
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-cap-refill-3s-or-more",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04854099825024605
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-crackles",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04641700070351362
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-decreased-activity",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04583294503390789
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-dry-mucous-membranes",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.047083012759685516
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-fever-5-days",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.0475830165669322
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-limb-or-joint-swelling",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.0779579859226942
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-nasal-flaring",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.05641602911055088
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-non-weight-bearing",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.05220901221036911
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-not-responding-normally",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.060916063375771046
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-pallor-reported",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04595797508955002
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-poor-feeding",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.046708970330655575
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-reduced-urine-output",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.045749940909445286
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-respiratory-rate-infant",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04341593012213707
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-respiratory-rate-toddler",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04045804962515831
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-rigors",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "vitals.acvpu",
+        "vitals.heart_rate",
+        "vitals.on_supplemental_o2",
+        "vitals.respiratory_rate",
+        "vitals.spo2",
+        "vitals.systolic_bp",
+        "vitals.temperature_c"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04620791878551245
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-spo2-in-air",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04291604273021221
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-tachycardia-infant",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03987492527812719
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-tachycardia-preschool",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03899994771927595
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-tachycardia-toddler",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.03741693217307329
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-wakes-only-with-prolonged-stimulation",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.05270808469504118
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-amber-young-infant-fever",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue",
+        "vitals.acvpu",
+        "vitals.heart_rate",
+        "vitals.on_supplemental_o2",
+        "vitals.respiratory_rate",
+        "vitals.spo2",
+        "vitals.systolic_bp"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_AMBER_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.06466603372246027
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-appears-ill-to-hcp",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.05358306225389242
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-bulging-fontanelle",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.050458009354770184
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-chest-indrawing",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04862493369728327
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-focal-neuro-signs",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.047083012759685516
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-grunting",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04441605415195227
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-hard-to-wake",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.0427919439971447
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-infant-fever",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.05262496415525675
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-neck-stiffness",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04837499000132084
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-no-response-to-social-cues",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04858302418142557
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-non-blanching-rash",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.048874993808567524
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-pale-mottled-ashen-or-blue",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.0427919439971447
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-reduced-skin-turgor",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.044500106014311314
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-respiratory-rate-over-60",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04595797508955002
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-seizure",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04600000102072954
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "facts": []
+      },
+      "id": "ng143-red-weak-high-pitched-cry",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_danger.grunting",
+        "child_danger.hard_to_wake",
+        "child_danger.non_blanching_rash",
+        "child_danger.pale_mottled_ashen_or_blue"
+      ],
+      "prediction": {
+        "alerts": [
+          "NG143_RED_FLAG"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.04291697405278683
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": []
+      },
+      "id": "sepsis-full-after-nurse",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [],
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.052666058763861656
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    },
+    {
+      "expected": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "facts": []
+      },
+      "id": "sepsis-partial-kiosk",
+      "latency_source": "measured_rules_execution",
+      "needed_facts": [
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2",
+        "vitals.respiratory_rate",
+        "vitals.systolic_bp"
+      ],
+      "prediction": {
+        "alerts": [
+          "SEPSIS_NEWS2"
+        ],
+        "dropped_count": 0,
+        "extraction_incomplete": false,
+        "facts": [],
+        "latency_ms": 0.045666005462408066
+      },
+      "problems": [],
+      "quality_passed": true,
+      "rules_validation": true,
+      "status": "completed"
+    }
+  ],
+  "schema_version": 1,
+  "status": "completed",
+  "suite": "rules"
+}

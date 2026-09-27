@@ -1,0 +1,7 @@
+{
+  "a62d7f7bc1b22550b5aff31f62374f1a7b870ece1fa793fdf406648feb470eaf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Dry skin\", \"turn_id\": \"t2\", \"quote\": \"Dry skin\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Two weeks ago\", \"turn_id\": \"t4\", \"quote\": \"Two weeks ago\", \"negated\": false}, {\"key\": \"severity\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"1\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"No known drug allergies\", \"turn_id\": \"t10\", \"quote\": \"No known drug allergies\", \"negated\": false}]}"
+  }
+}

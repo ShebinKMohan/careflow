@@ -1,0 +1,7 @@
+{
+  "8a456dd6aaed6d9587754ef1a5ec9ee6d786525b635dc01819feb67c65a39cd4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Left wrist ache\", \"turn_id\": \"t2\", \"quote\": \"Left wrist ache\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Three days ago\", \"turn_id\": \"t4\", \"quote\": \"Three days ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Left wrist\", \"turn_id\": \"t8\", \"quote\": \"Left wrist\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"No known medicine allergies\", \"turn_id\": \"t10\", \"quote\": \"No known medicine allergies\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "b747610d0d334173e9fbd1e91721b678c16fa0604449ad42933120c2a85bbb42": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My right arm is weak\", \"turn_id\": \"t2\", \"quote\": \"My right arm is weak\", \"negated\": false}, {\"key\": \"fast.arm_weakness\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.last_known_well\", \"value\": \"unknown\", \"turn_id\": \"t10\", \"quote\": \"unknown\", \"negated\": false}]}"
+  }
+}

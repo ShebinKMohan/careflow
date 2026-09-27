@@ -1,0 +1,7 @@
+{
+  "b7a08362bcf06b6c41cc9c23e016207716efa2e7f6b259f0b94f14b2f5691830": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Blocked right ear\", \"turn_id\": \"t2\", \"quote\": \"Blocked right ear\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Since Monday\", \"turn_id\": \"t4\", \"quote\": \"Since Monday\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}]}"
+  }
+}

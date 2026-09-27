@@ -1,0 +1,7 @@
+{
+  "8308852955ccff80f40c7ba4d7c6df4371a0ddb43244c658e843ebc52499fea7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I need help with these new symptoms\", \"turn_id\": \"t2\", \"quote\": \"I need help with these new symptoms\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes\", \"negated\": false}, {\"key\": \"fast.arm_weakness\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, one arm is weak\", \"negated\": false}, {\"key\": \"fast.speech_difficulty\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"Yes, my speech is slurred\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"Twenty minutes ago\", \"turn_id\": \"t10\", \"quote\": \"Twenty minutes ago\", \"negated\": false}]}"
+  }
+}

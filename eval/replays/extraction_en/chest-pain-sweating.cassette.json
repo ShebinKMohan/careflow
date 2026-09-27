@@ -1,0 +1,7 @@
+{
+  "e24b05f41d6a6e807e306e23f51e0a03a616ed7ba9cda55974361e1104d23607": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"discomfort in my chest\", \"turn_id\": \"t2\", \"quote\": \"I have discomfort in my chest.\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, it is still there.\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No, it does not spread anywhere.\", \"negated\": true}, {\"key\": \"chest_pain.sweating\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"Yes, I have been sweating a lot.\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 7, \"turn_id\": \"t10\", \"quote\": \"Seven out of ten.\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"This morning\", \"turn_id\": \"t12\", \"quote\": \"This morning.\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "0c3423098507e3c4bf95ab245c59308027c46bf7ad7f99f15d5ffe6cb5c68977": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Dry lips\", \"turn_id\": \"t2\", \"quote\": \"Dry lips\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Four days ago\", \"turn_id\": \"t4\", \"quote\": \"Four days ago\", \"negated\": false}, {\"key\": \"severity\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"1\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"No known drug allergies\", \"turn_id\": \"t8\", \"quote\": \"No known drug allergies\", \"negated\": false}]}"
+  }
+}

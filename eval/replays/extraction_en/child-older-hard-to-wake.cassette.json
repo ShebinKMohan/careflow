@@ -1,0 +1,7 @@
+{
+  "251b2120c2c01aca410ed4558f79e37cefbedb5edfd41ddf04ff10a680c626ec": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My child is unwell\", \"turn_id\": \"t2\", \"quote\": \"My child is unwell\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, he is very difficult to wake\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"symptom_onset_at\", \"value\": \"This afternoon\", \"turn_id\": \"t8\", \"quote\": \"This afternoon\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "4063b3b2f48f9cb690492bc048b1d7fece9d3b97d9e9831659db2915d5372745": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Itchy scalp\", \"turn_id\": \"t2\", \"quote\": \"Itchy scalp\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Six days ago\", \"turn_id\": \"t4\", \"quote\": \"Six days ago\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"No medicine allergies that I know of\", \"turn_id\": \"t8\", \"quote\": \"No medicine allergies that I know of\", \"negated\": false}]}"
+  }
+}

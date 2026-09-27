@@ -1,0 +1,7 @@
+{
+  "fd0e098ad4a5812b984dec3b61a1728bc7059f0b7c7a0b4b48c6171dcccba5d1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Blister on my left foot\", \"turn_id\": \"t2\", \"quote\": \"Blister on my left foot\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday morning\", \"turn_id\": \"t4\", \"quote\": \"Yesterday morning\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"1\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Left foot\", \"turn_id\": \"t8\", \"quote\": \"Left foot\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"no\", \"negated\": true}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "duration_ms": 10560.34979200922,
+  "output_sha256": "669cee2aff9f78fbd03c6bc83409c30a4da6c144d6885f0ca3de9704b4362de6",
+  "raw_text": "{\n  \"facts\": []\n}",
+  "profile": "production extraction prompt and schema, empty transcript, no case input",
+  "included_in_case_latencies": false
+}

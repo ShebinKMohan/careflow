@@ -1,0 +1,7 @@
+{
+  "e8043a9950b15c366040e0f62eac8e73c0035dc3f5c8ace838661fca02942d98": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Left ear itch\", \"turn_id\": \"t2\", \"quote\": \"Left ear itch\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Two days ago\", \"turn_id\": \"t4\", \"quote\": \"Two days ago\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"no\", \"negated\": true}, {\"key\": \"allergies_confirm\", \"value\": \"No known medicine allergies\", \"turn_id\": \"t10\", \"quote\": \"No known medicine allergies\", \"negated\": false}]}"
+  }
+}

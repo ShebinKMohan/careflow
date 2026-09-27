@@ -1,0 +1,7 @@
+{
+  "4a1275897a3b7ff0d16a3dc80e51cc26d6c960c30ba5013907ec3dfb637fcb57": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I feel very ill\", \"turn_id\": \"t2\", \"quote\": \"I feel very ill\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, I have had shaking chills\", \"negated\": false}, {\"key\": \"severity\", \"value\": 8, \"turn_id\": \"t8\", \"quote\": \"Eight out of ten\", \"negated\": false}]}"
+  }
+}

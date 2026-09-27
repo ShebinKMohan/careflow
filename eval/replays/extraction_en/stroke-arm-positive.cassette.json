@@ -1,0 +1,7 @@
+{
+  "eaedf9c00119dfcc52c705c5ff07dd159bfed9c200eda02e00ad3c76eb2e7ab6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My left arm feels weak\", \"turn_id\": \"t2\", \"quote\": \"My left arm feels weak\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, my left arm is weak\", \"negated\": false}, {\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"fast.last_known_well\", \"value\": \"About an hour ago\", \"turn_id\": \"t10\", \"quote\": \"About an hour ago\", \"negated\": false}]}"
+  }
+}

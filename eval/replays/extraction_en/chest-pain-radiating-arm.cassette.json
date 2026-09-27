@@ -1,0 +1,7 @@
+{
+  "2972d1e61faf0822210717f617729e4221fabe775a701d756b46b79bac05e48f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My chest feels tight\", \"turn_id\": \"t2\", \"quote\": \"My chest feels tight\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, I have chest pain now\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"Yes, the pain spreads to my left arm\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"Yes, I am short of breath\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 8, \"turn_id\": \"t10\", \"quote\": \"The pain is 8 out of 10\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"About twenty minutes ago\", \"turn_id\": \"t12\", \"quote\": \"About twenty minutes ago\", \"negated\": false}]}"
+  }
+}

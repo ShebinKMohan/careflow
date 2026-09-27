@@ -1,0 +1,7 @@
+{
+  "23ef79f543bacdc1a759afe63f298d28cf9d432e0cbb7018c99bc33b4707f023": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I feel unwell today\", \"turn_id\": \"t2\", \"quote\": \"I feel unwell today\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, I have felt feverish\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"severity\", \"value\": 5, \"turn_id\": \"t8\", \"quote\": \"Five out of ten\", \"negated\": false}]}"
+  }
+}

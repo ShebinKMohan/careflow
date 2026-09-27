@@ -1,0 +1,7 @@
+{
+  "097fa4a498484eb9c77d5b0f482493519ba996e5121eab59c6a03d158dadb7e3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Left knee ache\", \"turn_id\": \"t2\", \"quote\": \"Left knee ache\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Five days ago\", \"turn_id\": \"t4\", \"quote\": \"Five days ago\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 3, \"turn_id\": \"t6\", \"quote\": \"3\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Left knee\", \"turn_id\": \"t8\", \"quote\": \"Left knee\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"None that I know of\", \"turn_id\": \"t10\", \"quote\": \"None that I know of\", \"negated\": false}]}"
+  }
+}

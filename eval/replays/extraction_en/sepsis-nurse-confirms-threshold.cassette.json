@@ -1,0 +1,7 @@
+{
+  "e23471f8511bf216afd379357f7ec5d33a92cd71fe4ca19a94784f8d57f99665": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I feel sick\", \"turn_id\": \"t2\", \"quote\": \"I feel sick\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, I have had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"symptom_onset_at\", \"value\": \"Two days ago\", \"turn_id\": \"t8\", \"quote\": \"Two days ago\", \"negated\": false}]}"
+  }
+}

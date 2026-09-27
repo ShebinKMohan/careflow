@@ -1,0 +1,7 @@
+{
+  "a89086f1ae8e95cfa1e7aced9075bf81ec4d4ccbacd44ccc69bd94ddb03e054c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My child is unwell\", \"turn_id\": \"t2\", \"quote\": \"My child is unwell\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"Yes, he is very hard to wake\", \"negated\": false}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No, he is drinking as usual\", \"negated\": true}, {\"key\": \"child_amber.reduced_urine_output\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"No, wet nappies are as usual\", \"negated\": true}]}"
+  }
+}
