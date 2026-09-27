@@ -1040,6 +1040,15 @@ class IdTapCheckinRequest(BaseModel):
     ] = None
 
 
+type Citations = Annotated[
+    list[Citation],
+    Field(
+        description="The handbook sections a `clinic_answer` notice cites (M2-10); null otherwise.",
+        max_length=5,
+    ),
+]
+
+
 class IntakeQuestion(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -1051,14 +1060,13 @@ class IntakeQuestion(BaseModel):
     notice_kind: Annotated[
         NoticeKind | None,
         Field(
-            description='What the notice is (M2-10): the reply to a question the patient asked during the intake (`medical_refusal`, `clinic_answer`, `ask_on_phone`, `finish_first`), or the `nurse_coming` message. `ask_on_phone` tells the kiosk to highlight "Continue on your phone".'
+            description='What the notice is (M2-10): the reply to a question the patient asked during the intake (`medical_refusal`, `clinic_answer`, `ask_on_phone`, `finish_first`), or the `nurse_coming` message; null without a notice. `ask_on_phone` tells the kiosk to highlight "Continue on your phone".'
         ),
     ] = None
     citations: Annotated[
-        list[Citation] | None,
+        Citations | None,
         Field(
-            description="The handbook sections a `clinic_answer` notice cites (M2-10).",
-            max_length=5,
+            description="The handbook sections a `clinic_answer` notice cites (M2-10); null otherwise."
         ),
     ] = None
 

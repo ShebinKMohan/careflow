@@ -1167,13 +1167,10 @@ export interface components {
             text: string;
             key: string | null;
             notice?: string | null;
-            /**
-             * @description What the notice is (M2-10): the reply to a question the patient asked during the intake (`medical_refusal`, `clinic_answer`, `ask_on_phone`, `finish_first`), or the `nurse_coming` message. `ask_on_phone` tells the kiosk to highlight "Continue on your phone".
-             * @enum {string}
-             */
-            notice_kind?: "nurse_coming" | "medical_refusal" | "clinic_answer" | "ask_on_phone" | "finish_first";
-            /** @description The handbook sections a `clinic_answer` notice cites (M2-10). */
-            citations?: components["schemas"]["Citation"][];
+            /** @description What the notice is (M2-10): the reply to a question the patient asked during the intake (`medical_refusal`, `clinic_answer`, `ask_on_phone`, `finish_first`), or the `nurse_coming` message; null without a notice. `ask_on_phone` tells the kiosk to highlight "Continue on your phone". */
+            notice_kind?: ("nurse_coming" | "medical_refusal" | "clinic_answer" | "ask_on_phone" | "finish_first") | null;
+            /** @description The handbook sections a `clinic_answer` notice cites (M2-10); null otherwise. */
+            citations?: components["schemas"]["Citation"][] | null;
         };
         /** @description One-time token shown as a QR code on the kiosk. */
         QrToken: {
