@@ -31,11 +31,14 @@ export function IntakeFlow() {
   const [sending, setSending] = useState(false);
   const [failed, setFailed] = useState(false);
   const [listening, setListening] = useState(false);
+  const [heard, setHeard] = useState<string | null>(null);
+  const [voiceFailed, setVoiceFailed] = useState(false);
   const token = patient?.token;
   const client = useMemo(() => (token ? patientApi(token) : null), [token]);
   const voice = useMemo(() => createVoiceClient(), []);
 
   useEffect(() => onWipe(() => voice.abort()), [onWipe, voice]);
+  useEffect(() => () => voice.stop(), [voice]); // leaving the screen closes the microphone
   useEffect(() => {
     if (patient && patient.question === null) router.push("/vitals");
   }, [patient, router]);
@@ -55,6 +58,7 @@ export function IntakeFlow() {
 
   async function send(inputMode: InputMode, answer: string) {
     if (!patient || !client || !answer.trim()) return;
+    if (listening) stopListening(); // one answer at a time: a tap or text ends the voice turn
     setSending(true);
     setFailed(false);
     const { data } = await client.POST("/v1/sessions/{session_id}/turns", {
@@ -81,10 +85,34 @@ export function IntakeFlow() {
     void send("text", text);
   }
 
-  async function listen() {
-    setListening(true);
-    await voice.start((heard) => void send("voice", heard));
+  function stopListening() {
+    voice.stop();
     setListening(false);
+  }
+
+  /** The voice service posts the spoken answer itself; the kiosk shows it and the next question. */
+  async function listen() {
+    if (!patient) return;
+    if (listening) return stopListening();
+    setVoiceFailed(false);
+    setHeard(null);
+    setListening(true);
+    try {
+      await voice.start(
+        { sessionId: patient.sessionId, token: patient.token, language: patient.language },
+        {
+          onTranscript: (text) => setHeard(text),
+          onQuestion: (next) => setQuestion(next),
+          onError: (code) => {
+            setVoiceFailed(true);
+            if (code === "unauthorized" || code === "disconnected") setListening(false);
+          },
+        },
+      );
+    } catch {
+      setVoiceFailed(true);
+      setListening(false);
+    }
   }
 
   const answers = quickAnswers(question.key ?? null);
@@ -137,10 +165,23 @@ export function IntakeFlow() {
           {sending ? t("sending") : t("send")}
         </button>
       </form>
-      {voiceEnabled() ? (
-        <button type="button" className={PRIMARY} disabled={sending || listening} onClick={() => void listen()}>
-          {listening ? t("listening") : t("mic")}
-        </button>
+      {voiceEnabled() && patient.language === "en" ? (
+        <div className="flex flex-col gap-3">
+          <button type="button" className={PRIMARY} disabled={sending} aria-pressed={listening} onClick={() => void listen()}>
+            {listening ? t("stopMic") : t("mic")}
+          </button>
+          {listening ? (
+            <p role="status" className="text-label text-ink-muted">
+              {t("listening")}
+            </p>
+          ) : null}
+          {heard ? (
+            <p className="text-body" data-testid="heard">
+              {t("heard", { text: heard })}
+            </p>
+          ) : null}
+          {voiceFailed ? <p className="font-semibold text-danger">{t("voiceFailed")}</p> : null}
+        </div>
       ) : null}
       {failed ? (
         <p role="alert" className="font-semibold text-danger">

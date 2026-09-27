@@ -50,6 +50,9 @@
     "failed": "That did not go through. Please try again, or ask a nurse.",
     "mic": "Speak your answer",
     "listening": "Listening…",
+    "stopMic": "Stop listening",
+    "heard": "You said: “{text}”",
+    "voiceFailed": "Voice is not working right now. Please tap or type your answer.",
     "answers": {
       "yes": "Yes",
       "no": "No",

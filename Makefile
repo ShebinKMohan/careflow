@@ -10,7 +10,7 @@ export UV_LOCKED := 1
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke \
-	llm-local api migrate seed-dev mock e2e
+	llm-local api migrate seed-dev mock e2e voice-models voice
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -119,6 +119,13 @@ migrate: ## Apply the Alembic migrations as careflow_migrator
 
 seed-dev: ## Create the development clinics, staff and devices (secrets from .env)
 	uv run careflow-api seed-dev
+
+# --- Voice (M1-14) -------------------------------------------------------------------------------
+voice-models: ## Download the voice models (~2 GB) into services/voice/models and check their sha256
+	services/voice/scripts/download_models.sh
+
+voice: ## Run the voice service on 127.0.0.1:8090 (Apple silicon; needs `make voice-models`)
+	uv run --package careflow-voice --extra mlx-whisper careflow-voice
 
 # --- Apps (M0-08) --------------------------------------------------------------------------------
 mock: ## Serve the OpenAPI examples with Prism on :4010 (static examples, deterministic)

@@ -11,6 +11,7 @@ members = [
   "services/triage",
   "services/rag",
   "services/integration",
+  "services/voice",
 ]
 
 [dependency-groups]
@@ -47,7 +48,7 @@ select = ["E", "F", "I", "B", "UP", "S", "ASYNC"]
 
 [tool.ruff.lint.per-file-ignores]
 # Tests assert, use literal fake secrets, and run the repo scripts as subprocesses.
-"**/tests/**" = ["S101", "S105", "S106", "S603"]
+"**/tests/**" = ["S101", "S105", "S106", "S107", "S603"]
 
 [tool.pytest.ini_options]
 # importlib mode lets every package keep a tests/test_import.py without name clashes.
@@ -57,6 +58,6 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = [
   "requires_ktas: needs the real KTAS CSV in services/triage/data/raw (skipped when absent)",
-  "live: needs a local model on mlx_lm.server (CAREFLOW_LIVE_LLM=1, run through scripts/with_llm.sh)",
+  "live: needs a local model: mlx_lm.server (CAREFLOW_LIVE_LLM=1, scripts/with_llm.sh) or the voice models (CAREFLOW_LIVE_VOICE=1)",
   "hapi: needs HAPI FHIR seeded by `make up` (skipped when it does not answer)",
 ]

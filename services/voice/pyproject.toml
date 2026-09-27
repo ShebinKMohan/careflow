@@ -1,0 +1,45 @@
+[project]
+name = "careflow-voice"
+version = "0.1.0"
+description = "CareFlow voice service: the kiosk's ears and mouth (VAD, smart-turn, STT, Kokoro TTS)."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "careflow-contracts",
+  "certifi>=2026.7.22",
+  "fastapi>=0.141,<0.142",
+  "httpx>=0.28,<0.29",
+  "huggingface-hub>=1.33,<2",  # model_info() before any model download (scripts/)
+  "orjson>=3.12,<4",
+  "pydantic>=2.13,<3",
+  "pydantic-settings>=2.15,<3",
+  "pyjwt>=2.15,<3",
+  "pyyaml>=6.0,<7",
+  "redis>=8.1,<9",
+  "uvicorn>=0.54,<0.55",
+  "websockets>=16.1,<17",
+  # The in-process speech stack: Silero VAD and smart-turn (onnxruntime), Kokoro TTS.
+  "kokoro-onnx>=0.6.1,<0.7",
+  "numpy>=2.5,<3",
+  "onnxruntime>=1.30,<2",
+  "soxr>=1.1,<2",
+]
+
+[project.optional-dependencies]
+# The default speech-to-text engine. Apple silicon only: CI and other machines use the fake STT.
+mlx-whisper = [
+  "mlx-whisper>=0.4.3,<0.5; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+
+[tool.uv.sources]
+careflow-contracts = { workspace = true }
+
+[project.scripts]
+careflow-voice = "voice_agent.main:run"
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/voice_agent"]
