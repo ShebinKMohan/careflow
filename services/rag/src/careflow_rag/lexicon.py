@@ -4,8 +4,13 @@ English entries are regular expressions matched as whole words, case-insensitive
 matched word by word after normalisation (no diacritics or tatweel; alef, alef maqsura, ta marbuta
 and hamza seats folded), with one common prefix and one common suffix removed, because Arabic
 attaches the article, conjunctions, prepositions and pronouns to the word. A substring match would
-be wrong: the normalised "ألم" (pain) is inside "الماء" (the water). Both languages are checked
-for every question, whatever the session language.
+be wrong: the normalised "ألم" (pain) is inside "الماء" (the water). A phrase matches a run of
+consecutive words, each through the same prefix and suffix removal, so "المضادات الحيوية" matches
+the phrase "مضادات حيوية" (SHE-306). Both languages are checked for every question, whatever the
+session language.
+
+`entries()` lists every entry a text contains; the ask-the-clinic output gate compares an
+answer's entries with its sources' (`careflow_rag.output_gate`).
 """
 
 from __future__ import annotations
@@ -57,20 +62,44 @@ def ar_stems(word: str) -> set[str]:
 class Lexicon:
     english: re.Pattern[str]
     arabic_words: frozenset[str]
-    arabic_phrases: tuple[str, ...]
+    arabic_phrases: tuple[tuple[str, ...], ...]
+    #: Each English entry on its own, by its source pattern (for `entries`).
+    english_entries: tuple[tuple[str, re.Pattern[str]], ...] = ()
 
     def match(self, question: str) -> str | None:
         """The first entry the question contains, or None. For logs and tests: never log the
         question itself."""
-        lowered = " ".join(question.lower().replace("’", "'").split())
-        if (found := self.english.search(lowered)) is not None:
+        if (found := self.english.search(_lowered(question))) is not None:
             return found.group(0)
         words = ar_words(question)
         for word in words:
             if hits := ar_stems(word) & self.arabic_words:
                 return min(hits)
-        joined = f" {' '.join(words)} "
-        return next((phrase for phrase in self.arabic_phrases if f" {phrase} " in joined), None)
+        return next((" ".join(p) for p in self.arabic_phrases if _has_phrase(words, p)), None)
+
+    def entries(self, text: str) -> set[str]:
+        """Every entry the text contains: English patterns by their source (so "medicine" and
+        "medicines" are the same entry), Arabic words as their lexicon form, and phrases."""
+        lowered = _lowered(text)
+        found = {source for source, pattern in self.english_entries if pattern.search(lowered)}
+        words = ar_words(text)
+        for word in words:
+            found |= ar_stems(word) & self.arabic_words
+        found |= {" ".join(p) for p in self.arabic_phrases if _has_phrase(words, p)}
+        return found
+
+
+def _lowered(text: str) -> str:
+    return " ".join(text.lower().replace("’", "'").split())
+
+
+def _has_phrase(words: list[str], phrase: tuple[str, ...]) -> bool:
+    """`phrase` is a run of consecutive `words`, each word matched through `ar_stems`."""
+    size = len(phrase)
+    return any(
+        all(phrase[j] in ar_stems(words[i + j]) for j in range(size))
+        for i in range(len(words) - size + 1)
+    )
 
 
 def parse_lexicon(body: dict[str, Any]) -> Lexicon:
@@ -79,8 +108,27 @@ def parse_lexicon(body: dict[str, Any]) -> Lexicon:
     return Lexicon(
         english=re.compile(r"\b(?:" + "|".join(f"(?:{p})" for p in english) + r")\b", re.I),
         arabic_words=frozenset(normalise_ar(word) for word in arabic["words"]),
-        arabic_phrases=tuple(" ".join(ar_words(phrase)) for phrase in arabic["phrases"]),
+        arabic_phrases=tuple(tuple(ar_words(phrase)) for phrase in arabic["phrases"]),
+        english_entries=tuple(
+            (alt, re.compile(rf"\b(?:{alt})\b", re.I)) for p in english for alt in alternatives(p)
+        ),
     )
+
+
+def alternatives(pattern: str) -> list[str]:
+    """The top-level alternatives of a pattern: `medicines?|pills?` is two entries, so an answer
+    that says "pills" is not grounded by a source that says "medicines"."""
+    parts, depth, start = [], 0, 0
+    for index, char in enumerate(pattern):
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+        elif char == "|" and depth == 0:
+            parts.append(pattern[start:index])
+            start = index + 1
+    parts.append(pattern[start:])
+    return [part for part in parts if part]
 
 
 @cache
@@ -89,4 +137,12 @@ def load_lexicon() -> Lexicon:
     return parse_lexicon(yaml.safe_load(text))
 
 
-__all__ = ["Lexicon", "ar_stems", "ar_words", "load_lexicon", "normalise_ar", "parse_lexicon"]
+__all__ = [
+    "Lexicon",
+    "alternatives",
+    "ar_stems",
+    "ar_words",
+    "load_lexicon",
+    "normalise_ar",
+    "parse_lexicon",
+]

@@ -4,6 +4,8 @@
 
 Accepted, 27 Sep 2026 ([M2-09]). This is the core build. The agent's pytest cases (about 40 hand-written questions, replayed with a recorded provider), the 20 medical-question refusals, the 403 cases and the event schema test follow in the test phase.
 
+The test phase is done (SHE-306, docs/evidence/M2-09.md). It added an output gate on every generated answer and set the "I don't know" threshold from the M2-08 eval: ADR-054.
+
 ## Context
 
 Most questions come during the wait. Answers from the clinic's own handbook can be checked, because they cite it. Medical questions must never be answered: safety rule 2 says no AI output reaches a patient as medical advice.

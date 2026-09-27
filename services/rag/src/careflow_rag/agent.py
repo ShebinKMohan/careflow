@@ -1,7 +1,8 @@
 """The phone-only "ask the clinic" agent (M2-09): a fixed-shape LangGraph, never a free ReAct loop.
 
     classify -> medical -> refuse_and_flag -> END
-             -> clinic  -> plan -> run_tools -> answer -> check_citations -> END
+             -> clinic  -> plan -> run_tools -> answer -> check_citations -> output_gate -> END
+                                                                                 -> refuse_and_flag
              -> other   -> a fixed "I can help with questions about the clinic." -> END
 
 Safety rule 2 is absolute: no AI output reaches a patient as medical advice. The classifier has
@@ -15,7 +16,11 @@ retrieval query is the patient's question as typed. The answer prompt holds only
 chunks and the tool results, quoted as data with their ids. When only retrieval ran and its best
 dense cosine is below `min_score`, the answer is "I don't know" without a model call. Every cited
 id must be a retrieved section or `live:queue`; otherwise the answer is retried once, then "I
-don't know".
+don't know". A valid citation does not make an answer safe, so every generated answer then passes
+the output gate (`careflow_rag.output_gate`, SHE-306): plain rules, independent of the model, that
+block a dose, a diagnosis, reassurance or triage advice, or a medical term the cited sources do not
+contain. A blocked answer is never shown: the patient gets the refusal and the nurse a flag
+(category `output_gate`).
 
 `careflow_rag` never imports `careflow_api`: the API injects `AskPorts`. There is no kiosk route:
 ADR-006 defers kiosk RAG and wayfinding.
@@ -42,12 +47,13 @@ from careflow_providers.base import (
     structured,
 )
 from careflow_rag.lexicon import Lexicon, load_lexicon
+from careflow_rag.output_gate import check_answer
 from careflow_rag.retrieve import citation
 
 logger = logging.getLogger("careflow_rag.agent")
 
 type Lang = Literal["en", "ar"]
-type Category = Literal["lexicon", "model", "fail_safe"]
+type Category = Literal["lexicon", "model", "fail_safe", "output_gate"]
 
 LIVE_QUEUE: Final = "live:queue"
 QUEUE_TOOLS: Final = frozenset({"queue_position", "wait_time"})
@@ -187,6 +193,7 @@ class AskState(_AskInput, total=False):
     retry_note: str
     attempts: int
     result: AskResult
+    gate_reasons: list[str]
 
 
 class _Counting:
@@ -418,7 +425,37 @@ async def check_citations(state: AskState, run: _Run) -> dict[str, Any]:
 
 
 def after_check(state: AskState) -> str:
-    return "done" if "result" in state else "answer"
+    """Back to `answer` for a retry; a cited answer to the gate; "I don't know" is done."""
+    result = state.get("result")
+    if result is None:
+        return "answer"
+    return "done" if result.dont_know else "output_gate"
+
+
+async def output_gate(state: AskState, run: _Run) -> dict[str, Any]:
+    """The last check before model text reaches the patient (SHE-306): the answer against the
+    text of the sources it cites. Blocked: refuse and flag, never the answer."""
+    result = state.get("result")
+    if result is None:  # after_check only routes a cited answer here
+        return {}
+    cited = {c["doc_id"] for c in result.citations}
+    sources = [
+        f"{chunk.title}\n{chunk.body}"
+        for chunk in state.get("chunks") or []
+        if chunk.section_id in cited
+    ]
+    if LIVE_QUEUE in cited and (queue := state.get("queue")) is not None:
+        sources.append(json.dumps(queue.as_data(), ensure_ascii=False))
+    verdict = check_answer(result.answer, "\n\n".join(sources), lexicon=run.lexicon)
+    if verdict.allowed:
+        return {}
+    # The reasons name rules and lexicon entries, never the answer or the question.
+    logger.warning("rag.output_blocked", extra={"reasons": verdict.reasons})
+    return {"category": "output_gate", "gate_reasons": verdict.reasons}
+
+
+def after_gate(state: AskState) -> str:
+    return "blocked" if state.get("gate_reasons") else "done"
 
 
 type _Node = Callable[[AskState, _Run], Awaitable[dict[str, Any]]]
@@ -434,7 +471,17 @@ def _bind(fn: _Node, run: _Run) -> Any:
 
 def build_graph(run: _Run) -> Any:
     graph = StateGraph(AskState)
-    for fn in (classify, refuse_and_flag, other, plan, run_tools, answer, check_citations):
+    nodes = (
+        classify,
+        refuse_and_flag,
+        other,
+        plan,
+        run_tools,
+        answer,
+        check_citations,
+        output_gate,
+    )
+    for fn in nodes:
         graph.add_node(fn.__name__, _bind(fn, run))
     graph.add_edge(START, "classify")
     graph.add_conditional_edges(
@@ -449,7 +496,14 @@ def build_graph(run: _Run) -> Any:
     graph.add_conditional_edges(
         "answer", after_answer, {"check_citations": "check_citations", "done": END}
     )
-    graph.add_conditional_edges("check_citations", after_check, {"answer": "answer", "done": END})
+    graph.add_conditional_edges(
+        "check_citations",
+        after_check,
+        {"answer": "answer", "output_gate": "output_gate", "done": END},
+    )
+    graph.add_conditional_edges(
+        "output_gate", after_gate, {"blocked": "refuse_and_flag", "done": END}
+    )
     return graph.compile()
 
 
@@ -508,7 +562,10 @@ class AskAgent:
 
 
 __all__ = [
+    "ANSWER_PROMPT",
+    "CLASSIFY_PROMPT",
     "LIVE_QUEUE",
+    "PLAN_PROMPT",
     "TEXTS",
     "AskAgent",
     "AskConfig",

@@ -19,6 +19,7 @@ class Category(StrEnum):
     lexicon = "lexicon"
     model = "model"
     fail_safe = "fail_safe"
+    output_gate = "output_gate"
 
 
 class RagRefusedData(BaseModel):
