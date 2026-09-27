@@ -20,6 +20,12 @@ class Settings(BaseSettings):
     jwt_secret: SecretStr = Field(
         validation_alias=AliasChoices("JWT_SECRET", "CAREFLOW_JWT_SECRET")
     )
+    #: Signs the one-time QR hand-over tokens (M2-06); never the JWT secret. Without it the QR
+    #: routes answer 503.
+    handover_signing_key: SecretStr | None = Field(
+        default=None,
+        validation_alias=AliasChoices("CAREFLOW_HANDOVER_SIGNING_KEY", "HANDOVER_SIGNING_KEY"),
+    )
     fhir_base_url: str = "http://localhost:8080/fhir"
     runtime: str = Field(default="live", validation_alias=AliasChoices("CAREFLOW_RUNTIME"))
     #: "dev" enables the /v1/dev test hooks; any other value (the default) leaves them out.

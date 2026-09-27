@@ -30,7 +30,7 @@ from careflow_api.intake.wiring import build_ports
 from careflow_api.queue import router as queue_router
 from careflow_api.queue.rooms import rooms
 from careflow_api.queue.service import QueueService, run_grace_expiry
-from careflow_api.routers import admin, auth, consent, dev, health, nurse, sessions
+from careflow_api.routers import admin, auth, consent, dev, handover, health, nurse, sessions
 from careflow_api.writeback_store import SqlWritebackStore
 from careflow_intake.wiring import briefing_summarizer
 from careflow_integration.fhir.client import FhirClient
@@ -110,6 +110,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         auth,
         sessions,
         consent,
+        handover,
         nurse,
         doctor,
         admin,

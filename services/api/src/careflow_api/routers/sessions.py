@@ -112,13 +112,33 @@ async def patient_display(patient_ref: str | None) -> str:
 
 def question_of(result: dict[str, Any]) -> IntakeQuestion | None:
     """The next question from the graph's pause, or None when it is not asking the patient."""
-    value = pending(result)
+    return question_from(pending(result))
+
+
+def question_from(value: dict[str, Any] | None) -> IntakeQuestion | None:
+    """The question in a pause's value (`IntakeRuntime.waiting_for`), or None."""
     if not value or value.get("kind") != "patient_input":
         return None
     q = value["question"]
     return IntakeQuestion(
         question_id=q["question_id"], text=q["text"], key=q.get("key"), notice=q.get("notice")
     )
+
+
+def patient_token(
+    settings: Settings, *, clinic_id: uuid.UUID, session_id: str, channel: str
+) -> str:
+    """A 30-minute patient token for one session, on the kiosk or (after the QR hand-over, M2-06)
+    the phone."""
+    token, _ = create_access_token(
+        secret=settings.jwt_secret.get_secret_value(),
+        subject=f"session:{session_id}",
+        role="patient_session",
+        clinic_id=clinic_id,
+        extra={"session_id": session_id, "scope": f"session:{session_id}", "channel": channel},
+        ttl=PATIENT_TOKEN_TTL,
+    )
+    return token
 
 
 async def session_row(principal: Principal, session_id: str) -> PatientSession:
@@ -230,13 +250,8 @@ async def open_session(
         language=lang,
         extra={"patient_identifier": identifier},
     )
-    token, _ = create_access_token(
-        secret=settings.jwt_secret.get_secret_value(),
-        subject=f"session:{session_id}",
-        role="patient_session",
-        clinic_id=principal.clinic_id,
-        extra={"session_id": str(session_id), "scope": f"session:{session_id}"},
-        ttl=PATIENT_TOKEN_TTL,
+    token = patient_token(
+        settings, clinic_id=principal.clinic_id, session_id=str(session_id), channel="kiosk"
     )
     return CheckinResult(
         session_id=str(session_id),
