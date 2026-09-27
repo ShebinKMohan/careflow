@@ -1,12 +1,16 @@
 """`retrieve()`: the best handbook chunks for a question, in its language (M2-08).
 
-Three modes. `dense`: the 20 nearest chunks by cosine distance on the Qwen3 embedding (HNSW).
-`bm25`: the 20 best by BM25 keyword score (pg_textsearch), through the language's partial index,
-named explicitly. `hybrid`: both lists fused by reciprocal rank fusion, `score = sum(1 / (60 +
-rank))`, which uses ranks only, so the scales and signs of the raw scores never matter. Every
-query filters by the question's language, so an English section never answers an Arabic question
-by accident. The caller's session carries the clinic's row-level security scope; the query also
-filters by clinic.
+Three modes:
+
+- `dense`: the 20 nearest chunks by cosine distance on the Qwen3 embedding (HNSW).
+- `bm25`: the 20 best by BM25 keyword score (pg_textsearch), through the language's partial index,
+  named explicitly. A chunk with no query term (score 0) is not a match and gets no rank.
+- `hybrid`: both lists fused by reciprocal rank fusion, `score = sum(1 / (60 + rank))`, which uses
+  ranks only, so the scales and signs of the raw scores never matter.
+
+Every query filters by the question's language, so an English section never answers an Arabic
+question by accident. The caller's session carries the clinic's row-level security scope; the
+query also filters by clinic.
 """
 
 from __future__ import annotations
@@ -44,12 +48,14 @@ _DENSE: Final = {
 }
 _BM25: Final = {
     "en": text(
-        "SELECT section_id, chunk_no, title, body FROM rag_chunks "
+        "SELECT section_id, chunk_no, title, body, "
+        "body <@> to_bm25query(:q, 'rag_bm25_en') AS score FROM rag_chunks "
         "WHERE clinic_id = :clinic AND lang = 'en' "
         "ORDER BY body <@> to_bm25query(:q, 'rag_bm25_en') LIMIT :n"
     ),
     "ar": text(
-        "SELECT section_id, chunk_no, title, body FROM rag_chunks "
+        "SELECT section_id, chunk_no, title, body, "
+        "body <@> to_bm25query(:q, 'rag_bm25_ar') AS score FROM rag_chunks "
         "WHERE clinic_id = :clinic AND lang = 'ar' "
         "ORDER BY body <@> to_bm25query(:q, 'rag_bm25_ar') LIMIT :n"
     ),
@@ -100,6 +106,8 @@ async def retrieve(
             {"q": query, "clinic": clinic_id, "n": CANDIDATES},
         )
         for row in found.mappings():
+            if row["score"] >= 0:  # no query term in the chunk: not a keyword match at all
+                continue
             key = (row["section_id"], row["chunk_no"])
             keyword.append(key)
             rows.setdefault(key, dict(row))
