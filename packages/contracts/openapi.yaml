@@ -1576,9 +1576,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CompanionStatus'
               example:
+                state: queued
                 position: 3
                 wait_estimate_minutes: 25
                 token: *id004
+                room: null
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1599,7 +1601,12 @@ paths:
             schema:
               $ref: '#/components/schemas/FeelsWorseRequest'
             example:
-              note: My throat is much more painful now.
+              answers:
+                chest_or_breathing:
+                - chest_pain
+                face_arm_speech: []
+                drowsy_or_confused: 'no'
+              note: My chest feels tight now.
       responses:
         '202':
           description: I feel worse
@@ -1610,6 +1617,7 @@ paths:
               example:
                 flag_id: flg_routine_01
                 received_at: '2026-09-26T09:40:00Z'
+                press_count: 1
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1962,6 +1970,9 @@ webhooks:
                 session_id: ses_routine
                 flag_id: flg_routine_01
                 reported_at: '2026-09-26T09:40:00Z'
+                press_count: 1
+                danger_answer_codes:
+                - chest_pain
       responses:
         '204':
           description: Received. Any 2xx acknowledges delivery.
@@ -2856,6 +2867,30 @@ components:
       - severity
       - partial
       additionalProperties: false
+    FeelsWorseSummary:
+      type: object
+      description: A waiting patient's "I feel worse" presses (M2-07), for the nurse. The note is the
+        patient's own words from the latest press that had one; it is never put in an event.
+      properties:
+        press_count:
+          type: integer
+          minimum: 1
+        last_reported_at:
+          type: string
+          format: date-time
+        danger_answer_codes:
+          type: array
+          description: The latest press's answers.
+          items:
+            $ref: '#/components/schemas/DangerAnswerCode'
+        note:
+          type: string
+          maxLength: 280
+      required:
+      - press_count
+      - last_reported_at
+      - danger_answer_codes
+      additionalProperties: false
     WorklistItem:
       type: object
       properties:
@@ -2898,6 +2933,8 @@ components:
           type: string
           maxLength: 80
           description: The chief complaint, short. Staff screens only.
+        feels_worse:
+          $ref: '#/components/schemas/FeelsWorseSummary'
         warnings:
           type: array
           uniqueItems: true
@@ -3283,38 +3320,119 @@ components:
       additionalProperties: false
     CompanionStatus:
       type: object
+      description: The waiting room on the phone (M2-07), and the data of the `queue.status`
+        WebSocket frame. Never a level or an alert.
       properties:
+        state:
+          $ref: '#/components/schemas/SessionState'
         position:
-          type: integer
-          minimum: 0
+          oneOf:
+          - type: integer
+            minimum: 1
+          - type: 'null'
+          description: 1 is next in the patient's department queue; null when not waiting.
         wait_estimate_minutes:
-          type: integer
-          minimum: 0
+          oneOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
         token:
           oneOf:
           - $ref: '#/components/schemas/QueueToken'
           - type: 'null'
+        room:
+          oneOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+        patient_type:
+          type: string
+          enum:
+          - adult
+          - child
+          description: A parent's child session (M2-04) gets the child wording on the phone. Absent
+            in `queue.status` frames.
       required:
+      - state
       - position
       - wait_estimate_minutes
       - token
+      - room
       additionalProperties: false
     FeelsWorseRequest:
       type: object
       properties:
+        answers:
+          $ref: '#/components/schemas/FeelsWorseAnswers'
         note:
           type: string
           maxLength: 280
           description: Optional; shown to the nurse, never put in events.
+      required:
+      - answers
       additionalProperties: false
+    FeelsWorseAnswers:
+      type: object
+      description: The three quick danger questions of "I feel worse" (M2-07), as ticked items and a
+        yes / no / not sure; never free text. An unticked item is not a "no".
+      properties:
+        chest_or_breathing:
+          type: array
+          uniqueItems: true
+          maxItems: 2
+          items:
+            type: string
+            enum:
+            - chest_pain
+            - short_of_breath
+        face_arm_speech:
+          type: array
+          uniqueItems: true
+          maxItems: 3
+          items:
+            type: string
+            enum:
+            - face_droop
+            - arm_weakness
+            - speech_difficulty
+        drowsy_or_confused:
+          type: string
+          enum:
+          - 'yes'
+          - 'no'
+          - not_sure
+      required:
+      - chest_or_breathing
+      - face_arm_speech
+      - drowsy_or_confused
+      additionalProperties: false
+    DangerAnswerCode:
+      type: string
+      description: One "I feel worse" answer, as a code (M2-07).
+      enum:
+      - chest_pain
+      - short_of_breath
+      - face_droop
+      - arm_weakness
+      - speech_difficulty
+      - drowsy_or_confused
+      - drowsy_or_confused_unsure
     FeelsWorseAck:
       type: object
       properties:
-        flag_id: *id005
-        received_at: *id006
+        flag_id:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
+        received_at:
+          type: string
+          format: date-time
+        press_count:
+          type: integer
+          minimum: 1
+          description: How many times this session has pressed "I feel worse", this press included.
       required:
       - flag_id
       - received_at
+      - press_count
       additionalProperties: false
     AskRequest:
       type: object

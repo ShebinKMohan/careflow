@@ -532,35 +532,6 @@ class Sex(StrEnum):
     unknown = "unknown"
 
 
-class WorklistItem(BaseModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    session_id: Identifier
-    patient_display: Annotated[str, Field(max_length=8)]
-    arrived_at: AwareDatetime
-    state: SessionState
-    token_code: str | None = None
-    alerts: list[AlertChip]
-    suggested_level: UrgencyLevelModel | None = None
-    confirmed_level: UrgencyLevelModel | None = None
-    scale: TriageScaleModel | None = None
-    open_tasks: list[Task]
-    age_years: Annotated[int | None, Field(ge=0, le=130)] = None
-    sex: Annotated[
-        Sex | None,
-        Field(description="Administrative gender (http://hl7.org/fhir/administrative-gender)."),
-    ] = None
-    complaint: Annotated[
-        str | None,
-        Field(description="The chief complaint, short. Staff screens only.", max_length=80),
-    ] = None
-    warnings: list[SessionWarning] | None = None
-
-
-type Worklist = list[WorklistItem]
-
-
 class QueueTokenStatus(StrEnum):
     waiting = "waiting"
     called = "called"
@@ -789,23 +760,69 @@ class Briefing(BaseModel):
     versions: BriefingVersions
 
 
+type Position = Annotated[
+    int,
+    Field(description="1 is next in the patient's department queue; null when not waiting.", ge=1),
+]
+
+
+type WaitEstimateMinutes = Annotated[int, Field(ge=0)]
+
+
 class CompanionStatus(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    position: Annotated[int, Field(ge=0)]
-    wait_estimate_minutes: Annotated[int, Field(ge=0)]
+    state: SessionState
+    position: Annotated[
+        Position | None,
+        Field(description="1 is next in the patient's department queue; null when not waiting."),
+    ]
+    wait_estimate_minutes: WaitEstimateMinutes | None
     token: QueueToken | None
+    room: Room | None
+    patient_type: Annotated[
+        PatientType | None,
+        Field(
+            description="A parent's child session (M2-04) gets the child wording on the phone. Absent in `queue.status` frames."
+        ),
+    ] = None
 
 
-class FeelsWorseRequest(BaseModel):
+class ChestOrBreathingEnum(StrEnum):
+    chest_pain = "chest_pain"
+    short_of_breath = "short_of_breath"
+
+
+class FaceArmSpeechEnum(StrEnum):
+    face_droop = "face_droop"
+    arm_weakness = "arm_weakness"
+    speech_difficulty = "speech_difficulty"
+
+
+class DrowsyOrConfused(StrEnum):
+    yes = "yes"
+    no = "no"
+    not_sure = "not_sure"
+
+
+class FeelsWorseAnswers(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    note: Annotated[
-        str | None,
-        Field(description="Optional; shown to the nurse, never put in events.", max_length=280),
-    ] = None
+    chest_or_breathing: Annotated[list[ChestOrBreathingEnum], Field(max_length=2)]
+    face_arm_speech: Annotated[list[FaceArmSpeechEnum], Field(max_length=3)]
+    drowsy_or_confused: DrowsyOrConfused
+
+
+class DangerAnswerCode(StrEnum):
+    chest_pain = "chest_pain"
+    short_of_breath = "short_of_breath"
+    face_droop = "face_droop"
+    arm_weakness = "arm_weakness"
+    speech_difficulty = "speech_difficulty"
+    drowsy_or_confused = "drowsy_or_confused"
+    drowsy_or_confused_unsure = "drowsy_or_confused_unsure"
 
 
 class FeelsWorseAck(BaseModel):
@@ -814,6 +831,13 @@ class FeelsWorseAck(BaseModel):
     )
     flag_id: Identifier
     received_at: AwareDatetime
+    press_count: Annotated[
+        int,
+        Field(
+            description='How many times this session has pressed "I feel worse", this press included.',
+            ge=1,
+        ),
+    ]
 
 
 class AskRequest(BaseModel):
@@ -1071,6 +1095,59 @@ class DecisionResult(BaseModel):
     )
     decision: NurseDecisionModel
     token: QueueToken | None
+
+
+class FeelsWorseSummary(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    press_count: Annotated[int, Field(ge=1)]
+    last_reported_at: AwareDatetime
+    danger_answer_codes: Annotated[
+        list[DangerAnswerCode], Field(description="The latest press's answers.")
+    ]
+    note: Annotated[str | None, Field(max_length=280)] = None
+
+
+class WorklistItem(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: Identifier
+    patient_display: Annotated[str, Field(max_length=8)]
+    arrived_at: AwareDatetime
+    state: SessionState
+    token_code: str | None = None
+    alerts: list[AlertChip]
+    suggested_level: UrgencyLevelModel | None = None
+    confirmed_level: UrgencyLevelModel | None = None
+    scale: TriageScaleModel | None = None
+    open_tasks: list[Task]
+    age_years: Annotated[int | None, Field(ge=0, le=130)] = None
+    sex: Annotated[
+        Sex | None,
+        Field(description="Administrative gender (http://hl7.org/fhir/administrative-gender)."),
+    ] = None
+    complaint: Annotated[
+        str | None,
+        Field(description="The chief complaint, short. Staff screens only.", max_length=80),
+    ] = None
+    feels_worse: FeelsWorseSummary | None = None
+    warnings: list[SessionWarning] | None = None
+
+
+type Worklist = list[WorklistItem]
+
+
+class FeelsWorseRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    answers: FeelsWorseAnswers
+    note: Annotated[
+        str | None,
+        Field(description="Optional; shown to the nurse, never put in events.", max_length=280),
+    ] = None
 
 
 class Health(BaseModel):
