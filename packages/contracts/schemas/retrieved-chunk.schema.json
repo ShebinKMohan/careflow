@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "description": "RetrievedChunk: see $defs/RetrievedChunk. One chunk of the clinic handbook found for a question (M2-08), for the ask-the-clinic agent (M2-09). A citation is `doc_id = section_id`, `chunk_id = <section_id>#<chunk_no>`. The handbook is fictional and holds no patient data. Research prototype; synthetic data only.",
+  "description": "RetrievedChunk: see $defs/RetrievedChunk. One chunk of the clinic handbook found for a question (M2-08), for the ask-the-clinic agent (M2-09). A citation is `doc_id = section_id`, `chunk_id = <section_id>:<chunk_no>`. The handbook is fictional and holds no patient data. Research prototype; synthetic data only.",
   "$ref": "#/$defs/RetrievedChunk",
   "$defs": {
     "RetrievedChunk": {
