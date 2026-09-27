@@ -11,10 +11,15 @@ from collections.abc import AsyncIterator
 
 from fastapi import FastAPI
 from opentelemetry.sdk.trace import TracerProvider
+from redis.asyncio import Redis
 
 from careflow_api import problems, telemetry
 from careflow_api.config import get_settings
-from careflow_api.events.publisher import MemoryEventPublisher
+from careflow_api.events import tickets, ws
+from careflow_api.events.bus import EventBus
+from careflow_api.events.outbox import OutboxPublisher
+from careflow_api.events.relay import OutboxRelay
+from careflow_api.events.ws import LiveHub
 from careflow_api.queue import router as queue_router
 from careflow_api.queue.rooms import rooms
 from careflow_api.queue.service import QueueService, run_grace_expiry
@@ -23,15 +28,21 @@ from careflow_api.routers import admin, auth, dev, health, nurse
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    """Runs the queue's grace-window expiry every 10 s (off with CAREFLOW_QUEUE_GRACE_TASK=0)."""
-    task = None
-    if get_settings().queue_grace_task:
-        task = asyncio.create_task(run_grace_expiry(app.state.queue))
+    """Background work of one API process, each switchable in settings: the queue's grace window
+    every 10 s, the outbox relay every 100 ms and the live WebSocket fan-out."""
+    settings = get_settings()
+    tasks: list[asyncio.Task[None]] = []
+    if settings.queue_grace_task:
+        tasks.append(asyncio.create_task(run_grace_expiry(app.state.queue)))
+    if settings.outbox_relay:
+        tasks.append(asyncio.create_task(app.state.relay.run()))
+    if settings.live_events:
+        tasks.append(asyncio.create_task(app.state.hub.run()))
     yield
-    if task is not None:
+    for task in tasks:
         task.cancel()
-        with contextlib.suppress(asyncio.CancelledError):
-            await task
+    await asyncio.gather(*tasks, return_exceptions=True)
+    await app.state.redis.aclose()
 
 
 def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
@@ -46,10 +57,18 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         lifespan=lifespan,
     )
     problems.install(app)
+    app.state.redis = Redis.from_url(settings.redis_url, decode_responses=True)
+    app.state.events = OutboxPublisher()
+    app.state.relay = OutboxRelay(app.state.redis, stream=settings.event_stream)
+    app.state.bus = EventBus(app.state.redis, stream=settings.event_stream)
+    app.state.hub = LiveHub(
+        app.state.redis,
+        stream=settings.event_stream,
+        heartbeat_seconds=settings.ws_heartbeat_seconds,
+    )
     # config/rooms.yaml is validated here, so a bad file stops the API at start.
-    app.state.events = MemoryEventPublisher()  # until M1-11's outbox
     app.state.queue = QueueService(rooms(), app.state.events)
-    for module in (health, auth, nurse, admin, queue_router):
+    for module in (health, auth, nurse, admin, queue_router, tickets, ws):
         app.include_router(module.router)
     if settings.env == "dev":  # test hooks exist only in development (otherwise: 404)
         app.include_router(dev.router)

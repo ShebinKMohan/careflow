@@ -9,6 +9,7 @@ dependencies = [
   "careflow-integration",
   "fastapi>=0.141,<0.142",
   "uvicorn>=0.54,<0.55",
+  "websockets>=16.1,<17",
   "sqlalchemy[asyncio]>=2.1,<2.2",
   "psycopg[binary]>=3.3,<3.4",
   "alembic>=1.20,<2",
