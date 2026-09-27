@@ -1,4 +1,4 @@
 [
-  { "state": "awaiting_nurse" },
-  { "state": "called", "token_code": "A-014", "room": "Resus 2" }
+  { "state": "awaiting_nurse", "intake_revision": 6 },
+  { "state": "called", "intake_revision": 6, "token_code": "A-014", "room": "Resus 2" }
 ]

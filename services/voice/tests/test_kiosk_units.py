@@ -98,7 +98,13 @@ QUESTION = {"question_id": "q_pain_score_1", "text": "How bad is it?", "key": "p
 def test_next_prompt_follows_the_kiosk_fallbacks(
     reply: dict[str, Any], expected: tuple[str, dict[str, Any] | None, bool]
 ) -> None:
-    body = {"turn_id": "turn_01", "assistant_text": "x", "done": False, **reply}
+    body = {
+        "turn_id": "turn_01",
+        "intake_revision": 3,
+        "assistant_text": "x",
+        "done": False,
+        **reply,
+    }
     assert next_prompt(TurnResponse.model_validate(body)) == expected
 
 
@@ -106,12 +112,14 @@ async def test_the_turns_client_posts_the_contract_body() -> None:
     session = PatientSession(session_id="ses_abc", clinic_id="c", token="tok")
     with respx.mock(base_url=API) as api:
         route = api.post("/v1/sessions/ses_abc/turns").respond(
-            200, json={"turn_id": "turn_01", "assistant_text": "ok", "done": True}
+            200,
+            json={"turn_id": "turn_01", "intake_revision": 2, "assistant_text": "ok", "done": True},
         )
         client = TurnsClient(base_url=API + "/", timeout_seconds=1.0)
         reply = await client.post(session, text="x" * 2500, language="en")
         await client.aclose()
     assert reply.done is True
+    assert reply.intake_revision == 2
     body = json.loads(route.calls[0].request.content)
     assert body == {"input_mode": "voice", "text": "x" * 2000, "language": "en"}
     assert route.calls[0].request.headers["authorization"] == "Bearer tok"

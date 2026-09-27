@@ -17,7 +17,10 @@
     "welcome": "Connected, {initials}",
     "status": "See my place in the queue",
     "noCode": "This page needs the QR code from the kiosk. Scan it again, or enter the code.",
-    "enterCode": "Enter a code"
+    "enterCode": "Enter a code",
+    "unavailable": "We could not reach the clinic. Check your connection and try again.",
+    "expired": "Your phone session has ended. Ask at the kiosk or reception to reconnect.",
+    "retry": "Try again"
   },
   "status": {
     "title": "Your place in the queue",
@@ -53,7 +56,10 @@
       "injury": "Injury",
       "pain": "Pain",
       "other": "Something else"
-    }
+    },
+    "recoveryNeeded": "We could not check whether your answer was received. Reconnect to continue safely.",
+    "retryRecovery": "Check current question",
+    "openingStatus": "Opening your current visit status…"
   },
   "safety": {
     "feelsWorse": {

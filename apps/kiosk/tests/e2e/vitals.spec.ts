@@ -29,7 +29,7 @@ test("?scenario=hypoxic shows SpO2 of 90 or less within 5 s (mock API)", async (
   await page.route("**/v1/sessions/*/status", async (route) => {
     const vitals = HYPOXIC[Math.min(poll, HYPOXIC.length - 1)];
     poll += 1;
-    await route.fulfill({ json: { state: "intake", vitals } });
+    await route.fulfill({ json: { state: "intake", intake_revision: 1, vitals } });
   });
 
   const opened = Date.now();

@@ -8,9 +8,11 @@ from collections.abc import Sequence
 from datetime import datetime
 from typing import Any, Final
 
+from careflow_api.intake.runtime import intake_revision
 from careflow_contracts.api_models import (
     AlertChip,
     FeelsWorseSummary,
+    IntakeQuestion,
     MedicalQuestion,
     News2Score,
     SessionState,
@@ -204,10 +206,16 @@ def patient_status(
     token_status: str | None,
     room: str | None,
     wait_estimate_min: int | None,
+    current_question: IntakeQuestion | None = None,
 ) -> SessionStatus:
     """What the patient may see: the state, the token, the room and the wait. Never a level or an
     alert (safety rules 2 and 3)."""
-    body: dict[str, Any] = {"state": session_state(state, waiting, token_status).value}
+    body: dict[str, Any] = {
+        "state": session_state(state, waiting, token_status).value,
+        "intake_revision": intake_revision(state),
+    }
+    if body["state"] == SessionState.intake.value and waiting == "await_answer":
+        body["current_question"] = current_question
     if token_code:
         body["token_code"] = token_code
     if room:

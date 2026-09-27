@@ -32,7 +32,7 @@ function renderPanel(scenario: "hypoxic" | null = null, locale: "en" | "ar" = "e
 describe("VitalsPanel", () => {
   beforeEach(() => {
     post.mockReset().mockResolvedValue({ data: { session_id: "ses_test", scenario: "hypoxic", frames: 31, simulated: true } });
-    get.mockReset().mockResolvedValue({ data: { state: "intake", vitals: READING } });
+    get.mockReset().mockResolvedValue({ data: { state: "intake", intake_revision: 1, vitals: READING } });
   });
 
   it("renders the four tiles, the simulated badge and the exact skin-tone text", async () => {
@@ -51,7 +51,7 @@ describe("VitalsPanel", () => {
   });
 
   it("shows no blood-pressure tile when the kiosk measures pulse, SpO2 and temperature only", async () => {
-    get.mockResolvedValue({ data: { state: "intake", vitals: { ...READING, systolic_bp: undefined, diastolic_bp: undefined } } });
+    get.mockResolvedValue({ data: { state: "intake", intake_revision: 1, vitals: { ...READING, systolic_bp: undefined, diastolic_bp: undefined } } });
     renderPanel();
     await userEvent.click(screen.getByRole("button", { name: "Measure vitals" }));
     expect(await screen.findByRole("region", { name: "Pulse" })).toBeInTheDocument();

@@ -246,7 +246,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Send one intake turn */
+        /**
+         * Send one intake turn
+         * @description When expected_intake_revision is supplied, it must match the current server revision or the answer is rejected with 409 without advancing the intake. Recover the current question and revision from session status before retrying an uncertain request.
+         */
         post: operations["postTurn"];
         delete?: never;
         options?: never;
@@ -292,7 +295,7 @@ export interface paths {
         };
         /**
          * Patient-safe session status
-         * @description Never returns an urgency level or an alert.
+         * @description Returns the pending patient question during intake so a reloaded client can resume from the server's current state. Never returns an urgency level or an alert.
          */
         get: operations["getSessionStatus"];
         put?: never;
@@ -1213,6 +1216,8 @@ export interface components {
             age_months?: number;
         };
         TurnRequest: {
+            /** @description The opaque revision returned by session status or the previous accepted turn. A stale revision returns 409 without submitting the answer. Optional for older clients; clients must not calculate or increment it themselves. */
+            expected_intake_revision?: number;
             /** @enum {string} */
             input_mode: "tap" | "text" | "voice";
             text: string;
@@ -1220,6 +1225,8 @@ export interface components {
         };
         TurnResponse: {
             turn_id: components["schemas"]["Identifier"];
+            /** @description Opaque server revision after this accepted turn. Use this value unchanged as expected_intake_revision for the next answer. */
+            intake_revision: number;
             assistant_text: string;
             done: boolean;
             /** @description What to ask next; null when the conversation is done. */
@@ -1230,6 +1237,10 @@ export interface components {
         /** @description What the patient may see. Never a level or an alert. */
         SessionStatus: {
             state: components["schemas"]["SessionState"];
+            /** @description Opaque server revision of the intake, read together with the pending question. It can advance even when the question id is unchanged. Use it unchanged as expected_intake_revision when answering; never calculate it locally. */
+            intake_revision: number;
+            /** @description The pending patient question from the current intake. Omitted or null when the session is not in intake or is not waiting for a patient answer. */
+            current_question?: components["schemas"]["IntakeQuestion"] | null;
             token_code?: string;
             room?: string;
             wait_estimate_min?: number;
@@ -2892,6 +2903,7 @@ export interface operations {
                     /**
                      * @example {
                      *       "turn_id": "turn_02",
+                     *       "intake_revision": 3,
                      *       "assistant_text": "Thank you. On a scale of 0 to 10, how bad is the pain?",
                      *       "done": false,
                      *       "next_question": {
@@ -3121,6 +3133,7 @@ export interface operations {
                     /**
                      * @example {
                      *       "state": "queued",
+                     *       "intake_revision": 8,
                      *       "token_code": "G-031",
                      *       "wait_estimate_min": 25,
                      *       "vitals": {

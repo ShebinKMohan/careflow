@@ -28,7 +28,11 @@ export function saveToken(token: string): void {
 export function readSession(): PhoneSession | null {
   try {
     const raw = window.sessionStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as PhoneSession) : null;
+    const value: unknown = raw ? JSON.parse(raw) : null;
+    if (!value || typeof value !== "object") return null;
+    const session = value as Partial<PhoneSession>;
+    return typeof session.sessionId === "string" && typeof session.display === "string" &&
+      (session.language === "en" || session.language === "ar") ? session as PhoneSession : null;
   } catch {
     return null;
   }
@@ -36,4 +40,9 @@ export function readSession(): PhoneSession | null {
 
 export function saveSession(session: PhoneSession): void {
   window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+export function clearSession(): void {
+  window.sessionStorage.removeItem(TOKEN_KEY);
+  window.sessionStorage.removeItem(SESSION_KEY);
 }
