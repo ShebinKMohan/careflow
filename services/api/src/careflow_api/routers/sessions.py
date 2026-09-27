@@ -120,10 +120,29 @@ def question_from(value: dict[str, Any] | None) -> IntakeQuestion | None:
     """The question in a pause's value (`IntakeRuntime.waiting_for`), or None."""
     if not value or value.get("kind") != "patient_input":
         return None
-    q = value["question"]
+    return intake_question(value["question"])
+
+
+def intake_question(q: Mapping[str, Any]) -> IntakeQuestion:
+    """The contract question; a side question's reply comes as the notice, with its kind and
+    citations (M2-10)."""
     return IntakeQuestion(
-        question_id=q["question_id"], text=q["text"], key=q.get("key"), notice=q.get("notice")
+        question_id=q["question_id"],
+        text=q["text"],
+        key=q.get("key"),
+        notice=q.get("notice"),
+        notice_kind=q.get("notice_kind"),
+        citations=q.get("citations") or None,
     )
+
+
+def reply_text(question: IntakeQuestion | None, state: Mapping[str, Any]) -> str:
+    """What the kiosk says: the notice (a side question's reply, M2-10), a blank line and the
+    question; or the done message, after any reply still waiting to be said."""
+    if question is None:
+        prefix = state.get("reply_prefix")
+        return f"{prefix}\n\n{DONE_TEXT}" if prefix else DONE_TEXT
+    return f"{question.notice}\n\n{question.text}" if question.notice else question.text
 
 
 def pending_question(state: Mapping[str, Any] | None) -> IntakeQuestion | None:
@@ -133,9 +152,7 @@ def pending_question(state: Mapping[str, Any] | None) -> IntakeQuestion | None:
     if raw is None:
         return None
     q = raw.model_dump(mode="json") if hasattr(raw, "model_dump") else dict(raw)
-    return IntakeQuestion(
-        question_id=q["question_id"], text=q["text"], key=q.get("key"), notice=q.get("notice")
-    )
+    return intake_question(q)
 
 
 def patient_token(
@@ -366,7 +383,7 @@ async def post_turn(
         await touch(principal.clinic_id, session_id, status="awaiting_nurse")
     return TurnResponse(
         turn_id=said.turn_id,
-        assistant_text=question.text if question is not None else DONE_TEXT,
+        assistant_text=reply_text(question, result),
         done=question is None,
         next_question=question,
     )
