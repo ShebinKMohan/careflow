@@ -1,10 +1,16 @@
-"""The patient's phone after the QR hand-over (M2-07): the waiting room and "I feel worse".
+"""The patient's phone after the QR hand-over: the waiting room, "I feel worse" (M2-07) and
+"ask the clinic" (M2-09).
 
 Phone-channel tokens only (`require_phone_session`): the session is the token's own. "I feel
 worse" records the press and its `patient.feels_worse` event first, then maps the ticked answers
 to facts and re-runs the safety rules (new rule ids go out as `alert.raised`), then writes a FHIR
 `Flag` in the background. A failure after the first step still answers 202: the nurse was told.
 Every press counts; repeats are never dropped.
+
+"Ask the clinic" runs the fixed-shape agent (`careflow_rag.agent`) with tools bound to the token's
+session (`careflow_api.ask`). A medical question gets the fixed refusal and a nurse flag, never an
+answer (safety rule 2); a flag that cannot be stored answers 503, so the patient is never told the
+nurse knows when the nurse does not. No kiosk route: ADR-006 defers kiosk RAG and wayfinding.
 """
 
 from __future__ import annotations
@@ -12,8 +18,9 @@ from __future__ import annotations
 import logging
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 
+from careflow_api.ask import AskService
 from careflow_api.config import Settings, get_settings
 from careflow_api.deps import Principal, require_phone_session
 from careflow_api.feels_worse import record_press
@@ -22,6 +29,9 @@ from careflow_api.queue.service import QueueService
 from careflow_api.rls import clinic_session
 from careflow_api.routers.sessions import session_row, utc_now
 from careflow_contracts.api_models import (
+    AskRequest,
+    AskResponse,
+    Citation,
     CompanionStatus,
     FeelsWorseAck,
     FeelsWorseRequest,
@@ -122,3 +132,46 @@ async def feels_worse(
     except Exception:  # the event already went out: the nurse was told
         logger.exception("feels_worse.follow_up_failed", extra={"session_id": session_id})
     return FeelsWorseAck(flag_id=flag_id, received_at=now, press_count=press)
+
+
+@router.post("/v1/companion/ask", response_model=AskResponse)
+async def ask_the_clinic(body: AskRequest, principal: Phone, request: Request) -> AskResponse:
+    """A short cited answer from the clinic handbook or the patient's own queue, "I don't know",
+    or, for a medical question, the fixed refusal with a flag to the nurse."""
+    session_id = session_of(principal)
+    row = await session_row(principal, session_id)
+    if not body.question.strip():
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail="Please type a question.")
+    service: AskService = request.app.state.ask
+    ports = service.ports(
+        principal.clinic_id,
+        session_id,
+        session_state=row.status,
+        queue=request.app.state.queue,
+        events=request.app.state.events,
+    )
+    lang = "ar" if body.language.value == "ar" else "en"
+    try:
+        result = await service.ask(body.question, lang, session_id=session_id, ports=ports)
+    except Exception as exc:  # e.g. the flag could not be stored: never claim the nurse knows
+        logger.exception("companion.ask_failed", extra={"session_id": session_id})
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Questions are not available right now. Please ask at the reception desk.",
+        ) from exc
+    logger.info(
+        "companion.ask",
+        extra={
+            "session_id": session_id,
+            "refused_medical": result.refused_medical,
+            "dont_know": result.dont_know,
+            "category": result.category,
+            "llm_calls": result.llm_calls,
+        },
+    )
+    return AskResponse(
+        answer=result.answer,
+        citations=[Citation.model_validate(c) for c in result.citations],
+        refused_medical=result.refused_medical,
+        dont_know=result.dont_know,
+    )

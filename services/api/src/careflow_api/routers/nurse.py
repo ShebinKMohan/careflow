@@ -23,6 +23,7 @@ from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.intake.views import ECG_ACTION, tasks, triage_view, worklist_item
 from careflow_api.intake.views import task_id as ecg_task_id
 from careflow_api.models import NurseDecisionRow, PatientSession
+from careflow_api.nurse_flags import medical_questions
 from careflow_api.rls import clinic_session
 from careflow_api.routers.sessions import runtime, session_row, touch
 from careflow_api.writeback_store import SqlWritebackStore
@@ -84,8 +85,9 @@ async def worklist(
     principal: Annotated[Principal, Depends(require_roles("nurse", "admin"))],
     request: Request,
 ) -> list[WorklistItem]:
-    """Today's open sessions with their alerts, suggestion, level, tasks and warnings. Empty
-    while the intake runtime is not running (no intake can be in progress without it)."""
+    """Today's open sessions with their alerts, suggestion, level, tasks and warnings, and the
+    patient's "I feel worse" presses and refused medical questions. Empty while the intake runtime
+    is not running (no intake can be in progress without it)."""
     intake: IntakeRuntime | None = getattr(request.app.state, "intake", None)
     if intake is None:
         logger.warning("nurse.worklist", extra={"error": "intake runtime not started"})
@@ -93,6 +95,7 @@ async def worklist(
     items: list[WorklistItem] = []
     rows = await active_sessions(principal)
     presses = await feels_worse_summaries(principal.clinic_id, [str(row.id) for row in rows])
+    questions = await medical_questions(principal.clinic_id, [str(row.id) for row in rows])
     for row in rows:
         session_id = str(row.id)
         state = await intake.state(session_id)
@@ -109,6 +112,7 @@ async def worklist(
                 token_code=token.token_code if token else None,
                 token_status=token.status.value if token else None,
                 feels_worse=presses.get(session_id),
+                medical_questions=questions.get(session_id),
             )
         )
     return items

@@ -4,12 +4,14 @@ NEWS2, warnings and the patient's status. The patient's status never holds a lev
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime
 from typing import Any, Final
 
 from careflow_contracts.api_models import (
     AlertChip,
     FeelsWorseSummary,
+    MedicalQuestion,
     News2Score,
     SessionState,
     SessionStatus,
@@ -148,6 +150,7 @@ def worklist_item(
     token_code: str | None,
     token_status: str | None,
     feels_worse: FeelsWorseSummary | None = None,
+    medical_questions: Sequence[MedicalQuestion] | None = None,
 ) -> WorklistItem:
     facts = structured_facts(state)
     patient = facts.patient
@@ -188,6 +191,8 @@ def worklist_item(
         body["complaint"] = text
     if feels_worse is not None:  # M2-07: the waiting patient's presses, for this nurse only
         body["feels_worse"] = feels_worse.model_dump(mode="json", exclude_none=True)
+    if medical_questions:  # M2-09: refused on the phone and flagged, for this nurse only
+        body["medical_questions"] = [q.model_dump(mode="json") for q in medical_questions]
     return WorklistItem.model_validate(body)
 
 

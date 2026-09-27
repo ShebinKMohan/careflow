@@ -17,6 +17,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from redis.asyncio import Redis
 
 from careflow_api import problems, telemetry
+from careflow_api.ask import AskService
 from careflow_api.briefing import router as doctor
 from careflow_api.briefing.service import BriefingService
 from careflow_api.briefing.store import SqlBriefingStore
@@ -46,8 +47,10 @@ from careflow_api.routers import (
 )
 from careflow_api.writeback_store import SqlWritebackStore
 from careflow_contracts.api_models import CompanionStatus
-from careflow_intake.wiring import briefing_summarizer
+from careflow_intake.wiring import briefing_summarizer, providers_config
 from careflow_integration.fhir.client import FhirClient
+from careflow_providers.factory import build_provider
+from careflow_rag.config import load_rag_config
 
 
 @contextlib.asynccontextmanager
@@ -137,6 +140,12 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         writebacks=SqlWritebackStore(),
         fhir=lambda: FhirClient(settings.fhir_base_url),
         summarizer=briefing_summarizer(),
+    )
+    # Ask the clinic (M2-09). config/rag.yaml is validated here; the `conversation` provider is
+    # built on the first question, so a missing one refuses questions (fail safe) instead of
+    # stopping the API.
+    app.state.ask = AskService(
+        load_rag_config(), lambda: build_provider("conversation", providers_config())
     )
     for module in (
         health,
