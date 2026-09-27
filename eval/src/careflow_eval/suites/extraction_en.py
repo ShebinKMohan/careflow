@@ -139,4 +139,8 @@ async def run_case(
     }
     if replay_dir is not None:
         result["replay_wall_ms"] = measured_ms
+        result["failure_event_replayed"] = bool(selected and selected.failure_event_replayed)
+        result["replay_method"] = (
+            "confirmed_timeout_event" if result["failure_event_replayed"] else "recorded_replies"
+        )
     return result

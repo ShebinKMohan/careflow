@@ -112,6 +112,63 @@ def test_incomplete_metrics_are_explicitly_not_comparable(report):
     assert "- case-offline" in markdown
 
 
+def test_timeout_error_code_is_visible_even_with_null_legacy_error_fields(report):
+    report["results"].append(
+        {
+            "id": "case-timeout",
+            "status": "completed",
+            "rules_validation": False,
+            "error": None,
+            "reason": None,
+            "error_code": "timeout",
+        }
+    )
+    assert "| case-timeout | completed | false | timeout |" in render_markdown(report)
+    assert "case-timeout" in failing_scenario_ids(report)
+
+
+def test_confirmed_timeout_replay_is_distinguished_from_recorded_model_replies(report):
+    report["metadata"]["failure_event_replay_count"] = 1
+    report["results"][0].update(replay_method="recorded_replies", failure_event_replayed=False)
+    report["results"].append(
+        {
+            "id": "case-timeout",
+            "status": "completed",
+            "rules_validation": False,
+            "error_code": "timeout",
+            "recording_replayable": False,
+            "replay_method": "confirmed_timeout_event",
+            "failure_event_replayed": True,
+        }
+    )
+    original = json.dumps(report, sort_keys=True)
+    markdown = render_markdown(report)
+    assert "canonical `ReplayProvider`" in markdown
+    assert "also replays 1 confirmed timeout event(s)" in markdown
+    assert "immediately raising `TimeoutError` through the production extractor" in markdown
+    assert "Ordered provider calls" in markdown and "output hash" in markdown
+    assert "Historical case latency is retained separately from replay wall time" in markdown
+    assert "original `recording_replayable: false` remains unchanged" in markdown
+    assert "| case-good | completed | true | n/a | recorded_replies | false |" in markdown
+    assert (
+        "| case-timeout | completed | false | timeout | confirmed_timeout_event | true |"
+        in markdown
+    )
+    assert json.dumps(report, sort_keys=True) == original
+
+
+def test_reply_only_replay_does_not_claim_timeout_events(report):
+    report["metadata"]["failure_event_replay_count"] = 0
+    assert "confirmed timeout event" not in render_markdown(report)
+
+
+def test_rules_replay_does_not_claim_model_responses(report):
+    report["suite"] = "rules"
+    markdown = render_markdown(report)
+    assert "recorded rules outputs without invoking a model" in markdown
+    assert "recorded raw model responses" not in markdown
+
+
 def test_progress_prints_only_time_case_id_and_count(capsys):
     cli._progress("case-routine", 2, 50)
     captured = capsys.readouterr()

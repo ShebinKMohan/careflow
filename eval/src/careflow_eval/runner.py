@@ -162,8 +162,8 @@ async def run_suite(
 ) -> dict[str, Any]:
     """Return a JSON-friendly report; the caller owns publishing JSON/Markdown and exit policy.
 
-    A recorded timeout/provider failure cannot be faithfully replayed by a response cassette:
-    its case is explicitly not_run and the report is incomplete. Missing, changed, or mismatched
+    Recorded replies and validated extractor-confirmed deadline events can be replayed. Other
+    failures are explicitly not_run and the report is incomplete. Missing, changed, or mismatched
     successful recordings fail hard. Neither replay mode nor the pure rules suite builds a live
     provider. Latency values in replay are historical measurements, never replay wall time.
     """
@@ -336,6 +336,12 @@ async def run_suite(
             "metrics_comparable": len(completed) == len(results),
             "latency_source": sorted({row["latency_source"] for row in completed}),
             "replay_exact": len(completed) == len(results) if replay_dir is not None else None,
+            "failure_event_replay_count": sum(
+                bool(row.get("failure_event_replayed")) for row in completed
+            ),
+            "replay_exact_scope": "outputs_quality_metrics_and_recorded_latency"
+            if replay_dir is not None
+            else None,
             "wall_ms": (time.perf_counter() - started) * 1000,
             "rules_validation": all(row.get("rules_validation", False) for row in results),
             "include_unreviewed": include_unreviewed,

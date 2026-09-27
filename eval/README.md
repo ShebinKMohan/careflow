@@ -72,12 +72,34 @@ timed baseline and record that warm-up separately. The wrapper stops only a serv
 `eval/replays/<suite>/`. Recording refuses to overwrite existing evidence. Cassettes use the
 canonical provider's request keys and retain raw responses, including invalid model JSON.
 Receipts bind inputs, prompt, ruleset, normalization, model, outputs and historical duration.
-Missing or changed cassettes fail; replay never silently calls a live model.
+Missing or changed required cassettes fail; replay never silently calls a live model.
 
-Replay reproduces recorded extraction/rules outputs and historical latency metrics. Its
-own wall time is separate and is not a model-speed measurement. A provider exception or
-timeout without a replayable response remains an explicit incomplete recording; it cannot
-be presented as an exact replay or silently dropped from scoring.
+Successful model calls replay their raw replies through the canonical `ReplayProvider`.
+A confirmed terminal timeout has a separate, explicitly labelled replay path. It is currently
+limited to the production extractor's 20-second bound (`DEFAULT_TIMEOUT_SECONDS`): a
+timeout recorded with any other `--timeout` value stays `not_run`. It requires a receipt
+bound to that limit, a recorded case duration of at least 20 seconds whose finite call
+timings fit inside it, one failed final request recorded as `CancelledError`, and recorded
+replies for every earlier request (at most one: the structured-output correction). Cassette
+hashes (or proven absence for a first-request timeout) must still verify, as must the
+endpoint completion manifest when the original local recording required one. Unknown or
+unproven failures remain `not_run`, make the replay incomplete, and mark its metrics as not
+comparable with a complete baseline. `eval/tests/test_timeout_replay.py` changes each of these
+properties on a copy of the real recording and checks the outcome.
+
+For an eligible timeout, replay raises `TimeoutError` immediately at the recorded provider
+call through the production extractor, then checks the ordered calls and extraction/rules
+output hash. It does not invent a model reply or wait for another live timeout. The row says
+`replay_method: confirmed_timeout_event` and `failure_event_replayed: true`; successful reply
+rows say `replay_method: recorded_replies`. Metadata includes `failure_event_replay_count`.
+The original receipt's `replayable: false` and row's `recording_replayable: false` are preserved:
+they describe reply-only replayability. This additional failure-event handling does not
+rewrite historical recordings or baseline results.
+
+Replay preserves historical case latency separately from its own wall time. `replay_exact`
+means the recorded outcomes and ordered calls matched, not that model execution speed was
+measured again. A timeout observed during a live evaluation remains an incomplete extraction
+in that evaluation's quality metrics, even when its recorded failure outcome is reproducible.
 
 ## Metrics and reports
 
@@ -85,6 +107,10 @@ Reports go to `eval/reports/<suite>/<UTC timestamp>.json` and `.md`, with a sepa
 for each suite. `--output DIR` changes the report root, not the suite subdirectory. Reports
 include source and dataset provenance, prompt/ruleset/model identity, per-case results,
 per-key extraction scores, per-rule alert counts, and failing scenario IDs.
+Source provenance includes the Git SHA, dirty-worktree flag and relevant source hashes;
+replay retains the original recording's provenance alongside the current replay source.
+Local recording verifies the observed model endpoint before and after the batch and binds
+the completion manifest to the retained case receipts.
 
 Field precision/recall/F1 use micro counts. A wrong value contributes one false positive and
 one false negative; duplicates cannot reuse one matching gold value. Matching treats booleans
@@ -96,7 +122,41 @@ p50/p95 extractor latency (including retry and recording overhead). Undefined me
 
 The CLI exits nonzero for invalid data, failed review, operational failure or incomplete
 execution. A completed evaluation can report poor quality and still exit zero: completion
-describes execution, not a clinical pass. CI asserts the fixed recorded baseline separately.
+describes execution, not a clinical pass. CI asserts the fixed recorded baseline separately:
+`eval/tests/test_baseline_replay.py` replays all 50 extraction cases and the 56 rule
+scenarios from `eval/replays/`, with no model server, and requires every case output, every
+metric and the historical latency percentiles to equal the committed baseline reports.
+
+## Observed English extraction baseline
+
+The [27 September 2026 baseline JSON](reports/extraction_en/20260927-095128.json)
+records all 50 scenarios using local Qwen3.5-9B MLX 4-bit, prompt `extraction_v2`, and a
+20-second per-case timeout. Its source Git SHA is
+`989981b5c265a70ac2fb466459694ca9b6dad968`; the report retains the exact source, dataset,
+model-revision and launch evidence. These measurements describe that recorded run only.
+
+| Metric | Observed result |
+| --- | --- |
+| Field precision | 0.802521 |
+| Field recall | 0.689531 |
+| Field F1 | 0.741748 |
+| Alert recall | 0.96 (24 of 25 expected alerts) |
+| False-alert rate on benign scenarios | 0 |
+| Incomplete extraction rate | 0.02 (1 of 50 scenarios) |
+| Scenarios with dropped facts | 0.06 (3 of 50 scenarios) |
+| Extractor latency p50 | 9,113.42 ms |
+| Extractor latency p95 | 12,284.61 ms |
+
+`child-parent-unsure-waking` hit the 20-second timeout and missed its expected alert. Its
+`error_code: timeout`, incomplete extraction, failed rule expectation and historical latency
+are retained in the JSON and surfaced by subsequent report renders. Successful completion
+of the 50-case loop does not make this an acceptable safety result. Automated scenario review
+and a synthetic benchmark do not establish clinical performance. The original baseline JSON
+and Markdown remain unchanged, and `reports/extraction_en/LATEST.md` stays the live
+baseline. Replay verification is written separately, to
+`reports/replay-verification/extraction_en/` (`careflow-eval run extraction_en --replay
+--output eval/reports/replay-verification`); those reports explain the confirmed
+timeout-event replay.
 
 ## Authoring and independent review
 

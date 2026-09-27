@@ -104,6 +104,7 @@ def failing_scenario_ids(report: Mapping[str, Any]) -> list[str]:
             or result.get("quality_passed") is False
             or result.get("rules_validation") is False
             or result.get("error")
+            or result.get("error_code")
             or result.get("failures")
             or (isinstance(prediction, Mapping) and prediction.get("extraction_incomplete"))
         ):
@@ -149,11 +150,35 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         lines.extend(
             [
                 "",
-                "This run replays recorded raw model responses through the evaluation code.",
+                "For successful model calls, this run replays recorded raw model responses "
+                "through the canonical `ReplayProvider`."
+                if report.get("suite") == "extraction_en"
+                else "This run replays recorded rules outputs without invoking a model.",
                 "Recorded live latency and replay execution time are distinct; "
                 "use the stated latency source.",
             ]
         )
+        timeout_count = metadata.get("failure_event_replay_count") or sum(
+            1
+            for result in results
+            if isinstance(result, Mapping) and result.get("failure_event_replayed") is True
+        )
+        if timeout_count:
+            lines.extend(
+                [
+                    "",
+                    f"This run also replays {_cell(timeout_count)} confirmed timeout event(s).",
+                    "A confirmed terminal timeout is reproduced by immediately raising "
+                    "`TimeoutError` through the production extractor. It is an observed failure "
+                    "event, not a recorded model reply or a new live timeout measurement.",
+                    "Ordered provider calls and the resulting extraction/rules output hash are "
+                    "checked. Historical case latency is retained separately "
+                    "from replay wall time.",
+                    "The original `recording_replayable: false` remains unchanged: it describes "
+                    "reply-only replayability. `confirmed_timeout_event` explicitly identifies "
+                    "the additional failure-event replay path.",
+                ]
+            )
     lines.extend(["", "## Summary", ""])
     if metadata.get("metrics_comparable") is False:
         lines.extend(
@@ -203,24 +228,25 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     )
     lines.extend(["", "## Scenario outcomes", ""])
     rows = []
+    replay_columns = any(
+        isinstance(result, Mapping) and "replay_method" in result for result in results
+    )
     for result in results:
         if not isinstance(result, Mapping):
             continue
-        rows.append(
-            [
-                result.get("id", result.get("scenario_id")),
-                result.get("status"),
-                result.get("rules_validation"),
-                result.get("error", result.get("reason")),
-            ]
-        )
-    lines.extend(
-        _table(
-            ["Scenario", "Execution status", "Rule expectations matched", "Error / reason"], rows
-        )
-        if rows
-        else ["n/a"]
-    )
+        row = [
+            result.get("id", result.get("scenario_id")),
+            result.get("status"),
+            result.get("rules_validation"),
+            result.get("error") or result.get("reason") or result.get("error_code"),
+        ]
+        if replay_columns:
+            row.extend([result.get("replay_method"), result.get("failure_event_replayed")])
+        rows.append(row)
+    headers = ["Scenario", "Execution status", "Rule expectations matched", "Error / reason"]
+    if replay_columns:
+        headers.extend(["Replay method", "Failure event replayed"])
+    lines.extend(_table(headers, rows) if rows else ["n/a"])
     return "\n".join(lines) + "\n"
 
 

@@ -30,8 +30,15 @@ Bind model receipts to the configured endpoint/request model and observed server
 Retain pinned launch evidence separately because an endpoint's alias alone does not verify
 weight identity. Record source provenance, dataset/prompt/ruleset/normalization bindings and
 per-case raw replies. Strict replay verifies recorded outputs and retains historical model
-latency; report replay execution time independently. Provider exceptions without replayable
-replies remain explicitly incomplete.
+latency; report replay execution time independently. The first live baseline exposed one
+confirmed extraction timeout during structured correction. Replay may reproduce that terminal
+failure event from its immutable ordered request receipt, only after validating its partial
+cassette, final timeout outcome, bindings and endpoint evidence. Canonical replay still serves
+all actual replies; the confirmed terminal event raises `TimeoutError` into the real extractor.
+The actual extraction/rules output hash must match. Report this event explicitly and keep the
+original measured latency separate from replay wall time. Never fabricate the missing model
+reply or rewrite the historical receipt's reply-only `replayable` flag. Ambiguous cancellations
+and unsupported provider failures remain incomplete.
 
 Offline CLI review disables tools, skills and MCP and runs in a temporary directory. It
 requires subscription authentication, excludes API credentials and alternate-provider
