@@ -11,13 +11,16 @@
     "lint": "eslint .",
     "typecheck": "NEXT_TELEMETRY_DISABLED=1 next typegen && tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "models:sync": "node scripts/models-sync.mjs"
   },
   "dependencies": {
     "@careflow/contracts": "workspace:*",
+    "@careflow/laya-ts": "workspace:*",
     "@careflow/ui": "workspace:*",
     "next": "catalog:",
     "next-intl": "catalog:",
+    "onnxruntime-web": "1.30.0",
     "qrcode.react": "4.2.0",
     "react": "catalog:",
     "react-dom": "catalog:",

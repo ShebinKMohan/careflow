@@ -375,6 +375,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/sessions/{session_id}/model-input": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        /**
+         * The kiosk model's input (M3-02)
+         * @description The session's facts as the on-device urgency model reads them (input contract `laya-state/v1`), built on the server from the structured facts, and the SHA-256 of that state. Never a level, an alert or a suggestion.
+         */
+        get: operations["getModelInput"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/sessions/{session_id}/urgency-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * The kiosk model's urgency suggestion (M3-02)
+         * @description The on-device model's probabilities for the five levels. The server derives the level, the confidence and the reasons. While the nurse has not decided, it replaces the server suggestion (200, applied); otherwise it is stored for analysis only (202, not applied). 422 for a model version that is not released or probabilities that do not sum to 1; 409 when the facts changed since the model input was read.
+         */
+        post: operations["postDeviceUrgencySuggestion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/sessions/{session_id}/triage": {
         parameters: {
             query?: never;
@@ -1394,9 +1446,41 @@ export interface components {
             /** @description The chief complaint, short. Staff screens only. */
             complaint?: string;
             feels_worse?: components["schemas"]["FeelsWorseSummary"];
+            suggestion_source?: components["schemas"]["SuggestionSource"];
             /** @description Medical questions the patient asked on the phone (M2-09), refused and flagged to the nurse, newest first. Staff screens only; deleted when the session closes. */
             medical_questions?: components["schemas"]["MedicalQuestion"][];
             warnings?: components["schemas"]["SessionWarning"][];
+        };
+        /** @description Which model and version produced the current suggestion, and where it ran (M3-02), for the nurse's badge, e.g. "Laya 1.0.0 · kiosk" or "HGB 1.0.0 · server". */
+        SuggestionSource: {
+            family: string;
+            version: string;
+            /** @enum {string} */
+            device: "kiosk" | "server";
+        };
+        /** @description The on-device model's input (M3-02). No level, alert or suggestion. */
+        ModelInput: {
+            /** @enum {string} */
+            input_contract: "laya-state/v1";
+            state: {
+                [key: string]: string;
+            };
+            facts_sha256: string;
+        };
+        /** @description What the kiosk model computed (M3-02). The kiosk is an untrusted client, so the server checks the version and the probabilities and derives the level, the confidence and the reasons itself. */
+        DeviceUrgencySuggestion: {
+            /** @enum {string} */
+            model_family: "laya";
+            model_version: string;
+            facts_sha256: string;
+            /** @description KTAS level 1 to 5, in order. */
+            probabilities: number[];
+            reason_keys: ("age" | "sex" | "chief_complaint" | "pain_score" | "heart_rate" | "spo2" | "temperature" | "respiratory_rate" | "systolic_bp" | "consciousness")[];
+            latency_ms: number;
+        };
+        DeviceSuggestionAck: {
+            applied: boolean;
+            suggestion_id?: components["schemas"]["Identifier"];
         };
         /** @description A refused medical question, for the nurse (M2-09). The patient got the fixed refusal, never an answer. */
         MedicalQuestion: {
@@ -3353,6 +3437,121 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
+            422: components["responses"]["Unprocessablecontent"];
+        };
+    };
+    getModelInput: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The kiosk model's input */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "input_contract": "laya-state/v1",
+                     *       "state": {
+                     *         "age": "54 years",
+                     *         "sex": "male",
+                     *         "chief_complaint": "chest pain",
+                     *         "heart_rate": "112 /min"
+                     *       },
+                     *       "facts_sha256": "3f0a2b6c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ModelInput"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+        };
+    };
+    postDeviceUrgencySuggestion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /**
+                 * @example {
+                 *       "model_family": "laya",
+                 *       "model_version": "1.0.0",
+                 *       "facts_sha256": "3f0a2b6c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a",
+                 *       "probabilities": [
+                 *         0.02,
+                 *         0.61,
+                 *         0.3,
+                 *         0.05,
+                 *         0.02
+                 *       ],
+                 *       "reason_keys": [
+                 *         "chief_complaint",
+                 *         "heart_rate"
+                 *       ],
+                 *       "latency_ms": 2140
+                 *     }
+                 */
+                "application/json": components["schemas"]["DeviceUrgencySuggestion"];
+            };
+        };
+        responses: {
+            /** @description Applied as the current suggestion */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "applied": true,
+                     *       "suggestion_id": "sug_device_chest_pain"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["DeviceSuggestionAck"];
+                };
+            };
+            /** @description Stored for analysis only (the nurse has decided, or no review is waiting) */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "applied": false
+                     *     }
+                     */
+                    "application/json": components["schemas"]["DeviceSuggestionAck"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };

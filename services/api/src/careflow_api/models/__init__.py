@@ -10,6 +10,7 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
+    Float,
     ForeignKey,
     Identity,
     Integer,
@@ -198,6 +199,25 @@ class FeelsWorseReportRow(_ClinicScoped, Base):
     reported_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
 
 
+class DeviceSuggestionRow(_ClinicScoped, Base):
+    """One on-device urgency suggestion posted by the kiosk (M3-02), applied or not."""
+
+    __tablename__ = "device_suggestions"
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id")
+    )
+    suggestion_id: Mapped[str] = mapped_column(String(64))
+    model_family: Mapped[str] = mapped_column(String(32))
+    model_version: Mapped[str] = mapped_column(String(64))
+    facts_sha256: Mapped[str] = mapped_column(String(64))
+    probabilities: Mapped[list[float]] = mapped_column(ARRAY(Float))
+    level: Mapped[int] = mapped_column(SmallInteger)
+    confidence: Mapped[float] = mapped_column(Float)
+    reason_keys: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    latency_ms: Mapped[int] = mapped_column(Integer)
+    applied: Mapped[bool] = mapped_column(Boolean)
+
+
 class NurseFlagRow(_ClinicScoped, Base):
     """A medical question refused on the phone (M2-09), for the nurse; deleted when the session
     closes. The events never carry `question_text`."""
@@ -289,6 +309,7 @@ __all__ = [
     "Clinic",
     "ConsentRecordRow",
     "Device",
+    "DeviceSuggestionRow",
     "EncounterState",
     "FeelsWorseReportRow",
     "FhirWriteback",

@@ -95,6 +95,11 @@
         "en": "الإنجليزية",
         "ar": "العربية"
       }
+    },
+    "suggestionSource": "{model} {version} · {device}",
+    "devices": {
+      "kiosk": "الجهاز",
+      "server": "الخادم"
     }
   },
   "doctor": {

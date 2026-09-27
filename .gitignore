@@ -47,3 +47,7 @@ blob-report/
 !.vscode/extensions.json
 # `make up` process state and logs (M1-19)
 .run/
+
+# The kiosk's model files and ONNX Runtime WASM (M3-02): `pnpm --filter kiosk models:sync`.
+apps/kiosk/public/models/
+apps/kiosk/public/ort/

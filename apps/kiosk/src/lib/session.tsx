@@ -9,9 +9,10 @@
  *   sessionStorage, localStorage or a cookie. `wipe()` forgets it (idle timeout, done, start).
  */
 import type { Schema } from "@careflow/contracts";
-import { createContext, type ReactNode, useCallback, useContext, useMemo, useRef, useState } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { type ConsentChoices, setConsentChoices } from "@/consent/hasConsent";
+import { abortDeviceTriage, preloadDeviceTriage } from "@/lib/triage/deviceTriage";
 
 const DEVICE_KEY = "careflow.kiosk.device";
 
@@ -90,7 +91,10 @@ export function KioskProvider({ children }: { children: ReactNode }) {
   const setQuestion = useCallback((question: IntakeQuestion | null) => {
     setPatient((current) => (current ? { ...current, question } : current));
   }, []);
+  // The kiosk urgency model (M3-02) loads in the background as soon as the app starts.
+  useEffect(() => preloadDeviceTriage(), []);
   const wipe = useCallback(() => {
+    abortDeviceTriage();
     for (const cleanup of cleanups.current) cleanup();
     cleanups.current.clear();
     setPatient(null);

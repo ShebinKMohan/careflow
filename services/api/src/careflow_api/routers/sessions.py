@@ -14,8 +14,10 @@ from collections.abc import Mapping
 from typing import Annotated, Any, Final
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from sqlalchemy import select, update
 
+from careflow_api import device_triage
 from careflow_api.config import Settings, get_settings
 from careflow_api.consent import get_consent
 from careflow_api.deps import Principal, require_roles
@@ -28,10 +30,13 @@ from careflow_api.rls import clinic_session
 from careflow_api.security import create_access_token
 from careflow_contracts.api_models import (
     CheckinResult,
+    DeviceSuggestionAck,
+    DeviceUrgencySuggestion,
     DeviceVitalsReading,
     IdTapCheckinRequest,
     IntakeQuestion,
     KeypadCheckinRequest,
+    ModelInput,
     PatientDetails,
     PatientDetailsRequest,
     PatientType,
@@ -532,6 +537,80 @@ async def get_triage(
     if state is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
     return triage_view(state)
+
+
+@router.get("/v1/sessions/{session_id}/model-input", response_model=ModelInput)
+async def get_model_input(
+    session_id: str,
+    principal: Annotated[Principal, Depends(require_roles("patient_session"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+) -> ModelInput:
+    """What the kiosk's Laya model reads (M3-02): the `laya-state/v1` state, built here from the
+    structured facts, and its SHA-256. Never a level, an alert or a suggestion."""
+    own_session(principal, session_id)
+    await session_row(principal, session_id)
+    state = await intake.state(session_id)
+    if state is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
+    return device_triage.model_input(structured_facts(state))
+
+
+@router.post(
+    "/v1/sessions/{session_id}/urgency-suggestion",
+    response_model=DeviceSuggestionAck,
+    responses={202: {"model": DeviceSuggestionAck}},
+)
+async def post_device_suggestion(
+    session_id: str,
+    body: DeviceUrgencySuggestion,
+    principal: Annotated[Principal, Depends(require_roles("patient_session"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+    request: Request,
+) -> JSONResponse:
+    """The kiosk model's suggestion (M3-02). It becomes the current suggestion only while the
+    nurse has not decided (200); otherwise it is kept for analysis (202). The server derives the
+    level, the confidence and the reasons; the kiosk only sends probabilities and reason keys."""
+    own_session(principal, session_id)
+    await session_row(principal, session_id)
+    state = await intake.state(session_id)
+    if state is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
+    now = utc_now()
+    current = state.get("baseline_suggestion") or state.get("suggestion")
+    scale = current.scale if current is not None else intake.settings.scale
+    try:
+        suggestion = device_triage.derive(body, structured_facts(state), scale=scale, now=now)
+    except device_triage.Unacceptable as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
+    except device_triage.StaleInput as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    applied = await intake.apply_device_suggestion(
+        session_id, suggestion, device_triage.kiosk_source(body)
+    )
+    await device_triage.record(
+        principal.clinic_id,
+        body,
+        suggestion,
+        applied=applied,
+        events=request.app.state.events,
+        now=now,
+    )
+    logger.info(
+        "device_suggestion",
+        extra={
+            "session_id": session_id,
+            "model": f"{body.model_family.value}-{body.model_version}",
+            "applied": applied,
+            "latency_ms": body.latency_ms,
+        },
+    )
+    ack = DeviceSuggestionAck(applied=applied, suggestion_id=suggestion.suggestion_id)
+    if not applied:
+        ack = DeviceSuggestionAck(applied=False)
+    return JSONResponse(
+        ack.model_dump(mode="json", exclude_none=True),
+        status_code=status.HTTP_200_OK if applied else status.HTTP_202_ACCEPTED,
+    )
 
 
 __all__ = ["device_facts", "initials", "question_of", "router", "runtime", "session_row"]

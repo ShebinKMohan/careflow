@@ -2,6 +2,7 @@ packages:
   - apps/*
   - packages/ui
   - packages/contracts
+  - packages/laya-ts
 
 # One exact version per shared tool; packages refer to these with "catalog:".
 catalog:
@@ -33,11 +34,13 @@ catalog:
 
 # Install scripts stay off. sharp, unrs-resolver, @swc/core and @parcel/watcher ship prebuilt
 # binaries through optional dependencies (next, eslint-config-next, next-intl); @scarf/scarf is
-# install telemetry (from @stoplight/prism-cli) and must never run.
+# install telemetry (from @stoplight/prism-cli) and must never run. protobufjs (from
+# onnxruntime-web, M3-02) only checks its optional peer versions after install.
 allowBuilds:
   "@parcel/watcher": false
   "@scarf/scarf": false
   "@swc/core": false
+  protobufjs: false
   sharp: false
   unrs-resolver: false
 

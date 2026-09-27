@@ -26,6 +26,7 @@ from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedD
 from careflow_contracts.generated.events.envelope_schema import EventType
 from careflow_contracts.generated.nurse_decision_schema import NurseDecision
 from careflow_contracts.generated.structured_facts_schema import Language
+from careflow_contracts.generated.urgency_suggestion_schema import UrgencySuggestion
 from careflow_intake.checkpoint import libpq_url, serializer
 from careflow_intake.facts import FactEntry
 from careflow_intake.feels_worse import feels_worse_turns_and_facts
@@ -229,6 +230,28 @@ class IntakeRuntime:
         """Merge values into the session's state (the channels' reducers apply)."""
         async with self.serialized(session_id):
             await self.graph.aupdate_state(thread_config(session_id), values)
+
+    async def apply_device_suggestion(
+        self, session_id: str, suggestion: UrgencySuggestion, source: dict[str, str]
+    ) -> bool:
+        """Make a kiosk suggestion the current one while the graph waits for the nurse and no
+        decision exists (M3-02); the server's suggestion is kept as `baseline_suggestion`.
+        False when it came too late: the nurse has decided or no review is waiting."""
+        async with self.serialized(session_id):
+            snapshot = await self.graph.aget_state(thread_config(session_id))
+            values = cast(IntakeState, snapshot.values or {})
+            if not waiting_at(snapshot, "nurse_review") or values.get("nurse_decision"):
+                return False
+            baseline = values.get("baseline_suggestion") or values.get("suggestion")
+            await self.graph.aupdate_state(
+                thread_config(session_id),
+                {
+                    "suggestion": suggestion,
+                    "baseline_suggestion": baseline,
+                    "suggestion_source": source,
+                },
+            )
+            return True
 
     async def resume_nurse(self, session_id: str, decision: NurseDecision) -> Result:
         """The nurse's decision; raises `NotWaiting` or `InvalidNurseDecision`."""

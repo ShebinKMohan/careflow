@@ -151,6 +151,7 @@ def worklist_item(
     token_status: str | None,
     feels_worse: FeelsWorseSummary | None = None,
     medical_questions: Sequence[MedicalQuestion] | None = None,
+    suggestion_source: dict[str, str] | None = None,
 ) -> WorklistItem:
     facts = structured_facts(state)
     patient = facts.patient
@@ -193,6 +194,8 @@ def worklist_item(
         body["feels_worse"] = feels_worse.model_dump(mode="json", exclude_none=True)
     if medical_questions:  # M2-09: refused on the phone and flagged, for this nurse only
         body["medical_questions"] = [q.model_dump(mode="json") for q in medical_questions]
+    if suggestion_source and suggestion is not None:  # M3-02: which model, where it ran
+        body["suggestion_source"] = suggestion_source
     return WorklistItem.model_validate(body)
 
 

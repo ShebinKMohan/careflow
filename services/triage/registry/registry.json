@@ -1,0 +1,151 @@
+{
+ "schema": "careflow-model-registry/v1",
+ "entries": [
+  {
+   "version": "1.0.0",
+   "family": "hgb",
+   "artifact": "services/triage/artifacts/ktas-hgb-ebf31b5e-s42",
+   "sha256": "6684a3a5ec13a0970784fd0ef65b52ed32486b5b9cdfd13872cb4f21d1d05eec",
+   "files": [
+    {
+     "path": "background.npy",
+     "sha256": "2ad2c49e1fd8f88e4e4c08e30b6d05441cb8954292fc9e47b28af4089e0f612c",
+     "bytes": 11328
+    },
+    {
+     "path": "meta.json",
+     "sha256": "865069228e11334af6edb77b0b2320a484046392a251851fdbc3050490ce01ed",
+     "bytes": 5533
+    },
+    {
+     "path": "model.joblib",
+     "sha256": "47e6ca5f424c07f393aaa2412e1ee33dadfda59322a3808095bca24b3c54b8da",
+     "bytes": 1815008
+    }
+   ],
+   "datasets": {
+    "ktas": {
+     "csv_sha256": "ebf31b5ec517d7766851ee2082e30c3b05a578def3e2a667380c05b779f286ee",
+     "split": "ktas_v1.json",
+     "split_counts": {
+      "train": 886,
+      "val": 190,
+      "test": 191
+     }
+    }
+   },
+   "metrics": {
+    "source": "ktas-hgb-ebf31b5e-s42 meta.json (M1-04)",
+    "test_full": {
+     "n": 191,
+     "under_triage_l1_2": {
+      "count": 14,
+      "of": 37,
+      "ci95": [
+       0.24063999084918747,
+       0.5389956968436023
+      ]
+     },
+     "macro_f1": 0.6251970443349755,
+     "ece_after": 0.11213161560744693
+    }
+   },
+   "gate_report": null,
+   "status": "released",
+   "created_at": "2026-09-27T07:53:15+00:00"
+  },
+  {
+   "version": "1.0.0",
+   "family": "laya",
+   "artifact": "services/triage/artifacts/laya/laya-ktas-ebf31b5e-s42/onnx-int8",
+   "sha256": "201e43887d195cab5999aa771d6f29e6a2d07f0e1adebcd050173b17ade38805",
+   "files": [
+    {
+     "path": "encoder.onnx",
+     "sha256": "5c00c90a4bb26759bb89e37cc1a0951bb2140a80ec60362cb8e1f940ab1872ea",
+     "bytes": 492560874
+    },
+    {
+     "path": "head.onnx",
+     "sha256": "435471c9bd10f9e11bdf7c9f311c82e7a55794b9efa0b595ac38565894ada0a0",
+     "bytes": 106271091
+    },
+    {
+     "path": "question.json",
+     "sha256": "b56c2708fe1800180dd40323eddd130855bdb29af5948df3e9eed01d12c934c0",
+     "bytes": 506
+    },
+    {
+     "path": "rl_agent_config.json",
+     "sha256": "8dc0dfdd44714a3b927a9e0b76ed3722ae46233eaee0a56c8a647262a7c8d86c",
+     "bytes": 622
+    },
+    {
+     "path": "tokenizer/tokenizer.json",
+     "sha256": "6c8aaa9a542084f2457eab775d4eeb51f92a70c0fd9de28d5edb0ddec3c08d30",
+     "bytes": 3583228
+    },
+    {
+     "path": "tokenizer/tokenizer_config.json",
+     "sha256": "08d4cf3ac4dca381759441b85b91a6d40e688471dcd33d15d6649eb0a9a854d1",
+     "bytes": 337
+    },
+    {
+     "path": "tokenizer.json",
+     "sha256": "6c8aaa9a542084f2457eab775d4eeb51f92a70c0fd9de28d5edb0ddec3c08d30",
+     "bytes": 3583228
+    }
+   ],
+   "datasets": {
+    "ktas": {
+     "csv_sha256": "ebf31b5ec517d7766851ee2082e30c3b05a578def3e2a667380c05b779f286ee",
+     "split": "ktas_v1.json",
+     "split_counts": {
+      "train": 886,
+      "val": 190,
+      "test": 191
+     }
+    }
+   },
+   "metrics": {
+    "run": "laya-ktas-ebf31b5e-s42",
+    "bundle": "onnx-int8",
+    "source": "laya_ktas_20260927.json (the fp32 run, M3-01)",
+    "test_full": {
+     "n": 191,
+     "under_triage_l1_2": {
+      "count": 12,
+      "of": 37,
+      "ci95": [
+       0.19633266447139566,
+       0.485363328862634
+      ]
+     },
+     "macro_f1": 0.6624618736383441,
+     "ece_after": 0.09663034140751624
+    },
+    "test_kiosk_partial": {
+     "n": 191,
+     "under_triage_l1_2": {
+      "count": 14,
+      "of": 37,
+      "ci95": [
+       0.24063999084918747,
+       0.5389956968436023
+      ]
+     },
+     "macro_f1": 0.669648786906679,
+     "ece_after": 0.126671620220414
+    },
+    "temperature": 1.6376932859420776
+   },
+   "gate_report": null,
+   "status": "released",
+   "created_at": "2026-09-27T07:55:01+00:00"
+  }
+ ],
+ "current": {
+  "hgb": "1.0.0",
+  "laya": "1.0.0"
+ }
+}

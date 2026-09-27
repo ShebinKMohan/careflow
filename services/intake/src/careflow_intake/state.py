@@ -113,6 +113,10 @@ class IntakeState(TypedDict, total=False):
     extraction: ExtractionInfo
     suggestion: UrgencySuggestion | None
     suggestion_unavailable: str | None
+    # M3-02: when the kiosk's on-device model replaces the server suggestion before the nurse
+    # decides, the server's stays here; `suggestion_source` says which model made `suggestion`.
+    baseline_suggestion: UrgencySuggestion | None
+    suggestion_source: dict[str, str] | None
     nurse_decision: NurseDecision | None
     token: str | None
     room: str | None

@@ -17,6 +17,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 
+from careflow_api import device_triage
 from careflow_api.deps import Principal, require_roles
 from careflow_api.feels_worse import summaries as feels_worse_summaries
 from careflow_api.intake.runtime import IntakeRuntime
@@ -113,6 +114,7 @@ async def worklist(
                 token_status=token.status.value if token else None,
                 feels_worse=presses.get(session_id),
                 medical_questions=questions.get(session_id),
+                suggestion_source=device_triage.suggestion_source(dict(state)),
             )
         )
     return items
@@ -152,6 +154,13 @@ async def decide(
     if decision.nurse_user_id != principal.subject:
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="A decision is made as yourself.")
     before = await intake.state(session_id)
+    current = (before or {}).get("suggestion")
+    if current is not None and decision.suggestion_id != current.suggestion_id:
+        # M3-02: the kiosk model may have replaced the suggestion since the nurse read it.
+        raise HTTPException(
+            status.HTTP_409_CONFLICT,
+            detail="The suggestion changed since you opened it; review the triage again.",
+        )
     try:
         await intake.resume_nurse(session_id, decision)
     except NotWaiting as exc:

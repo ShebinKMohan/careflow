@@ -22,6 +22,11 @@ laya_app = typer.Typer(
 )
 app.add_typer(laya_app, name="laya")
 LAYA_CONFIG = Path(__file__).resolve().parents[2] / "config" / "laya_ktas_v1.yaml"
+registry_app = typer.Typer(
+    add_completion=False,
+    help="The versioned model registry (M3-02); M5-02 adds the gated register and promote.",
+)
+app.add_typer(registry_app, name="registry")
 
 
 def _data(csv: Path | None) -> tuple[Path, str]:
@@ -157,6 +162,16 @@ def laya_evaluate(
     typer.echo(f"laya: report {md_path} ({json_path.name})")
 
 
+@laya_app.command("quantize")
+def laya_quantize(
+    run_dir: Annotated[Path | None, typer.Option(help="Run directory.")] = None,
+) -> None:
+    """int8 encoder (dynamic, QInt8) and fp32 head from onnx-fp32/ into onnx-int8/ (M3-02)."""
+    from careflow_triage.laya_ktas.quantize import quantize
+
+    typer.echo(f"laya: int8 {quantize(_laya_run(run_dir))}")
+
+
 @laya_app.command("fixtures")
 def laya_fixtures(
     run_dir: Annotated[Path | None, typer.Option(help="Run directory.")] = None,
@@ -165,6 +180,52 @@ def laya_fixtures(
     from careflow_triage.laya_ktas.golden import write_golden
 
     typer.echo(f"laya: golden {write_golden(_laya_run(run_dir))}")
+
+
+@registry_app.command("add")
+def registry_add(
+    family: Annotated[str, typer.Option(help="hgb or laya.")],
+    version: Annotated[str, typer.Option(help="Semantic version, e.g. 1.0.0.")],
+    artifact: Annotated[Path, typer.Option(help="The artifact directory.")],
+    status: Annotated[str, typer.Option(help="released, candidate or retired.")] = "released",
+    notes: Annotated[str, typer.Option(help="A paragraph for the model card.")] = "",
+) -> None:
+    """Register an artifact (bootstrap until M5-02's gated register)."""
+    from careflow_triage.registry import add
+
+    record = add(family, version, artifact, status=status, notes=notes)  # type: ignore[arg-type]
+    typer.echo(
+        f"registry: {family} {version} ({len(record['files'])} files, {record['sha256'][:12]})"
+    )
+
+
+@registry_app.command("list")
+def registry_list() -> None:
+    """Every entry, with the current version per family."""
+    from careflow_triage.registry import load
+
+    body = load()
+    for record in body["entries"]:
+        mark = "*" if body["current"].get(record["family"]) == record["version"] else " "
+        typer.echo(
+            f"{mark} {record['family']} {record['version']} {record['status']} "
+            f"{record['artifact']} {record['sha256'][:12]}"
+        )
+
+
+@registry_app.command("verify")
+def registry_verify(
+    family: Annotated[str | None, typer.Option(help="Only this family.")] = None,
+) -> None:
+    """Check every current entry's files against the registry's sha256s."""
+    from careflow_triage.registry import verify
+
+    problems = verify(family)
+    for problem in problems:
+        typer.echo(f"registry: {problem}", err=True)
+    if problems:
+        raise typer.Exit(1)
+    typer.echo("registry: ok")
 
 
 def main() -> None:

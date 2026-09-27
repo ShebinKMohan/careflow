@@ -95,6 +95,11 @@
         "en": "English",
         "ar": "Arabic"
       }
+    },
+    "suggestionSource": "{model} {version} · {device}",
+    "devices": {
+      "kiosk": "kiosk",
+      "server": "server"
     }
   },
   "doctor": {

@@ -59,6 +59,7 @@ from careflow_contracts.generated.nurse_decision_schema import (
     OverrideReasonCode,
 )
 from careflow_contracts.generated.fact_schema import FactId, Identifier, Provenance, SourceRef
+from typing_extensions import TypeAliasType
 from careflow_contracts.generated.events.envelope_schema import EventEnvelope
 from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedData
 from careflow_contracts.generated.events.triage_suggested_schema import TriageSuggestedData
@@ -515,6 +516,81 @@ class Sex(StrEnum):
     female = "female"
     other = "other"
     unknown = "unknown"
+
+
+class Device(StrEnum):
+    kiosk = "kiosk"
+    server = "server"
+
+
+class SuggestionSource(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    family: Annotated[str, Field(max_length=32)]
+    version: Annotated[str, Field(max_length=64)]
+    device: Device
+
+
+class InputContract(StrEnum):
+    laya_state_v1 = "laya-state/v1"
+
+
+StateAdditionalProperty = TypeAliasType(
+    "StateAdditionalProperty", Annotated[str, Field(max_length=300)]
+)
+
+
+class ModelInput(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    input_contract: InputContract
+    state: Annotated[dict[str, StateAdditionalProperty], Field(max_length=16)]
+    facts_sha256: Annotated[str, Field(pattern="^[0-9a-f]{64}$")]
+
+
+class ModelFamily(StrEnum):
+    laya = "laya"
+
+
+type Probability = Annotated[float, Field(ge=0.0, le=1.0)]
+
+
+class ReasonKey(StrEnum):
+    age = "age"
+    sex = "sex"
+    chief_complaint = "chief_complaint"
+    pain_score = "pain_score"
+    heart_rate = "heart_rate"
+    spo2 = "spo2"
+    temperature = "temperature"
+    respiratory_rate = "respiratory_rate"
+    systolic_bp = "systolic_bp"
+    consciousness = "consciousness"
+
+
+class DeviceUrgencySuggestion(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    model_family: ModelFamily
+    model_version: Annotated[str, Field(pattern="^[0-9]+\\.[0-9]+\\.[0-9]+$")]
+    facts_sha256: Annotated[str, Field(pattern="^[0-9a-f]{64}$")]
+    probabilities: Annotated[
+        list[Probability],
+        Field(description="KTAS level 1 to 5, in order.", max_length=5, min_length=5),
+    ]
+    reason_keys: Annotated[list[ReasonKey], Field(max_length=3)]
+    latency_ms: Annotated[int, Field(ge=0, le=600000)]
+
+
+class DeviceSuggestionAck(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    applied: bool
+    suggestion_id: Identifier | None = None
 
 
 class MedicalQuestion(BaseModel):
@@ -1157,6 +1233,7 @@ class WorklistItem(BaseModel):
         Field(description="The chief complaint, short. Staff screens only.", max_length=80),
     ] = None
     feels_worse: FeelsWorseSummary | None = None
+    suggestion_source: SuggestionSource | None = None
     medical_questions: Annotated[
         list[MedicalQuestion] | None,
         Field(

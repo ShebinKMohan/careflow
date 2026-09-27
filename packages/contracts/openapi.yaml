@@ -901,6 +901,96 @@ paths:
           $ref: '#/components/responses/Notfound'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/model-input:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getModelInput
+      summary: The kiosk model's input (M3-02)
+      description: The session's facts as the on-device urgency model reads them (input contract
+        `laya-state/v1`), built on the server from the structured facts, and the SHA-256 of that
+        state. Never a level, an alert or a suggestion.
+      tags:
+      - triage
+      x-careflow-roles:
+      - patient_session
+      responses:
+        '200':
+          description: The kiosk model's input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelInput'
+              example:
+                input_contract: laya-state/v1
+                state:
+                  age: 54 years
+                  sex: male
+                  chief_complaint: chest pain
+                  heart_rate: 112 /min
+                facts_sha256: 3f0a2b6c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+  /v1/sessions/{session_id}/urgency-suggestion:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: postDeviceUrgencySuggestion
+      summary: The kiosk model's urgency suggestion (M3-02)
+      description: The on-device model's probabilities for the five levels. The server derives the
+        level, the confidence and the reasons. While the nurse has not decided, it replaces the
+        server suggestion (200, applied); otherwise it is stored for analysis only (202, not
+        applied). 422 for a model version that is not released or probabilities that do not sum
+        to 1; 409 when the facts changed since the model input was read.
+      tags:
+      - triage
+      x-careflow-roles:
+      - patient_session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceUrgencySuggestion'
+            example:
+              model_family: laya
+              model_version: 1.0.0
+              facts_sha256: 3f0a2b6c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a
+              probabilities: [0.02, 0.61, 0.3, 0.05, 0.02]
+              reason_keys: [chief_complaint, heart_rate]
+              latency_ms: 2140
+      responses:
+        '200':
+          description: Applied as the current suggestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceSuggestionAck'
+              example:
+                applied: true
+                suggestion_id: sug_device_chest_pain
+        '202':
+          description: Stored for analysis only (the nurse has decided, or no review is waiting)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceSuggestionAck'
+              example:
+                applied: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
   /v1/sessions/{session_id}/triage:
     parameters:
     - $ref: '#/components/parameters/SessionId'
@@ -2960,6 +3050,8 @@ components:
           description: The chief complaint, short. Staff screens only.
         feels_worse:
           $ref: '#/components/schemas/FeelsWorseSummary'
+        suggestion_source:
+          $ref: '#/components/schemas/SuggestionSource'
         medical_questions:
           type: array
           maxItems: 20
@@ -2979,6 +3071,112 @@ components:
       - state
       - alerts
       - open_tasks
+      additionalProperties: false
+    SuggestionSource:
+      type: object
+      description: Which model and version produced the current suggestion, and where it ran (M3-02),
+        for the nurse's badge, e.g. "Laya 1.0.0 · kiosk" or "HGB 1.0.0 · server".
+      properties:
+        family:
+          type: string
+          maxLength: 32
+        version:
+          type: string
+          maxLength: 64
+        device:
+          type: string
+          enum:
+          - kiosk
+          - server
+      required:
+      - family
+      - version
+      - device
+      additionalProperties: false
+    ModelInput:
+      type: object
+      description: The on-device model's input (M3-02). No level, alert or suggestion.
+      properties:
+        input_contract:
+          type: string
+          enum:
+          - laya-state/v1
+        state:
+          type: object
+          maxProperties: 16
+          additionalProperties:
+            type: string
+            maxLength: 300
+        facts_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+      required:
+      - input_contract
+      - state
+      - facts_sha256
+      additionalProperties: false
+    DeviceUrgencySuggestion:
+      type: object
+      description: What the kiosk model computed (M3-02). The kiosk is an untrusted client, so the
+        server checks the version and the probabilities and derives the level, the confidence and
+        the reasons itself.
+      properties:
+        model_family:
+          type: string
+          enum:
+          - laya
+        model_version:
+          type: string
+          pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+        facts_sha256:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        probabilities:
+          type: array
+          description: KTAS level 1 to 5, in order.
+          minItems: 5
+          maxItems: 5
+          items:
+            type: number
+            minimum: 0
+            maximum: 1
+        reason_keys:
+          type: array
+          maxItems: 3
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - age
+            - sex
+            - chief_complaint
+            - pain_score
+            - heart_rate
+            - spo2
+            - temperature
+            - respiratory_rate
+            - systolic_bp
+            - consciousness
+        latency_ms:
+          type: integer
+          minimum: 0
+          maximum: 600000
+      required:
+      - model_family
+      - model_version
+      - facts_sha256
+      - probabilities
+      - reason_keys
+      - latency_ms
+      additionalProperties: false
+    DeviceSuggestionAck:
+      type: object
+      properties:
+        applied:
+          type: boolean
+        suggestion_id: *id005
+      required:
+      - applied
       additionalProperties: false
     MedicalQuestion:
       type: object

@@ -4,13 +4,14 @@ import { Card } from "@careflow/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { patientApi } from "@/lib/api";
 import { type AnswerKey, quickAnswers } from "@/lib/quickAnswers";
 import { type IntakeQuestion, useKiosk } from "@/lib/session";
 import { ContinueOnPhone } from "@/components/ContinueOnPhone";
 import { hasConsent } from "@/consent/hasConsent";
+import { runDeviceTriage } from "@/lib/triage/deviceTriage";
 import { createVoiceClient, voiceEnabled } from "@/lib/voice";
 
 type InputMode = "tap" | "text" | "voice";
@@ -43,9 +44,17 @@ export function IntakeFlow() {
 
   useEffect(() => onWipe(() => voice.abort()), [onWipe, voice]);
   useEffect(() => () => voice.stop(), [voice]); // leaving the screen closes the microphone
+  const triaged = useRef<string | null>(null);
   useEffect(() => {
+    if (!patient || patient.question !== null) return;
+    // The intake is done: the kiosk model suggests a level in the background (M3-02); the
+    // patient moves on at once, and without a model the server's suggestion stays.
+    if (triaged.current !== patient.sessionId) {
+      triaged.current = patient.sessionId;
+      runDeviceTriage(patient.sessionId, patient.token);
+    }
     // A child skips the adult sensor steps (M2-04): a nurse checks temperature and breathing.
-    if (patient && patient.question === null) router.push(patient.patientType === "child" ? "/done" : "/vitals");
+    router.push(patient.patientType === "child" ? "/done" : "/vitals");
   }, [patient, router]);
 
   if (!patient || !client) {

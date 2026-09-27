@@ -24,10 +24,14 @@ dependencies = [
 # Laya (M3-01): a ModernBERT-large decision model fine-tuned on KTAS on MPS. Apple silicon only,
 # like the voice and embedding extras: torch's Linux wheels would pull the CUDA stack into the
 # lock. The serializer (`laya_ktas.serialize`) never imports it, so CI and the API run without it.
+# M3-02 adds the ONNX export (torch's dynamo exporter: onnx, onnxscript) and the int8 runtime.
 laya = [
   "laya==0.3.20; sys_platform == 'darwin' and platform_machine == 'arm64'",
   "torch>=2.8,<3; sys_platform == 'darwin' and platform_machine == 'arm64'",
   "transformers>=5.17,<6; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "onnx>=1.23,<1.24; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "onnxscript>=0.7,<0.8; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "onnxruntime==1.30.0; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
 
 [project.scripts]
