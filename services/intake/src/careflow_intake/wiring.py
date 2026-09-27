@@ -63,7 +63,15 @@ class IntakeConfig:
         return IntakeSettings(max_turns=self.max_turns, max_seconds=self.max_seconds)
 
 
-def load_intake_config(path: Path = INTAKE_CONFIG) -> IntakeConfig:
+def intake_config_path() -> Path:
+    """`CAREFLOW_INTAKE_CONFIG` when set (deterministic API tests and E2E runs use a copy with
+    `llm_phrasing: false`), else config/intake.yaml."""
+    override = os.environ.get("CAREFLOW_INTAKE_CONFIG")
+    return Path(override) if override else INTAKE_CONFIG
+
+
+def load_intake_config(path: Path | None = None) -> IntakeConfig:
+    path = path or intake_config_path()
     body: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     return IntakeConfig(
         llm_phrasing=bool(body.get("llm_phrasing", True)),
@@ -110,7 +118,7 @@ def providers_config(path: Path = PROVIDERS_CONFIG) -> ProvidersConfig:
 @dataclass(frozen=True)
 class RealPortsSettings:
     providers: Path = PROVIDERS_CONFIG
-    intake: Path = INTAKE_CONFIG
+    intake: Path | None = None  # None: intake_config_path()
     llm_phrasing: bool | None = None  # overrides config/intake.yaml
     extraction_provider: ChatProvider | None = None  # e.g. a ReplayProvider for scripted runs
     conversation_provider: ChatProvider | None = None
@@ -147,6 +155,7 @@ __all__ = [
     "RealPortsSettings",
     "briefing_summarizer",
     "build_real_ports",
+    "intake_config_path",
     "load_intake_config",
     "providers_config",
 ]

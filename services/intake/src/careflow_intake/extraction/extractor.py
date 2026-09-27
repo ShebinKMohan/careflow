@@ -31,6 +31,7 @@ from careflow_intake.extraction.prompt import build_messages, extractable_keys, 
 from careflow_intake.extraction.verify import VerifiedFact, numeric_value, verify_facts
 from careflow_intake.facts import LIST_KEYS, FactEntry, fact_class, stable_fact_id
 from careflow_intake.ports import ExtractionResult
+from careflow_providers.adapters.replay import ReplayProvider
 from careflow_providers.base import ChatProvider, StructuredFailure, structured
 from careflow_providers.config import ProvidersConfig, load_config
 from careflow_providers.factory import build_provider
@@ -136,7 +137,9 @@ class LlmExtractor:
         providers is a config change only."""
         providers = config if isinstance(config, ProvidersConfig) else load_config(config)
         provider = build_provider(TASK, providers, chat_model=chat_model)
-        kind = providers.tasks[TASK].provider
+        # A replayed provider says so: its facts come from a recording, not from the model.
+        replaying = isinstance(provider, ReplayProvider) and provider.mode == "replay"
+        kind = "replay" if replaying else providers.tasks[TASK].provider
         return cls(provider, timeout_seconds=timeout_seconds, provider_kind=kind)
 
     def _result(self, language: Language, **fields: Any) -> ExtractionResult:

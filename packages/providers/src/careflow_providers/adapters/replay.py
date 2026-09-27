@@ -87,6 +87,11 @@ class ReplayProvider:
         yield (await self.chat(messages)).text
 
 
+def provider_mode() -> Mode:
+    """`CAREFLOW_PROVIDER_MODE` (record, replay or off; unset is off)."""
+    return _mode_from_env()
+
+
 def _mode_from_env() -> Mode:
     value = os.environ.get("CAREFLOW_PROVIDER_MODE", "off")
     if value not in ("record", "replay", "off"):
