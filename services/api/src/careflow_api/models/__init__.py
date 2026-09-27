@@ -198,6 +198,22 @@ class FeelsWorseReportRow(_ClinicScoped, Base):
     reported_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
 
 
+class NurseFlagRow(_ClinicScoped, Base):
+    """A medical question refused on the phone (M2-09), for the nurse; deleted when the session
+    closes. The events never carry `question_text`."""
+
+    __tablename__ = "nurse_flags"
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id")
+    )
+    flag_id: Mapped[str] = mapped_column(String(64), unique=True)
+    reason: Mapped[str] = mapped_column(String(32))
+    question_text: Mapped[str] = mapped_column(Text)
+    lang: Mapped[str] = mapped_column(String(2))
+    category: Mapped[str] = mapped_column(String(16))
+    raised_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+
+
 class QueueTokenRow(_ClinicScoped, Base):
     """One queue token (M1-10). Status: waiting | called | arrived | no_show | closed."""
 
@@ -278,6 +294,7 @@ __all__ = [
     "FhirWriteback",
     "FhirWritebackStatus",
     "NurseDecisionRow",
+    "NurseFlagRow",
     "OutboxEvent",
     "PatientSession",
     "ProcessedEvent",
