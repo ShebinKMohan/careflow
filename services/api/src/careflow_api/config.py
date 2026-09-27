@@ -40,6 +40,11 @@ class Settings(BaseSettings):
     event_stream: str = Field(
         default="careflow:events", validation_alias=AliasChoices("CAREFLOW_EVENT_STREAM")
     )
+    #: Browser origins allowed to call the API (the apps under `make up`), comma-separated.
+    cors_origins: str = Field(
+        default="http://localhost:3000,http://localhost:3001,http://localhost:3002",
+        validation_alias=AliasChoices("CAREFLOW_CORS_ORIGINS"),
+    )
     #: Run the intake graph behind the patient and nurse routes (M1-12).
     intake_runtime: bool = Field(
         default=True, validation_alias=AliasChoices("CAREFLOW_INTAKE_RUNTIME")

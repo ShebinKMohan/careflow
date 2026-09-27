@@ -10,6 +10,7 @@ import contextlib
 from collections.abc import AsyncIterator
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry.sdk.trace import TracerProvider
 from redis.asyncio import Redis
 
@@ -78,6 +79,15 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         lifespan=lifespan,
     )
     problems.install(app)
+    # The kiosk, staff and companion apps call the API from the browser; bearer tokens only, so
+    # no cookies cross origins.
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[o.strip() for o in settings.cors_origins.split(",") if o.strip()],
+        allow_methods=["GET", "POST"],
+        allow_headers=["Authorization", "Content-Type"],
+        allow_credentials=False,
+    )
     app.state.redis = Redis.from_url(settings.redis_url, decode_responses=True)
     app.state.events = OutboxPublisher()
     app.state.relay = OutboxRelay(app.state.redis, stream=settings.event_stream)
