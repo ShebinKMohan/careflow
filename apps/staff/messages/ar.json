@@ -41,7 +41,7 @@
     "level": "{scale} {level}",
     "noLevel": "لم يُقيَّم بعد",
     "sessionTitle": "الفرز",
-    "session": "الجلسة {id}",
+    "session": "الجلسة <ltr>{id}</ltr>",
     "ageSex": "العمر، الجنس",
     "complaint": "الشكوى",
     "levelColumn": "المستوى",
@@ -72,7 +72,7 @@
   },
   "doctor": {
     "title": "ملخص الطبيب",
-    "session": "الجلسة {id}",
+    "session": "الجلسة <ltr>{id}</ltr>",
     "listTitle": "المرضى المؤكدون",
     "none": "لا يوجد مرضى مؤكدون اليوم بعد.",
     "token": "الرقم",
@@ -163,8 +163,8 @@
     "failed": "لم يُحفظ القرار. حاول مرة أخرى.",
     "confirmedTitle": "القرار",
     "confirmedLevel": "{label}، حدده الممرض",
-    "token": "الرقم {code}",
-    "room": "الغرفة {room}",
+    "token": "الرقم <ltr>{code}</ltr>",
+    "room": "الغرفة <ltr>{room}</ltr>",
     "noToken": "لا يوجد رقم انتظار بعد.",
     "warnings": {
       "extraction_incomplete": "الاستخلاص غير مكتمل. راجع الإجابات مع المريض.",

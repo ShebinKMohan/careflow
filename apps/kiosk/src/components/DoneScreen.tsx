@@ -72,7 +72,7 @@ export function DoneScreen() {
           </p>
           {status?.room ? (
             <p className="text-title font-semibold" data-testid="room">
-              {t("room", { room: status.room })}
+              {t.rich("room", { room: status.room, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}
             </p>
           ) : (
             <p className="text-title">{t("waiting")}</p>

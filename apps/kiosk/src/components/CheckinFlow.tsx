@@ -3,7 +3,7 @@
 import { Card } from "@careflow/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState, useSyncExternalStore } from "react";
 
 import { api } from "@/lib/api";
@@ -21,6 +21,7 @@ const noSubscription = () => () => undefined;
 /** The silent keypad -> POST /v1/checkin/keypad (digits only in the body) -> /intake. */
 export function CheckinFlow() {
   const t = useTranslations("checkin");
+  const locale = useLocale() === "ar" ? "ar" : "en";
   const tIntake = useTranslations("intake");
   const router = useRouter();
   const { start } = useKiosk();
@@ -34,7 +35,7 @@ export function CheckinFlow() {
     if (!device) return;
     setWorking(true);
     const { data } = await api.POST("/v1/checkin/keypad", {
-      body: { clinic_id: device.clinicId, kiosk_id: device.deviceId, digits },
+      body: { clinic_id: device.clinicId, kiosk_id: device.deviceId, digits, language: locale },
     });
     setWorking(false);
     if (!data) {

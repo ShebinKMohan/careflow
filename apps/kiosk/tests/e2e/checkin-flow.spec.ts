@@ -102,7 +102,8 @@ test("keypad, three answers (tap, typed, severity), vitals, the token and room, 
   ]);
   expect(sent.every((s) => s.auth === "Bearer example-session-token-e2e")).toBe(true);
   // The keypad digits travel only in the POST body, never in a URL.
-  expect(checkinBody).toEqual({ clinic_id: "clinic_demo", kiosk_id: "kiosk_01", digits: DIGITS });
+  // The session keeps the language picked on the first screen (M2-01).
+  expect(checkinBody).toEqual({ clinic_id: "clinic_demo", kiosk_id: "kiosk_01", digits: DIGITS, language: "en" });
   expect(urls.filter((url) => url.includes(DIGITS))).toEqual([]);
   // Nothing about the patient is stored in the browser.
   const stored = await page.evaluate(() => ({

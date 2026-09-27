@@ -31,6 +31,7 @@ lint-py:
 
 lint-node:
 	pnpm -r lint
+	node scripts/check-physical-css.mjs
 
 typecheck: typecheck-py typecheck-node ## Pyright and tsc
 
