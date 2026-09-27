@@ -144,7 +144,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Issue a one-time QR hand-over token */
+        /**
+         * Issue a one-time QR hand-over token
+         * @description A 120-second, single-use token for this session (M2-06), signed with its own key; it carries no personal data. The kiosk shows it as `http://<companion>/claim#t=<qr_token>`, in the URL fragment so no browser sends it in a request. The kiosk's device token or the session's kiosk-channel patient token may ask; a phone token may not. A closed or already handed-over session is a 409.
+         */
         post: operations["issueQrToken"];
         delete?: never;
         options?: never;
@@ -163,7 +166,7 @@ export interface paths {
         put?: never;
         /**
          * Claim the QR hand-over on the phone
-         * @description The single-use qr_token in the body is the credential, so no bearer is needed. It fails with 401 once used or expired.
+         * @description The single-use qr_token in the body is the credential, so no bearer is needed (rate-limited to 10 claims a minute per IP). An expired, forged or wrong-audience token is a 401; a spent token, or a closed or already handed-over session, is a 409. The result is a phone-channel patient token for that one session and the question the intake is waiting on; the kiosk's tokens for the session stop working and the kiosk receives the `session.handed_over` WebSocket frame.
          */
         post: operations["claimQrToken"];
         delete?: never;
@@ -2614,6 +2617,7 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
         };
     };
     claimQrToken: {
@@ -2652,6 +2656,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["Unauthorized"];
+            409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };
