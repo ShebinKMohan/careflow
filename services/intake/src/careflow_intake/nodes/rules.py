@@ -8,13 +8,19 @@ from typing import Literal
 
 from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedData
 from careflow_contracts.generated.events.envelope_schema import EventType
+from careflow_intake.conversation.child_questions import asked_counts, next_child_question
 from careflow_intake.nodes import Update
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState, structured_facts
 
 
 def caps_reached(state: IntakeState, now: datetime, settings: IntakeSettings) -> bool:
-    """The conversation stops after `max_turns` patient answers or `max_seconds`."""
+    """The conversation stops after `max_turns` patient answers or `max_seconds`, except while a
+    child's fixed question bank (M2-04) still has questions: those are never cut short."""
+    if state.get("patient_type") == "child":
+        asked = asked_counts(state.get("turns", []))
+        if next_child_question(structured_facts(state), asked) is not None:
+            return False
     if state.get("turn_count", 0) >= settings.max_turns:
         return True
     started_at = state.get("started_at")

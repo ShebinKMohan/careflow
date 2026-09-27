@@ -9,8 +9,10 @@ from langgraph.types import interrupt
 
 from careflow_contracts.generated.structured_facts_schema import FactKey, Language, Turn, TurnRole
 from careflow_intake.nodes import Update
+from careflow_intake.patient_details import AGE_KEYS
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState
+from careflow_intake.tap import tap_fact
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +21,12 @@ MAX_ANSWER_CHARS: Final = 4000  # the contract's Turn.text limit
 
 class InvalidAnswer(ValueError):
     """The patient's answer cannot become a turn (empty or too long)."""
+
+
+def answer_mode(raw: Any) -> str:
+    """How the answer came (`{"input_mode": ...}`): "tap", "voice" or, by default, "text"."""
+    mode = raw.get("input_mode") if isinstance(raw, dict) else None
+    return mode if mode in ("tap", "text", "voice") else "text"
 
 
 def answer_text(raw: Any) -> str:
@@ -81,6 +89,7 @@ async def await_answer(state: IntakeState, ports: IntakePorts, settings: IntakeS
             break
         except InvalidAnswer as exc:
             payload = {**base, "error": str(exc)}
+    mode = answer_mode(raw)
     turn = Turn(
         turn_id=next_turn_id(state),
         role=TurnRole.patient,
@@ -92,6 +101,7 @@ async def await_answer(state: IntakeState, ports: IntakePorts, settings: IntakeS
         "turns": [turn],
         "turn_count": state.get("turn_count", 0) + 1,
         "pending_question": None,
+        "last_answer_mode": mode,
         "node_trace": ["await_answer"],
     }
 
@@ -107,6 +117,12 @@ async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettin
         for turn in turns
         if turn.role is TurnRole.patient and turn.question_key is not None
     }
+    latest = turns[-1]
+    if state.get("last_answer_mode") == "tap" and latest.question_key is not None:
+        # A tapped Yes / No / Not sure or scale number maps straight to its fact (M2-04).
+        tapped = tap_fact(latest, latest.question_key)
+        if tapped is not None:
+            return {"facts": [tapped], "node_trace": ["extract"]}
     try:
         result = await ports.extractor.extract(
             turns, state.get("facts", []), question_keys, Language(state["language"])
@@ -114,8 +130,12 @@ async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettin
     except Exception as exc:  # fail safe
         logger.warning("extraction failed for %s: %s", state["session_id"], type(exc).__name__)
         return {"flags": {"extraction_incomplete": True}, "node_trace": ["extract"]}
+    facts = list(result.facts)
+    if state.get("patient_type") == "child":
+        # A child's age is the parent's kiosk entry (M2-04); a model never replaces it.
+        facts = [entry for entry in facts if entry.key not in AGE_KEYS]
     update: Update = {
-        "facts": list(result.facts),
+        "facts": facts,
         "extraction": {
             "dropped_count": result.dropped_count,
             "model_id": result.model_id,

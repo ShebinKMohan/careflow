@@ -34,3 +34,22 @@ questions:
   child_danger.non_blanching_rash: "Does your child have spots that do not fade when you press a glass on them?"
   child_amber.poor_feeding: "Is your child feeding or drinking much less than usual?"
   child_amber.reduced_urine_output: "Has your child had fewer wet nappies or passed less urine than usual?"
+# The child question bank (M2-04), asked of the parent verbatim (never rephrased), in the order of
+# conversation/child_questions.py: the NICE NG143 red features a parent can answer, then amber.
+child_questions:
+  child_danger.hard_to_wake: "Is your child very hard to wake, or not staying awake?"
+  child_danger.no_response_to_social_cues: "Is your child not responding to you at all?"
+  child_danger.weak_high_pitched_or_continuous_cry: "Is your child's cry weak, high-pitched or non-stop?"
+  child_danger.pale_mottled_ashen_or_blue: "Does your child's skin look very pale, blotchy, grey or blue?"
+  child_danger.grunting: "Is your child grunting or struggling to breathe?"
+  child_danger.non_blanching_rash: "Does your child have a rash that does not fade when you press a glass on it?"
+  child_danger.neck_stiffness: "Does your child have a stiff neck?"
+  child_danger.seizure: "Has your child had a fit or seizure?"
+  child_amber.decreased_activity: "Is your child much less active than usual?"
+  child_amber.not_responding_normally: "Is your child not smiling or not responding to you as usual?"
+  child_amber.poor_feeding: "Is your child feeding or drinking much less than usual?"
+  child_amber.reduced_urine_output: "Has your child had fewer wet nappies or passed less urine than usual?"
+  child_amber.fever_5_days_or_more: "Has your child had a fever for 5 days or more?"
+  infection.rigors: "Has your child had shivering fits?"
+  child_amber.limb_or_joint_swelling: "Does your child have a swollen joint or limb?"
+  child_amber.non_weight_bearing: "Is your child not using an arm or leg, or not able to stand on it?"

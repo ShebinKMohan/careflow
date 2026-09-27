@@ -13,6 +13,7 @@ from careflow_contracts.generated.structured_facts_schema import (
     TurnRole,
 )
 from careflow_intake.conversation.checklist import Templates, load_templates, templates_for
+from careflow_intake.conversation.child_questions import next_child_question
 from careflow_intake.conversation.output_filter import check_patient_facing
 from careflow_intake.conversation.phrasing import Phraser
 from careflow_intake.conversation.picker import has_critical_alert, pick_next_question
@@ -61,8 +62,22 @@ class ChecklistConversation:
         alerts = state.get("alerts", [])
         announced = any(turn.text == nurse_coming for turn in prompts)
         notice = nurse_coming if has_critical_alert(alerts) and not announced else None
+        facts = structured_facts(state)
+        if state.get("patient_type") == "child":
+            child_key = next_child_question(facts, asked)
+            if child_key is not None:  # the fixed bank, verbatim (M2-04)
+                text = templates.render_child(child_key)
+                if not check_patient_facing(text).allowed:
+                    raise RuntimeError(f"the child question {child_key.value} fails the filter")
+                return Question(
+                    question_id=f"q_{child_key.value}_{asked[child_key] + 1}",
+                    text=text,
+                    key=child_key,
+                    source="template",
+                    notice=notice,
+                )
         key = pick_next_question(
-            structured_facts(state),
+            facts,
             state.get("needed_facts", []),
             asked,
             state.get("ehr_context"),
