@@ -419,6 +419,10 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+arabic-speech = [
+    { name = "torch", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
+    { name = "transformers", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
+]
 mlx-whisper = [
     { name = "mlx-whisper", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
 ]
@@ -441,10 +445,12 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0,<7" },
     { name = "redis", specifier = ">=8.1,<9" },
     { name = "soxr", specifier = ">=1.1,<2" },
+    { name = "torch", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'arabic-speech'", specifier = ">=2.14,<3" },
+    { name = "transformers", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'arabic-speech'", specifier = ">=5.17,<6" },
     { name = "uvicorn", specifier = ">=0.54,<0.55" },
     { name = "websockets", specifier = ">=16.1,<17" },
 ]
-provides-extras = ["mlx-whisper"]
+provides-extras = ["mlx-whisper", "arabic-speech"]
 
 [[package]]
 name = "certifi"

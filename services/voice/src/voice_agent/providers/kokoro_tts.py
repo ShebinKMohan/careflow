@@ -25,6 +25,7 @@ import threading
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
+from voice_agent.providers._memory import peak_rss_mb
 from voice_agent.telephony.plivo import PlivoAudioFormat
 
 logger = logging.getLogger(__name__)
@@ -65,6 +66,7 @@ def _cached_engine(model_path: str, voices_path: str) -> tuple[Any, threading.Lo
         if entry is None:
             entry = (_build_engine(model_path, voices_path), threading.Lock())
             _ENGINE_CACHE[key] = entry
+            logger.info("kokoro.loaded", extra={"model": model_path, "peak_rss_mb": peak_rss_mb()})
         return entry
 
 

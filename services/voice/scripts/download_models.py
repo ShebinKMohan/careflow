@@ -44,6 +44,8 @@ _SHERPA = "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models"
 _KOKORO = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0"
 _SMART_TURN_REV = "f766f81d3cfdf7737ac64aad813d91bbfd56bf93"
 _WHISPER_REV = "a4aaeec0636e6fef84abdcbe3544cb2bf7e9f6fb"
+_MMS_REPO = "facebook/mms-tts-ara"  # Arabic TTS (M2-02); CC-BY-NC-4.0, see ADR-033
+_MMS_REV = "afba26a4b470f9ae64aeeea91b99f080dee410de"
 
 
 def _hf(repo: str, revision: str, file: str, path: str, size: int, *, whisper: bool = False):
@@ -68,6 +70,11 @@ FILES: tuple[ModelFile, ...] = (
         "whisper-large-v3-turbo/config.json", 268, whisper=True),
     _hf("mlx-community/whisper-large-v3-turbo", _WHISPER_REV, "weights.safetensors",
         "whisper-large-v3-turbo/weights.safetensors", 1_613_977_612, whisper=True),
+    _hf(_MMS_REPO, _MMS_REV, "config.json", "mms-tts-ara/config.json", 1_641),
+    _hf(_MMS_REPO, _MMS_REV, "model.safetensors", "mms-tts-ara/model.safetensors", 145_228_280),
+    _hf(_MMS_REPO, _MMS_REV, "special_tokens_map.json", "mms-tts-ara/special_tokens_map.json", 48),
+    _hf(_MMS_REPO, _MMS_REV, "tokenizer_config.json", "mms-tts-ara/tokenizer_config.json", 288),
+    _hf(_MMS_REPO, _MMS_REV, "vocab.json", "mms-tts-ara/vocab.json", 460),
 )  # fmt: skip
 
 
