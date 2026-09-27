@@ -729,6 +729,22 @@ paths:
                   model_version: 0.1.0
                   created_at: '2026-09-26T09:04:00Z'
                 needed_facts: []
+                news2:
+                  total: 15
+                  subscores:
+                    respiratory_rate: 3
+                    spo2: 2
+                    systolic_bp: 3
+                    heart_rate: 2
+                    acvpu: 3
+                    temperature_c: 2
+                    on_supplemental_o2: 0
+                  missing: []
+                  partial: false
+                  any_single_3: true
+                  risk_band: high
+                open_tasks: []
+                warnings: []
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -830,6 +846,22 @@ paths:
                 - key: vitals.on_supplemental_o2
                   audience: nurse
                   reason: news2_incomplete
+                news2:
+                  total: 6
+                  subscores:
+                    spo2: 2
+                    heart_rate: 2
+                    temperature_c: 2
+                  missing:
+                  - vitals.respiratory_rate
+                  - vitals.systolic_bp
+                  - vitals.acvpu
+                  - vitals.on_supplemental_o2
+                  partial: true
+                  any_single_3: false
+                  risk_band: medium
+                open_tasks: []
+                warnings: []
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -953,6 +985,10 @@ paths:
                   partial: false
                 suggested_level: 2
                 scale: KTAS
+                age_years: 58
+                sex: male
+                complaint: Crushing chest pain for about an hour
+                warnings: []
                 open_tasks:
                 - task_id: tsk_chest_pain_ecg
                   session_id: ses_chest_pain
@@ -969,6 +1005,10 @@ paths:
                 confirmed_level: 5
                 scale: KTAS
                 open_tasks: []
+                age_years: 34
+                sex: female
+                complaint: Sore throat for five days
+                warnings: []
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1828,6 +1868,8 @@ components:
       $ref: ./schemas/urgency-suggestion.schema.json#/$defs/UrgencyLevel
     AcvpuCode:
       $ref: ./schemas/structured-facts.schema.json#/$defs/AcvpuCode
+    FactKey:
+      $ref: ./schemas/structured-facts.schema.json#/$defs/FactKey
     LoginRequest:
       type: object
       description: Staff login (dev users only; synthetic).
@@ -2262,6 +2304,79 @@ components:
           description: -> vitals.on_supplemental_o2 (yes/no)
       additionalProperties: false
       minProperties: 1
+    SessionWarning:
+      type: string
+      description: 'Why the nurse should double-check a session: extraction failed validation twice (extraction_incomplete), the EHR could not be read at check-in (ehr_unavailable), or the intake ended before its questions were done (intake_stopped_early).'
+      enum:
+      - extraction_incomplete
+      - ehr_unavailable
+      - intake_stopped_early
+    News2Subscores:
+      type: object
+      description: The 0-3 subscore of each NEWS2 parameter that was measured.
+      properties:
+        respiratory_rate:
+          type: integer
+          minimum: 0
+          maximum: 3
+        spo2:
+          type: integer
+          minimum: 0
+          maximum: 3
+        systolic_bp:
+          type: integer
+          minimum: 0
+          maximum: 3
+        heart_rate:
+          type: integer
+          minimum: 0
+          maximum: 3
+        acvpu:
+          type: integer
+          minimum: 0
+          maximum: 3
+        temperature_c:
+          type: integer
+          minimum: 0
+          maximum: 3
+        on_supplemental_o2:
+          type: integer
+          minimum: 0
+          maximum: 3
+      additionalProperties: false
+    News2Score:
+      type: object
+      description: NEWS2 (RCP 2017) from the latest vitals, as the rules engine scored it. Partial until all seven parameters are present, and never shown as a full score while partial.
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          maximum: 20
+        subscores:
+          $ref: '#/components/schemas/News2Subscores'
+        missing:
+          type: array
+          items:
+            $ref: '#/components/schemas/FactKey'
+        partial:
+          type: boolean
+        any_single_3:
+          type: boolean
+        risk_band:
+          type: string
+          enum:
+          - low
+          - low-medium
+          - medium
+          - high
+      required:
+      - total
+      - subscores
+      - missing
+      - partial
+      - any_single_3
+      - risk_band
+      additionalProperties: false
     TriageStatus:
       type: string
       enum:
@@ -2287,6 +2402,20 @@ components:
             $ref: '#/components/schemas/NeededFact'
         decision:
           $ref: '#/components/schemas/NurseDecision'
+        news2:
+          description: Null when NEWS2 does not apply (under 16) or no vitals exist yet.
+          oneOf:
+          - $ref: '#/components/schemas/News2Score'
+          - type: 'null'
+        open_tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        warnings:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/SessionWarning'
       required:
       - session_id
       - status
@@ -2374,6 +2503,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Task'
+        age_years:
+          type: integer
+          minimum: 0
+          maximum: 130
+        sex:
+          type: string
+          description: Administrative gender (http://hl7.org/fhir/administrative-gender).
+          enum:
+          - male
+          - female
+          - other
+          - unknown
+        complaint:
+          type: string
+          maxLength: 80
+          description: The chief complaint, short. Staff screens only.
+        warnings:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/SessionWarning'
       required:
       - session_id
       - patient_display
