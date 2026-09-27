@@ -165,7 +165,7 @@ export function IntakeFlow() {
           {sending ? t("sending") : t("send")}
         </button>
       </form>
-      {voiceEnabled() && patient.language === "en" ? (
+      {voiceEnabled() ? (
         <div className="flex flex-col gap-3">
           <button type="button" className={PRIMARY} disabled={sending} aria-pressed={listening} onClick={() => void listen()}>
             {listening ? t("stopMic") : t("mic")}
