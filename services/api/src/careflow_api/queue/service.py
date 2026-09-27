@@ -460,6 +460,22 @@ class QueueService:
         except Exception:
             logger.exception("queue.broadcast_failed")
 
+    async def tell(self, clinic_id: uuid.UUID, token: QueueToken) -> None:
+        """Send the changed token's own phone its state (`queue.status`) after a nurse marks it
+        arrived, a no-show or seen. `broadcast` covers only waiting and called tokens, so without
+        this a closed visit's phone would keep its last state (M2-01, the final state). Best
+        effort, after the commit: the phone also re-reads its status when it reconnects."""
+        if self.notify is None:
+            return
+        try:
+            async with clinic_session(clinic_id) as db:
+                status = await self.companion_status(
+                    db, session_id=token.session_id, session_state=SessionState.queued.value
+                )
+            await self.notify(clinic_id, [(token.session_id, status)])
+        except Exception:
+            logger.exception("queue.tell_failed")
+
     async def session_token(self, db: AsyncSession, *, session_id: str) -> QueueToken | None:
         """The session's active token, or its latest one."""
         try:

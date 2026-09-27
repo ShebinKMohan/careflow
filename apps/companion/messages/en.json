@@ -14,7 +14,7 @@
     "working": "Connecting…",
     "invalid": "The code has at least 16 characters.",
     "failed": "This code did not work. It may have expired; ask at the kiosk for a new one.",
-    "welcome": "Connected, {initials}",
+    "welcome": "Connected, <ltr>{initials}</ltr>",
     "status": "See my place in the queue",
     "noCode": "This page needs the QR code from the kiosk. Scan it again, or enter the code.",
     "enterCode": "Enter a code",
@@ -38,7 +38,7 @@
     "stale": "We could not refresh your status. This is the last one we had."
   },
   "intake": {
-    "greeting": "Welcome, {initials}.",
+    "greeting": "Welcome, <ltr>{initials}</ltr>.",
     "typeAnswer": "Or type your answer",
     "send": "Send",
     "sending": "Sending…",
@@ -90,6 +90,10 @@
     },
     "rag": {
       "refusal": "I can't answer medical questions. I've told the nurse, who will speak with you."
+    },
+    "status": {
+      "ended": "This visit has ended. If you feel worse, tell the reception desk now.",
+      "missed": "We called your number and could not find you. Please go to the reception desk now."
     }
   },
   "ask": {

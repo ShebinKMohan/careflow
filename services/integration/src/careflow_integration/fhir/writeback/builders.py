@@ -432,6 +432,8 @@ def news2(ctx: Context, vitals: list[Built]) -> Built | None:
     if score is None:
         return None
     inputs = [b for b in vitals if b.local_id != "obs-pain-score"]
+    if not inputs:  # nothing was measured (the vitals step was skipped, e.g. a phone hand-over):
+        return None  # a total derived from nothing is not a score, and would have no provenance
     sources = [Provenance(tag["code"]) for b in inputs for tag in b.resource["meta"]["tag"]]
     extra: Json = {
         "valueQuantity": quantity(score.total, "{score}"),

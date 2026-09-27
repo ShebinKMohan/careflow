@@ -36,7 +36,7 @@ interface Loaded {
  * re-read every 5 s. A failed reload keeps the last card on screen.
  */
 export function NurseSession({ sessionId }: { sessionId: string }) {
-  const t = useTranslations("alerts");
+  const t = useTranslations("safety.alerts");
   const [state, setState] = useState<ApiState<Loaded>>({ status: "loading" });
 
   useEffect(() => {

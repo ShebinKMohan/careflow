@@ -129,7 +129,7 @@ export function PhoneIntake({
 
   if (!question) {
     return (
-      <Card title={tClaim("welcome", { initials: display })}>
+      <Card title={tClaim.rich("welcome", { initials: display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}>
         <p className="mb-4 text-title">{t("done")}</p>
         <Link href="/status" className={PRIMARY + " inline-flex items-center"}>
           {t("status")}
@@ -142,7 +142,7 @@ export function PhoneIntake({
   const label = (key: AnswerKey) => t(`answers.${key}`);
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-label text-ink-muted">{t("greeting", { initials: display })}</p>
+      <p className="text-label text-ink-muted">{t.rich("greeting", { initials: display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
       {question.notice ? (
         <p role="status" className="font-semibold">
           {question.notice}

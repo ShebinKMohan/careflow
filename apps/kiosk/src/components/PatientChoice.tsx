@@ -65,7 +65,7 @@ export function PatientChoice() {
     router.push("/intake");
   }
 
-  const greeting = <p className="text-label text-ink-muted">{tIntake("greeting", { initials: patient.display })}</p>;
+  const greeting = <p className="text-label text-ink-muted">{tIntake.rich("greeting", { initials: patient.display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>;
 
   if (!child) {
     return (

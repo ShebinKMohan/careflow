@@ -8,6 +8,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "n
 
 import { type Browser, type BrowserContext, devices, expect, type Page, request, type Response, test } from "@playwright/test";
 
+import { literally, type Locale, msg } from "./i18n";
 import { BOARD_A, CLINIC_A, KIOSK_A, secret, STACK, staffUser } from "./stack";
 
 type Scenario = "normal" | "septic" | "hypoxic";
@@ -66,23 +67,24 @@ export interface CheckedIn {
   patientToken: string;
 }
 
-/** The keypad check-in of a persona; the session comes from the keypad's response. */
-export async function checkIn(page: Page, digits: string): Promise<CheckedIn> {
+/** The keypad check-in of a persona, in `locale` (picked on the first screen); the session comes
+ * from the keypad's response. */
+export async function checkIn(page: Page, digits: string, locale: Locale = "en"): Promise<CheckedIn> {
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: msg("kiosk", "en", locale === "en" ? "home.english" : "home.arabic") }).click();
   await expect(page).toHaveURL(/\/consent$/);
-  await page.getByRole("button", { name: "Agree", exact: true }).click();
+  await page.getByRole("button", { name: msg("kiosk", locale, "safety.consent.agree"), exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
   for (const digit of digits) await page.getByRole("button", { name: digit, exact: true }).click();
   const keypad = page.waitForResponse(
     (response) => response.url().endsWith("/v1/checkin/keypad") && response.request().method() === "POST",
   );
-  await page.getByRole("button", { name: "Check in" }).click();
+  await page.getByRole("button", { name: msg("kiosk", locale, "checkin.submit"), exact: true }).click();
   const answer = await keypad;
   expect(answer.status(), "the persona is found in the stack's HAPI").toBe(200);
   const started = await answer.json();
   await expect(page).toHaveURL(/\/patient$/);
-  await page.getByRole("button", { name: "Me", exact: true }).click();
+  await page.getByRole("button", { name: msg("kiosk", locale, "safety.child.me"), exact: true }).click();
   await expect(page).toHaveURL(/\/intake$/);
   return { sessionId: String(started.session_id), patientToken: String(started.session_token) };
 }
@@ -98,42 +100,46 @@ export async function kioskDeviceToken(page: Page): Promise<string> {
 }
 
 /** Answer the intake to its end (or its first `limit` questions): the complaint typed, then every
- * question as the script says. */
-export async function answerIntake(page: Page, script: PatientScript, { limit = 12 }: { limit?: number } = {}): Promise<Turn[]> {
+ * question as the script says, on a kiosk showing `locale`. */
+export async function answerIntake(
+  page: Page,
+  script: PatientScript,
+  { limit = 12, locale = "en" }: { limit?: number; locale?: Locale } = {},
+): Promise<Turn[]> {
   const turns: Turn[] = [];
+  const t = (key: string) => msg("kiosk", locale, key);
+  const vitals = new RegExp(["vitals.measure", "vitals.continue", "vitals.skip"].map((key) => literally(t(key)).source).join("|"));
   for (let asked = 0; asked < limit; asked += 1) {
     const heading = page.getByRole("heading", { level: 2 });
-    await expect(heading.or(page.getByRole("button", { name: /Measure vitals|Continue|Skip/ })).first()).toBeVisible();
+    await expect(heading.or(page.getByRole("button", { name: vitals })).first()).toBeVisible();
     if (!/\/intake$/.test(page.url())) break;
     const question = (await heading.textContent())?.trim() ?? "";
-    const choices = page.getByRole("group", { name: "Tap an answer" });
-    const scale = page.getByRole("group", { name: "Tap a number from 0 to 10" });
+    const choices = page.getByRole("group", { name: t("intake.tapLabel") });
+    const scale = page.getByRole("group", { name: t("intake.scaleLabel") });
     let mode: Turn["mode"] = "tap";
     let answer: string;
     let click: () => Promise<void>;
+    const typeIt = async () => {
+      await page.getByLabel(t("intake.typeLabel")).fill(answer);
+      await page.getByRole("button", { name: t("intake.send"), exact: true }).click();
+    };
     if (turns.length === 0) {
       mode = "text";
       answer = script.complaint;
-      click = async () => {
-        await page.getByLabel("Or type your answer").fill(answer);
-        await page.getByRole("button", { name: "Send" }).click();
-      };
-    } else if (await choices.getByRole("button", { name: "Yes", exact: true }).isVisible()) {
-      answer = script.yes.some((pattern) => pattern.test(question)) ? "Yes" : "No";
+      click = typeIt;
+    } else if (await choices.getByRole("button", { name: t("intake.answers.yes"), exact: true }).isVisible()) {
+      answer = t(script.yes.some((pattern) => pattern.test(question)) ? "intake.answers.yes" : "intake.answers.no");
       click = () => choices.getByRole("button", { name: answer, exact: true }).click();
-    } else if (await choices.getByRole("button", { name: "OK", exact: true }).isVisible()) {
-      answer = "OK";
-      click = () => choices.getByRole("button", { name: "OK", exact: true }).click();
+    } else if (await choices.getByRole("button", { name: t("intake.answers.ok"), exact: true }).isVisible()) {
+      answer = t("intake.answers.ok");
+      click = () => choices.getByRole("button", { name: answer, exact: true }).click();
     } else if (await scale.isVisible()) {
       answer = script.scale;
       click = () => scale.getByRole("button", { name: answer, exact: true }).click();
     } else {
       mode = "text";
-      answer = script.typed.find(([pattern]) => pattern.test(question))?.[1] ?? "No";
-      click = async () => {
-        await page.getByLabel("Or type your answer").fill(answer);
-        await page.getByRole("button", { name: "Send" }).click();
-      };
+      answer = script.typed.find(([pattern]) => pattern.test(question))?.[1] ?? t("intake.answers.no");
+      click = typeIt;
     }
     const sent = page.waitForResponse(
       (response) => /\/v1\/sessions\/[^/]+\/turns$/.test(new URL(response.url()).pathname) && response.request().method() === "POST",
@@ -156,32 +162,34 @@ export async function answerIntake(page: Page, script: PatientScript, { limit = 
 }
 
 /** The phone (companion) answers the rest of the intake, as the script says, until it is done.
- * `answered` is how many answers the kiosk already gave (the complaint was one of them). */
-export async function answerOnPhone(page: Page, script: PatientScript, answered: number): Promise<Turn[]> {
+ * `answered` is how many answers the kiosk already gave (the complaint was one of them); the phone
+ * shows the session's `locale`. */
+export async function answerOnPhone(page: Page, script: PatientScript, answered: number, locale: Locale = "en"): Promise<Turn[]> {
   const turns: Turn[] = [];
-  const done = page.getByText("Thank you. A nurse will see you shortly.");
+  const t = (key: string) => msg("companion", locale, key);
+  const done = page.getByText(t("intake.done"));
   for (let asked = answered; asked < 12; asked += 1) {
     const heading = page.getByRole("heading", { level: 2 });
     await expect(heading.or(done).first()).toBeVisible({ timeout: 30_000 });
     if (await done.isVisible()) break;
     const question = (await heading.textContent())?.trim() ?? "";
-    const scale = page.getByRole("group", { name: "Tap a number from 0 to 10" });
-    const yes = page.getByRole("button", { name: "Yes", exact: true });
+    const scale = page.getByRole("group", { name: t("intake.scale") });
+    const yes = page.getByRole("button", { name: t("intake.answers.yes"), exact: true });
     let mode: Turn["mode"] = "tap";
     let answer: string;
     let click: () => Promise<void>;
     if (await yes.isVisible()) {
-      answer = script.yes.some((pattern) => pattern.test(question)) ? "Yes" : "No";
+      answer = t(script.yes.some((pattern) => pattern.test(question)) ? "intake.answers.yes" : "intake.answers.no");
       click = () => page.getByRole("button", { name: answer, exact: true }).click();
     } else if (await scale.isVisible()) {
       answer = script.scale;
       click = () => scale.getByRole("button", { name: answer, exact: true }).click();
     } else {
       mode = "text";
-      answer = script.typed.find(([pattern]) => pattern.test(question))?.[1] ?? "No";
+      answer = script.typed.find(([pattern]) => pattern.test(question))?.[1] ?? t("intake.answers.no");
       click = async () => {
-        await page.getByLabel("Or type your answer").fill(answer);
-        await page.getByRole("button", { name: "Send" }).click();
+        await page.getByLabel(t("intake.typeAnswer")).fill(answer);
+        await page.getByRole("button", { name: t("intake.send"), exact: true }).click();
       };
     }
     const sent = page.waitForResponse(
@@ -284,10 +292,11 @@ export async function pressFeelsWorse(
 }
 
 /** The simulated vitals (the scenario set at sign-in), then the done screen. */
-export async function measureVitals(page: Page): Promise<void> {
+export async function measureVitals(page: Page, locale: Locale = "en"): Promise<void> {
   await expect(page).toHaveURL(/\/vitals$/, { timeout: 30_000 });
-  await expect(page.getByRole("region", { name: "Pulse" }).getByTestId("vital-value")).not.toHaveText("–", { timeout: 60_000 });
-  await page.getByRole("button", { name: "Continue" }).click();
+  const pulse = page.getByRole("region", { name: msg("kiosk", locale, "vitals.heartRate") });
+  await expect(pulse.getByTestId("vital-value")).not.toHaveText("–", { timeout: 60_000 });
+  await page.getByRole("button", { name: msg("kiosk", locale, "vitals.continue"), exact: true }).click();
   await expect(page).toHaveURL(/\/done$/);
 }
 

@@ -69,34 +69,6 @@
       "no_show": "No-show",
       "closed": "Closed"
     },
-    "feelsWorse": {
-      "region": "Patients who feel worse",
-      "title": "{patient} feels worse",
-      "count": "×{count}",
-      "noAnswers": "No danger answer ticked",
-      "at": "Pressed at {time}",
-      "note": "Note:",
-      "codes": {
-        "chest_pain": "Chest pain",
-        "short_of_breath": "Short of breath",
-        "face_droop": "Face drooping",
-        "arm_weakness": "Arm weak",
-        "speech_difficulty": "Speech difficult",
-        "drowsy_or_confused": "Drowsy or confused",
-        "drowsy_or_confused_unsure": "Not sure if drowsy or confused"
-      },
-      "titleHere": "Pressed \"I feel worse\""
-    },
-    "medicalQuestions": {
-      "region": "Medical questions from phones",
-      "title": "{patient} asked {count, plural, one {a medical question} other {# medical questions}}",
-      "asked": "Asked at {time}, in {language}",
-      "refused": "The assistant did not answer. The patient was told a nurse will speak with them.",
-      "language": {
-        "en": "English",
-        "ar": "Arabic"
-      }
-    },
     "queue": {
       "title": "Queue",
       "callNext": "Call next: {department}",
@@ -152,32 +124,70 @@
     "no": "No",
     "statusLink": "System status"
   },
-  "alerts": {
-    "title": "Active alerts",
-    "rules": {
-      "FAST_STROKE": "FAST stroke screen",
-      "CHEST_PAIN_ECG_10MIN": "Chest pain: ECG in 10 min",
-      "SEPSIS_NEWS2": "Possible sepsis (NEWS2)",
-      "NG143_RED_FLAG": "Child red flag",
-      "NG143_AMBER_FLAG": "Child amber flag",
-      "CHILD_HARD_TO_WAKE": "Child hard to wake"
+  "safety": {
+    "alerts": {
+      "title": "Active alerts",
+      "rules": {
+        "FAST_STROKE": "FAST stroke screen",
+        "CHEST_PAIN_ECG_10MIN": "Chest pain: ECG in 10 min",
+        "SEPSIS_NEWS2": "Possible sepsis (NEWS2)",
+        "NG143_RED_FLAG": "Child red flag",
+        "NG143_AMBER_FLAG": "Child amber flag",
+        "CHILD_HARD_TO_WAKE": "Child hard to wake"
+      },
+      "severity": {
+        "critical": "Critical",
+        "high": "High"
+      },
+      "patient": "Patient <ltr>{name}</ltr>",
+      "partial": "Partial NEWS2",
+      "evidence": "Evidence",
+      "evidenceLoading": "Loading the evidence…",
+      "raised": "Raised {time}",
+      "ecgDue": "ECG due in",
+      "overdue": "Overdue +{time}",
+      "ecgDone": "ECG done",
+      "ecgDoneAt": "ECG done {time}",
+      "ecgFailed": "The ECG was not recorded. Try again.",
+      "openCard": "Open triage",
+      "afterDecision": "New since the decision"
     },
-    "severity": {
-      "critical": "Critical",
-      "high": "High"
+    "feelsWorse": {
+      "region": "Patients who feel worse",
+      "title": "<ltr>{patient}</ltr> feels worse",
+      "count": "×{count}",
+      "noAnswers": "No danger answer ticked",
+      "at": "Pressed at {time}",
+      "note": "Note:",
+      "codes": {
+        "chest_pain": "Chest pain",
+        "short_of_breath": "Short of breath",
+        "face_droop": "Face drooping",
+        "arm_weakness": "Arm weak",
+        "speech_difficulty": "Speech difficult",
+        "drowsy_or_confused": "Drowsy or confused",
+        "drowsy_or_confused_unsure": "Not sure if drowsy or confused"
+      },
+      "titleHere": "Pressed \"I feel worse\""
     },
-    "patient": "Patient {name}",
-    "partial": "Partial NEWS2",
-    "evidence": "Evidence",
-    "evidenceLoading": "Loading the evidence…",
-    "raised": "Raised {time}",
-    "ecgDue": "ECG due in",
-    "overdue": "Overdue +{time}",
-    "ecgDone": "ECG done",
-    "ecgDoneAt": "ECG done {time}",
-    "ecgFailed": "The ECG was not recorded. Try again.",
-    "openCard": "Open triage",
-    "afterDecision": "New since the decision"
+    "medicalQuestions": {
+      "region": "Medical questions from phones",
+      "title": "<ltr>{patient}</ltr> asked {count, plural, one {a medical question} other {# medical questions}}",
+      "asked": "Asked at {time}, in {language}",
+      "refused": "The assistant did not answer. The patient was told a nurse will speak with them.",
+      "language": {
+        "en": "English",
+        "ar": "Arabic"
+      }
+    },
+    "triage": {
+      "notFinal": "Suggestion only. You decide.",
+      "warnings": {
+        "extraction_incomplete": "Extraction incomplete. Check answers with the patient.",
+        "ehr_unavailable": "EHR unavailable at check-in",
+        "intake_stopped_early": "Intake stopped early"
+      }
+    }
   },
   "provenance": {
     "EHR": "EHR",
@@ -190,7 +200,6 @@
   "triage": {
     "title": "Triage",
     "suggestion": "Model suggestion",
-    "notFinal": "Suggestion only. You decide.",
     "suggested": "Suggested {label}",
     "confidence": "Confidence {percent}%",
     "model": "Model {version}",
@@ -217,11 +226,6 @@
     "token": "Number <ltr>{code}</ltr>",
     "room": "Room <ltr>{room}</ltr>",
     "noToken": "No queue number yet.",
-    "warnings": {
-      "extraction_incomplete": "Extraction incomplete. Check answers with the patient.",
-      "ehr_unavailable": "EHR unavailable at check-in",
-      "intake_stopped_early": "Intake stopped early"
-    },
     "facts": "Facts",
     "noFacts": "No facts yet."
   },

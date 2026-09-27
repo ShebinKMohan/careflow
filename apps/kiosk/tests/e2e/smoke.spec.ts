@@ -1,11 +1,16 @@
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 
 import { expect, type Page, test } from "@playwright/test";
 
-const FOOTER_EN = "Research prototype. Synthetic data only. Not for clinical use.";
-const DISCLAIMER_EN = "Arabic supported; not validated by native speakers.";
-const FOOTER_AR = "نموذج بحثي. بيانات اصطناعية فقط. ليس للاستخدام السريري.";
-const DISCLAIMER_AR = "العربية مدعومة؛ لم يتحقق منها متحدثون أصليون.";
+// The footer's strings, from @careflow/ui's messages (the Arabic is back-translation checked).
+const footer = (locale: "en" | "ar") =>
+  (JSON.parse(readFileSync(new URL(`../../../../packages/ui/src/messages/${locale}.json`, import.meta.url), "utf8")) as {
+    safety: { footer: { prototype: string; arabicDisclaimer: string } };
+  }).safety.footer;
+const FOOTER_EN = footer("en").prototype;
+const DISCLAIMER_EN = footer("en").arabicDisclaimer;
+const FOOTER_AR = footer("ar").prototype;
+const DISCLAIMER_AR = footer("ar").arabicDisclaimer;
 const EVIDENCE_DIR = new URL("../../../../docs/evidence/M0-08/", import.meta.url).pathname;
 
 async function signInKiosk(page: Page) {

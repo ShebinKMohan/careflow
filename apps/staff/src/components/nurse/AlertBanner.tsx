@@ -34,7 +34,7 @@ export function AlertBanner({
   /** Raised after the nurse's decision (M2-07): a patient getting worse while waiting. */
   afterDecision?: boolean;
 }) {
-  const t = useTranslations("alerts");
+  const t = useTranslations("safety.alerts");
   const format = useFormatter();
   const locale = useLocale() === "ar" ? "ar" : "en";
   const evidence = alert.evidence_fact_ids.map((id) => facts.get(id)).filter((fact) => fact !== undefined);
@@ -62,7 +62,7 @@ export function AlertBanner({
           {t(`severity.${alert.severity}`)}
         </span>
         <h2 className="text-title font-bold">{t(`rules.${alert.rule_id}`)}</h2>
-        {patient ? <span className="text-body font-semibold">{t("patient", { name: patient })}</span> : null}
+        {patient ? <span className="text-body font-semibold">{t.rich("patient", { name: patient, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</span> : null}
         {alert.partial ? (
           <span className="rounded-control border-2 border-current px-2 font-semibold">{t("partial")}</span>
         ) : null}

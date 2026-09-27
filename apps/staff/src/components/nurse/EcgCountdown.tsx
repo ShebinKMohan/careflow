@@ -20,7 +20,7 @@ export function EcgCountdown({
   task?: Task;
   onDone?: (task: Task) => Promise<boolean>;
 }) {
-  const t = useTranslations("alerts");
+  const t = useTranslations("safety.alerts");
   const format = useFormatter();
   const now = useNow();
   const [pending, setPending] = useState(false);

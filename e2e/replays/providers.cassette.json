@@ -4,6 +4,16 @@
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}]}"
   },
+  "249e14a56f2520f4b56cdda08900202156fc380a457d34eb7beaa1e5de766812": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Ankle sprain\", \"turn_id\": \"t2\", \"quote\": \"لويت كاحلي أمس وأنا ألعب كرة القدم\", \"negated\": false}]}"
+  },
+  "40f9eb40797c339127c173784037c31940bee64278e603d492b1b501362cae4e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Ankle pain\", \"turn_id\": \"t2\", \"quote\": \"لويت كاحلي أمس وأنا ألعب كرة القدم\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"أمس بعد الظهر\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Left ankle\", \"turn_id\": \"t8\", \"quote\": \"كاحلي الأيسر\", \"negated\": false}]}"
+  },
   "4c386e77bfaf98f34d21f2e04b6d5e32c3fa6d33576d35e93b2904e1b0969cb9": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
@@ -28,6 +38,16 @@
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Yesterday afternoon\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My left ankle\", \"turn_id\": \"t8\", \"quote\": \"My left ankle\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"No\", \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}]}"
+  },
+  "cc750574ff0338d78a97bf5a45fbeed96b1c6073ce509617c71020eefe9af97c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Ankle sprain\", \"turn_id\": \"t2\", \"quote\": \"لويت كاحلي أمس وأنا ألعب كرة القدم\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"أمس بعد الظهر\", \"negated\": false}]}"
+  },
+  "d000bbeea96feefefbd2d095af5edcc12ca205ab80801afff5268c88be674722": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Ankle sprain\", \"turn_id\": \"t2\", \"quote\": \"لويت كاحلي أمس وأنا ألعب كرة القدم\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"أمس بعد الظهر\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Left ankle\", \"turn_id\": \"t8\", \"quote\": \"كاحلي الأيسر\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا\", \"negated\": true}]}"
   },
   "d9c2fb10348274bb2982c92b0d1f92057ea1f3517d5acbd91e41935d6a2b9f2a": {
     "model": "qwen3.5-9b-4bit",

@@ -12,6 +12,7 @@ import type { LiveStatus } from "@/lib/liveStatus";
  */
 export function StatusView({ live }: { live: LiveStatus }) {
   const t = useTranslations("status");
+  const tSafety = useTranslations("safety.status");
   const format = useFormatter();
   if (live.status === "loading") return <p aria-busy="true">{t("loading")}</p>;
   if (live.status === "failed") {
@@ -42,6 +43,12 @@ export function StatusView({ live }: { live: LiveStatus }) {
         <p>{token ? t.rich("token", { code: token.token_code, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> }) : t("noToken")}</p>
         {state === "called" && room ? (
           <p className="text-title font-semibold">{t.rich("room", { room, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
+        ) : null}
+        {/* The final states (M2-01): the visit is over, and the reception desk takes any change. */}
+        {state === "closed" || state === "no_show" ? (
+          <p className="text-title font-semibold" data-testid="visit-ended">
+            {tSafety(state === "closed" ? "ended" : "missed")}
+          </p>
         ) : null}
         {position !== null ? <p data-testid="position">{t("position", { position })}</p> : null}
         {minutes !== null ? <p>{t("wait", { minutes })}</p> : null}

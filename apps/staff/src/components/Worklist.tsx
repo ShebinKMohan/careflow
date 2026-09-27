@@ -23,7 +23,8 @@ const CELL = "border-b border-border px-3 py-3 text-start align-top";
  */
 export function Worklist() {
   const t = useTranslations("nurse");
-  const tAlerts = useTranslations("alerts");
+  const tAlerts = useTranslations("safety.alerts");
+  const tSafety = useTranslations("safety");
   const format = useFormatter();
   const pushRef = useRef<(raised: AlertRaised) => void>(() => undefined);
   const onAlert = useCallback((raised: AlertRaised) => pushRef.current(raised), []);
@@ -48,7 +49,7 @@ export function Worklist() {
             {live === "live" ? t("live") : live === "paused" ? t("paused") : t("connecting")}
           </p>
           {rows.some((row) => row.feels_worse) ? (
-            <div className="flex flex-col gap-3" role="region" aria-label={t("feelsWorse.region")}>
+            <div className="flex flex-col gap-3" role="region" aria-label={tSafety("feelsWorse.region")}>
               {rows
                 .filter((row) => row.feels_worse)
                 .sort((a, b) => (b.feels_worse?.last_reported_at ?? "").localeCompare(a.feels_worse?.last_reported_at ?? ""))
@@ -63,7 +64,7 @@ export function Worklist() {
             </div>
           ) : null}
           {rows.some((row) => row.medical_questions?.length) ? (
-            <div className="flex flex-col gap-3" role="region" aria-label={t("medicalQuestions.region")}>
+            <div className="flex flex-col gap-3" role="region" aria-label={tSafety("medicalQuestions.region")}>
               {rows
                 .filter((row) => row.medical_questions?.length)
                 .sort((a, b) =>

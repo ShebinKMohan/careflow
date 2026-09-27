@@ -125,7 +125,7 @@ export function IntakeFlow() {
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-label text-ink-muted">{t("greeting", { initials: patient.display })}</p>
+      <p className="text-label text-ink-muted">{t.rich("greeting", { initials: patient.display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
       {question.notice ? (
         <p role="status" className="rounded-card border-2 border-border bg-secondary p-gutter text-title text-on-secondary">
           {question.notice}

@@ -47,6 +47,16 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   adds a `warning` annotation with the measured time when it is over, instead of failing.
 - **Still asserted in CI.** The chip appears on this session's row of the already open worklist
   (live, no reload) before any level exists, and every other check of the journey.
+- **27 September 2026 (SHE-273).** On the reference machine, the first full run after restarting
+  the e2e stack failed this budget once: 2,153 ms. The API and the apps' dev servers were cold,
+  and the stack held 125 open visits from the day's runs. The next three consecutive runs passed at
+  1,208, 1,198 and 1,726 ms. Nothing was retried or loosened. The worklist reads each open
+  session one by one, so this time grows with open visits; SHE-325 makes that read batched.
+- **The same day, the "I feel worse" budget (M2-07, `e2e/journeys/feels-worse.spec.ts`).** It uses
+  the same 2 s rule and the same handling. The first run after the next restart, with 161 open
+  visits on the stack, failed it at 3,158 ms. The next three consecutive runs passed at 1,688,
+  1,680 and 1,662 ms, against 1,151 to 1,177 ms earlier that day with fewer open visits. SHE-325
+  covers both.
 
 ## `services/api/tests/test_events_ws.py::test_heartbeats_and_replay_after_a_reconnect` (M1-11)
 
@@ -65,3 +75,21 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   snapshot whenever their socket (re)opens, so a client never depends on catching an event in the
   first moments of a connection. The server-side test and its 0.3 s window are unchanged; it has
   not failed again in the runs recorded in docs/evidence/M2-07.md.
+
+## `services/voice/tests/test_media_session.py`: two end-of-turn races (M1-14)
+
+- **What happened.** During SHE-273 [M2-01] on 27 September 2026, one full `make check` run on the
+  isolated stack failed two tests:
+  - `test_media_runner_prefers_speech_final_over_unpunctuated_interim`;
+  - `test_media_runner_ignores_duplicate_final_after_interim_local_silence_commit`.
+
+  The runner committed the unpunctuated interim transcript as a turn before the final one
+  arrived, so the model got two user texts. The machine was loaded at the time (2,400 tests, three
+  stacks and the local model). Alone, both tests passed 5 runs out of 5, and the whole file passed
+  (104). M2-01 does not touch `services/voice`.
+- **Suspected cause.** The tests use 50 ms windows (local end-of-turn silence and interim
+  stability) and a 70 ms sleep. Under load, the event loop can run the interim's commit before the
+  final transcript's event is handled.
+- **Handling.** Not retried, not weakened. A red run is investigated. The fix belongs to the voice
+  work (SHE-278 or a voice follow-up): drive these tests with a controllable clock instead of wall
+  time.

@@ -19,6 +19,7 @@
 #                      e2e/replays/providers.cassette.json and the intake uses e2e/config/intake.yaml
 #   E2E_RECORD=1       record that cassette from the local model instead; run the journeys with the
 #                      model up: `scripts/with_llm.sh make e2e` (or LOCAL_LLM=1 here)
+#   E2E_RECORD=add     keep the recorded replies and add a new journey's: run only that journey
 #   E2E_LIVE=1         the journeys against the local model, nothing replayed (same model rule)
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -74,9 +75,10 @@ uv run python scripts/ensure_triage_model.py
 # E2E: what the API replays (or records) and how the intake phrases its questions.
 cassette=e2e/replays/providers.cassette.json
 model_note="run the journeys with the model up: scripts/with_llm.sh make e2e"
-if [[ "${E2E_RECORD:-0}" == "1" ]]; then
-  [[ "${LOCAL_LLM:-0}" == "1" ]] || echo "up: E2E_RECORD=1 without LOCAL_LLM=1: $model_note"
-  rm -f "$cassette"
+if [[ "${E2E_RECORD:-0}" == "1" || "${E2E_RECORD:-0}" == "add" ]]; then
+  [[ "${LOCAL_LLM:-0}" == "1" ]] || echo "up: E2E_RECORD=$E2E_RECORD without LOCAL_LLM=1: $model_note"
+  # 1 records the cassette afresh; add keeps its replies and adds the new prompts' (a new journey).
+  [[ "$E2E_RECORD" == "add" ]] || rm -f "$cassette"
   export CAREFLOW_PROVIDER_MODE=record CAREFLOW_CASSETTE="$PWD/$cassette"
   export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
   echo "up: E2E recording: every model reply goes to $cassette"
