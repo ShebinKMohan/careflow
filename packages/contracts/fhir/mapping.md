@@ -39,6 +39,7 @@ CareFlow defines its own code systems under `https://careflow.example/fhir/CodeS
 | `complaint_category` | write | Encounter | `Encounter.reasonCode` | cf:complaint-category |  |  |  | yes |
 | `alert` | write | Flag | `Flag.code` | cf:rule-id | FAST_STROKE / CHEST_PAIN_ECG_10MIN / SEPSIS_NEWS2 / NG143_RED_FLAG / NG143_AMBER_FLAG / CHILD_HARD_TO_WAKE |  |  | yes |
 | `alert.required_action` | write | Task | `Task.code / Task.restriction.period.end` | cf:task-kind | ecg_within_10_min | ECG within 10 minutes of arrival |  | yes |
+| `tasks.ecg_done_at` | write | Task | `Task.status` (completed) / `Task.lastModified` | cf:task-kind | ecg_within_10_min | ECG within 10 minutes of arrival |  | yes |
 | `alert.notification` | write | Communication | `Communication.category` | tho:communication-category | notification | Notification |  | yes |
 | `briefing` | write | Composition | `Composition.type` | LOINC | 54094-8 | Emergency Department Triage Note |  | yes |
 | `intake.questionnaire_response` | write | QuestionnaireResponse | `QuestionnaireResponse.questionnaire` |  | https://careflow.example/fhir/Questionnaire/careflow-intake |  |  | yes |

@@ -33,7 +33,7 @@ test("the nurse worklist renders the mocked sessions", async ({ page }) => {
 
 test("the doctor briefing shows provenance, the board and admin render their data", async ({ page }) => {
   await signIn(page, "/doctor/ses_chest_pain");
-  await expect(page.getByText("Crushing chest pain for about an hour")).toBeVisible();
+  await expect(page.getByText("Chief complaint: crushing pain in my chest.")).toBeVisible();
   await expect(page.getByText("PATIENT_STATED").first()).toBeVisible();
   await page.goto("/board?department=ed");
   await expect(page.getByRole("cell", { name: "A-014" })).toBeVisible();

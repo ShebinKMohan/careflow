@@ -88,6 +88,26 @@ def validator(schema_name: str) -> Draft202012Validator:
     return validator_for_file(schema_files()[schema_name])
 
 
+OPENAPI: Final = CONTRACTS_DIR / "openapi.yaml"
+
+
+@cache
+def openapi_registry() -> SchemaRegistry:
+    """`registry()` plus openapi.yaml, so its components (and their `./schemas` refs) resolve."""
+    import yaml
+
+    spec = yaml.safe_load(OPENAPI.read_text(encoding="utf-8"))
+    return registry().with_resource(OPENAPI.as_uri(), Resource.from_contents(spec, DRAFT202012))
+
+
+def openapi_validator(component: str) -> Draft202012Validator:
+    """Validator for an openapi.yaml component schema, e.g. `Briefing`."""
+    ref = {"$ref": f"{OPENAPI.as_uri()}#/components/schemas/{component}"}
+    return Draft202012Validator(
+        ref, registry=openapi_registry(), format_checker=Draft202012Validator.FORMAT_CHECKER
+    )
+
+
 def error_messages(validator: Draft202012Validator, instance: Any) -> list[str]:
     """Validation errors for `instance`, as short `path: message` lines."""
     errors: list[ValidationError] = list(

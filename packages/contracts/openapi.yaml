@@ -1276,37 +1276,177 @@ paths:
                 $ref: '#/components/schemas/Briefing'
               example:
                 session_id: ses_chest_pain
-                generated_at: '2026-09-26T09:07:00Z'
+                generated_at: '2026-09-27T09:09:00Z'
                 sections:
-                - title: Presenting complaint
+                - id: alerts_triage
+                  title: Alerts and triage
                   items:
-                  - text: Crushing chest pain for about an hour
+                  - text: 'Critical alert: Chest pain: ECG within 10 minutes of arrival. Raised 6 min after arrival. Acknowledged by the nurse.'
+                    provenance: NURSE_CONFIRMED
+                    source:
+                      kind: nurse
+                      staff_user_id: usr_nurse_01
+                    recorded_at: '2026-09-27T09:08:00Z'
+                  - text: 'Triage level: KTAS 2, set by the nurse (model suggested KTAS 3). Reason: clinical judgement. Note: "Chest pain alert with radiation and sweating."'
+                    provenance: NURSE_CONFIRMED
+                    source:
+                      kind: nurse
+                      staff_user_id: usr_nurse_01
+                    recorded_at: '2026-09-27T09:08:00Z'
+                  - text: 'ECG done: 7 min after arrival.'
+                    provenance: NURSE_CONFIRMED
+                    source:
+                      kind: nurse
+                      staff_user_id: usr_nurse_01
+                    fact_id: f_YK9TR82CZK4JE6GKNJ1QQS9MD5
+                    recorded_at: '2026-09-27T09:07:00Z'
+                - id: presenting_complaint
+                  title: Presenting complaint
+                  items:
+                  - text: 'Age: 58 years.'
+                    provenance: EHR
+                    source:
+                      kind: fhir
+                      resource_type: Patient
+                      id: persona-chest-pain
+                      version_id: '1'
+                    fact_id: f_7DY0Z700BWJ5JASKFZWJ85K8YN
+                    recorded_at: '2026-09-27T09:00:20Z'
+                  - text: 'Sex: Male.'
+                    provenance: EHR
+                    source:
+                      kind: fhir
+                      resource_type: Patient
+                      id: persona-chest-pain
+                      version_id: '1'
+                    fact_id: f_6JTSYS90Z0944MSNN1VMQAY2M5
+                    recorded_at: '2026-09-27T09:00:20Z'
+                  - text: 'Chief complaint: crushing pain in my chest. Patient: "crushing pain in my chest"'
                     provenance: PATIENT_STATED
                     source:
                       kind: transcript_span
-                      turn_id: turn_01
+                      turn_id: trn_002
                       start: 9
                       end: 34
                       quote: crushing pain in my chest
-                    fact_id: f_01M3EF2PM000000000035FW008
-                - title: Vital signs
+                    fact_id: f_150R58P1KFNAQ31VY0BXSSBE3F
+                    recorded_at: '2026-09-27T09:01:20Z'
+                - id: danger_screens
+                  title: Danger-screen answers
                   items:
-                  - text: Heart rate 104 /min
+                  - text: 'Chest pain: yes. Patient: "crushing pain in my chest"'
+                    provenance: PATIENT_STATED
+                    source:
+                      kind: transcript_span
+                      turn_id: trn_002
+                      start: 9
+                      end: 34
+                      quote: crushing pain in my chest
+                    fact_id: f_E3JM3BSSH14PFA5MWFSPS4K2KF
+                    recorded_at: '2026-09-27T09:01:20Z'
+                  - text: 'Chest pain, radiates: yes. Patient: "it goes down my left arm"'
+                    provenance: PATIENT_STATED
+                    source:
+                      kind: transcript_span
+                      turn_id: trn_004
+                      start: 5
+                      end: 29
+                      quote: it goes down my left arm
+                    fact_id: f_1MZ3EE90CZQD1F3ZX9M5RXFFNG
+                    recorded_at: '2026-09-27T09:01:50Z'
+                - id: vitals_news2
+                  title: Vitals and NEWS2
+                  items:
+                  - text: 'Heart rate: 104 /min.'
                     provenance: DEVICE_MEASURED
                     source:
                       kind: device
                       device_id: sim_vitals_01
-                      reading_id: rd_0001
-                    fact_id: f_01M3EF2PM000000000035FW00B
-                - title: History
+                      reading_id: rd_ses_chest_pain_01
+                    fact_id: f_FM0KRYT3VWRE3DE4PCK0CZW0AP
+                    recorded_at: '2026-09-27T09:03:00Z'
+                  - text: 'SpO2: 97 %.'
+                    provenance: DEVICE_MEASURED
+                    source:
+                      kind: device
+                      device_id: sim_vitals_01
+                      reading_id: rd_ses_chest_pain_01
+                    fact_id: f_E4QB53YWWP8M9KN56CSY8KYDFD
+                    recorded_at: '2026-09-27T09:03:00Z'
+                - id: record
+                  title: Record (EHR)
                   items:
-                  - text: Hypertension
+                  - text: 'Allergies (patient''s answer): no allergies. Patient: "no allergies"'
+                    provenance: PATIENT_STATED
+                    source:
+                      kind: transcript_span
+                      turn_id: trn_012
+                      start: 4
+                      end: 16
+                      quote: no allergies
+                    fact_id: f_Z00DC1MN81JCDV7RXBXFKNCPGS
+                    recorded_at: '2026-09-27T09:03:50Z'
+                  - text: 'Condition: Hypertensive disorder.'
                     provenance: EHR
                     source:
                       kind: fhir
                       resource_type: Condition
-                      id: persona-chest-pain-htn
-                    fact_id: f_01M3EF2PM000000000035FW00G
+                      id: persona-chest-pain-condition-1
+                      version_id: '1'
+                    fact_id: f_Q9X2FP01Q07CF4F16DQNEMDTH0
+                    recorded_at: '2026-09-27T09:00:20Z'
+                - id: model_output
+                  title: Model output
+                  items:
+                  - text: 'Complaint category: Chest pain. Nurse''s level: KTAS 2.'
+                    provenance: MODEL_INFERRED
+                    source:
+                      kind: model
+                      model_id: ktas_keyword_map
+                      model_version: '1'
+                    fact_id: f_4E7HZBV5GASHXR6P3DNY9RWT32
+                    recorded_at: '2026-09-27T09:01:20Z'
+                  - text: 'Suggested KTAS 3 (confidence 0.59). Only a suggestion. Nurse''s level: KTAS 2.'
+                    provenance: MODEL_INFERRED
+                    source:
+                      kind: model
+                      model_id: careflow-ktas-hgb
+                      model_version: ktas-hgb-ebf31b5e-s42
+                    recorded_at: '2026-09-27T09:07:00Z'
+                - id: data_quality
+                  title: Data quality
+                  items: []
+                  notes:
+                  - code: none_recorded
+                    text: No data-quality problem was recorded.
+                summary:
+                  sentences:
+                  - text: Age 58 years; sex Male.
+                    fact_ids:
+                    - f_7DY0Z700BWJ5JASKFZWJ85K8YN
+                    - f_6JTSYS90Z0944MSNN1VMQAY2M5
+                summary_status: ok
+                triage:
+                  suggested:
+                    level: 3
+                    scale: KTAS
+                    display_label: KTAS 3
+                    confidence: 0.5946511261441932
+                    model_id: careflow-ktas-hgb
+                    model_version: ktas-hgb-ebf31b5e-s42
+                  confirmed:
+                    level: 2
+                    scale: KTAS
+                    action: OVERRIDE
+                    nurse_user_id: usr_nurse_01
+                    decided_at: '2026-09-27T09:08:00Z'
+                  override_reason:
+                    code: clinical_judgement
+                    note: Chest pain alert with radiation and sweating.
+                versions:
+                  ruleset: 2026.2.0
+                  model: ktas-hgb-ebf31b5e-s42
+                  prompt: briefing-summary-v1
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2633,9 +2773,20 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/DoctorSessionSummary'
+    BriefingSectionId:
+      type: string
+      description: 'The briefing''s fixed sections, always in this order: alerts and triage, presenting complaint, danger-screen answers, vitals and NEWS2, record (EHR), model output, data quality.'
+      enum:
+      - alerts_triage
+      - presenting_complaint
+      - danger_screens
+      - vitals_news2
+      - record
+      - model_output
+      - data_quality
     BriefingItem:
       type: object
-      description: 'Safety rule 4: every item carries its provenance and source.'
+      description: 'Safety rule 4: every item carries its provenance and source. The text comes from fixed templates over structured values, never from a model. A patient''s words are in the transcript_span source''s quote.'
       properties:
         text:
           type: string
@@ -2647,14 +2798,54 @@ components:
           $ref: '#/components/schemas/SourceRef'
         fact_id:
           $ref: ./schemas/fact.schema.json#/$defs/FactId
+        recorded_at:
+          type: string
+          format: date-time
+          description: When the fact was recorded (a device reading, a nurse's entry, an EHR read, the patient's answer), or when the nurse decided.
+        source_missing:
+          type: boolean
+          description: True when the item's source failed the briefing check. Screens show "source missing" in red; it is logged as an error, and the tests require that no item has it.
       required:
       - text
       - provenance
       - source
+      - recorded_at
+      additionalProperties: false
+    BriefingNoteCode:
+      type: string
+      description: 'What a note says: a data-quality warning (extraction_incomplete, intake_stopped_early, ehr_unavailable, ehr_partial, facts_dropped), no model suggestion (suggestion_unavailable), NEWS2 not applicable under 16 (news2_not_applicable), or nothing of a section''s kind was recorded (none_recorded).'
+      enum:
+      - extraction_incomplete
+      - intake_stopped_early
+      - ehr_unavailable
+      - ehr_partial
+      - facts_dropped
+      - suggestion_unavailable
+      - news2_not_applicable
+      - none_recorded
+    BriefingNote:
+      type: object
+      description: A fixed line about the briefing itself, not about the patient, so it has no provenance. Data-quality warnings, and a section where nothing of its kind was recorded, are notes.
+      properties:
+        code:
+          $ref: '#/components/schemas/BriefingNoteCode'
+        text:
+          type: string
+          minLength: 1
+          maxLength: 300
+        count:
+          type: integer
+          minimum: 0
+          description: How many, for facts_dropped.
+      required:
+      - code
+      - text
       additionalProperties: false
     BriefingSection:
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/BriefingSectionId'
         title:
           type: string
           minLength: 1
@@ -2663,13 +2854,166 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BriefingItem'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BriefingNote'
       required:
+      - id
       - title
       - items
       additionalProperties: false
+    BriefingSentence:
+      type: object
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 400
+        fact_ids:
+          type: array
+          description: The facts this sentence rephrases. Every id must be an item's fact_id.
+          items:
+            $ref: ./schemas/fact.schema.json#/$defs/FactId
+          minItems: 1
+          maxItems: 20
+          uniqueItems: true
+      required:
+      - text
+      - fact_ids
+      additionalProperties: false
+    BriefingSummary:
+      type: object
+      description: 'An optional model summary that may only rephrase cited items. The whole summary is dropped when any sentence cites no fact or an unknown fact, has a number that is not in its cited items, or reads as a diagnosis or advice (safety rule 2).'
+      properties:
+        sentences:
+          type: array
+          items:
+            $ref: '#/components/schemas/BriefingSentence'
+          minItems: 1
+          maxItems: 5
+      required:
+      - sentences
+      additionalProperties: false
+    SummaryStatus:
+      type: string
+      description: 'ok: a checked summary is attached. dropped: the model''s summary failed the check and was discarded. disabled: summaries are switched off, or the summary provider is unavailable. The plain list is always complete.'
+      enum:
+      - ok
+      - dropped
+      - disabled
+    DecisionAction:
+      $ref: ./schemas/nurse-decision.schema.json#/$defs/DecisionAction
+    OverrideReasonCode:
+      $ref: ./schemas/nurse-decision.schema.json#/$defs/OverrideReasonCode
+    BriefingSuggestion:
+      type: object
+      description: The urgency model's suggestion. Only a suggestion; the nurse's level is in confirmed.
+      properties:
+        level:
+          $ref: '#/components/schemas/UrgencyLevel'
+        scale:
+          $ref: '#/components/schemas/TriageScale'
+        display_label:
+          type: string
+          minLength: 1
+          maxLength: 40
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        model_id:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
+        model_version:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
+      required:
+      - level
+      - scale
+      - confidence
+      - model_id
+      - model_version
+      additionalProperties: false
+    BriefingConfirmation:
+      type: object
+      description: The level the nurse confirmed or set (safety rule 3).
+      properties:
+        level:
+          $ref: '#/components/schemas/UrgencyLevel'
+        scale:
+          $ref: '#/components/schemas/TriageScale'
+        action:
+          $ref: '#/components/schemas/DecisionAction'
+        nurse_user_id:
+          $ref: ./schemas/fact.schema.json#/$defs/Identifier
+        decided_at:
+          type: string
+          format: date-time
+      required:
+      - level
+      - scale
+      - action
+      - nurse_user_id
+      - decided_at
+      additionalProperties: false
+    BriefingOverrideReason:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/OverrideReasonCode'
+        note:
+          type: string
+          minLength: 1
+          maxLength: 500
+      required:
+      - code
+      additionalProperties: false
+    BriefingTriage:
+      type: object
+      description: The model's suggestion (null when there was none) always beside the nurse's decision.
+      properties:
+        suggested:
+          oneOf:
+          - $ref: '#/components/schemas/BriefingSuggestion'
+          - type: 'null'
+        confirmed:
+          $ref: '#/components/schemas/BriefingConfirmation'
+        override_reason:
+          oneOf:
+          - $ref: '#/components/schemas/BriefingOverrideReason'
+          - type: 'null'
+      required:
+      - suggested
+      - confirmed
+      - override_reason
+      additionalProperties: false
+    BriefingVersions:
+      type: object
+      description: What produced the briefing. Null when that part did not run.
+      properties:
+        ruleset:
+          oneOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          description: The safety ruleset version.
+        model:
+          oneOf:
+          - $ref: ./schemas/fact.schema.json#/$defs/Identifier
+          - type: 'null'
+          description: The urgency model version behind the suggestion.
+        prompt:
+          oneOf:
+          - $ref: ./schemas/fact.schema.json#/$defs/Identifier
+          - type: 'null'
+          description: The summary prompt version, when a summary was asked for.
+      required:
+      - ruleset
+      - model
+      - prompt
+      additionalProperties: false
     Briefing:
       type: object
-      description: Doctor briefing (extended by M1-16).
+      description: 'The doctor briefing (M1-16): seven fixed sections of sourced items, an optional checked summary, and the triage decision. Built after the nurse''s decision.'
       properties:
         session_id: *id005
         generated_at: *id006
@@ -2677,10 +3021,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BriefingSection'
+          minItems: 7
+          maxItems: 7
+        summary:
+          oneOf:
+          - $ref: '#/components/schemas/BriefingSummary'
+          - type: 'null'
+        summary_status:
+          $ref: '#/components/schemas/SummaryStatus'
+        triage:
+          $ref: '#/components/schemas/BriefingTriage'
+        versions:
+          $ref: '#/components/schemas/BriefingVersions'
       required:
       - session_id
       - generated_at
       - sections
+      - summary
+      - summary_status
+      - triage
+      - versions
       additionalProperties: false
     CompanionStatus:
       type: object
