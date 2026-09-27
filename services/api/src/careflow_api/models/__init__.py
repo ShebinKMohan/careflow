@@ -121,6 +121,24 @@ class FhirWriteback(_ClinicScoped, Base):
     )
 
 
+class BriefingRow(_ClinicScoped, Base):
+    """A session's doctor briefing (M1-16): the contract JSON and its FHIR document's status."""
+
+    __tablename__ = "briefings"
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id"), unique=True
+    )
+    briefing: Mapped[dict[str, object]] = mapped_column(JSONB)
+    summary_status: Mapped[str] = mapped_column(String(16))
+    source_missing: Mapped[int] = mapped_column(Integer, server_default=text("0"))
+    document_status: Mapped[str | None] = mapped_column(String(16))
+    document_id: Mapped[str | None] = mapped_column(String(64))
+    document_error: Mapped[str | None] = mapped_column(String(500))
+    updated_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
 class QueueTokenRow(_ClinicScoped, Base):
     """One queue token (M1-10). Status: waiting | called | arrived | no_show | closed."""
 
@@ -192,6 +210,7 @@ class ProcessedEvent(Base):
 
 __all__ = [
     "Base",
+    "BriefingRow",
     "Clinic",
     "Device",
     "EncounterState",
