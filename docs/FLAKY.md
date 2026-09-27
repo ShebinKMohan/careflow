@@ -25,6 +25,15 @@ This file lists tests whose outcome depends on the machine or on timing, and how
 - **Handling.** Not retried, not weakened. Reproduce and fix with SHE-302 [M2-07], which changes
   the nurse card's refresh (the card must re-read alerts live). Until then the test runs as it
   is in CI; a red run of it is investigated, not re-run until green.
+- **Resolved (SHE-302, 27 September 2026).** The cause was confirmed in the code: `useNow` read the
+  clock once at the first render and then only on its 1 s interval, which is registered in an
+  effect after the first paint; when the test paused the clock between the two, the countdown
+  stayed at the mount time ("10:00"). `useNow` now reads the clock again as the effect runs. The
+  card's new live reload (M2-07) then exposed a second race in the test's stub: a reload scheduled
+  before the pause could land after "ECG done" and bring back the stub's open task. The stubs now
+  keep state like the API (a completed task, a decision and saved vitals stay in later reads).
+  With both, the whole staff suite passed 5 runs out of 5 (18 passed each); the assertion is
+  unchanged.
 
 ## `e2e/journeys/chest-pain.spec.ts` alert-latency budget (M1-19)
 
@@ -52,3 +61,7 @@ This file lists tests whose outcome depends on the machine or on timing, and how
 - **Handling.** Not retried, not weakened. SHE-302 [M2-07] makes clients reload an authoritative
   snapshot on (re)connect instead of relying on events that arrive in the first moments; revisit
   this test's 0.3 s window there. A red run is investigated, not re-run until green.
+- **Since SHE-302.** The nurse's session card and the phone's waiting room now reload their
+  snapshot whenever their socket (re)opens, so a client never depends on catching an event in the
+  first moments of a connection. The server-side test and its 0.3 s window are unchanged; it has
+  not failed again in the runs recorded in docs/evidence/M2-07.md.

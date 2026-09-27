@@ -535,6 +535,12 @@ class AlertChip(BaseModel):
     rule_id: RuleIdModel
     severity: AlertSeverityModel
     partial: bool
+    raised_at: Annotated[
+        AwareDatetime | None,
+        Field(
+            description="When the rule first raised it (M2-07). A confirmed session shows a banner again for an alert raised after the nurse's decision."
+        ),
+    ] = None
 
 
 class Sex(StrEnum):
@@ -1142,24 +1148,6 @@ class SessionStatus(BaseModel):
     vitals: LatestVitals | None = None
 
 
-class TriageView(BaseModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    session_id: Identifier
-    status: TriageStatus
-    alerts: list[AlertModel]
-    suggestion: UrgencySuggestionModel | None
-    needed_facts: list[NeededFactModel] | None = None
-    decision: NurseDecisionModel | None = None
-    news2: Annotated[
-        News2Score | None,
-        Field(description="Null when NEWS2 does not apply (under 16) or no vitals exist yet."),
-    ] = None
-    open_tasks: list[Task] | None = None
-    warnings: list[SessionWarning] | None = None
-
-
 class DecisionResult(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -1189,9 +1177,19 @@ class WorklistItem(BaseModel):
     arrived_at: AwareDatetime
     state: SessionState
     token_code: str | None = None
+    queue_token: Annotated[
+        QueueToken | None,
+        Field(
+            description="The session's queue token (M2-07), for the nurse's queue controls (call, arrived, no-show, close)."
+        ),
+    ] = None
     alerts: list[AlertChip]
     suggested_level: UrgencyLevelModel | None = None
     confirmed_level: UrgencyLevelModel | None = None
+    decided_at: Annotated[
+        AwareDatetime | None,
+        Field(description="When the nurse confirmed or overrode the level (M2-07); absent before."),
+    ] = None
     scale: TriageScaleModel | None = None
     open_tasks: list[Task]
     age_years: Annotated[int | None, Field(ge=0, le=130)] = None
@@ -1252,3 +1250,28 @@ class CheckinResult(BaseModel):
     ]
     language: LanguageModel
     first_question: IntakeQuestion | None = None
+
+
+class TriageView(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: Identifier
+    status: TriageStatus
+    alerts: list[AlertModel]
+    suggestion: UrgencySuggestionModel | None
+    needed_facts: list[NeededFactModel] | None = None
+    decision: NurseDecisionModel | None = None
+    news2: Annotated[
+        News2Score | None,
+        Field(description="Null when NEWS2 does not apply (under 16) or no vitals exist yet."),
+    ] = None
+    open_tasks: list[Task] | None = None
+    tasks: Annotated[
+        list[Task] | None,
+        Field(
+            description='Every task of the session, completed ones included (M2-07), so a card read again after "ECG done" still shows it done.'
+        ),
+    ] = None
+    warnings: list[SessionWarning] | None = None
+    feels_worse: FeelsWorseSummary | None = None

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { API_BASE_URL, api } from "./api";
 import { type LiveFrame, type LiveStatus, StaffLiveChannel, wsBaseUrl } from "./liveEvents";
+import { browserLiveDeps } from "./staffChannel";
 import { sortWorklist, type WorklistItem } from "./sortWorklist";
 import type { ApiState } from "./useApiData";
 
@@ -57,19 +58,7 @@ export function useLiveWorklist(onAlert: (raised: AlertRaised) => void): {
     };
     const channel = new StaffLiveChannel(
       wsBaseUrl(API_BASE_URL),
-      {
-        requestTicket: async () => {
-          try {
-            const { data } = await api.POST("/v1/ws-ticket", { body: { channel: "staff" } });
-            return data?.ticket ?? null;
-          } catch {
-            return null;
-          }
-        },
-        createSocket: (url) => new WebSocket(url),
-        setTimeout: (callback, ms) => window.setTimeout(callback, ms),
-        clearTimeout: (handle) => window.clearTimeout(handle as number),
-      },
+      browserLiveDeps(),
       {
         onFrame: (frame: LiveFrame) => {
           if (frame.type === "alert.raised" && isAlertRaised(frame.data)) onAlertRef.current(frame.data);

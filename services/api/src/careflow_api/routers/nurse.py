@@ -114,6 +114,7 @@ async def worklist(
                 token_status=token.status.value if token else None,
                 feels_worse=presses.get(session_id),
                 medical_questions=questions.get(session_id),
+                queue_token=token,
             )
         )
     return items

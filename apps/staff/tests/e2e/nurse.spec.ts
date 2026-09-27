@@ -51,22 +51,30 @@ async function stubApi(page: Page, options: { holdDecision?: boolean; holdTask?:
       ? route.fulfill({ status: 201, json: { ticket: "tkt_e2e_0123456789abcdef", channel: "staff", expires_at: "2026-09-26T09:00:30Z" } })
       : route.fulfill({ status: stubs.ticketStatus, json: { title: "Unavailable", status: stubs.ticketStatus } }),
   );
-  await page.route("**/v1/sessions/*/triage", (route) => route.fulfill({ json: fixture("triage") }));
+  // Like the API, later reads of the card see what the nurse did (the card re-reads live, M2-07).
+  let triage = fixture<Record<string, unknown>>("triage");
+  await page.route("**/v1/sessions/*/triage", (route) => route.fulfill({ json: triage }));
   await page.route("**/v1/sessions/*/facts", (route) => route.fulfill({ json: fixture("facts") }));
   await page.route("**/v1/auth/me", (route) => route.fulfill({ json: fixture("me") }));
   await page.route("**/v1/nurse/sessions/*/decision", async (route) => {
     stubs.decisions.push(route.request().postDataJSON());
     if (options.holdDecision) await new Promise<void>((resolve) => (stubs.releaseDecision = resolve));
-    return route.fulfill({ json: fixture("decision") });
+    const result = fixture<{ decision: unknown }>("decision");
+    triage = { ...triage, status: "confirmed", decision: result.decision };
+    return route.fulfill({ json: result });
   });
   await page.route("**/v1/nurse/sessions/*/vitals", (route) => {
     stubs.vitals.push(route.request().postDataJSON());
-    return route.fulfill({ json: fixture("triage-after-vitals") });
+    triage = fixture<Record<string, unknown>>("triage-after-vitals");
+    return route.fulfill({ json: triage });
   });
   await page.route("**/v1/nurse/sessions/*/tasks/*/complete", async (route) => {
     stubs.tasksCompleted += 1;
     if (options.holdTask) await new Promise<void>((resolve) => (stubs.releaseTask = resolve));
-    return route.fulfill({ json: fixture("task-done") });
+    const done = fixture<{ task_id: string }>("task-done");
+    const tasks = (triage.open_tasks as { task_id: string }[] | undefined) ?? [];
+    triage = { ...triage, open_tasks: tasks.map((task) => (task.task_id === done.task_id ? done : task)) };
+    return route.fulfill({ json: done });
   });
   await page.routeWebSocket(/\/v1\/ws\/staff/, (socket) => {
     stubs.socket = socket;
@@ -157,7 +165,10 @@ test("confirm sends CONFIRM with the suggested level; the token and room show on
   stubs.releaseDecision!();
   await expect(page.getByTestId("decision-result")).toContainText("KTAS 2, set by the nurse");
   await expect(page.getByTestId("decision-result")).toContainText("Number A-014 · Room Resus 2");
-  await expect(page.getByTestId("alert-banner")).toHaveCount(0);  // banners stay until the triage is confirmed
+  // The alert stays after the decision (M2-07): a later deterioration must never be hidden by it.
+  // It was raised before the decision, so it is not marked as new.
+  await expect(page.getByTestId("alert-banner")).toHaveCount(1);
+  await expect(page.getByTestId("after-decision")).toHaveCount(0);
   expect(stubs.decisions[0]).toMatchObject({
     session_id: "ses_chest_pain",
     suggestion_id: "sug_chest_pain",

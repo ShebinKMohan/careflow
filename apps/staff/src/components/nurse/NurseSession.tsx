@@ -6,11 +6,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { api } from "@/lib/api";
 import { indexFacts } from "@/lib/facts";
+import type { LiveStatus } from "@/lib/liveEvents";
+import { raisedAfter } from "@/lib/sortWorklist";
 import type { ApiState } from "@/lib/useApiData";
+import { useLiveSession } from "@/lib/useLiveSession";
 import type { Task } from "@/lib/useSessionAlerts";
 
 import { ApiStatus } from "../ApiStatus";
 import { AlertBanner } from "./AlertBanner";
+import { FeelsWorseBanner } from "./FeelsWorseBanner";
 import { News2Form } from "./News2Form";
 import { TriageCard } from "./TriageCard";
 
@@ -25,8 +29,11 @@ interface Loaded {
 }
 
 /**
- * One session for the nurse: its alerts first (safety rule 1), then the triage card and the NEWS2
- * inputs. Everything comes from `GET /v1/sessions/{id}/triage` and `/facts`.
+ * One session for the nurse: its alerts first (safety rule 1), also after the decision, then any
+ * "I feel worse" presses, the triage card and the NEWS2 inputs. Everything comes from
+ * `GET /v1/sessions/{id}/triage` and `/facts`, and stays live (M2-07): a staff-channel frame about
+ * this session reloads the card, as does every reconnection; while the channel is paused it is
+ * re-read every 5 s. A failed reload keeps the last card on screen.
  */
 export function NurseSession({ sessionId }: { sessionId: string }) {
   const t = useTranslations("alerts");
@@ -42,13 +49,20 @@ export function NurseSession({ sessionId }: { sessionId: string }) {
     };
   }, [sessionId]);
 
+  const reload = useCallback(() => {
+    void loadSession(sessionId).then((next) =>
+      setState((current) => (next.status !== "ready" && current.status === "ready" ? current : next)),
+    );
+  }, [sessionId]);
+  const live = useLiveSession(sessionId, reload);
+
   const update = useCallback((change: (loaded: Loaded) => Loaded) => {
     setState((current) => (current.status === "ready" ? { status: "ready", data: change(current.data) } : current));
   }, []);
 
   return (
     <ApiStatus state={state}>
-      {(loaded) => <SessionView loaded={loaded} update={update} sectionLabel={t("title")} />}
+      {(loaded) => <SessionView loaded={loaded} update={update} sectionLabel={t("title")} live={live} />}
     </ApiStatus>
   );
 }
@@ -75,21 +89,24 @@ function SessionView({
   loaded,
   update,
   sectionLabel,
+  live,
 }: {
   loaded: Loaded;
   update: (change: (loaded: Loaded) => Loaded) => void;
   sectionLabel: string;
+  live: LiveStatus;
 }) {
+  const tNurse = useTranslations("nurse");
   const { triage, facts } = loaded;
   const index = useMemo(() => indexFacts(facts), [facts]);
-  const tasks = triage.open_tasks ?? [];
+  const tasks = triage.tasks ?? triage.open_tasks ?? []; // done tasks too: "ECG done" survives a reload
   const warnings: SessionWarning[] = [...(triage.warnings ?? [])];
   if (facts?.extraction_status === "incomplete" && !warnings.includes("extraction_incomplete")) {
     warnings.unshift("extraction_incomplete");
   }
   const systolic = facts?.vitals?.systolic_bp;
   const deviceSystolic = systolic?.provenance === "DEVICE_MEASURED" ? systolic.value : undefined;
-  const awaiting = triage.status === "awaiting_nurse";
+  const decidedAt = triage.status === "confirmed" ? triage.decision?.decided_at : undefined;
 
   const onTaskDone = (task: Task) =>
     update((current) => ({
@@ -97,18 +114,35 @@ function SessionView({
       triage: {
         ...current.triage,
         open_tasks: (current.triage.open_tasks ?? []).map((existing) => (existing.task_id === task.task_id ? task : existing)),
+        tasks: (current.triage.tasks ?? current.triage.open_tasks ?? []).map((existing) => (existing.task_id === task.task_id ? task : existing)),
       },
     }));
 
   return (
     <div className="flex max-w-4xl flex-col gap-6">
-      {awaiting && triage.alerts.length ? (
-        <div className="sticky top-0 z-10 flex flex-col gap-3" role="region" aria-label={sectionLabel}>
+      <p
+        className={`w-fit rounded-control border-2 px-3 py-1 font-semibold ${live === "paused" ? "border-danger text-danger" : "border-border"}`}
+        data-testid="live-status"
+      >
+        {live === "live" ? tNurse("live") : live === "paused" ? tNurse("paused") : tNurse("connecting")}
+      </p>
+      {triage.alerts.length ? (
+        // Every alert of the session, before and after the decision: a patient getting worse while
+        // waiting must never be hidden by an earlier decision (M2-07).
+        <div className="sticky top-0 z-10 flex max-h-[45vh] flex-col gap-3 overflow-y-auto" role="region" aria-label={sectionLabel}>
           {triage.alerts.map((alert) => (
-            <AlertBanner key={alert.alert_id} alert={alert} facts={index} tasks={tasks} onTaskDone={onTaskDone} />
+            <AlertBanner
+              key={alert.alert_id}
+              alert={alert}
+              facts={index}
+              tasks={tasks}
+              onTaskDone={onTaskDone}
+              afterDecision={raisedAfter(alert.raised_at, decidedAt)}
+            />
           ))}
         </div>
       ) : null}
+      <FeelsWorseBanner sessionId={triage.session_id} report={triage.feels_worse} />
       <TriageCard
         triage={triage}
         facts={index}

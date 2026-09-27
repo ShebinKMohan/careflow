@@ -34,7 +34,8 @@
     "failed": "Your status could not be loaded.",
     "room": "Please go to <ltr>{room}</ltr> now.",
     "updated": "Updated {time}.",
-    "paused": "Live updates paused; checking every 15 seconds."
+    "paused": "Live updates paused; checking every 15 seconds.",
+    "stale": "We could not refresh your status. This is the last one we had."
   },
   "intake": {
     "greeting": "Welcome, {initials}.",

@@ -20,6 +20,7 @@ from careflow_api.config import Settings, get_settings
 from careflow_api.consent import get_consent
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
+from careflow_api.feels_worse import summaries as feels_worse_summaries
 from careflow_api.hospital import fhir_endpoint, hospital_adapter
 from careflow_api.intake.runtime import (
     IntakeRevisionConflict,
@@ -559,7 +560,10 @@ async def get_triage(
     state = await intake.state(session_id)
     if state is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
-    return triage_view(state)
+    view = triage_view(state)
+    # The patient's "I feel worse" presses (M2-07), also after the nurse's decision.
+    presses = (await feels_worse_summaries(principal.clinic_id, [session_id])).get(session_id)
+    return view.model_copy(update={"feels_worse": presses}) if presses else view
 
 
 __all__ = ["device_facts", "initials", "question_of", "router", "runtime", "session_row"]

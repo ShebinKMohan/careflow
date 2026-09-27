@@ -6,7 +6,7 @@ import { countdown } from "@/lib/countdown";
 import { decisionBody, NO_SUGGESTION_NOTE, reasonGiven } from "@/lib/decision";
 import { factLabel } from "@/lib/factLabel";
 import { indexFacts } from "@/lib/facts";
-import { sortWorklist, type WorklistItem } from "@/lib/sortWorklist";
+import { alertsSinceDecision, sortWorklist, type WorklistItem } from "@/lib/sortWorklist";
 
 function item(id: string, extra: Partial<WorklistItem> = {}): WorklistItem {
   return { session_id: id, patient_display: id, arrived_at: "2026-09-26T09:00:00Z", state: "awaiting_nurse", alerts: [], open_tasks: [], ...extra };
@@ -33,6 +33,20 @@ describe("sortWorklist", () => {
       item("confirmed", { confirmed_level: 4, alerts: [chip("critical")] }),
     ];
     expect(sortWorklist(items).map((i) => i.session_id)).toEqual(["none", "l2", "confirmed"]);
+  });
+
+  it("ranks a confirmed session first again when a critical alert is raised after the decision", () => {
+    const decided = "2026-09-26T09:20:00Z";
+    const before = { ...chip("critical"), raised_at: "2026-09-26T09:10:00Z" };
+    const after = { ...chip("critical"), alert_id: "a_after", rule_id: "FAST_STROKE" as const, raised_at: "2026-09-26T09:40:00Z" };
+    const items = [
+      item("l1", { suggested_level: 1 }),
+      item("worse", { confirmed_level: 4, decided_at: decided, alerts: [before, after] }),
+      item("same", { confirmed_level: 4, decided_at: decided, alerts: [before] }),
+    ];
+    expect(sortWorklist(items).map((i) => i.session_id)).toEqual(["worse", "l1", "same"]);
+    expect(alertsSinceDecision(items[1]!).map((alert) => alert.alert_id)).toEqual(["a_after"]);
+    expect(alertsSinceDecision(items[2]!)).toEqual([]);
   });
 });
 

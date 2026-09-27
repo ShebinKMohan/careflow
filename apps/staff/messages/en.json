@@ -84,7 +84,8 @@
         "speech_difficulty": "Speech difficult",
         "drowsy_or_confused": "Drowsy or confused",
         "drowsy_or_confused_unsure": "Not sure if drowsy or confused"
-      }
+      },
+      "titleHere": "Pressed \"I feel worse\""
     },
     "medicalQuestions": {
       "region": "Medical questions from phones",
@@ -94,6 +95,27 @@
       "language": {
         "en": "English",
         "ar": "Arabic"
+      }
+    },
+    "queue": {
+      "title": "Queue",
+      "callNext": "Call next: {department}",
+      "called": "Called {code} to {room}.",
+      "nobody": "Nobody is waiting there.",
+      "noRoom": "No free room for the next patient. Close or mark a called patient first.",
+      "failed": "That did not work. Please try again.",
+      "inRoom": "Room: {room}",
+      "arrived": "Arrived",
+      "noShow": "No-show",
+      "close": "Seen (free the room)",
+      "status": {
+        "called": "Called",
+        "arrived": "Arrived"
+      },
+      "done": {
+        "arrived": "{code} arrived.",
+        "no-show": "{code} marked as a no-show.",
+        "close": "{code} seen; the room is free."
       }
     }
   },
@@ -154,7 +176,8 @@
     "ecgDone": "ECG done",
     "ecgDoneAt": "ECG done {time}",
     "ecgFailed": "The ECG was not recorded. Try again.",
-    "openCard": "Open triage"
+    "openCard": "Open triage",
+    "afterDecision": "New since the decision"
   },
   "provenance": {
     "EHR": "EHR",
