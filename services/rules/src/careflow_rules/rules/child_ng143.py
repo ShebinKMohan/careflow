@@ -12,6 +12,10 @@ threshold uses the end of that range that alerts sooner. Without any age, only t
 child screen apply (they are only asked of children). A parent-reported seizure counts as red:
 the kiosk cannot tell status epilepticus or a focal seizure from other fits. SpO2 at or below 95%
 is amber in air and also on supplemental oxygen (hypoxic despite oxygen).
+
+"Not sure" (M2-04): a parent's unknown answer to a red question they can answer (`PARENT_RED`)
+counts as red. When only unsure answers raise the red alert, it carries the fixed `parent_unsure`
+qualifier. The nurse-assessed red signs and the amber answers still need a yes.
 """
 
 from __future__ import annotations
@@ -33,6 +37,7 @@ from careflow_rules.facts import (
     age_months,
     ask,
     fact_at,
+    is_unsure,
     is_yes,
     one_decimal,
     whole_number,
@@ -71,6 +76,18 @@ AMBER_ANSWERS: Final = (
     FactKey.child_amber_limb_or_joint_swelling,
     FactKey.child_amber_non_weight_bearing,
 )
+# The red questions a parent answers at the kiosk (M2-04): "Not sure" counts as red for these.
+PARENT_RED: Final = (
+    FactKey.child_danger_hard_to_wake,
+    FactKey.child_danger_no_response_to_social_cues,
+    FactKey.child_danger_weak_high_pitched_or_continuous_cry,
+    FactKey.child_danger_pale_mottled_ashen_or_blue,
+    FactKey.child_danger_grunting,
+    FactKey.child_danger_non_blanching_rash,
+    FactKey.child_danger_neck_stiffness,
+    FactKey.child_danger_seizure,
+)
+PARENT_UNSURE: Final = "parent_unsure"
 CHILD_SCREEN: Final = tuple(
     k for k in (*RED_ANSWERS, *AMBER_ANSWERS) if k.value.startswith("child_")
 )
@@ -124,6 +141,9 @@ class Ng143Rule:
             return RuleOutcome()
 
         red = [f.fact_id for key in RED_ANSWERS if (f := fact_at(facts, key)) and is_yes(f)]
+        unsure = [f.fact_id for key in PARENT_RED if (f := fact_at(facts, key)) and is_unsure(f)]
+        only_unsure = bool(unsure) and not red
+        red += unsure
         amber = [f.fact_id for key in AMBER_ANSWERS if (f := fact_at(facts, key)) and is_yes(f)]
         vitals = facts.vitals
         rr = vitals.respiratory_rate if vitals else None
@@ -132,6 +152,7 @@ class Ng143Rule:
         temp = vitals.temperature_c if vitals else None
         if rr is not None and whole_number(rr.value) > RED_RESPIRATORY_RATE:
             red.append(rr.fact_id)
+            only_unsure = False
         if spo2 is not None and whole_number(spo2.value) <= AMBER_SPO2:
             amber.append(spo2.fact_id)
         if known_age is not None:
@@ -140,6 +161,7 @@ class Ng143Rule:
             if temp is not None and celsius is not None:
                 if age.low < 3 and celsius >= RED_INFANT_FEVER:
                     red += [temp.fact_id, *age_ids]
+                    only_unsure = False
                 if age.low <= 6 and age.high >= 3 and celsius >= AMBER_YOUNG_INFANT_FEVER:
                     amber += [temp.fact_id, *age_ids]
             rr_limit = amber_respiratory_limit(age)
@@ -150,8 +172,16 @@ class Ng143Rule:
 
         alerts: list[Alert] = []
         if red:
+            qualifiers = (PARENT_UNSURE,) if only_unsure else ()
             alerts.append(
-                raise_alert(facts, ctx, RuleId.NG143_RED_FLAG, AlertSeverity.critical, red)
+                raise_alert(
+                    facts,
+                    ctx,
+                    RuleId.NG143_RED_FLAG,
+                    AlertSeverity.critical,
+                    red,
+                    qualifiers=qualifiers,
+                )
             )
         if amber:
             alerts.append(

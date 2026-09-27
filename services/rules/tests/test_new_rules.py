@@ -28,7 +28,7 @@ def ids(facts: StructuredFacts, arrived_at: datetime | None = ARRIVED) -> set[st
 
 
 def test_version_is_bumped() -> None:
-    assert RULESET_VERSION == "2026.2.0"
+    assert RULESET_VERSION == "2026.3.0"
 
 
 def test_fast_alert_includes_the_onset_as_evidence() -> None:
