@@ -16,6 +16,12 @@ from careflow_triage.splits import SEED
 app = typer.Typer(add_completion=False, help="CareFlow urgency model (research prototype).")
 ktas = typer.Typer(add_completion=False, help="The KTAS dataset.")
 app.add_typer(ktas, name="ktas")
+laya_app = typer.Typer(
+    add_completion=False,
+    help="Laya fine-tuned on KTAS (M3-01). Needs the `laya` extra: uv sync --extra laya.",
+)
+app.add_typer(laya_app, name="laya")
+LAYA_CONFIG = Path(__file__).resolve().parents[2] / "config" / "laya_ktas_v1.yaml"
 
 
 def _data(csv: Path | None) -> tuple[Path, str]:
@@ -87,6 +93,78 @@ def train_command(
         f"(T={result.meta['temperature']:.2f}) in {result.meta['train_seconds']} s"
     )
     typer.echo(f"artifact {result.artifact_dir}\nreport {md_path} ({json_path.name}); {card.name}")
+
+
+def _laya_run(run_dir: Path | None) -> Path:
+    """The given run, else the newest one under artifacts/laya/."""
+    if run_dir is not None:
+        return run_dir
+    from careflow_triage.laya_ktas.train import LAYA_DIR
+
+    runs = sorted(
+        (p for p in LAYA_DIR.glob("*laya-ktas-*") if (p / "model.safetensors").exists()),
+        key=lambda p: p.stat().st_mtime,
+    )
+    if not runs:
+        raise typer.BadParameter("no Laya run under artifacts/laya/: run `laya train` first")
+    return runs[-1]
+
+
+@laya_app.command("train")
+def laya_train(
+    config: Annotated[Path, typer.Option(help="Training config.")] = LAYA_CONFIG,
+    csv: Annotated[Path | None, typer.Option(help="CSV path (default: the KTAS data).")] = None,
+    max_epochs: Annotated[int | None, typer.Option(help="Override max_epochs.")] = None,
+) -> None:
+    """Fine-tune Laya on the KTAS train split (MPS); the best epoch by val macro-F1 is kept."""
+    from careflow_triage.laya_ktas.train import train
+
+    path, _ = _data(csv)
+    run_dir = train(config, path, max_epochs=max_epochs, log=typer.echo)
+    typer.echo(f"laya: run {run_dir}")
+
+
+@laya_app.command("calibrate")
+def laya_calibrate(
+    run_dir: Annotated[Path | None, typer.Option(help="Run directory.")] = None,
+    config: Annotated[Path, typer.Option(help="Training config.")] = LAYA_CONFIG,
+    csv: Annotated[Path | None, typer.Option(help="CSV path.")] = None,
+) -> None:
+    """Fit the choice temperature on validation and write it into the run's agent config."""
+    from careflow_triage.laya_ktas.calibrate import calibrate
+
+    path, _ = _data(csv)
+    result = calibrate(_laya_run(run_dir), path, config)
+    fitted, used = result["temperature_fitted"], result["temperature_used"]
+    typer.echo(
+        f"laya: T fitted {fitted:.3f}, used {used:.3f}; "
+        f"val NLL {result['val_nll_before']:.3f} -> {result['val_nll_after']:.3f}"
+    )
+
+
+@laya_app.command("evaluate")
+def laya_evaluate(
+    run_dir: Annotated[Path | None, typer.Option(help="Run directory.")] = None,
+    config: Annotated[Path, typer.Option(help="Training config.")] = LAYA_CONFIG,
+    csv: Annotated[Path | None, typer.Option(help="CSV path.")] = None,
+    baseline: Annotated[Path | None, typer.Option(help="M1-04 artifact directory.")] = None,
+) -> None:
+    """Score Laya and the M1-04 baseline on test (full and kiosk-partial) and write the report."""
+    from careflow_triage.laya_ktas.evaluate import write_report
+
+    path, _ = _data(csv)
+    json_path, md_path = write_report(_laya_run(run_dir), path, config, baseline_dir=baseline)
+    typer.echo(f"laya: report {md_path} ({json_path.name})")
+
+
+@laya_app.command("fixtures")
+def laya_fixtures(
+    run_dir: Annotated[Path | None, typer.Option(help="Run directory.")] = None,
+) -> None:
+    """Write laya_ktas/fixtures/golden.json: 50 synthetic states and their probabilities."""
+    from careflow_triage.laya_ktas.golden import write_golden
+
+    typer.echo(f"laya: golden {write_golden(_laya_run(run_dir))}")
 
 
 def main() -> None:

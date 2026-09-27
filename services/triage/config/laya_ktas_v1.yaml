@@ -1,0 +1,19 @@
+# Laya fine-tuned on KTAS (M3-01): `careflow-triage laya train --config services/triage/config/laya_ktas_v1.yaml`.
+# Research prototype. MPS only (no cloud GPU). Starting values from the issue and the official notebook
+# (NandhaKishorM/laya @ 4066d5d5, soft cross-entropy term only).
+base_model: convaiinnovations/laya
+revision: 55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851  # the English root checkpoint (not multilingual/)
+device: mps
+precision: fp32
+seed: 42
+lr_encoder: 2.5e-5
+lr_head: 1.0e-4
+weight_decay: 0.01
+eta_min: 1.0e-6          # the cosine schedule's floor, as in the notebook
+grad_clip: 1.0
+micro_batch: 4
+grad_accum: 8
+max_epochs: 6
+patience: 2              # early stop on validation macro-F1
+kiosk_p: 0.5             # per epoch, a training row is shown as the kiosk sees it (no RR, BP, ACVPU)
+eval_batch: 16

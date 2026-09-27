@@ -1,0 +1,1051 @@
+{
+ "state_version": "laya-state/v1",
+ "model_id": "laya-ktas",
+ "model_version": "laya-ktas-ebf31b5e-s42",
+ "temperature": 1.6376932859420776,
+ "device": "cpu",
+ "synthetic": true,
+ "cases": [
+  {
+   "state": {
+    "age": "22 years",
+    "sex": "female",
+    "chief_complaint": "vomiting since last night",
+    "heart_rate": "92 /min",
+    "spo2": "98 %",
+    "temperature": "38.8 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0679,
+    "level_2": 0.2422,
+    "level_3": 0.294,
+    "level_4": 0.3162,
+    "level_5": 0.0797
+   }
+  },
+  {
+   "state": {
+    "age": "91 years",
+    "sex": "female",
+    "chief_complaint": "back pain",
+    "pain_score": "7/10",
+    "heart_rate": "128 /min",
+    "spo2": "92 %",
+    "temperature": "37.6 °C",
+    "respiratory_rate": "13 /min",
+    "systolic_bp": "135 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0145,
+    "level_2": 0.2773,
+    "level_3": 0.1849,
+    "level_4": 0.4501,
+    "level_5": 0.0732
+   }
+  },
+  {
+   "state": {
+    "age": "30 years",
+    "sex": "female",
+    "chief_complaint": "sore throat",
+    "pain_score": "7/10",
+    "heart_rate": "89 /min",
+    "spo2": "97 %",
+    "temperature": "37.6 °C",
+    "respiratory_rate": "21 /min",
+    "systolic_bp": "105 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0125,
+    "level_2": 0.074,
+    "level_3": 0.5308,
+    "level_4": 0.324,
+    "level_5": 0.0588
+   }
+  },
+  {
+   "state": {
+    "age": "58 years",
+    "sex": "female",
+    "chief_complaint": "chest pain",
+    "pain_score": "9/10",
+    "heart_rate": "133 /min",
+    "spo2": "88 %",
+    "temperature": "39.1 °C"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0223,
+    "level_2": 0.5581,
+    "level_3": 0.3042,
+    "level_4": 0.0726,
+    "level_5": 0.0427
+   }
+  },
+  {
+   "state": {
+    "age": "21 years",
+    "sex": "female",
+    "chief_complaint": "fever",
+    "pain_score": "9/10",
+    "heart_rate": "117 /min",
+    "spo2": "97 %",
+    "temperature": "36.4 °C",
+    "respiratory_rate": "19 /min",
+    "systolic_bp": "131 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0264,
+    "level_2": 0.2815,
+    "level_3": 0.1744,
+    "level_4": 0.4262,
+    "level_5": 0.0915
+   }
+  },
+  {
+   "state": {
+    "age": "19 years",
+    "sex": "female",
+    "chief_complaint": "abdominal pain",
+    "pain_score": "8/10",
+    "heart_rate": "118 /min",
+    "spo2": "99 %",
+    "temperature": "40.0 °C",
+    "respiratory_rate": "28 /min",
+    "systolic_bp": "125 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.008,
+    "level_2": 0.0688,
+    "level_3": 0.8536,
+    "level_4": 0.0457,
+    "level_5": 0.0239
+   }
+  },
+  {
+   "state": {
+    "age": "85 years",
+    "sex": "male",
+    "chief_complaint": "chest pain",
+    "pain_score": "5/10",
+    "heart_rate": "129 /min",
+    "spo2": "87 %",
+    "temperature": "36.1 °C"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0243,
+    "level_2": 0.5908,
+    "level_3": 0.2593,
+    "level_4": 0.0779,
+    "level_5": 0.0476
+   }
+  },
+  {
+   "state": {
+    "age": "33 years",
+    "sex": "female",
+    "chief_complaint": "vomiting since last night",
+    "heart_rate": "93 /min",
+    "spo2": "86 %",
+    "temperature": "38.8 °C",
+    "respiratory_rate": "30 /min",
+    "systolic_bp": "90 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0563,
+    "level_2": 0.3587,
+    "level_3": 0.3627,
+    "level_4": 0.1667,
+    "level_5": 0.0555
+   }
+  },
+  {
+   "state": {
+    "age": "75 years",
+    "sex": "female",
+    "chief_complaint": "fever",
+    "pain_score": "8/10",
+    "heart_rate": "134 /min",
+    "spo2": "90 %",
+    "temperature": "36.9 °C",
+    "respiratory_rate": "15 /min",
+    "systolic_bp": "155 mmHg",
+    "consciousness": "new confusion"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0262,
+    "level_2": 0.3628,
+    "level_3": 0.1749,
+    "level_4": 0.3574,
+    "level_5": 0.0787
+   }
+  },
+  {
+   "state": {
+    "age": "26 years",
+    "sex": "female",
+    "chief_complaint": "abdominal pain",
+    "pain_score": "8/10",
+    "heart_rate": "48 /min",
+    "spo2": "97 %",
+    "temperature": "38.6 °C"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0132,
+    "level_2": 0.0576,
+    "level_3": 0.8468,
+    "level_4": 0.0532,
+    "level_5": 0.0293
+   }
+  },
+  {
+   "state": {
+    "age": "37 years",
+    "sex": "female",
+    "chief_complaint": "ankle injury after a fall",
+    "pain_score": "5/10",
+    "heart_rate": "100 /min",
+    "spo2": "93 %",
+    "temperature": "36.2 °C",
+    "respiratory_rate": "16 /min",
+    "systolic_bp": "92 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0113,
+    "level_2": 0.1071,
+    "level_3": 0.0817,
+    "level_4": 0.7295,
+    "level_5": 0.0703
+   }
+  },
+  {
+   "state": {
+    "age": "67 years",
+    "sex": "female",
+    "chief_complaint": "cut on the hand",
+    "pain_score": "9/10",
+    "heart_rate": "106 /min",
+    "spo2": "85 %",
+    "temperature": "38.5 °C",
+    "respiratory_rate": "29 /min",
+    "systolic_bp": "142 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0141,
+    "level_2": 0.1881,
+    "level_3": 0.0966,
+    "level_4": 0.6183,
+    "level_5": 0.0829
+   }
+  },
+  {
+   "state": {
+    "age": "22 years",
+    "sex": "female",
+    "chief_complaint": "sore throat",
+    "pain_score": "3/10",
+    "heart_rate": "110 /min",
+    "spo2": "84 %",
+    "temperature": "37.6 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0193,
+    "level_2": 0.0972,
+    "level_3": 0.1601,
+    "level_4": 0.5776,
+    "level_5": 0.1457
+   }
+  },
+  {
+   "state": {
+    "age": "47 years",
+    "sex": "female",
+    "chief_complaint": "palpitations",
+    "pain_score": "0/10",
+    "heart_rate": "72 /min",
+    "spo2": "97 %",
+    "temperature": "36.8 °C",
+    "respiratory_rate": "11 /min",
+    "systolic_bp": "181 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.02,
+    "level_2": 0.1354,
+    "level_3": 0.3577,
+    "level_4": 0.4138,
+    "level_5": 0.0732
+   }
+  },
+  {
+   "state": {
+    "age": "49 years",
+    "sex": "female",
+    "chief_complaint": "shortness of breath",
+    "heart_rate": "100 /min",
+    "spo2": "97 %",
+    "temperature": "38.6 °C",
+    "respiratory_rate": "20 /min",
+    "systolic_bp": "125 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0286,
+    "level_2": 0.2417,
+    "level_3": 0.6105,
+    "level_4": 0.0858,
+    "level_5": 0.0334
+   }
+  },
+  {
+   "state": {
+    "age": "78 years",
+    "sex": "male",
+    "chief_complaint": "abdominal pain",
+    "pain_score": "3/10",
+    "heart_rate": "50 /min",
+    "spo2": "85 %",
+    "temperature": "38.9 °C"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0114,
+    "level_2": 0.0775,
+    "level_3": 0.6402,
+    "level_4": 0.2316,
+    "level_5": 0.0393
+   }
+  },
+  {
+   "state": {
+    "age": "71 years",
+    "sex": "male",
+    "chief_complaint": "palpitations",
+    "pain_score": "5/10",
+    "heart_rate": "144 /min",
+    "spo2": "86 %",
+    "temperature": "38.8 °C",
+    "respiratory_rate": "22 /min",
+    "systolic_bp": "129 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0164,
+    "level_2": 0.2276,
+    "level_3": 0.4508,
+    "level_4": 0.257,
+    "level_5": 0.0481
+   }
+  },
+  {
+   "state": {
+    "age": "45 years",
+    "sex": "male",
+    "chief_complaint": "headache",
+    "pain_score": "7/10",
+    "heart_rate": "112 /min",
+    "spo2": "94 %",
+    "temperature": "35.9 °C",
+    "respiratory_rate": "19 /min",
+    "systolic_bp": "118 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0122,
+    "level_2": 0.3089,
+    "level_3": 0.5619,
+    "level_4": 0.0902,
+    "level_5": 0.0268
+   }
+  },
+  {
+   "state": {
+    "age": "42 years",
+    "sex": "female",
+    "chief_complaint": "dizziness",
+    "pain_score": "9/10",
+    "heart_rate": "98 /min",
+    "spo2": "95 %",
+    "temperature": "36.7 °C"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0252,
+    "level_2": 0.1561,
+    "level_3": 0.7396,
+    "level_4": 0.0457,
+    "level_5": 0.0334
+   }
+  },
+  {
+   "state": {
+    "age": "75 years",
+    "sex": "male",
+    "chief_complaint": "back pain",
+    "pain_score": "8/10",
+    "heart_rate": "94 /min",
+    "spo2": "96 %",
+    "temperature": "36.0 °C",
+    "respiratory_rate": "16 /min",
+    "systolic_bp": "129 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0247,
+    "level_2": 0.6166,
+    "level_3": 0.1402,
+    "level_4": 0.1315,
+    "level_5": 0.087
+   }
+  },
+  {
+   "state": {
+    "age": "25 years",
+    "sex": "male",
+    "chief_complaint": "back pain",
+    "pain_score": "2/10",
+    "heart_rate": "122 /min",
+    "spo2": "89 %",
+    "temperature": "38.2 °C",
+    "respiratory_rate": "23 /min",
+    "systolic_bp": "99 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.014,
+    "level_2": 0.1273,
+    "level_3": 0.1287,
+    "level_4": 0.6054,
+    "level_5": 0.1247
+   }
+  },
+  {
+   "state": {
+    "age": "81 years",
+    "sex": "male",
+    "chief_complaint": "back pain",
+    "heart_rate": "122 /min",
+    "spo2": "95 %",
+    "temperature": "38.4 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0229,
+    "level_2": 0.2427,
+    "level_3": 0.1835,
+    "level_4": 0.4654,
+    "level_5": 0.0855
+   }
+  },
+  {
+   "state": {
+    "age": "23 years",
+    "sex": "female",
+    "chief_complaint": "vomiting since last night",
+    "pain_score": "0/10",
+    "heart_rate": "126 /min",
+    "spo2": "91 %",
+    "temperature": "35.7 °C",
+    "respiratory_rate": "14 /min",
+    "systolic_bp": "134 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0144,
+    "level_2": 0.1728,
+    "level_3": 0.4659,
+    "level_4": 0.2825,
+    "level_5": 0.0645
+   }
+  },
+  {
+   "state": {
+    "age": "41 years",
+    "sex": "female",
+    "chief_complaint": "shortness of breath",
+    "pain_score": "7/10",
+    "heart_rate": "58 /min",
+    "spo2": "86 %",
+    "temperature": "36.3 °C",
+    "respiratory_rate": "24 /min",
+    "systolic_bp": "113 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0468,
+    "level_2": 0.6376,
+    "level_3": 0.202,
+    "level_4": 0.0657,
+    "level_5": 0.0478
+   }
+  },
+  {
+   "state": {
+    "age": "92 years",
+    "sex": "female",
+    "chief_complaint": "fever",
+    "pain_score": "3/10",
+    "heart_rate": "111 /min",
+    "spo2": "94 %",
+    "temperature": "35.6 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0322,
+    "level_2": 0.2114,
+    "level_3": 0.1801,
+    "level_4": 0.4508,
+    "level_5": 0.1254
+   }
+  },
+  {
+   "state": {
+    "age": "53 years",
+    "sex": "male",
+    "chief_complaint": "sore throat",
+    "pain_score": "0/10",
+    "heart_rate": "56 /min",
+    "spo2": "88 %",
+    "temperature": "37.8 °C",
+    "respiratory_rate": "22 /min",
+    "systolic_bp": "128 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0214,
+    "level_2": 0.3163,
+    "level_3": 0.5191,
+    "level_4": 0.0882,
+    "level_5": 0.055
+   }
+  },
+  {
+   "state": {
+    "age": "28 years",
+    "sex": "female",
+    "chief_complaint": "ankle injury after a fall",
+    "pain_score": "5/10",
+    "heart_rate": "131 /min",
+    "spo2": "88 %",
+    "temperature": "37.1 °C",
+    "respiratory_rate": "23 /min",
+    "systolic_bp": "137 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0304,
+    "level_2": 0.3519,
+    "level_3": 0.1279,
+    "level_4": 0.3194,
+    "level_5": 0.1704
+   }
+  },
+  {
+   "state": {
+    "age": "49 years",
+    "sex": "male",
+    "chief_complaint": "chest pain",
+    "pain_score": "4/10",
+    "heart_rate": "133 /min",
+    "spo2": "84 %",
+    "temperature": "36.2 °C"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0198,
+    "level_2": 0.6462,
+    "level_3": 0.2163,
+    "level_4": 0.0784,
+    "level_5": 0.0394
+   }
+  },
+  {
+   "state": {
+    "age": "40 years",
+    "sex": "male",
+    "chief_complaint": "vomiting since last night",
+    "heart_rate": "60 /min",
+    "spo2": "88 %",
+    "temperature": "38.6 °C",
+    "respiratory_rate": "28 /min",
+    "systolic_bp": "160 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0517,
+    "level_2": 0.2739,
+    "level_3": 0.4229,
+    "level_4": 0.2035,
+    "level_5": 0.0481
+   }
+  },
+  {
+   "state": {
+    "age": "75 years",
+    "sex": "male",
+    "chief_complaint": "shortness of breath",
+    "pain_score": "6/10",
+    "heart_rate": "142 /min",
+    "spo2": "100 %",
+    "temperature": "35.7 °C",
+    "respiratory_rate": "15 /min",
+    "systolic_bp": "95 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0142,
+    "level_2": 0.2422,
+    "level_3": 0.6187,
+    "level_4": 0.098,
+    "level_5": 0.0269
+   }
+  },
+  {
+   "state": {
+    "age": "58 years",
+    "sex": "male",
+    "chief_complaint": "dizziness",
+    "pain_score": "9/10",
+    "heart_rate": "95 /min",
+    "spo2": "97 %",
+    "temperature": "37.0 °C"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0297,
+    "level_2": 0.1252,
+    "level_3": 0.7464,
+    "level_4": 0.0568,
+    "level_5": 0.0419
+   }
+  },
+  {
+   "state": {
+    "age": "38 years",
+    "sex": "female",
+    "chief_complaint": "cut on the hand",
+    "pain_score": "9/10",
+    "heart_rate": "74 /min",
+    "spo2": "100 %",
+    "temperature": "36.3 °C",
+    "respiratory_rate": "33 /min",
+    "systolic_bp": "139 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0134,
+    "level_2": 0.0753,
+    "level_3": 0.1,
+    "level_4": 0.722,
+    "level_5": 0.0894
+   }
+  },
+  {
+   "state": {
+    "age": "39 years",
+    "sex": "male",
+    "chief_complaint": "weakness on one side",
+    "pain_score": "10/10",
+    "heart_rate": "63 /min",
+    "spo2": "99 %",
+    "temperature": "39.0 °C",
+    "respiratory_rate": "31 /min",
+    "systolic_bp": "178 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0172,
+    "level_2": 0.1962,
+    "level_3": 0.4447,
+    "level_4": 0.2676,
+    "level_5": 0.0743
+   }
+  },
+  {
+   "state": {
+    "age": "84 years",
+    "sex": "male",
+    "chief_complaint": "cut on the hand",
+    "pain_score": "5/10",
+    "heart_rate": "80 /min",
+    "spo2": "84 %",
+    "temperature": "38.6 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.014,
+    "level_2": 0.0822,
+    "level_3": 0.1013,
+    "level_4": 0.6893,
+    "level_5": 0.1132
+   }
+  },
+  {
+   "state": {
+    "age": "84 years",
+    "sex": "male",
+    "chief_complaint": "back pain",
+    "pain_score": "8/10",
+    "heart_rate": "87 /min",
+    "spo2": "88 %",
+    "temperature": "39.9 °C",
+    "respiratory_rate": "33 /min",
+    "systolic_bp": "106 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0135,
+    "level_2": 0.3279,
+    "level_3": 0.1779,
+    "level_4": 0.416,
+    "level_5": 0.0647
+   }
+  },
+  {
+   "state": {
+    "age": "25 years",
+    "sex": "male",
+    "chief_complaint": "sore throat",
+    "heart_rate": "63 /min",
+    "spo2": "96 %",
+    "temperature": "38.3 °C",
+    "respiratory_rate": "14 /min",
+    "systolic_bp": "159 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.0543,
+    "level_2": 0.3834,
+    "level_3": 0.4041,
+    "level_4": 0.0899,
+    "level_5": 0.0683
+   }
+  },
+  {
+   "state": {
+    "age": "19 years",
+    "sex": "male",
+    "chief_complaint": "headache",
+    "pain_score": "3/10",
+    "heart_rate": "150 /min",
+    "spo2": "97 %",
+    "temperature": "40.1 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0169,
+    "level_2": 0.1096,
+    "level_3": 0.1429,
+    "level_4": 0.6648,
+    "level_5": 0.0659
+   }
+  },
+  {
+   "state": {
+    "age": "27 years",
+    "sex": "female",
+    "chief_complaint": "chest pain",
+    "pain_score": "1/10",
+    "heart_rate": "71 /min",
+    "spo2": "88 %",
+    "temperature": "38.7 °C",
+    "respiratory_rate": "13 /min",
+    "systolic_bp": "187 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.016,
+    "level_2": 0.5574,
+    "level_3": 0.282,
+    "level_4": 0.0946,
+    "level_5": 0.05
+   }
+  },
+  {
+   "state": {
+    "age": "38 years",
+    "sex": "female",
+    "chief_complaint": "weakness on one side",
+    "pain_score": "7/10",
+    "heart_rate": "126 /min",
+    "spo2": "93 %",
+    "temperature": "36.4 °C",
+    "respiratory_rate": "31 /min",
+    "systolic_bp": "169 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0183,
+    "level_2": 0.3468,
+    "level_3": 0.3294,
+    "level_4": 0.2305,
+    "level_5": 0.075
+   }
+  },
+  {
+   "state": {
+    "age": "71 years",
+    "sex": "male",
+    "chief_complaint": "back pain",
+    "pain_score": "9/10",
+    "heart_rate": "61 /min",
+    "spo2": "91 %",
+    "temperature": "39.9 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0163,
+    "level_2": 0.1766,
+    "level_3": 0.1977,
+    "level_4": 0.5394,
+    "level_5": 0.07
+   }
+  },
+  {
+   "state": {
+    "age": "90 years",
+    "sex": "male",
+    "chief_complaint": "shortness of breath",
+    "pain_score": "5/10",
+    "heart_rate": "100 /min",
+    "spo2": "95 %",
+    "temperature": "40.0 °C",
+    "respiratory_rate": "23 /min",
+    "systolic_bp": "111 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0225,
+    "level_2": 0.4834,
+    "level_3": 0.3979,
+    "level_4": 0.0647,
+    "level_5": 0.0316
+   }
+  },
+  {
+   "state": {
+    "age": "87 years",
+    "sex": "male",
+    "chief_complaint": "chest pain",
+    "pain_score": "6/10",
+    "heart_rate": "105 /min",
+    "spo2": "86 %",
+    "temperature": "36.0 °C",
+    "respiratory_rate": "25 /min",
+    "systolic_bp": "160 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0175,
+    "level_2": 0.55,
+    "level_3": 0.285,
+    "level_4": 0.103,
+    "level_5": 0.0445
+   }
+  },
+  {
+   "state": {
+    "age": "73 years",
+    "sex": "male",
+    "chief_complaint": "chest pain",
+    "heart_rate": "65 /min",
+    "spo2": "94 %",
+    "temperature": "39.9 °C"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0546,
+    "level_2": 0.4293,
+    "level_3": 0.3744,
+    "level_4": 0.0964,
+    "level_5": 0.0453
+   }
+  },
+  {
+   "state": {
+    "age": "51 years",
+    "sex": "female",
+    "chief_complaint": "sore throat",
+    "pain_score": "9/10",
+    "heart_rate": "49 /min",
+    "spo2": "95 %",
+    "temperature": "39.4 °C",
+    "respiratory_rate": "12 /min",
+    "systolic_bp": "107 mmHg",
+    "consciousness": "new confusion"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.017,
+    "level_2": 0.1522,
+    "level_3": 0.3902,
+    "level_4": 0.3618,
+    "level_5": 0.0788
+   }
+  },
+  {
+   "state": {
+    "age": "51 years",
+    "sex": "male",
+    "chief_complaint": "dizziness",
+    "pain_score": "5/10",
+    "heart_rate": "126 /min",
+    "spo2": "94 %",
+    "temperature": "39.6 °C",
+    "respiratory_rate": "28 /min",
+    "systolic_bp": "146 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.021,
+    "level_2": 0.2303,
+    "level_3": 0.6516,
+    "level_4": 0.0573,
+    "level_5": 0.0399
+   }
+  },
+  {
+   "state": {
+    "age": "47 years",
+    "sex": "male",
+    "chief_complaint": "dizziness",
+    "pain_score": "10/10",
+    "heart_rate": "91 /min",
+    "spo2": "85 %",
+    "temperature": "39.6 °C"
+   },
+   "choice": "level_3",
+   "probabilities": {
+    "level_1": 0.025,
+    "level_2": 0.2229,
+    "level_3": 0.6546,
+    "level_4": 0.0566,
+    "level_5": 0.0409
+   }
+  },
+  {
+   "state": {
+    "age": "56 years",
+    "sex": "male",
+    "chief_complaint": "headache",
+    "pain_score": "2/10",
+    "heart_rate": "150 /min",
+    "spo2": "96 %",
+    "temperature": "39.3 °C",
+    "respiratory_rate": "33 /min",
+    "systolic_bp": "91 mmHg",
+    "consciousness": "responds to voice"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.0277,
+    "level_2": 0.6328,
+    "level_3": 0.1624,
+    "level_4": 0.1049,
+    "level_5": 0.0722
+   }
+  },
+  {
+   "state": {
+    "age": "21 years",
+    "sex": "male",
+    "chief_complaint": "ankle injury after a fall",
+    "pain_score": "3/10",
+    "heart_rate": "63 /min",
+    "spo2": "87 %",
+    "temperature": "37.0 °C",
+    "respiratory_rate": "30 /min",
+    "systolic_bp": "182 mmHg",
+    "consciousness": "alert"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0116,
+    "level_2": 0.0746,
+    "level_3": 0.0882,
+    "level_4": 0.6584,
+    "level_5": 0.1671
+   }
+  },
+  {
+   "state": {
+    "age": "86 years",
+    "sex": "female",
+    "chief_complaint": "ankle injury after a fall",
+    "pain_score": "1/10",
+    "heart_rate": "64 /min",
+    "spo2": "88 %",
+    "temperature": "36.2 °C"
+   },
+   "choice": "level_4",
+   "probabilities": {
+    "level_1": 0.0166,
+    "level_2": 0.0806,
+    "level_3": 0.094,
+    "level_4": 0.6565,
+    "level_5": 0.1523
+   }
+  },
+  {
+   "state": {
+    "age": "17 years",
+    "sex": "female",
+    "chief_complaint": "chest pain",
+    "heart_rate": "65 /min",
+    "spo2": "98 %",
+    "temperature": "38.3 °C",
+    "respiratory_rate": "11 /min",
+    "systolic_bp": "137 mmHg",
+    "consciousness": "new confusion"
+   },
+   "choice": "level_2",
+   "probabilities": {
+    "level_1": 0.032,
+    "level_2": 0.458,
+    "level_3": 0.3177,
+    "level_4": 0.1306,
+    "level_5": 0.0616
+   }
+  }
+ ]
+}
