@@ -122,7 +122,9 @@ describe("phone visit recovery", () => {
     get.mockResolvedValue(reply({ state, token_code: "G-031", room: "Room 4", intake_revision: 3 }));
     show();
     await screen.findByText("Opening your current visit status…");
-    expect(router.replace).toHaveBeenCalledWith("/status");
+    // The redirect runs in an effect after that render: wait for it (a loaded machine reached the
+    // assertion first, docs/FLAKY.md).
+    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/status"));
     expect(screen.queryByText(/stay in the waiting area/)).not.toBeInTheDocument();
   });
 

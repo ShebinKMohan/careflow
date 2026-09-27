@@ -2,7 +2,7 @@
 
 import type { Schema } from "@careflow/contracts";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { api } from "@/lib/api";
 import { indexFacts } from "@/lib/facts";
@@ -38,21 +38,30 @@ interface Loaded {
 export function NurseSession({ sessionId }: { sessionId: string }) {
   const t = useTranslations("safety.alerts");
   const [state, setState] = useState<ApiState<Loaded>>({ status: "loading" });
+  // Loads overlap (a live frame, a reconnection, the poll). An answer is shown as soon as it comes,
+  // unless a load started after it has already been shown: then it is older than the screen and
+  // would put back what just changed (SHE-325).
+  const started = useRef(0);
+  const shown = useRef(0);
+  const onScreen = useRef(sessionId); // a load for another session is never shown
 
   useEffect(() => {
-    let active = true;
+    onScreen.current = sessionId;
+    const load = ++started.current;
     void loadSession(sessionId).then((next) => {
-      if (active) setState(next);
+      if (onScreen.current !== sessionId || load <= shown.current) return;
+      shown.current = load;
+      setState(next);
     });
-    return () => {
-      active = false;
-    };
   }, [sessionId]);
 
   const reload = useCallback(() => {
-    void loadSession(sessionId).then((next) =>
-      setState((current) => (next.status !== "ready" && current.status === "ready" ? current : next)),
-    );
+    const load = ++started.current;
+    void loadSession(sessionId).then((next) => {
+      if (onScreen.current !== sessionId || load <= shown.current) return;
+      shown.current = load;
+      setState((current) => (next.status !== "ready" && current.status === "ready" ? current : next));
+    });
   }, [sessionId]);
   const live = useLiveSession(sessionId, reload);
 

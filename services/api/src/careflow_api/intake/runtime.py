@@ -15,6 +15,7 @@ import asyncio
 import logging
 from collections.abc import AsyncIterator, Callable, Mapping, Sequence
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, cast
 
@@ -47,6 +48,17 @@ from careflow_intake.state import IntakeSettings, IntakeState, structured_facts
 logger = logging.getLogger("careflow_api.intake")
 
 type Result = dict[str, Any]
+
+
+@dataclass(frozen=True, slots=True)
+class SessionView:
+    """A session's state and where its graph is paused, from one checkpoint read."""
+
+    state: IntakeState
+    waiting: str | None
+
+
+PAUSES: tuple[str, ...] = ("await_answer", "nurse_review")
 
 
 class PatientAlreadySet(RuntimeError):
@@ -276,10 +288,20 @@ class IntakeRuntime:
     async def waiting_for(self, session_id: str) -> tuple[str | None, dict[str, Any] | None]:
         """Where the session is paused (`await_answer`, `nurse_review`) and the pause's value."""
         snapshot = await self.graph.aget_state(thread_config(session_id))
-        for node in ("await_answer", "nurse_review"):
+        for node in PAUSES:
             if waiting_at(snapshot, node):
                 return node, pending(snapshot)
         return None, None
+
+    async def view(self, session_id: str) -> SessionView | None:
+        """`state` and where it is paused (`waiting_for`'s node) from ONE checkpoint read: the
+        nurse's worklist reads every open session, and two reads each doubled its time
+        (SHE-325). None when the session has no checkpoint."""
+        snapshot = await self.graph.aget_state(thread_config(session_id))
+        if not snapshot.values:
+            return None
+        waiting = next((node for node in PAUSES if waiting_at(snapshot, node)), None)
+        return SessionView(state=cast(IntakeState, snapshot.values), waiting=waiting)
 
     async def load(self, clinic_id: str, session_id: str) -> IntakeState | None:
         """The briefing's `StateSource` (M1-16): the state of a session of this clinic."""
@@ -292,6 +314,7 @@ class IntakeRuntime:
 __all__ = [
     "IntakeRevisionConflict",
     "IntakeRuntime",
+    "SessionView",
     "NotWaiting",
     "PatientAlreadySet",
     "intake_revision",

@@ -17,7 +17,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import uuid
-from collections.abc import Awaitable, Callable, Iterable
+from collections.abc import Awaitable, Callable, Iterable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Final
@@ -478,21 +478,39 @@ class QueueService:
 
     async def session_token(self, db: AsyncSession, *, session_id: str) -> QueueToken | None:
         """The session's active token, or its latest one."""
-        try:
-            key = uuid.UUID(session_id)
-        except ValueError:
-            return None
+        return (await self.session_tokens(db, session_ids=[session_id])).get(session_id)
+
+    async def session_tokens(
+        self, db: AsyncSession, *, session_ids: Sequence[str]
+    ) -> dict[str, QueueToken]:
+        """`session_token` for many sessions in one query (the nurse's worklist, SHE-325): each
+        session's newest active token, else its newest one. Sessions without a token are left
+        out."""
+        keys: list[uuid.UUID] = []
+        for session_id in session_ids:
+            try:
+                keys.append(uuid.UUID(session_id))
+            except ValueError:
+                continue
+        if not keys:
+            return {}
         found = (
             await db.execute(
                 select(QueueTokenRow)
-                .where(QueueTokenRow.session_id == key)
+                .where(QueueTokenRow.session_id.in_(keys))
                 .order_by(QueueTokenRow.issued_at.desc())
             )
         ).scalars()
-        rows = sorted(found, key=lambda r: r.status not in ACTIVE_VALUES)  # active first
-        if not rows:
-            return None
-        return self.to_api(to_token(rows[0]), self.rooms.department(rows[0].department))
+        chosen: dict[str, QueueTokenRow] = {}
+        for row in found:  # newest first: keep the first, unless a later one is active
+            session_id = str(row.session_id)
+            best = chosen.get(session_id)
+            if best is None or (best.status not in ACTIVE_VALUES and row.status in ACTIVE_VALUES):
+                chosen[session_id] = row
+        return {
+            session_id: self.to_api(to_token(row), self.rooms.department(row.department))
+            for session_id, row in chosen.items()
+        }
 
 
 async def run_grace_expiry(

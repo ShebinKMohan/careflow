@@ -57,6 +57,16 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   visits on the stack, failed it at 3,158 ms. The next three consecutive runs passed at 1,688,
   1,680 and 1,662 ms, against 1,151 to 1,177 ms earlier that day with fewer open visits. SHE-325
   covers both.
+- **SHE-325 (27 September 2026).** The worklist now reads each visit's checkpoint once,
+  concurrently, and every token in one query. At 161 open visits a load dropped from 935 ms to
+  325 ms (medians of 15). With 161 to 197 open visits, a warm-up and three runs all passed. With
+  287 open visits:
+  - the chest-pain alert stayed under 2 s in six runs (974 to 1,384 ms);
+  - "I feel worse" took 1,701 to 1,881 ms in five runs and failed once at 2,265 ms.
+
+  The load still grows with open visits (decoding each checkpoint is CPU work); a worklist
+  projection would stop that (ADR-051, M6-01). The test stack keeps every journey's visits open
+  for 24 hours, far more than a clinic holds. Nothing was retried or loosened.
 
 ## `services/api/tests/test_events_ws.py::test_heartbeats_and_replay_after_a_reconnect` (M1-11)
 
@@ -93,3 +103,14 @@ This file lists tests whose outcome depends on the machine or on timing, and how
 - **Handling.** Not retried, not weakened. A red run is investigated. The fix belongs to the voice
   work (SHE-278 or a voice follow-up): drive these tests with a controllable clock instead of wall
   time.
+
+## `apps/companion/tests/phone-recovery.test.tsx` › "opens current status for a called/arrived visit" (M2-06)
+
+- **What happened.** During SHE-325 on 27 September 2026, one full `make check` run failed the
+  "arrived" case: `router.replace` had not been called with "/status". Alone it passed 5 runs out of
+  5, and the whole companion suite passed 3 out of 3.
+- **Cause.** A race in the test, not the product. `PhoneIntake` renders "Opening your current visit
+  status…" and then redirects in a passive effect. The test found the text and asserted the redirect
+  at once, which a loaded machine can reach before the effect runs.
+- **Handling.** The test now waits for the redirect it asserts (`waitFor`): the same assertion, no
+  retry.

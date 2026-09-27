@@ -1,8 +1,8 @@
 """Run async work once a request's transaction has committed (M2-07).
 
-The request's database session (`deps.get_db`) commits when its dependency exits, which is after
-the route and even after FastAPI's background tasks. Work that must see the committed state (the
-queue's `queue.status` broadcast) is scheduled from the session's `after_commit` event instead: it
+The request's database session (`deps.Db`) commits when the route returns, before the response
+is sent (SHE-325), and before FastAPI's background tasks. Work that must see the committed state
+(the queue's `queue.status` broadcast) is scheduled from the session's `after_commit` event: it
 never runs on a rollback.
 """
 
