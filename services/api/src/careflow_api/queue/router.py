@@ -12,7 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from careflow_api.aftercommit import after_commit
-from careflow_api.deps import Principal, get_db, require_roles
+from careflow_api.deps import Db, Principal, require_roles
 from careflow_api.queue.core import InvalidTransition, RoomBusy
 from careflow_api.queue.rooms import UnknownDepartment, UnknownRoom
 from careflow_api.queue.service import QueueService, UnknownToken
@@ -26,7 +26,6 @@ def queue_service(request: Request) -> QueueService:
     return service
 
 
-Db = Annotated[AsyncSession, Depends(get_db)]
 Service = Annotated[QueueService, Depends(queue_service)]
 Nurse = Annotated[Principal, Depends(require_roles("nurse"))]
 

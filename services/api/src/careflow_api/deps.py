@@ -109,6 +109,13 @@ def require_roles(*roles: Role) -> Callable[..., Awaitable[Principal]]:
 async def get_db(
     principal: Annotated[Principal, Depends(get_principal)],
 ) -> AsyncIterator[AsyncSession]:
-    """One transaction per request, scoped by RLS to the caller's clinic."""
+    """One transaction per request, scoped by RLS to the caller's clinic. Inject it as `Db`."""
     async with clinic_session(principal.clinic_id) as session:
         yield session
+
+
+# `scope="function"`: the transaction commits when the route returns, BEFORE the response is sent.
+# FastAPI's default runs a yield dependency's exit after the response, so a client that acted on
+# a 200 at once (the nurse's "Seen", then the worklist's reload) could read the state from before
+# the commit (SHE-325).
+Db = Annotated[AsyncSession, Depends(get_db, scope="function")]

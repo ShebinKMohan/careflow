@@ -32,10 +32,18 @@ function wsBase(): string {
 export function useLiveStatus(): LiveStatus {
   const [state, setState] = useState<LiveStatus>({ status: "loading" });
   const patientType = useRef<CompanionStatus["patient_type"]>(undefined);
+  // Reads overlap with each other and with pushed frames. An answer is shown as soon as it comes,
+  // unless something newer is already on screen: a read started after it, or a frame that came
+  // after it started (SHE-325).
+  const started = useRef(0);
+  const shown = useRef(0);
 
   const refresh = useCallback(async () => {
+    const read = ++started.current;
     try {
       const { data, response } = await api.GET("/v1/companion/status");
+      if (read <= shown.current) return;
+      shown.current = read;
       if (data) {
         patientType.current = data.patient_type ?? patientType.current;
         setState((current) => ({
@@ -51,6 +59,8 @@ export function useLiveStatus(): LiveStatus {
         setState(keepLastGood);
       }
     } catch {
+      if (read <= shown.current) return;
+      shown.current = read;
       setState(keepLastGood);
     }
   }, []);
@@ -93,6 +103,7 @@ export function useLiveStatus(): LiveStatus {
           return;
         }
         if (frame.type === "queue.status" && frame.data) {
+          shown.current = started.current; // newer than every read still on its way
           const next = { ...frame.data, patient_type: frame.data.patient_type ?? patientType.current };
           setState({ status: "ready", data: next, updatedAt: Date.now(), live: true, stale: false });
         } else if (frame.type === "token.called" || frame.type === "token.no_show") {

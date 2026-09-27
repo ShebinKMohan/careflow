@@ -257,3 +257,28 @@ async def test_a_seen_or_no_show_patients_phone_learns_its_final_state(
         marked = await client.post(f"/v1/queue/tokens/{await call(missed)}/no-show", headers=nurse)
         assert marked.status_code == 200
     assert await final_state(missed) == "no_show"
+
+
+async def test_session_tokens_reads_many_sessions_like_session_token_one_by_one(
+    app: FastAPI, client: AsyncClient, database: Engine, clinic: uuid.UUID
+) -> None:
+    """The worklist's one-query token lookup (SHE-325) picks what `session_token` picks for each
+    session: its newest active token, else its newest one; a session without a token is left
+    out."""
+    nurse = bearer("nurse", clinic)
+    seen, waiting, _ = await queued(database, app, clinic, [2, 3, 4])
+    called = await client.post("/v1/queue/emergency/call-next", headers=nurse)
+    assert called.json()["token"]["session_id"] == seen
+    token_id = called.json()["token"]["token_id"]
+    closed = await client.post(f"/v1/queue/tokens/{token_id}/close", headers=nurse)
+    assert closed.status_code == 200
+    service = cast(QueueService, app.state.queue)
+    without = str(uuid.uuid4())
+    ids = [seen, waiting, without, "not-a-uuid"]
+    async with clinic_session(clinic) as db:
+        many = await service.session_tokens(db, session_ids=ids)
+        one_by_one = {sid: await service.session_token(db, session_id=sid) for sid in ids}
+    assert many == {sid: token for sid, token in one_by_one.items() if token is not None}
+    assert many[seen].status.value == "closed"
+    assert many[waiting].status.value == "waiting"
+    assert without not in many

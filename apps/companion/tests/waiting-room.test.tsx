@@ -127,6 +127,23 @@ describe("the waiting room's safety button", () => {
   });
 });
 
+describe("overlapping reads (SHE-325)", () => {
+  it("a pushed status is not overwritten by an older read that answers after it", async () => {
+    get.mockResolvedValueOnce(reply(STATUS)); // the first load: position 3
+    show();
+    await settle();
+    let answerSnapshot!: (value: unknown) => void;
+    get.mockImplementationOnce(() => new Promise((answer) => (answerSnapshot = answer)));
+    act(() => FakeSocket.all[0]!.open()); // the snapshot read on open, still on its way
+    await settle();
+    act(() => FakeSocket.all[0]!.onmessage?.({ data: JSON.stringify({ type: "queue.status", data: { ...STATUS, position: 1 } }) } as MessageEvent<unknown>));
+    expect(screen.getByTestId("position")).toHaveTextContent("Position: 1");
+    await act(async () => answerSnapshot(reply({ ...STATUS, position: 2 }))); // older than the frame
+    await settle();
+    expect(screen.getByTestId("position")).toHaveTextContent("Position: 1");
+  });
+});
+
 describe("the end of the visit (M2-01)", () => {
   const closed = { ...STATUS, state: "closed", position: null, wait_estimate_minutes: null, token: { ...STATUS.token, status: "closed" } };
 

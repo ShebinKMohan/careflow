@@ -156,6 +156,31 @@ describe("the nurse's session card after the decision (M2-07)", () => {
     expect(screen.getByTestId("after-decision")).toBeInTheDocument();
   });
 
+  it("keeps the newer reload when an older, slower one answers last (SHE-325)", async () => {
+    show();
+    await settle();
+    act(() => FakeSocket.all[0]!.open());
+    await settle(200);
+    const held: ((value: unknown) => void)[] = [];
+    get.mockImplementation(async (path: string) => {
+      if (path === "/v1/sessions/{session_id}/triage") return new Promise((answer) => held.push(answer));
+      if (path === "/v1/sessions/{session_id}/facts") return reply(FACTS);
+      return reply(ME);
+    });
+    act(() => FakeSocket.all[0]!.send({ id: "4-0", type: "alert.raised", data: { session_id: SESSION } }));
+    await settle(200); // reload 1, still waiting for its answer
+    act(() => FakeSocket.all[0]!.send({ id: "5-0", type: "patient.feels_worse", data: { session_id: SESSION } }));
+    await settle(200); // reload 2
+    expect(held).toHaveLength(2);
+
+    await act(async () => held[1]!(reply(confirmed([ECG, FAST]))));
+    await settle();
+    expect(screen.getAllByTestId("alert-banner")).toHaveLength(2);
+    await act(async () => held[0]!(reply(confirmed([ECG])))); // the older answer arrives last
+    await settle();
+    expect(screen.getAllByTestId("alert-banner")).toHaveLength(2); // still the newer card
+  });
+
   it("takes a duplicated frame once: one reload of the server's state, nothing counted twice", async () => {
     triage = confirmed([ECG], {
       feels_worse: { press_count: 1, last_reported_at: "2026-09-26T09:41:00Z", danger_answer_codes: [] },

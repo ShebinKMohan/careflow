@@ -8,6 +8,7 @@ graph waiting. Every decision writes one `nurse_decisions` row.
 
 from __future__ import annotations
 
+import asyncio
 import datetime as dt
 import logging
 import uuid
@@ -20,7 +21,7 @@ from sqlalchemy import select
 from careflow_api.deps import Principal, require_roles
 from careflow_api.feels_worse import summaries as feels_worse_summaries
 from careflow_api.hospital import hospital_adapter
-from careflow_api.intake.runtime import IntakeRuntime
+from careflow_api.intake.runtime import IntakeRuntime, SessionView
 from careflow_api.intake.views import ECG_ACTION, tasks, triage_view, worklist_item
 from careflow_api.intake.views import task_id as ecg_task_id
 from careflow_api.models import NurseDecisionRow, PatientSession
@@ -50,6 +51,9 @@ logger = logging.getLogger("careflow_api.nurse")
 router = APIRouter(prefix="/v1/nurse", tags=["nurse"])
 
 ACTIVE_WINDOW: Final = dt.timedelta(hours=24)
+# Checkpoint reads the worklist runs at once: the intake runtime's pool holds 10 connections, so
+# this leaves room for the requests the nurse and the kiosks make meanwhile.
+WORKLIST_READS: Final = 8
 ACVPU_DISPLAY: Final = {
     "A": "Alert",
     "C": "New confusion",
@@ -93,23 +97,31 @@ async def worklist(
     if intake is None:
         logger.warning("nurse.worklist", extra={"error": "intake runtime not started"})
         return []
-    items: list[WorklistItem] = []
     rows = await active_sessions(principal)
-    presses = await feels_worse_summaries(principal.clinic_id, [str(row.id) for row in rows])
-    questions = await medical_questions(principal.clinic_id, [str(row.id) for row in rows])
-    for row in rows:
-        session_id = str(row.id)
-        state = await intake.state(session_id)
-        if state is None:
+    ids = [str(row.id) for row in rows]
+    presses = await feels_worse_summaries(principal.clinic_id, ids)
+    questions = await medical_questions(principal.clinic_id, ids)
+    async with clinic_session(principal.clinic_id) as db:
+        tokens = await request.app.state.queue.session_tokens(db, session_ids=ids)
+    # Every open session's checkpoint, read concurrently (SHE-325): the worklist reloads on every
+    # alert, and one read after another made the alert's way to the nurse grow with open visits.
+    gate = asyncio.Semaphore(WORKLIST_READS)
+
+    async def read(session_id: str) -> SessionView | None:
+        async with gate:
+            return await intake.view(session_id)
+
+    views = await asyncio.gather(*(read(session_id) for session_id in ids))
+    items: list[WorklistItem] = []
+    for row, session_id, view in zip(rows, ids, views, strict=True):
+        if view is None:
             continue
-        waiting, _ = await intake.waiting_for(session_id)
-        async with clinic_session(principal.clinic_id) as db:
-            token = await request.app.state.queue.session_token(db, session_id=session_id)
+        token = tokens.get(session_id)
         items.append(
             worklist_item(
-                state,
+                view.state,
                 patient_display=row.patient_display or "Unknown",
-                waiting=waiting,
+                waiting=view.waiting,
                 token_code=token.token_code if token else None,
                 token_status=token.status.value if token else None,
                 feels_worse=presses.get(session_id),

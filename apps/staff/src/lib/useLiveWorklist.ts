@@ -31,19 +31,25 @@ export function useLiveWorklist(onAlert: (raised: AlertRaised) => void): {
   const [live, setLive] = useState<LiveStatus>("connecting");
   const onAlertRef = useRef(onAlert);
   const refetchTimer = useRef<number | null>(null);
+  const started = useRef(0); // reads started
+  const shown = useRef(0); // the read whose answer is on screen
 
   useEffect(() => {
     onAlertRef.current = onAlert;
   }, [onAlert]);
 
-  const refresh = useCallback(
-    () =>
-      fetchWorklist().then((next) =>
-        // A failed refresh keeps the last good list on screen.
-        setState((current) => (next.status === "failed" && current.status === "ready" ? current : next)),
-      ),
-    [],
-  );
+  const refresh = useCallback(() => {
+    // Reads overlap (a live frame's refetch, the queue controls' reload, the poll). An answer is
+    // shown as soon as it comes, unless a read started after it has already been shown: then it is
+    // older than the screen and would put back what just changed (SHE-325).
+    const read = ++started.current;
+    return fetchWorklist().then((next) => {
+      if (read <= shown.current) return;
+      shown.current = read;
+      // A failed refresh keeps the last good list on screen.
+      setState((current) => (next.status === "failed" && current.status === "ready" ? current : next));
+    });
+  }, []);
 
   useEffect(() => {
     void refresh();
