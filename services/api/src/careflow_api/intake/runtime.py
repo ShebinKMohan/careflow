@@ -28,6 +28,7 @@ from careflow_contracts.generated.nurse_decision_schema import NurseDecision
 from careflow_contracts.generated.structured_facts_schema import Language
 from careflow_intake.checkpoint import libpq_url, serializer
 from careflow_intake.facts import FactEntry
+from careflow_intake.feels_worse import feels_worse_turns_and_facts
 from careflow_intake.graph import (
     IntakeGraph,
     NotWaiting,
@@ -167,6 +168,26 @@ class IntakeRuntime:
     async def add_facts(self, session_id: str, facts: Sequence[FactEntry]) -> None:
         async with self.serialized(session_id):
             await add_facts(self.graph, session_id, facts)
+
+    async def report_feels_worse(
+        self, session_id: str, *, codes: Sequence[str], now: datetime
+    ) -> IntakeState:
+        """An "I feel worse" press (M2-07): its turns and the facts its ticked answers state, then
+        the safety rules at once (new rule ids go out as `alert.raised`). Raises `NotWaiting`
+        without a checkpoint."""
+        async with self.serialized(session_id):
+            config = thread_config(session_id)
+            state = cast(IntakeState, (await self.graph.aget_state(config)).values)
+            if not state:
+                raise NotWaiting(f"session {session_id} has no intake")
+            turns, facts = feels_worse_turns_and_facts(
+                language=state["language"],
+                turn_number=len(state.get("turns", [])) + 1,
+                patient_type=state.get("patient_type", "adult"),
+                codes=codes,
+                now=now,
+            )
+            return await self._merge_and_evaluate(session_id, {"turns": turns, "facts": facts})
 
     async def add_facts_and_evaluate(
         self, session_id: str, facts: Sequence[FactEntry]

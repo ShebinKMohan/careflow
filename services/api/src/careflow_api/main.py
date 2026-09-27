@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import uuid
 from collections.abc import AsyncIterator
+from datetime import UTC, datetime
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,9 +20,10 @@ from careflow_api import problems, telemetry
 from careflow_api.briefing import router as doctor
 from careflow_api.briefing.service import BriefingService
 from careflow_api.briefing.store import SqlBriefingStore
-from careflow_api.config import get_settings
+from careflow_api.config import Settings, get_settings
 from careflow_api.events import tickets, ws
 from careflow_api.events.bus import EventBus
+from careflow_api.events.frames import QUEUE_STATUS, publish_frame
 from careflow_api.events.outbox import OutboxPublisher
 from careflow_api.events.relay import OutboxRelay
 from careflow_api.events.ws import LiveHub
@@ -29,9 +32,20 @@ from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.intake.wiring import build_ports
 from careflow_api.queue import router as queue_router
 from careflow_api.queue.rooms import rooms
-from careflow_api.queue.service import QueueService, run_grace_expiry
-from careflow_api.routers import admin, auth, consent, dev, handover, health, nurse, sessions
+from careflow_api.queue.service import Notify, QueueService, run_grace_expiry
+from careflow_api.routers import (
+    admin,
+    auth,
+    companion,
+    consent,
+    dev,
+    handover,
+    health,
+    nurse,
+    sessions,
+)
 from careflow_api.writeback_store import SqlWritebackStore
+from careflow_contracts.api_models import CompanionStatus
 from careflow_intake.wiring import briefing_summarizer
 from careflow_integration.fhir.client import FhirClient
 
@@ -67,6 +81,25 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await app.state.redis.aclose()
 
 
+def queue_notifier(app: FastAPI, settings: Settings) -> Notify:
+    """`queue.status` frames to each waiting session's phone (M2-07), straight to the stream."""
+
+    async def notify(clinic_id: uuid.UUID, statuses: list[tuple[str, CompanionStatus]]) -> None:
+        now = datetime.now(UTC)
+        for session_id, status in statuses:
+            await publish_frame(
+                app.state.redis,
+                frame_type=QUEUE_STATUS,
+                clinic_id=str(clinic_id),
+                session_id=session_id,
+                data=status.model_dump(mode="json"),
+                now=now,
+                stream=settings.event_stream,
+            )
+
+    return notify
+
+
 def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     settings = get_settings()
     app = FastAPI(
@@ -98,7 +131,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         heartbeat_seconds=settings.ws_heartbeat_seconds,
     )
     # config/rooms.yaml is validated here, so a bad file stops the API at start.
-    app.state.queue = QueueService(rooms(), app.state.events)
+    app.state.queue = QueueService(rooms(), app.state.events, notify=queue_notifier(app, settings))
     app.state.briefings = BriefingService(
         store=SqlBriefingStore(),
         writebacks=SqlWritebackStore(),
@@ -111,6 +144,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         sessions,
         consent,
         handover,
+        companion,
         nurse,
         doctor,
         admin,

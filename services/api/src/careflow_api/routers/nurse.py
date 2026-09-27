@@ -18,6 +18,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import select
 
 from careflow_api.deps import Principal, require_roles
+from careflow_api.feels_worse import summaries as feels_worse_summaries
 from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.intake.views import ECG_ACTION, tasks, triage_view, worklist_item
 from careflow_api.intake.views import task_id as ecg_task_id
@@ -90,7 +91,9 @@ async def worklist(
         logger.warning("nurse.worklist", extra={"error": "intake runtime not started"})
         return []
     items: list[WorklistItem] = []
-    for row in await active_sessions(principal):
+    rows = await active_sessions(principal)
+    presses = await feels_worse_summaries(principal.clinic_id, [str(row.id) for row in rows])
+    for row in rows:
         session_id = str(row.id)
         state = await intake.state(session_id)
         if state is None:
@@ -105,6 +108,7 @@ async def worklist(
                 waiting=waiting,
                 token_code=token.token_code if token else None,
                 token_status=token.status.value if token else None,
+                feels_worse=presses.get(session_id),
             )
         )
     return items

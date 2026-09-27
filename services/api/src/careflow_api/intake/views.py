@@ -9,6 +9,7 @@ from typing import Any, Final
 
 from careflow_contracts.api_models import (
     AlertChip,
+    FeelsWorseSummary,
     News2Score,
     SessionState,
     SessionStatus,
@@ -146,6 +147,7 @@ def worklist_item(
     waiting: str | None,
     token_code: str | None,
     token_status: str | None,
+    feels_worse: FeelsWorseSummary | None = None,
 ) -> WorklistItem:
     facts = structured_facts(state)
     patient = facts.patient
@@ -184,6 +186,8 @@ def worklist_item(
             body["sex"] = code
     if (text := complaint(state)) is not None:
         body["complaint"] = text
+    if feels_worse is not None:  # M2-07: the waiting patient's presses, for this nurse only
+        body["feels_worse"] = feels_worse.model_dump(mode="json", exclude_none=True)
     return WorklistItem.model_validate(body)
 
 
