@@ -387,6 +387,52 @@ paths:
           $ref: '#/components/responses/Notfound'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/patient:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: setPatientDetails
+      summary: Say who the patient is
+      description: The kiosk's "Who is the patient?" answer (M2-04), once per session. For a child
+        (under 16), the parent's stated age becomes PATIENT_STATED age facts, which replace an
+        EHR age, and the intake asks the fixed child question bank. The same answer again is
+        accepted; a different one is a conflict.
+      tags:
+      - intake
+      x-careflow-roles:
+      - patient_session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientDetailsRequest'
+            example:
+              patient_type: child
+              age_years: 1
+              age_months: 4
+      responses:
+        '200':
+          description: Say who the patient is
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDetails'
+              example:
+                session_id: ses_routine
+                patient_type: child
+                age_years: 1
+                age_months: 4
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
   /v1/sessions/{session_id}/turns:
     parameters:
     - $ref: '#/components/parameters/SessionId'
@@ -2289,6 +2335,48 @@ components:
       - camera
       - voice
       - recorded_at
+      additionalProperties: false
+    PatientDetailsRequest:
+      type: object
+      description: Who the patient is. A child's age is required; months are the months beyond
+        `age_years` and are asked when the child is under 2.
+      properties:
+        patient_type:
+          type: string
+          enum:
+          - adult
+          - child
+        age_years:
+          type: integer
+          minimum: 0
+          maximum: 15
+        age_months:
+          type: integer
+          minimum: 0
+          maximum: 11
+      required:
+      - patient_type
+      additionalProperties: false
+    PatientDetails:
+      type: object
+      properties:
+        session_id: *id005
+        patient_type:
+          type: string
+          enum:
+          - adult
+          - child
+        age_years:
+          type: integer
+          minimum: 0
+          maximum: 15
+        age_months:
+          type: integer
+          minimum: 0
+          maximum: 11
+      required:
+      - session_id
+      - patient_type
       additionalProperties: false
     TurnRequest:
       type: object
