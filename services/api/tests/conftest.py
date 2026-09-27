@@ -124,8 +124,9 @@ def database() -> Iterator[Engine]:
     engine.dispose()
 
 
-@pytest.fixture(scope="session")
-def clinics(database: Engine) -> Clinics:
+def make_clinics(database: Engine) -> Clinics:
+    """Two new clinics, each with a nurse, doctor and admin, a kiosk, board and integration
+    device, and one patient session."""
     from careflow_api.security import hash_password
 
     password_hash, secret_hash = hash_password(TEST_PASSWORD), hash_password(TEST_DEVICE_SECRET)
@@ -175,6 +176,17 @@ def clinics(database: Engine) -> Clinics:
                 {"c": clinic_id},
             )
     return Clinics(a=ids["a"], b=ids["b"], staff=staff, devices=devices)
+
+
+@pytest.fixture(scope="session")
+def clinics(database: Engine) -> Clinics:
+    return make_clinics(database)
+
+
+@pytest.fixture(scope="session")
+def clinics_factory(database: Engine) -> Callable[[], Clinics]:
+    """Clinics of a test module's own, for tests that add sessions (the shared ones are counted)."""
+    return lambda: make_clinics(database)
 
 
 @pytest.fixture

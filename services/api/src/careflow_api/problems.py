@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from http import HTTPStatus
-from typing import Any
+from typing import Any, cast
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -30,7 +30,7 @@ def allowed_methods(routes: Iterable[Any], path: str) -> set[str]:
     for route in routes:
         candidates = getattr(route, "effective_candidates", None)
         if callable(candidates):  # an included APIRouter (FastAPI resolves them lazily)
-            found |= allowed_methods(candidates(), path)
+            found |= allowed_methods(cast(Iterable[Any], candidates()), path)
             continue
         regex, methods = getattr(route, "path_regex", None), getattr(route, "methods", None)
         if regex is not None and methods and regex.match(path):

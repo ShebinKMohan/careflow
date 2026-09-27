@@ -1,0 +1,17 @@
+{
+  "5cccb1634faa72db3890b38b005e37444380c2b66e53f04020d5ecd88456da22": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"It hurts when I walk on it\", \"turn_id\": \"t2\", \"quote\": \"It hurts when I walk on it\", \"negated\": false}, {\"key\": \"symptoms\", \"value\": \"pain\", \"turn_id\": \"t2\", \"quote\": \"It hurts\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"playing football\", \"turn_id\": \"t4\", \"quote\": \"playing football\", \"negated\": false}, {\"key\": \"injury\", \"value\": \"true\", \"turn_id\": \"t4\", \"quote\": \"I twisted my ankle\", \"negated\": false}]}"
+  },
+  "60fbb1ce51c611423c099a1d34441bdc623ef63666b6f48f1ba730e289df6732": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"It hurts when I walk on it\", \"turn_id\": \"t2\", \"quote\": \"It hurts when I walk on it\", \"negated\": false}]}"
+  },
+  "d9c2fb10348274bb2982c92b0d1f92057ea1f3517d5acbd91e41935d6a2b9f2a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}]}"
+  }
+}

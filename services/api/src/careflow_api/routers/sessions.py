@@ -386,7 +386,7 @@ async def post_turn(
             status.HTTP_409_CONFLICT, detail="This session is not waiting for an answer."
         ) from exc
     except InvalidAnswer as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
     await touch(principal.clinic_id, session_id)
     turns = result.get("turns", [])
     said = next(t for t in reversed(turns) if t.role is TurnRole.patient)
@@ -420,11 +420,11 @@ async def set_patient_details(
     child = body.patient_type is PatientType.child
     if child and body.age_years is None:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="A child's age is required."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="A child's age is required."
         )
     if not child and (body.age_years is not None or body.age_months is not None):
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="An adult's age comes from the record."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="An adult's age comes from the record."
         )
     try:
         await intake.set_patient(

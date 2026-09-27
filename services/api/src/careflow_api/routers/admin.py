@@ -57,8 +57,13 @@ async def admin_status(
                     "detail": detail[:200],
                 }
             )
+        no_model = any(c.port == "urgency" and c.degraded for c in wiring.choices)
         services.append(
-            {"name": "urgency-model", "status": "ok", "detail": wiring.urgency_model_version[:200]}
+            {
+                "name": "urgency-model",
+                "status": "degraded" if no_model else "ok",  # no suggestion: the nurse sets it
+                "detail": wiring.urgency_model_version[:200],
+            }
         )
     else:
         services.append(

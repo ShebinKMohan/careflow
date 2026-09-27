@@ -19,7 +19,7 @@ import os
 import uuid
 from collections.abc import Callable, Iterator, Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 import schemathesis
@@ -75,7 +75,7 @@ def served(routes: Sequence[Any]) -> set[tuple[str, str]]:
     for route in routes:
         candidates = getattr(route, "effective_candidates", None)
         if callable(candidates):  # an included APIRouter (FastAPI 0.14x resolves them lazily)
-            found |= served(candidates())
+            found |= served(cast(Sequence[Any], candidates()))
             continue
         methods = getattr(route, "methods", None) or set()
         found |= {(route.path, method.lower()) for method in methods - {"HEAD", "OPTIONS"}}
@@ -170,7 +170,12 @@ def token_for(clinics: Any) -> Callable[[Any], dict[str, str]]:
 @settings(
     max_examples=MAX_EXAMPLES,
     deadline=None,
-    suppress_health_check=list(HealthCheck),
+    suppress_health_check=[
+        HealthCheck.too_slow,
+        HealthCheck.filter_too_much,
+        HealthCheck.data_too_large,
+        HealthCheck.function_scoped_fixture,
+    ],
     derandomize=True,
 )
 def test_every_response_matches_the_contract(

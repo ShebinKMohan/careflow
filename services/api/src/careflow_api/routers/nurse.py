@@ -148,7 +148,7 @@ async def decide(
     await session_row(principal, session_id)
     if decision.session_id != session_id:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, detail="The decision is for another session."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, detail="The decision is for another session."
         )
     if decision.nurse_user_id != principal.subject:
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="A decision is made as yourself.")
@@ -160,7 +160,7 @@ async def decide(
             status.HTTP_409_CONFLICT, detail="This session is not waiting for a nurse decision."
         ) from exc
     except InvalidNurseDecision as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
     suggestion = before.get("suggestion") if before else None
     async with clinic_session(principal.clinic_id) as db:
         db.add(
@@ -193,16 +193,17 @@ async def decide(
             "level": int(decision.final_level),
         },
     )
-    # Optional fields without a value are left out (a queued token has no room yet); the token
-    # itself is required and may be null.
-    body = {
-        "decision": decision.model_dump(mode="json", exclude_none=True),
-        "token": token.model_dump(mode="json", exclude_none=True) if token else None,
-    }
-    return JSONResponse(
-        DecisionResult.model_validate(body).model_dump(mode="json", exclude_none=True)
-        | {"token": body["token"]}
-    )
+    # Optional fields without a value are left out (a queued token has no room yet). The token and
+    # the decision's suggestion_id are required and may be null: without a triage model nothing
+    # was suggested, and dropping the null made this a 500 after the decision had taken effect.
+    decided = decision.model_dump(mode="json", exclude_none=True)
+    decided["suggestion_id"] = decision.suggestion_id
+    token_body = token.model_dump(mode="json", exclude_none=True) if token else None
+    result = DecisionResult.model_validate({"decision": decided, "token": token_body})
+    body = result.model_dump(mode="json", exclude_none=True)
+    body["decision"]["suggestion_id"] = decision.suggestion_id
+    body["token"] = token_body
+    return JSONResponse(body)
 
 
 def nurse_facts(session_id: str, principal: Principal, body: NurseVitalsRequest) -> list[FactEntry]:
