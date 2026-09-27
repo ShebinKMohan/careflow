@@ -6,10 +6,12 @@ import datetime as dt
 import uuid
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     Date,
     DateTime,
     ForeignKey,
+    Identity,
     Integer,
     SmallInteger,
     String,
@@ -17,7 +19,7 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -154,6 +156,40 @@ class TokenCounter(Base):
     last_number: Mapped[int] = mapped_column(Integer)
 
 
+class OutboxEvent(Base):
+    """One event, written in the transaction of the change it reports (M1-11)."""
+
+    __tablename__ = "outbox_events"
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    seq: Mapped[int] = mapped_column(BigInteger, Identity(always=True), unique=True)
+    event_type: Mapped[str] = mapped_column(String(64))
+    schema_version: Mapped[str] = mapped_column(String(32))
+    clinic_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clinic.id"))
+    session_id: Mapped[str | None] = mapped_column(String(64))
+    idempotency_key: Mapped[str] = mapped_column(String(200))
+    payload: Mapped[dict[str, object]] = mapped_column(JSONB)
+    created_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=text("clock_timestamp()")
+    )
+    published_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+    attempts: Mapped[int] = mapped_column(Integer, server_default=text("0"))
+    last_error: Mapped[str | None] = mapped_column(String(500))
+
+
+class ProcessedEvent(Base):
+    """A consumer group handled this event (M1-11): a re-delivery is skipped."""
+
+    __tablename__ = "processed_events"
+    consumer_group: Mapped[str] = mapped_column(String(64), primary_key=True)
+    event_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    clinic_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clinic.id"))
+    processed_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
 __all__ = [
     "Base",
     "Clinic",
@@ -161,7 +197,9 @@ __all__ = [
     "EncounterState",
     "FhirWriteback",
     "FhirWritebackStatus",
+    "OutboxEvent",
     "PatientSession",
+    "ProcessedEvent",
     "QueueTokenRow",
     "StaffUser",
     "TokenCounter",

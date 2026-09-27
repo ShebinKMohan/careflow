@@ -1,4 +1,5 @@
-"""`careflow-api` command line: `careflow-api seed-dev` (manual development runs only).
+"""`careflow-api` command line: `careflow-api seed-dev` (manual development runs only) and
+`careflow-api relay` (the outbox relay as its own process, with CAREFLOW_OUTBOX_RELAY=0 on the API).
 
 Creates clinics `clinic-a` and `clinic-b`, each with a nurse, a doctor, an admin, a kiosk, a
 board device and an integration service account. Passwords and device secrets come from
@@ -118,6 +119,27 @@ def get_env_file_value(key: str) -> str | None:
         if line.startswith(f"{key}="):
             return line.split("=", 1)[1].strip() or None
     return None
+
+
+@app.command("relay")
+def relay() -> None:
+    """Publish the transactional outbox to the event stream until stopped (M1-11)."""
+    import asyncio
+
+    from redis.asyncio import Redis
+
+    from careflow_api.events.relay import OutboxRelay
+
+    settings = get_settings()
+
+    async def run() -> None:
+        redis = Redis.from_url(settings.redis_url, decode_responses=True)
+        try:
+            await OutboxRelay(redis, stream=settings.event_stream).run()
+        finally:
+            await redis.aclose()
+
+    asyncio.run(run())
 
 
 def main() -> None:
