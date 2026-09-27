@@ -27,7 +27,7 @@ make infra
 extras=()
 if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
   # The voice service's local STT, and its Arabic speech (M2-02); Apple silicon only.
-  extras=(--extra mlx-whisper --extra arabic-speech)
+  extras=(--extra mlx-whisper --extra arabic-speech --extra embeddings)
 fi
 uv sync --locked --all-packages "${extras[@]}"
 pnpm install --frozen-lockfile

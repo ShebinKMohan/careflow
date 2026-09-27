@@ -10,7 +10,7 @@ export UV_LOCKED := 1
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down infra infra-down seed ps logs nuke \
-	llm-local api migrate seed-dev mock e2e voice-models voice
+	llm-local api migrate seed-dev mock e2e rag-ingest voice-models voice
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -131,6 +131,12 @@ seed-dev: ## Create the development clinics, staff and devices (secrets from .en
 	uv run careflow-api seed-dev
 
 # --- Voice (M1-14) -------------------------------------------------------------------------------
+rag-ingest: ## Load the clinic handbook into rag_chunks for the dev clinics (Qwen3-Embedding-0.6B, ~1.2 GB once)
+	for clinic in clinic-a clinic-b; do \
+	  id=$$(uv run --no-sync python -c "from careflow_api.cli import dev_id; print(dev_id('$$clinic'))"); \
+	  uv run --package careflow-rag --extra embeddings python -m careflow_rag.ingest services/rag/handbook --clinic $$id; \
+	done
+
 voice-models: ## Download the voice models (~2 GB) into services/voice/models and check their sha256
 	services/voice/scripts/download_models.sh
 

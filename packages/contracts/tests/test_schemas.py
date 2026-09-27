@@ -42,7 +42,7 @@ def model_errors(schema_name: str, raw: str) -> str | None:
     return None
 
 
-def test_the_seven_schema_files_exist() -> None:
+def test_the_schema_files_exist() -> None:
     assert set(schema_files()) == {
         "fact",
         "structured-facts",
@@ -51,6 +51,7 @@ def test_the_seven_schema_files_exist() -> None:
         "nurse-decision",
         "extraction-output",
         "ehr-fetch",
+        "retrieved-chunk",  # M2-08
     }
 
 
