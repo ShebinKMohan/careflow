@@ -117,7 +117,8 @@
     "noRoom": "Please wait",
     "nowCalling": "Now calling",
     "noneCalled": "No number is being called.",
-    "waiting": "{count, plural, one {# person waiting} other {# people waiting}}"
+    "waiting": "{count, plural, one {# person waiting} other {# people waiting}}",
+    "stale": "Connection lost. This board may be out of date (last updated {time})."
   },
   "admin": {
     "title": "Model providers",

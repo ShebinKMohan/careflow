@@ -1,0 +1,42 @@
+{
+  "tasks": [
+    {
+      "task": "conversation",
+      "provider": "local",
+      "available": true,
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "task": "extraction",
+      "provider": "local",
+      "available": true,
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "task": "summary",
+      "provider": "local",
+      "available": true,
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "task": "eval_judge",
+      "provider": "cli",
+      "available": false,
+      "tool": "codex",
+      "detail": "offline jobs only"
+    },
+    {
+      "task": "test_data",
+      "provider": "cli",
+      "available": false,
+      "tool": "codex",
+      "detail": "offline jobs only"
+    },
+    {
+      "task": "translation_check",
+      "provider": "local",
+      "available": true,
+      "model": "qwen3.5-9b-4bit"
+    }
+  ]
+}
