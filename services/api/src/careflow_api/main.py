@@ -61,7 +61,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     tasks: list[asyncio.Task[None]] = []
     async with contextlib.AsyncExitStack() as stack:
         if settings.intake_runtime:
-            wiring = build_ports(queue=app.state.queue, briefing=app.state.briefings)
+            wiring = build_ports(
+                queue=app.state.queue, briefing=app.state.briefings, ask=app.state.ask
+            )
             runtime = await stack.enter_async_context(
                 IntakeRuntime.open(settings.database_url, wiring.ports)
             )

@@ -17,6 +17,7 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict
 
 class Reason(StrEnum):
     medical_question = "medical_question"
+    medical_question_intake = "medical_question_intake"
     feels_worse = "feels_worse"
     other = "other"
 

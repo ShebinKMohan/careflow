@@ -1,21 +1,26 @@
-"""Medical questions refused on the phone (M2-09): stored for the nurse, announced without words.
+"""Medical questions refused on the phone (M2-09) or asked during the intake (M2-10): stored for
+the nurse, announced without words.
 
 `record_medical_question` stores the question in `nurse_flags` and adds `nurse.flag` (reason
 `medical_question`) and the internal `rag.refused` (which classifier layer decided) to the outbox,
-in one transaction. Neither event carries the question: the words stay in the clinic's database
-for the nurse's worklist. The rows go when the session's token closes or becomes a no-show
-(`purge`, in the queue's transaction), or when the session leaves the worklist's 24-hour window
-without a token (`purge_stale`, from the grace-window loop).
+in one transaction. `record_intake_question` does the same for a question asked mid-intake (reason
+`medical_question_intake`), once per session and turn: its flag id and idempotency key come from
+the turn, so a node that runs again adds nothing. No event carries the question: the words stay in
+the clinic's database for the nurse's worklist. The rows go when the session's token closes or
+becomes a no-show (`purge`, in the queue's transaction), or when the session leaves the worklist's
+24-hour window without a token (`purge_stale`, from the grace-window loop).
 """
 
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import uuid
 from collections.abc import Iterable, Sequence
 from typing import Final
 
 from sqlalchemy import delete, select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from careflow_api.events.outbox import OutboxPublisher
@@ -70,6 +75,47 @@ async def record_medical_question(
     return flag_id
 
 
+async def record_intake_question(
+    clinic_id: uuid.UUID,
+    *,
+    session_id: str,
+    turn_id: str,
+    question: str,
+    lang: str,
+    category: str,
+    events: OutboxPublisher,
+    now: dt.datetime,
+) -> str:
+    """The flag of a medical question asked during the intake; the same turn gives the same flag
+    and one `nurse.flag` (idempotency key `{session_id}:{turn_id}:nurse_flag`)."""
+    key = f"{session_id}:{turn_id}:nurse_flag"
+    flag_id = f"flg_{hashlib.sha256(key.encode()).hexdigest()[:24]}"
+    async with clinic_session(clinic_id) as db:
+        await db.execute(
+            insert(NurseFlagRow)
+            .values(
+                clinic_id=clinic_id,
+                session_id=uuid.UUID(session_id),
+                flag_id=flag_id,
+                reason=Reason.medical_question_intake.value,
+                question_text=question[:500],
+                lang=lang,
+                category=category,
+                raised_at=now,
+            )
+            .on_conflict_do_nothing(index_elements=[NurseFlagRow.flag_id])
+        )
+        data = NurseFlagData(
+            clinic_id=str(clinic_id),
+            session_id=session_id,
+            flag_id=flag_id,
+            reason=Reason.medical_question_intake,
+            raised_at=now,
+        )
+        await events.add(db, Event(EventType.nurse_flag, data, now, idempotency_key=key))
+    return flag_id
+
+
 async def medical_questions(
     clinic_id: uuid.UUID, session_ids: Sequence[str]
 ) -> dict[str, list[MedicalQuestion]]:
@@ -114,4 +160,10 @@ async def purge_stale(db: AsyncSession, now: dt.datetime) -> None:
     await db.execute(delete(NurseFlagRow).where(NurseFlagRow.session_id.in_(stale)))
 
 
-__all__ = ["medical_questions", "purge", "purge_stale", "record_medical_question"]
+__all__ = [
+    "medical_questions",
+    "purge",
+    "purge_stale",
+    "record_intake_question",
+    "record_medical_question",
+]

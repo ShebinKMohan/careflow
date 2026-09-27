@@ -3,6 +3,13 @@
 # these; every string, including these templates, passes the patient-facing output filter.
 version: templates_en_v1
 nurse_coming: "Thank you. A nurse will be with you shortly. Please stay here."
+# Fixed replies to a question the patient asks mid-intake (M2-10), shown before the question is
+# asked again. `medical_refusal` is the ask-the-clinic refusal (safety.rag.refusal, M2-09).
+messages:
+  medical_refusal: "I can't answer medical questions. I've told the nurse, who will speak with you."
+  ask_on_phone: "You can ask this on your phone: tap 'Continue on your phone' and scan the code."
+  finish_first: "Let's finish these questions first. You can ask the reception desk afterwards."
+  dont_know: "I don't know that one. Please ask at the reception desk."
 questions:
   # The intake checklist.
   chief_complaint: "What is the main reason for your visit today?"

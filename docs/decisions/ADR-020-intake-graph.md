@@ -27,7 +27,7 @@ Four things were checked in the pinned LangGraph 1.2.12 (langgraph-checkpoint 4.
 The nodes and edges follow the issue:
 
 - `START → identify → fetch_ehr_context → ask`.
-- `ask` either asks, going to `await_answer → extract → run_rules`, or marks the conversation complete and goes to `run_rules`.
+- `ask` either asks, going to `await_answer → extract → run_rules`, or marks the conversation complete and goes to `run_rules`. (Amended by ADR-041: `intent_router` now sits between `await_answer` and `extract`, and `run_rules → handle_side_question → run_rules` handles a question the patient asks.)
 - `run_rules` routes back to `ask` or on to `suggest_urgency`.
 - `suggest_urgency → nurse_review → assign_token → writeback → build_briefing → END`.
 

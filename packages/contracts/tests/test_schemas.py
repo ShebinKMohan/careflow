@@ -53,6 +53,7 @@ def test_the_schema_files_exist() -> None:
         "ehr-fetch",
         "retrieved-chunk",  # M2-08
         "ask-agent",  # M2-09
+        "turn-intent",  # M2-10
     }
 
 

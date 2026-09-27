@@ -4,11 +4,21 @@ The CareFlow intake graph (M1-05) is a LangGraph 1.2 `StateGraph` that runs one 
 
 ```
 START -> identify -> fetch_ehr_context -> ask
-ask -> await_answer -> extract -> run_rules          (a question was asked)
+ask -> await_answer -> intent_router -> extract -> run_rules   (a question was asked)
 ask -> run_rules                                     (the conversation is complete)
+run_rules -> handle_side_question -> run_rules       (the patient asked something, M2-10)
 run_rules -> ask | suggest_urgency                   (route_after_rules)
 suggest_urgency -> nurse_review -> assign_token -> writeback -> build_briefing -> END
 ```
+
+`intent_router` (M2-10, ADR-041) only records what a turn holds. Every patient turn still reaches
+`extract` and `run_rules`. `handle_side_question` does three things:
+
+- flags a medical question to the nurse and gives the fixed refusal;
+- answers a clinic question on the phone, or says "ask this on your phone" on the kiosk;
+- after two side questions, says "let's finish these questions first".
+
+`ask` then asks the interrupted question again, word for word, with the reply as its notice.
 
 The graph's shape enforces two safety rules:
 
