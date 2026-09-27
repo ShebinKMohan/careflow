@@ -124,6 +124,8 @@ def contract_app(database: Engine) -> Iterator[FastAPI]:
         patch.setenv("CAREFLOW_INTAKE_CONFIG", str(intake))
         patch.setenv("CAREFLOW_EVENT_STREAM", stream)
         patch.setenv("VITALS_SIM_SPEED", "0")
+        # A configured deployment: without its key the QR routes answer 503 (not in the contract).
+        patch.setenv("CAREFLOW_HANDOVER_SIGNING_KEY", "test-only-contract-handover-key-000000000")
         app = build_app(patch, "dev")
         LATE_APP.app = app
         yield app
