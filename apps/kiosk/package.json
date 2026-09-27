@@ -18,6 +18,7 @@
     "@careflow/ui": "workspace:*",
     "next": "catalog:",
     "next-intl": "catalog:",
+    "qrcode.react": "4.2.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zod": "catalog:"
