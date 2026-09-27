@@ -3,7 +3,9 @@ import { expect, test } from "@playwright/test";
 import {
   answerIntake,
   boardEntries,
+  callIn,
   checkIn,
+  closeToken,
   decisionBody,
   kioskPage,
   measureVitals,
@@ -99,6 +101,13 @@ test("chest pain: the ECG alert reaches the nurse first, ECG done, the nurse dec
   const board = await boardEntries(queued.department);
   expect(board.filter((entry) => entry.token_code === token), `${token} is on the ${queued.department} board once`).toHaveLength(1);
 
+  // The nurse calls the patient in: the kiosk, still on its done screen, shows the token and room.
+  const called = await callIn(nurse, queued.department, sessionId);
+  expect(called.token_code).toBe(token);
+  expect(called.room, "a called token has a room").toBeTruthy();
+  await expect(kiosk.getByTestId("room")).toContainText(called.room!);
+  await expect(kioskToken).toHaveText(token);
+
   const doctor = await staffPage(browser, "doctor", `/doctor/${sessionId}`);
   const briefing = doctor.getByTestId("briefing");
   await expect(briefing).toBeVisible({ timeout: 30_000 });
@@ -127,4 +136,5 @@ test("chest pain: the ECG alert reaches the nurse first, ECG done, the nurse dec
   } finally {
     await hapi.close();
   }
+  await closeToken(nurse, called.token_id); // seen: the room is free for the next run
 });

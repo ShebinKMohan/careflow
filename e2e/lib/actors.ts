@@ -286,6 +286,39 @@ export async function boardEntries(department: string): Promise<BoardEntry[]> {
   }
 }
 
+export interface QueueToken {
+  token_id: string;
+  session_id: string;
+  token_code: string;
+  department: string;
+  status: string;
+  room?: string | null;
+}
+
+/** The nurse calls patients into `department`, in the queue's order, until `sessionId` is called.
+ * M1 has no call button yet (the queue controls are M2-07), so this is the API the staff app will
+ * use. A test stack keeps earlier runs' patients waiting; each one called first is closed (seen),
+ * which frees its room. */
+export async function callIn(page: Page, department: string, sessionId: string): Promise<QueueToken> {
+  const headers = { Authorization: `Bearer ${await staffToken(page)}` };
+  for (let calls = 0; calls < 100; calls += 1) {
+    const response = await page.request.post(`${STACK.api}/v1/queue/${encodeURIComponent(department)}/call-next`, { headers });
+    expect(response.status(), `a ${department} room is free for the next patient`).toBe(200);
+    const token = (await response.json()).token as QueueToken | null;
+    if (token === null) throw new Error(`${sessionId} is not waiting in ${department}`);
+    if (token.session_id === sessionId) return token;
+    await closeToken(page, token.token_id);
+  }
+  throw new Error(`${sessionId} was not called within 100 calls`);
+}
+
+/** The patient was seen: the token is closed and its room freed. */
+export async function closeToken(page: Page, tokenId: string): Promise<void> {
+  const headers = { Authorization: `Bearer ${await staffToken(page)}` };
+  const closed = await page.request.post(`${STACK.api}/v1/queue/tokens/${encodeURIComponent(tokenId)}/close`, { headers });
+  expect(closed.status(), `token ${tokenId} closes`).toBe(200);
+}
+
 /** The signed-in staff member's API token, from the staff app's session storage. */
 export async function staffToken(page: Page): Promise<string> {
   const token = await page.evaluate(() => window.sessionStorage.getItem("careflow.staff.token"));

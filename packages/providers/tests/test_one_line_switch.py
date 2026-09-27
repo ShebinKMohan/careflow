@@ -61,13 +61,18 @@ async def test_the_api_adapter_gives_the_local_models_facts(
     api_extractor = ports.extractor
     assert isinstance(api_extractor, LlmExtractor)
     assert isinstance(api_extractor.provider, ApiProvider)
-    assert (api_extractor.provider_kind, api_extractor.provider.model_name) == ("api", "gpt-4.1-mini")
+    assert (api_extractor.provider_kind, api_extractor.provider.model_name) == (
+        "api",
+        "gpt-4.1-mini",
+    )
 
     [recorded] = json.loads(RECORDED.read_text(encoding="utf-8")).values()
     scenario = next(s for s in load_dataset(DEFAULT_DATASET).scenarios if s.id == CASE)
     turns, keys = transcript(scenario)
     local = LlmExtractor(
-        ReplayProvider(None, task="extraction", model=recorded["model"], cassette=RECORDED, mode="replay"),
+        ReplayProvider(
+            None, task="extraction", model=recorded["model"], cassette=RECORDED, mode="replay"
+        ),
         provider_kind="local",
     )
     from_local = await local.extract(turns, [], keys, scenario.language)
