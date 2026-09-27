@@ -5,7 +5,7 @@ import { Card } from "@careflow/ui";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 
 import { useKiosk } from "@/lib/session";
 
@@ -17,8 +17,23 @@ function isScenario(value: string | null): value is Schema<"VitalsScenario"> {
   return value !== null && (SCENARIOS as readonly string[]).includes(value);
 }
 
+/** Dev and E2E runs (NEXT_PUBLIC_SIMULATORS=1) may set the simulated device's scenario before
+ * the patient reaches this screen, so a journey keeps the kiosk's in-memory session (M1-19). */
+export const SIMULATOR_SCENARIO_KEY = "careflow.kiosk.simulatorScenario";
+const noSubscription = () => () => undefined;
+
+function storedScenario(): string | null {
+  if (process.env.NEXT_PUBLIC_SIMULATORS !== "1") return null;
+  try {
+    return window.sessionStorage.getItem(SIMULATOR_SCENARIO_KEY);
+  } catch {
+    return null; // storage blocked
+  }
+}
+
 /**
- * `/vitals`: the panel for the checked-in patient (`?session=` and `?scenario=` for dev and E2E).
+ * `/vitals`: the panel for the checked-in patient (`?session=` and `?scenario=`, or the stored
+ * simulator scenario, for dev and E2E).
  * The patient continues once a reading is in, or skips.
  */
 export function VitalsPage() {
@@ -28,7 +43,8 @@ export function VitalsPage() {
   const { patient } = useKiosk();
   const [measured, setMeasured] = useState(false);
   const sessionId = params.get("session") ?? patient?.sessionId ?? null;
-  const requested = params.get("scenario");
+  const stored = useSyncExternalStore(noSubscription, storedScenario, () => null);
+  const requested = params.get("scenario") ?? stored;
   const scenario = isScenario(requested) ? requested : null;
 
   if (!sessionId) {

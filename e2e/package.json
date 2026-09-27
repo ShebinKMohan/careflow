@@ -1,0 +1,18 @@
+{
+  "name": "@careflow/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The MVP journeys (M1-19) on a running CareFlow stack: the real API, Postgres, Valkey and HAPI. Synthetic personas only; not for clinical use.",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "journeys": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

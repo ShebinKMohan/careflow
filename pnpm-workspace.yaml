@@ -2,6 +2,7 @@ packages:
   - apps/*
   - packages/ui
   - packages/contracts
+  - e2e
 
 # One exact version per shared tool; packages refer to these with "catalog:".
 catalog:

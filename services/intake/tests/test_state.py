@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta
 from typing import Any
 
 import pytest
@@ -93,6 +94,22 @@ def test_alerts_merge_by_rule_id_and_are_never_removed() -> None:
     merged = merge_alerts_by_rule_id([fast], [chest, alert("FAST_STROKE", fid)])
     assert [a.rule_id.value for a in merged] == ["FAST_STROKE", "CHEST_PAIN_ECG_10MIN"]
     assert merge_alerts_by_rule_id(merged, []) == merged
+
+
+def test_a_re_raised_alert_keeps_its_first_raise_time_and_takes_the_new_content() -> None:
+    first, second = stable_fact_id("x"), stable_fact_id("y")
+    raised = alert("CHEST_PAIN_ECG_10MIN", first)
+    later = alert("CHEST_PAIN_ECG_10MIN", second).model_copy(
+        update={
+            "raised_at": datetime.fromisoformat(T0) + timedelta(seconds=40),
+            "evidence_fact_ids": [first, second],
+        }
+    )
+    [merged] = merge_alerts_by_rule_id([raised], [later])
+    assert merged.raised_at == raised.raised_at
+    assert merged.evidence_fact_ids == [first, second]
+    [merged] = merge_alerts_by_rule_id([], [later])
+    assert merged.raised_at == later.raised_at
 
 
 def test_flags_only_turn_on() -> None:

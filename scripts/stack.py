@@ -105,6 +105,9 @@ def stack_env(stack: str, offset: int, secrets: dict[str, str]) -> dict[str, str
     p = ports(offset)
     admin, app, migrator = (quote(secrets[key], safe="") for key in SECRETS)
     pg = p["CAREFLOW_POSTGRES_PORT"]
+    apps = [p[f"CAREFLOW_{name}_PORT"] for name in ("KIOSK", "STAFF", "COMPANION")]
+    origins = [f"http://{host}:{port}" for port in apps for host in ("localhost", "127.0.0.1")]
+    api = f"http://localhost:{p['CAREFLOW_API_PORT']}"
     return {
         "CAREFLOW_STACK": stack,
         "COMPOSE_PROJECT_NAME": stack,
@@ -115,7 +118,15 @@ def stack_env(stack: str, offset: int, secrets: dict[str, str]) -> dict[str, str
         "CAREFLOW_TEST_ADMIN_URL": f"postgresql+psycopg://postgres:{admin}@localhost:{pg}/postgres",
         "REDIS_URL": f"redis://localhost:{p['CAREFLOW_VALKEY_PORT']}/0",
         "FHIR_BASE_URL": f"http://localhost:{p['CAREFLOW_HAPI_PORT']}/fhir",
-        "CAREFLOW_API_URL": f"http://localhost:{p['CAREFLOW_API_PORT']}",
+        "CAREFLOW_API_URL": api,
+        # The API lets the stack's own apps call it, and finds its voice service (M1-19).
+        "CAREFLOW_CORS_ORIGINS": ",".join(origins),
+        "CAREFLOW_VOICE_URL": f"http://127.0.0.1:{p['VOICE_PORT']}",
+        # What the stack's apps are built with (public values: URLs only, never a secret).
+        "NEXT_PUBLIC_API_BASE_URL": api,
+        "NEXT_PUBLIC_COMPANION_URL": f"http://localhost:{p['CAREFLOW_COMPANION_PORT']}",
+        "NEXT_PUBLIC_FHIR_BASE_URL": f"http://localhost:{p['CAREFLOW_HAPI_PORT']}/fhir",
+        "NEXT_PUBLIC_VOICE_WS_URL": f"ws://localhost:{p['VOICE_PORT']}/kiosk/audio",
     }
 
 
@@ -230,7 +241,7 @@ def gib(value: int) -> str:
     return f"{value / 1024**3:.2f} GiB"
 
 
-def up(stack: str, offset: int) -> int:
+def up(stack: str, offset: int, *, seed: bool = True) -> int:
     found = check_owner(stack)
     subprocess.run([sys.executable, str(REPO / "scripts/gen_dev_env.py")], check=True)  # noqa: S603
     env = stack_env(stack, offset, parse_env(DOT_ENV.read_text(encoding="utf-8")))
@@ -252,7 +263,7 @@ def up(stack: str, offset: int) -> int:
     fhir = env["FHIR_BASE_URL"]
     wait_http(f"{fhir}/metadata", 300)
     seed_env = {**os.environ, **env}
-    for script in ("infra/seed/load_fhir.py", "infra/seed/add_mock_ids.py"):
+    for script in ("infra/seed/load_fhir.py", "infra/seed/add_mock_ids.py") if seed else ():
         extra = ["--personas-only"] if script.endswith("load_fhir.py") else []
         subprocess.run(  # noqa: S603 - fixed argv
             ["uv", "run", "python", script, *extra, "--base-url", fhir],  # noqa: S607
@@ -261,9 +272,10 @@ def up(stack: str, offset: int) -> int:
             check=True,
         )
     total = memory_in_use()
+    seeded = " (personas seeded)" if seed else ""
     print(
         f"stack: {stack} is up: Postgres :{env['CAREFLOW_POSTGRES_PORT']}, Valkey "
-        f":{env['CAREFLOW_VALKEY_PORT']}, HAPI :{env['CAREFLOW_HAPI_PORT']} (personas seeded)."
+        f":{env['CAREFLOW_VALKEY_PORT']}, HAPI :{env['CAREFLOW_HAPI_PORT']}{seeded}."
     )
     print(f"stack: all containers now use {gib(total)} (budget {gib(BUDGET_BYTES)}).")
     print(f"stack: run commands against it with: python3 scripts/stack.py run --stack {stack} -- …")
@@ -315,6 +327,8 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--offset", type=int, default=None)
         if name == "down":
             command.add_argument("--volumes", action="store_true")
+        if name == "up":
+            command.add_argument("--no-seed", action="store_true", help="leave HAPI empty")
         if name == "run":
             command.add_argument("cmd", nargs=argparse.REMAINDER)
     sub.add_parser("ps")
@@ -331,7 +345,7 @@ def main(argv: list[str] | None = None) -> int:
             print(path.relative_to(REPO))
             return 0
         if args.command == "up":
-            return up(args.stack, offset)
+            return up(args.stack, offset, seed=not args.no_seed)
         if args.command == "down":
             return down(args.stack, args.volumes)
         command = args.cmd[1:] if args.cmd[:1] == ["--"] else args.cmd

@@ -1,0 +1,9 @@
+# The intake for the E2E journeys (M1-19): approved templates only and no model summary, so every
+# model call is the extraction or the intent router, whose replies are recorded and replayed
+# (e2e/replays). Otherwise as config/intake.yaml. Research prototype; synthetic data only.
+llm_phrasing: false
+phrasing_timeout_s: 3.0
+max_turns: 8
+max_seconds: 300
+briefing_summary: false
+summary_timeout_s: 60

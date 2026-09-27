@@ -5,70 +5,131 @@
 # dependencies, migrates, seeds the personas and the demo staff, makes sure an urgency model is
 # installed, then runs the API and the three apps (and the voice service when its models are
 # downloaded, and the local LLM when LOCAL_LLM=1) under honcho in the background. It returns when
-# every process answers ("CareFlow is up"). `make logs` follows them; `make down` stops everything.
+# every process answers and the API's database, Valkey and FHIR server are reachable ("CareFlow
+# is up"). `make logs` follows them; `make down` stops what this checkout started.
 #
+#   CAREFLOW_STACK=name CAREFLOW_PORT_OFFSET=n
+#                      run a second, isolated stack: its own Compose project and every port + n
+#                      (scripts/stack.py). Default: the dev stack `careflow` on the CONVENTIONS ports.
 #   VOICE=0            leave the voice service out (default: on when `make voice-models` has run
-#                      and VOICE_PORT, default 8090, is free)
-#   LOCAL_LLM=1        also serve the pinned Qwen3.5-9B MLX model on :8081
+#                      and the stack's voice port is free)
+#   LOCAL_LLM=1        also serve the pinned Qwen3.5-9B MLX model on :8081 (through scripts/with_llm.sh)
 #   SEED_SYNTHEA=0     load the 7 personas only (no Synthea population)
+#   E2E=1              deterministic journeys (make e2e): every model reply is replayed from
+#                      e2e/replays/providers.cassette.json and the intake uses e2e/config/intake.yaml
+#   E2E_RECORD=1       record that cassette from the local model instead; run the journeys with the
+#                      model up: `scripts/with_llm.sh make e2e` (or LOCAL_LLM=1 here)
+#   E2E_LIVE=1         the journeys against the local model, nothing replayed (same model rule)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source scripts/lib.sh
 
-run_dir=.run
-pidfile="$run_dir/honcho.pid"
+stack="${CAREFLOW_STACK:-careflow}"
+run_dir=.run/stacks
+pidfile="$run_dir/$stack.pid"
+mkdir -p "$run_dir"
 if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
-  echo "up: CareFlow is already running (pid $(cat "$pidfile")); 'make down' first." >&2
+  echo "up: stack $stack is already running from this checkout (pid $(cat "$pidfile")); 'make down' first." >&2
   exit 1
 fi
+for other in "$run_dir"/*.pid; do  # one set of apps per checkout: they share .next
+  [[ -f "$other" && "$other" != "$pidfile" ]] || continue
+  if kill -0 "$(cat "$other")" 2>/dev/null; then
+    echo "up: stack $(basename "$other" .pid) already runs its apps from this checkout; stop it first." >&2
+    exit 1
+  fi
+done
 
-scripts/check_prereqs.sh
-make infra
+python3 scripts/gen_dev_env.py
+if [[ -n "${CAREFLOW_PORT_OFFSET:-}" ]]; then
+  env_file="$(python3 scripts/stack.py env --stack "$stack" --offset "$CAREFLOW_PORT_OFFSET")"
+else  # the stack's default: +0 for the dev stack, +10000 for careflow-test
+  env_file="$(python3 scripts/stack.py env --stack "$stack")"
+fi
+set -a
+# shellcheck disable=SC1090
+source "$env_file"
+set +a
+offset="$CAREFLOW_PORT_OFFSET"
+
+voice_port="$VOICE_PORT"
+CAREFLOW_PORTS="$CAREFLOW_API_PORT $CAREFLOW_KIOSK_PORT $CAREFLOW_STAFF_PORT $CAREFLOW_COMPANION_PORT" \
+  scripts/check_prereqs.sh
+python3 scripts/check_mem_budget.py
+python3 scripts/stack.py up --stack "$stack" --offset "$offset" --no-seed
+
 extras=()
 if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
   # The voice service's local STT, and its Arabic speech (M2-02); Apple silicon only.
   extras=(--extra mlx-whisper --extra arabic-speech --extra embeddings)
 fi
-uv sync --locked --all-packages "${extras[@]}"
+# --inexact: never remove what another extra installed (e.g. the laya fine-tuning stack).
+uv sync --locked --all-packages --inexact "${extras[@]}"
 pnpm install --frozen-lockfile
 make migrate
 make seed
 make seed-dev
 uv run python scripts/ensure_triage_model.py
 
-mkdir -p "$run_dir"
-procfile="$run_dir/Procfile"
+# E2E: what the API replays (or records) and how the intake phrases its questions.
+cassette=e2e/replays/providers.cassette.json
+model_note="run the journeys with the model up: scripts/with_llm.sh make e2e"
+if [[ "${E2E_RECORD:-0}" == "1" ]]; then
+  [[ "${LOCAL_LLM:-0}" == "1" ]] || echo "up: E2E_RECORD=1 without LOCAL_LLM=1: $model_note"
+  rm -f "$cassette"
+  export CAREFLOW_PROVIDER_MODE=record CAREFLOW_CASSETTE="$PWD/$cassette"
+  export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
+  echo "up: E2E recording: every model reply goes to $cassette"
+elif [[ "${E2E_LIVE:-0}" == "1" ]]; then
+  [[ "${LOCAL_LLM:-0}" == "1" ]] || echo "up: E2E_LIVE=1 without LOCAL_LLM=1: $model_note"
+  export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
+  echo "up: E2E live: the journeys use the local model, nothing is replayed"
+elif [[ "${E2E:-0}" == "1" ]]; then
+  if [[ ! -s "$cassette" ]]; then
+    echo "up: E2E=1 replays $cassette, which is missing; record it: E2E_RECORD=1 LOCAL_LLM=1 make up, then make e2e" >&2
+    exit 1
+  fi
+  export CAREFLOW_PROVIDER_MODE=replay CAREFLOW_CASSETTE="$PWD/$cassette"
+  export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
+  echo "up: E2E replay: model replies come from $cassette, no model is called"
+fi
+
+procfile="$run_dir/$stack.Procfile"
 cp Procfile.dev "$procfile"
 services=(
-  api=http://127.0.0.1:8000/health
-  kiosk=http://localhost:3000
-  staff=http://localhost:3001
-  companion=http://localhost:3002
+  api="http://127.0.0.1:$CAREFLOW_API_PORT/health"
+  kiosk="http://localhost:$CAREFLOW_KIOSK_PORT"
+  staff="http://localhost:$CAREFLOW_STAFF_PORT"
+  companion="http://localhost:$CAREFLOW_COMPANION_PORT"
 )
 
-voice_port="${VOICE_PORT:-8090}"
 if [[ "${VOICE:-auto}" == "0" ]]; then
   echo "up: voice service off (VOICE=0)."
 elif [[ -z "$(ls -A services/voice/models 2>/dev/null)" ]]; then
   echo "up: voice service off: its models are not downloaded ('make voice-models', ~2 GB)."
 elif lsof -iTCP:"$voice_port" -sTCP:LISTEN >/dev/null 2>&1; then
-  echo "up: voice service off: port $voice_port is in use (set VOICE_PORT)."
+  echo "up: voice service off: port $voice_port is in use (set CAREFLOW_PORT_OFFSET or VOICE=0)."
 else
   echo "voice: VOICE_PORT=$voice_port uv run --package careflow-voice ${extras[*]} careflow-voice" >>"$procfile"
   services+=("voice=http://127.0.0.1:$voice_port/healthz")
 fi
 
+wait_s=300
 if [[ "${LOCAL_LLM:-0}" == "1" ]]; then
-  model="$(with_timeout 600 uvx --from 'huggingface_hub==2.0.0' hf download \
-    mlx-community/Qwen3.5-9B-MLX-4bit --revision 938d8919941c6e7efd3c7150eff7fe9d12afa631 --quiet)"
-  echo "llm: uv run mlx_lm.server --host 127.0.0.1 --port 8081 --model $model" >>"$procfile"
+  # The one sanctioned way to start the local model (docs/AGENT_RUNBOOK.md section 6): with_llm.sh
+  # serves the pinned Qwen3.5-9B on 8081, or reuses a server already answering there, and stops
+  # only a server it started. honcho signals the whole process group on `make down`.
+  echo "llm: scripts/with_llm.sh tail -f /dev/null" >>"$procfile"
   services+=("llm=http://127.0.0.1:8081/v1/models")
+  wait_s=900  # a first download of the model (~5 GB)
 fi
 
-echo "up: starting $(grep -c '^[a-z]*:' "$procfile") processes (logs: make logs)"
-nohup uv run honcho start -f "$procfile" >"$run_dir/careflow.log" 2>&1 &
+echo "up: stack $stack: starting $(grep -c '^[a-z]*:' "$procfile") processes (logs: make logs)"
+# honcho loads its env files over the environment: the stack's file comes last, so its ports and
+# URLs win over the dev values in .env (secrets stay from .env).
+nohup uv run honcho -e ".env,$env_file" start -f "$procfile" >"$run_dir/$stack.log" 2>&1 &
 echo $! >"$pidfile"
-if ! python3 scripts/wait_healthy.py "${services[@]}" --timeout 300; then
-  tail -n 40 "$run_dir/careflow.log" >&2 || true
+if ! python3 scripts/wait_healthy.py "${services[@]}" --timeout "$wait_s"; then
+  tail -n 40 "$run_dir/$stack.log" >&2 || true
   exit 1
 fi

@@ -3,6 +3,8 @@
 #   extraction: { provider: api, vendor: anthropic, model: <model id> }
 # API providers are off unless the owner adds a key to .env; without it the task raises
 # ProviderUnavailable and callers fall back to local/replay or mark the work not_run.
+# The local model `qwen3.5-9b-4bit` is mlx-community/Qwen3.5-9B-MLX-4bit at revision
+# 938d8919941c6e7efd3c7150eff7fe9d12afa631 (ADR-013), served only by scripts/with_llm.sh, which pins it.
 tasks:
   conversation: { provider: local, model: qwen3.5-9b-4bit }
   extraction:   { provider: local, model: qwen3.5-9b-4bit }
