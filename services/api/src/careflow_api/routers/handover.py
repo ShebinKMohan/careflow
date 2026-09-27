@@ -35,7 +35,7 @@ from careflow_api.rls import clinic_session
 from careflow_api.routers.sessions import (
     own_session,
     patient_token,
-    question_from,
+    pending_question,
     runtime,
     session_row,
     touch,
@@ -129,8 +129,7 @@ async def claim_qr(
     token = patient_token(
         settings, clinic_id=clinic_id, session_id=claims.session_id, channel="phone"
     )
-    node, value = await intake.waiting_for(claims.session_id)
-    question = question_from(value) if node == "await_answer" else None
+    question = pending_question(await intake.state(claims.session_id))
     await publish_frame(
         redis,
         frame_type=SESSION_HANDED_OVER,

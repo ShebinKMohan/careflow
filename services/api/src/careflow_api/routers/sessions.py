@@ -10,6 +10,7 @@ from __future__ import annotations
 import datetime as dt
 import logging
 import uuid
+from collections.abc import Mapping
 from typing import Annotated, Any, Final
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -120,6 +121,18 @@ def question_from(value: dict[str, Any] | None) -> IntakeQuestion | None:
     if not value or value.get("kind") != "patient_input":
         return None
     q = value["question"]
+    return IntakeQuestion(
+        question_id=q["question_id"], text=q["text"], key=q.get("key"), notice=q.get("notice")
+    )
+
+
+def pending_question(state: Mapping[str, Any] | None) -> IntakeQuestion | None:
+    """The question the intake is waiting on, from the graph's state (it survives any state update,
+    unlike the interrupt's value), or None."""
+    raw = (state or {}).get("pending_question")
+    if raw is None:
+        return None
+    q = raw.model_dump(mode="json") if hasattr(raw, "model_dump") else dict(raw)
     return IntakeQuestion(
         question_id=q["question_id"], text=q["text"], key=q.get("key"), notice=q.get("notice")
     )
