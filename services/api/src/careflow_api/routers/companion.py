@@ -16,7 +16,7 @@ nurse knows when the nurse does not. No kiosk route: ADR-006 defers kiosk RAG an
 from __future__ import annotations
 
 import logging
-from typing import Annotated
+from typing import Annotated, Final
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 
@@ -44,6 +44,9 @@ from careflow_integration.fhir.writeback.feels_worse import feels_worse_flag, wr
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["companion"])
+
+#: A visit in one of these states is off the nurse station: a press there is refused (409).
+ENDED: Final = frozenset({"closed", "no_show"})
 
 Phone = Annotated[Principal, Depends(require_phone_session)]
 
@@ -97,9 +100,16 @@ async def feels_worse(
     background: BackgroundTasks,
     settings: Annotated[Settings, Depends(get_settings)],
 ) -> FeelsWorseAck:
-    """Safety feature: the nurse hears of every press first; then the rules run again."""
+    """Safety feature: the nurse hears of every press first; then the rules run again. A visit
+    that has ended is refused (409): the nurse station no longer lists it, and the phone must send
+    the patient to the desk rather than say the nurse was told."""
     session_id = session_of(principal)
-    await session_row(principal, session_id)
+    row = await session_row(principal, session_id)
+    if row.status in ENDED:
+        raise HTTPException(
+            status.HTTP_409_CONFLICT,
+            detail="This visit has ended. If you feel worse, tell the reception desk now.",
+        )
     now = utc_now()
     answers = body.answers
     codes = answer_codes(
@@ -115,21 +125,21 @@ async def feels_worse(
         events=request.app.state.events,
         now=now,
     )
+    # The EHR Flag records the press itself, so it does not wait on (or fail with) the rules.
+    if row.fhir_patient_id:
+        background.add_task(
+            _write_flag,
+            fhir_endpoint(),
+            session_id=session_id,
+            patient_ref=f"Patient/{row.fhir_patient_id}",
+            press=press,
+            codes=codes,
+            now=now,
+        )
     intake: IntakeRuntime | None = getattr(request.app.state, "intake", None)
     try:
         if intake is not None:
-            state = await intake.report_feels_worse(session_id, codes=codes, now=now)
-            patient_ref = state.get("patient_ref")
-            if patient_ref:
-                background.add_task(
-                    _write_flag,
-                    fhir_endpoint(),
-                    session_id=session_id,
-                    patient_ref=patient_ref,
-                    press=press,
-                    codes=codes,
-                    now=now,
-                )
+            await intake.report_feels_worse(session_id, codes=codes, now=now)
     except Exception:  # the event already went out: the nurse was told
         logger.exception("feels_worse.follow_up_failed", extra={"session_id": session_id})
     return FeelsWorseAck(flag_id=flag_id, received_at=now, press_count=press)

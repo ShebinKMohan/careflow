@@ -23,6 +23,7 @@ export function AlertBanner({
   tasks,
   patient,
   onTaskDone,
+  afterDecision = false,
 }: {
   alert: Alert;
   facts: Map<string, FactView>;
@@ -30,6 +31,8 @@ export function AlertBanner({
   /** The patient's initials, on the worklist (the triage card already names the patient). */
   patient?: string;
   onTaskDone?: (task: Task) => void;
+  /** Raised after the nurse's decision (M2-07): a patient getting worse while waiting. */
+  afterDecision?: boolean;
 }) {
   const t = useTranslations("alerts");
   const format = useFormatter();
@@ -62,6 +65,11 @@ export function AlertBanner({
         {patient ? <span className="text-body font-semibold">{t("patient", { name: patient })}</span> : null}
         {alert.partial ? (
           <span className="rounded-control border-2 border-current px-2 font-semibold">{t("partial")}</span>
+        ) : null}
+        {afterDecision ? (
+          <span className="rounded-control border-2 border-current px-2 font-semibold" data-testid="after-decision">
+            {t("afterDecision")}
+          </span>
         ) : null}
       </div>
       <p className="text-body font-semibold">{alertText(alert, locale)}</p>

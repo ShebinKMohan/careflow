@@ -1,8 +1,8 @@
 import { randomBytes } from "node:crypto";
 
-import { devices, expect, type Page, type Response, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-import { answerIntake, answerOnPhone, checkIn, kioskPage, type PatientScript, RequestLog } from "../lib/actors";
+import { answerIntake, answerOnPhone, checkIn, isClaim, kioskPage, type PatientScript, phonePage, RequestLog, showCode } from "../lib/actors";
 import { STACK } from "../lib/stack";
 
 // The QR hand-over (M2-06), persona `qr-phone` (keypad 100006, synthetic): the kiosk and a phone
@@ -19,28 +19,6 @@ const PATIENT: PatientScript = {
   ],
 };
 const WELCOME = /^Welcome$/;
-
-const isClaim = (response: Response) =>
-  new URL(response.url()).pathname === "/v1/checkin/qr/claim" && response.request().method() === "POST";
-
-/** The kiosk shows its code; the phone's camera reads it: here, the code from the kiosk's own
- * `POST /qr` answer, the value inside the QR image (`{companion}/claim#t=<code>`). */
-async function showCode(kiosk: Page): Promise<string> {
-  const issued = kiosk.waitForResponse(
-    (response) => /\/v1\/sessions\/[^/]+\/qr$/.test(new URL(response.url()).pathname) && response.request().method() === "POST",
-  );
-  await kiosk.getByTestId("continue-on-phone").click();
-  const answer = await issued;
-  expect(answer.status(), "the kiosk gets a hand-over code").toBe(200);
-  await expect(kiosk.getByTestId("handover-qr")).toBeVisible();
-  return String((await answer.json()).qr_token);
-}
-
-async function phonePage(browser: import("@playwright/test").Browser, log: RequestLog): Promise<Page> {
-  const context = await browser.newContext({ ...devices["Pixel 7"], baseURL: STACK.companion });
-  log.watch(context);
-  return context.newPage();
-}
 
 test("QR hand-over: two answers on the kiosk, the phone claims once and finishes, the kiosk forgets the patient", async ({ browser }) => {
   const log = new RequestLog();

@@ -713,7 +713,7 @@ export interface paths {
         put?: never;
         /**
          * I feel worse
-         * @description Safety feature: re-alerts the nurse immediately.
+         * @description Safety feature: re-alerts the nurse immediately. Every press is stored and told to the nurse before anything else; the rules then run again. A visit that has ended (closed or a no-show) is a 409: the nurse station no longer shows it, so the phone tells the patient to go to the reception desk instead of saying the nurse was told.
          */
         post: operations["postFeelsWorse"];
         delete?: never;
@@ -1383,7 +1383,10 @@ export interface components {
             /** @description Null when NEWS2 does not apply (under 16) or no vitals exist yet. */
             news2?: components["schemas"]["News2Score"] | null;
             open_tasks?: components["schemas"]["Task"][];
+            /** @description Every task of the session, completed ones included (M2-07), so a card read again after "ECG done" still shows it done. */
+            tasks?: components["schemas"]["Task"][];
             warnings?: components["schemas"]["SessionWarning"][];
+            feels_worse?: components["schemas"]["FeelsWorseSummary"];
         };
         /** @enum {string} */
         TaskKind: "ecg_within_10_min";
@@ -1409,6 +1412,11 @@ export interface components {
             rule_id: components["schemas"]["RuleId"];
             severity: components["schemas"]["AlertSeverity"];
             partial: boolean;
+            /**
+             * Format: date-time
+             * @description When the rule first raised it (M2-07). A confirmed session shows a banner again for an alert raised after the nurse's decision.
+             */
+            raised_at?: string;
         };
         /** @description A waiting patient's "I feel worse" presses (M2-07), for the nurse. The note is the patient's own words from the latest press that had one; it is never put in an event. */
         FeelsWorseSummary: {
@@ -1426,9 +1434,16 @@ export interface components {
             arrived_at: string;
             state: components["schemas"]["SessionState"];
             token_code?: string;
+            /** @description The session's queue token (M2-07), for the nurse's queue controls (call, arrived, no-show, close). */
+            queue_token?: components["schemas"]["QueueToken"];
             alerts: components["schemas"]["AlertChip"][];
             suggested_level?: components["schemas"]["UrgencyLevel"];
             confirmed_level?: components["schemas"]["UrgencyLevel"];
+            /**
+             * Format: date-time
+             * @description When the nurse confirmed or overrode the level (M2-07); absent before.
+             */
+            decided_at?: string;
             scale?: components["schemas"]["TriageScale"];
             open_tasks: components["schemas"]["Task"][];
             age_years?: number;
@@ -4477,6 +4492,7 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };

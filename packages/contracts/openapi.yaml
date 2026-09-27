@@ -1672,7 +1672,10 @@ paths:
       summary: I feel worse
       tags:
       - companion
-      description: 'Safety feature: re-alerts the nurse immediately.'
+      description: 'Safety feature: re-alerts the nurse immediately. Every press is stored and told
+        to the nurse before anything else; the rules then run again. A visit that has ended (closed or
+        a no-show) is a 409: the nurse station no longer shows it, so the phone tells the patient to
+        go to the reception desk instead of saying the nurse was told.'
       x-careflow-roles:
       - patient_session
       requestBody:
@@ -1707,6 +1710,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
   /v1/companion/ask:
@@ -2988,11 +2993,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Task'
+        tasks:
+          description: Every task of the session, completed ones included (M2-07), so a card read
+            again after "ECG done" still shows it done.
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
         warnings:
           type: array
           uniqueItems: true
           items:
             $ref: '#/components/schemas/SessionWarning'
+        feels_worse:
+          $ref: '#/components/schemas/FeelsWorseSummary'
       required:
       - session_id
       - status
@@ -3048,6 +3061,11 @@ components:
           $ref: '#/components/schemas/AlertSeverity'
         partial:
           type: boolean
+        raised_at:
+          description: When the rule first raised it (M2-07). A confirmed session shows a banner
+            again for an alert raised after the nurse's decision.
+          type: string
+          format: date-time
       required:
       - alert_id
       - rule_id
@@ -3090,6 +3108,10 @@ components:
           $ref: '#/components/schemas/SessionState'
         token_code:
           type: string
+        queue_token:
+          description: The session's queue token (M2-07), for the nurse's queue controls (call,
+            arrived, no-show, close).
+          $ref: '#/components/schemas/QueueToken'
         alerts:
           type: array
           items:
@@ -3098,6 +3120,10 @@ components:
           $ref: '#/components/schemas/UrgencyLevel'
         confirmed_level:
           $ref: '#/components/schemas/UrgencyLevel'
+        decided_at:
+          description: When the nurse confirmed or overrode the level (M2-07); absent before.
+          type: string
+          format: date-time
         scale:
           $ref: '#/components/schemas/TriageScale'
         open_tasks:

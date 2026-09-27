@@ -12,6 +12,7 @@ import { AlertBanner } from "./nurse/AlertBanner";
 import { FeelsWorseBanner } from "./nurse/FeelsWorseBanner";
 import { LevelChip } from "./nurse/LevelChip";
 import { MedicalQuestions } from "./nurse/MedicalQuestions";
+import { QueueControls } from "./nurse/QueueControls";
 
 const CELL = "border-b border-border px-3 py-3 text-start align-top";
 
@@ -26,7 +27,7 @@ export function Worklist() {
   const format = useFormatter();
   const pushRef = useRef<(raised: AlertRaised) => void>(() => undefined);
   const onAlert = useCallback((raised: AlertRaised) => pushRef.current(raised), []);
-  const { state, live } = useLiveWorklist(onAlert);
+  const { state, live, refresh } = useLiveWorklist(onAlert);
   const items = state.status === "ready" ? state.data : null;
   const { sessions, push, updateTask } = useSessionAlerts(items);
 
@@ -52,7 +53,12 @@ export function Worklist() {
                 .filter((row) => row.feels_worse)
                 .sort((a, b) => (b.feels_worse?.last_reported_at ?? "").localeCompare(a.feels_worse?.last_reported_at ?? ""))
                 .map((row) => (
-                  <FeelsWorseBanner key={row.session_id} item={row} />
+                  <FeelsWorseBanner
+                    key={row.session_id}
+                    sessionId={row.session_id}
+                    patient={row.token_code ?? row.patient_display}
+                    report={row.feels_worse}
+                  />
                 ))}
             </div>
           ) : null}
@@ -69,7 +75,9 @@ export function Worklist() {
             </div>
           ) : null}
           {sessions.length ? (
-            <div className="sticky top-0 z-10 flex flex-col gap-3" aria-label={tAlerts("title")} role="region">
+            // Sticky, but never more than 45% of the screen: with many alerts the region scrolls on its
+            // own, so the patient list and the queue controls below stay usable.
+            <div className="sticky top-0 z-10 flex max-h-[45vh] flex-col gap-3 overflow-y-auto" aria-label={tAlerts("title")} role="region">
               {sessions.flatMap((session) =>
                 session.alerts.map((alert) => (
                   <AlertBanner
@@ -79,11 +87,13 @@ export function Worklist() {
                     tasks={session.tasks}
                     patient={session.patientDisplay}
                     onTaskDone={updateTask}
+                    afterDecision={session.decidedAt !== undefined}
                   />
                 )),
               )}
             </div>
           ) : null}
+          <QueueControls rows={rows} onChanged={() => void refresh()} />
           {rows.length === 0 ? (
             <p>{t("empty")}</p>
           ) : (

@@ -6,7 +6,7 @@
  */
 import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
-import { type Browser, type BrowserContext, expect, type Page, request, test } from "@playwright/test";
+import { type Browser, type BrowserContext, devices, expect, type Page, request, type Response, test } from "@playwright/test";
 
 import { BOARD_A, CLINIC_A, KIOSK_A, secret, STACK, staffUser } from "./stack";
 
@@ -220,6 +220,67 @@ export class RequestLog {
   carrying(secret: string): Sent[] {
     return this.requests.filter((sent) => sent.url.includes(secret) || (sent.body ?? "").includes(secret));
   }
+}
+
+export const isClaim = (response: Response) =>
+  new URL(response.url()).pathname === "/v1/checkin/qr/claim" && response.request().method() === "POST";
+
+/** The kiosk shows its code; the phone's camera reads it: here, the code from the kiosk's own
+ * `POST /qr` answer, the value inside the QR image (`{companion}/claim#t=<code>`). */
+export async function showCode(kiosk: Page): Promise<string> {
+  const issued = kiosk.waitForResponse(
+    (response) => /\/v1\/sessions\/[^/]+\/qr$/.test(new URL(response.url()).pathname) && response.request().method() === "POST",
+  );
+  await kiosk.getByTestId("continue-on-phone").click();
+  const answer = await issued;
+  expect(answer.status(), "the kiosk gets a hand-over code").toBe(200);
+  await expect(kiosk.getByTestId("handover-qr")).toBeVisible();
+  return String((await answer.json()).qr_token);
+}
+
+export async function phonePage(browser: Browser, log?: RequestLog): Promise<Page> {
+  const context = await browser.newContext({ ...devices["Pixel 7"], baseURL: STACK.companion });
+  log?.watch(context);
+  return context.newPage();
+}
+
+/** The nurse sets this level on the open card: the suggestion confirmed when it is that level,
+ * otherwise an override with a coded reason (or the level chosen when there is no suggestion). */
+export async function nurseSetsLevel(page: Page, level: number): Promise<void> {
+  await expect(page.getByText(/Suggestion only|No model suggestion/).first()).toBeVisible({ timeout: 30_000 });
+  const suggested = await suggestedLevel(page);
+  if (suggested === level) {
+    await page.getByRole("button", { name: `Confirm level ${level}` }).click();
+  } else if (suggested === null) {
+    await page.getByRole("button", { name: `KTAS ${level}`, exact: true }).click();
+    await page.getByRole("button", { name: `Set level ${level}` }).click();
+  } else {
+    await nurseOverrides(page, level);
+  }
+  await expect(page.getByTestId("decision-result")).toContainText(`KTAS ${level}`);
+}
+
+/** "I feel worse" on the phone's waiting room, with these danger answers; resolves when the phone
+ * says the nurse was told, with the time the patient pressed "Tell the nurse" (ms since epoch). */
+export async function pressFeelsWorse(
+  phone: Page,
+  answers: { chest?: string[]; fast?: string[]; drowsy?: "Yes" | "No" | "Not sure" } = {},
+): Promise<number> {
+  await phone.getByTestId("feels-worse").click();
+  const dialog = phone.getByRole("dialog", { name: "Tell the nurse what changed" });
+  for (const label of [...(answers.chest ?? []), ...(answers.fast ?? [])]) {
+    await dialog.getByRole("button", { name: label, exact: true }).click();
+  }
+  await dialog.getByRole("button", { name: answers.drowsy ?? "No", exact: true }).click();
+  const sent = phone.waitForResponse(
+    (response) => new URL(response.url()).pathname === "/v1/companion/feels-worse" && response.request().method() === "POST",
+  );
+  const pressedAt = Date.now();
+  await dialog.getByRole("button", { name: "Tell the nurse", exact: true }).click();
+  expect((await sent).status(), "the press is accepted").toBe(202);
+  await expect(dialog.getByTestId("feels-worse-told")).toHaveText("The nurse has been told. Stay where you are.");
+  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+  return pressedAt;
 }
 
 /** The simulated vitals (the scenario set at sign-in), then the done screen. */

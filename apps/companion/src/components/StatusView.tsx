@@ -48,6 +48,11 @@ export function StatusView({ live }: { live: LiveStatus }) {
         <p className="text-label text-ink-muted">
           {t("updated", { time: updated })} {live.live ? null : t("paused")}
         </p>
+        {live.stale ? (
+          <p role="status" className="font-semibold" data-testid="status-stale">
+            {t("stale")}
+          </p>
+        ) : null}
       </div>
     </Card>
   );

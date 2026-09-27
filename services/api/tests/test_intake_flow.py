@@ -302,6 +302,10 @@ def test_keypad_to_token_on_the_real_stack(
     )
     assert completed.status_code == 200, completed.text
     assert completed.json()["status"] == "completed"
+    # A card read again still shows the ECG done (M2-07): the task stays in `tasks`, completed.
+    view = client.get(f"/v1/sessions/{session_id}/triage", headers=nurse).json()
+    assert task_id not in {task["task_id"] for task in view.get("open_tasks", [])}
+    assert {task["task_id"]: task["status"] for task in view["tasks"]}[task_id] == "completed"
     facts = client.get(f"/v1/sessions/{session_id}/facts", headers=nurse).json()
     ecg_done = facts["tasks"]["ecg_done_at"]
     assert ecg_done["provenance"] == "NURSE_CONFIRMED"

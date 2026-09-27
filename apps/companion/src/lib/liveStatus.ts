@@ -9,7 +9,8 @@ import { readSession } from "./session";
 export type CompanionStatus = Schema<"CompanionStatus">;
 export type LiveStatus =
   | { status: "loading" }
-  | { status: "ready"; data: CompanionStatus; updatedAt: number; live: boolean }
+  /** `stale`: the last refresh failed; the last good status stays on screen (and so does "I feel worse"). */
+  | { status: "ready"; data: CompanionStatus; updatedAt: number; live: boolean; stale: boolean }
   | { status: "unauthorized" }
   | { status: "failed" };
 
@@ -24,8 +25,9 @@ function wsBase(): string {
 /**
  * The waiting room's live status (M2-07): `GET /v1/companion/status`, then the session channel
  * (`queue.status` frames; a one-time ticket from `POST /v1/ws-ticket`, never the token in a URL).
- * A dropped socket reconnects with backoff and a fresh ticket; until then the status is polled
- * every 15 s.
+ * A dropped socket reconnects with backoff and a fresh ticket, and every (re)opened socket reloads
+ * the status first, so nothing missed while it was down is lost; until then the status is polled
+ * every 15 s. A failed refresh keeps the last good status on screen, marked stale.
  */
 export function useLiveStatus(): LiveStatus {
   const [state, setState] = useState<LiveStatus>({ status: "loading" });
@@ -41,10 +43,15 @@ export function useLiveStatus(): LiveStatus {
           data,
           updatedAt: Date.now(),
           live: current.status === "ready" ? current.live : false,
+          stale: false,
         }));
-      } else setState({ status: response.status === 401 || response.status === 403 ? "unauthorized" : "failed" });
+      } else if (response.status === 401 || response.status === 403) {
+        setState({ status: "unauthorized" });
+      } else {
+        setState(keepLastGood);
+      }
     } catch {
-      setState((current) => (current.status === "ready" ? current : { status: "failed" }));
+      setState(keepLastGood);
     }
   }, []);
 
@@ -76,6 +83,7 @@ export function useLiveStatus(): LiveStatus {
       socket.onopen = () => {
         attempts = 0;
         setLive(true);
+        void refresh(); // the snapshot: frames sent while the socket was down are not replayed
       };
       socket.onmessage = (event: MessageEvent<unknown>) => {
         let frame: { type?: string; data?: CompanionStatus } = {};
@@ -86,7 +94,7 @@ export function useLiveStatus(): LiveStatus {
         }
         if (frame.type === "queue.status" && frame.data) {
           const next = { ...frame.data, patient_type: frame.data.patient_type ?? patientType.current };
-          setState({ status: "ready", data: next, updatedAt: Date.now(), live: true });
+          setState({ status: "ready", data: next, updatedAt: Date.now(), live: true, stale: false });
         } else if (frame.type === "token.called" || frame.type === "token.no_show") {
           void refresh();
         }
@@ -121,4 +129,9 @@ export function useLiveStatus(): LiveStatus {
   }, [refresh]);
 
   return state;
+}
+
+/** A failed refresh: the last good status stays (marked stale); without one, "failed". */
+function keepLastGood(current: LiveStatus): LiveStatus {
+  return current.status === "ready" ? { ...current, stale: true } : { status: "failed" };
 }

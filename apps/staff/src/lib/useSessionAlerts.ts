@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Alert } from "./alerts";
 import { api } from "./api";
 import { type FactView, indexFacts } from "./facts";
-import { awaitingDecision, type WorklistItem } from "./sortWorklist";
+import { alertsSinceDecision, awaitingDecision, raisedAfter, type WorklistItem } from "./sortWorklist";
 import type { AlertRaised } from "./useLiveWorklist";
 
 export type Task = Schema<"Task">;
@@ -17,12 +17,16 @@ export interface SessionAlerts {
   alerts: Alert[];
   facts: Map<string, FactView>;
   tasks: Task[];
+  /** Set when the nurse has decided: then only alerts raised after it show, marked as new. */
+  decidedAt?: string;
 }
 
 /**
  * The full alerts (text, evidence, deadline) behind the worklist's alert chips: for each session
  * still awaiting the nurse, `GET /v1/sessions/{id}/triage` and its facts. A pushed `alert.raised`
- * shows at once and loads that session's facts for its evidence. A confirmed session drops out.
+ * shows at once and loads that session's facts for its evidence. Once the nurse has decided, the
+ * session's older alerts drop out, but an alert raised after the decision (a patient getting worse
+ * while waiting, M2-07) shows again, marked as new since the decision.
  */
 export function useSessionAlerts(items: WorklistItem[] | null): {
   sessions: SessionAlerts[];
@@ -47,7 +51,7 @@ export function useSessionAlerts(items: WorklistItem[] | null): {
         patientDisplay,
         alerts,
         facts: facts.data ? indexFacts(facts.data) : (previous?.facts ?? new Map()),
-        tasks: triage.data?.open_tasks ?? previous?.tasks ?? [],
+        tasks: triage.data?.tasks ?? triage.data?.open_tasks ?? previous?.tasks ?? [],
       });
       return next;
     });
@@ -56,9 +60,12 @@ export function useSessionAlerts(items: WorklistItem[] | null): {
   useEffect(() => {
     if (!items) return;
     for (const item of items) {
-      if (!awaitingDecision(item) || item.alerts.length === 0) continue;
-      if (requested.current.has(item.session_id)) continue;
-      requested.current.add(item.session_id);
+      const active = awaitingDecision(item) ? item.alerts : alertsSinceDecision(item);
+      if (active.length === 0) continue;
+      // A confirmed session is loaded again for each alert raised after its decision.
+      const key = `${item.session_id}:${active.map((alert) => alert.alert_id).join(",")}`;
+      if (requested.current.has(key)) continue;
+      requested.current.add(key);
       void load(item.session_id, item.patient_display);
     }
   }, [items, load]);
@@ -97,8 +104,16 @@ export function useSessionAlerts(items: WorklistItem[] | null): {
     });
   }, []);
 
-  const confirmed = new Set((items ?? []).filter((item) => !awaitingDecision(item)).map((item) => item.session_id));
-  const sessions = [...details.values()].filter((session) => !confirmed.has(session.sessionId) && session.alerts.length);
+  const decided = new Map(
+    (items ?? []).filter((item) => !awaitingDecision(item)).map((item) => [item.session_id, item.decided_at ?? ""]),
+  );
+  const sessions = [...details.values()]
+    .map((session) => {
+      const decidedAt = decided.get(session.sessionId);
+      if (decidedAt === undefined) return session;
+      return { ...session, decidedAt, alerts: session.alerts.filter((alert) => raisedAfter(alert.raised_at, decidedAt)) };
+    })
+    .filter((session) => session.alerts.length);
   return { sessions, push, updateTask };
 }
 

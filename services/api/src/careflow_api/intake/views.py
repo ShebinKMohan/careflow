@@ -15,6 +15,7 @@ from careflow_contracts.api_models import (
     IntakeQuestion,
     MedicalQuestion,
     News2Score,
+    QueueToken,
     SessionState,
     SessionStatus,
     SessionWarning,
@@ -129,10 +130,16 @@ def triage_view(state: IntakeState) -> TriageView:
             for t in tasks(state)
             if t.status.value == "open"
         ],
+        # Every task, done ones included: a card read again after "ECG done" must still say so.
+        "tasks": [t.model_dump(mode="json", exclude_none=True) for t in tasks(state)],
         "warnings": [w.value for w in warnings(state)],
     }
     if decision is not None:
-        body["decision"] = decision.model_dump(mode="json", exclude_none=True)
+        decided = decision.model_dump(mode="json", exclude_none=True)
+        # Required and nullable: without a triage model nothing was suggested (see the decision
+        # route).
+        decided["suggestion_id"] = decision.suggestion_id
+        body["decision"] = decided
     return TriageView.model_validate(body)
 
 
@@ -153,6 +160,7 @@ def worklist_item(
     token_status: str | None,
     feels_worse: FeelsWorseSummary | None = None,
     medical_questions: Sequence[MedicalQuestion] | None = None,
+    queue_token: QueueToken | None = None,
 ) -> WorklistItem:
     facts = structured_facts(state)
     patient = facts.patient
@@ -164,7 +172,11 @@ def worklist_item(
         "state": session_state(state, waiting, token_status).value,
         "alerts": [
             AlertChip(
-                alert_id=a.alert_id, rule_id=a.rule_id, severity=a.severity, partial=a.partial
+                alert_id=a.alert_id,
+                rule_id=a.rule_id,
+                severity=a.severity,
+                partial=a.partial,
+                raised_at=a.raised_at,
             ).model_dump(mode="json")
             for a in state.get("alerts", [])
         ],
@@ -177,12 +189,15 @@ def worklist_item(
     }
     if token_code:
         body["token_code"] = token_code
+    if queue_token is not None:
+        body["queue_token"] = queue_token.model_dump(mode="json", exclude_none=True)
     if suggestion is not None:
         body["suggested_level"] = int(suggestion.level)
         body["scale"] = suggestion.scale.value
     if decision is not None:
         body["confirmed_level"] = int(decision.final_level)
         body["scale"] = decision.scale.value
+        body["decided_at"] = decision.decided_at
     if patient is not None and patient.age_years is not None:
         body["age_years"] = min(int(patient.age_years.value), 130)
     if patient is not None and patient.sex is not None:
