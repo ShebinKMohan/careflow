@@ -72,14 +72,25 @@
   },
   "doctor": {
     "title": "Doctor briefing",
-    "session": "Session {id}"
+    "session": "Session {id}",
+    "listTitle": "Confirmed patients",
+    "none": "No confirmed patients yet today.",
+    "token": "Number",
+    "arrived": "Arrived",
+    "level": "Level",
+    "alerts": "Alerts",
+    "open": "Open briefing",
+    "levelValue": "{scale} {level}"
   },
   "board": {
     "title": "Queue board: {department}",
     "token": "Number",
     "room": "Room",
     "status": "Status",
-    "noRoom": "Please wait"
+    "noRoom": "Please wait",
+    "nowCalling": "Now calling",
+    "noneCalled": "No number is being called.",
+    "waiting": "{count, plural, one {# person waiting} other {# people waiting}}"
   },
   "admin": {
     "title": "Model providers",
@@ -88,7 +99,8 @@
     "model": "Model or tool",
     "available": "Available",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "statusLink": "System status"
   },
   "alerts": {
     "title": "Active alerts",
@@ -121,7 +133,8 @@
     "PATIENT_STATED": "Patient said",
     "DEVICE_MEASURED": "Device",
     "NURSE_CONFIRMED": "Nurse",
-    "MODEL_INFERRED": "Model inferred"
+    "MODEL_INFERRED": "Model inferred",
+    "missing": "Source missing"
   },
   "triage": {
     "title": "Triage",
@@ -199,5 +212,60 @@
     "save": "Save vitals",
     "saving": "Saving…",
     "failed": "The vitals were not saved. Try again."
+  },
+  "source": {
+    "show": "Show where this came from",
+    "title": "Source",
+    "missing": "This line's source could not be verified.",
+    "patientWords": "The patient's words:",
+    "turn": "Answer {turn}, characters {start} to {end}, {when}.",
+    "ehr": "EHR record: {type} {id} (version {version}).",
+    "openEhr": "Open in the EHR",
+    "device": "Device {device}, reading {reading}, {when}. Simulated device.",
+    "nurse": "Entered by nurse {nurse}, {when}.",
+    "model": "Model {model}, version {version}.",
+    "confidence": "Confidence {value}%.",
+    "suggestionOnly": "Suggestion. Nurse confirmed level {scale} {level}."
+  },
+  "briefing": {
+    "triage": "Triage",
+    "confirmed": "{scale} {level}",
+    "setByNurse": "set by the nurse",
+    "confirmedByNurse": "confirmed by the nurse",
+    "suggested": "Model suggestion: {label} ({confidence}% confidence). Only a suggestion.",
+    "noSuggestion": "No model suggestion: the nurse set the level.",
+    "reason": "Reason: {code}. {note}",
+    "summaryDropped": "Summary unavailable. Showing verified facts only.",
+    "summary": "Summary",
+    "summaryNote": "Written by a model from the facts below; every sentence cites its facts.",
+    "cites": "{count, plural, one {Show the fact} other {Show # facts}}"
+  },
+  "adminStatus": {
+    "title": "System status",
+    "refresh": "Refresh",
+    "versions": "Versions",
+    "api": "API",
+    "ruleset": "Safety ruleset",
+    "urgencyModel": "Urgency model",
+    "unknown": "unknown",
+    "services": "Services",
+    "ports": "Intake parts",
+    "aiTasks": "AI tasks",
+    "providers": "Model providers",
+    "task": "Task",
+    "provider": "Provider",
+    "model": "Model or tool",
+    "available": "Available",
+    "yes": "Yes",
+    "no": "No",
+    "name": "Name",
+    "status": "Status",
+    "detail": "In use",
+    "state": {
+      "ok": "OK",
+      "degraded": "Degraded",
+      "down": "Down"
+    },
+    "stub": "Stub"
   }
 }

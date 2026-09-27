@@ -24,6 +24,26 @@
   --color-footer: #1f2933;
   --color-on-footer: #ffffff;
 
+  /* Provenance (M1-17): a text label always goes with the colour, never colour alone. Each ink
+     is at least 7:1 on its tint and on white. */
+  --color-prov-ehr: #0a3d73;
+  --color-prov-ehr-tint: #e3eefb;
+  --color-prov-patient: #6b3f00;
+  --color-prov-patient-tint: #fdf1dc;
+  --color-prov-device: #0b4f48;
+  --color-prov-device-tint: #dcf3f0;
+  --color-prov-nurse: #14532d;
+  --color-prov-nurse-tint: #dff3e5;
+  --color-prov-model: #4c1d95;
+  --color-prov-model-tint: #f0e6fd;
+  --color-prov-missing: #8b1414;
+  --color-prov-missing-tint: #fde2e2;
+
+  /* The public queue board: dark, high contrast */
+  --color-board: #0b1b2b;
+  --color-on-board: #ffffff;
+  --color-on-board-muted: #d8e1ea;
+
   /* Spacing: touch targets are at least 64 x 64 px (min-h-touch, min-w-touch) */
   --spacing-touch: 4rem;
   --spacing-gutter: 1.5rem;
