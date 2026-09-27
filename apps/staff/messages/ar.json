@@ -72,14 +72,25 @@
   },
   "doctor": {
     "title": "ملخص الطبيب",
-    "session": "الجلسة {id}"
+    "session": "الجلسة {id}",
+    "listTitle": "المرضى المؤكدون",
+    "none": "لا يوجد مرضى مؤكدون اليوم بعد.",
+    "token": "الرقم",
+    "arrived": "وقت الوصول",
+    "level": "المستوى",
+    "alerts": "التنبيهات",
+    "open": "افتح الملخص",
+    "levelValue": "{scale} {level}"
   },
   "board": {
     "title": "لوحة الانتظار: {department}",
     "token": "الرقم",
     "room": "الغرفة",
     "status": "الحالة",
-    "noRoom": "يرجى الانتظار"
+    "noRoom": "يرجى الانتظار",
+    "nowCalling": "يُنادى الآن",
+    "noneCalled": "لا يُنادى أي رقم الآن.",
+    "waiting": "{count, plural, one {شخص واحد ينتظر} other {# أشخاص ينتظرون}}"
   },
   "admin": {
     "title": "مزودو النماذج",
@@ -88,7 +99,8 @@
     "model": "النموذج أو الأداة",
     "available": "متاح",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "statusLink": "حالة النظام"
   },
   "alerts": {
     "title": "التنبيهات النشطة",
@@ -121,7 +133,8 @@
     "PATIENT_STATED": "قال المريض",
     "DEVICE_MEASURED": "جهاز",
     "NURSE_CONFIRMED": "الممرض",
-    "MODEL_INFERRED": "استنتاج النموذج"
+    "MODEL_INFERRED": "استنتاج النموذج",
+    "missing": "المصدر مفقود"
   },
   "triage": {
     "title": "الفرز",
@@ -199,5 +212,60 @@
     "save": "حفظ العلامات الحيوية",
     "saving": "جارٍ الحفظ…",
     "failed": "لم تُحفظ العلامات الحيوية. حاول مرة أخرى."
+  },
+  "source": {
+    "show": "اعرض مصدر هذه المعلومة",
+    "title": "المصدر",
+    "missing": "تعذّر التحقق من مصدر هذا السطر.",
+    "patientWords": "كلمات المريض:",
+    "turn": "الإجابة {turn}، الأحرف من {start} إلى {end}، {when}.",
+    "ehr": "سجل المريض: {type} {id} (الإصدار {version}).",
+    "openEhr": "افتح في السجل الصحي",
+    "device": "الجهاز {device}، القراءة {reading}، {when}. جهاز محاكاة.",
+    "nurse": "أدخلها الممرض {nurse}، {when}.",
+    "model": "النموذج {model}، الإصدار {version}.",
+    "confidence": "الثقة {value}٪.",
+    "suggestionOnly": "اقتراح فقط. أكّد الممرض المستوى {scale} {level}."
+  },
+  "briefing": {
+    "triage": "الفرز",
+    "confirmed": "{scale} {level}",
+    "setByNurse": "حدده الممرض",
+    "confirmedByNurse": "أكّده الممرض",
+    "suggested": "اقتراح النموذج: {label} (ثقة {confidence}٪). اقتراح فقط.",
+    "noSuggestion": "لا يوجد اقتراح من النموذج: حدد الممرض المستوى.",
+    "reason": "السبب: {code}. {note}",
+    "summaryDropped": "الملخص غير متاح. تُعرض الحقائق المتحقق منها فقط.",
+    "summary": "الملخص",
+    "summaryNote": "كتبه نموذج من الحقائق أدناه؛ كل جملة تذكر حقائقها.",
+    "cites": "{count, plural, one {اعرض الحقيقة} other {اعرض # حقائق}}"
+  },
+  "adminStatus": {
+    "title": "حالة النظام",
+    "refresh": "تحديث",
+    "versions": "الإصدارات",
+    "api": "واجهة البرمجة",
+    "ruleset": "قواعد السلامة",
+    "urgencyModel": "نموذج الأولوية",
+    "unknown": "غير معروف",
+    "services": "الخدمات",
+    "ports": "أجزاء الاستقبال",
+    "aiTasks": "مهام الذكاء الاصطناعي",
+    "providers": "مزودو النماذج",
+    "task": "المهمة",
+    "provider": "المزود",
+    "model": "النموذج أو الأداة",
+    "available": "متاح",
+    "yes": "نعم",
+    "no": "لا",
+    "name": "الاسم",
+    "status": "الحالة",
+    "detail": "المستخدم",
+    "state": {
+      "ok": "سليم",
+      "degraded": "متراجع",
+      "down": "متوقف"
+    },
+    "stub": "بديل مؤقت"
   }
 }

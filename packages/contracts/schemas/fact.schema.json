@@ -163,7 +163,14 @@
         }
       ],
       "discriminator": {
-        "propertyName": "kind"
+        "propertyName": "kind",
+        "mapping": {
+          "transcript_span": "#/$defs/TranscriptSpanSource",
+          "fhir": "#/$defs/FhirSource",
+          "device": "#/$defs/DeviceSource",
+          "nurse": "#/$defs/NurseSource",
+          "model": "#/$defs/ModelSource"
+        }
       }
     },
     "FactBase": {
