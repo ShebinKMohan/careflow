@@ -6,8 +6,8 @@ import { expect, type Page, test } from "@playwright/test";
 // The doctor briefing, the public board and the admin status (M1-17) against stubbed HTTP
 // (page.route) with the synthetic, contract-derived fixtures in tests/fixtures/api/. Mock-backed:
 // the same screens on the real API and a persisted briefing are the journeys' job (M1-19, M2-12).
-const fixture = <T,>(name: string): T =>
-  JSON.parse(readFileSync(new URL(`../fixtures/api/${name}.json`, import.meta.url), "utf8")) as T;
+const fixture = <T,>(name: string, folder = "api"): T =>
+  JSON.parse(readFileSync(new URL(`../fixtures/${folder}/${name}.json`, import.meta.url), "utf8")) as T;
 
 const EVIDENCE_DIR = new URL("../../../../docs/evidence/M1-17/", import.meta.url).pathname;
 const FHIR = (process.env.NEXT_PUBLIC_FHIR_BASE_URL ?? "http://localhost:8080/fhir").replace(/\/+$/, "");
@@ -86,7 +86,7 @@ test("the public board shows numbers and rooms only, flags a lost connection, an
   let failing = false;
   await signedIn(page, "example-board-token");
   await page.route("**/v1/board/*", (route) =>
-    failing ? route.abort("connectionrefused") : route.fulfill({ json: fixture("board-with-leaked-fields") }),
+    failing ? route.abort("connectionrefused") : route.fulfill({ json: fixture("board-with-leaked-fields", "negative") }),
   );
   await page.goto("/board?department=ed");
   const board = page.getByTestId("board");

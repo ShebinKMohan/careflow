@@ -21,7 +21,9 @@ import { highlight } from "@/lib/highlight";
 
 import providers from "./fixtures/api/admin-providers.json";
 import adminStatus from "./fixtures/api/admin-status.json";
-import leakedBoard from "./fixtures/api/board-with-leaked-fields.json";
+// Deliberately not contract-valid (it carries fields a board answer must never have), so it
+// lives outside fixtures/api, whose files packages/contracts validates.
+import leakedBoard from "./fixtures/negative/board-with-leaked-fields.json";
 import chestPain from "./fixtures/api/briefing-chest-pain.json";
 import dropped from "./fixtures/api/briefing-dropped.json";
 

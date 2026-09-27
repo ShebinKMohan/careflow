@@ -31,6 +31,10 @@ FIXTURES: dict[str, str] = {
     "staff/tests/fixtures/api/decision.json": "DecisionResult",
     "staff/tests/fixtures/api/task-done.json": "Task",
     "staff/tests/fixtures/api/alert-raised.json": "frame:AlertRaisedData",
+    "staff/tests/fixtures/api/briefing-chest-pain.json": "Briefing",
+    "staff/tests/fixtures/api/briefing-dropped.json": "Briefing",
+    "staff/tests/fixtures/api/admin-status.json": "AdminStatus",
+    "staff/tests/fixtures/api/admin-providers.json": "ProvidersResponse",
 }
 
 
