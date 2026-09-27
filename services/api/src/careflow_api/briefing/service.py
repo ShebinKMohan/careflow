@@ -8,6 +8,7 @@ process per clinic set, so the service is shared by the graph and the route.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import uuid
 from collections.abc import Callable
@@ -73,6 +74,7 @@ class BriefingService:
         self.summarizer = summarizer
         self.states = states or NoStateSource()
         self.clock = clock
+        self._tasks: set[asyncio.Task[None]] = set()
 
     async def make(self, state: IntakeState) -> Briefing:
         """Build, check, summarise and store the briefing, then write its FHIR document."""
@@ -107,9 +109,24 @@ class BriefingService:
             await client.aclose()
 
     async def build(self, state: IntakeState) -> str:
-        """The `BriefingBuilder` port: returns the briefing's reference."""
-        briefing = await self.make(state)
-        return f"briefing:{briefing.session_id}"
+        """The `BriefingBuilder` port. The briefing (with its model summary) is built in the
+        background, so the nurse's decision returns as soon as the patient is queued and the
+        triage is written back; a doctor who opens it first gets it built on demand."""
+        task = asyncio.create_task(self._make_logged(state), name="briefing")
+        self._tasks.add(task)
+        task.add_done_callback(self._tasks.discard)
+        return f"briefing:{state['session_id']}"
+
+    async def _make_logged(self, state: IntakeState) -> None:
+        try:
+            await self.make(state)
+        except Exception:  # the doctor route builds it again on demand
+            logger.exception("briefing.build_failed", extra={"session_id": state["session_id"]})
+
+    async def drain(self) -> None:
+        """Wait for briefings still being built (shutdown and tests)."""
+        if self._tasks:
+            await asyncio.gather(*list(self._tasks), return_exceptions=True)
 
 
 __all__ = ["BriefingService", "BriefingStore", "NoStateSource", "StateSource"]
