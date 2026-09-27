@@ -4,7 +4,7 @@ Two channels push the same event envelope as the webhooks ([README.md](README.md
 
 | Channel | Clients (roles) | Carries |
 |---|---|---|
-| `/v1/ws/staff` | nurse station, doctor screen, queue board (`nurse`, `doctor`, `board`) | Every event for the caller's clinic. The board receives only `token.called`. |
+| `/v1/ws/staff` | nurse station, doctor screen, queue board (`nurse`, `doctor`, `board`) | Every event for the caller's clinic. The board receives only `token.called` and `token.no_show`. |
 | `/v1/ws/sessions/{session_id}` | kiosk and companion phone (`kiosk_device`, `patient_session`) | Events for that session only, filtered for patients: never an alert or an urgency level (patients see status, token and room). |
 
 ## Authentication: one-time tickets

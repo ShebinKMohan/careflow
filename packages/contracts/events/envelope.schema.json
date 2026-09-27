@@ -10,6 +10,7 @@
         "triage.suggested",
         "triage.confirmed",
         "token.called",
+        "token.no_show",
         "intake.completed",
         "patient.feels_worse",
         "nurse.flag"

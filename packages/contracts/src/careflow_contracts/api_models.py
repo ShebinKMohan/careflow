@@ -28,6 +28,7 @@ from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedD
 from careflow_contracts.generated.events.triage_suggested_schema import TriageSuggestedData
 from careflow_contracts.generated.events.triage_confirmed_schema import TriageConfirmedData
 from careflow_contracts.generated.events.token_called_schema import TokenCalledData
+from careflow_contracts.generated.events.token_no_show_schema import TokenNoShowData
 from careflow_contracts.generated.events.intake_completed_schema import IntakeCompletedData
 from careflow_contracts.generated.events.patient_feels_worse_schema import PatientFeelsWorseData
 from careflow_contracts.generated.events.nurse_flag_schema import NurseFlagData
@@ -53,6 +54,7 @@ from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedD
 from careflow_contracts.generated.events.triage_suggested_schema import TriageSuggestedData
 from careflow_contracts.generated.events.triage_confirmed_schema import TriageConfirmedData
 from careflow_contracts.generated.events.token_called_schema import TokenCalledData
+from careflow_contracts.generated.events.token_no_show_schema import TokenNoShowData
 from careflow_contracts.generated.events.intake_completed_schema import IntakeCompletedData
 from careflow_contracts.generated.events.patient_feels_worse_schema import PatientFeelsWorseData
 from careflow_contracts.generated.events.nurse_flag_schema import NurseFlagData
@@ -709,6 +711,18 @@ class TokenCalledEvent(BaseModel):
     type: Literal["token.called"]
     timestamp: AwareDatetime
     data: TokenCalledDataModel
+
+
+type TokenNoShowDataModel = TokenNoShowData
+
+
+class TokenNoShowEvent(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    type: Literal["token.no_show"]
+    timestamp: AwareDatetime
+    data: TokenNoShowDataModel
 
 
 type IntakeCompletedDataModel = IntakeCompletedData

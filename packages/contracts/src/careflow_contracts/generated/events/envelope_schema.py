@@ -21,6 +21,7 @@ class EventType(StrEnum):
     triage_suggested = "triage.suggested"
     triage_confirmed = "triage.confirmed"
     token_called = "token.called"
+    token_no_show = "token.no_show"
     intake_completed = "intake.completed"
     patient_feels_worse = "patient.feels_worse"
     nurse_flag = "nurse.flag"

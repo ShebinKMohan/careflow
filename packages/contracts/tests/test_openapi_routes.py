@@ -18,7 +18,7 @@ OPERATIONS = [
     if method in ("get", "post", "put", "patch", "delete")
 ]
 # The route list in the M0-03 issue (the single source for names used by later issues), plus the
-# routes later issues add: M1-03 the dev-only vitals simulator.
+# routes later issues add: M1-03 the dev-only vitals simulator, M1-10 closing a queue token.
 EXPECTED_ROUTES = """
 post /v1/auth/login
 post /v1/auth/device-token
@@ -43,6 +43,7 @@ get /v1/board/{department}
 post /v1/queue/{department}/call-next
 post /v1/queue/tokens/{token_id}/arrived
 post /v1/queue/tokens/{token_id}/no-show
+post /v1/queue/tokens/{token_id}/close
 get /v1/doctor/sessions
 get /v1/doctor/sessions/{session_id}/briefing
 get /v1/companion/status
