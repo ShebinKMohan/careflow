@@ -1,15 +1,37 @@
+import type { IntakeQuestion } from "@/lib/session";
+
+import { WsVoiceClient } from "./wsVoiceClient";
+
 /**
- * The kiosk's voice input. M1-14 implements a real client (browser audio to the voice agent);
- * until then `NoopVoiceClient` is used, and the mic button shows only when
+ * The kiosk's voice input (M1-14). The voice service (`WS /kiosk/audio`) hears the patient,
+ * posts each answer to the intake API itself and speaks the next question back, so the kiosk
+ * only shows what was heard and moves to the next question. The mic button shows only when
  * NEXT_PUBLIC_VOICE_ENABLED=true. Voice is never used on the keypad screen.
  */
+export interface VoiceSession {
+  sessionId: string;
+  /** The patient_session token, sent in the first message (never in a URL). */
+  token: string;
+  language: "en" | "ar";
+}
+
+export interface VoiceEvents {
+  /** What the voice service heard (the answer it sent to the intake API). */
+  onTranscript(text: string): void;
+  /** The next question after a spoken answer; null when the intake is done. */
+  onQuestion(question: IntakeQuestion | null): void;
+  /** The voice path failed; the patient can still tap or type. */
+  onError(code: string): void;
+}
+
 export interface VoiceClient {
   /** True when this client can capture speech. */
   readonly available: boolean;
-  /** Listen until `stop()`; `onText` gets the final transcript. */
-  start(onText: (text: string) => void): Promise<void>;
+  /** Open the microphone and the voice service; resolves once audio is flowing. */
+  start(session: VoiceSession, events: VoiceEvents): Promise<void>;
+  /** Stop listening and speaking (the patient taps the mic again or leaves the screen). */
   stop(): void;
-  /** Drop everything now (idle wipe): no transcript is delivered and nothing is kept. */
+  /** Drop everything now (idle wipe): no further events, no queued audio, tracks stopped. */
   abort(): void;
 }
 
@@ -20,10 +42,13 @@ export class NoopVoiceClient implements VoiceClient {
   abort(): void {}
 }
 
+export const DEFAULT_VOICE_URL = "ws://localhost:8090/kiosk/audio";
+
 export function voiceEnabled(): boolean {
   return process.env.NEXT_PUBLIC_VOICE_ENABLED === "true";
 }
 
 export function createVoiceClient(): VoiceClient {
-  return new NoopVoiceClient();
+  if (!voiceEnabled()) return new NoopVoiceClient();
+  return new WsVoiceClient(process.env.NEXT_PUBLIC_VOICE_WS_URL ?? DEFAULT_VOICE_URL);
 }
