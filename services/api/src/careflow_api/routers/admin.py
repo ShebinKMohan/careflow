@@ -1,4 +1,9 @@
-"""Admin routes (/v1/admin/*)."""
+"""Admin routes (/v1/admin/*).
+
+The status says what actually runs, not only what is configured (M1-17): a local model counts as
+available only when its server answers, a missing urgency model or one trained on the synthetic
+fixture is "degraded" and named as such, and replayed providers say "replay".
+"""
 
 from __future__ import annotations
 
@@ -7,6 +12,7 @@ import shutil
 from pathlib import Path
 from typing import Annotated, Any
 
+import httpx
 from fastapi import APIRouter, Depends, Request
 
 from careflow_api.config import Settings, get_settings
@@ -17,6 +23,7 @@ from careflow_providers.adapters.replay import provider_mode
 
 router = APIRouter(prefix="/v1/admin", tags=["admin"])
 SERVICE_NAMES = {"db": "postgres", "redis": "valkey", "fhir": "hapi-fhir"}
+LOCAL_PROBE_SECONDS = 1.0
 
 
 def ruleset_version() -> str:
@@ -57,19 +64,12 @@ async def admin_status(
                     "detail": detail[:200],
                 }
             )
-        no_model = any(c.port == "urgency" and c.degraded for c in wiring.choices)
-        services.append(
-            {
-                "name": "urgency-model",
-                "status": "degraded" if no_model else "ok",  # no suggestion: the nurse sets it
-                "detail": wiring.urgency_model_version[:200],
-            }
-        )
+        services.append(urgency_row(wiring))
     else:
         services.append(
             {"name": "intake", "status": "down", "detail": "intake runtime not started"}
         )
-    for task in provider_rows():
+    for task in await provider_rows():
         uses = task.get("model") or task.get("tool") or ""
         services.append(
             {
@@ -87,12 +87,41 @@ async def admin_status(
     )
 
 
-def provider_rows() -> list[dict[str, Any]]:
-    """Every AI task in config/providers.yaml: provider, model or tool, and whether it can run.
-    An API provider needs its key in the environment; a CLI one runs offline jobs only."""
+def urgency_row(wiring: Any) -> dict[str, str]:
+    """The urgency model as it really is: "degraded" when there is none (no suggestion, the
+    nurse sets every level) or when it was trained on the synthetic fixture (not a result)."""
+    version = str(wiring.urgency_model_version)
+    if any(c.port == "urgency" and c.degraded for c in wiring.choices):
+        return {"name": "urgency-model", "status": "degraded", "detail": "none: no suggestion"}
+    if version.startswith("fixture-"):
+        detail = f"{version}: trained on the synthetic fixture, not KTAS (NOT A RESULT)"
+        return {"name": "urgency-model", "status": "degraded", "detail": detail[:200]}
+    return {"name": "urgency-model", "status": "ok", "detail": version[:200]}
+
+
+def cassette_present() -> bool:
+    cassette = os.environ.get("CAREFLOW_CASSETTE", "")
+    return bool(cassette) and Path(cassette).is_file()
+
+
+async def local_server_answers(base_url: str) -> bool:
+    """Whether the local model server (mlx_lm.server) answers `/models` right now."""
+    try:
+        async with httpx.AsyncClient(timeout=LOCAL_PROBE_SECONDS) as client:
+            response = await client.get(f"{base_url.rstrip('/')}/models")
+    except httpx.HTTPError:
+        return False
+    return response.status_code == 200
+
+
+async def provider_rows() -> list[dict[str, Any]]:
+    """Every AI task in config/providers.yaml: provider, model or tool, and whether it can run
+    now. An API provider needs its key in the environment; a local one needs its server to
+    answer (probed once per server); a CLI one runs offline jobs only."""
     from careflow_intake.wiring import providers_config
 
     rows: list[dict[str, Any]] = []
+    answers: dict[str, bool] = {}
     for task, spec in providers_config().tasks.items():
         body = spec.model_dump()
         kind = str(body.get("provider"))
@@ -110,12 +139,16 @@ def provider_rows() -> list[dict[str, Any]]:
             row["available"] = shutil.which(str(body.get("tool", ""))) is not None
             row["detail"] = "offline jobs only"
         else:
-            row["available"] = True
+            base_url = str(body.get("base_url") or "")
+            if base_url not in answers:
+                answers[base_url] = bool(base_url) and await local_server_answers(base_url)
+            row["available"] = answers[base_url]
+            if not row["available"]:
+                row["detail"] = f"model server not answering at {base_url}"[:200]
         mode = provider_mode()
         if mode == "replay":  # CAREFLOW_PROVIDER_MODE: no model is called at all
-            cassette = os.environ.get("CAREFLOW_CASSETTE", "")
             row["provider"] = "replay"
-            row["available"] = bool(cassette) and Path(cassette).is_file()
+            row["available"] = cassette_present()
             row["detail"] = "recorded responses only; no model is called"
         elif mode == "record":
             row["detail"] = "recording every response to a cassette"
@@ -130,4 +163,4 @@ def provider_rows() -> list[dict[str, Any]]:
     dependencies=[Depends(require_roles("admin"))],
 )
 async def admin_providers() -> ProvidersResponse:
-    return ProvidersResponse.model_validate({"tasks": provider_rows()})
+    return ProvidersResponse.model_validate({"tasks": await provider_rows()})
