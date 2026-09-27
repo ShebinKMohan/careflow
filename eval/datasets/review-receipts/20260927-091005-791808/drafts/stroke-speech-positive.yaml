@@ -1,0 +1,30 @@
+id: "stroke-speech-positive"
+category: "stroke"
+language: "en"
+synthetic: true
+description: "Isolated speech difficulty remains a positive FAST screen."
+patient:
+  age_years: 72
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My words are hard to get out."}
+  - {"question_key": "fast.face_droop", "patient_text": "No."}
+  - {"question_key": "fast.arm_weakness", "patient_text": "No."}
+  - {"question_key": "fast.speech_difficulty", "patient_text": "Yes, speaking is difficult."}
+  - {"question_key": "fast.last_known_well", "patient_text": "Before breakfast."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My words are hard to get out."
+    fast.face_droop: "no"
+    fast.arm_weakness: "no"
+    fast.speech_difficulty: "yes"
+    fast.last_known_well: "Before breakfast."
+  alerts:
+    - "FAST_STROKE"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: Positive speech difficulty merits immediate nurse escalation without requiring another positive FAST sign."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

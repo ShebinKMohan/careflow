@@ -1,0 +1,35 @@
+id: routine-16-toenail-irritation
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting a low-intensity toenail complaint."
+patient:
+  age_years: 58
+  sex: male
+turns:
+  - question_key: chief_complaint
+    patient_text: "Left big toenail irritation"
+  - question_key: symptom_onset_at
+    patient_text: "One week ago"
+  - question_key: severity
+    patient_text: "2"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+  - question_key: allergies_confirm
+    patient_text: "I do not know"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Left big toenail irritation"
+    symptom_onset_at: "One week ago"
+    severity: 2
+    infection.fever_reported: "no"
+    allergies_confirm: "I do not know"
+    symptoms: ["Left big toenail irritation"]
+  alerts: []
+  level: 5
+  level_rationale: "Draft synthetic level 5 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

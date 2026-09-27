@@ -1,0 +1,31 @@
+id: "sepsis-low-measured-temperature"
+category: "sepsis"
+language: "en"
+synthetic: true
+description: "Low measured temperature and abnormal kiosk vitals cross the sepsis rule threshold."
+patient:
+  age_years: 81
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "I feel poorly."}
+  - {"question_key": "infection.fever_reported", "patient_text": "No."}
+  - {"question_key": "infection.rigors", "patient_text": "I am not sure."}
+  - {"question_key": "symptom_onset_at", "patient_text": "Since last night."}
+device_vitals:
+  heart_rate: 120
+  spo2: 94
+  temperature_c: 35.0
+expected:
+  facts:
+    chief_complaint: "I feel poorly."
+    infection.fever_reported: "no"
+    infection.rigors: "unknown"
+    symptom_onset_at: "Since last night."
+  alerts:
+    - "SEPSIS_NEWS2"
+  level: 2
+  level_rationale: "Synthetic illustrative urgency level 2 is not a rule output. The implemented infection-evidence function accepts measured temperature at or below 36.0 as well as measured fever at or above 38.1; it does not require the patient to report fever. Temperature 35.0 therefore supplies infection evidence despite fever no and rigors unknown. SpO2 94 scores 1, heart rate 120 scores 2 and temperature 35.0 scores 3: partial NEWS2 totals 6 and raises SEPSIS_NEWS2. There is no severity answer or severity gold in this scenario."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

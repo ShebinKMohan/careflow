@@ -1,0 +1,40 @@
+synthetic: true
+id: routine-09-scalp-itch
+category: routine
+language: en
+description: Synthetic case. Adult reporting a low-intensity scalp itch.
+patient:
+  age_years: 30
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: Itchy scalp
+- question_key: symptom_onset_at
+  patient_text: Six days ago
+- question_key: severity
+  patient_text: '2'
+- question_key: allergies_confirm
+  patient_text: No medicine allergies that I know of
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Itchy scalp
+    symptom_onset_at: Six days ago
+    severity: 2
+    allergies_confirm: No medicine allergies that I know of
+    symptoms:
+    - Itchy scalp
+  alerts: []
+  level: 5
+  level_rationale: Draft synthetic level 5 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:22:59.468777Z'
+review_method: automated
+reviewed_content_sha256: eaace05aae1e9fd06fdcf20516cdae690e27ff3d16da26d28c3a49c88f0fdc07

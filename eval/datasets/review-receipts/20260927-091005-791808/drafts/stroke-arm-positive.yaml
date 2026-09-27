@@ -1,0 +1,30 @@
+id: "stroke-arm-positive"
+category: "stroke"
+language: "en"
+synthetic: true
+description: "Isolated arm weakness with an explicitly stated last-known-well answer."
+patient:
+  age_years: 57
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My left arm feels weak."}
+  - {"question_key": "fast.face_droop", "patient_text": "No."}
+  - {"question_key": "fast.arm_weakness", "patient_text": "Yes, my left arm is weak."}
+  - {"question_key": "fast.speech_difficulty", "patient_text": "No."}
+  - {"question_key": "fast.last_known_well", "patient_text": "About an hour ago."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My left arm feels weak."
+    fast.face_droop: "no"
+    fast.arm_weakness: "yes"
+    fast.speech_difficulty: "no"
+    fast.last_known_well: "About an hour ago."
+  alerts:
+    - "FAST_STROKE"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: A positive arm weakness answer activates FAST_STROKE; the nurse must assess this time-sensitive report."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

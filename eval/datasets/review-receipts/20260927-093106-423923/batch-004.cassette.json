@@ -1,0 +1,7 @@
+{
+  "253de1f4331007b50e9d4c07d97e2c745da5ffc6c26e349e5e0b8c2ea7ce3a76": {
+    "model": "claude-sonnet-5",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"id\": \"sepsis-kiosk-threshold-five\", \"content_sha256\": \"4e20a35bfa34c2453f6ab929f72d193abf72ed4afcba913af0b10cf406376990\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"sepsis-low-measured-temperature\", \"content_sha256\": \"45299522898e8e86fe4dec6123d7c88abec7411a8079bec9e6f986b1b28057d1\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"sepsis-measured-fever-denied\", \"content_sha256\": \"b11e62f2e90feca489df0e582b82faa43290eae725ab4b8519dfb22a16ae7652\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"sepsis-nurse-completes-high-score\", \"content_sha256\": \"e870c68d2c36a67578cb8e42da69ce65ee202fb93c75946ecb88352a738c1620\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"sepsis-nurse-confirms-threshold\", \"content_sha256\": \"d738428133ae4bc211cbc54c9ec9dbebaec43fb4302aebaeb9d4652f7553c420\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}]}"
+  }
+}

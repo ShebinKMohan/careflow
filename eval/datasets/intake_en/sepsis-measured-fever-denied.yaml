@@ -1,0 +1,47 @@
+synthetic: true
+id: sepsis-measured-fever-denied
+category: sepsis
+language: en
+description: Measured fever supplies rule evidence even when the patient denies feeling
+  feverish.
+patient:
+  age_years: 62
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: I do not feel right.
+- question_key: infection.fever_reported
+  patient_text: No, I have not felt feverish.
+- question_key: infection.rigors
+  patient_text: No, I have not had shivering fits.
+- question_key: severity
+  patient_text: Seven out of ten.
+device_vitals:
+  heart_rate: 115
+  spo2: 94
+  temperature_c: 39.5
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I do not feel right.
+    infection.fever_reported: 'no'
+    infection.rigors: 'no'
+    severity: 7
+  alerts:
+  - SEPSIS_NEWS2
+  level: 2
+  level_rationale: 'Synthetic illustrative urgency level 2 is not a rule output. The
+    patient explicitly denies fever and rigors, so both extraction facts remain no.
+    Independently, device temperature 39.5 exceeds the implemented measured-infection
+    threshold of 38.1 and supplies infection evidence. SpO2 94 scores 1, heart rate
+    115 scores 2 and temperature 39.5 scores 2: partial NEWS2 totals 5 and raises
+    SEPSIS_NEWS2. Patient severity 7 is a separate extraction fact, not a NEWS2 score
+    or prerequisite.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:33:56.869906Z'
+review_method: automated
+reviewed_content_sha256: b11e62f2e90feca489df0e582b82faa43290eae725ab4b8519dfb22a16ae7652

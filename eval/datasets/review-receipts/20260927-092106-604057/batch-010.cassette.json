@@ -1,0 +1,7 @@
+{
+  "1aceb49af42a8a8c7247f77e8f1388736c7e054186e31e6a7404ab89d510a12b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"routine-09-scalp-itch\",\n      \"content_sha256\": \"eaace05aae1e9fd06fdcf20516cdae690e27ff3d16da26d28c3a49c88f0fdc07\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-27T09:20:26.036360+00:00",
+  "status": "clarified_unreviewed_drafts_no_approvals",
+  "author": "coding-agent/GPT-6",
+  "prior_review_directory": "eval/datasets/review-receipts/20260927-091005-791808",
+  "reviewed_accepted_unchanged": 24,
+  "unapproved_remaining": 26,
+  "rule_or_payload_interpretation_rejections": 11,
+  "output_identity_failures": 15,
+  "changed_fields": [
+    "expected.level_rationale"
+  ],
+  "patient_turns_facts_alerts_levels_demographics_vitals_and_generation_metadata_unchanged": true,
+  "all_unedited_file_byte_hashes_unchanged": true,
+  "changes": [
+    {
+      "id": "breathing-low-oxygen-no-infection",
+      "path": "eval/datasets/intake_en/_inbox/breathing-low-oxygen-no-infection.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Reported breathing difficulty with measured SpO2 90 needs prompt nurse assessment; partial NEWS2 5 alone does not activate the current sepsis rule without infection evidence.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. Age 60 years excludes NG143, which applies below 60 months. SpO2 90 scores 3, heart rate 118 scores 2 and temperature 36.8 scores 0: partial NEWS2 is 5, with respiratory rate, systolic pressure, consciousness and oxygen-support status unmeasured. SEPSIS_NEWS2 requires infection evidence AND score at least 5. Fever and rigors are denied, measured temperature is normal, and no infectious symptom is stated, so infection evidence is absent and this rule does not alert. Empty alerts document the missing standalone adult respiratory rule, not a safe clinical state; the reported breathing difficulty and low measured oxygen still warrant prompt nurse assessment.",
+      "before_content_sha256": "b09ceacf22629e8e0d68a45f834fd017c66a6e3f8ac6ea16bdc37f329b2990fd",
+      "after_content_sha256": "18a56227856cc763c44192364799c1e0f8ac2227e7b60c5329ae125e4124957a",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-001.cassette.receipt.json",
+      "prior_content_sha256": "b09ceacf22629e8e0d68a45f834fd017c66a6e3f8ac6ea16bdc37f329b2990fd",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Expected empty alerts but SpO2 90 triggers NG143_AMBER_FLAG for hypoxia if age < 5 months; age 60 years prevents this.",
+        "Expected empty alerts but SpO2 90 triggers SEPSIS_NEWS2 if NEWS2 total >= 5; scenario lacks NEWS2 data to support this."
+      ],
+      "error": null
+    },
+    {
+      "id": "chest-pain-unsure-radiation",
+      "path": "eval/datasets/intake_en/_inbox/chest-pain-unsure-radiation.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: The definite current chest symptom is sufficient for the implemented ECG alert; uncertain radiation remains unknown.",
+      "after": "Synthetic illustrative urgency level 2 is distinct from the rule alert severity critical; the rule does not predict a numbered urgency level. The current chest-pain/tightness answer is yes. ChestPainEcgRule gates only on that positive present answer, so CHEST_PAIN_ECG_10MIN is raised. Radiation being unknown and breathlessness being no do not suppress the alert: those associated features add supporting evidence or unanswered questions, not prerequisites. General pain presence and location were not inferred from tightness alone.",
+      "before_content_sha256": "a94950a0a0273df7717455eebfd8e8514e83c67dfd61378c54f2b0eff692e2ec",
+      "after_content_sha256": "bf7a815ea15d594fe4351f4cceeee02eaa552fadfbce0af151ec5a62be249164",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-003.cassette.receipt.json",
+      "prior_content_sha256": "a94950a0a0273df7717455eebfd8e8514e83c67dfd61378c54f2b0eff692e2ec",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Alert CHEST_PAIN_ECG_10MIN requires 'chest_pain.radiates' to be 'yes' or unanswered; scenario has 'unknown' which is not a trigger per rule logic.",
+        "Expected alert level 2 is unsupported; rule only raises critical alerts (level 1) or needed facts, never a draft level 2 label."
+      ],
+      "error": null
+    },
+    {
+      "id": "child-non-blanching-rash",
+      "path": "eval/datasets/intake_en/_inbox/child-non-blanching-rash.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: The parent report meets the implemented non-blanching-rash red feature; it requires immediate nurse assessment, not a generated diagnosis.",
+      "after": "Synthetic illustrative urgency level 2 is distinct from the rule alert severity critical. Age 4 years corresponds to 48 through 59 months, below the NG143 upper boundary of 60 months. The positive non-blanching-rash answer is independently a red feature, so NG143_RED_FLAG is raised. Negative waking, grunting and feeding answers do not cancel a positive red feature. This is a rule-consistency example, not a clinically validated urgency label.",
+      "before_content_sha256": "2ab68b807385dcdf36be9c5c44beeeb709c8a1dd6784e270189cc6eaa2a14b41",
+      "after_content_sha256": "159a893b93cf78e3c091e1a676c629a9410783b6e7b3a8013e532b3cd29ee6f9",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-004.cassette.receipt.json",
+      "prior_content_sha256": "2ab68b807385dcdf36be9c5c44beeeb709c8a1dd6784e270189cc6eaa2a14b41",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Patient age 4 years (48 months) exceeds the under-5 threshold (60 months) required for NG143 rule application.",
+        "Alert NG143_RED_FLAG is raised incorrectly because the child is older than 5 years per the rule logic."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-kiosk-below-threshold",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-kiosk-below-threshold.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Measured HR 110, SpO2 93 and temperature 38.5 score 1 + 2 + 1 = 4; the partial score needs completion by a nurse and is not reassuring.",
+      "after": "Synthetic illustrative urgency level 3 is not a NEWS2 score or rule output. Patient-reported fever yes and measured temperature 38.5 provide infection evidence. SpO2 93 scores 2, heart rate 110 scores 1 and temperature 38.5 scores 1: partial NEWS2 totals 4. Because 4 is below the implemented sepsis threshold of 5, alerts remain empty while missing measurements remain needed. Severity 5 is the separate number the patient explicitly said; it belongs in extraction gold but is not a NEWS2 input.",
+      "before_content_sha256": "97ad4531acdfb767e01456480eff8290f3a3e1802f5b2da0abffc9043ba876b1",
+      "after_content_sha256": "27e7c6a7aa0711033b772304aefdb02cabd198737c9890d7d489cbc58990d0ae",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-008.cassette.receipt.json",
+      "prior_content_sha256": "97ad4531acdfb767e01456480eff8290f3a3e1802f5b2da0abffc9043ba876b1",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Expected no alert but scenario describes partial NEWS2 4; rule requires 5 or more to alert.",
+        "Expected facts include severity 5, but rule ignores severity and uses NEWS2 subscores only."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-kiosk-high-fever",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-kiosk-high-fever.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Measured HR 125, SpO2 93 and temperature 39.4 produce partial NEWS2 6 with infection evidence; unmeasured inputs remain missing.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. Patient fever yes, rigors yes and measured temperature 39.4 supply infection evidence. SpO2 93 scores 2, heart rate 125 scores 2 and temperature 39.4 scores 2: partial NEWS2 totals 6, meeting the sepsis threshold of 5. The expected SEPSIS_NEWS2 alert is partial because respiratory rate, systolic pressure, consciousness and oxygen-support status are missing. This scenario contains an onset answer and no severity answer or severity gold.",
+      "before_content_sha256": "f5a8b487939d9c2be3d34e5e91097a7c9d370c5399dd5af44af11c2e7b0c1695",
+      "after_content_sha256": "d238e6fc2cc98b4fce7c6e36e7809ea46854c09b432459afbefdd80c308629a9",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-008.cassette.receipt.json",
+      "prior_content_sha256": "f5a8b487939d9c2be3d34e5e91097a7c9d370c5399dd5af44af11c2e7b0c1695",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Expected alert but SpO2 93 is not <= 95 (threshold is 95, not 94).",
+        "Expected facts include severity, but rule ignores severity and uses NEWS2 subscores only."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-kiosk-threshold-five",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-kiosk-threshold-five.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Measured HR 120, SpO2 93 and temperature 38.5 score 2 + 2 + 1 = 5; the threshold is inclusive and the score is partial.",
+      "after": "Synthetic illustrative urgency level 2 is not a NEWS2 score or rule output. Patient fever yes and measured temperature 38.5 provide infection evidence; rigors no does not erase it. SpO2 93 scores 2, heart rate 120 scores 2 and temperature 38.5 scores 1: partial NEWS2 totals exactly 5 and raises SEPSIS_NEWS2. Severity 6 is independently the number spoken by the patient and belongs in extraction gold, although it is not a NEWS2 input. The four unmeasured NEWS2 parameters remain missing.",
+      "before_content_sha256": "9e53109b78c5a424447a1fb1f55119ce39312cec20d802e8295bb6e909f3926b",
+      "after_content_sha256": "4e20a35bfa34c2453f6ab929f72d193abf72ed4afcba913af0b10cf406376990",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-008.cassette.receipt.json",
+      "prior_content_sha256": "9e53109b78c5a424447a1fb1f55119ce39312cec20d802e8295bb6e909f3926b",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Expected alert but SpO2 93 is not <= 95 (threshold is 95, not 94).",
+        "Expected facts include severity, but rule ignores severity and uses NEWS2 subscores only."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-low-measured-temperature",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-low-measured-temperature.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Measured temperature 35.0 provides infection evidence and three points; HR 120 and SpO2 94 add three, giving partial NEWS2 6.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. The implemented infection-evidence function accepts measured temperature at or below 36.0 as well as measured fever at or above 38.1; it does not require the patient to report fever. Temperature 35.0 therefore supplies infection evidence despite fever no and rigors unknown. SpO2 94 scores 1, heart rate 120 scores 2 and temperature 35.0 scores 3: partial NEWS2 totals 6 and raises SEPSIS_NEWS2. There is no severity answer or severity gold in this scenario.",
+      "before_content_sha256": "d2c92fb43f0029d60329d32246c559c561f0fa3be6a4c0ea39ccd958ed1c58a2",
+      "after_content_sha256": "45299522898e8e86fe4dec6123d7c88abec7411a8079bec9e6f986b1b28057d1",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-008.cassette.receipt.json",
+      "prior_content_sha256": "d2c92fb43f0029d60329d32246c559c561f0fa3be6a4c0ea39ccd958ed1c58a2",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Expected alert but infection evidence requires suspected infection or fever >= 38.1; 35.0 is not fever.",
+        "Expected facts include severity, but rule ignores severity and uses NEWS2 subscores only."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-measured-fever-denied",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-measured-fever-denied.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Measured temperature 39.5 supplies infection evidence; HR 115 and SpO2 94 add two and one points for partial NEWS2 5. Patient denials stay no.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. The patient explicitly denies fever and rigors, so both extraction facts remain no. Independently, device temperature 39.5 exceeds the implemented measured-infection threshold of 38.1 and supplies infection evidence. SpO2 94 scores 1, heart rate 115 scores 2 and temperature 39.5 scores 2: partial NEWS2 totals 5 and raises SEPSIS_NEWS2. Patient severity 7 is a separate extraction fact, not a NEWS2 score or prerequisite.",
+      "before_content_sha256": "c827a6b0bf8850a5dfc63004119fb43eadbc19a3134130a8fdfce733c66b1e0b",
+      "after_content_sha256": "b11e62f2e90feca489df0e582b82faa43290eae725ab4b8519dfb22a16ae7652",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-009.cassette.receipt.json",
+      "prior_content_sha256": "c827a6b0bf8850a5dfc63004119fb43eadbc19a3134130a8fdfce733c66b1e0b",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Infection evidence requires patient-reported fever or rigors; patient denied both, so no infection evidence exists.",
+        "Without infection evidence, SEPSIS_NEWS2 cannot be raised per rule logic."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-nurse-completes-high-score",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-nurse-completes-high-score.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Kiosk HR 105, SpO2 96 and temperature 38.4 score 2; nurse RR 26 and systolic BP 98 raise the complete NEWS2 to 7 and require prompt assessment.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. In this case the patient reports fever yes AND rigors yes; neither is denied. Temperature 38.4 independently also supplies infection evidence. Nurse readings complete the score: respiratory rate 26 scores 3, SpO2 96 scores 0, systolic pressure 98 scores 2, heart rate 105 scores 1, alert consciousness A scores 0, temperature 38.4 scores 1 and no supplemental oxygen scores 0. Complete NEWS2 totals 7 and raises SEPSIS_NEWS2. The explicitly spoken severity 8 remains a separate extraction fact.",
+      "before_content_sha256": "dff9f82b9fef4c3820d0e59db737a373213d890708e90c0f256b0e3597befd57",
+      "after_content_sha256": "e870c68d2c36a67578cb8e42da69ce65ee202fb93c75946ecb88352a738c1620",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-009.cassette.receipt.json",
+      "prior_content_sha256": "dff9f82b9fef4c3820d0e59db737a373213d890708e90c0f256b0e3597befd57",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Infection evidence requires patient-reported fever or rigors; patient denied both, so no infection evidence exists.",
+        "Without infection evidence, SEPSIS_NEWS2 cannot be raised per rule logic."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-nurse-confirms-threshold",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-nurse-confirms-threshold.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Kiosk HR 108 and temperature 38.6 score two; nurse RR 22 and systolic BP 108 add three, giving complete NEWS2 5.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. This patient explicitly reports fever yes and rigors no; the fever answer and measured temperature 38.6 each provide infection evidence. Nurse measurements complete NEWS2: respiratory rate 22 scores 2, SpO2 97 scores 0, systolic pressure 108 scores 1, heart rate 108 scores 1, alert consciousness A scores 0, temperature 38.6 scores 1 and no supplemental oxygen scores 0. The total is exactly 5, so SEPSIS_NEWS2 is raised. This scenario has an onset answer and no severity gold.",
+      "before_content_sha256": "bfda7697e1d4dacefb1a2d6a7261d395c813329933cf656551e636ff22473b15",
+      "after_content_sha256": "d738428133ae4bc211cbc54c9ec9dbebaec43fb4302aebaeb9d4652f7553c420",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-009.cassette.receipt.json",
+      "prior_content_sha256": "bfda7697e1d4dacefb1a2d6a7261d395c813329933cf656551e636ff22473b15",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Infection evidence requires patient-reported fever or rigors; patient denied both, so no infection evidence exists.",
+        "Without infection evidence, SEPSIS_NEWS2 cannot be raised per rule logic."
+      ],
+      "error": null
+    },
+    {
+      "id": "sepsis-rigors-with-normal-temperature",
+      "path": "eval/datasets/intake_en/_inbox/sepsis-rigors-with-normal-temperature.yaml",
+      "field": "expected.level_rationale",
+      "before": "Synthetic draft label for independent review: Reported rigors plus measured HR 135 and SpO2 93 yield partial NEWS2 5; a normal temperature must not cancel infection evidence.",
+      "after": "Synthetic illustrative urgency level 2 is not a rule output. The patient denies fever but explicitly says yes to rigors and reports shaking chills; rigors yes independently supplies infection evidence even with measured temperature 37.0. SpO2 93 scores 2, heart rate 135 scores 3 and temperature 37.0 scores 0: partial NEWS2 totals 5 and raises SEPSIS_NEWS2. Respiratory rate, systolic pressure, consciousness and oxygen-support status remain missing. No severity answer or severity gold is present.",
+      "before_content_sha256": "c74afaf291604de67e8e1670e2992aff11906e7ffed3728120324a2bc4f52123",
+      "after_content_sha256": "934104f2e5437758e8c4d2dee31c89c7a2fffdca1dc096b1aa0e13264307661c",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-009.cassette.receipt.json",
+      "prior_content_sha256": "c74afaf291604de67e8e1670e2992aff11906e7ffed3728120324a2bc4f52123",
+      "category": "rule_or_payload_interpretation",
+      "judge_reasons": [
+        "Infection evidence requires patient-reported fever or rigors; patient denied both, so no infection evidence exists.",
+        "Without infection evidence, SEPSIS_NEWS2 cannot be raised per rule logic."
+      ],
+      "error": null
+    }
+  ],
+  "unchanged_identity_failure_cases": [
+    {
+      "id": "chest-pain-no-breathlessness",
+      "path": "eval/datasets/intake_en/_inbox/chest-pain-no-breathlessness.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-002.cassette.receipt.json",
+      "prior_content_sha256": "6b3e7a3749037f2091b0df303eacf5a2dbfd563171f3bd89b18978574b24eea9",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "chest-pain-radiating-arm",
+      "path": "eval/datasets/intake_en/_inbox/chest-pain-radiating-arm.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-002.cassette.receipt.json",
+      "prior_content_sha256": "7bc0472e19a4a4e8a2845f3ab0589795d34454f3d907ad11845c3c57aba81f5d",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "chest-pain-screen-negative",
+      "path": "eval/datasets/intake_en/_inbox/chest-pain-screen-negative.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-002.cassette.receipt.json",
+      "prior_content_sha256": "462a9642ae9c4698e4101eb8540bdb86c876c8aaf662d2c477b95fedf2a77c51",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "chest-pain-screen-uncertain",
+      "path": "eval/datasets/intake_en/_inbox/chest-pain-screen-uncertain.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-002.cassette.receipt.json",
+      "prior_content_sha256": "c464bdf640728ffbb930bf8c3ea2aedd97cd8390b6ff7c6ad54fbedfe576e0b7",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "chest-pain-sweating",
+      "path": "eval/datasets/intake_en/_inbox/chest-pain-sweating.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-002.cassette.receipt.json",
+      "prior_content_sha256": "5734aa96d9dba92a7ddf7b3591c75c0f34d572593d3e86bde4d9527e398e369e",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-08-dry-skin",
+      "path": "eval/datasets/intake_en/_inbox/routine-08-dry-skin.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-006.cassette.receipt.json",
+      "prior_content_sha256": "59d4f9053442e583d258afc8f066321479afad20ed1f55ee491e594cef3e00d5",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-09-scalp-itch",
+      "path": "eval/datasets/intake_en/_inbox/routine-09-scalp-itch.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-006.cassette.receipt.json",
+      "prior_content_sha256": "eaace05aae1e9fd06fdcf20516cdae690e27ff3d16da26d28c3a49c88f0fdc07",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-10-flaky-skin",
+      "path": "eval/datasets/intake_en/_inbox/routine-10-flaky-skin.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-006.cassette.receipt.json",
+      "prior_content_sha256": "2bf8bc764e1364a0fdd10464e1feb39be260e8a2bc7bef783b1ccf7010d4026a",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-11-ear-itch",
+      "path": "eval/datasets/intake_en/_inbox/routine-11-ear-itch.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-006.cassette.receipt.json",
+      "prior_content_sha256": "261b30983547afc4ac6bd509f97db224e8f00e10e6af170bb99ef7b1c8d0fb24",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-12-blocked-ear",
+      "path": "eval/datasets/intake_en/_inbox/routine-12-blocked-ear.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-006.cassette.receipt.json",
+      "prior_content_sha256": "9ebe0cda8c9fdde775f1b77e0bcf520632f5d70f02427621b73639c88b333dc5",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-13-bloating",
+      "path": "eval/datasets/intake_en/_inbox/routine-13-bloating.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-007.cassette.receipt.json",
+      "prior_content_sha256": "7c7260bb3d81066eb5961b1fc5f875c703f6265e74e2b3b1742efb763a802811",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-14-constipation",
+      "path": "eval/datasets/intake_en/_inbox/routine-14-constipation.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-007.cassette.receipt.json",
+      "prior_content_sha256": "f030cb7b95d9e410d4ebfbf740b84aa34f961303d7990c7c0c4fda0bd1cecd32",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-15-queasiness",
+      "path": "eval/datasets/intake_en/_inbox/routine-15-queasiness.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-007.cassette.receipt.json",
+      "prior_content_sha256": "0cf7da32b60b495d3d3b9e3b1c929af907bf1e4ab5d6a43a28c3e54a3c611eed",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-16-toenail-irritation",
+      "path": "eval/datasets/intake_en/_inbox/routine-16-toenail-irritation.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-007.cassette.receipt.json",
+      "prior_content_sha256": "fffac2c38cc3ea3e5f16bc215f9d843cdb3b02aed1356f012deb0cd2d1f107dc",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    },
+    {
+      "id": "routine-17-foot-blister",
+      "path": "eval/datasets/intake_en/_inbox/routine-17-foot-blister.yaml",
+      "receipt": "eval/datasets/review-receipts/20260927-091005-791808/batch-007.cassette.receipt.json",
+      "prior_content_sha256": "e88674272c20f85ec4399a5dd078957099c37eaf4ca50150786e89b2dd1d785d",
+      "category": "output_identity_failure",
+      "judge_reasons": [],
+      "error": "judge output did not contain exactly one verdict per scenario"
+    }
+  ],
+  "dataset_sha256_after_clarification": "b8e3c26807e65a4d634c29bbb4fa783e78f5880eb22399c1bcd019e49d4f0bc9",
+  "validation": {
+    "all_scenarios": 50,
+    "schema_phi_source_and_rule_errors": 0
+  }
+}

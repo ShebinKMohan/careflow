@@ -1,0 +1,5 @@
+# Offline independent scenario review only. The reviewer model must be explicitly selected
+# and different from the writer; the CLI requires an existing Claude subscription login.
+# This file intentionally does not configure any patient-facing task.
+tasks:
+  eval_judge: { provider: cli, tool: claude }

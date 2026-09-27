@@ -1,0 +1,30 @@
+id: "child-hard-to-wake-under-five"
+category: "child"
+language: "en"
+synthetic: true
+description: "Parent reports difficulty waking a child under five."
+patient:
+  age_years: 2
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My child is unwell."}
+  - {"question_key": "child_danger.hard_to_wake", "patient_text": "Yes, he is very hard to wake."}
+  - {"question_key": "child_danger.grunting", "patient_text": "No."}
+  - {"question_key": "child_amber.poor_feeding", "patient_text": "No, he is drinking as usual."}
+  - {"question_key": "child_amber.reduced_urine_output", "patient_text": "No, wet nappies are as usual."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My child is unwell."
+    child_danger.hard_to_wake: "yes"
+    child_danger.grunting: "no"
+    child_amber.poor_feeding: "no"
+    child_amber.reduced_urine_output: "no"
+  alerts:
+    - "NG143_RED_FLAG"
+  level: 2
+  level_rationale: "Synthetic draft label for independent review: Parent-reported difficulty waking an under-five child is a red feature requiring immediate nurse assessment; adult NEWS2 does not apply."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

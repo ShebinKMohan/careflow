@@ -1,0 +1,36 @@
+id: routine-05-elbow-tenderness
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting mild elbow tenderness."
+patient:
+  age_years: 46
+  sex: female
+turns:
+  - question_key: chief_complaint
+    patient_text: "Left elbow tenderness"
+  - question_key: symptom_onset_at
+    patient_text: "About a week ago"
+  - question_key: pain_score
+    patient_text: "2"
+  - question_key: pain_location
+    patient_text: "Left elbow"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Left elbow tenderness"
+    symptom_onset_at: "About a week ago"
+    pain_score: 2
+    pain_location: "Left elbow"
+    infection.fever_reported: "no"
+    pain_present: "yes"
+    symptoms: ["Left elbow tenderness"]
+  alerts: []
+  level: 4
+  level_rationale: "Draft synthetic level 4 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

@@ -1,0 +1,35 @@
+id: routine-07-finger-ache
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting a mild ache in one finger."
+patient:
+  age_years: 24
+  sex: female
+turns:
+  - question_key: chief_complaint
+    patient_text: "Right index finger ache"
+  - question_key: symptom_onset_at
+    patient_text: "Since yesterday"
+  - question_key: pain_score
+    patient_text: "2"
+  - question_key: pain_location
+    patient_text: "Right index finger"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Right index finger ache"
+    symptom_onset_at: "Since yesterday"
+    pain_score: 2
+    pain_location: "Right index finger"
+    infection.fever_reported: "no"
+    pain_present: "yes"
+  alerts: []
+  level: 4
+  level_rationale: "Draft synthetic level 4 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

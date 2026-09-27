@@ -1,0 +1,42 @@
+synthetic: true
+id: chest-pain-screen-uncertain
+category: chest_pain
+language: en
+description: Uncertain chest symptom does not become a fabricated positive or negative
+  answer.
+patient:
+  age_years: 44
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: I feel unwell.
+- question_key: chest_pain.present
+  patient_text: I am not sure.
+- question_key: chest_pain.radiates
+  patient_text: I do not know.
+- question_key: chest_pain.short_of_breath
+  patient_text: No.
+- question_key: severity
+  patient_text: Five out of ten.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel unwell.
+    chest_pain.present: unknown
+    chest_pain.radiates: unknown
+    chest_pain.short_of_breath: 'no'
+    severity: 5
+  alerts: []
+  level: 3
+  level_rationale: 'Synthetic draft label for independent review: Uncertainty needs
+    nurse clarification; the implemented chest rule only raises on yes, so no rule
+    alert does not establish low risk.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:22:13.936668Z'
+review_method: automated
+reviewed_content_sha256: c464bdf640728ffbb930bf8c3ea2aedd97cd8390b6ff7c6ad54fbedfe576e0b7

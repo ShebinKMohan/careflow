@@ -1,0 +1,35 @@
+id: routine-02-ankle-soreness
+synthetic: true
+category: routine
+language: en
+description: "Synthetic case. Adult reporting a low-intensity ankle complaint."
+patient:
+  age_years: 41
+  sex: male
+turns:
+  - question_key: chief_complaint
+    patient_text: "Right ankle soreness"
+  - question_key: symptom_onset_at
+    patient_text: "Since last weekend"
+  - question_key: pain_score
+    patient_text: "2"
+  - question_key: pain_location
+    patient_text: "Right ankle"
+  - question_key: infection.fever_reported
+    patient_text: "no"
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "Right ankle soreness"
+    symptom_onset_at: "Since last weekend"
+    pain_score: 2
+    pain_location: "Right ankle"
+    infection.fever_reported: "no"
+    pain_present: "yes"
+  alerts: []
+  level: 4
+  level_rationale: "Draft synthetic level 4 evaluation label based on the reported low-intensity complaint. Vital signs are unavailable; this label requires independent review and is not a clinical determination."
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'

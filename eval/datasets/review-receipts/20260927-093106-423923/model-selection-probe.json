@@ -1,0 +1,93 @@
+{
+  "purpose": "Identify the installed subscription CLI principal model before selecting its explicit model ID for review.",
+  "requested_alias": "sonnet",
+  "verified_principal_model": "claude-sonnet-5",
+  "auth_method_observed": "claude.ai",
+  "subscription_type_observed": "max",
+  "tools_enabled": false,
+  "mcp_servers": {},
+  "api_credential_environment_removed": true,
+  "result": {
+    "is_error": false,
+    "duration_api_ms": 3121,
+    "num_turns": 2,
+    "stop_reason": "tool_use",
+    "session_id": "9fca4b7d-3a5e-44d9-bcb9-6b5bb9cb0bb8",
+    "total_cost_usd": 0.03388700000000001,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 5355,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 52,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 5355,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 52,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 5355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 5355
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 906,
+        "outputTokens": 13,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.000971,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000,
+        "canonicalModel": "claude-haiku-4-5",
+        "provider": "firstParty"
+      },
+      "claude-sonnet-5": {
+        "inputTokens": 2,
+        "outputTokens": 52,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 5355,
+        "webSearchRequests": 0,
+        "costUSD": 0.03291600000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 64000,
+        "canonicalModel": "claude-sonnet-5",
+        "provider": "firstParty"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "{\"ready\":true}",
+    "structured_output": {
+      "ready": true
+    },
+    "ttft_ms": 2830,
+    "ttft_stream_ms": 2541,
+    "time_to_request_ms": 738,
+    "type": "result",
+    "duration_ms": 2846,
+    "uuid": "11cbce40-d384-47b2-9566-2f031d923420"
+  }
+}

@@ -1,0 +1,42 @@
+synthetic: true
+id: stroke-screen-unsure
+category: stroke
+language: en
+description: Uncertain arm answer and two negative FAST answers exercise the unknown
+  state.
+patient:
+  age_years: 42
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: Something feels different.
+- question_key: fast.face_droop
+  patient_text: No.
+- question_key: fast.arm_weakness
+  patient_text: I am not sure.
+- question_key: fast.speech_difficulty
+  patient_text: No.
+- question_key: fast.last_known_well
+  patient_text: unknown
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Something feels different.
+    fast.face_droop: 'no'
+    fast.arm_weakness: unknown
+    fast.speech_difficulty: 'no'
+    fast.last_known_well: unknown
+  alerts: []
+  level: 3
+  level_rationale: 'Synthetic draft label for independent review: The implemented
+    FAST rule needs a yes answer; uncertainty and unclear onset still need nurse assessment
+    and are not a negative clinical diagnosis.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:17:24.106288Z'
+review_method: automated
+reviewed_content_sha256: 8692181a7e9ba764ca3f09daada79e64bd254a7bdcb5342b95b97dd4ad7e241c

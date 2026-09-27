@@ -1,0 +1,43 @@
+synthetic: true
+id: routine-15-queasiness
+category: routine
+language: en
+description: Synthetic case. Adult reporting low-intensity queasiness.
+patient:
+  age_years: 21
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: Queasiness
+- question_key: symptom_onset_at
+  patient_text: Since this morning
+- question_key: severity
+  patient_text: '2'
+- question_key: infection.fever_reported
+  patient_text: 'no'
+- question_key: allergies_confirm
+  patient_text: None that I know of
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Queasiness
+    symptom_onset_at: Since this morning
+    severity: 2
+    infection.fever_reported: 'no'
+    allergies_confirm: None that I know of
+    symptoms:
+    - Queasiness
+  alerts: []
+  level: 4
+  level_rationale: Draft synthetic level 4 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:33:10.248348Z'
+review_method: automated
+reviewed_content_sha256: 0cf7da32b60b495d3d3b9e3b1c929af907bf1e4ab5d6a43a28c3e54a3c611eed

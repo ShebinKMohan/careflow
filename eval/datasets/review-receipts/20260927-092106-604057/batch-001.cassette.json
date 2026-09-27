@@ -1,0 +1,7 @@
+{
+  "00476c45a8a9ea7bc011fecc9da5f179e1928db927aa66c94134fc68d36d22c1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"breathing-low-oxygen-no-infection\",\n      \"content_sha256\": \"18a56227856cc763c44192364799c1e0f8ac2227e7b60c5329ae125e4124957a\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alerts is empty, but SpO2 90 and HR 118 with age 60 should trigger NG143_AMBER_FLAG (hypoxic tachycardia).\",\n        \"Expected level 2 is invalid; rules only output critical (2) or high (1) severity levels.\"\n      ]\n    }\n  ]\n}"
+  }
+}

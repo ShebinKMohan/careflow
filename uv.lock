@@ -12,6 +12,7 @@ resolution-markers = [
 members = [
     "careflow-api",
     "careflow-contracts",
+    "careflow-eval",
     "careflow-intake",
     "careflow-integration",
     "careflow-providers",
@@ -259,6 +260,33 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "pydantic", specifier = ">=2.13,<3" }]
+
+[[package]]
+name = "careflow-eval"
+version = "0.0.0"
+source = { editable = "eval" }
+dependencies = [
+    { name = "careflow-contracts" },
+    { name = "careflow-intake" },
+    { name = "careflow-providers" },
+    { name = "careflow-rules" },
+    { name = "httpx" },
+    { name = "jsonschema" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "careflow-contracts", editable = "packages/contracts" },
+    { name = "careflow-intake", editable = "services/intake" },
+    { name = "careflow-providers", editable = "packages/providers" },
+    { name = "careflow-rules", editable = "services/rules" },
+    { name = "httpx", specifier = ">=0.28.1,<0.29" },
+    { name = "jsonschema", specifier = ">=4.26,<5" },
+    { name = "pydantic", specifier = ">=2.13,<3" },
+    { name = "pyyaml", specifier = ">=6.0.3,<7" },
+]
 
 [[package]]
 name = "careflow-intake"

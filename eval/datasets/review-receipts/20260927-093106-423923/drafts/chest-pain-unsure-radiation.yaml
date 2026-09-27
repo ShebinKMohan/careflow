@@ -1,0 +1,30 @@
+id: "chest-pain-unsure-radiation"
+category: "chest_pain"
+language: "en"
+synthetic: true
+description: "Definite chest tightness with uncertainty about radiation."
+patient:
+  age_years: 47
+  sex: "male"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My chest is tight."}
+  - {"question_key": "chest_pain.present", "patient_text": "Yes, the tightness is here now."}
+  - {"question_key": "chest_pain.radiates", "patient_text": "I am not sure."}
+  - {"question_key": "chest_pain.short_of_breath", "patient_text": "No."}
+  - {"question_key": "chest_pain.onset", "patient_text": "An hour ago."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My chest is tight."
+    chest_pain.present: "yes"
+    chest_pain.radiates: "unknown"
+    chest_pain.short_of_breath: "no"
+    chest_pain.onset: "An hour ago."
+  alerts:
+    - "CHEST_PAIN_ECG_10MIN"
+  level: 2
+  level_rationale: "Synthetic illustrative urgency level 2 is distinct from the rule alert severity critical; the rule does not predict a numbered urgency level. The current chest-pain/tightness answer is yes. ChestPainEcgRule gates only on that positive present answer, so CHEST_PAIN_ECG_10MIN is raised. Radiation being unknown and breathlessness being no do not suppress the alert: those associated features add supporting evidence or unanswered questions, not prerequisites. General pain presence and location were not inferred from tightness alone."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

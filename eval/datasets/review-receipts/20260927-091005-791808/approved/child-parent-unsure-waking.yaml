@@ -1,0 +1,43 @@
+synthetic: true
+id: child-parent-unsure-waking
+category: child
+language: en
+description: Parent uncertainty about waking is preserved and escalated by the under-five
+  rule.
+patient:
+  age_years: 3
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: My child seems unwell.
+- question_key: child_danger.hard_to_wake
+  patient_text: I am not sure.
+- question_key: child_danger.pale_mottled_ashen_or_blue
+  patient_text: No.
+- question_key: child_danger.grunting
+  patient_text: No.
+- question_key: child_amber.poor_feeding
+  patient_text: No.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child seems unwell.
+    child_danger.hard_to_wake: unknown
+    child_danger.pale_mottled_ashen_or_blue: 'no'
+    child_danger.grunting: 'no'
+    child_amber.poor_feeding: 'no'
+  alerts:
+  - NG143_RED_FLAG
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: The implemented
+    parent-red-screen rule treats an unknown waking answer as a red alert; the gold
+    answer itself remains unknown.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-27T09:13:12.124875Z'
+review_method: automated
+reviewed_content_sha256: 0800cf9c0355b877fc67d4aaa7a7ca4ef5f452b600d0780b7c24e469cd283dcf

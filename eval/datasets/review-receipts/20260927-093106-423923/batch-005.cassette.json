@@ -1,0 +1,7 @@
+{
+  "37fa13dec7a6eaba66368bb4d91c45f5b0c5129cb71bcc9bc0e7f54718b90960": {
+    "model": "claude-sonnet-5",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"id\": \"sepsis-rigors-with-normal-temperature\", \"content_sha256\": \"934104f2e5437758e8c4d2dee31c89c7a2fffdca1dc096b1aa0e13264307661c\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}]}"
+  }
+}

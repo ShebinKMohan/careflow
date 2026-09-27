@@ -1,0 +1,7 @@
+{
+  "df81ce891a73e709540fd36020a99ce5353424b03ee38500b5f0858c263f9c9e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"routine-10-flaky-skin\",\n      \"content_sha256\": \"2bf8bc764e1364a0fdd10464e1feb39be260e8a2bc7bef783b1ccf7010d4026a\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

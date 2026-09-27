@@ -1,5 +1,5 @@
 {
-  "include": ["packages", "services", "scripts", "infra"],
+  "include": ["packages", "services", "scripts", "infra", "eval/src", "eval/tests"],
   "exclude": [
     "**/node_modules", "**/__pycache__", "**/.venv", "**/.next", "**/dist",
     "services/voice/src/voice_agent/app.py",

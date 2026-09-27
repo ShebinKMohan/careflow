@@ -1,0 +1,7 @@
+{
+  "26ba86bef910614d6f1771c9963d9da8de30fe37e1699ca5457c206a48720df2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"chest-pain-no-breathlessness\",\n      \"content_sha256\": \"6b3e7a3749037f2091b0df303eacf5a2dbfd563171f3bd89b18978574b24eea9\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 does not match rule CHEST_PAIN_ECG_10MIN which mandates AlertSeverity.critical.\",\n        \"Expected alert list contains only the rule ID, but the rule logic requires including feature fact IDs in the alert evidence.\"\n      ]\n    }\n  ]\n}"
+  }
+}

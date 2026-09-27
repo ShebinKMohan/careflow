@@ -1,0 +1,43 @@
+synthetic: true
+id: routine-14-constipation
+category: routine
+language: en
+description: Synthetic case. Adult reporting mildly troublesome constipation.
+patient:
+  age_years: 45
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: Constipation
+- question_key: symptom_onset_at
+  patient_text: Three days ago
+- question_key: severity
+  patient_text: '2'
+- question_key: infection.fever_reported
+  patient_text: 'no'
+- question_key: allergies_confirm
+  patient_text: No known medicine allergies
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Constipation
+    symptom_onset_at: Three days ago
+    severity: 2
+    infection.fever_reported: 'no'
+    allergies_confirm: No known medicine allergies
+    symptoms:
+    - Constipation
+  alerts: []
+  level: 5
+  level_rationale: Draft synthetic level 5 evaluation label based on the reported
+    low-intensity complaint. Vital signs are unavailable; this label requires independent
+    review and is not a clinical determination.
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:32:25.150935Z'
+review_method: automated
+reviewed_content_sha256: f030cb7b95d9e410d4ebfbf740b84aa34f961303d7990c7c0c4fda0bd1cecd32

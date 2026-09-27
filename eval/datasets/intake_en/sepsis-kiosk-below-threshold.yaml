@@ -1,0 +1,46 @@
+synthetic: true
+id: sepsis-kiosk-below-threshold
+category: sepsis
+language: en
+description: Reported infection with partial NEWS2 4 does not cross the implemented
+  alert threshold.
+patient:
+  age_years: 38
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: I feel unwell today.
+- question_key: infection.fever_reported
+  patient_text: Yes, I have felt feverish.
+- question_key: infection.rigors
+  patient_text: No.
+- question_key: severity
+  patient_text: Five out of ten.
+device_vitals:
+  heart_rate: 110
+  spo2: 93
+  temperature_c: 38.5
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel unwell today.
+    infection.fever_reported: 'yes'
+    infection.rigors: 'no'
+    severity: 5
+  alerts: []
+  level: 3
+  level_rationale: 'Synthetic illustrative urgency level 3 is not a NEWS2 score or
+    rule output. Patient-reported fever yes and measured temperature 38.5 provide
+    infection evidence. SpO2 93 scores 2, heart rate 110 scores 1 and temperature
+    38.5 scores 1: partial NEWS2 totals 4. Because 4 is below the implemented sepsis
+    threshold of 5, alerts remain empty while missing measurements remain needed.
+    Severity 5 is the separate number the patient explicitly said; it belongs in extraction
+    gold but is not a NEWS2 input.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:33:10.275057Z'
+review_method: automated
+reviewed_content_sha256: 27e7c6a7aa0711033b772304aefdb02cabd198737c9890d7d489cbc58990d0ae

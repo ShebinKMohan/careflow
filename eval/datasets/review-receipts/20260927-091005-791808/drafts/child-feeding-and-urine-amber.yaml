@@ -1,0 +1,32 @@
+id: "child-feeding-and-urine-amber"
+category: "child"
+language: "en"
+synthetic: true
+description: "Two amber parent reports with red answers explicitly negative."
+patient:
+  age_years: 3
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "My child seems poorly."}
+  - {"question_key": "child_danger.hard_to_wake", "patient_text": "No, she wakes normally."}
+  - {"question_key": "child_danger.grunting", "patient_text": "No."}
+  - {"question_key": "child_danger.non_blanching_rash", "patient_text": "No."}
+  - {"question_key": "child_amber.poor_feeding", "patient_text": "Yes, she is drinking much less."}
+  - {"question_key": "child_amber.reduced_urine_output", "patient_text": "Yes, she is passing less urine."}
+device_vitals: {}
+expected:
+  facts:
+    chief_complaint: "My child seems poorly."
+    child_danger.hard_to_wake: "no"
+    child_danger.grunting: "no"
+    child_danger.non_blanching_rash: "no"
+    child_amber.poor_feeding: "yes"
+    child_amber.reduced_urine_output: "yes"
+  alerts:
+    - "NG143_AMBER_FLAG"
+  level: 3
+  level_rationale: "Synthetic draft label for independent review: Reduced intake and urine output are amber features requiring nurse assessment; the explicit negative red answers must remain negative."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

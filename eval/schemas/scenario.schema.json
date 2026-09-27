@@ -1,0 +1,374 @@
+{
+  "$defs": {
+    "Category": {
+      "enum": [
+        "chest_pain",
+        "stroke",
+        "sepsis",
+        "child",
+        "breathing",
+        "routine"
+      ],
+      "type": "string"
+    },
+    "Expected": {
+      "additionalProperties": false,
+      "properties": {
+        "facts": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Scalar"
+              },
+              {
+                "items": {
+                  "$ref": "#/$defs/Scalar"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "propertyNames": {
+            "$ref": "#/$defs/FactKey"
+          },
+          "title": "Facts",
+          "type": "object"
+        },
+        "alerts": {
+          "items": {
+            "$ref": "#/$defs/RuleId"
+          },
+          "title": "Alerts",
+          "type": "array"
+        },
+        "level": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Level",
+          "type": "integer"
+        },
+        "level_rationale": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Level Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "facts",
+        "alerts",
+        "level",
+        "level_rationale"
+      ],
+      "title": "Expected",
+      "type": "object"
+    },
+    "FactKey": {
+      "enum": [
+        "patient.age_years",
+        "patient.age_months",
+        "patient.sex",
+        "chief_complaint",
+        "complaint_category",
+        "symptoms",
+        "symptom_onset_at",
+        "severity",
+        "pain_score",
+        "pain_present",
+        "pain_location",
+        "injury",
+        "arrival_mode",
+        "allergies_confirm",
+        "fast.face_droop",
+        "fast.arm_weakness",
+        "fast.speech_difficulty",
+        "fast.last_known_well",
+        "chest_pain.present",
+        "chest_pain.radiates",
+        "chest_pain.sweating",
+        "chest_pain.short_of_breath",
+        "chest_pain.onset",
+        "infection.suspected",
+        "infection.fever_reported",
+        "infection.rigors",
+        "child_danger.hard_to_wake",
+        "child_danger.no_response_to_social_cues",
+        "child_danger.weak_high_pitched_or_continuous_cry",
+        "child_danger.pale_mottled_ashen_or_blue",
+        "child_danger.grunting",
+        "child_danger.non_blanching_rash",
+        "child_danger.neck_stiffness",
+        "child_danger.seizure",
+        "child_danger.appears_ill_to_hcp",
+        "child_danger.chest_indrawing",
+        "child_danger.reduced_skin_turgor",
+        "child_danger.bulging_fontanelle",
+        "child_danger.focal_neuro_signs",
+        "child_amber.pallor_reported",
+        "child_amber.not_responding_normally",
+        "child_amber.decreased_activity",
+        "child_amber.wakes_only_with_prolonged_stimulation",
+        "child_amber.nasal_flaring",
+        "child_amber.crackles",
+        "child_amber.cap_refill_3s_or_more",
+        "child_amber.dry_mucous_membranes",
+        "child_amber.poor_feeding",
+        "child_amber.reduced_urine_output",
+        "child_amber.fever_5_days_or_more",
+        "child_amber.limb_or_joint_swelling",
+        "child_amber.non_weight_bearing",
+        "vitals.heart_rate",
+        "vitals.spo2",
+        "vitals.temperature_c",
+        "vitals.respiratory_rate",
+        "vitals.systolic_bp",
+        "vitals.diastolic_bp",
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2",
+        "tasks.ecg_done_at",
+        "ehr_context.allergies",
+        "ehr_context.conditions",
+        "ehr_context.medications"
+      ],
+      "title": "FactKey",
+      "type": "string"
+    },
+    "GeneratedBy": {
+      "additionalProperties": false,
+      "properties": {
+        "tool": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        },
+        "model": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "model",
+        "date"
+      ],
+      "title": "GeneratedBy",
+      "type": "object"
+    },
+    "Patient": {
+      "additionalProperties": false,
+      "properties": {
+        "age_years": {
+          "maximum": 120,
+          "minimum": 0,
+          "title": "Age Years",
+          "type": "integer"
+        },
+        "sex": {
+          "enum": [
+            "male",
+            "female",
+            "other",
+            "unknown"
+          ],
+          "title": "Sex",
+          "type": "string"
+        }
+      },
+      "required": [
+        "age_years",
+        "sex"
+      ],
+      "title": "Patient",
+      "type": "object"
+    },
+    "RuleId": {
+      "enum": [
+        "FAST_STROKE",
+        "CHEST_PAIN_ECG_10MIN",
+        "SEPSIS_NEWS2",
+        "NG143_RED_FLAG",
+        "NG143_AMBER_FLAG",
+        "CHILD_HARD_TO_WAKE"
+      ],
+      "title": "RuleId",
+      "type": "string"
+    },
+    "Scalar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "ScenarioTurn": {
+      "additionalProperties": false,
+      "properties": {
+        "question_key": {
+          "$ref": "#/$defs/FactKey"
+        },
+        "patient_text": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Patient Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_key",
+        "patient_text"
+      ],
+      "title": "ScenarioTurn",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "synthetic": {
+      "const": true,
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "id": {
+      "maxLength": 48,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Id",
+      "type": "string"
+    },
+    "category": {
+      "$ref": "#/$defs/Category"
+    },
+    "language": {
+      "const": "en",
+      "default": "en",
+      "title": "Language",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "patient": {
+      "$ref": "#/$defs/Patient"
+    },
+    "turns": {
+      "items": {
+        "$ref": "#/$defs/ScenarioTurn"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Turns",
+      "type": "array"
+    },
+    "device_vitals": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/Scalar"
+          },
+          "type": "object"
+        }
+      ],
+      "title": "Device Vitals"
+    },
+    "nurse_vitals": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Scalar"
+      },
+      "title": "Nurse Vitals",
+      "type": "object"
+    },
+    "expected": {
+      "$ref": "#/$defs/Expected"
+    },
+    "generated_by": {
+      "$ref": "#/$defs/GeneratedBy"
+    },
+    "reviewed_by": {
+      "anyOf": [
+        {
+          "pattern": "^agent:[^/\\s]+/\\S+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed By"
+    },
+    "reviewed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed At"
+    },
+    "review_method": {
+      "anyOf": [
+        {
+          "const": "automated",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Review Method"
+    },
+    "reviewed_content_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed Content Sha256"
+    }
+  },
+  "required": [
+    "synthetic",
+    "id",
+    "category",
+    "description",
+    "patient",
+    "turns",
+    "expected",
+    "generated_by"
+  ],
+  "title": "Scenario",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

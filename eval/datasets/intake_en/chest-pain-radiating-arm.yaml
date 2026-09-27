@@ -1,0 +1,48 @@
+synthetic: true
+id: chest-pain-radiating-arm
+category: chest_pain
+language: en
+description: Current chest pain with reported radiation and breathlessness; chest
+  rule positive.
+patient:
+  age_years: 58
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: My chest feels tight.
+- question_key: chest_pain.present
+  patient_text: Yes, I have chest pain now.
+- question_key: chest_pain.radiates
+  patient_text: Yes, the pain spreads to my left arm.
+- question_key: chest_pain.short_of_breath
+  patient_text: Yes, I am short of breath.
+- question_key: pain_score
+  patient_text: The pain is 8 out of 10.
+- question_key: chest_pain.onset
+  patient_text: About twenty minutes ago.
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My chest feels tight.
+    chest_pain.present: 'yes'
+    chest_pain.radiates: 'yes'
+    chest_pain.short_of_breath: 'yes'
+    pain_score: 8
+    chest_pain.onset: About twenty minutes ago.
+    pain_present: 'yes'
+    pain_location: chest
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic draft label for independent review: Current chest pain
+    with radiation and breathlessness merits prompt nurse assessment; the deterministic
+    ECG alert is expected.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:31:48.523545Z'
+review_method: automated
+reviewed_content_sha256: 7bc0472e19a4a4e8a2845f3ab0589795d34454f3d907ad11845c3c57aba81f5d

@@ -1,0 +1,50 @@
+synthetic: true
+id: sepsis-nurse-confirms-threshold
+category: sepsis
+language: en
+description: Nurse vitals bring the complete NEWS2 exactly to 5.
+patient:
+  age_years: 46
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: I feel sick.
+- question_key: infection.fever_reported
+  patient_text: Yes, I have had a fever.
+- question_key: infection.rigors
+  patient_text: No.
+- question_key: symptom_onset_at
+  patient_text: Two days ago.
+device_vitals:
+  heart_rate: 108
+  spo2: 97
+  temperature_c: 38.6
+nurse_vitals:
+  respiratory_rate: 22
+  systolic_bp: 108
+  acvpu: A
+  on_supplemental_o2: 'no'
+expected:
+  facts:
+    chief_complaint: I feel sick.
+    infection.fever_reported: 'yes'
+    infection.rigors: 'no'
+    symptom_onset_at: Two days ago.
+  alerts:
+  - SEPSIS_NEWS2
+  level: 2
+  level_rationale: 'Synthetic illustrative urgency level 2 is not a rule output. This
+    patient explicitly reports fever yes and rigors no; the fever answer and measured
+    temperature 38.6 each provide infection evidence. Nurse measurements complete
+    NEWS2: respiratory rate 22 scores 2, SpO2 97 scores 0, systolic pressure 108 scores
+    1, heart rate 108 scores 1, alert consciousness A scores 0, temperature 38.6 scores
+    1 and no supplemental oxygen scores 0. The total is exactly 5, so SEPSIS_NEWS2
+    is raised. This scenario has an onset answer and no severity gold.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:33:56.886441Z'
+review_method: automated
+reviewed_content_sha256: d738428133ae4bc211cbc54c9ec9dbebaec43fb4302aebaeb9d4652f7553c420

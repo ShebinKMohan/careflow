@@ -1,0 +1,46 @@
+synthetic: true
+id: sepsis-rigors-with-normal-temperature
+category: sepsis
+language: en
+description: Rigors provide infection evidence despite a normal measured temperature.
+patient:
+  age_years: 70
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: I feel very unwell.
+- question_key: infection.fever_reported
+  patient_text: No, I have not noticed a fever.
+- question_key: infection.rigors
+  patient_text: Yes, I keep having shaking chills.
+- question_key: symptom_onset_at
+  patient_text: Early this morning.
+device_vitals:
+  heart_rate: 135
+  spo2: 93
+  temperature_c: 37.0
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel very unwell.
+    infection.fever_reported: 'no'
+    infection.rigors: 'yes'
+    symptom_onset_at: Early this morning.
+  alerts:
+  - SEPSIS_NEWS2
+  level: 2
+  level_rationale: 'Synthetic illustrative urgency level 2 is not a rule output. The
+    patient denies fever but explicitly says yes to rigors and reports shaking chills;
+    rigors yes independently supplies infection evidence even with measured temperature
+    37.0. SpO2 93 scores 2, heart rate 135 scores 3 and temperature 37.0 scores 0:
+    partial NEWS2 totals 5 and raises SEPSIS_NEWS2. Respiratory rate, systolic pressure,
+    consciousness and oxygen-support status remain missing. No severity answer or
+    severity gold is present.'
+generated_by:
+  tool: coding-agent
+  model: GPT-6
+  date: '2026-09-27'
+reviewed_by: agent:claude/claude-sonnet-5
+reviewed_at: '2026-09-27T09:34:10.976081Z'
+review_method: automated
+reviewed_content_sha256: 934104f2e5437758e8c4d2dee31c89c7a2fffdca1dc096b1aa0e13264307661c

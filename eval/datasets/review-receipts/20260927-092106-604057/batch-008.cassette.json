@@ -1,0 +1,7 @@
+{
+  "149a956242cee69d01967d82269caa43f6d39574a6ac1b6401df0799b791b271": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"child-non-blanching-rash\",\n      \"content_sha256\": \"159a893b93cf78e3c091e1a676c629a9410783b6e7b3a8013e532b3cd29ee6f9\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

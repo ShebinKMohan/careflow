@@ -1,0 +1,7 @@
+{
+  "455c8271c2ba755c54f951437ea9a73b59a413e45d8e1dfd0db418b9c4aec2cc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"chest-pain-sweating\",\n      \"content_sha256\": \"5734aa96d9dba92a7ddf7b3591c75c0f34d572593d3e86bde4d9527e398e369e\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 (high) conflicts with rule CHEST_PAIN_ECG_10MIN which mandates critical severity.\",\n        \"Expected alert ID 'CHEST_PAIN_ECG_10MIN' does not match the rule ID 'chest_pain_ecg_10min' in the provided code.\"\n      ]\n    }\n  ]\n}"
+  }
+}

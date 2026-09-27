@@ -1,0 +1,31 @@
+id: "sepsis-kiosk-threshold-five"
+category: "sepsis"
+language: "en"
+synthetic: true
+description: "A partial NEWS2 exactly at the alert threshold."
+patient:
+  age_years: 54
+  sex: "female"
+turns:
+  - {"question_key": "chief_complaint", "patient_text": "I am feeling poorly."}
+  - {"question_key": "infection.fever_reported", "patient_text": "Yes."}
+  - {"question_key": "infection.rigors", "patient_text": "No, I have not had shaking chills."}
+  - {"question_key": "severity", "patient_text": "Six out of ten."}
+device_vitals:
+  heart_rate: 120
+  spo2: 93
+  temperature_c: 38.5
+expected:
+  facts:
+    chief_complaint: "I am feeling poorly."
+    infection.fever_reported: "yes"
+    infection.rigors: "no"
+    severity: 6
+  alerts:
+    - "SEPSIS_NEWS2"
+  level: 2
+  level_rationale: "Synthetic illustrative urgency level 2 is not a NEWS2 score or rule output. Patient fever yes and measured temperature 38.5 provide infection evidence; rigors no does not erase it. SpO2 93 scores 2, heart rate 120 scores 2 and temperature 38.5 scores 1: partial NEWS2 totals exactly 5 and raises SEPSIS_NEWS2. Severity 6 is independently the number spoken by the patient and belongs in extraction gold, although it is not a NEWS2 input. The four unmeasured NEWS2 parameters remain missing."
+generated_by:
+  tool: "coding-agent"
+  model: "GPT-6"
+  date: "2026-09-27"

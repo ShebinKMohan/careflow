@@ -1,0 +1,7 @@
+{
+  "3a5e643277a07e65f8d27b3ff774a3e8531a02c01b2a91d94bdeb94a5f2218cc": {
+    "model": "claude-sonnet-5",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"id\": \"breathing-low-oxygen-no-infection\", \"content_sha256\": \"18a56227856cc763c44192364799c1e0f8ac2227e7b60c5329ae125e4124957a\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"chest-pain-no-breathlessness\", \"content_sha256\": \"6b3e7a3749037f2091b0df303eacf5a2dbfd563171f3bd89b18978574b24eea9\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"chest-pain-radiating-arm\", \"content_sha256\": \"7bc0472e19a4a4e8a2845f3ab0589795d34454f3d907ad11845c3c57aba81f5d\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"chest-pain-screen-negative\", \"content_sha256\": \"462a9642ae9c4698e4101eb8540bdb86c876c8aaf662d2c477b95fedf2a77c51\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}, {\"id\": \"chest-pain-sweating\", \"content_sha256\": \"5734aa96d9dba92a7ddf7b3591c75c0f34d572593d3e86bde4d9527e398e369e\", \"realistic_wording\": true, \"facts_supported\": true, \"alerts_consistent\": true, \"no_phi\": true, \"reasons\": []}]}"
+  }
+}
