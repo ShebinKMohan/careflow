@@ -28,7 +28,10 @@
     "unauthorized": "Your session has ended. Scan the kiosk QR code again.",
     "claimLink": "Enter a code",
     "loading": "Loading…",
-    "failed": "Your status could not be loaded."
+    "failed": "Your status could not be loaded.",
+    "room": "Please go to <ltr>{room}</ltr> now.",
+    "updated": "Updated {time}.",
+    "paused": "Live updates paused; checking every 15 seconds."
   },
   "intake": {
     "greeting": "Welcome, {initials}.",
@@ -51,5 +54,42 @@
       "pain": "Pain",
       "other": "Something else"
     }
+  },
+  "safety": {
+    "feelsWorse": {
+      "button": "I feel worse",
+      "title": "Tell the nurse what changed",
+      "chestQuestion": "Chest pain or trouble breathing?",
+      "chest_pain": "Chest pain",
+      "short_of_breath": "Short of breath",
+      "fastQuestion": "Face drooping, arm weak or speech difficult?",
+      "face_droop": "Face drooping",
+      "arm_weakness": "Arm weak",
+      "speech_difficulty": "Speech difficult",
+      "drowsyQuestion": "Very drowsy or confused?",
+      "yes": "Yes",
+      "no": "No",
+      "not_sure": "Not sure",
+      "note": "Anything else? (optional)",
+      "send": "Tell the nurse",
+      "sending": "Telling the nurse…",
+      "told": "The nurse has been told. Stay where you are.",
+      "failed": "We couldn't reach the nurse. Tell the reception desk now.",
+      "close": "Close",
+      "cancel": "Cancel"
+    },
+    "child": {
+      "drowsyQuestion": "Is your child very hard to wake, or confused?"
+    }
+  },
+  "ask": {
+    "title": "Ask the clinic",
+    "label": "A question about your visit or the clinic",
+    "send": "Ask",
+    "sending": "Asking…",
+    "refused": "I can't answer medical questions. The nurse has been told; please ask them.",
+    "dontKnow": "I don't know that one. Please ask at the reception desk.",
+    "unavailable": "Questions are not available right now. Please ask at the reception desk.",
+    "sources": "Sources"
   }
 }
