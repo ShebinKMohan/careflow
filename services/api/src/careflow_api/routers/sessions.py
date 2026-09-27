@@ -171,6 +171,7 @@ async def keypad_checkin(
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=UNKNOWN_DIGITS)
     now = utc_now()
     session_id = uuid.uuid4()
+    language = Language(body.language.value) if body.language is not None else Language.en
     display = await patient_display(fetch.patient_ref)
     fhir_id = fetch.patient_ref.split("/", 1)[1] if fetch.patient_ref else None
     async with clinic_session(principal.clinic_id) as db:
@@ -180,7 +181,7 @@ async def keypad_checkin(
                 clinic_id=principal.clinic_id,
                 device_id=uuid.UUID(body.kiosk_id),
                 fhir_patient_id=fhir_id,
-                language=Language.en.value,
+                language=language.value,
                 status="intake",
                 started_at=now,
                 expires_at=now + SESSION_EXPIRY,
@@ -191,6 +192,7 @@ async def keypad_checkin(
         session_id=str(session_id),
         clinic_id=str(principal.clinic_id),
         arrived_at=now,
+        language=language,
         extra={"patient_identifier": identifier},
     )
     token, _ = create_access_token(
@@ -206,7 +208,7 @@ async def keypad_checkin(
         session_id=str(session_id),
         session_token=token,
         patient_display=display,
-        language=Language.en,
+        language=language,
         first_question=question_of(result),
     )
 

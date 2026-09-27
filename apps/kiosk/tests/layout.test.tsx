@@ -19,7 +19,10 @@ vi.mock("next/headers", () => ({
 }));
 vi.mock("next-intl/server", () => ({ getRequestConfig: <T,>(factory: T) => factory }));
 const refresh = vi.fn();
-vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh, push: vi.fn(), replace: vi.fn() }) }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh, push: vi.fn(), replace: vi.fn() }),
+  usePathname: () => "/", // the first screen, where the language toggle shows
+}));
 
 async function renderDocument() {
   const config = await requestConfig({ requestLocale: Promise.resolve(undefined) });

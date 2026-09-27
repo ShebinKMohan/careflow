@@ -3,7 +3,9 @@ import { mkdirSync } from "node:fs";
 import { expect, type Page, test } from "@playwright/test";
 
 const FOOTER_EN = "Research prototype. Synthetic data only. Not for clinical use.";
+const DISCLAIMER_EN = "Arabic supported; not validated by native speakers.";
 const FOOTER_AR = "نموذج بحثي. بيانات اصطناعية فقط. ليس للاستخدام السريري.";
+const DISCLAIMER_AR = "العربية مدعومة؛ لم يتحقق منها متحدثون أصليون.";
 const EVIDENCE_DIR = new URL("../../../../docs/evidence/M0-08/", import.meta.url).pathname;
 
 async function signInKiosk(page: Page) {
@@ -17,7 +19,8 @@ async function signInKiosk(page: Page) {
 test("the footer is visible on every page", async ({ page }) => {
   for (const path of ["/", "/setup", "/checkin", "/intake", "/vitals", "/done"]) {
     await page.goto(path);
-    await expect(page.getByRole("contentinfo"), path).toHaveText(FOOTER_EN);
+    await expect(page.getByTestId("prototype-footer"), path).toHaveText(FOOTER_EN);
+    await expect(page.getByTestId("arabic-disclaimer"), path).toHaveText(DISCLAIMER_EN);
     await expect(page.getByRole("contentinfo"), path).toBeVisible();
   }
 });
@@ -45,7 +48,8 @@ test("choosing Arabic switches the page to right-to-left", async ({ page }) => {
   await expect(page).toHaveURL(/\/checkin$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator("html")).toHaveAttribute("lang", "ar");
-  await expect(page.getByRole("contentinfo")).toHaveText(FOOTER_AR);
+  await expect(page.getByTestId("prototype-footer")).toHaveText(FOOTER_AR);
+  await expect(page.getByTestId("arabic-disclaimer")).toHaveText(DISCLAIMER_AR);
   await page.evaluate(() => document.fonts.ready); // stable screenshots: web fonts loaded
   mkdirSync(EVIDENCE_DIR, { recursive: true });
   await page.screenshot({ path: `${EVIDENCE_DIR}kiosk-checkin-ar.png`, fullPage: true });

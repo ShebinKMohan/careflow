@@ -1096,6 +1096,8 @@ export interface components {
             kiosk_id: components["schemas"]["Identifier"];
             /** @description Keypad ID. Only ever in the body, never in a URL. */
             digits: string;
+            /** @description The language the patient picked on the kiosk's first screen (M2-01). The session keeps it; it never changes mid-session. English when absent. */
+            language?: components["schemas"]["Language"];
         };
         IdTapCheckinRequest: {
             /** @description Payload of the mock ID card (Emirates ID / UAE Pass style mock). Synthetic only. */

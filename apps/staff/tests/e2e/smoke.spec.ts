@@ -1,6 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
 const FOOTER_EN = "Research prototype. Synthetic data only. Not for clinical use.";
+const DISCLAIMER_EN = "Arabic supported; not validated by native speakers.";
 const PAGES = ["/", "/login", "/nurse", "/nurse/ses_chest_pain", "/doctor/ses_chest_pain", "/board?department=ed", "/admin"];
 
 async function signIn(page: Page, next: string) {
@@ -14,7 +15,8 @@ async function signIn(page: Page, next: string) {
 test("the footer is visible on every page", async ({ page }) => {
   for (const path of PAGES) {
     await page.goto(path);
-    await expect(page.getByRole("contentinfo"), path).toHaveText(FOOTER_EN);
+    await expect(page.getByTestId("prototype-footer"), path).toHaveText(FOOTER_EN);
+    await expect(page.getByTestId("arabic-disclaimer"), path).toHaveText(DISCLAIMER_EN);
     await expect(page.getByRole("contentinfo"), path).toBeVisible();
   }
 });

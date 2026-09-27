@@ -8,7 +8,7 @@ export default async function DoctorBriefingPage({ params }: { params: Promise<{
   return (
     <>
       <h1 className="text-display font-bold">{t("title")}</h1>
-      <p className="text-ink-muted">{t("session", { id: sessionId })}</p>
+      <p className="text-ink-muted">{t.rich("session", { id: sessionId, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
       <BriefingView sessionId={sessionId} />
     </>
   );

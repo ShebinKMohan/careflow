@@ -40,7 +40,7 @@ export function DoctorSessionsView() {
                   <td className={`${CELL} font-mono font-bold`} dir="ltr">
                     {session.token_code}
                   </td>
-                  <td className={CELL}>{format.dateTime(new Date(session.arrived_at), { timeStyle: "short" })}</td>
+                  <td className={CELL}>{format.dateTime(new Date(session.arrived_at), { timeStyle: "short", numberingSystem: "latn" })}</td>
                   <td className={CELL}>{t("levelValue", { scale: session.scale, level: session.confirmed_level })}</td>
                   <td className={CELL}>
                     <ul className="flex flex-wrap gap-2">

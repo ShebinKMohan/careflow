@@ -91,7 +91,7 @@
     "title": "Thank you",
     "seat": "Please take a seat. A nurse will review your details.",
     "tokenLabel": "Your number",
-    "room": "Please go to {room}.",
+    "room": "Please go to <ltr>{room}</ltr>.",
     "waiting": "We will call your number soon.",
     "estimate": "About {minutes} minutes (an estimate).",
     "noSession": "Please check in first."

@@ -27,7 +27,7 @@ export function EcgCountdown({
   const [failed, setFailed] = useState(false);
 
   if (task?.status === "completed") {
-    const at = task.completed_at ? format.dateTime(new Date(task.completed_at), { timeStyle: "short" }) : "";
+    const at = task.completed_at ? format.dateTime(new Date(task.completed_at), { timeStyle: "short", numberingSystem: "latn" }) : "";
     return (
       <p className="text-title font-bold" data-testid="ecg-status">
         {t("ecgDoneAt", { time: at })}

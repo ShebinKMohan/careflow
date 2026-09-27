@@ -35,7 +35,7 @@ export function StatusView() {
       <p className="text-display font-bold" dir="ltr">
         {token ? token.token_code : null}
       </p>
-      <p>{token ? t("token", { code: token.token_code }) : t("noToken")}</p>
+      <p>{token ? t.rich("token", { code: token.token_code, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> }) : t("noToken")}</p>
       <p>{t("position", { position })}</p>
       <p>{t("wait", { minutes })}</p>
     </Card>
