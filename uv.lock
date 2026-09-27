@@ -406,11 +406,19 @@ dependencies = [
     { name = "typer" },
 ]
 
+[package.optional-dependencies]
+laya = [
+    { name = "laya", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
+    { name = "torch", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
+    { name = "transformers", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "careflow-contracts", editable = "packages/contracts" },
     { name = "httpx", specifier = ">=0.28,<0.29" },
     { name = "joblib", specifier = ">=1.6,<2" },
+    { name = "laya", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'laya'", specifier = "==0.3.20" },
     { name = "numpy", specifier = ">=2.3,<3" },
     { name = "openpyxl", specifier = ">=3.1,<4" },
     { name = "pandas", specifier = ">=3.0,<4" },
@@ -420,8 +428,11 @@ requires-dist = [
     { name = "scipy", specifier = ">=1.18,<2" },
     { name = "shap", specifier = ">=0.52,<0.53" },
     { name = "threadpoolctl", specifier = ">=3.7,<4" },
+    { name = "torch", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'laya'", specifier = ">=2.8,<3" },
+    { name = "transformers", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'laya'", specifier = ">=5.17,<6" },
     { name = "typer", specifier = ">=0.27,<0.28" },
 ]
+provides-extras = ["laya"]
 
 [[package]]
 name = "careflow-voice"
@@ -1380,6 +1391,22 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/96/23/ba753811d6d768f4d98d0336ba49c2b3021afeeaa59a8f63ab83bf83efe7/langsmith-0.14.1.tar.gz", hash = "sha256:0b5cd2473420c9c5acef33a9bafe6c812a7cf96741e9a5af465b1d93bf77f7ae", size = 4966485, upload-time = "2026-09-25T17:38:08.216Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/04/d6/1771421302dd230d3e52f29546b187cda824cff1443031067b69d46207ee/langsmith-0.14.1-py3-none-any.whl", hash = "sha256:dcfd8a25ba72d8663024bd87df02e372e470f43e18f4a726f37fbacc772c0193", size = 812092, upload-time = "2026-09-25T17:38:05.704Z" },
+]
+
+[[package]]
+name = "laya"
+version = "0.3.20"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "huggingface-hub" },
+    { name = "numpy" },
+    { name = "safetensors" },
+    { name = "torch" },
+    { name = "transformers" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/31/82/0964e13e1a67ae4ac2824c3115470d31cd149a065d971a5dec6e4049ca23/laya-0.3.20.tar.gz", hash = "sha256:692de1346cf0239bb7bbcffdf0cfbd538c24834f8bc61e9b60f4106465c033c9", size = 275028, upload-time = "2026-09-24T05:41:07.653Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/34/0c/80982f9ad6f52ca9cb146cfc00fac79e7b7f4388f00f4197575a3170be48/laya-0.3.20-py3-none-any.whl", hash = "sha256:6039e802fa5effb8dd492061cd7ad39a43087beadc4a4fa4a649614e77eb83d4", size = 118520, upload-time = "2026-09-24T05:41:06.273Z" },
 ]
 
 [[package]]
