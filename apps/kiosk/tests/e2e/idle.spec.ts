@@ -10,7 +10,11 @@ async function checkIn(page: Page) {
     window.sessionStorage.setItem("careflow.kiosk.device", JSON.stringify(device));
   }, DEVICE);
   await page.route("**/v1/checkin/keypad", (route) => route.fulfill({ json: CHECKIN }));
-  await page.goto("/checkin");
+  await page.goto("/");
+  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
+  await expect(page).toHaveURL(/\/checkin$/);
   for (const digit of "100001") await page.getByRole("button", { name: digit, exact: true }).click();
   await page.getByRole("button", { name: "Check in" }).click();
   await expect(page).toHaveURL(/\/patient$/);
@@ -35,6 +39,7 @@ test("80 s without input wipes the session and returns to the start", async ({ p
 
   await page.goForward();
   await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page.getByLabel("Keypad ID")).toHaveValue("");
   const stored = await page.evaluate(() => ({
     session: Object.entries(window.sessionStorage),

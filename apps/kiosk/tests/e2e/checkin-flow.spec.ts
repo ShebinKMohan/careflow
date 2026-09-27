@@ -60,6 +60,8 @@ test("keypad, three answers (tap, typed, severity), vitals, the token and room, 
 
   await page.goto("/");
   await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
   const targets: Record<string, number> = { keypad: await smallestButtonSide(page.getByRole("main")) };
   for (const digit of DIGITS) await page.getByRole("button", { name: digit, exact: true }).click();
@@ -131,7 +133,11 @@ test("three failed keypad attempts send the patient to reception", async ({ page
   await page.route("**/v1/checkin/keypad", (route) =>
     route.fulfill({ status: 404, contentType: "application/problem+json", json: { title: "Not found", status: 404 } }),
   );
-  await page.goto("/checkin");
+  await page.goto("/");
+  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
+  await expect(page).toHaveURL(/\/checkin$/);
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     for (const digit of "999999") await page.getByRole("button", { name: digit, exact: true }).click();
     await page.getByRole("button", { name: "Check in" }).click();

@@ -5,13 +5,13 @@ import { type Locale, setLocaleCookie } from "@careflow/ui/i18n";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-/** The kiosk start screen: pick a language, then go to the keypad. */
+/** The kiosk start screen: pick a language, then the consent screen (M2-05), then check-in. */
 export function LanguageChoice() {
   const t = useTranslations("home");
   const router = useRouter();
   const choose = (locale: Locale) => {
     setLocaleCookie(locale);
-    router.push("/checkin");
+    router.push("/consent");
     router.refresh();
   };
   return (

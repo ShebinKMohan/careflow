@@ -44,7 +44,7 @@ export function DeviceSetupForm() {
       return;
     }
     saveDevice({ token: data.access_token, clinicId: data.clinic_id, deviceId: parsed.data.device_id });
-    router.push("/checkin");
+    router.push("/"); // the welcome screen: language, consent, then check-in
   }
 
   return (

@@ -59,7 +59,11 @@ test("a spoken answer shows what was heard, then the next question, and the ques
     });
   });
 
-  await page.goto("/checkin");
+  await page.goto("/");
+  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
+  await expect(page).toHaveURL(/\/checkin$/);
   for (const digit of "100001") await page.getByRole("button", { name: digit, exact: true }).click();
   await page.getByRole("button", { name: "Check in" }).click();
   await expect(page).toHaveURL(/\/patient$/);

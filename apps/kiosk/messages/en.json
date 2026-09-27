@@ -33,7 +33,13 @@
     "needsSetup": "This kiosk is not signed in yet.",
     "setupLink": "Kiosk setup (staff)",
     "seeReception": "Please see reception.",
-    "backspace": "Delete the last digit"
+    "backspace": "Delete the last digit",
+    "tapCard": "Or tap your ID card on the reader.",
+    "cardNotFound": "We could not find your record with this card. Please use the keypad.",
+    "cardReception": "Please go to the reception desk.",
+    "simulatedReader": "Simulated ID reader",
+    "simulatedReaderNote": "A mock for this prototype: synthetic cards only, not a real ID service.",
+    "mockCard": "Mock card ({persona})"
   },
   "intake": {
     "title": "Your visit",
@@ -114,6 +120,17 @@
       "failed": "Something went wrong. Please try again, or ask at reception.",
       "nurseCheck": "A nurse will check your child's temperature and breathing.",
       "nurseTold": "A nurse has been told. Please stay here."
+    },
+    "consent": {
+      "title": "Before we start",
+      "camera": "The kiosk camera, if used, is processed on this kiosk only and never saved.",
+      "voice": "If you speak your answers, your voice is turned into text on the clinic's own server. No recording is kept.",
+      "dataUse": "Your answers go to the clinic team and into your clinic record.",
+      "agree": "Agree",
+      "withoutCameraVoice": "Continue without camera and voice",
+      "decline": "I don't agree to data use",
+      "reception": "Please go to the reception desk.",
+      "startOver": "Start again"
     }
   }
 }
