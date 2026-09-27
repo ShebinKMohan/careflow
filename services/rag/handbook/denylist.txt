@@ -1,0 +1,97 @@
+# Real names that must never appear in the fictional handbook (M2-08 review item 2).
+# One name per line, matched case-insensitively as whole words in every handbook file, English and
+# Arabic. The handbook's clinic is "CareFlow Demo Clinic" and its insurers are "Insurer A/B/C".
+# Hospitals and health authorities (UAE and elsewhere)
+Cleveland Clinic
+Mayo Clinic
+Johns Hopkins
+Mount Sinai
+Massachusetts General
+Kaiser Permanente
+Moorfields
+King's College Hospital
+Mediclinic
+NMC Healthcare
+NMC Royal
+Aster Hospital
+Aster DM
+Burjeel
+Medcare
+Thumbay
+Rashid Hospital
+Dubai Hospital
+Latifa Hospital
+Al Zahra Hospital
+Saudi German Hospital
+American Hospital Dubai
+Canadian Specialist Hospital
+Emirates Hospital
+Prime Hospital
+Sheikh Khalifa Medical City
+Cleveland Clinic Abu Dhabi
+Tawam Hospital
+Al Qassimi Hospital
+Zayed Military Hospital
+SEHA
+Dubai Health Authority
+Department of Health Abu Dhabi
+NHS
+# Insurers and health plans
+Daman
+Thiqa
+AXA
+Allianz
+Bupa
+Cigna
+MetLife
+Aetna
+UnitedHealthcare
+Humana
+Blue Cross
+Sukoon
+Oman Insurance
+Orient Insurance
+ADNIC
+Abu Dhabi National Insurance
+Dubai Insurance
+Dubai National Insurance
+Al Buhaira
+Nextcare
+MedNet
+Neuron
+Gulf Insurance Group
+Tokio Marine
+Noor Takaful
+Takaful Emarat
+Watania
+Salama Insurance
+Union Insurance
+RAK Insurance
+Fidelity United
+Al Sagr
+Emirates Insurance
+Qatar Insurance
+Tawuniya
+MedGulf
+# Arabic spellings of real names (distinctive names only: "ضمان" and "ثقة" are ordinary words)
+كليفلاند كلينك
+مايو كلينك
+ميديكلينيك
+مستشفى راشد
+مستشفى دبي
+مستشفى لطيفة
+مستشفى الزهراء
+مستشفى برجيل
+برجيل
+مدينة الشيخ خليفة الطبية
+مستشفى توام
+مستشفى القاسمي
+هيئة الصحة بدبي
+دائرة الصحة أبوظبي
+صحة أبوظبي
+بوبا
+أكسا
+أليانز
+سيجنا
+ميتلايف
+التعاونية للتأمين
