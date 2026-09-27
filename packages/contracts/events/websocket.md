@@ -17,6 +17,8 @@ Internal events (for example `fhir.write.completed`) never reach a socket.
 
 A JWT or session token **never** goes in a URL or in a WebSocket frame; only the short-lived ticket does. A used or expired ticket closes the connection with code 4401. The server may close with 4403 when the caller's role may not use the channel.
 
+The voice service's `WS /kiosk/audio` (M1-14, ADR-028) is not an API channel. It posts turns as the patient, so the kiosk sends the patient token in its first frame, never in the URL.
+
 ## Delivery
 
 Every event is first written to the transactional outbox, then relayed to a Redis Stream that each API process reads (M1-11). Frames are best-effort and ordered per session. A reconnecting client may pass `?last_event_id=<id of the last frame it saw>` to replay what it missed, up to 5 minutes back. It should still re-read state through the REST API (`GET /v1/nurse/worklist`, `GET /v1/sessions/{session_id}/status`), which stays the source of truth when the live channel is down.

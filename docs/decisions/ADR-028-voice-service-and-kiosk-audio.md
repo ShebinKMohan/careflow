@@ -62,6 +62,7 @@ Two constraints shape it. The intake graph must stay the only "brain", and no ra
   - the token is checked like the API checks it: HS256, the API's required claims, role `patient_session`, and its `session_id` claim equal to the message's;
   - the socket closes with 1008 if the message is invalid, the token is bad, or no start arrives within 5 s;
   - the token never appears in a URL.
+- **Why a token and not a ticket.** CONVENTIONS' rule (a one-time ticket from `POST /v1/ws-ticket`; never a JWT in a URL) is for the API's sockets. The voice service is a separate service that posts each turn *as the patient*, so it needs the patient's own token. A ticket would still leave it needing that token, or a broader service credential. The token goes only in the first frame over the kiosk's connection: never in a URL, never logged.
 - **Audio.** Then PCM16 frames (20 ms, 640 bytes; up to 16,000 bytes, even length; otherwise an `error` message) and `{type: "stop"}`.
 - **`KioskTurnLoop`.** It is new; the agent's `MediaSessionRunner` is Plivo- and LLM-centric. On a final transcript it:
   1. sends `final`;
