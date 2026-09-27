@@ -1,0 +1,349 @@
+"""Patient-side routes (M1-12): the silent-keypad check-in, the intake turns, the patient's status,
+device vitals, and the session's facts and triage view for staff.
+
+The intake graph (M1-05) runs behind them in `IntakeRuntime`. Keypad digits, turn text and tokens
+are never logged. The patient never gets a level or an alert (safety rules 2 and 3).
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+import logging
+import uuid
+from typing import Annotated, Any, Final
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlalchemy import select, update
+
+from careflow_api.config import Settings, get_settings
+from careflow_api.deps import Principal, require_roles
+from careflow_api.devices.gateway import latest_vitals
+from careflow_api.intake.runtime import IntakeRuntime
+from careflow_api.intake.views import patient_status, triage_view
+from careflow_api.models import PatientSession
+from careflow_api.ratelimit import failure_limit
+from careflow_api.rls import clinic_session
+from careflow_api.security import create_access_token
+from careflow_contracts.api_models import (
+    CheckinResult,
+    DeviceVitalsReading,
+    IntakeQuestion,
+    KeypadCheckinRequest,
+    SessionStatus,
+    TriageView,
+    TurnRequest,
+    TurnResponse,
+    VitalsAccepted,
+)
+from careflow_contracts.generated.ehr_fetch_schema import EhrStatus, PatientIdentifier
+from careflow_contracts.generated.structured_facts_schema import (
+    Language,
+    StructuredFacts,
+    TurnRole,
+)
+from careflow_contracts.ids import stable_fact_id
+from careflow_intake.facts import FactEntry
+from careflow_intake.graph import NotWaiting, pending
+from careflow_intake.nodes.conversation import InvalidAnswer
+from careflow_intake.state import structured_facts
+from careflow_integration.adapters.loader import load_adapter
+from careflow_integration.fhir.client import FhirClient, FhirError
+
+logger = logging.getLogger("careflow_api.sessions")
+
+router = APIRouter(tags=["sessions"])
+
+KEYPAD_LIMIT: Final = 5
+KEYPAD_WINDOW_SECONDS: Final = 300
+PATIENT_TOKEN_TTL: Final = dt.timedelta(minutes=30)
+SESSION_EXPIRY: Final = dt.timedelta(hours=2)
+UNKNOWN_DIGITS: Final = "We could not check you in with that number. Please ask at the desk."
+DONE_TEXT: Final = "Thank you. A nurse will see you shortly. Please stay here."
+DEVICE_FIELDS: Final = {
+    "heart_rate": ("vitals.heart_rate", "/min"),
+    "spo2": ("vitals.spo2", "%"),
+    "temperature_c": ("vitals.temperature_c", "Cel"),
+    "systolic_bp": ("vitals.systolic_bp", "mm[Hg]"),
+    "diastolic_bp": ("vitals.diastolic_bp", "mm[Hg]"),
+}
+
+
+def runtime(request: Request) -> IntakeRuntime:
+    found: IntakeRuntime | None = getattr(request.app.state, "intake", None)
+    if found is None:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, detail="The intake is starting.")
+    return found
+
+
+def utc_now() -> dt.datetime:
+    return dt.datetime.now(dt.UTC)
+
+
+def initials(patient: dict[str, Any]) -> str:
+    """ "M. S." from a FHIR Patient's first name; never more than initials."""
+    names = patient.get("name") or []
+    if not names:
+        return "Unknown"
+    name = names[0]
+    given = (name.get("given") or [""])[0][:1]
+    family = (name.get("family") or "")[:1]
+    parts = [f"{letter.upper()}." for letter in (given, family) if letter]
+    return " ".join(parts) or "Unknown"
+
+
+async def patient_display(patient_ref: str | None) -> str:
+    if patient_ref is None:
+        return "Unknown"
+    try:
+        async with FhirClient(load_adapter().fhir_base_url) as client:
+            kind, rid = patient_ref.split("/", 1)
+            return initials(await client.read(kind, rid))
+    except (FhirError, ValueError):
+        return "Unknown"
+
+
+def question_of(result: dict[str, Any]) -> IntakeQuestion | None:
+    """The next question from the graph's pause, or None when it is not asking the patient."""
+    value = pending(result)
+    if not value or value.get("kind") != "patient_input":
+        return None
+    q = value["question"]
+    return IntakeQuestion(
+        question_id=q["question_id"], text=q["text"], key=q.get("key"), notice=q.get("notice")
+    )
+
+
+async def session_row(principal: Principal, session_id: str) -> PatientSession:
+    """The session of the caller's clinic (RLS), or 404."""
+    try:
+        key = uuid.UUID(session_id)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No such session.") from exc
+    async with clinic_session(principal.clinic_id) as db:
+        row = (
+            await db.execute(select(PatientSession).where(PatientSession.id == key))
+        ).scalar_one_or_none()
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No such session.")
+    return row
+
+
+def own_session(principal: Principal, session_id: str) -> None:
+    """A patient token only ever reaches its own session."""
+    if principal.role == "patient_session" and principal.session_id != session_id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="This token is for another session.")
+
+
+async def touch(clinic_id: uuid.UUID, session_id: str, **values: Any) -> None:
+    async with clinic_session(clinic_id) as db:
+        await db.execute(
+            update(PatientSession)
+            .where(PatientSession.id == uuid.UUID(session_id))
+            .values(last_activity_at=utc_now(), **values)
+        )
+
+
+@router.post("/v1/checkin/keypad", response_model=CheckinResult, response_model_exclude_none=True)
+async def keypad_checkin(
+    body: KeypadCheckinRequest,
+    principal: Annotated[Principal, Depends(require_roles("kiosk_device"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+    settings: Annotated[Settings, Depends(get_settings)],
+) -> CheckinResult:
+    """Digits -> the EHR patient -> a new session with its intake started, and a 30-minute
+    patient token. Unknown digits get a generic 404; after 5 of them in 5 minutes the kiosk gets
+    429 (guessing protection: successful check-ins are not counted)."""
+    if body.clinic_id != str(principal.clinic_id) or body.kiosk_id != principal.device_id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="This kiosk may not check in here.")
+    allowed, record_failure = failure_limit(
+        "keypad", body.kiosk_id, limit=KEYPAD_LIMIT, window_seconds=KEYPAD_WINDOW_SECONDS
+    )
+    if not allowed:
+        raise HTTPException(
+            status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many attempts. Please wait a few minutes or ask at the desk.",
+        )
+    adapter = load_adapter()
+    identifier = PatientIdentifier(system=adapter.identifier_systems["keypad"], value=body.digits)
+    fetch = await intake.ports.ehr.fetch_context(identifier, body.clinic_id)
+    if fetch.status is EhrStatus.not_found:
+        record_failure()
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=UNKNOWN_DIGITS)
+    now = utc_now()
+    session_id = uuid.uuid4()
+    display = await patient_display(fetch.patient_ref)
+    fhir_id = fetch.patient_ref.split("/", 1)[1] if fetch.patient_ref else None
+    async with clinic_session(principal.clinic_id) as db:
+        db.add(
+            PatientSession(
+                id=session_id,
+                clinic_id=principal.clinic_id,
+                device_id=uuid.UUID(body.kiosk_id),
+                fhir_patient_id=fhir_id,
+                language=Language.en.value,
+                status="intake",
+                started_at=now,
+                expires_at=now + SESSION_EXPIRY,
+                patient_display=display,
+            )
+        )
+    result = await intake.start(
+        session_id=str(session_id),
+        clinic_id=str(principal.clinic_id),
+        arrived_at=now,
+        extra={"patient_identifier": identifier},
+    )
+    token, _ = create_access_token(
+        secret=settings.jwt_secret.get_secret_value(),
+        subject=f"session:{session_id}",
+        role="patient_session",
+        clinic_id=principal.clinic_id,
+        extra={"session_id": str(session_id), "scope": f"session:{session_id}"},
+        ttl=PATIENT_TOKEN_TTL,
+    )
+    logger.info("checkin.keypad", extra={"session_id": str(session_id), "ehr": fetch.status.value})
+    return CheckinResult(
+        session_id=str(session_id),
+        session_token=token,
+        patient_display=display,
+        language=Language.en,
+        first_question=question_of(result),
+    )
+
+
+@router.post(
+    "/v1/sessions/{session_id}/turns",
+    response_model=TurnResponse,
+    response_model_exclude_none=False,
+)
+async def post_turn(
+    session_id: str,
+    body: TurnRequest,
+    principal: Annotated[Principal, Depends(require_roles("patient_session"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+) -> TurnResponse:
+    """The patient's answer; the reply is the next question, or done."""
+    own_session(principal, session_id)
+    await session_row(principal, session_id)
+    try:
+        result = await intake.submit_turn(session_id, body.text)
+    except NotWaiting as exc:
+        raise HTTPException(
+            status.HTTP_409_CONFLICT, detail="This session is not waiting for an answer."
+        ) from exc
+    except InvalidAnswer as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+    await touch(principal.clinic_id, session_id)
+    turns = result.get("turns", [])
+    said = next(t for t in reversed(turns) if t.role is TurnRole.patient)
+    question = question_of(result)
+    if question is None:
+        await touch(principal.clinic_id, session_id, status="awaiting_nurse")
+    return TurnResponse(
+        turn_id=said.turn_id,
+        assistant_text=question.text if question is not None else DONE_TEXT,
+        done=question is None,
+        next_question=question,
+    )
+
+
+@router.get(
+    "/v1/sessions/{session_id}/status",
+    response_model=SessionStatus,
+    response_model_exclude_none=True,
+)
+async def get_status(
+    session_id: str,
+    principal: Annotated[Principal, Depends(require_roles("patient_session", "kiosk_device"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+    request: Request,
+) -> SessionStatus:
+    """The state, token, room and wait. Never a level or an alert."""
+    own_session(principal, session_id)
+    await session_row(principal, session_id)
+    state = await intake.state(session_id)
+    waiting, _ = await intake.waiting_for(session_id)
+    async with clinic_session(principal.clinic_id) as db:
+        token = await request.app.state.queue.session_token(db, session_id=session_id)
+    found = patient_status(
+        state,
+        waiting=waiting,
+        token_code=token.token_code if token else None,
+        token_status=token.status.value if token else None,
+        room=token.room if token else None,
+        wait_estimate_min=None,
+    )
+    vitals = latest_vitals.get(session_id)  # the kiosk's vitals panel: numbers only
+    return found.model_copy(update={"vitals": vitals}) if vitals is not None else found
+
+
+@router.get(
+    "/v1/sessions/{session_id}/facts",
+    response_model=StructuredFacts,
+    response_model_exclude_none=True,
+)
+async def get_facts(
+    session_id: str,
+    principal: Annotated[Principal, Depends(require_roles("nurse", "doctor"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+) -> StructuredFacts:
+    await session_row(principal, session_id)
+    state = await intake.state(session_id)
+    if state is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
+    return structured_facts(state)
+
+
+def device_facts(session_id: str, reading: DeviceVitalsReading) -> list[FactEntry]:
+    source = {"kind": "device", "device_id": reading.device_id, "reading_id": reading.reading_id}
+    entries = []
+    for name, (key, unit) in DEVICE_FIELDS.items():
+        value = getattr(reading, name)
+        if value is None:
+            continue
+        fact = {
+            "fact_id": stable_fact_id(session_id, key, reading.device_id, reading.reading_id),
+            "provenance": "DEVICE_MEASURED",
+            "source": source,
+            "recorded_at": reading.measured_at,
+            "value": value,
+            "unit": unit,
+        }
+        entries.append(FactEntry.model_validate({"key": key, "fact": fact}))
+    return entries
+
+
+@router.post("/v1/sessions/{session_id}/vitals", response_model=VitalsAccepted)
+async def post_device_vitals(
+    session_id: str,
+    reading: DeviceVitalsReading,
+    principal: Annotated[Principal, Depends(require_roles("kiosk_device"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+) -> VitalsAccepted:
+    """A device reading becomes DEVICE_MEASURED facts; the safety rules run at once."""
+    await session_row(principal, session_id)
+    if await intake.state(session_id) is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
+    entries = device_facts(session_id, reading)
+    if entries:
+        await intake.add_facts_and_evaluate(session_id, entries)
+    await touch(principal.clinic_id, session_id)
+    return VitalsAccepted(session_id=session_id, fact_ids=[e.fact_id for e in entries])
+
+
+@router.get(
+    "/v1/sessions/{session_id}/triage", response_model=TriageView, response_model_exclude_unset=True
+)
+async def get_triage(
+    session_id: str,
+    principal: Annotated[Principal, Depends(require_roles("nurse", "doctor"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+) -> TriageView:
+    await session_row(principal, session_id)
+    state = await intake.state(session_id)
+    if state is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="No intake for this session.")
+    return triage_view(state)
+
+
+__all__ = ["device_facts", "initials", "question_of", "router", "runtime", "session_row"]

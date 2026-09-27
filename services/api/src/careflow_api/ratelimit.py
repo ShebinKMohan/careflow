@@ -63,6 +63,31 @@ def _hit(key: str, limit: int, window_seconds: int) -> bool:
     return _hit_memory(key, limit, window_seconds)
 
 
+def count(key: str) -> int:
+    """How many hits `key` has in its current window (0 when none), without adding one."""
+    client = _get_redis()
+    if client is not None:
+        try:
+            return int(client.get(key) or 0)
+        except Exception:  # noqa: BLE001
+            logger.warning("Rate-limit Redis error; falling back to in-process limiter.")
+    reset_at, hits = _memory.get(key, (0.0, 0))
+    return hits if time.monotonic() <= reset_at else 0
+
+
+def failure_limit(
+    name: str, key: str, *, limit: int, window_seconds: int
+) -> tuple[bool, Callable[[], None]]:
+    """(allowed, record_failure) for a limit on failed attempts only (e.g. keypad guessing):
+    blocked once `limit` failures fall in the window; call `record_failure()` after a failure."""
+    full = f"{key_prefix}:{name}:{key}"
+
+    def record_failure() -> None:
+        _hit(full, limit, window_seconds)
+
+    return count(full) < limit, record_failure
+
+
 def reset_memory() -> None:
     """Clear the in-process buckets (tests)."""
     _memory.clear()

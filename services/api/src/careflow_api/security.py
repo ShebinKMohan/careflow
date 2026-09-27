@@ -51,10 +51,11 @@ def create_access_token(
     clinic_id: uuid.UUID | str,
     extra: dict[str, Any] | None = None,
     now: dt.datetime | None = None,
+    ttl: dt.timedelta | None = None,
 ) -> tuple[str, int]:
-    """Return the token and its lifetime in seconds."""
+    """Return the token and its lifetime in seconds (`ttl` may shorten the role's default)."""
     issued = now or dt.datetime.now(tz=dt.UTC)
-    ttl = TOKEN_TTL[role]
+    ttl = min(ttl, TOKEN_TTL[role]) if ttl is not None else TOKEN_TTL[role]
     payload: dict[str, Any] = {
         "sub": subject,
         "role": role,
