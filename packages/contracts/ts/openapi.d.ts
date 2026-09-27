@@ -1040,6 +1040,11 @@ export interface components {
          * @enum {string}
          */
         AcvpuCode: "A" | "C" | "V" | "P" | "U";
+        /**
+         * @description Every leaf fact path in StructuredFacts (list-valued paths name the list). Used for question keys, needed facts, missing inputs, FHIR mapping keys and Questionnaire linkIds.
+         * @enum {string}
+         */
+        FactKey: "patient.age_years" | "patient.age_months" | "patient.sex" | "chief_complaint" | "complaint_category" | "symptoms" | "symptom_onset_at" | "severity" | "pain_score" | "pain_present" | "pain_location" | "injury" | "arrival_mode" | "allergies_confirm" | "fast.face_droop" | "fast.arm_weakness" | "fast.speech_difficulty" | "fast.last_known_well" | "chest_pain.present" | "chest_pain.radiates" | "chest_pain.sweating" | "chest_pain.short_of_breath" | "chest_pain.onset" | "infection.suspected" | "infection.fever_reported" | "infection.rigors" | "child_danger.hard_to_wake" | "child_danger.no_response_to_social_cues" | "child_danger.weak_high_pitched_or_continuous_cry" | "child_danger.pale_mottled_ashen_or_blue" | "child_danger.grunting" | "child_danger.non_blanching_rash" | "child_danger.neck_stiffness" | "child_danger.seizure" | "child_danger.appears_ill_to_hcp" | "child_danger.chest_indrawing" | "child_danger.reduced_skin_turgor" | "child_danger.bulging_fontanelle" | "child_danger.focal_neuro_signs" | "child_amber.pallor_reported" | "child_amber.not_responding_normally" | "child_amber.decreased_activity" | "child_amber.wakes_only_with_prolonged_stimulation" | "child_amber.nasal_flaring" | "child_amber.crackles" | "child_amber.cap_refill_3s_or_more" | "child_amber.dry_mucous_membranes" | "child_amber.poor_feeding" | "child_amber.reduced_urine_output" | "child_amber.fever_5_days_or_more" | "child_amber.limb_or_joint_swelling" | "child_amber.non_weight_bearing" | "vitals.heart_rate" | "vitals.spo2" | "vitals.temperature_c" | "vitals.respiratory_rate" | "vitals.systolic_bp" | "vitals.diastolic_bp" | "vitals.acvpu" | "vitals.on_supplemental_o2" | "ehr_context.allergies" | "ehr_context.conditions" | "ehr_context.medications";
         /** @description Staff login (dev users only; synthetic). */
         LoginRequest: {
             username: string;
@@ -1216,6 +1221,31 @@ export interface components {
             /** @description -> vitals.on_supplemental_o2 (yes/no) */
             on_supplemental_o2?: boolean;
         };
+        /**
+         * @description Why the nurse should double-check a session: extraction failed validation twice (extraction_incomplete), the EHR could not be read at check-in (ehr_unavailable), or the intake ended before its questions were done (intake_stopped_early).
+         * @enum {string}
+         */
+        SessionWarning: "extraction_incomplete" | "ehr_unavailable" | "intake_stopped_early";
+        /** @description The 0-3 subscore of each NEWS2 parameter that was measured. */
+        News2Subscores: {
+            respiratory_rate?: number;
+            spo2?: number;
+            systolic_bp?: number;
+            heart_rate?: number;
+            acvpu?: number;
+            temperature_c?: number;
+            on_supplemental_o2?: number;
+        };
+        /** @description NEWS2 (RCP 2017) from the latest vitals, as the rules engine scored it. Partial until all seven parameters are present, and never shown as a full score while partial. */
+        News2Score: {
+            total: number;
+            subscores: components["schemas"]["News2Subscores"];
+            missing: components["schemas"]["FactKey"][];
+            partial: boolean;
+            any_single_3: boolean;
+            /** @enum {string} */
+            risk_band: "low" | "low-medium" | "medium" | "high";
+        };
         /** @enum {string} */
         TriageStatus: "awaiting_nurse" | "confirmed";
         TriageView: {
@@ -1225,6 +1255,10 @@ export interface components {
             suggestion: components["schemas"]["UrgencySuggestion"] | null;
             needed_facts?: components["schemas"]["NeededFact"][];
             decision?: components["schemas"]["NurseDecision"];
+            /** @description Null when NEWS2 does not apply (under 16) or no vitals exist yet. */
+            news2?: components["schemas"]["News2Score"] | null;
+            open_tasks?: components["schemas"]["Task"][];
+            warnings?: components["schemas"]["SessionWarning"][];
         };
         /** @enum {string} */
         TaskKind: "ecg_within_10_min";
@@ -1263,6 +1297,15 @@ export interface components {
             confirmed_level?: components["schemas"]["UrgencyLevel"];
             scale?: components["schemas"]["TriageScale"];
             open_tasks: components["schemas"]["Task"][];
+            age_years?: number;
+            /**
+             * @description Administrative gender (http://hl7.org/fhir/administrative-gender).
+             * @enum {string}
+             */
+            sex?: "male" | "female" | "other" | "unknown";
+            /** @description The chief complaint, short. Staff screens only. */
+            complaint?: string;
+            warnings?: components["schemas"]["SessionWarning"][];
         };
         Worklist: components["schemas"]["WorklistItem"][];
         /** @enum {string} */
@@ -1960,11 +2003,6 @@ export interface components {
          * @enum {string}
          */
         ExtractionStatus: "complete" | "incomplete";
-        /**
-         * @description Every leaf fact path in StructuredFacts (list-valued paths name the list). Used for question keys, needed facts, missing inputs, FHIR mapping keys and Questionnaire linkIds.
-         * @enum {string}
-         */
-        FactKey: "patient.age_years" | "patient.age_months" | "patient.sex" | "chief_complaint" | "complaint_category" | "symptoms" | "symptom_onset_at" | "severity" | "pain_score" | "pain_present" | "pain_location" | "injury" | "arrival_mode" | "allergies_confirm" | "fast.face_droop" | "fast.arm_weakness" | "fast.speech_difficulty" | "fast.last_known_well" | "chest_pain.present" | "chest_pain.radiates" | "chest_pain.sweating" | "chest_pain.short_of_breath" | "chest_pain.onset" | "infection.suspected" | "infection.fever_reported" | "infection.rigors" | "child_danger.hard_to_wake" | "child_danger.no_response_to_social_cues" | "child_danger.weak_high_pitched_or_continuous_cry" | "child_danger.pale_mottled_ashen_or_blue" | "child_danger.grunting" | "child_danger.non_blanching_rash" | "child_danger.neck_stiffness" | "child_danger.seizure" | "child_danger.appears_ill_to_hcp" | "child_danger.chest_indrawing" | "child_danger.reduced_skin_turgor" | "child_danger.bulging_fontanelle" | "child_danger.focal_neuro_signs" | "child_amber.pallor_reported" | "child_amber.not_responding_normally" | "child_amber.decreased_activity" | "child_amber.wakes_only_with_prolonged_stimulation" | "child_amber.nasal_flaring" | "child_amber.crackles" | "child_amber.cap_refill_3s_or_more" | "child_amber.dry_mucous_membranes" | "child_amber.poor_feeding" | "child_amber.reduced_urine_output" | "child_amber.fever_5_days_or_more" | "child_amber.limb_or_joint_swelling" | "child_amber.non_weight_bearing" | "vitals.heart_rate" | "vitals.spo2" | "vitals.temperature_c" | "vitals.respiratory_rate" | "vitals.systolic_bp" | "vitals.diastolic_bp" | "vitals.acvpu" | "vitals.on_supplemental_o2" | "ehr_context.allergies" | "ehr_context.conditions" | "ehr_context.medications";
         /** @description One of the top reasons for the suggestion, citing the facts it rests on. */
         SuggestionReason: {
             text: string;
@@ -2922,7 +2960,25 @@ export interface operations {
                      *         "model_version": "0.1.0",
                      *         "created_at": "2026-09-26T09:04:00Z"
                      *       },
-                     *       "needed_facts": []
+                     *       "needed_facts": [],
+                     *       "news2": {
+                     *         "total": 15,
+                     *         "subscores": {
+                     *           "respiratory_rate": 3,
+                     *           "spo2": 2,
+                     *           "systolic_bp": 3,
+                     *           "heart_rate": 2,
+                     *           "acvpu": 3,
+                     *           "temperature_c": 2,
+                     *           "on_supplemental_o2": 0
+                     *         },
+                     *         "missing": [],
+                     *         "partial": false,
+                     *         "any_single_3": true,
+                     *         "risk_band": "high"
+                     *       },
+                     *       "open_tasks": [],
+                     *       "warnings": []
                      *     }
                      */
                     "application/json": components["schemas"]["TriageView"];
@@ -3079,7 +3135,26 @@ export interface operations {
                      *           "audience": "nurse",
                      *           "reason": "news2_incomplete"
                      *         }
-                     *       ]
+                     *       ],
+                     *       "news2": {
+                     *         "total": 6,
+                     *         "subscores": {
+                     *           "spo2": 2,
+                     *           "heart_rate": 2,
+                     *           "temperature_c": 2
+                     *         },
+                     *         "missing": [
+                     *           "vitals.respiratory_rate",
+                     *           "vitals.systolic_bp",
+                     *           "vitals.acvpu",
+                     *           "vitals.on_supplemental_o2"
+                     *         ],
+                     *         "partial": true,
+                     *         "any_single_3": false,
+                     *         "risk_band": "medium"
+                     *       },
+                     *       "open_tasks": [],
+                     *       "warnings": []
                      *     }
                      */
                     "application/json": components["schemas"]["TriageView"];
@@ -3244,6 +3319,10 @@ export interface operations {
                      *         ],
                      *         "suggested_level": 2,
                      *         "scale": "KTAS",
+                     *         "age_years": 58,
+                     *         "sex": "male",
+                     *         "complaint": "Crushing chest pain for about an hour",
+                     *         "warnings": [],
                      *         "open_tasks": [
                      *           {
                      *             "task_id": "tsk_chest_pain_ecg",
@@ -3264,7 +3343,11 @@ export interface operations {
                      *         "suggested_level": 5,
                      *         "confirmed_level": 5,
                      *         "scale": "KTAS",
-                     *         "open_tasks": []
+                     *         "open_tasks": [],
+                     *         "age_years": 34,
+                     *         "sex": "female",
+                     *         "complaint": "Sore throat for five days",
+                     *         "warnings": []
                      *       }
                      *     ]
                      */

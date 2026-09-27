@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from careflow_contracts.generated.structured_facts_schema import (
     AcvpuCode,
+    FactKey,
     Language,
     NeededFact,
     StructuredFacts,
@@ -37,6 +38,7 @@ from typing import Annotated, Literal
 from enum import StrEnum
 from careflow_contracts.generated.structured_facts_schema import (
     AcvpuCode,
+    FactKey,
     Language,
     NeededFact,
     StructuredFacts,
@@ -131,6 +133,9 @@ type UrgencyLevelModel = UrgencyLevel
 
 
 type AcvpuCodeModel = AcvpuCode
+
+
+type FactKeyModel = FactKey
 
 
 class LoginRequest(BaseModel):
@@ -393,21 +398,47 @@ class NurseVitalsRequest(BaseModel):
     ] = None
 
 
-class TriageStatus(StrEnum):
-    awaiting_nurse = "awaiting_nurse"
-    confirmed = "confirmed"
+class SessionWarning(StrEnum):
+    extraction_incomplete = "extraction_incomplete"
+    ehr_unavailable = "ehr_unavailable"
+    intake_stopped_early = "intake_stopped_early"
 
 
-class TriageView(BaseModel):
+class News2Subscores(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    session_id: Identifier
-    status: TriageStatus
-    alerts: list[AlertModel]
-    suggestion: UrgencySuggestionModel | None
-    needed_facts: list[NeededFactModel] | None = None
-    decision: NurseDecisionModel | None = None
+    respiratory_rate: Annotated[int | None, Field(ge=0, le=3)] = None
+    spo2: Annotated[int | None, Field(ge=0, le=3)] = None
+    systolic_bp: Annotated[int | None, Field(ge=0, le=3)] = None
+    heart_rate: Annotated[int | None, Field(ge=0, le=3)] = None
+    acvpu: Annotated[int | None, Field(ge=0, le=3)] = None
+    temperature_c: Annotated[int | None, Field(ge=0, le=3)] = None
+    on_supplemental_o2: Annotated[int | None, Field(ge=0, le=3)] = None
+
+
+class RiskBand(StrEnum):
+    low = "low"
+    low_medium = "low-medium"
+    medium = "medium"
+    high = "high"
+
+
+class News2Score(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    total: Annotated[int, Field(ge=0, le=20)]
+    subscores: News2Subscores
+    missing: list[FactKeyModel]
+    partial: bool
+    any_single_3: bool
+    risk_band: RiskBand
+
+
+class TriageStatus(StrEnum):
+    awaiting_nurse = "awaiting_nurse"
+    confirmed = "confirmed"
 
 
 class TaskKind(StrEnum):
@@ -442,6 +473,13 @@ class AlertChip(BaseModel):
     partial: bool
 
 
+class Sex(StrEnum):
+    male = "male"
+    female = "female"
+    other = "other"
+    unknown = "unknown"
+
+
 class WorklistItem(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -456,6 +494,16 @@ class WorklistItem(BaseModel):
     confirmed_level: UrgencyLevelModel | None = None
     scale: TriageScaleModel | None = None
     open_tasks: list[Task]
+    age_years: Annotated[int | None, Field(ge=0, le=130)] = None
+    sex: Annotated[
+        Sex | None,
+        Field(description="Administrative gender (http://hl7.org/fhir/administrative-gender)."),
+    ] = None
+    complaint: Annotated[
+        str | None,
+        Field(description="The chief complaint, short. Staff screens only.", max_length=80),
+    ] = None
+    warnings: list[SessionWarning] | None = None
 
 
 type Worklist = list[WorklistItem]
@@ -791,6 +839,24 @@ class SessionStatus(BaseModel):
     room: str | None = None
     wait_estimate_min: Annotated[int | None, Field(ge=0)] = None
     vitals: LatestVitals | None = None
+
+
+class TriageView(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: Identifier
+    status: TriageStatus
+    alerts: list[AlertModel]
+    suggestion: UrgencySuggestionModel | None
+    needed_facts: list[NeededFactModel] | None = None
+    decision: NurseDecisionModel | None = None
+    news2: Annotated[
+        News2Score | None,
+        Field(description="Null when NEWS2 does not apply (under 16) or no vitals exist yet."),
+    ] = None
+    open_tasks: list[Task] | None = None
+    warnings: list[SessionWarning] | None = None
 
 
 class DecisionResult(BaseModel):

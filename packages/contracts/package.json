@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./ts/index.ts",
-    "./client": "./ts/client.ts"
+    "./client": "./ts/client.ts",
+    "./alert-templates": "./ts/alertTemplates.ts"
   },
   "scripts": {
     "generate": "openapi-typescript openapi.yaml -o ts/openapi.d.ts",

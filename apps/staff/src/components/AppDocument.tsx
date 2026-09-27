@@ -19,7 +19,7 @@ export function AppDocument({ locale, messages, className, children }: AppDocume
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={DEFAULT_TIME_ZONE}>
           <SiteHeader />
-          <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-gutter py-8">{children}</main>
+          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-gutter py-8">{children}</main>
           <PrototypeFooter locale={locale} />
         </NextIntlClientProvider>
       </body>
