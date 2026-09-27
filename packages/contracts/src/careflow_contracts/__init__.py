@@ -38,7 +38,6 @@ from careflow_contracts.generated.nurse_decision_schema import (
     OverrideReasonCode,
 )
 from careflow_contracts.generated.retrieved_chunk_schema import RetrievedChunk
-from careflow_contracts.generated.turn_intent_schema import TurnIntent
 from careflow_contracts.generated.structured_facts_schema import (
     AcvpuCode,
     AcvpuCoding,
@@ -71,6 +70,7 @@ from careflow_contracts.generated.structured_facts_schema import (
     TurnRole,
     Vitals,
 )
+from careflow_contracts.generated.turn_intent_schema import TurnIntent
 from careflow_contracts.generated.urgency_suggestion_schema import (
     SuggestionReason,
     TriageScale,
