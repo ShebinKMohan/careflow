@@ -1,0 +1,8 @@
+id: child-3y-fever-5-days-or-more-unsure
+description: "3-year-old; the parent answers not sure (unknown) to child_amber.fever_5_days_or_more (M2-04, generated)."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 3, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.fever_5_days_or_more, value: "unknown", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: []

@@ -30,6 +30,7 @@ lint-py:
 	uv run ruff check .
 	uv run ruff format --check .
 	uv run python scripts/i18n/backtranslate.py --check
+	uv run python scripts/child_scenarios.py --check
 
 lint-node:
 	pnpm -r lint

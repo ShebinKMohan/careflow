@@ -1,0 +1,8 @@
+id: child-9y-non-blanching-rash-yes
+description: "9-year-old; the parent answers yes to child_danger.non_blanching_rash (M2-04, generated)."
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 9, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_danger.non_blanching_rash, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: []

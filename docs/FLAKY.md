@@ -67,6 +67,17 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   The load still grows with open visits (decoding each checkpoint is CPU work); a worklist
   projection would stop that (ADR-051, M6-01). The test stack keeps every journey's visits open
   for 24 hours, far more than a clinic holds. Nothing was retried or loosened.
+- **The child parent path (M2-04, SHE-293, `e2e/journeys/child-parent-path.spec.ts`).** The same
+  2 s rule and handling, from the kiosk getting a parent's "Yes" to hard to wake to the critical
+  `NG143_RED_FLAG` chip. With the models replayed and 352 open visits, six runs of each language
+  passed: 543 to 1,594 ms.
+  - While its cassette was recorded, the live Qwen3.5-9B shared this 18 GB machine with the dev
+    stack, the e2e stack and Docker. Memory was under pressure (about 8 GB compressed, heavy
+    swapping).
+  - Arabic failed the budget twice, at 2,530 and 6,431 ms; one tap, which uses no model, took
+    4.1 s. English passed at 1,751 ms, and failed once in the first recording run, whose message
+    was overwritten.
+  - Nothing was retried or loosened; the journeys run replayed (docs/evidence/M2-04.md).
 
 ## `services/api/tests/test_events_ws.py::test_heartbeats_and_replay_after_a_reconnect` (M1-11)
 

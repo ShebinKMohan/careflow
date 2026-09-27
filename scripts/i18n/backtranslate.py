@@ -1,7 +1,9 @@
 """Back-translation drift check for the Arabic UI strings (M2-01).
 
 There is no native Arabic reviewer, so meaning drift is caught by machine, and the report says so.
-Each Arabic string of the three apps and of the shared footer is translated back to English by the
+Each Arabic string of the three apps, of the shared footer and of the nurse's alert lines
+(packages/contracts/alert_templates.yaml: `Alert.display_text` and its qualifiers, checked as
+`safety.alerts.<rule>` and `safety.qualifiers.<name>`, SHE-293) is translated back to English by the
 provider configured for the `translation_check` task (the local Qwen3.5-9B by default: offline,
 zero cost). The model does not see the English while it translates. Then the back-translation is
 compared with the English original twice: by the model's judgement, and by chrF (sacrebleu). A key
@@ -37,6 +39,7 @@ from typing import Any, Final, cast
 
 import httpx
 import sacrebleu
+import yaml
 from pydantic import BaseModel, Field
 
 from careflow_providers import (
@@ -49,7 +52,7 @@ from careflow_providers import (
 
 REPO: Final = Path(__file__).resolve().parents[2]
 # The three apps' messages, and the shared footer's (packages/ui: "Not for clinical use").
-APPS: Final = ("kiosk", "staff", "companion", "ui")
+APPS: Final = ("kiosk", "staff", "companion", "ui", "alerts")
 REPORT_JSON: Final = REPO / "eval" / "reports" / "i18n_backtranslation.json"
 REPORT_MD: Final = REPO / "eval" / "reports" / "i18n_backtranslation.md"
 UNRESOLVED: Final = REPO / "docs" / "i18n" / "unresolved.md"
@@ -125,12 +128,29 @@ def leaves(value: Any, prefix: str = "") -> dict[str, str]:
 
 
 def messages(app: str, locale: str) -> Path:
+    """The file with `app`'s strings in `locale`; the alert lines hold both locales in one file."""
+    if app == "alerts":
+        return REPO / "packages" / "contracts" / "alert_templates.yaml"
     folder = REPO / "packages" / "ui" / "src" if app == "ui" else REPO / "apps" / app
     return folder / "messages" / f"{locale}.json"
 
 
 def load_messages(app: str, locale: str) -> dict[str, str]:
-    return leaves(json.loads(messages(app, locale).read_text(encoding="utf-8")))
+    text = messages(app, locale).read_text(encoding="utf-8")
+    if app == "alerts":
+        return alert_lines(yaml.safe_load(text) or {}, locale)
+    return leaves(json.loads(text))
+
+
+def alert_lines(templates: dict[str, Any], locale: str) -> dict[str, str]:
+    """The nurse's alert lines in `locale`, as `safety.` keys: every one is safety text."""
+    lines = {
+        f"safety.alerts.{rule}": str(entry[locale])
+        for rule, entry in (templates.get("rules") or {}).items()
+    }
+    for name, entry in (templates.get("qualifiers") or {}).items():
+        lines[f"safety.qualifiers.{name}"] = str(entry[locale])
+    return lines
 
 
 def sha256(path: Path) -> str:

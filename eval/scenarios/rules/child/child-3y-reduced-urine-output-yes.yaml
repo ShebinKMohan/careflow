@@ -1,0 +1,9 @@
+id: child-3y-reduced-urine-output-yes
+description: "3-year-old; the parent answers yes to child_amber.reduced_urine_output (M2-04, generated)."
+covers: [amber:child_amber.reduced_urine_output]
+now: "2026-09-26T09:05:00Z"
+arrived_at: "2026-09-26T09:00:00Z"
+facts:
+  - {path: patient.age_years, value: 3, provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:00:00Z"}
+  - {path: child_amber.reduced_urine_output, value: "yes", provenance: PATIENT_STATED, recorded_at: "2026-09-26T09:01:00Z"}
+expect_alerts: [NG143_AMBER_FLAG]

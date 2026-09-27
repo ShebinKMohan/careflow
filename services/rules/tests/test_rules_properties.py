@@ -1,4 +1,5 @@
-"""Properties of the M1-02 rules (Hypothesis, 500 examples each): danger only ever adds alerts."""
+"""Properties of the M1-02 and M2-04 rules (Hypothesis, 500 examples each): danger only ever adds
+alerts, and a hard-to-wake child always raises a critical one."""
 
 from __future__ import annotations
 
@@ -8,7 +9,7 @@ from typing import Final
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from careflow_contracts import FactKey, RuleId
+from careflow_contracts import AlertSeverity, FactKey, RuleId
 from careflow_rules import evaluate
 from careflow_rules.rules.child_ng143 import AMBER_ANSWERS, RED_ANSWERS
 from careflow_rules.rules.stroke_fast import FAST_SCREEN_SYMPTOMS, SIGNS
@@ -136,3 +137,51 @@ def test_chest_pain_deadline_is_arrival_plus_10_minutes(
     [alert] = evaluate(facts, NOW, arrived_at=arrived_at).alerts
     assert alert.deadline_at is not None
     assert alert.deadline_at - arrived_at == timedelta(minutes=10)
+
+
+PARENT_ANSWERS: Final = [key.value for key in (*RED_ANSWERS, *AMBER_ANSWERS)]
+
+
+def child_age() -> st.SearchStrategy[Entry]:
+    """Any age under 16 as the kiosk records it (months, or whole years), or as the EHR does."""
+    return st.one_of(
+        st.integers(0, 191).map(lambda m: ("patient.age_months", str(m), "EHR")),
+        st.integers(0, 15).map(lambda y: ("patient.age_years", str(y), "PATIENT_STATED")),
+    )
+
+
+def other_answers() -> st.SearchStrategy[list[Entry]]:
+    """Any other answers a parent can give: yes, no or not sure to any other question."""
+    return st.lists(
+        st.tuples(
+            st.sampled_from([key for key in PARENT_ANSWERS if key != "child_danger.hard_to_wake"]),
+            st.sampled_from(["yes", "no", "unknown"]),
+        ).map(lambda pair: (pair[0], pair[1], "PATIENT_STATED")),
+        max_size=10,
+    )
+
+
+@EXAMPLES
+@given(child_age(), st.sampled_from(["yes", "unknown"]), other_answers())
+def test_a_hard_to_wake_child_always_raises_a_critical_alert(
+    patient_age: Entry, answer: str, others: list[Entry]
+) -> None:
+    """M2-04: at any age under 16, whatever else the parent answered, "hard to wake" answered yes
+    or "Not sure" raises a critical alert: NG143_RED_FLAG under 5, CHILD_HARD_TO_WAKE from 5."""
+    entries = one_per_path(
+        [patient_age, ("child_danger.hard_to_wake", answer, "PATIENT_STATED"), *others]
+    )
+    facts = facts_from_entries(
+        [{"path": p, "value": v, "provenance": prov, "recorded_at": AT} for p, v, prov in entries]
+    )
+    raised = evaluate(facts, NOW).alerts
+    expected = RuleId.CHILD_HARD_TO_WAKE if months_of(patient_age) >= 60 else RuleId.NG143_RED_FLAG
+    assert any(
+        alert.rule_id is expected and alert.severity is AlertSeverity.critical for alert in raised
+    )
+
+
+def months_of(entry: Entry) -> int:
+    """The youngest age in months an age entry allows."""
+    path, value, _ = entry
+    return int(value) if path == "patient.age_months" else int(value) * 12

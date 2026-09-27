@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T16:03:38+00:00",
+  "generated_at": "2026-09-27T17:58:52+00:00",
   "provider": {
     "task": "translation_check",
     "model": "qwen3.5-9b-4bit",
@@ -28,9 +28,126 @@
       "ar_messages_sha256": "24cf3a400ea300679badd13c78737cbfd5e18384b78be94101898d8095a0c681",
       "en_messages_sha256": "a5ed63f26615208cda6c5b031335bcec5c2d11c557f35ab551bb896266ebf897",
       "strings": 2
+    },
+    "alerts": {
+      "ar_messages_sha256": "5575e5142b98be8b5452929f2b1bac872180ad479e86d0269c7a2d5d4a047a5a",
+      "en_messages_sha256": "5575e5142b98be8b5452929f2b1bac872180ad479e86d0269c7a2d5d4a047a5a",
+      "strings": 8
     }
   },
   "items": [
+    {
+      "app": "alerts",
+      "key": "safety.alerts.CHEST_PAIN_ECG_10MIN",
+      "safety": true,
+      "english": "Chest pain: ECG within 10 minutes of arrival.",
+      "arabic": "ألم في الصدر: تخطيط القلب خلال 10 دقائق من الوصول.",
+      "back_translation": "Chest pain: ECG within 10 minutes of arrival.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 100.0,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.alerts.CHILD_HARD_TO_WAKE",
+      "safety": true,
+      "english": "Child hard to wake. Urgent medical review.",
+      "arabic": "يصعب إيقاظ الطفل. مراجعة طبية عاجلة.",
+      "back_translation": "Difficult to wake the child. Urgent medical review.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 67.4,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.alerts.FAST_STROKE",
+      "safety": true,
+      "english": "Possible stroke: FAST screen positive. Immediate stroke assessment.",
+      "arabic": "سكتة دماغية محتملة: فحص FAST إيجابي. تقييم فوري للسكتة الدماغية.",
+      "back_translation": "Possible stroke: Positive FAST exam. Immediate stroke assessment.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 75.6,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.alerts.NG143_AMBER_FLAG",
+      "safety": true,
+      "english": "Child amber flag (NICE NG143). Prompt clinical assessment.",
+      "arabic": "علامة تحذير برتقالية لدى الطفل (NICE NG143). تقييم سريري سريع.",
+      "back_translation": "Orange warning in the child (NICE NG143). Rapid clinical assessment.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 57.5,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.alerts.NG143_RED_FLAG",
+      "safety": true,
+      "english": "Child red flag (NICE NG143). Urgent medical review.",
+      "arabic": "علامة خطر حمراء لدى الطفل (NICE NG143). مراجعة طبية عاجلة.",
+      "back_translation": "Red flag in the child (NICE NG143). Urgent medical review.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 81.2,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.alerts.SEPSIS_NEWS2",
+      "safety": true,
+      "english": "Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review.",
+      "arabic": "إنتان محتمل: اشتباه بعدوى مع NEWS2 بقيمة 5 أو أكثر. مراجعة عاجلة.",
+      "back_translation": "Possible sepsis: Suspected infection with NEWS2 score of 5 or more. Urgent review.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 88.1,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.qualifiers.parent_unsure",
+      "safety": true,
+      "english": "parent unsure",
+      "arabic": "ولي الأمر غير متأكد",
+      "back_translation": "Parent is unsure",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 56.2,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "alerts",
+      "key": "safety.qualifiers.partial_news2",
+      "safety": true,
+      "english": "partial NEWS2 (kiosk vitals only)",
+      "arabic": "NEWS2 جزئي (قياسات الكشك فقط)",
+      "back_translation": "Partial NEWS2 (kiosk measurements only)",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 65.6,
+      "flagged": false,
+      "checked_at": "2026-09-27T17:58:52+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
     {
       "app": "companion",
       "key": "safety.child.drowsyQuestion",

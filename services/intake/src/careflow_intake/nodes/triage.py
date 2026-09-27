@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Final
 
 from langgraph.types import interrupt
 from pydantic import ValidationError
@@ -24,6 +24,9 @@ from careflow_intake.state import IntakeSettings, IntakeState, structured_facts
 logger = logging.getLogger(__name__)
 
 
+CHILD_NO_SUGGESTION: Final = "a child: the urgency model is trained on adults only"
+
+
 class InvalidNurseDecision(ValueError):
     """The nurse's decision is not acceptable (e.g. a changed level without a reason)."""
 
@@ -32,7 +35,10 @@ async def suggest_urgency(
     state: IntakeState, ports: IntakePorts, settings: IntakeSettings
 ) -> Update:
     """Ask the urgency model for a suggestion. Without one (model cannot suggest, fails, or cites
-    facts that are not in the session) the nurse sets the level alone."""
+    facts that are not in the session) the nurse sets the level alone. A child (under 16, M2-04)
+    gets none: the model is trained on adults, and its own age guard stops at 15 (SHE-293)."""
+    if state.get("patient_type") == "child":
+        return _unavailable(CHILD_NO_SUGGESTION)
     facts = structured_facts(state)
     session_id = state["session_id"]
     try:

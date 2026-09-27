@@ -24,6 +24,16 @@
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Yesterday afternoon\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My left ankle\", \"turn_id\": \"t8\", \"quote\": \"My left ankle\", \"negated\": false}]}"
   },
+  "5f3c67bb299a5805afea6269ee51ab5e17dc34dd4e10d321b685b53a4e883012": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"patient.age_years\", \"value\": 2, \"turn_id\": \"t5\", \"quote\": \"2 years\", \"negated\": false}, {\"key\": \"chief_complaint\", \"value\": \"My son has had a fever since last night\", \"turn_id\": \"t6\", \"quote\": \"My son has had a fever since last night\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"My son has had a fever\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since last night\", \"turn_id\": \"t6\", \"quote\": \"since last night\", \"negated\": false}]}"
+  },
+  "7b84cbab7c75236c48a88b6e8ed2ee1cc864dde1b6057ab4890b14e389dc86ab": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"patient.age_years\", \"value\": 2, \"turn_id\": \"t5\", \"quote\": \"2 سنة\", \"negated\": false}, {\"key\": \"chief_complaint\", \"value\": \"Fever since last night\", \"turn_id\": \"t6\", \"quote\": \"ابني عنده حمّى منذ الليلة الماضية\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"حمّى منذ الليلة الماضية\", \"negated\": false}]}"
+  },
   "8fd4dbf5d834d27c2cc03dc15b02a310b905fefdfa5e560dcd42ad9117c06e11": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
