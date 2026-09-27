@@ -2,24 +2,26 @@
 
 import { Card } from "@careflow/ui";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 
-import { api } from "@/lib/api";
-import { useApiData } from "@/lib/useApiData";
+import type { LiveStatus } from "@/lib/liveStatus";
 
-/** GET /v1/companion/status: queue position and number only; never a level or an alert. */
-export function StatusView() {
+/**
+ * The waiting room's status card (M2-07): token, room, place in the queue and wait estimate,
+ * updated live; never a level or an alert.
+ */
+export function StatusView({ live }: { live: LiveStatus }) {
   const t = useTranslations("status");
-  const state = useApiData(() => api.GET("/v1/companion/status"), "status");
-  if (state.status === "loading") return <p aria-busy="true">{t("loading")}</p>;
-  if (state.status === "failed") {
+  const format = useFormatter();
+  if (live.status === "loading") return <p aria-busy="true">{t("loading")}</p>;
+  if (live.status === "failed") {
     return (
       <p role="alert" className="font-semibold text-danger">
         {t("failed")}
       </p>
     );
   }
-  if (state.status === "unauthorized") {
+  if (live.status === "unauthorized") {
     return (
       <Card>
         <p className="mb-4">{t("unauthorized")}</p>
@@ -29,15 +31,24 @@ export function StatusView() {
       </Card>
     );
   }
-  const { position, wait_estimate_minutes: minutes, token } = state.data;
+  const { position, wait_estimate_minutes: minutes, token, room, state } = live.data;
+  const updated = format.dateTime(new Date(live.updatedAt), { timeStyle: "short", numberingSystem: "latn" });
   return (
     <Card>
-      <p className="text-display font-bold" dir="ltr">
-        {token ? token.token_code : null}
-      </p>
-      <p>{token ? t.rich("token", { code: token.token_code, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> }) : t("noToken")}</p>
-      <p>{t("position", { position })}</p>
-      <p>{t("wait", { minutes })}</p>
+      <div aria-live="polite" className="flex flex-col gap-2" data-testid="waiting-status">
+        <p className="text-display font-bold" dir="ltr">
+          {token ? token.token_code : null}
+        </p>
+        <p>{token ? t.rich("token", { code: token.token_code, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> }) : t("noToken")}</p>
+        {state === "called" && room ? (
+          <p className="text-title font-semibold">{t.rich("room", { room, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
+        ) : null}
+        {position !== null ? <p data-testid="position">{t("position", { position })}</p> : null}
+        {minutes !== null ? <p>{t("wait", { minutes })}</p> : null}
+        <p className="text-label text-ink-muted">
+          {t("updated", { time: updated })} {live.live ? null : t("paused")}
+        </p>
+      </div>
     </Card>
   );
 }

@@ -11,6 +11,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from careflow_api.aftercommit import after_commit
 from careflow_api.deps import Principal, get_db, require_roles
 from careflow_api.queue.core import InvalidTransition, RoomBusy
 from careflow_api.queue.rooms import UnknownDepartment, UnknownRoom
@@ -42,7 +43,11 @@ def conflict(exc: ValueError) -> HTTPException:
 
 @router.post("/v1/queue/{department}/call-next", response_model=CallNextResult)
 async def call_next(
-    department: str, principal: Nurse, db: Db, service: Service, room: str | None = None
+    department: str,
+    principal: Nurse,
+    db: Db,
+    service: Service,
+    room: str | None = None,
 ) -> CallNextResult:
     try:
         token = await service.call_next(
@@ -52,11 +57,17 @@ async def call_next(
         raise not_found(exc) from exc
     except RoomBusy as exc:
         raise conflict(exc) from exc
+    if token is not None:  # after the commit: every waiting phone moves up (M2-07)
+        after_commit(db, lambda: service.broadcast(principal.clinic_id, department))
     return CallNextResult(token=token)
 
 
 async def _change(
-    action: str, token_id: str, principal: Principal, db: AsyncSession, service: QueueService
+    action: str,
+    token_id: str,
+    principal: Principal,
+    db: AsyncSession,
+    service: QueueService,
 ) -> QueueToken:
     operations = {
         "arrived": service.mark_arrived,
@@ -64,11 +75,13 @@ async def _change(
         "close": service.close,
     }
     try:
-        return await operations[action](db, clinic_id=principal.clinic_id, token_id=token_id)
+        token = await operations[action](db, clinic_id=principal.clinic_id, token_id=token_id)
     except UnknownToken as exc:
         raise not_found(exc) from exc
     except InvalidTransition as exc:
         raise conflict(exc) from exc
+    after_commit(db, lambda: service.broadcast(principal.clinic_id, token.department))
+    return token
 
 
 @router.post("/v1/queue/tokens/{token_id}/arrived", response_model=QueueToken)

@@ -10,8 +10,20 @@
 from __future__ import annotations
 
 from careflow_contracts.generated.fact_schema import Identifier
+from enum import StrEnum
 from careflow_contracts.generated.fact_schema import Identifier
-from pydantic import AwareDatetime, BaseModel, ConfigDict
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
+from typing import Annotated
+
+
+class DangerAnswerCode(StrEnum):
+    chest_pain = "chest_pain"
+    short_of_breath = "short_of_breath"
+    face_droop = "face_droop"
+    arm_weakness = "arm_weakness"
+    speech_difficulty = "speech_difficulty"
+    drowsy_or_confused = "drowsy_or_confused"
+    drowsy_or_confused_unsure = "drowsy_or_confused_unsure"
 
 
 class PatientFeelsWorseData(BaseModel):
@@ -22,3 +34,17 @@ class PatientFeelsWorseData(BaseModel):
     session_id: Identifier
     flag_id: Identifier
     reported_at: AwareDatetime
+    press_count: Annotated[
+        int | None,
+        Field(
+            description="How many times the session has pressed it, this press included; repeats are never dropped. Always sent since M2-07.",
+            ge=1,
+        ),
+    ] = None
+    danger_answer_codes: Annotated[
+        list[DangerAnswerCode] | None,
+        Field(
+            description="The press's danger answers as codes (M2-07); never free text. Always sent since M2-07.",
+            max_length=7,
+        ),
+    ] = None

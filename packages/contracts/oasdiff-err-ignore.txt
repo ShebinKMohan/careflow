@@ -40,3 +40,10 @@ POST /v1/checkin/id-tap added the new required request property `mock_card_paylo
 POST /v1/checkin/id-tap the `mock_card_payload` request property `type` changed from `string` to `object`
 POST /v1/sessions/{session_id}/consent added the new required request property `consent_version`
 POST /v1/sessions/{session_id}/consent added the new required request property `data_use`
+# M2-07 (ADR-038): "I feel worse" sends the three danger answers, and the waiting-room status has
+# no position or wait when the patient is not waiting. Only the companion calls these routes; it
+# changes in the same PR.
+POST /v1/companion/feels-worse added the new required request property `answers`
+GET /v1/companion/status the response property `wait_estimate_minutes` became nullable for the status `200`
+GET /v1/companion/status response property `position` list-of-types was widened by adding types `null` to media type `application/json` of response `200`
+GET /v1/companion/status the `position` response property's min was unset from `0.00` for the response status `200`

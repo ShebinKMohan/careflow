@@ -5,7 +5,7 @@ Two channels push the same event envelope as the webhooks ([README.md](README.md
 | Channel | Clients (roles) | Carries (always only the caller's clinic) |
 |---|---|---|
 | `/v1/ws/staff` | nurse station, doctor screen, queue board, admin (`nurse`, `doctor`, `board`, `admin`) | Nurse: `alert.*`, `triage.*`, `token.*`, `intake.*`, `patient.feels_worse`, `nurse.flag`. Doctor: `triage.confirmed`, `intake.completed`. Board: `token.called`, `token.no_show`. Admin: every event type. |
-| `/v1/ws/sessions/{session_id}` | kiosk and companion phone (`kiosk_device`, `patient_session`) | That session's `token.called`, `token.no_show`, `intake.completed` and `session.handed_over` only: never an alert, a suggestion or an urgency level (patients see status, token and room). |
+| `/v1/ws/sessions/{session_id}` | kiosk and companion phone (`kiosk_device`, `patient_session`) | That session's `token.called`, `token.no_show`, `intake.completed`, `session.handed_over` and `queue.status` only: never an alert, a suggestion or an urgency level (patients see status, token and room). |
 
 Internal events (for example `fhir.write.completed`) never reach a socket.
 
@@ -34,3 +34,4 @@ same shape as any frame, `{id, type, timestamp, data}`.
 | Type | Channel | `data` | Meaning |
 | --- | --- | --- | --- |
 | `session.handed_over` | `/v1/ws/sessions/{session_id}` | `{"session_id": "..."}` | The patient claimed the session's QR hand-over on their phone (M2-06). The kiosk shows "Continued on your phone", forgets the patient and returns to the welcome screen; its tokens for the session no longer work. |
+| `queue.status` | `/v1/ws/sessions/{session_id}` | `CompanionStatus` (`state`, `position`, `wait_estimate_minutes`, `token`, `room`) | The waiting patient's place changed: sent to every waiting session of the department whenever its queue changes (M2-07). |

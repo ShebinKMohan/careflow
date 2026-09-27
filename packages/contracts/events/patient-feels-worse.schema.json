@@ -20,6 +20,29 @@
         "reported_at": {
           "type": "string",
           "format": "date-time"
+        },
+        "press_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "How many times the session has pressed it, this press included; repeats are never dropped. Always sent since M2-07."
+        },
+        "danger_answer_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 7,
+          "description": "The press's danger answers as codes (M2-07); never free text. Always sent since M2-07.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "chest_pain",
+              "short_of_breath",
+              "face_droop",
+              "arm_weakness",
+              "speech_difficulty",
+              "drowsy_or_confused",
+              "drowsy_or_confused_unsure"
+            ]
+          }
         }
       },
       "required": [
@@ -34,7 +57,11 @@
           "clinic_id": "clinic_demo",
           "session_id": "ses_routine",
           "flag_id": "flg_routine_01",
-          "reported_at": "2026-09-26T09:40:00Z"
+          "reported_at": "2026-09-26T09:40:00Z",
+          "press_count": 1,
+          "danger_answer_codes": [
+            "chest_pain"
+          ]
         }
       ]
     }

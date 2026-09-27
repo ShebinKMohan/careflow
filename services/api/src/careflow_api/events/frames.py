@@ -15,6 +15,7 @@ from careflow_api.events.relay import MAXLEN, STREAM
 from careflow_api.events.streams import xadd
 
 SESSION_HANDED_OVER = "session.handed_over"
+QUEUE_STATUS = "queue.status"
 
 
 async def publish_frame(
@@ -41,4 +42,4 @@ async def publish_frame(
     return await xadd(redis, stream, fields, maxlen=MAXLEN)
 
 
-__all__ = ["SESSION_HANDED_OVER", "publish_frame"]
+__all__ = ["QUEUE_STATUS", "SESSION_HANDED_OVER", "publish_frame"]

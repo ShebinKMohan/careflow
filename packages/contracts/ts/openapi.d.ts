@@ -1360,6 +1360,15 @@ export interface components {
             severity: components["schemas"]["AlertSeverity"];
             partial: boolean;
         };
+        /** @description A waiting patient's "I feel worse" presses (M2-07), for the nurse. The note is the patient's own words from the latest press that had one; it is never put in an event. */
+        FeelsWorseSummary: {
+            press_count: number;
+            /** Format: date-time */
+            last_reported_at: string;
+            /** @description The latest press's answers. */
+            danger_answer_codes: components["schemas"]["DangerAnswerCode"][];
+            note?: string;
+        };
         WorklistItem: {
             session_id: components["schemas"]["Identifier"];
             patient_display: string;
@@ -1380,6 +1389,7 @@ export interface components {
             sex?: "male" | "female" | "other" | "unknown";
             /** @description The chief complaint, short. Staff screens only. */
             complaint?: string;
+            feels_worse?: components["schemas"]["FeelsWorseSummary"];
             warnings?: components["schemas"]["SessionWarning"][];
         };
         Worklist: components["schemas"]["WorklistItem"][];
@@ -1526,19 +1536,43 @@ export interface components {
             triage: components["schemas"]["BriefingTriage"];
             versions: components["schemas"]["BriefingVersions"];
         };
+        /** @description The waiting room on the phone (M2-07), and the data of the `queue.status` WebSocket frame. Never a level or an alert. */
         CompanionStatus: {
-            position: number;
-            wait_estimate_minutes: number;
+            state: components["schemas"]["SessionState"];
+            /** @description 1 is next in the patient's department queue; null when not waiting. */
+            position: number | null;
+            wait_estimate_minutes: number | null;
             token: components["schemas"]["QueueToken"] | null;
+            room: string | null;
+            /**
+             * @description A parent's child session (M2-04) gets the child wording on the phone. Absent in `queue.status` frames.
+             * @enum {string}
+             */
+            patient_type?: "adult" | "child";
         };
         FeelsWorseRequest: {
+            answers: components["schemas"]["FeelsWorseAnswers"];
             /** @description Optional; shown to the nurse, never put in events. */
             note?: string;
         };
+        /** @description The three quick danger questions of "I feel worse" (M2-07), as ticked items and a yes / no / not sure; never free text. An unticked item is not a "no". */
+        FeelsWorseAnswers: {
+            chest_or_breathing: ("chest_pain" | "short_of_breath")[];
+            face_arm_speech: ("face_droop" | "arm_weakness" | "speech_difficulty")[];
+            /** @enum {string} */
+            drowsy_or_confused: "yes" | "no" | "not_sure";
+        };
+        /**
+         * @description One "I feel worse" answer, as a code (M2-07).
+         * @enum {string}
+         */
+        DangerAnswerCode: "chest_pain" | "short_of_breath" | "face_droop" | "arm_weakness" | "speech_difficulty" | "drowsy_or_confused" | "drowsy_or_confused_unsure";
         FeelsWorseAck: {
             flag_id: components["schemas"]["Identifier"];
             /** Format: date-time */
             received_at: string;
+            /** @description How many times this session has pressed "I feel worse", this press included. */
+            press_count: number;
         };
         AskRequest: {
             question: string;
@@ -1810,7 +1844,11 @@ export interface components {
          *       "clinic_id": "clinic_demo",
          *       "session_id": "ses_routine",
          *       "flag_id": "flg_routine_01",
-         *       "reported_at": "2026-09-26T09:40:00Z"
+         *       "reported_at": "2026-09-26T09:40:00Z",
+         *       "press_count": 1,
+         *       "danger_answer_codes": [
+         *         "chest_pain"
+         *       ]
          *     }
          */
         PatientFeelsWorseData: {
@@ -1819,6 +1857,10 @@ export interface components {
             flag_id: components["schemas"]["Identifier"];
             /** Format: date-time */
             reported_at: string;
+            /** @description How many times the session has pressed it, this press included; repeats are never dropped. Always sent since M2-07. */
+            press_count?: number;
+            /** @description The press's danger answers as codes (M2-07); never free text. Always sent since M2-07. */
+            danger_answer_codes?: ("chest_pain" | "short_of_breath" | "face_droop" | "arm_weakness" | "speech_difficulty" | "drowsy_or_confused" | "drowsy_or_confused_unsure")[];
         };
         /** @description `patient.feels_worse` in the event envelope. */
         PatientFeelsWorseEvent: {
@@ -4217,6 +4259,7 @@ export interface operations {
                 content: {
                     /**
                      * @example {
+                     *       "state": "queued",
                      *       "position": 3,
                      *       "wait_estimate_minutes": 25,
                      *       "token": {
@@ -4226,7 +4269,8 @@ export interface operations {
                      *         "department": "general",
                      *         "status": "waiting",
                      *         "issued_at": "2026-09-26T09:07:00Z"
-                     *       }
+                     *       },
+                     *       "room": null
                      *     }
                      */
                     "application/json": components["schemas"]["CompanionStatus"];
@@ -4247,7 +4291,14 @@ export interface operations {
             content: {
                 /**
                  * @example {
-                 *       "note": "My throat is much more painful now."
+                 *       "answers": {
+                 *         "chest_or_breathing": [
+                 *           "chest_pain"
+                 *         ],
+                 *         "face_arm_speech": [],
+                 *         "drowsy_or_confused": "no"
+                 *       },
+                 *       "note": "My chest feels tight now."
                  *     }
                  */
                 "application/json": components["schemas"]["FeelsWorseRequest"];
@@ -4263,7 +4314,8 @@ export interface operations {
                     /**
                      * @example {
                      *       "flag_id": "flg_routine_01",
-                     *       "received_at": "2026-09-26T09:40:00Z"
+                     *       "received_at": "2026-09-26T09:40:00Z",
+                     *       "press_count": 1
                      *     }
                      */
                     "application/json": components["schemas"]["FeelsWorseAck"];
@@ -4732,7 +4784,11 @@ export interface operations {
                  *         "clinic_id": "clinic_demo",
                  *         "session_id": "ses_routine",
                  *         "flag_id": "flg_routine_01",
-                 *         "reported_at": "2026-09-26T09:40:00Z"
+                 *         "reported_at": "2026-09-26T09:40:00Z",
+                 *         "press_count": 1,
+                 *         "danger_answer_codes": [
+                 *           "chest_pain"
+                 *         ]
                  *       }
                  *     }
                  */

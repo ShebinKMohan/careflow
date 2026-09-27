@@ -15,11 +15,12 @@ from sqlalchemy import (
     Integer,
     SmallInteger,
     String,
+    Text,
     UniqueConstraint,
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -183,6 +184,20 @@ class ConsentRecordRow(_ClinicScoped, Base):
     )
 
 
+class FeelsWorseReportRow(_ClinicScoped, Base):
+    """One "I feel worse" press (M2-07), append-only; the note is for the nurse only."""
+
+    __tablename__ = "feels_worse_reports"
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id")
+    )
+    flag_id: Mapped[str] = mapped_column(String(64), unique=True)
+    press_number: Mapped[int] = mapped_column(Integer)
+    answer_codes: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    note: Mapped[str | None] = mapped_column(Text)
+    reported_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+
+
 class QueueTokenRow(_ClinicScoped, Base):
     """One queue token (M1-10). Status: waiting | called | arrived | no_show | closed."""
 
@@ -259,6 +274,7 @@ __all__ = [
     "ConsentRecordRow",
     "Device",
     "EncounterState",
+    "FeelsWorseReportRow",
     "FhirWriteback",
     "FhirWritebackStatus",
     "NurseDecisionRow",
