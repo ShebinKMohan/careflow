@@ -9,7 +9,7 @@ export UV_LOCKED := 1
 
 .PHONY: help install install-py install-node lint lint-py lint-node typecheck typecheck-py \
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
-	contracts-drift contracts-breaking contracts-check up down seed ps logs nuke \
+	contracts-drift contracts-breaking contracts-check up down infra infra-down seed ps logs nuke \
 	llm-local api migrate seed-dev mock e2e voice-models voice
 
 help: ## List the targets
@@ -76,7 +76,13 @@ contracts-check: contracts-lint contracts-drift contracts-breaking ## All contra
 COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
 SEED_SYNTHEA ?= 1
 
-up: ## Start Postgres, Valkey and HAPI FHIR and wait until they are healthy
+up: ## Start everything: services, migrations, seed data, the API and the apps (M1-19)
+	scripts/up.sh
+
+down: ## Stop everything `make up` started; named volumes keep the data
+	scripts/down.sh
+
+infra: ## Start only Postgres, Valkey and HAPI FHIR and wait until they are healthy (tests)
 	scripts/ensure_docker.sh
 	python3 scripts/gen_dev_env.py
 	python3 scripts/check_mem_budget.py
@@ -84,7 +90,7 @@ up: ## Start Postgres, Valkey and HAPI FHIR and wait until they are healthy
 	$(COMPOSE) up -d hapi
 	python3 scripts/wait_for_http.py http://localhost:8080/fhir/metadata 180
 
-down: ## Stop the services; named volumes keep the data
+infra-down: ## Stop only the Docker services
 	$(COMPOSE) down
 
 seed: ## Load Synthea patients (SEED_SYNTHEA=0 skips them) and the 7 personas; FORCE=1 reloads
@@ -94,8 +100,9 @@ seed: ## Load Synthea patients (SEED_SYNTHEA=0 skips them) and the 7 personas; F
 ps: ## Service status
 	$(COMPOSE) ps
 
-logs: ## Last 200 log lines of every service
+logs: ## Follow the CareFlow processes' log (and the last 200 lines of every Docker service)
 	$(COMPOSE) logs --tail 200
+	@if [ -f .run/careflow.log ]; then tail -n 200 -f .run/careflow.log; fi
 
 nuke: ## Delete every local data volume (asks first). Agents never run this: use make seed FORCE=1
 	@read -r -p "This deletes all CareFlow Docker volumes (Postgres, Valkey, HAPI data). Type nuke: " a; \

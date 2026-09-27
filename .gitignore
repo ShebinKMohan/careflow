@@ -45,3 +45,5 @@ blob-report/
 .idea/
 .vscode/*
 !.vscode/extensions.json
+# `make up` process state and logs (M1-19)
+.run/

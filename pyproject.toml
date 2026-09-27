@@ -29,6 +29,8 @@ dev = [
   "fhir.resources==8.3.0",
   "httpx==0.28.1",
   "respx==0.23.1",
+  # `make up` runs the API, the apps and the voice service with it (M1-19).
+  "honcho==2.0.0",
   # Local LLM server (Apple silicon only); scripts/with_llm.sh and `make llm-local` use it.
   "mlx-lm==0.31.3; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
