@@ -1,13 +1,15 @@
 """`build_graph`: the intake StateGraph, and the helpers the API uses to drive it.
 
     START -> identify -> fetch_ehr_context -> ask
-    ask -> await_answer -> extract -> run_rules       (a question was asked)
+    ask -> await_answer -> intent_router -> extract -> run_rules   (a question was asked)
     ask -> run_rules                                  (the conversation is complete)
+    run_rules -> handle_side_question -> run_rules    (the patient asked something, M2-10)
     run_rules -> ask | suggest_urgency                (route_after_rules)
     suggest_urgency -> nurse_review -> assign_token -> writeback -> build_briefing -> END
 
 `suggest_urgency` is reachable only through `run_rules` (safety rule 1), and nothing after
-`nurse_review` runs until a nurse resumes the graph (safety rule 3). `thread_id` = session id.
+`nurse_review` runs until a nurse resumes the graph (safety rule 3). Every patient turn reaches
+`extract` and `run_rules`, whatever the intent router finds in it. `thread_id` = session id.
 """
 
 from __future__ import annotations
@@ -35,7 +37,12 @@ from careflow_intake.nodes.conversation import (
     route_after_ask,
 )
 from careflow_intake.nodes.patient import fetch_ehr_context, identify
-from careflow_intake.nodes.rules import route_after_rules, run_rules
+from careflow_intake.nodes.rules import run_rules
+from careflow_intake.nodes.side_questions import (
+    handle_side_question,
+    intent_router,
+    route_after_run_rules,
+)
 from careflow_intake.nodes.triage import nurse_review, suggest_urgency, validate_decision
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState
@@ -47,8 +54,10 @@ NODES: Final[dict[str, NodeFn]] = {
     "fetch_ehr_context": fetch_ehr_context,
     "ask": ask,
     "await_answer": await_answer,
+    "intent_router": intent_router,
     "extract": extract,
     "run_rules": run_rules,
+    "handle_side_question": handle_side_question,
     "suggest_urgency": suggest_urgency,
     "nurse_review": nurse_review,
     "assign_token": assign_token,
@@ -86,11 +95,20 @@ def build_graph(
     graph.add_conditional_edges(
         "ask", route_after_ask, {"await_answer": "await_answer", "run_rules": "run_rules"}
     )
-    graph.add_edge("await_answer", "extract")
+    graph.add_edge("await_answer", "intent_router")
+    graph.add_edge("intent_router", "extract")
     graph.add_edge("extract", "run_rules")
     graph.add_conditional_edges(
-        "run_rules", route_after_rules, {"ask": "ask", "suggest_urgency": "suggest_urgency"}
+        "run_rules",
+        route_after_run_rules,
+        {
+            "handle_side_question": "handle_side_question",
+            "ask": "ask",
+            "suggest_urgency": "suggest_urgency",
+        },
     )
+    # Back through the rules, which stay the only way to the suggestion (safety rule 1).
+    graph.add_edge("handle_side_question", "run_rules")
     graph.add_edge("suggest_urgency", "nurse_review")
     graph.add_edge("nurse_review", "assign_token")
     graph.add_edge("assign_token", "writeback")

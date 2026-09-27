@@ -27,9 +27,10 @@ from careflow_contracts.generated.structured_facts_schema import (
     StructuredFacts,
     Turn,
 )
+from careflow_contracts.generated.turn_intent_schema import TurnIntent
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
 from careflow_intake.facts import FactEntry, merge_facts_by_id, to_structured_facts
-from careflow_intake.ports import Question
+from careflow_intake.ports import MedicalCategory, NoticeKind, Question
 
 
 class Flags(TypedDict, total=False):
@@ -89,7 +90,21 @@ class IntakeState(TypedDict, total=False):
     turns: Annotated[list[Turn], operator.add]
     turn_count: int
     pending_question: Question | None
+    # The question the latest patient turn answered: re-asked word for word after a turn that
+    # only asked something (M2-10).
+    answered_question: Question | None
     last_answer_mode: str | None  # how the latest answer came: "tap", "text" or "voice"
+    # Side questions (M2-10): what the latest patient turn held, whether a side question still
+    # waits for its reply, the medical layer that decided, how many were handled, the patient
+    # turns that were only questions (not answers), and the reply shown before the next question.
+    turn_intent: TurnIntent | None
+    side_question_pending: bool
+    side_category: MedicalCategory | None
+    side_questions: int
+    side_turn_ids: Annotated[list[str], operator.add]
+    reply_prefix: str | None
+    reply_kind: NoticeKind | None
+    reply_citations: list[dict[str, str]]
     conversation_complete: bool
     facts: Annotated[list[FactEntry], merge_facts_by_id]
     alerts: Annotated[list[Alert], merge_alerts_by_rule_id]

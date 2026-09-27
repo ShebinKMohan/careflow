@@ -26,13 +26,17 @@ from careflow_contracts.generated.structured_facts_schema import (
     Turn,
     TurnRole,
 )
+from careflow_contracts.generated.turn_intent_schema import TurnIntent
 from careflow_contracts.generated.urgency_suggestion_schema import TriageScale, UrgencySuggestion
 from careflow_contracts.validators import iter_facts
 from careflow_intake.facts import FactEntry, fact_class, stable_fact_id
 from careflow_intake.ports import (
     Assignment,
+    Classified,
+    ClinicReply,
     ExtractionResult,
     IntakePorts,
+    MedicalCategory,
     NoSuggestion,
     Question,
     RulesOutcome,
@@ -299,6 +303,53 @@ class RecordingEventSink:
         return [event_type.value for event_type, _, _ in self.events]
 
 
+class AnswerOnlyClassifier:
+    """`IntentClassifier` (M2-10) that finds every turn an answer: no side questions."""
+
+    async def classify(self, text: str, language: Language, asked: str | None) -> Classified:
+        return Classified(
+            intent=TurnIntent(intake_answer=True, clinic_question=False, medical_question=False)
+        )
+
+
+@dataclass
+class StubClinicQA:
+    """`ClinicQA` (M2-10) with a fixed cited answer; records every question."""
+
+    answer: str = "The pharmacy is on the ground floor. It is open from 8:00 to 22:00."
+    asked: list[str] = field(default_factory=list[str])
+
+    async def ask(
+        self, *, session_id: str, clinic_id: str, question: str, language: Language
+    ) -> ClinicReply:
+        self.asked.append(question)
+        citation = {"doc_id": "pharmacy.hours", "title": "Pharmacy", "chunk_id": "pharmacy.hours:0"}
+        return ClinicReply(answer=self.answer, citations=[citation])
+
+
+@dataclass
+class RecordingNurseFlags:
+    """`NurseFlags` (M2-10): one flag per session and turn, however often it is sent."""
+
+    flags: dict[str, tuple[str, MedicalCategory]] = field(
+        default_factory=dict[str, tuple[str, MedicalCategory]]
+    )
+
+    async def flag(
+        self,
+        *,
+        session_id: str,
+        clinic_id: str,
+        turn_id: str,
+        question: str,
+        language: Language,
+        category: MedicalCategory,
+    ) -> str:
+        key = f"{session_id}:{turn_id}:nurse_flag"
+        self.flags.setdefault(key, (question, category))
+        return f"flg_{turn_id}"
+
+
 def stub_ports(**overrides: Any) -> IntakePorts:
     """IntakePorts with every port stubbed; pass keyword arguments to replace some."""
     ports: dict[str, Any] = {
@@ -312,6 +363,9 @@ def stub_ports(**overrides: Any) -> IntakePorts:
         "writeback": StubWriteback(),
         "briefing": StubBriefing(),
         "events": RecordingEventSink(),
+        "intents": AnswerOnlyClassifier(),
+        "clinic_qa": StubClinicQA(),
+        "nurse_flags": RecordingNurseFlags(),
         "clock": SteppingClock(),
     }
     ports.update(overrides)
@@ -323,12 +377,15 @@ __all__ = [
     "KEYPAD_SYSTEM",
     "START",
     "AnswerExtractor",
+    "AnswerOnlyClassifier",
     "EndlessConversation",
     "RecordingEventSink",
+    "RecordingNurseFlags",
     "RecordingRulesRunner",
     "ScriptedConversation",
     "SteppingClock",
     "StubBriefing",
+    "StubClinicQA",
     "StubEhrReader",
     "StubIdentifier",
     "StubQueue",
