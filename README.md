@@ -10,7 +10,7 @@ Requires macOS (Apple silicon) or Linux with Docker, [uv](https://docs.astral.sh
 
 ```bash
 make up      # everything, then "CareFlow is up"
-make down    # stops it all; the data volumes stay
+make down    # stops what this checkout started; the data volumes stay
 ```
 
 `make up` checks the prerequisites and the ports, then:
@@ -20,7 +20,7 @@ make down    # stops it all; the data volumes stay
 3. migrates the database;
 4. loads the seven synthetic personas and the demo clinics, staff and devices;
 5. trains an urgency model if none is installed (on the synthetic fixture, labelled `fixture-*`, when the KTAS data has not been downloaded);
-6. starts the API and the three apps with honcho, and returns once every one answers.
+6. starts the API and the three apps with honcho, and returns once every one answers and the API reaches its database, Valkey and HAPI FHIR.
 
 | What | Where |
 |---|---|
@@ -33,14 +33,16 @@ make down    # stops it all; the data volumes stay
 - **Demo sign-in.** The staff are `nurse.a@careflow.example`, `doctor.a@careflow.example` and `admin.a@careflow.example`, with the dev password that `scripts/gen_dev_env.py` wrote to the gitignored `.env` (`CAREFLOW_DEV_PASSWORD`). The same file holds the kiosk device secret.
 - **Options:**
   - `SEED_SYNTHEA=0` loads the personas only;
-  - `LOCAL_LLM=1` also serves the pinned local model (Qwen3.5-9B, MLX 4-bit) on :8081 for the conversation, extraction and summary;
-  - `VOICE=0` leaves the voice service out. It runs on :8090 when `make voice-models` has run and the port is free.
+  - `LOCAL_LLM=1` also serves the pinned local model (Qwen3.5-9B, MLX 4-bit, Apple silicon) on :8081 for the conversation, extraction and summary, through `scripts/with_llm.sh`;
+  - `VOICE=0` leaves the voice service out. It runs on :8090 when `make voice-models` has run and the port is free;
+  - `CAREFLOW_STACK=<name> CAREFLOW_PORT_OFFSET=<n>` runs a second, isolated stack from another checkout: its own Docker project and volumes, and every port above plus `n` (`careflow-test` defaults to +10000). `make down` with the same `CAREFLOW_STACK` stops only that stack.
+- **End-to-end journeys.** `E2E=1 VOICE=0 make up`, then `make e2e`: Playwright drives the kiosk, the nurse station and the doctor briefing through three journeys (chest pain, routine walk-in, sepsis) against the running API, Postgres, Valkey and HAPI, and checks what was written to HAPI. `E2E=1` replays every model reply from [`e2e/replays/`](e2e/replays/), so no model or key is needed; `E2E_LIVE=1 LOCAL_LLM=1` runs them against the local model instead, and `E2E_RECORD=1 LOCAL_LLM=1` records new replies. CI runs them on pushes to `main` and on PRs labelled `e2e`.
 - **Everyday commands:**
   - `make logs` follows the processes;
   - `make infra` starts only the Docker services, which the database and HAPI tests need;
   - `make check` runs ruff, pyright, pytest, ESLint, tsc, Vitest and the banned-dependency check.
-- **Switching a model is one line** in [`config/providers.yaml`](config/providers.yaml). For example, `extraction: { provider: api, vendor: anthropic, model: <model id> }` moves extraction to an API provider, once its key is in `.env`.
-- **Without the backend.** `make mock` serves the API contract's examples with Prism on :4010, so the apps can run against it (`pnpm -F staff dev`), and `make e2e` runs their Playwright smoke tests ([`apps/README.md`](apps/README.md)).
+- **Switching a model is one line** in [`config/providers.yaml`](config/providers.yaml). For example, `extraction: { provider: api, vendor: openai, model: <model id> }` moves extraction to an API provider, once its key is in `.env` ([`test_one_line_switch.py`](packages/providers/tests/test_one_line_switch.py) proves the one-line diff).
+- **Without the backend.** `make mock` serves the API contract's examples with Prism on :4010, so the apps can run against it (`pnpm -F staff dev`), and `make e2e-apps` runs their Playwright smoke tests ([`apps/README.md`](apps/README.md)).
 
 **Limitations.** The hospital (HAPI FHIR) and the vitals device are simulated, and every patient is synthetic. The urgency model is trained on the public Korean KTAS dataset, which is not a local population. Not for clinical use.
 

@@ -218,6 +218,11 @@ def written(database: Engine, clinic_id: uuid.UUID, session_id: str) -> dict[str
         return {row.local_id: row.resource_id for row in rows}
 
 
+def item_arrival(client: TestClient, nurse: dict[str, str], session_id: str) -> str:
+    rows = client.get("/v1/nurse/worklist", headers=nurse).json()
+    return str(next(row for row in rows if row["session_id"] == session_id)["arrived_at"])
+
+
 def test_keypad_to_token_on_the_real_stack(
     flow: TestClient, clinics: Any, database: Engine
 ) -> None:
@@ -242,6 +247,9 @@ def test_keypad_to_token_on_the_real_stack(
         response = turn(client, session_id, patient, mode, answer)
         assert response.status_code == 200, response.text
     assert len(answers) >= 3  # at least the three turns of the issue's flow
+    before = client.get(f"/v1/sessions/{session_id}/triage", headers=nurse).json()["alerts"]
+    first_raised = {alert["rule_id"]: alert["raised_at"] for alert in before}
+    assert "CHEST_PAIN_ECG_10MIN" in first_raised
 
     # Device vitals (simulated device, DEVICE_MEASURED) and the nurse's vitals (full NEWS2).
     reading = {
@@ -270,6 +278,14 @@ def test_keypad_to_token_on_the_real_stack(
     assert view["news2"] and not view["news2"].get("partial"), view["news2"]
     rules = {alert["rule_id"] for alert in view["alerts"]}
     assert "CHEST_PAIN_ECG_10MIN" in rules  # safety rule 1: the rules run on the facts
+    # Dated by the real clock, after the patient arrived (the stubs' fixed clock once leaked in).
+    arrived = datetime.fromisoformat(item_arrival(client, nurse, session_id))
+    for alert in view["alerts"]:
+        raised = datetime.fromisoformat(alert["raised_at"])
+        assert arrived <= raised <= datetime.now(UTC), (alert["rule_id"], raised, arrived)
+        # The vitals re-ran the rules: an alert already raised keeps the time it was raised.
+        if alert["rule_id"] in first_raised:
+            assert raised == datetime.fromisoformat(first_raised[alert["rule_id"]]), alert
 
     # No triage model: the worklist says so, and the nurse must set the level.
     [item] = [

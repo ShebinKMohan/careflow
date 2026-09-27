@@ -11,7 +11,7 @@ export UV_LOCKED := 1
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down infra infra-down test-stack \
 	test-stack-down test-integration seed ps logs nuke \
-	llm-local api migrate seed-dev mock e2e rag-ingest voice-models voice
+	llm-local api migrate seed-dev mock e2e e2e-apps rag-ingest voice-models voice
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -110,9 +110,9 @@ seed: ## Load Synthea patients (SEED_SYNTHEA=0 skips them) and the 7 personas; F
 ps: ## Service status
 	$(COMPOSE) ps
 
-logs: ## Follow the CareFlow processes' log (and the last 200 lines of every Docker service)
-	$(COMPOSE) logs --tail 200
-	@if [ -f .run/careflow.log ]; then tail -n 200 -f .run/careflow.log; fi
+logs: ## Follow this checkout's processes (CAREFLOW_STACK, default careflow) after the last 200 lines of its Docker services
+	@stack=$${CAREFLOW_STACK:-careflow}; docker compose -p $$stack logs --tail 200; \
+		if [ -f .run/stacks/$$stack.log ]; then tail -n 200 -f .run/stacks/$$stack.log; fi
 
 nuke: ## Delete every local data volume (asks first). Agents never run this: use make seed FORCE=1
 	@read -r -p "This deletes all CareFlow Docker volumes (Postgres, Valkey, HAPI data). Type nuke: " a; \
@@ -155,5 +155,7 @@ voice: ## Run the voice service on 127.0.0.1:8090 (Apple silicon; needs `make vo
 mock: ## Serve the OpenAPI examples with Prism on :4010 (static examples, deterministic)
 	pnpm exec prism mock packages/contracts/openapi.yaml --port 4010
 
-e2e: ## Playwright smoke suites for kiosk, staff and companion (each starts its own mock and app)
+e2e: ## The three MVP journeys (M1-19) on the running stack: start it with `E2E=1 make up` first
+	pnpm --filter @careflow/e2e journeys
+e2e-apps: ## Playwright suites for kiosk, staff and companion against Prism mocks (each starts its own)
 	pnpm test:e2e

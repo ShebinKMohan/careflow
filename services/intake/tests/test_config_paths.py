@@ -34,3 +34,18 @@ def test_a_replayed_extractor_says_replay(tmp_path: Path, monkeypatch: pytest.Mo
     assert LlmExtractor.from_config(config).provider_kind == "replay"
     monkeypatch.setenv("CAREFLOW_PROVIDER_MODE", "record")
     assert LlmExtractor.from_config(config).provider_kind == "local"
+
+
+def test_real_ports_read_the_real_clock() -> None:
+    """The stubs' stepping clock starts on 27 Sep 2026 09:00Z; the running API used it, so its
+    alerts were dated hours before the patient arrived (M1-19)."""
+    from datetime import UTC, datetime, timedelta
+
+    from careflow_intake.stubs import SteppingClock
+    from careflow_intake.wiring import build_real_ports
+
+    before = datetime.now(UTC)
+    now = build_real_ports().clock()
+    assert before - timedelta(seconds=1) <= now <= datetime.now(UTC) + timedelta(seconds=1)
+    stepping = SteppingClock()
+    assert build_real_ports(clock=stepping).clock is stepping  # a test may still pin time

@@ -7,6 +7,8 @@ on:
     branches: [main]
     paths-ignore: ["docs/**", "**/*.md"]
   pull_request:
+    # `labeled`: adding the `e2e` label runs the journeys on the PR (the e2e job below).
+    types: [opened, synchronize, reopened, labeled]
     paths-ignore: ["docs/**", "**/*.md"]
   workflow_dispatch:
 
@@ -163,3 +165,57 @@ jobs:
         run: osv-scanner scan source --lockfile uv.lock --lockfile pnpm-lock.yaml
       - name: Banned and unconstrained dependencies
         run: uv run --no-project --python 3.12 python scripts/check_banned_deps.py
+
+  e2e:
+    # The three M1-19 journeys (chest pain, routine walk-in, sepsis) on the real stack: Postgres,
+    # Valkey and HAPI FHIR in Docker, the API and the three apps from `make up`, every model reply
+    # replayed from e2e/replays (no model, no key, no voice). About a quarter of an hour of the
+    # monthly minutes, so only on pushes to main, on PRs labelled `e2e` and on demand.
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'e2e')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      E2E: "1"
+      VOICE: "0"
+      SEED_SYNTHEA: "0"
+      PLAYWRIGHT_CHANNEL: chromium
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.14"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build the Postgres image from the python job's cache (never pushed)
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: infra/postgres
+          tags: careflow/postgres:17-pgvector0.8.6-pgts1.4.0
+          load: true
+          push: false
+          cache-from: type=gha,scope=careflow-postgres
+      - name: make up (Docker services, migrations, seed, API and apps; replayed models)
+        run: make up
+      - name: Install Chromium for Playwright
+        run: pnpm --filter @careflow/e2e exec playwright install --with-deps chromium
+      - name: make e2e
+        run: make e2e
+      - name: Upload the Playwright traces and the stack log
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: e2e-traces
+          path: |
+            e2e/test-results/
+            .run/stacks/careflow.log
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: make down
+        if: always()
+        run: make down

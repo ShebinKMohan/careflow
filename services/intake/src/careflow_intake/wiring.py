@@ -22,7 +22,7 @@ from careflow_intake.briefing.summary import Summarizer
 from careflow_intake.conversation import ChecklistConversation
 from careflow_intake.conversation.phrasing import DEFAULT_TIMEOUT_SECONDS, Phraser
 from careflow_intake.extraction.extractor import LlmExtractor
-from careflow_intake.ports import IntakePorts, RulesOutcome
+from careflow_intake.ports import IntakePorts, RulesOutcome, utc_now
 from careflow_intake.state import IntakeSettings
 from careflow_intake.stubs import stub_ports
 from careflow_providers.base import ChatProvider
@@ -125,8 +125,13 @@ class RealPortsSettings:
 
 
 def build_real_ports(settings: RealPortsSettings | None = None, **stubs: Any) -> IntakePorts:
-    """IntakePorts with the real extractor, rules and conversation; keyword arguments replace any
-    of the remaining stubs."""
+    """IntakePorts with the real extractor, rules, conversation and clock; keyword arguments
+    replace any of the remaining stubs (a test may pass `clock=SteppingClock()`).
+
+    The clock is the real UTC clock: it dates every turn, fact, alert (`raised_at`), suggestion
+    and completion. The stubs' stepping clock (starting 27 Sep 2026 09:00Z) must never reach a
+    running API, where it dated alerts hours before the patient arrived."""
+    stubs.setdefault("clock", utc_now)
     settings = settings or RealPortsSettings()
     config = load_intake_config(settings.intake)
     providers = providers_config(settings.providers)

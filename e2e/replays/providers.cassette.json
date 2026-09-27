@@ -1,0 +1,42 @@
+{
+  "0be3dccf7b096db53720eea0fde81488171730874ca39b2e0fd58cd31e9466f5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}]}"
+  },
+  "4c386e77bfaf98f34d21f2e04b6d5e32c3fa6d33576d35e93b2904e1b0969cb9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Yesterday afternoon\", \"negated\": false}]}"
+  },
+  "537cce4559267d198cec43845a91bc89fce9e3f4a77e8e5ef0520d88698a18cd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Yesterday afternoon\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My left ankle\", \"turn_id\": \"t8\", \"quote\": \"My left ankle\", \"negated\": false}]}"
+  },
+  "8fd4dbf5d834d27c2cc03dc15b02a310b905fefdfa5e560dcd42ad9117c06e11": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and shivering since yesterday\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and shivering since yesterday\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"shivering\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since yesterday\", \"turn_id\": \"t2\", \"quote\": \"since yesterday\", \"negated\": false}]}"
+  },
+  "9a9fc07ef6416cbe76db229d06acf4bde0a78d78def3a9fee36cb08b7ffa9586": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and shivering since yesterday\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and shivering since yesterday\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"shivering\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since yesterday\", \"turn_id\": \"t2\", \"quote\": \"since yesterday\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t4\", \"quote\": \"5\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"No\", \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}]}"
+  },
+  "b2d5fef4bf7635b7246577a719728ccb348f12a946e1e2b75a2553c603e615e4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Yesterday afternoon\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My left ankle\", \"turn_id\": \"t8\", \"quote\": \"My left ankle\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"No\", \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}]}"
+  },
+  "d9c2fb10348274bb2982c92b0d1f92057ea1f3517d5acbd91e41935d6a2b9f2a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}]}"
+  },
+  "e1d7fcd5e280e589362279f3fab71ad519b68151b77cc951b4b3d75f33ed7b1b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and shivering since yesterday\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and shivering since yesterday\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t4\", \"quote\": \"5\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"No\", \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"shivering\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}]}"
+  }
+}

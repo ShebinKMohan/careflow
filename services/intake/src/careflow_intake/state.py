@@ -51,11 +51,18 @@ def merge_alerts_by_rule_id(
     existing: Sequence[Alert] | None, new: Sequence[Alert | dict[str, Any]] | Alert | None
 ) -> list[Alert]:
     """LangGraph reducer: an alert replaces the one with the same rule id; new rule ids append.
-    Alerts are never removed: a later evaluation without the alert does not retract it."""
+    Alerts are never removed: a later evaluation without the alert does not retract it.
+
+    A replacement keeps the time the alert was first raised: every evaluation stamps `raised_at`
+    with its own clock, but `alert.raised` goes out once, on the first raise, and the briefing,
+    the FHIR Flag and the audit report when the nurse was told."""
     merged = {alert.rule_id: alert for alert in existing or []}
     incoming = [new] if isinstance(new, Alert) else list(new or [])
     for value in incoming:
         alert = value if isinstance(value, Alert) else Alert.model_validate(value)
+        first = merged.get(alert.rule_id)
+        if first is not None and first.raised_at < alert.raised_at:
+            alert = alert.model_copy(update={"raised_at": first.raised_at})
         merged[alert.rule_id] = alert
     return list(merged.values())
 
