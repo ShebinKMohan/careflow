@@ -8,6 +8,7 @@ from typing import TypeAlias
 
 from careflow_contracts.alert_text import render_display_text, required_action_for
 from careflow_contracts.generated.alert_schema import Alert, AlertSeverity, RuleId
+from careflow_contracts.generated.ask_agent_schema import ClinicAnswer, IntentVerdict, ToolPlan
 from careflow_contracts.generated.ehr_fetch_schema import (
     EhrAppointment,
     EhrFetch,
@@ -104,6 +105,9 @@ __all__ = [
     "ExtractedFact",
     "ExtractionOutput",
     "RetrievedChunk",
+    "ClinicAnswer",
+    "IntentVerdict",
+    "ToolPlan",
     "ExtractionStatus",
     "FactBase",
     "FactKey",

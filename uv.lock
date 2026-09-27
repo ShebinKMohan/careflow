@@ -200,6 +200,7 @@ dependencies = [
     { name = "careflow-contracts" },
     { name = "careflow-intake" },
     { name = "careflow-integration" },
+    { name = "careflow-rag" },
     { name = "careflow-rules" },
     { name = "careflow-triage" },
     { name = "fastapi" },
@@ -227,6 +228,7 @@ requires-dist = [
     { name = "careflow-contracts", editable = "packages/contracts" },
     { name = "careflow-intake", editable = "services/intake" },
     { name = "careflow-integration", editable = "services/integration" },
+    { name = "careflow-rag", editable = "services/rag" },
     { name = "careflow-rules", editable = "services/rules" },
     { name = "careflow-triage", editable = "services/triage" },
     { name = "fastapi", specifier = ">=0.141,<0.142" },
@@ -343,8 +345,11 @@ version = "0.1.0"
 source = { editable = "services/rag" }
 dependencies = [
     { name = "careflow-contracts" },
+    { name = "careflow-providers" },
+    { name = "langgraph" },
     { name = "numpy" },
     { name = "psycopg", extra = ["binary", "pool"] },
+    { name = "pyyaml" },
     { name = "sqlalchemy", extra = ["asyncio"] },
 ]
 
@@ -356,8 +361,11 @@ embeddings = [
 [package.metadata]
 requires-dist = [
     { name = "careflow-contracts", editable = "packages/contracts" },
+    { name = "careflow-providers", editable = "packages/providers" },
+    { name = "langgraph", specifier = "==1.2.12" },
     { name = "numpy", specifier = ">=2.5,<3" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.3,<3.4" },
+    { name = "pyyaml", specifier = ">=6.0,<7" },
     { name = "sentence-transformers", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'embeddings'", specifier = ">=5.1,<6" },
     { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.1,<2.2" },
 ]

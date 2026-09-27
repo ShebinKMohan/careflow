@@ -1,6 +1,7 @@
 # careflow-rag
 
-CareFlow clinic knowledge ingest and hybrid retrieval (M2-08, ADR-039).
+CareFlow clinic knowledge ingest and hybrid retrieval (M2-08, ADR-039), and the phone-only
+"ask the clinic" agent (M2-09, ADR-040).
 
 Research prototype. Synthetic data only. Not for clinical use.
 
@@ -13,5 +14,10 @@ Research prototype. Synthetic data only. Not for clinical use.
   nothing.
 - `careflow_rag.retrieve.retrieve()`: `dense`, `bm25` or `hybrid` (reciprocal rank fusion), always
   filtered by the question's language.
+- `careflow_rag.agent.AskAgent`: a fixed-shape LangGraph (classify, then refuse and flag, or plan,
+  run the tools, answer and check the citations). The medical classifier is the lexicon in
+  `medical_lexicon.yaml` plus the `conversation` model, and it fails safe: a medical question gets
+  the fixed refusal and a nurse flag, never an answer. The API injects the tools (`AskPorts`);
+  this package never imports `careflow_api`. Settings: `config/rag.yaml`. Phone only (ADR-006).
 
 No patient data ever enters the handbook index.

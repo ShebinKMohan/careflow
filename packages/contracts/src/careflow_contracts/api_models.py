@@ -532,6 +532,16 @@ class Sex(StrEnum):
     unknown = "unknown"
 
 
+class MedicalQuestion(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    flag_id: Identifier
+    question: Annotated[str, Field(max_length=500, min_length=1)]
+    language: LanguageModel
+    asked_at: AwareDatetime
+
+
 class QueueTokenStatus(StrEnum):
     waiting = "waiting"
     called = "called"
@@ -1133,6 +1143,13 @@ class WorklistItem(BaseModel):
         Field(description="The chief complaint, short. Staff screens only.", max_length=80),
     ] = None
     feels_worse: FeelsWorseSummary | None = None
+    medical_questions: Annotated[
+        list[MedicalQuestion] | None,
+        Field(
+            description="Medical questions the patient asked on the phone (M2-09), refused and flagged to the nurse, newest first. Staff screens only; deleted when the session closes.",
+            max_length=20,
+        ),
+    ] = None
     warnings: list[SessionWarning] | None = None
 
 

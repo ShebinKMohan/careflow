@@ -10,11 +10,13 @@ Three modes:
 
 Every query filters by the question's language, so an English section never answers an Arabic
 question by accident. The caller's session carries the clinic's row-level security scope; the
-query also filters by clinic.
+query also filters by clinic. The question is embedded in a worker thread, so a model call never
+blocks the API's event loop.
 """
 
 from __future__ import annotations
 
+import asyncio
 import uuid
 from collections.abc import Sequence
 from typing import Final, Literal
@@ -92,9 +94,10 @@ async def retrieve(
     dense: list[Key] = []
     keyword: list[Key] = []
     if mode in ("dense", "hybrid"):
+        vector = await asyncio.to_thread(embedder.query, query)
         found = await db.execute(
             _DENSE[language],
-            {"q": vector_literal(embedder.query(query)), "clinic": clinic_id, "n": CANDIDATES},
+            {"q": vector_literal(vector), "clinic": clinic_id, "n": CANDIDATES},
         )
         for row in found.mappings():
             key = (row["section_id"], row["chunk_no"])
@@ -136,11 +139,12 @@ async def retrieve(
 
 
 def citation(chunk: RetrievedChunk) -> dict[str, str]:
-    """The API's citation for a chunk: `doc_id` is the section, `chunk_id` the chunk."""
+    """The API's citation for a chunk: `doc_id` is the section, `chunk_id` is
+    `<section>:<chunk>` (the API's Identifier pattern has no `#`)."""
     return {
         "doc_id": chunk.section_id,
         "title": chunk.title,
-        "chunk_id": f"{chunk.section_id}#{chunk.chunk_no}",
+        "chunk_id": f"{chunk.section_id}:{chunk.chunk_no}",
     }
 
 

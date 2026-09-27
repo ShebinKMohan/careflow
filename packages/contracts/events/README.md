@@ -21,6 +21,7 @@ These travel only on the CareFlow event bus (M1-11), for example to the audit lo
 |---|---|---|
 | `fhir.write.completed` | `fhir-write-completed.schema.json` | CareFlow wrote a confirmed triage to the hospital FHIR server (M1-09). |
 | `consent.recorded` | `consent-recorded.schema.json` | A patient's consent choices (camera, voice) were recorded at the kiosk (M2-05). |
+| `rag.refused` | `rag-refused.schema.json` | The ask-the-clinic agent refused a medical question and flagged it to the nurse (M2-09); no question text. |
 
 ## Payload
 

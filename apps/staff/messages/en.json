@@ -85,6 +85,16 @@
         "drowsy_or_confused": "Drowsy or confused",
         "drowsy_or_confused_unsure": "Not sure if drowsy or confused"
       }
+    },
+    "medicalQuestions": {
+      "region": "Medical questions from phones",
+      "title": "{patient} asked {count, plural, one {a medical question} other {# medical questions}}",
+      "asked": "Asked at {time}, in {language}",
+      "refused": "The assistant did not answer. The patient was told a nurse will speak with them.",
+      "language": {
+        "en": "English",
+        "ar": "Arabic"
+      }
     }
   },
   "doctor": {

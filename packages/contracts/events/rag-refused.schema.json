@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "RagRefusedData: see $defs/RagRefusedData. Internal only: the ask-the-clinic agent refused a medical question (M2-09). It travels on the CareFlow event bus (for the audit log, M5-01) and is never a webhook or a WebSocket message. No question text, name, date of birth or free text.",
+  "$ref": "#/$defs/RagRefusedData",
+  "$defs": {
+    "RagRefusedData": {
+      "title": "RagRefusedData",
+      "description": "Internal only: a medical question was refused and flagged to the nurse (M2-09). `category` says which classifier layer decided. No question text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "flag_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "lexicon",
+            "model",
+            "fail_safe"
+          ]
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "flag_id",
+        "category"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_routine",
+          "flag_id": "flg_routine_02",
+          "category": "lexicon"
+        }
+      ]
+    }
+  }
+}

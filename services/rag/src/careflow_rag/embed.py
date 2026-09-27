@@ -24,6 +24,8 @@ _WORD: Final = re.compile(r"\w+")
 
 _MODELS: dict[tuple[str, str], Any] = {}
 _MODELS_LOCK = threading.Lock()
+#: One encode at a time: the API embeds questions from worker threads, and one MPS model is shared.
+_ENCODE_LOCK = threading.Lock()
 
 
 class Embedder(Protocol):
@@ -63,15 +65,15 @@ class QwenEmbedder:
         self.name = f"{model_id.split('/')[-1].lower()}@{revision[:8]}"
 
     def documents(self, texts: Sequence[str]) -> list[list[float]]:
-        vectors = _model(self.model_id, self.revision).encode(
-            list(texts), normalize_embeddings=True, batch_size=16
-        )
+        model = _model(self.model_id, self.revision)
+        with _ENCODE_LOCK:
+            vectors = model.encode(list(texts), normalize_embeddings=True, batch_size=16)
         return [[float(x) for x in vector] for vector in vectors]
 
     def query(self, text: str) -> list[float]:
-        vector = _model(self.model_id, self.revision).encode(
-            [text], prompt_name="query", normalize_embeddings=True
-        )[0]
+        model = _model(self.model_id, self.revision)
+        with _ENCODE_LOCK:
+            vector = model.encode([text], prompt_name="query", normalize_embeddings=True)[0]
         return [float(x) for x in vector]
 
 

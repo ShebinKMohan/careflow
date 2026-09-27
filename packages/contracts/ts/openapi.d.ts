@@ -704,7 +704,7 @@ export interface paths {
         put?: never;
         /**
          * Ask the clinic (phone only)
-         * @description Safety rule 2: medical questions are refused with a fixed safe message (refused_medical: true) and flagged to the nurse.
+         * @description Phone-channel patient tokens only (after the QR hand-over): kiosk devices, kiosk-channel tokens and staff get 403. Safety rule 2: medical questions are refused with a fixed safe message (refused_medical: true) and flagged to the nurse. Answers cite handbook sections (doc_id is the section id, chunk_id is `<section id>:<chunk number>`) or `live:queue`; weak retrieval gives dont_know. The patient's own queue only: the session comes from the token, never the question.
          */
         post: operations["askTheClinic"];
         delete?: never;
@@ -1390,7 +1390,17 @@ export interface components {
             /** @description The chief complaint, short. Staff screens only. */
             complaint?: string;
             feels_worse?: components["schemas"]["FeelsWorseSummary"];
+            /** @description Medical questions the patient asked on the phone (M2-09), refused and flagged to the nurse, newest first. Staff screens only; deleted when the session closes. */
+            medical_questions?: components["schemas"]["MedicalQuestion"][];
             warnings?: components["schemas"]["SessionWarning"][];
+        };
+        /** @description A refused medical question, for the nurse (M2-09). The patient got the fixed refusal, never an answer. */
+        MedicalQuestion: {
+            flag_id: components["schemas"]["Identifier"];
+            question: string;
+            language: components["schemas"]["Language"];
+            /** Format: date-time */
+            asked_at: string;
         };
         Worklist: components["schemas"]["WorklistItem"][];
         /** @enum {string} */
@@ -4353,12 +4363,12 @@ export interface operations {
                 content: {
                     /**
                      * @example {
-                     *       "answer": "The pharmacy is on the ground floor next to the main entrance and is open until 22:00.",
+                     *       "answer": "The pharmacy is on the ground floor, to the right of the main entrance. It is open from 8:00 to 22:00 every day.",
                      *       "citations": [
                      *         {
-                     *           "doc_id": "doc_pharmacy",
-                     *           "title": "Pharmacy and prescriptions",
-                     *           "chunk_id": "doc_pharmacy_c02"
+                     *           "doc_id": "pharmacy.hours",
+                     *           "title": "Pharmacy hours and place",
+                     *           "chunk_id": "pharmacy.hours:0"
                      *         }
                      *       ],
                      *       "refused_medical": false,

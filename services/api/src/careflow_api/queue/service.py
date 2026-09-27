@@ -4,7 +4,8 @@ Every change to a department's queue runs in the caller's transaction, which RLS
 caller's clinic, under a transaction-level advisory lock for that clinic and department. It loads
 the department's active tokens into `QueueCore`, applies the rule and writes the changed tokens
 back. Events (`token.called`, `token.no_show`) go through `EventPublisher.add` in the same
-transaction, so they exist exactly when the change commits.
+transaction, so they exist exactly when the change commits. A token that closes or becomes a
+no-show also deletes its session's refused medical questions (`nurse_flags`, M2-09).
 
 Token codes are `<prefix>-<NNN>`, numbered per clinic, department and local day from a counter row
 locked with `SELECT ... FOR UPDATE`. After 999 the number wraps to 1, skipping any code an active
@@ -26,6 +27,7 @@ from sqlalchemy import select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from careflow_api import nurse_flags
 from careflow_api.db import get_sessionmaker
 from careflow_api.events.publisher import Event, EventPublisher
 from careflow_api.models import Clinic, PatientSession, QueueTokenRow, TokenCounter
@@ -135,6 +137,11 @@ class QueueService:
         )
 
     async def _write(self, db: AsyncSession, tokens: Iterable[Token]) -> None:
+        tokens = list(tokens)
+        # A closed or no-show session's refused medical questions go with it (M2-09).
+        await nurse_flags.purge(
+            db, [t.session_id for t in tokens if t.status in (Status.closed, Status.no_show)]
+        )
         for token in tokens:
             await db.execute(
                 update(QueueTokenRow)
@@ -483,6 +490,7 @@ async def run_grace_expiry(
             for clinic_id in clinic_ids:
                 async with clinic_session(clinic_id) as db:
                     changed = await service.expire_grace(db, clinic_id=clinic_id)
+                    await nurse_flags.purge_stale(db, service.clock())
                 for department in {token.department for token in changed}:
                     await service.broadcast(clinic_id, department)
         except Exception:  # keep running: the next tick retries

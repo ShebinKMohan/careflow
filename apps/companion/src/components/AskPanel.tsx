@@ -10,12 +10,15 @@ import { api } from "@/lib/api";
 type AskResponse = Schema<"AskResponse">;
 
 /**
- * "Ask the clinic" (M2-07 UI; the answering agent is M2-09): questions about the clinic, answered
- * from its documents with citation chips. A medical question gets the fixed safe message
- * (`refused_medical`: never advice, safety rule 2), and an unknown one says so (`dont_know`).
+ * "Ask the clinic" (M2-07 UI, M2-09 agent): questions about the clinic, answered from its handbook
+ * or the patient's own queue, with citation chips. A medical question gets the fixed safe message
+ * `safety.rag.refusal` (`refused_medical`: never advice, safety rule 2) and the nurse is flagged;
+ * an unknown one says so (`dont_know`). A 503 means the question could not be handled, so the
+ * patient is sent to the desk.
  */
 export function AskPanel() {
   const t = useTranslations("ask");
+  const tSafety = useTranslations("safety.rag");
   const language = useLocale() === "ar" ? "ar" : "en";
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<AskResponse | null>(null);
@@ -63,7 +66,7 @@ export function AskPanel() {
       {answer ? (
         <div className="mt-4 flex flex-col gap-2" aria-live="polite" data-testid="ask-answer">
           {answer.refused_medical ? (
-            <p className="font-semibold">{t("refused")}</p>
+            <p className="font-semibold">{tSafety("refusal")}</p>
           ) : answer.dont_know ? (
             <p>{t("dontKnow")}</p>
           ) : (

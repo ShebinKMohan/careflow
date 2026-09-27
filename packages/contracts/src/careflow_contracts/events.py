@@ -20,6 +20,7 @@ from careflow_contracts.generated.events.fhir_write_completed_schema import Fhir
 from careflow_contracts.generated.events.intake_completed_schema import IntakeCompletedData
 from careflow_contracts.generated.events.nurse_flag_schema import NurseFlagData
 from careflow_contracts.generated.events.patient_feels_worse_schema import PatientFeelsWorseData
+from careflow_contracts.generated.events.rag_refused_schema import RagRefusedData
 from careflow_contracts.generated.events.token_called_schema import TokenCalledData
 from careflow_contracts.generated.events.token_no_show_schema import TokenNoShowData
 from careflow_contracts.generated.events.triage_confirmed_schema import TriageConfirmedData
@@ -40,6 +41,7 @@ DATA_MODEL_FOR_EVENT: Final[dict[EventType, type[BaseModel]]] = {
 INTERNAL_DATA_MODELS: Final[dict[str, type[BaseModel]]] = {
     "fhir.write.completed": FhirWriteCompletedData,
     "consent.recorded": ConsentRecordedData,
+    "rag.refused": RagRefusedData,
 }
 
 __all__ = [
@@ -53,6 +55,7 @@ __all__ = [
     "IntakeCompletedData",
     "NurseFlagData",
     "PatientFeelsWorseData",
+    "RagRefusedData",
     "TokenCalledData",
     "TokenNoShowData",
     "TriageConfirmedData",

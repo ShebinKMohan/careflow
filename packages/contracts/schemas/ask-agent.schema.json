@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "AskAgent: the ask-the-clinic agent's structured model outputs (M2-09): the intent verdict, the tool plan and the cited answer. Research prototype; synthetic data only.",
+  "$ref": "#/$defs/ClinicAnswer",
+  "$defs": {
+    "IntentVerdict": {
+      "type": "object",
+      "description": "The model's half of the medical-question classifier (the lexicon is the other). A failure counts as medical: refuse and flag (safety rule 2).",
+      "properties": {
+        "intent": {
+          "type": "string",
+          "enum": [
+            "clinic",
+            "medical",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "intent"
+      ],
+      "additionalProperties": false
+    },
+    "ToolPlan": {
+      "type": "object",
+      "description": "Which tools answer a clinic question. The tools take no arguments from the model: the session comes from the verified token and the query is the patient's question.",
+      "properties": {
+        "tools": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 3,
+          "items": {
+            "type": "string",
+            "enum": [
+              "retrieve",
+              "queue_position",
+              "wait_time"
+            ]
+          }
+        }
+      },
+      "required": [
+        "tools"
+      ],
+      "additionalProperties": false
+    },
+    "ClinicAnswer": {
+      "type": "object",
+      "description": "A short answer in the session language, citing the handbook sections (or `live:queue`) it rests on. The agent checks every cited id against what was retrieved.",
+      "properties": {
+        "answer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "cited_section_ids": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      },
+      "required": [
+        "answer",
+        "cited_section_ids"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
