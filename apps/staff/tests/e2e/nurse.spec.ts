@@ -128,8 +128,10 @@ test("ECG done sends the task-complete request once and stops the countdown", as
   await page.clock.install({ time: RAISED_AT });
   const stubs = await stubApi(page, { holdTask: true });
   await page.goto(CARD);
-  await page.clock.fastForward("03:00");
+  // Paused exactly 3 minutes after the alert: a slow page load must not move the countdown.
+  await page.clock.pauseAt(new Date(new Date(RAISED_AT).getTime() + 3 * 60_000));
   await expect(page.getByTestId("ecg-status")).toContainText("07:00");
+  await page.clock.resume();
   const done = page.getByRole("button", { name: "ECG done" });
   await done.click();
   await expect.poll(() => stubs.tasksCompleted).toBe(1);

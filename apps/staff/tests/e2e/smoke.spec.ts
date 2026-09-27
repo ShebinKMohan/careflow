@@ -34,10 +34,12 @@ test("the nurse worklist renders the mocked sessions", async ({ page }) => {
 test("the doctor briefing shows provenance, the board and admin render their data", async ({ page }) => {
   await signIn(page, "/doctor/ses_chest_pain");
   await expect(page.getByText("Chief complaint: crushing pain in my chest.")).toBeVisible();
-  await expect(page.getByText("PATIENT_STATED").first()).toBeVisible();
+  // Every line's provenance is a labelled chip (M1-17), never the raw code alone.
+  await expect(page.locator('[data-provenance="PATIENT_STATED"]').first()).toHaveText("Patient said");
   await page.goto("/board?department=ed");
-  await expect(page.getByRole("cell", { name: "A-014" })).toBeVisible();
-  await expect(page.getByRole("cell", { name: "Resus 2" })).toBeVisible();
+  const board = page.getByTestId("board");
+  await expect(board.getByText("A-014")).toBeVisible();
+  await expect(board.getByText("Resus 2")).toBeVisible();
   await page.goto("/admin");
   await expect(page.getByRole("cell", { name: "qwen3.5-9b-4bit" })).toBeVisible();
 });
