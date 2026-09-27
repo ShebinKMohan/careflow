@@ -20,6 +20,7 @@ from careflow_api.config import Settings, get_settings
 from careflow_api.consent import get_consent
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
+from careflow_api.hospital import fhir_endpoint, hospital_adapter
 from careflow_api.intake.runtime import (
     IntakeRevisionConflict,
     IntakeRuntime,
@@ -57,7 +58,6 @@ from careflow_intake.facts import FactEntry
 from careflow_intake.graph import NotWaiting, pending
 from careflow_intake.nodes.conversation import InvalidAnswer
 from careflow_intake.state import structured_facts
-from careflow_integration.adapters.loader import load_adapter
 from careflow_integration.fhir.client import FhirClient, FhirError
 
 logger = logging.getLogger("careflow_api.sessions")
@@ -109,7 +109,7 @@ async def patient_display(patient_ref: str | None) -> str:
     if patient_ref is None:
         return "Unknown"
     try:
-        async with FhirClient(load_adapter().fhir_base_url) as client:
+        async with FhirClient(fhir_endpoint()) as client:
             kind, rid = patient_ref.split("/", 1)
             return initials(await client.read(kind, rid))
     except (FhirError, ValueError):
@@ -226,7 +226,7 @@ async def keypad_checkin(
             status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Too many attempts. Please wait a few minutes or ask at the desk.",
         )
-    adapter = load_adapter()
+    adapter = hospital_adapter()
     identifier = PatientIdentifier(system=adapter.identifier_systems["keypad"], value=body.digits)
     fetch = await intake.ports.ehr.fetch_context(identifier, body.clinic_id)
     if fetch.status is EhrStatus.not_found:
@@ -324,7 +324,7 @@ async def id_tap_checkin(
             detail="Too many attempts. Please wait a few minutes or ask at the desk.",
         )
     card = body.mock_card_payload.id_number
-    system = load_adapter().identifier_systems["mock_national_id"]
+    system = hospital_adapter().identifier_systems["mock_national_id"]
     identifier = PatientIdentifier(system=system, value=card)
     fetch = await intake.ports.ehr.fetch_context(identifier, body.clinic_id)
     if fetch.status is EhrStatus.not_found:

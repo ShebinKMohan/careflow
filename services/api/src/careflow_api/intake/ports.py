@@ -25,6 +25,7 @@ from sqlalchemy import update
 
 from careflow_api.events.outbox import OutboxPublisher
 from careflow_api.events.publisher import Event
+from careflow_api.hospital import hospital_adapter
 from careflow_api.models import PatientSession
 from careflow_api.queue.service import QueueService as ApiQueue
 from careflow_api.rls import clinic_session
@@ -58,7 +59,7 @@ class CheckinIdentifier:
 class CachedEhrReader:
     """The FHIR reader; a lookup made at check-in is reused by the graph's first node."""
 
-    reader: FhirEhrReader = field(default_factory=FhirEhrReader)
+    reader: FhirEhrReader = field(default_factory=lambda: FhirEhrReader(hospital_adapter()))
     ttl_seconds: float = EHR_CACHE_SECONDS
     _cache: dict[tuple[str, str, str], tuple[float, EhrFetch]] = field(default_factory=dict)
 
@@ -256,7 +257,12 @@ class WritebackPort:
             nurse_user_id=decision.nurse_user_id,
             decided_at=decision.decided_at,
         )
-        handler = WritebackHandler(records=_Record(record), store=self.store, events=self.events)
+        handler = WritebackHandler(
+            records=_Record(record),
+            store=self.store,
+            events=self.events,
+            adapter=hospital_adapter(),
+        )
         try:
             return await handler.on_triage_confirmed(event)
         finally:

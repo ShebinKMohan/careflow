@@ -19,6 +19,7 @@ from sqlalchemy import select
 
 from careflow_api.deps import Principal, require_roles
 from careflow_api.feels_worse import summaries as feels_worse_summaries
+from careflow_api.hospital import hospital_adapter
 from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.intake.views import ECG_ACTION, tasks, triage_view, worklist_item
 from careflow_api.intake.views import task_id as ecg_task_id
@@ -286,7 +287,9 @@ async def complete_task(
     written = await store.resources(str(principal.clinic_id), session_id)
     fhir_task = next((w for w in written if w.local_id == f"task-{ECG_ACTION}"), None)
     if fhir_task is not None:
-        handler = WritebackHandler(records=_NoRecords(), store=store, events=_NoEvents())
+        handler = WritebackHandler(
+            records=_NoRecords(), store=store, events=_NoEvents(), adapter=hospital_adapter()
+        )
         try:
             await handler.complete_task(str(principal.clinic_id), session_id, fhir_task.resource_id)
         except (UnknownTask, Exception) as exc:  # the fact stands; the FHIR Task is retried later

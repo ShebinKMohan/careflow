@@ -26,7 +26,9 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("CAREFLOW_HANDOVER_SIGNING_KEY", "HANDOVER_SIGNING_KEY"),
     )
-    fhir_base_url: str = "http://localhost:8080/fhir"
+    #: The FHIR endpoint override (`FHIR_BASE_URL`); unset, the hospital adapter file's URL is
+    #: used. Read it through `careflow_api.hospital.fhir_endpoint()`.
+    fhir_base_url: str | None = None
     runtime: str = Field(default="live", validation_alias=AliasChoices("CAREFLOW_RUNTIME"))
     #: "dev" enables the /v1/dev test hooks; any other value (the default) leaves them out.
     env: str = Field(default="prod", validation_alias=AliasChoices("CAREFLOW_ENV"))

@@ -28,6 +28,7 @@ from careflow_api.events.frames import QUEUE_STATUS, publish_frame
 from careflow_api.events.outbox import OutboxPublisher
 from careflow_api.events.relay import OutboxRelay
 from careflow_api.events.ws import LiveHub
+from careflow_api.hospital import fhir_endpoint
 from careflow_api.intake.consumers import WRITEBACK_GROUP, writeback_consumer
 from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.intake.wiring import build_ports
@@ -140,7 +141,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     app.state.briefings = BriefingService(
         store=SqlBriefingStore(),
         writebacks=SqlWritebackStore(),
-        fhir=lambda: FhirClient(settings.fhir_base_url),
+        fhir=lambda: FhirClient(fhir_endpoint()),
         summarizer=briefing_summarizer(),
     )
     # Ask the clinic (M2-09). config/rag.yaml is validated here; the `conversation` provider is

@@ -24,6 +24,7 @@ from careflow_api.ask import AskService
 from careflow_api.config import Settings, get_settings
 from careflow_api.deps import Principal, require_phone_session
 from careflow_api.feels_worse import record_press
+from careflow_api.hospital import fhir_endpoint
 from careflow_api.intake.runtime import IntakeRuntime
 from careflow_api.queue.service import QueueService
 from careflow_api.rls import clinic_session
@@ -122,7 +123,7 @@ async def feels_worse(
             if patient_ref:
                 background.add_task(
                     _write_flag,
-                    settings.fhir_base_url,
+                    fhir_endpoint(),
                     session_id=session_id,
                     patient_ref=patient_ref,
                     press=press,
