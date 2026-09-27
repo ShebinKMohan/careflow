@@ -1,0 +1,78 @@
+{
+  "api_version": "0.1.0",
+  "ruleset_version": "2026.3.0",
+  "services": [
+    {
+      "name": "postgres",
+      "status": "ok"
+    },
+    {
+      "name": "valkey",
+      "status": "ok"
+    },
+    {
+      "name": "hapi-fhir",
+      "status": "down"
+    },
+    {
+      "name": "fhir-writeback",
+      "status": "degraded",
+      "detail": "consumer consuming; 2 failed write-backs in this clinic"
+    },
+    {
+      "name": "port:ehr",
+      "status": "ok",
+      "detail": "FHIR R4 reader (M1-08)"
+    },
+    {
+      "name": "port:urgency",
+      "status": "degraded",
+      "detail": "none (no suggestion); TRIAGE_MODEL_PATH has no model"
+    },
+    {
+      "name": "urgency-model",
+      "status": "degraded",
+      "detail": "fixture-hgb-1a2b3c: trained on the synthetic fixture, not KTAS (NOT A RESULT)"
+    },
+    {
+      "name": "ai:conversation",
+      "status": "ok",
+      "detail": "local qwen3.5-9b-4bit"
+    },
+    {
+      "name": "ai:extraction",
+      "status": "ok",
+      "detail": "local qwen3.5-9b-4bit"
+    },
+    {
+      "name": "ai:summary",
+      "status": "ok",
+      "detail": "local qwen3.5-9b-4bit"
+    },
+    {
+      "name": "ai:eval_judge",
+      "status": "degraded",
+      "detail": "cli codex"
+    },
+    {
+      "name": "ai:test_data",
+      "status": "degraded",
+      "detail": "cli codex"
+    },
+    {
+      "name": "ai:translation_check",
+      "status": "ok",
+      "detail": "local qwen3.5-9b-4bit"
+    },
+    {
+      "name": "speech:stt",
+      "status": "down",
+      "detail": "mlx-whisper (en), mlx-whisper (ar); voice service not answering at http://127.0.0.1:8090"
+    },
+    {
+      "name": "speech:tts",
+      "status": "down",
+      "detail": "kokoro (en), mms-tts-ara (ar); voice service not answering at http://127.0.0.1:8090"
+    }
+  ]
+}

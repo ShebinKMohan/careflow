@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { api } from "@/lib/api";
 import { usePolling } from "@/lib/usePolling";
@@ -12,11 +12,14 @@ const CALLED_SHOWN = 8;
 
 /**
  * GET /v1/board/{department}, every 3 s: a public screen, so token numbers and rooms only (never a
- * name or a level). Only the three contract fields are ever read. Dark and high contrast.
+ * name or a level). Only the three contract fields are ever read. Dark and high contrast. When a
+ * poll fails the last board stays up, marked with the time it was fetched, until a fresh one
+ * replaces it: a called number is never shown as current when it may not be.
  */
 export function BoardView({ department }: { department: string }) {
   const t = useTranslations("board");
-  const state = usePolling(
+  const format = useFormatter();
+  const { state, updatedAt, stale } = usePolling(
     () => api.GET("/v1/board/{department}", { params: { path: { department } } }),
     `board:${department}`,
     BOARD_POLL_MS,
@@ -27,6 +30,11 @@ export function BoardView({ department }: { department: string }) {
       className="flex min-h-[70dvh] flex-col gap-8 rounded-card bg-board p-8 text-on-board"
       data-testid="board"
     >
+      {stale && updatedAt !== null ? (
+        <p role="status" className="rounded-control border-2 border-on-board px-4 py-2 text-title font-semibold" data-testid="board-stale">
+          {t("stale", { time: format.dateTime(new Date(updatedAt), { timeStyle: "short", numberingSystem: "latn" }) })}
+        </p>
+      ) : null}
       <ApiStatus state={state}>
         {(entries) => {
           const called = entries

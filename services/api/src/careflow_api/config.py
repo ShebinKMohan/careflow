@@ -29,6 +29,11 @@ class Settings(BaseSettings):
     #: The FHIR endpoint override (`FHIR_BASE_URL`); unset, the hospital adapter file's URL is
     #: used. Read it through `careflow_api.hospital.fhir_endpoint()`.
     fhir_base_url: str | None = None
+    #: The CareFlow voice service (M1-14), probed by the admin status; unset, VOICE_PORT on this
+    #: host (default 8090).
+    voice_base_url: str | None = Field(
+        default=None, validation_alias=AliasChoices("CAREFLOW_VOICE_URL")
+    )
     runtime: str = Field(default="live", validation_alias=AliasChoices("CAREFLOW_RUNTIME"))
     #: "dev" enables the /v1/dev test hooks; any other value (the default) leaves them out.
     env: str = Field(default="prod", validation_alias=AliasChoices("CAREFLOW_ENV"))
