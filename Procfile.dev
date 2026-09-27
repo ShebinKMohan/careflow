@@ -1,6 +1,6 @@
 # The CareFlow processes `make up` runs with honcho (scripts/up.sh adds voice and llm when enabled).
 # Research prototype. Synthetic data only. Not for clinical use.
 api: CAREFLOW_ENV=dev uv run uvicorn careflow_api.main:create_app --factory --host 127.0.0.1 --port 8000
-kiosk: NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 pnpm -F kiosk dev
+kiosk: NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 NEXT_PUBLIC_SIMULATORS=1 pnpm -F kiosk dev
 staff: NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 pnpm -F staff dev
 companion: NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 pnpm -F companion dev

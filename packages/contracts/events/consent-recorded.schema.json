@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "ConsentRecordedData: see $defs/ConsentRecordedData. Internal only: a patient's consent choices were recorded at the kiosk (M2-05). It travels on the CareFlow event bus (for the audit log, M5-01) and is never a webhook or a WebSocket message. No name, date of birth or free text.",
+  "$ref": "#/$defs/ConsentRecordedData",
+  "$defs": {
+    "ConsentRecordedData": {
+      "title": "ConsentRecordedData",
+      "description": "Internal only: the consent a patient gave at the kiosk (M2-05). No name, date of birth or free text.",
+      "type": "object",
+      "properties": {
+        "clinic_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "session_id": {
+          "$ref": "../schemas/fact.schema.json#/$defs/Identifier"
+        },
+        "camera": {
+          "type": "boolean",
+          "description": "On-kiosk camera processing (frames are never saved)."
+        },
+        "voice": {
+          "type": "boolean",
+          "description": "Voice transcription on the clinic server (no audio is kept)."
+        }
+      },
+      "required": [
+        "clinic_id",
+        "session_id",
+        "camera",
+        "voice"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "clinic_id": "clinic_demo",
+          "session_id": "ses_routine",
+          "camera": false,
+          "voice": true
+        }
+      ]
+    }
+  }
+}

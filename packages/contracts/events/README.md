@@ -20,6 +20,7 @@ These travel only on the CareFlow event bus (M1-11), for example to the audit lo
 | Type | Data schema | When |
 |---|---|---|
 | `fhir.write.completed` | `fhir-write-completed.schema.json` | CareFlow wrote a confirmed triage to the hospital FHIR server (M1-09). |
+| `consent.recorded` | `consent-recorded.schema.json` | A patient's consent choices (camera, voice) were recorded at the kiosk (M2-05). |
 
 ## Payload
 

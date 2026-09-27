@@ -13,11 +13,11 @@ async function signInKiosk(page: Page) {
   await page.getByLabel("Device ID").fill("kiosk_01");
   await page.getByLabel("Device secret").fill("example-device-secret-0001");
   await page.getByRole("button", { name: "Sign in kiosk" }).click();
-  await expect(page).toHaveURL(/\/checkin$/);
+  await expect(page).toHaveURL(/\/$/);
 }
 
 test("the footer is visible on every page", async ({ page }) => {
-  for (const path of ["/", "/setup", "/checkin", "/patient", "/intake", "/vitals", "/done"]) {
+  for (const path of ["/", "/setup", "/consent", "/checkin", "/patient", "/intake", "/vitals", "/done"]) {
     await page.goto(path);
     await expect(page.getByTestId("prototype-footer"), path).toHaveText(FOOTER_EN);
     await expect(page.getByTestId("arabic-disclaimer"), path).toHaveText(DISCLAIMER_EN);
@@ -26,10 +26,11 @@ test("the footer is visible on every page", async ({ page }) => {
 });
 
 test("keypad 100001 opens the mocked session's first question within 1 s", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
-  await expect(page).toHaveURL(/\/checkin$/);
   await signInKiosk(page);
+  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole("button", { name: "Agree", exact: true }).click();
+  await expect(page).toHaveURL(/\/checkin$/);
   for (const digit of "100001") await page.getByRole("button", { name: digit, exact: true }).click();
   const started = Date.now();
   await page.getByRole("button", { name: "Check in" }).click();
@@ -47,6 +48,8 @@ test("keypad 100001 opens the mocked session's first question within 1 s", async
 test("choosing Arabic switches the page to right-to-left", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("main").getByRole("button", { name: "العربية" }).click();
+  await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole("button", { name: "أوافق", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator("html")).toHaveAttribute("lang", "ar");

@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import secrets
 from collections.abc import Callable, Iterator
-from typing import Any
+from typing import Any, Final
 
 import anyio
 import httpx
@@ -41,9 +41,21 @@ def _reply(next_question: dict[str, Any] | None = NEXT_QUESTION, **extra: Any) -
     }
 
 
+CONSENTED: Final = {
+    "session_id": SESSION,
+    "camera": False,
+    "voice": True,
+    "data_use": True,
+    "consent_version": "2026-09-27.1",
+    "recorded_at": "2026-09-27T09:00:00Z",
+}
+
+
 @pytest.fixture
 def api() -> Iterator[respx.MockRouter]:
+    """The CareFlow API; the session has consented to voice (M2-05)."""
     with respx.mock(base_url=API, assert_all_called=False) as router:
+        router.get(f"/v1/sessions/{SESSION}/consent").respond(200, json=CONSENTED)
         yield router
 
 
@@ -107,7 +119,10 @@ def _close_code(ws: WebSocketTestSession) -> int:
     ["garbage", "expired", "wrong_secret", "nurse", "other_session", "bad_rate", "not_json"],
 )
 def test_a_bad_start_closes_with_1008(
-    variant: str, make_kiosk_app: Callable[..., FastAPI], patient_token: Callable[..., str]
+    variant: str,
+    make_kiosk_app: Callable[..., FastAPI],
+    patient_token: Callable[..., str],
+    api: respx.MockRouter,
 ) -> None:
     starts = {
         "garbage": _start("not-a-jwt"),
@@ -271,7 +286,9 @@ def test_an_unreachable_api_is_api_unavailable(
 
 
 def test_oversized_or_odd_frames_are_refused(
-    make_kiosk_app: Callable[..., FastAPI], patient_token: Callable[..., str]
+    make_kiosk_app: Callable[..., FastAPI],
+    patient_token: Callable[..., str],
+    api: respx.MockRouter,
 ) -> None:
     with TestClient(make_kiosk_app()) as client, client.websocket_connect("/kiosk/audio") as ws:
         ws.send_text(_start(patient_token()))

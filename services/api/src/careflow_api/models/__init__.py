@@ -166,6 +166,23 @@ class NurseDecisionRow(_ClinicScoped, Base):
     presented_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class ConsentRecordRow(_ClinicScoped, Base):
+    """One consent POST (M2-05), append-only; the latest row of a session wins."""
+
+    __tablename__ = "consent_records"
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("patient_session.id")
+    )
+    camera: Mapped[bool] = mapped_column(Boolean)
+    voice: Mapped[bool] = mapped_column(Boolean)
+    data_use: Mapped[bool] = mapped_column(Boolean)
+    consent_version: Mapped[str] = mapped_column(String(32))
+    language: Mapped[str] = mapped_column(String(2))
+    recorded_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
 class QueueTokenRow(_ClinicScoped, Base):
     """One queue token (M1-10). Status: waiting | called | arrived | no_show | closed."""
 
@@ -239,6 +256,7 @@ __all__ = [
     "Base",
     "BriefingRow",
     "Clinic",
+    "ConsentRecordRow",
     "Device",
     "EncounterState",
     "FhirWriteback",

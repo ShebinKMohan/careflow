@@ -1,3 +1,4 @@
+import { hasConsent } from "@/consent/hasConsent";
 import { z } from "zod";
 
 import type { VoiceClient, VoiceEvents, VoiceSession } from "./index";
@@ -119,6 +120,8 @@ export class WsVoiceClient implements VoiceClient {
   }
 
   async start(session: VoiceSession, events: VoiceEvents): Promise<void> {
+    // The microphone never opens without the patient's voice consent (M2-05).
+    if (!hasConsent("voice")) throw new Error("Voice was not consented to.");
     this.release();
     const generation = (this.generation += 1);
     this.events = events;

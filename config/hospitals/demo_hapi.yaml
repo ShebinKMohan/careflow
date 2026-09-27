@@ -7,6 +7,8 @@ fhir_base_url: http://localhost:8080/fhir
 identifier_systems:
   keypad: https://careflow.example/fhir/sid/keypad-id
   mr: http://hospital.smarthealthit.org
+  # The simulated ID-card tap (M2-05): synthetic 784-YYYY-NNNNNNN-C numbers, infra/seed/add_mock_ids.py.
+  mock_national_id: https://careflow.example/fhir/sid/mock-national-id
 # Where a coded concept's display text comes from, in order of preference.
 display_paths: [text, "coding[0].display"]
 # Condition.category codes to include (a Condition without a category is included too).

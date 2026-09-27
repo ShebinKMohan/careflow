@@ -11,6 +11,8 @@
 import type { Schema } from "@careflow/contracts";
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useRef, useState } from "react";
 
+import { type ConsentChoices, setConsentChoices } from "@/consent/hasConsent";
+
 const DEVICE_KEY = "careflow.kiosk.device";
 
 export interface DeviceSession {
@@ -48,6 +50,9 @@ export interface PatientSession {
 
 interface KioskContext {
   patient: PatientSession | null;
+  /** The consent screen's choices (M2-05), before and after check-in; null until chosen. */
+  consent: ConsentChoices | null;
+  setConsent: (choices: ConsentChoices) => void;
   start: (result: Schema<"CheckinResult">, fallback: IntakeQuestion) => void;
   setQuestion: (question: IntakeQuestion | null) => void;
   setPatientType: (patientType: "adult" | "child") => void;
@@ -61,7 +66,13 @@ const Context = createContext<KioskContext | null>(null);
 
 export function KioskProvider({ children }: { children: ReactNode }) {
   const [patient, setPatient] = useState<PatientSession | null>(null);
+  const [consent, setConsentState] = useState<ConsentChoices | null>(null);
   const cleanups = useRef(new Set<() => void>());
+
+  const setConsent = useCallback((choices: ConsentChoices) => {
+    setConsentChoices(choices);
+    setConsentState(choices);
+  }, []);
 
   const start = useCallback((result: Schema<"CheckinResult">, fallback: IntakeQuestion) => {
     setPatient({
@@ -83,6 +94,8 @@ export function KioskProvider({ children }: { children: ReactNode }) {
     for (const cleanup of cleanups.current) cleanup();
     cleanups.current.clear();
     setPatient(null);
+    setConsentChoices(null);
+    setConsentState(null);
   }, []);
   const onWipe = useCallback((cleanup: () => void) => {
     cleanups.current.add(cleanup);
@@ -92,8 +105,8 @@ export function KioskProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ patient, start, setQuestion, setPatientType, wipe, onWipe }),
-    [patient, start, setQuestion, setPatientType, wipe, onWipe],
+    () => ({ patient, consent, setConsent, start, setQuestion, setPatientType, wipe, onWipe }),
+    [patient, consent, setConsent, start, setQuestion, setPatientType, wipe, onWipe],
   );
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

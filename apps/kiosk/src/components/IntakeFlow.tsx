@@ -9,6 +9,7 @@ import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { patientApi } from "@/lib/api";
 import { type AnswerKey, quickAnswers } from "@/lib/quickAnswers";
 import { type IntakeQuestion, useKiosk } from "@/lib/session";
+import { hasConsent } from "@/consent/hasConsent";
 import { createVoiceClient, voiceEnabled } from "@/lib/voice";
 
 type InputMode = "tap" | "text" | "voice";
@@ -166,7 +167,7 @@ export function IntakeFlow() {
           {sending ? t("sending") : t("send")}
         </button>
       </form>
-      {voiceEnabled() ? (
+      {voiceEnabled() && hasConsent("voice") ? (
         <div className="flex flex-col gap-3">
           <button type="button" className={PRIMARY} disabled={sending} aria-pressed={listening} onClick={() => void listen()}>
             {listening ? t("stopMic") : t("mic")}

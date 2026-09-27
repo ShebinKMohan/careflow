@@ -1,5 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { setConsentChoices } from "@/consent/hasConsent";
 import type { VoiceEvents } from "@/lib/voice";
 import { type VoiceDeps, WsVoiceClient } from "@/lib/voice/wsVoiceClient";
 
@@ -135,6 +136,10 @@ function setup() {
 }
 
 describe("WsVoiceClient", () => {
+  // The patient agreed to voice on the consent screen (M2-05); without it start() refuses.
+  beforeEach(() => setConsentChoices({ camera: false, voice: true, dataUse: true }));
+  afterEach(() => setConsentChoices(null));
+
   let t: ReturnType<typeof setup>;
   beforeEach(() => {
     t = setup();

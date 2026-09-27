@@ -118,7 +118,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Check in with the mock ID tap */
+        /**
+         * Check in with the mock ID tap
+         * @description A simulated ID-card tap (M2-05), clearly a mock; never a real Emirates ID or UAE Pass. The card's synthetic id number is looked up as a Patient identifier on the FHIR server. One match starts a session exactly as the keypad does; none is a 404 that points the patient to the keypad; more than one is a 409 that sends them to reception. The id number travels only in this body and is logged masked.
+         */
         post: operations["checkinIdTap"];
         delete?: never;
         options?: never;
@@ -182,9 +185,16 @@ export interface paths {
             };
             cookie?: never;
         };
-        get?: never;
+        /**
+         * The session's latest consent
+         * @description The latest consent record (M2-05); the voice service checks it before it opens the microphone stream. 404 when the session has none.
+         */
+        get: operations["getConsent"];
         put?: never;
-        /** Record camera and voice consent */
+        /**
+         * Record camera and voice consent
+         * @description Every POST appends a record; the latest wins (M2-05). Declining data use is recorded too, and the kiosk then sends the patient to reception.
+         */
         post: operations["recordConsent"];
         delete?: never;
         options?: never;
@@ -1126,8 +1136,18 @@ export interface components {
             language?: components["schemas"]["Language"];
         };
         IdTapCheckinRequest: {
-            /** @description Payload of the mock ID card (Emirates ID / UAE Pass style mock). Synthetic only. */
-            mock_card_payload: string;
+            clinic_id: components["schemas"]["Identifier"];
+            kiosk_id: components["schemas"]["Identifier"];
+            mock_card_payload: components["schemas"]["MockCardPayload"];
+            /** @description The language the patient picked on the kiosk's first screen. English when absent. */
+            language?: components["schemas"]["Language"];
+        };
+        /** @description What the simulated ID reader sends (M2-05). Synthetic only; never a real ID. */
+        MockCardPayload: {
+            /** @enum {string} */
+            card_type: "mock_national_id";
+            /** @description A synthetic Emirates ID-style number (784-YYYY-NNNNNNN-C). Only ever in the body, never in a URL or a log (logs mask it). */
+            id_number: string;
         };
         CheckinResult: {
             session_id: components["schemas"]["Identifier"];
@@ -1154,14 +1174,20 @@ export interface components {
         QrClaimRequest: {
             qr_token: string;
         };
+        /** @description The kiosk's consent screen (M2-05). The camera is processed on the kiosk and never saved; voice is transcribed on the clinic server and no audio is kept; data use covers the answers going to the clinic team and the clinic record. */
         ConsentRequest: {
             camera: boolean;
             voice: boolean;
+            data_use: boolean;
+            /** @description The version of the consent text the patient saw. */
+            consent_version: string;
         };
         ConsentRecord: {
             session_id: components["schemas"]["Identifier"];
             camera: boolean;
             voice: boolean;
+            data_use: boolean;
+            consent_version: string;
             /** Format: date-time */
             recorded_at: string;
         };
@@ -2518,7 +2544,13 @@ export interface operations {
             content: {
                 /**
                  * @example {
-                 *       "mock_card_payload": "MOCKID:784-1955-0000002-1"
+                 *       "clinic_id": "clinic_demo",
+                 *       "kiosk_id": "kiosk_01",
+                 *       "mock_card_payload": {
+                 *         "card_type": "mock_national_id",
+                 *         "id_number": "784-1955-0000002-1"
+                 *       },
+                 *       "language": "en"
                  *     }
                  */
                 "application/json": components["schemas"]["IdTapCheckinRequest"];
@@ -2545,6 +2577,7 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
         };
     };
@@ -2622,6 +2655,45 @@ export interface operations {
             422: components["responses"]["Unprocessablecontent"];
         };
     };
+    getConsent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The session's latest consent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_routine",
+                     *       "camera": false,
+                     *       "voice": true,
+                     *       "data_use": true,
+                     *       "consent_version": "2026-09-27.1",
+                     *       "recorded_at": "2026-09-26T09:00:30Z"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ConsentRecord"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+        };
+    };
     recordConsent: {
         parameters: {
             query?: never;
@@ -2640,7 +2712,9 @@ export interface operations {
                 /**
                  * @example {
                  *       "camera": false,
-                 *       "voice": true
+                 *       "voice": true,
+                 *       "data_use": true,
+                 *       "consent_version": "2026-09-27.1"
                  *     }
                  */
                 "application/json": components["schemas"]["ConsentRequest"];
@@ -2658,6 +2732,8 @@ export interface operations {
                      *       "session_id": "ses_routine",
                      *       "camera": false,
                      *       "voice": true,
+                     *       "data_use": true,
+                     *       "consent_version": "2026-09-27.1",
                      *       "recorded_at": "2026-09-26T09:00:30Z"
                      *     }
                      */

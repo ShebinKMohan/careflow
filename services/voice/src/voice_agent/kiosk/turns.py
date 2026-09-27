@@ -1,13 +1,15 @@
-"""`POST /v1/sessions/{id}/turns` on the CareFlow API, with the patient's session token."""
+"""The CareFlow API, with the patient's session token: `POST /v1/sessions/{id}/turns`, and the
+session's consent (`GET /v1/sessions/{id}/consent`, M2-05) before the microphone stream opens."""
 
 from __future__ import annotations
 
+import logging
 from typing import Protocol
 
 import httpx
 from pydantic import ValidationError
 
-from careflow_contracts.api_models import InputMode, TurnRequest, TurnResponse
+from careflow_contracts.api_models import ConsentRecord, InputMode, TurnRequest, TurnResponse
 from careflow_contracts.generated.structured_facts_schema import Language
 from voice_agent.kiosk.auth import PatientSession
 
@@ -20,8 +22,15 @@ class TurnError(Exception):
         self.code = code
 
 
+logger = logging.getLogger(__name__)
+
+
 class TurnPoster(Protocol):
     async def post(self, session: PatientSession, *, text: str, language: str) -> TurnResponse: ...
+
+    async def voice_consented(self, session: PatientSession) -> bool:
+        """The session's latest consent allows voice; anything else (none, an error) is no."""
+        ...
 
 
 _STATUS_CODES = {
@@ -62,6 +71,22 @@ class TurnsClient:
             return TurnResponse.model_validate(response.json())
         except (ValueError, ValidationError) as exc:
             raise TurnError("bad_api_response") from exc
+
+    async def voice_consented(self, session: PatientSession) -> bool:
+        url = f"{self._base_url}/v1/sessions/{session.session_id}/consent"
+        try:
+            response = await self._client.get(
+                url, headers={"Authorization": f"Bearer {session.token}"}
+            )
+        except httpx.HTTPError:
+            logger.warning("The consent check could not reach the CareFlow API.")
+            return False
+        if response.status_code != 200:
+            return False
+        try:
+            return ConsentRecord.model_validate(response.json()).voice
+        except (ValueError, ValidationError):
+            return False
 
     async def aclose(self) -> None:
         if self._owns_client:

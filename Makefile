@@ -97,6 +97,7 @@ infra-down: ## Stop only the Docker services
 seed: ## Load Synthea patients (SEED_SYNTHEA=0 skips them) and the 7 personas; FORCE=1 reloads
 	@if [ "$(SEED_SYNTHEA)" != "0" ]; then infra/seed/run_synthea.sh; fi
 	uv run python infra/seed/load_fhir.py $(if $(filter 0,$(SEED_SYNTHEA)),--personas-only,)
+	uv run python infra/seed/add_mock_ids.py
 
 ps: ## Service status
 	$(COMPOSE) ps

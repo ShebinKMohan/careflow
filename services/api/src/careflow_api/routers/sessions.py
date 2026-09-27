@@ -16,6 +16,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select, update
 
 from careflow_api.config import Settings, get_settings
+from careflow_api.consent import get_consent
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
 from careflow_api.intake.runtime import IntakeRuntime, PatientAlreadySet
@@ -27,6 +28,7 @@ from careflow_api.security import create_access_token
 from careflow_contracts.api_models import (
     CheckinResult,
     DeviceVitalsReading,
+    IdTapCheckinRequest,
     IntakeQuestion,
     KeypadCheckinRequest,
     PatientDetails,
@@ -38,7 +40,7 @@ from careflow_contracts.api_models import (
     TurnResponse,
     VitalsAccepted,
 )
-from careflow_contracts.generated.ehr_fetch_schema import EhrStatus, PatientIdentifier
+from careflow_contracts.generated.ehr_fetch_schema import EhrFetch, EhrStatus, PatientIdentifier
 from careflow_contracts.generated.structured_facts_schema import (
     Language,
     StructuredFacts,
@@ -61,6 +63,9 @@ KEYPAD_WINDOW_SECONDS: Final = 300
 PATIENT_TOKEN_TTL: Final = dt.timedelta(minutes=30)
 SESSION_EXPIRY: Final = dt.timedelta(hours=2)
 UNKNOWN_DIGITS: Final = "We could not check you in with that number. Please ask at the desk."
+UNKNOWN_CARD: Final = "We could not find your record with this card. Please use the keypad."
+AMBIGUOUS_CARD: Final = "We could not check you in with this card. Please go to the reception desk."
+VOICE_NOT_CONSENTED: Final = "Voice was not consented to for this session."
 DONE_TEXT: Final = "Thank you. A nurse will see you shortly. Please stay here."
 DEVICE_FIELDS: Final = {
     "heart_rate": ("vitals.heart_rate", "/min"),
@@ -172,9 +177,36 @@ async def keypad_checkin(
     if fetch.status is EhrStatus.not_found:
         record_failure()
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=UNKNOWN_DIGITS)
+    result = await open_session(
+        principal=principal,
+        intake=intake,
+        settings=settings,
+        identifier=identifier,
+        fetch=fetch,
+        kiosk_id=body.kiosk_id,
+        language=body.language,
+    )
+    logger.info(
+        "checkin.keypad", extra={"session_id": result.session_id, "ehr": fetch.status.value}
+    )
+    return result
+
+
+async def open_session(
+    *,
+    principal: Principal,
+    intake: IntakeRuntime,
+    settings: Settings,
+    identifier: PatientIdentifier,
+    fetch: EhrFetch,
+    kiosk_id: str,
+    language: Language | None,
+) -> CheckinResult:
+    """The session row, the intake started and a 30-minute patient token: the same for every
+    check-in path (keypad, ID tap)."""
     now = utc_now()
     session_id = uuid.uuid4()
-    language = Language(body.language.value) if body.language is not None else Language.en
+    lang = Language(language.value) if language is not None else Language.en
     display = await patient_display(fetch.patient_ref)
     fhir_id = fetch.patient_ref.split("/", 1)[1] if fetch.patient_ref else None
     async with clinic_session(principal.clinic_id) as db:
@@ -182,9 +214,9 @@ async def keypad_checkin(
             PatientSession(
                 id=session_id,
                 clinic_id=principal.clinic_id,
-                device_id=uuid.UUID(body.kiosk_id),
+                device_id=uuid.UUID(kiosk_id),
                 fhir_patient_id=fhir_id,
-                language=language.value,
+                language=lang.value,
                 status="intake",
                 started_at=now,
                 expires_at=now + SESSION_EXPIRY,
@@ -195,7 +227,7 @@ async def keypad_checkin(
         session_id=str(session_id),
         clinic_id=str(principal.clinic_id),
         arrived_at=now,
-        language=language,
+        language=lang,
         extra={"patient_identifier": identifier},
     )
     token, _ = create_access_token(
@@ -206,14 +238,70 @@ async def keypad_checkin(
         extra={"session_id": str(session_id), "scope": f"session:{session_id}"},
         ttl=PATIENT_TOKEN_TTL,
     )
-    logger.info("checkin.keypad", extra={"session_id": str(session_id), "ehr": fetch.status.value})
     return CheckinResult(
         session_id=str(session_id),
         session_token=token,
         patient_display=display,
-        language=language,
+        language=lang,
         first_question=question_of(result),
     )
+
+
+def masked_card(id_number: str) -> str:
+    """784-****-*******-C: a mock ID in logs keeps only its check digit."""
+    return f"784-****-*******-{id_number[-1:]}"
+
+
+@router.post("/v1/checkin/id-tap", response_model=CheckinResult, response_model_exclude_none=True)
+async def id_tap_checkin(
+    body: IdTapCheckinRequest,
+    principal: Annotated[Principal, Depends(require_roles("kiosk_device"))],
+    intake: Annotated[IntakeRuntime, Depends(runtime)],
+    settings: Annotated[Settings, Depends(get_settings)],
+) -> CheckinResult:
+    """A simulated ID-card tap (M2-05) -> the FHIR Patient with that synthetic identifier -> a
+    session exactly as the keypad path. No match: 404 (use the keypad); more than one: 409
+    (reception). Failed taps count against the kiosk like keypad guesses; the id number is only
+    ever logged masked."""
+    if body.clinic_id != str(principal.clinic_id) or body.kiosk_id != principal.device_id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="This kiosk may not check in here.")
+    allowed, record_failure = failure_limit(
+        "id-tap", body.kiosk_id, limit=KEYPAD_LIMIT, window_seconds=KEYPAD_WINDOW_SECONDS
+    )
+    if not allowed:
+        raise HTTPException(
+            status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many attempts. Please wait a few minutes or ask at the desk.",
+        )
+    card = body.mock_card_payload.id_number
+    system = load_adapter().identifier_systems["mock_national_id"]
+    identifier = PatientIdentifier(system=system, value=card)
+    fetch = await intake.ports.ehr.fetch_context(identifier, body.clinic_id)
+    if fetch.status is EhrStatus.not_found:
+        record_failure()
+        logger.info("checkin.id_tap.not_found", extra={"card": masked_card(card)})
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=UNKNOWN_CARD)
+    if fetch.status is EhrStatus.ambiguous:
+        logger.warning("checkin.id_tap.ambiguous", extra={"card": masked_card(card)})
+        raise HTTPException(status.HTTP_409_CONFLICT, detail=AMBIGUOUS_CARD)
+    result = await open_session(
+        principal=principal,
+        intake=intake,
+        settings=settings,
+        identifier=identifier,
+        fetch=fetch,
+        kiosk_id=body.kiosk_id,
+        language=body.language,
+    )
+    logger.info(
+        "checkin.id_tap",
+        extra={
+            "session_id": result.session_id,
+            "card": masked_card(card),
+            "ehr": fetch.status.value,
+        },
+    )
+    return result
 
 
 @router.post(
@@ -230,6 +318,10 @@ async def post_turn(
     """The patient's answer; the reply is the next question, or done."""
     own_session(principal, session_id)
     await session_row(principal, session_id)
+    if body.input_mode.value == "voice":  # the microphone needs the session's consent (M2-05)
+        consent = await get_consent(principal.clinic_id, session_id)
+        if consent is None or not consent.voice:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, detail=VOICE_NOT_CONSENTED)
     try:
         result = await intake.submit_turn(session_id, body.text, body.input_mode.value)
     except NotWaiting as exc:

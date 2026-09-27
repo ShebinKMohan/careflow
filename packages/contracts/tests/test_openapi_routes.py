@@ -28,6 +28,7 @@ post /v1/checkin/keypad
 post /v1/checkin/id-tap
 post /v1/sessions/{session_id}/qr
 post /v1/checkin/qr/claim
+get /v1/sessions/{session_id}/consent
 post /v1/sessions/{session_id}/consent
 post /v1/sessions/{session_id}/patient
 post /v1/sessions/{session_id}/turns

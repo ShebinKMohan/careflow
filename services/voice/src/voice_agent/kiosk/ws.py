@@ -92,6 +92,10 @@ async def kiosk_audio(websocket: WebSocket) -> None:
         logger.info("Kiosk voice start refused: %s", exc)
         await websocket.close(code=CLOSE_POLICY_VIOLATION)
         return
+    if not await channel.turns.voice_consented(session):  # consent gates the microphone (M2-05)
+        logger.info("Kiosk voice start refused: the session has no voice consent.")
+        await websocket.close(code=CLOSE_POLICY_VIOLATION)
+        return
 
     sender = _Sender(websocket)
     try:
