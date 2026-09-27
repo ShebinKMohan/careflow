@@ -25,7 +25,7 @@ async function cachedUrls(page: Page): Promise<string[]> {
 }
 
 test("the footer is visible on every page", async ({ page }) => {
-  for (const path of ["/", "/status"]) {
+  for (const path of ["/", "/claim", "/status"]) {
     await page.goto(path);
     await expect(page.getByTestId("prototype-footer"), path).toHaveText(FOOTER_EN);
     await expect(page.getByTestId("arabic-disclaimer"), path).toHaveText(DISCLAIMER_EN);

@@ -46,7 +46,10 @@ STAFF_TYPES: Final[dict[str, frozenset[str]]] = {
     "admin": WEBHOOK_TYPES,
 }
 #: What a patient's own screen may receive: status, token and room. Never alerts or levels.
-SESSION_TYPES: Final = frozenset({"token.called", "token.no_show", "intake.completed"})
+#: `session.handed_over` (M2-06) is a WebSocket frame only, never a webhook event.
+SESSION_TYPES: Final = frozenset(
+    {"token.called", "token.no_show", "intake.completed", "session.handed_over"}
+)
 REPLAY_SECONDS: Final = 300
 QUEUE_SIZE: Final = 1000
 CLOSE_TICKET: Final = 4401

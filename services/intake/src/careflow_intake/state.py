@@ -76,6 +76,8 @@ class IntakeState(TypedDict, total=False):
     # Who the patient is (M2-04): "child" (under 16) when a parent checks in a child; absent is an
     # adult. Set once, by the kiosk's "Who is the patient?" answer.
     patient_type: Literal["adult", "child"]
+    # Where the patient answers (M2-06): the kiosk, or their phone after the QR hand-over.
+    channel: Literal["kiosk", "phone"]
     # Set by the nodes.
     started_at: datetime
     patient_identifier: PatientIdentifier | None

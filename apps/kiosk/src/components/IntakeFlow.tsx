@@ -9,6 +9,7 @@ import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { patientApi } from "@/lib/api";
 import { type AnswerKey, quickAnswers } from "@/lib/quickAnswers";
 import { type IntakeQuestion, useKiosk } from "@/lib/session";
+import { ContinueOnPhone } from "@/components/ContinueOnPhone";
 import { hasConsent } from "@/consent/hasConsent";
 import { createVoiceClient, voiceEnabled } from "@/lib/voice";
 
@@ -190,6 +191,7 @@ export function IntakeFlow() {
           {t("failed")}
         </p>
       ) : null}
+      <ContinueOnPhone />
     </div>
   );
 }

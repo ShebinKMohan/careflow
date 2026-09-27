@@ -70,6 +70,14 @@
       "injury": "Injury",
       "pain": "Pain",
       "other": "Something else"
+    },
+    "phone": {
+      "button": "Continue on your phone",
+      "title": "Scan this code with your phone's camera",
+      "expires": "This code works for {seconds} more seconds.",
+      "stay": "Stay on the kiosk",
+      "failed": "The phone code is not available right now. Please continue here.",
+      "handedOver": "Continued on your phone. This screen will now clear."
     }
   },
   "vitals": {
