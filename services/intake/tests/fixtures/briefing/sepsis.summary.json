@@ -1,0 +1,12 @@
+{
+  "persona": "sepsis",
+  "summary_status": "ok",
+  "reasons": [],
+  "sentences": [
+    "The patient is a 66-year-old male.",
+    "The patient reports fever, shivering, and a productive cough for two days.",
+    "Suspected infection is present with reported fever and rigors.",
+    "Vitals show heart rate 125 /min, SpO2 93 %, temperature 39.4 °C, respiratory rate 24 /min, systolic blood pressure 98 mmHg, diastolic blood pressure 60 mmHg, ACVPU A, and no supplemental oxygen.",
+    "The patient has no allergies, a history of diabetes mellitus type 2, takes metformin, and the complaint category is fever with a nurse's level of KTAS 2."
+  ]
+}

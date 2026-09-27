@@ -1,0 +1,115 @@
+{
+  "description": "Hand-written summary replies for the chest-pain persona: each case breaks one rule of check_summary and must be dropped; `valid` only rephrases cited facts. `{f:<fact path>}` stands for that fact's id. Synthetic data only.",
+  "valid": {
+    "sentences": [
+      {
+        "text": "The patient reports a crushing pain in the chest that goes down the left arm, with sweating.",
+        "fact_ids": ["{f:chief_complaint}", "{f:chest_pain.radiates}", "{f:chest_pain.sweating}"]
+      },
+      {
+        "text": "Heart rate is 104 /min and the pain score is 8/10.",
+        "fact_ids": ["{f:vitals.heart_rate}", "{f:pain_score}"]
+      }
+    ]
+  },
+  "cases": {
+    "uncited_sentence": {
+      "reason": "sentence 2 cites no fact",
+      "reply": {
+        "sentences": [
+          {"text": "The patient reports a crushing pain in the chest.", "fact_ids": ["{f:chief_complaint}"]},
+          {"text": "The pain started after heavy lifting.", "fact_ids": []}
+        ]
+      }
+    },
+    "unknown_fact_id": {
+      "reason": "sentence 1 cites a fact that is not in the briefing",
+      "reply": {
+        "sentences": [
+          {"text": "The patient reports a crushing pain in the chest.", "fact_ids": ["f_01M3EF2PM000000000035FW099"]}
+        ]
+      }
+    },
+    "number_not_in_cited_facts": {
+      "reason": "sentence 1 has a number that is not in its cited facts (124)",
+      "reply": {
+        "sentences": [
+          {"text": "Heart rate is 124 /min.", "fact_ids": ["{f:vitals.heart_rate}"]}
+        ]
+      }
+    },
+    "number_from_an_uncited_fact": {
+      "reason": "sentence 1 has a number that is not in its cited facts (104)",
+      "reply": {
+        "sentences": [
+          {"text": "The pain is 8/10 with a heart rate of 104 /min.", "fact_ids": ["{f:pain_score}"]}
+        ]
+      }
+    },
+    "hedged_diagnosis": {
+      "reason": "sentence 1 reads as a diagnosis or advice ('consistent with')",
+      "reply": {
+        "sentences": [
+          {"text": "Chest pain radiating to the left arm, consistent with a cardiac cause.", "fact_ids": ["{f:chest_pain.present}", "{f:chest_pain.radiates}"]}
+        ]
+      }
+    },
+    "likely": {
+      "reason": "sentence 1 reads as a diagnosis or advice ('likely')",
+      "reply": {
+        "sentences": [
+          {"text": "The chest pain is likely cardiac.", "fact_ids": ["{f:chest_pain.present}"]}
+        ]
+      }
+    },
+    "rule_out": {
+      "reason": "sentence 1 reads as a diagnosis or advice ('rule out')",
+      "reply": {
+        "sentences": [
+          {"text": "Rule out a cardiac cause of the chest pain.", "fact_ids": ["{f:chest_pain.present}"]}
+        ]
+      }
+    },
+    "advice": {
+      "reason": "sentence 1 reads as a diagnosis or advice ('should')",
+      "reply": {
+        "sentences": [
+          {"text": "The patient should have a repeat ECG.", "fact_ids": ["{f:tasks.ecg_done_at}"]}
+        ]
+      }
+    },
+    "condition_not_in_cited_facts": {
+      "reason": "sentence 1 names a condition that its cited facts do not ('angina')",
+      "reply": {
+        "sentences": [
+          {"text": "The patient describes angina with sweating.", "fact_ids": ["{f:chief_complaint}", "{f:chest_pain.sweating}"]}
+        ]
+      }
+    },
+    "dose_not_in_cited_facts": {
+      "reason": "sentence 1 has a number that is not in its cited facts (5)",
+      "reply": {
+        "sentences": [
+          {"text": "The record lists amlodipine 5 mg.", "fact_ids": ["{f:ehr_context.medications[0]}"]}
+        ]
+      }
+    },
+    "too_many_sentences": {
+      "reason": "the model's reply did not validate twice",
+      "reply": {
+        "sentences": [
+          {"text": "Crushing pain in the chest.", "fact_ids": ["{f:chief_complaint}"]},
+          {"text": "The pain goes down the left arm.", "fact_ids": ["{f:chest_pain.radiates}"]},
+          {"text": "The patient is sweating.", "fact_ids": ["{f:chest_pain.sweating}"]},
+          {"text": "The patient is a little short of breath.", "fact_ids": ["{f:chest_pain.short_of_breath}"]},
+          {"text": "The pain score is 8/10.", "fact_ids": ["{f:pain_score}"]},
+          {"text": "Heart rate is 104 /min.", "fact_ids": ["{f:vitals.heart_rate}"]}
+        ]
+      }
+    },
+    "not_json": {
+      "reason": "the model's reply did not validate twice",
+      "reply": "Summary: 58-year-old man with chest pain, probably a heart attack."
+    }
+  }
+}

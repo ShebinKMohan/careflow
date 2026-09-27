@@ -1,0 +1,12 @@
+{
+  "persona": "chest-pain",
+  "summary_status": "ok",
+  "reasons": [],
+  "sentences": [
+    "ECG done 7 min after arrival; onset for 1 h.",
+    "Age 58 years; sex Male.",
+    "Chief complaint crushing pain in my chest; radiates down left arm; sweating yes; short of breath yes.",
+    "Pain score 8/10.",
+    "Heart rate 104 /min; SpO2 97 %; Temperature 36.9 °C; Respiratory rate 20 /min; Systolic blood pressure 150 mmHg; Diastolic blood pressure 90 mmHg; ACVPU A; Supplemental oxygen no."
+  ]
+}

@@ -38,6 +38,14 @@ class Flags(TypedDict, total=False):
     intake_truncated: bool
 
 
+class ExtractionInfo(TypedDict, total=False):
+    """The latest extraction run: what the briefing's data-quality section reports (M1-16)."""
+
+    dropped_count: int
+    model_id: str | None
+    prompt_version: str | None
+
+
 def merge_alerts_by_rule_id(
     existing: Sequence[Alert] | None, new: Sequence[Alert | dict[str, Any]] | Alert | None
 ) -> list[Alert]:
@@ -80,6 +88,8 @@ class IntakeState(TypedDict, total=False):
     facts: Annotated[list[FactEntry], merge_facts_by_id]
     alerts: Annotated[list[Alert], merge_alerts_by_rule_id]
     needed_facts: list[NeededFact]
+    ruleset_version: str | None
+    extraction: ExtractionInfo
     suggestion: UrgencySuggestion | None
     suggestion_unavailable: str | None
     nurse_decision: NurseDecision | None
@@ -114,6 +124,7 @@ def structured_facts(state: IntakeState) -> StructuredFacts:
 
 
 __all__ = [
+    "ExtractionInfo",
     "Flags",
     "IntakeSettings",
     "IntakeState",

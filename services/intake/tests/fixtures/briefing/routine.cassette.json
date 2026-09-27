@@ -1,0 +1,7 @@
+{
+  "636f3e7d56439abc070bf7b114d06770e145ed251e8e9c2089fcd8d068b44048": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"fact_ids\":[\"f_RR0NDWYCCAZBEE3VFR8HVQZ75S\",\"f_Y3ZM5M0A2G0ZXKQBZ99XKTS5EZ\"],\"text\":\"The patient is a 34-year-old female.\"},{\"fact_ids\":[\"f_PRSNV6C1FPAPKSXVQ6RVW3J54P\",\"f_KJQQTTFCB063X28CDANQ7BAJQT\",\"f_NCN7XFVAX5MGTX12DTEKCQRC3X\"],\"text\":\"The chief complaint is a sore throat that started five days ago with a pain score of 3 out of 10.\"},{\"fact_ids\":[\"f_38MCGGVQQ3GXGXXE5ARE5BMJSN\",\"f_QYNBAZP1PGG2K1AYG8GN0XYS88\",\"f_M0HGN3XB36PPM7MKBW654XD95B\"],\"text\":\"Vital signs show a heart rate of 78 /min, SpO2 of 99 %, and a temperature of 37.1 °C.\"},{\"fact_ids\":[\"f_9RN8M4EJV38NDGKX6G84M6B2K3\"],\"text\":\"The patient states they are allergic to penicillin.\"},{\"fact_ids\":[\"f_NTTJF9YQS7TNH81QG78THG9Y3M\"],\"text\":\"The complaint category is Eye, ear, nose or throat with a nurse's level of KTAS 5.\"}]}"
+  }
+}

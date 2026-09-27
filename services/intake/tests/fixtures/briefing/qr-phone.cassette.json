@@ -1,0 +1,12 @@
+{
+  "4a900c3213ef83c751b3be562a487036203be616e7e80652110afa08a08c0d99": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"text\":\"The patient is a 29-year-old male.\",\"fact_ids\":[\"f_N3KDQVE47SKAQM1DWWWSZ0AWAG\",\"f_3G24NGJMB9WRRPD8NKDDEVNEAZ\"]},{\"text\":\"The chief complaint is a twisted ankle.\",\"fact_ids\":[\"f_V4AKV2QFFBWQD750XYGYVFFGT0\"]},{\"text\":\"The injury occurred this morning.\",\"fact_ids\":[\"f_5SAV0MYWJ9G4R3YH3HYWWRARYP\"]},{\"text\":\"The pain score is 6 out of 10.\",\"fact_ids\":[\"f_PCBPKYMYQMDQCSN11K5F85MBNB\"]},{\"text\":\"The complaint category is Other with a nurse level of KTAS 4.\",\"fact_ids\":[\"f_H87K99RYP62XV57Y5HXPCYZ99W\",\"f_C3WTY3NNPK8M5KFF7DR6MYYT8M\"]}]"
+  },
+  "eb66ba22c8a29fdd1b6e4653901e128e2cf51459c70a079eb7075793d9d9c2ad": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"text\":\"The patient is a 29-year-old male.\",\"fact_ids\":[\"f_N3KDQVE47SKAQM1DWWWSZ0AWAG\",\"f_3G24NGJMB9WRRPD8NKDDEVNEAZ\"]},{\"text\":\"The chief complaint is a twisted ankle.\",\"fact_ids\":[\"f_V4AKV2QFFBWQD750XYGYVFFGT0\"]},{\"text\":\"The injury occurred this morning.\",\"fact_ids\":[\"f_5SAV0MYWJ9G4R3YH3HYWWRARYP\"]},{\"text\":\"The pain score is 6 out of 10.\",\"fact_ids\":[\"f_PCBPKYMYQMDQCSN11K5F85MBNB\"]},{\"text\":\"The complaint category is Other with a nurse level of KTAS 4.\",\"fact_ids\":[\"f_H87K99RYP62XV57Y5HXPCYZ99W\",\"f_C3WTY3NNPK8M5KFF7DR6MYYT8M\"]}]}"
+  }
+}

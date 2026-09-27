@@ -112,7 +112,15 @@ async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettin
     except Exception as exc:  # fail safe
         logger.warning("extraction failed for %s: %s", state["session_id"], type(exc).__name__)
         return {"flags": {"extraction_incomplete": True}, "node_trace": ["extract"]}
-    update: Update = {"facts": list(result.facts), "node_trace": ["extract"]}
+    update: Update = {
+        "facts": list(result.facts),
+        "extraction": {
+            "dropped_count": result.dropped_count,
+            "model_id": result.model_id,
+            "prompt_version": result.prompt_version,
+        },
+        "node_trace": ["extract"],
+    }
     if result.extraction_incomplete:
         update["flags"] = {"extraction_incomplete": True}
     return update

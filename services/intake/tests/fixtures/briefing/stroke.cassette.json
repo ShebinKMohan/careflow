@@ -1,0 +1,7 @@
+{
+  "cae8c5306223249a1b8089555934bb17d85cb957fc6ae47aac682beb270c078b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"fact_ids\":[\"f_Y0RVPRFW509BJ9ZXFSVSMWDRKG\",\"f_YJ6YDDXVDHZDNBKF461TDXNFCP\"],\"text\":\"The patient is a 71-year-old female.\"},{\"fact_ids\":[\"f_8QAYHQ6R2V7XMR4TPD4W6Z94P6\",\"f_995FR8XH5VGXS030Q05TQQMFZE\",\"f_MYEZM66KZS6G6QD37N6Y5AP8P4\",\"f_3ESHR2CXE4MH3NFP1CY1FMZJVC\"],\"text\":\"The patient reports facial droop, right arm weakness, and speech difficulty.\"},{\"fact_ids\":[\"f_J5YDRA9D886Z3AMXEG6M0W1QEK\"],\"text\":\"The patient was last known well 65 minutes before arrival.\"},{\"fact_ids\":[\"f_AFFMPTH6WRK71Z52XPFBA5PZPD\",\"f_QV98HJ9QSEB1N2KQY35XADSKH1\",\"f_KFTZ7FGQX22BMATXH9MSJDN3C4\",\"f_T8E9XJD6VHT8P96AHVDAX4TAQM\",\"f_D15RYQW8352YGBV7466NNWMZMQ\",\"f_B9MC03B0GDCMT05PKBNHEM6GJ5\",\"f_EJV03060T2WWA9HT2DVGPFMKD5\",\"f_HMMGPV586R3Q2JWD3213PB3KGV\"],\"text\":\"Vitals show a heart rate of 88 /min, SpO2 of 96 %, temperature of 36.7 °C, respiratory rate of 18 /min, systolic blood pressure of 182 mmHg, diastolic blood pressure of 96 mmHg, ACVPU of A, and no supplemental oxygen.\"},{\"fact_ids\":[\"f_586FR5CB084B2MFK7DDM8PZWQM\",\"f_0C3WH6CRAWXYEJA46MBKMAW5SR\",\"f_E5PC0B3969MT4BA22G38ZHN68S\",\"f_ABT3V2EEX0971HFX17TNGVTMX4\"],\"text\":\"The patient has a history of atrial fibrillation, takes warfarin, is allergic to penicillin, and the complaint category is musculoskeletal pain with a KTAS level of 1.\"}]}"
+  }
+}

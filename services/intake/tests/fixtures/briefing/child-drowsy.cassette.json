@@ -1,0 +1,7 @@
+{
+  "272b0a16f9c5631f29d764ac4e44e2ded54a9ff06b191f54e7342b5f68523e84": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"fact_ids\":[\"f_MBWB2YBSEG065F81DT0C67W612\",\"f_VSY99W3D17RYTGFGWDXK2YENCH\",\"f_7Y6P5RF9Z145QYJBM2JPYAC9BT\"],\"text\":\"The patient is a 2-year-old male, with an age recorded as 26 months.\"},{\"fact_ids\":[\"f_3MPGG7TF6D9C7EVZC7RZHR77XF\",\"f_NZHTX7BMR6QDY19RCWJHDGMVD1\"],\"text\":\"The chief complaint is that the child has been very hard to wake since this morning.\"},{\"fact_ids\":[\"f_R6YXJAQGFQE97FMGF56XRC7X5T\",\"f_JMQSC2NN6VMKMM4VGR8NZHG5AQ\"],\"text\":\"The patient reports a fever from last night, and there is a red flag for being hard to wake.\"},{\"fact_ids\":[\"f_VTV58RCPXG40NPSV9DCWM3SYD4\",\"f_E62DZ7D3N35GTFSDAZBZQD0C49\"],\"text\":\"There is no non-blanching rash and no seizure reported.\"},{\"fact_ids\":[\"f_1GW0T37PSDEJ15K4X3P45E6VG8\",\"f_3ZK0Q18KKJYQM0RX7QX081857G\",\"f_FVQJ68Y4WP61M7HS3S7FCX8Y5A\",\"f_470VM1W1N99A41Z9D1PEC7DWR7\",\"f_0QQ6JD03RTN32MBX8Q9WXYH591\"],\"text\":\"Vital signs show a heart rate of 150 /min, SpO2 of 95 %, temperature of 38.9 °C, no known allergies, and a nurse level of KTAS 2.\"}]}"
+  }
+}

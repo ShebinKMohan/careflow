@@ -1,0 +1,279 @@
+{
+  "persona": "routine",
+  "description": "Routine walk-in with an appointment: a sore throat for five days, getting better; kiosk vitals only (partial NEWS2).",
+  "generated_by": "services/intake/tests/fixtures/briefing/generate.py",
+  "ruleset": "2026.2.0",
+  "urgency_model": "ktas-hgb-ebf31b5e-s42",
+  "state": {
+    "session_id": "ses_routine",
+    "clinic_id": "clinic_demo",
+    "language": "en",
+    "arrived_at": "2026-09-27T10:20:00+00:00",
+    "patient_ref": "Patient/persona-routine",
+    "ehr_status": "ok",
+    "ehr_errors": [],
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "facts": [
+      {
+        "key": "patient.age_years",
+        "fact": {
+          "fact_id": "f_RR0NDWYCCAZBEE3VFR8HVQZ75S",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-routine",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T10:20:20Z",
+          "value": 34
+        }
+      },
+      {
+        "key": "patient.sex",
+        "fact": {
+          "fact_id": "f_Y3ZM5M0A2G0ZXKQBZ99XKTS5EZ",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-routine",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T10:20:20Z",
+          "value": {
+            "system": "http://hl7.org/fhir/administrative-gender",
+            "code": "female",
+            "display": "Female"
+          }
+        }
+      },
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_PRSNV6C1FPAPKSXVQ6RVW3J54P",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 11,
+            "end": 22,
+            "quote": "sore throat"
+          },
+          "recorded_at": "2026-09-27T10:21:20Z",
+          "value": "sore throat"
+        }
+      },
+      {
+        "key": "symptom_onset_at",
+        "fact": {
+          "fact_id": "f_KJQQTTFCB063X28CDANQ7BAJQT",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 23,
+            "end": 36,
+            "quote": "for five days"
+          },
+          "recorded_at": "2026-09-27T10:21:20Z",
+          "value": "for five days"
+        }
+      },
+      {
+        "key": "complaint_category",
+        "fact": {
+          "fact_id": "f_NTTJF9YQS7TNH81QG78THG9Y3M",
+          "provenance": "MODEL_INFERRED",
+          "source": {
+            "kind": "model",
+            "model_id": "ktas_keyword_map",
+            "model_version": "1"
+          },
+          "recorded_at": "2026-09-27T10:21:20Z",
+          "value": {
+            "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+            "code": "eye_ent",
+            "display": "Eye, ear, nose or throat"
+          }
+        }
+      },
+      {
+        "key": "pain_score",
+        "fact": {
+          "fact_id": "f_NCN7XFVAX5MGTX12DTEKCQRC3X",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_004",
+            "start": 6,
+            "end": 9,
+            "quote": "a 3"
+          },
+          "recorded_at": "2026-09-27T10:21:50Z",
+          "value": 3
+        }
+      },
+      {
+        "key": "allergies_confirm",
+        "fact": {
+          "fact_id": "f_9RN8M4EJV38NDGKX6G84M6B2K3",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_006",
+            "start": 4,
+            "end": 26,
+            "quote": "allergic to penicillin"
+          },
+          "recorded_at": "2026-09-27T10:22:20Z",
+          "value": "allergic to penicillin"
+        }
+      },
+      {
+        "key": "vitals.heart_rate",
+        "fact": {
+          "fact_id": "f_38MCGGVQQ3GXGXXE5ARE5BMJSN",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_routine_01"
+          },
+          "recorded_at": "2026-09-27T10:23:00Z",
+          "value": 78.0,
+          "unit": "/min"
+        }
+      },
+      {
+        "key": "vitals.spo2",
+        "fact": {
+          "fact_id": "f_QYNBAZP1PGG2K1AYG8GN0XYS88",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_routine_01"
+          },
+          "recorded_at": "2026-09-27T10:23:00Z",
+          "value": 99.0,
+          "unit": "%"
+        }
+      },
+      {
+        "key": "vitals.temperature_c",
+        "fact": {
+          "fact_id": "f_M0HGN3XB36PPM7MKBW654XD95B",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_routine_01"
+          },
+          "recorded_at": "2026-09-27T10:23:00Z",
+          "value": 37.1,
+          "unit": "Cel"
+        }
+      }
+    ],
+    "turns": [
+      {
+        "turn_id": "trn_001",
+        "role": "assistant",
+        "text": "What brings you in today?",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T10:21:00Z"
+      },
+      {
+        "turn_id": "trn_002",
+        "role": "patient",
+        "text": "I've had a sore throat for five days, but it's getting better.",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T10:21:20Z"
+      },
+      {
+        "turn_id": "trn_003",
+        "role": "assistant",
+        "text": "How bad is the pain now, from 0 to 10?",
+        "question_key": "pain_score",
+        "created_at": "2026-09-27T10:21:30Z"
+      },
+      {
+        "turn_id": "trn_004",
+        "role": "patient",
+        "text": "About a 3.",
+        "question_key": "pain_score",
+        "created_at": "2026-09-27T10:21:50Z"
+      },
+      {
+        "turn_id": "trn_005",
+        "role": "assistant",
+        "text": "Do you have any allergies to medicines?",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T10:22:00Z"
+      },
+      {
+        "turn_id": "trn_006",
+        "role": "patient",
+        "text": "I'm allergic to penicillin.",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T10:22:20Z"
+      }
+    ],
+    "alerts": [],
+    "ruleset_version": "2026.2.0",
+    "extraction": {
+      "dropped_count": 0,
+      "model_id": "qwen3.5-9b-4bit",
+      "prompt_version": "extraction_v2"
+    },
+    "flags": {},
+    "suggestion_unavailable": null,
+    "suggestion": {
+      "suggestion_id": "sug_7cced435b540ed76759feabe",
+      "session_id": "ses_routine",
+      "level": 5,
+      "scale": "KTAS",
+      "display_label": "KTAS 5",
+      "confidence": 0.41185824748781763,
+      "reasons": [
+        {
+          "text": "Complaint: eye, ear, nose or throat made KTAS 5 more likely",
+          "fact_ids": [
+            "f_NTTJF9YQS7TNH81QG78THG9Y3M"
+          ]
+        },
+        {
+          "text": "Pain score 3/10 made KTAS 5 more likely",
+          "fact_ids": [
+            "f_NCN7XFVAX5MGTX12DTEKCQRC3X"
+          ]
+        },
+        {
+          "text": "SpO2 99% made KTAS 5 less likely",
+          "fact_ids": [
+            "f_QYNBAZP1PGG2K1AYG8GN0XYS88"
+          ]
+        }
+      ],
+      "model_id": "careflow-ktas-hgb",
+      "model_version": "ktas-hgb-ebf31b5e-s42",
+      "created_at": "2026-09-27T10:27:00Z"
+    },
+    "nurse_decision": {
+      "decision_id": "dec_ses_routine",
+      "session_id": "ses_routine",
+      "suggestion_id": "sug_7cced435b540ed76759feabe",
+      "action": "CONFIRM",
+      "final_level": 5,
+      "scale": "KTAS",
+      "nurse_user_id": "usr_nurse_01",
+      "acknowledged_alert_ids": [],
+      "decided_at": "2026-09-27T10:28:00Z"
+    }
+  }
+}

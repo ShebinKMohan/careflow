@@ -1,0 +1,443 @@
+{
+  "persona": "sepsis",
+  "description": "Fever, rigors and productive cough; kiosk vitals give a partial NEWS2, then the nurse completes it and records a suspected infection.",
+  "generated_by": "services/intake/tests/fixtures/briefing/generate.py",
+  "ruleset": "2026.2.0",
+  "urgency_model": "ktas-hgb-ebf31b5e-s42",
+  "state": {
+    "session_id": "ses_sepsis",
+    "clinic_id": "clinic_demo",
+    "language": "en",
+    "arrived_at": "2026-09-27T10:00:00+00:00",
+    "patient_ref": "Patient/persona-sepsis",
+    "ehr_status": "ok",
+    "ehr_errors": [],
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [
+        {
+          "fact_id": "f_RRHFBAE4SC60D8MKPEE8B9DTEY",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Condition",
+            "id": "persona-sepsis-condition-1",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T10:00:20Z",
+          "value": {
+            "system": "http://snomed.info/sct",
+            "code": "44054006",
+            "display": "Diabetes mellitus type 2"
+          }
+        }
+      ],
+      "medications": [
+        {
+          "fact_id": "f_TD0T4NN8FZ61P7M4X3YMQX47T5",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "MedicationStatement",
+            "id": "persona-sepsis-medication-1",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T10:00:20Z",
+          "value": {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "6809",
+            "display": "metformin"
+          }
+        }
+      ]
+    },
+    "facts": [
+      {
+        "key": "patient.age_years",
+        "fact": {
+          "fact_id": "f_QSXSKECNVJV8P30X3BHA6GHGS0",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-sepsis",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T10:00:20Z",
+          "value": 66
+        }
+      },
+      {
+        "key": "patient.sex",
+        "fact": {
+          "fact_id": "f_WC9RWH96ZNF42P5GH8N539FHM8",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "persona-sepsis",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-27T10:00:20Z",
+          "value": {
+            "system": "http://hl7.org/fhir/administrative-gender",
+            "code": "male",
+            "display": "Male"
+          }
+        }
+      },
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_YE049QBNFQJXQS7NWQNF735RZZ",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 9,
+            "end": 43,
+            "quote": "a fever and shivering for two days"
+          },
+          "recorded_at": "2026-09-27T10:01:20Z",
+          "value": "fever and shivering for two days"
+        }
+      },
+      {
+        "key": "infection.fever_reported",
+        "fact": {
+          "fact_id": "f_SCHT67DHYVP738MFR9KVPS0BCK",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 9,
+            "end": 16,
+            "quote": "a fever"
+          },
+          "recorded_at": "2026-09-27T10:01:20Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "infection.rigors",
+        "fact": {
+          "fact_id": "f_50XQCERBRY4N49ENRQWF66J0YQ",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 21,
+            "end": 30,
+            "quote": "shivering"
+          },
+          "recorded_at": "2026-09-27T10:01:20Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "symptoms",
+        "fact": {
+          "name": {
+            "fact_id": "f_RZJEP0QY94C1FFBVMKKRN7VRH1",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_002",
+              "start": 53,
+              "end": 77,
+              "quote": "coughing up green phlegm"
+            },
+            "recorded_at": "2026-09-27T10:01:20Z",
+            "value": "productive_cough"
+          }
+        }
+      },
+      {
+        "key": "symptom_onset_at",
+        "fact": {
+          "fact_id": "f_QREFPSQ32PHCJM794GTP8MBKBH",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_002",
+            "start": 31,
+            "end": 43,
+            "quote": "for two days"
+          },
+          "recorded_at": "2026-09-27T10:01:20Z",
+          "value": "for two days"
+        }
+      },
+      {
+        "key": "complaint_category",
+        "fact": {
+          "fact_id": "f_PW4P7RQ2K4FKZZJE85DNKQ2HSM",
+          "provenance": "MODEL_INFERRED",
+          "source": {
+            "kind": "model",
+            "model_id": "ktas_keyword_map",
+            "model_version": "1"
+          },
+          "recorded_at": "2026-09-27T10:01:20Z",
+          "value": {
+            "system": "https://careflow.example/fhir/CodeSystem/complaint-category",
+            "code": "fever",
+            "display": "Fever"
+          }
+        }
+      },
+      {
+        "key": "allergies_confirm",
+        "fact": {
+          "fact_id": "f_HH0P86QRZWQV57WV6JHJG6FE1Y",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_004",
+            "start": 0,
+            "end": 12,
+            "quote": "No allergies"
+          },
+          "recorded_at": "2026-09-27T10:01:50Z",
+          "value": "no allergies"
+        }
+      },
+      {
+        "key": "vitals.heart_rate",
+        "fact": {
+          "fact_id": "f_ET6ZJJ3CS6SQZ0GDT68PTG2PXJ",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_sepsis_01"
+          },
+          "recorded_at": "2026-09-27T10:03:00Z",
+          "value": 125.0,
+          "unit": "/min"
+        }
+      },
+      {
+        "key": "vitals.spo2",
+        "fact": {
+          "fact_id": "f_FFJZH4DY5J0Q9EMV0X84CJD9YV",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_sepsis_01"
+          },
+          "recorded_at": "2026-09-27T10:03:00Z",
+          "value": 93.0,
+          "unit": "%"
+        }
+      },
+      {
+        "key": "vitals.temperature_c",
+        "fact": {
+          "fact_id": "f_N8YR1QHS1JH59EWA2D8GD4YGFN",
+          "provenance": "DEVICE_MEASURED",
+          "source": {
+            "kind": "device",
+            "device_id": "sim_vitals_01",
+            "reading_id": "rd_ses_sepsis_01"
+          },
+          "recorded_at": "2026-09-27T10:03:00Z",
+          "value": 39.4,
+          "unit": "Cel"
+        }
+      },
+      {
+        "key": "vitals.respiratory_rate",
+        "fact": {
+          "fact_id": "f_9Y0A2STFWQA14M6WAVFCE1QKM5",
+          "provenance": "NURSE_CONFIRMED",
+          "source": {
+            "kind": "nurse",
+            "staff_user_id": "usr_nurse_01"
+          },
+          "recorded_at": "2026-09-27T10:06:00Z",
+          "value": 24.0,
+          "unit": "/min"
+        }
+      },
+      {
+        "key": "vitals.systolic_bp",
+        "fact": {
+          "fact_id": "f_HAP886C1KEETH3A708W0QZ9R9M",
+          "provenance": "NURSE_CONFIRMED",
+          "source": {
+            "kind": "nurse",
+            "staff_user_id": "usr_nurse_01"
+          },
+          "recorded_at": "2026-09-27T10:06:00Z",
+          "value": 98.0,
+          "unit": "mm[Hg]"
+        }
+      },
+      {
+        "key": "vitals.diastolic_bp",
+        "fact": {
+          "fact_id": "f_TNNNJ6WRZT4CCB92PYYG2YJE0H",
+          "provenance": "NURSE_CONFIRMED",
+          "source": {
+            "kind": "nurse",
+            "staff_user_id": "usr_nurse_01"
+          },
+          "recorded_at": "2026-09-27T10:06:00Z",
+          "value": 60.0,
+          "unit": "mm[Hg]"
+        }
+      },
+      {
+        "key": "vitals.acvpu",
+        "fact": {
+          "fact_id": "f_46VVK5F1S1B99ZCVTKDYTEBW5A",
+          "provenance": "NURSE_CONFIRMED",
+          "source": {
+            "kind": "nurse",
+            "staff_user_id": "usr_nurse_01"
+          },
+          "recorded_at": "2026-09-27T10:06:00Z",
+          "value": {
+            "system": "https://careflow.example/fhir/CodeSystem/acvpu",
+            "code": "A",
+            "display": "Alert"
+          }
+        }
+      },
+      {
+        "key": "vitals.on_supplemental_o2",
+        "fact": {
+          "fact_id": "f_3SQTFFG3BA7V2D3AJ9WZ7A4MYP",
+          "provenance": "NURSE_CONFIRMED",
+          "source": {
+            "kind": "nurse",
+            "staff_user_id": "usr_nurse_01"
+          },
+          "recorded_at": "2026-09-27T10:06:00Z",
+          "value": "no"
+        }
+      },
+      {
+        "key": "infection.suspected",
+        "fact": {
+          "fact_id": "f_H4R2W5FH3Y5PZR78T5VDDGE91X",
+          "provenance": "NURSE_CONFIRMED",
+          "source": {
+            "kind": "nurse",
+            "staff_user_id": "usr_nurse_01"
+          },
+          "recorded_at": "2026-09-27T10:06:00Z",
+          "value": "yes"
+        }
+      }
+    ],
+    "turns": [
+      {
+        "turn_id": "trn_001",
+        "role": "assistant",
+        "text": "What brings you in today?",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T10:01:00Z"
+      },
+      {
+        "turn_id": "trn_002",
+        "role": "patient",
+        "text": "I've had a fever and shivering for two days, and I'm coughing up green phlegm.",
+        "question_key": "chief_complaint",
+        "created_at": "2026-09-27T10:01:20Z"
+      },
+      {
+        "turn_id": "trn_003",
+        "role": "assistant",
+        "text": "Do you have any allergies to medicines?",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T10:01:30Z"
+      },
+      {
+        "turn_id": "trn_004",
+        "role": "patient",
+        "text": "No allergies.",
+        "question_key": "allergies_confirm",
+        "created_at": "2026-09-27T10:01:50Z"
+      }
+    ],
+    "alerts": [
+      {
+        "alert_id": "alr_dabc4cef14be8ee77a2cfd94",
+        "session_id": "ses_sepsis",
+        "rule_id": "SEPSIS_NEWS2",
+        "ruleset_version": "2026.2.0",
+        "severity": "critical",
+        "evidence_fact_ids": [
+          "f_H4R2W5FH3Y5PZR78T5VDDGE91X",
+          "f_SCHT67DHYVP738MFR9KVPS0BCK",
+          "f_50XQCERBRY4N49ENRQWF66J0YQ",
+          "f_N8YR1QHS1JH59EWA2D8GD4YGFN",
+          "f_RZJEP0QY94C1FFBVMKKRN7VRH1",
+          "f_9Y0A2STFWQA14M6WAVFCE1QKM5",
+          "f_FFJZH4DY5J0Q9EMV0X84CJD9YV",
+          "f_HAP886C1KEETH3A708W0QZ9R9M",
+          "f_ET6ZJJ3CS6SQZ0GDT68PTG2PXJ"
+        ],
+        "required_action": "sepsis_review_now",
+        "display_text": "Possible sepsis: suspected infection with NEWS2 5 or more. Urgent review.",
+        "partial": false,
+        "missing_inputs": [],
+        "raised_at": "2026-09-27T10:06:00Z",
+        "deadline_at": null
+      }
+    ],
+    "ruleset_version": "2026.2.0",
+    "extraction": {
+      "dropped_count": 0,
+      "model_id": "qwen3.5-9b-4bit",
+      "prompt_version": "extraction_v2"
+    },
+    "flags": {},
+    "suggestion_unavailable": null,
+    "suggestion": {
+      "suggestion_id": "sug_b190a33916c0fe17387e9154",
+      "session_id": "ses_sepsis",
+      "level": 2,
+      "scale": "KTAS",
+      "display_label": "KTAS 2",
+      "confidence": 0.5195247026087495,
+      "reasons": [
+        {
+          "text": "Respiratory rate 24/min made KTAS 2 more likely",
+          "fact_ids": [
+            "f_9Y0A2STFWQA14M6WAVFCE1QKM5"
+          ]
+        },
+        {
+          "text": "Temperature 39.4 °C made KTAS 2 more likely",
+          "fact_ids": [
+            "f_N8YR1QHS1JH59EWA2D8GD4YGFN"
+          ]
+        },
+        {
+          "text": "Pain score not recorded made KTAS 2 more likely",
+          "fact_ids": []
+        }
+      ],
+      "model_id": "careflow-ktas-hgb",
+      "model_version": "ktas-hgb-ebf31b5e-s42",
+      "created_at": "2026-09-27T10:07:00Z"
+    },
+    "nurse_decision": {
+      "decision_id": "dec_ses_sepsis",
+      "session_id": "ses_sepsis",
+      "suggestion_id": "sug_b190a33916c0fe17387e9154",
+      "action": "CONFIRM",
+      "final_level": 2,
+      "scale": "KTAS",
+      "nurse_user_id": "usr_nurse_01",
+      "acknowledged_alert_ids": [
+        "alr_dabc4cef14be8ee77a2cfd94"
+      ],
+      "decided_at": "2026-09-27T10:08:00Z"
+    }
+  }
+}

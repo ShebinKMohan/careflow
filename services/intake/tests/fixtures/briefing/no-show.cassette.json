@@ -1,0 +1,12 @@
+{
+  "6b35d37f8d67064cab603d375c28760e14b83e8da0885c7ad9f69efa721454c9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"text\":\"The patient reports a bad headache that started since yesterday evening.\",\"fact_ids\":[\"f_1P8XZ7ZJ2BPRZ8M8NGQRFJB39W\",\"f_M1G8X6HAF7V02GS9GRGTB2HTVV\"]},{\"text\":\"The patient rates the pain as a 7.\",\"fact_ids\":[\"f_R2609RSSDY9H0JP0VR0Q66ANDC\"]},{\"text\":\"The model infers the complaint category is Headache.\",\"fact_ids\":[\"f_ZF5F58605JJXAQ53Y9FDMPRTT2\"]},{\"text\":\"The nurse's level is KTAS 3.\",\"fact_ids\":[\"f_ZF5F58605JJXAQ53Y9FDMPRTT2\"]},{\"text\":\"Device measurements include a heart rate of 82 /min, SpO2 of 98 %, and a temperature of 36.8 °C.\",\"fact_ids\":[\"f_SSA8Q68TAB8QZ315CXWV5GFKZK\",\"f_BQBBKJ2HNF6S0JBGCT1CM721P7\",\"f_A9Q9F7CA840XXBKCY9S4P10EMQ\"]},{\"text\":\"The patient states there are none known allergies.\",\"fact_ids\":[\"f_P9T6XTQZ8CNJJ8R231AQRSTDC0\"]}]}"
+  },
+  "ee2621dba8c2da805e931b74a2c7fd6c38033fa7ed2ec2a0231411a995cf8c2e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "summary",
+    "text": "{\"sentences\":[{\"text\":\"The patient reports a bad headache that started since yesterday evening.\",\"fact_ids\":[\"f_1P8XZ7ZJ2BPRZ8M8NGQRFJB39W\",\"f_M1G8X6HAF7V02GS9GRGTB2HTVV\"]},{\"text\":\"The patient rates the pain as a 7.\",\"fact_ids\":[\"f_R2609RSSDY9H0JP0VR0Q66ANDC\"]},{\"text\":\"The model infers the complaint category is Headache.\",\"fact_ids\":[\"f_ZF5F58605JJXAQ53Y9FDMPRTT2\"]},{\"text\":\"The nurse's level is KTAS 3.\",\"fact_ids\":[\"f_ZF5F58605JJXAQ53Y9FDMPRTT2\"]},{\"text\":\"Device measurements include a heart rate of 82 /min, SpO2 of 98 %, and a temperature of 36.8 °C.\",\"fact_ids\":[\"f_SSA8Q68TAB8QZ315CXWV5GFKZK\",\"f_BQBBKJ2HNF6S0JBGCT1CM721P7\",\"f_A9Q9F7CA840XXBKCY9S4P10EMQ\"]}]}"
+  }
+}
