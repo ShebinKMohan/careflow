@@ -30,3 +30,13 @@ POST /v1/nurse/sessions/{session_id}/vitals added the new `tasks.ecg_done_at` en
 GET /v1/sessions/{session_id}/triage added the new `tasks.ecg_done_at` enum value to the `alerts/items/missing_inputs/items/` response property for the response status `200`
 GET /v1/sessions/{session_id}/triage added the new `tasks.ecg_done_at` enum value to the `needed_facts/items/key` response property for the response status `200`
 GET /v1/sessions/{session_id}/triage added the new `tasks.ecg_done_at` enum value to the `news2/oneOf[#/components/schemas/News2Score]/missing/items/` response property for the response status `200`
+# M2-05 (ADR-036): the consent screen records data use and the consent text's version, and the
+# mock ID tap sends a structured synthetic card plus the kiosk's clinic and device, as the keypad
+# does. Only the kiosk calls these routes; it changes in the same PR.
+POST /v1/checkin/id-tap added the new required request property `clinic_id`
+POST /v1/checkin/id-tap added the new required request property `kiosk_id`
+POST /v1/checkin/id-tap added the new required request property `mock_card_payload/card_type`
+POST /v1/checkin/id-tap added the new required request property `mock_card_payload/id_number`
+POST /v1/checkin/id-tap the `mock_card_payload` request property `type` changed from `string` to `object`
+POST /v1/sessions/{session_id}/consent added the new required request property `consent_version`
+POST /v1/sessions/{session_id}/consent added the new required request property `data_use`

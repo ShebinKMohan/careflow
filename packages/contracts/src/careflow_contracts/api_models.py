@@ -233,16 +233,20 @@ class KeypadCheckinRequest(BaseModel):
     ] = None
 
 
-class IdTapCheckinRequest(BaseModel):
+class CardType(StrEnum):
+    mock_national_id = "mock_national_id"
+
+
+class MockCardPayload(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    mock_card_payload: Annotated[
+    card_type: CardType
+    id_number: Annotated[
         str,
         Field(
-            description="Payload of the mock ID card (Emirates ID / UAE Pass style mock). Synthetic only.",
-            max_length=512,
-            min_length=1,
+            description="A synthetic Emirates ID-style number (784-YYYY-NNNNNNN-C). Only ever in the body, never in a URL or a log (logs mask it).",
+            pattern="^784-[0-9]{4}-[0-9]{7}-[0-9]$",
         ),
     ]
 
@@ -284,6 +288,14 @@ class ConsentRequest(BaseModel):
     )
     camera: bool
     voice: bool
+    data_use: bool
+    consent_version: Annotated[
+        str,
+        Field(
+            description="The version of the consent text the patient saw.",
+            pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}(\\.[0-9]+)?$",
+        ),
+    ]
 
 
 class ConsentRecord(BaseModel):
@@ -293,6 +305,8 @@ class ConsentRecord(BaseModel):
     session_id: Identifier
     camera: bool
     voice: bool
+    data_use: bool
+    consent_version: Annotated[str, Field(pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}(\\.[0-9]+)?$")]
     recorded_at: AwareDatetime
 
 
@@ -990,6 +1004,21 @@ class NurseFlagEvent(BaseModel):
     type: Literal["nurse.flag"]
     timestamp: AwareDatetime
     data: NurseFlagDataModel
+
+
+class IdTapCheckinRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    clinic_id: Identifier
+    kiosk_id: Identifier
+    mock_card_payload: MockCardPayload
+    language: Annotated[
+        LanguageModel | None,
+        Field(
+            description="The language the patient picked on the kiosk's first screen. English when absent."
+        ),
+    ] = None
 
 
 class CheckinResult(BaseModel):

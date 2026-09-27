@@ -14,6 +14,7 @@ from typing import Final
 from pydantic import BaseModel
 
 from careflow_contracts.generated.events.alert_raised_schema import AlertRaisedData
+from careflow_contracts.generated.events.consent_recorded_schema import ConsentRecordedData
 from careflow_contracts.generated.events.envelope_schema import EventEnvelope, EventType
 from careflow_contracts.generated.events.fhir_write_completed_schema import FhirWriteCompletedData
 from careflow_contracts.generated.events.intake_completed_schema import IntakeCompletedData
@@ -38,12 +39,14 @@ DATA_MODEL_FOR_EVENT: Final[dict[EventType, type[BaseModel]]] = {
 #: Internal event type -> data model. Bus only: never a webhook or a WebSocket message.
 INTERNAL_DATA_MODELS: Final[dict[str, type[BaseModel]]] = {
     "fhir.write.completed": FhirWriteCompletedData,
+    "consent.recorded": ConsentRecordedData,
 }
 
 __all__ = [
     "DATA_MODEL_FOR_EVENT",
     "INTERNAL_DATA_MODELS",
     "AlertRaisedData",
+    "ConsentRecordedData",
     "EventEnvelope",
     "EventType",
     "FhirWriteCompletedData",
