@@ -39,7 +39,36 @@
     "alerts": "Alerts",
     "arrived": "Arrived",
     "level": "{scale} {level}",
-    "noLevel": "Not assessed"
+    "noLevel": "Not assessed",
+    "sessionTitle": "Triage",
+    "session": "Session {id}",
+    "ageSex": "Age, sex",
+    "complaint": "Complaint",
+    "levelColumn": "Level",
+    "suggestedChip": "Suggested {label}",
+    "confirmedChip": "Confirmed {label}",
+    "noSuggestion": "No suggestion",
+    "age": "{age} y",
+    "unknown": "Not recorded",
+    "empty": "No patients waiting.",
+    "live": "Live",
+    "paused": "Live updates paused. Checking every 5 seconds.",
+    "connecting": "Connecting to live updates…",
+    "sex": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "unknown": "Unknown"
+    },
+    "states": {
+      "intake": "In intake",
+      "awaiting_nurse": "Awaiting nurse",
+      "queued": "Queued",
+      "called": "Called",
+      "arrived": "Arrived",
+      "no_show": "No-show",
+      "closed": "Closed"
+    }
   },
   "doctor": {
     "title": "Doctor briefing",
@@ -60,5 +89,115 @@
     "available": "Available",
     "yes": "Yes",
     "no": "No"
+  },
+  "alerts": {
+    "title": "Active alerts",
+    "rules": {
+      "FAST_STROKE": "FAST stroke screen",
+      "CHEST_PAIN_ECG_10MIN": "Chest pain: ECG in 10 min",
+      "SEPSIS_NEWS2": "Possible sepsis (NEWS2)",
+      "NG143_RED_FLAG": "Child red flag",
+      "NG143_AMBER_FLAG": "Child amber flag",
+      "CHILD_HARD_TO_WAKE": "Child hard to wake"
+    },
+    "severity": {
+      "critical": "Critical",
+      "high": "High"
+    },
+    "patient": "Patient {name}",
+    "partial": "Partial NEWS2",
+    "evidence": "Evidence",
+    "evidenceLoading": "Loading the evidence…",
+    "raised": "Raised {time}",
+    "ecgDue": "ECG due in",
+    "overdue": "Overdue +{time}",
+    "ecgDone": "ECG done",
+    "ecgDoneAt": "ECG done {time}",
+    "ecgFailed": "The ECG was not recorded. Try again.",
+    "openCard": "Open triage"
+  },
+  "provenance": {
+    "EHR": "EHR",
+    "PATIENT_STATED": "Patient said",
+    "DEVICE_MEASURED": "Device",
+    "NURSE_CONFIRMED": "Nurse",
+    "MODEL_INFERRED": "Model inferred"
+  },
+  "triage": {
+    "title": "Triage",
+    "suggestion": "Model suggestion",
+    "notFinal": "Suggestion only. You decide.",
+    "suggested": "Suggested {label}",
+    "confidence": "Confidence {percent}%",
+    "model": "Model {version}",
+    "why": "Why",
+    "none": "No model suggestion. Choose a level.",
+    "confirm": "Confirm level {level}",
+    "change": "Change level",
+    "pickLevel": "Level",
+    "reason": "Reason for this level",
+    "reasonCodes": {
+      "clinical_judgement": "Clinical judgement",
+      "new_information": "New information",
+      "patient_deteriorated": "Patient deteriorated",
+      "model_error": "The suggestion is wrong",
+      "other": "Other"
+    },
+    "note": "Or describe the reason (at least 5 characters)",
+    "submitOverride": "Set level {level}",
+    "submitOverrideNoLevel": "Choose a level",
+    "cancel": "Cancel",
+    "failed": "The decision was not saved. Try again.",
+    "confirmedTitle": "Decision",
+    "confirmedLevel": "{label}, set by the nurse",
+    "token": "Number {code}",
+    "room": "Room {room}",
+    "noToken": "No queue number yet.",
+    "warnings": {
+      "extraction_incomplete": "Extraction incomplete. Check answers with the patient.",
+      "ehr_unavailable": "EHR unavailable at check-in",
+      "intake_stopped_early": "Intake stopped early"
+    },
+    "facts": "Facts",
+    "noFacts": "No facts yet."
+  },
+  "news2": {
+    "title": "Complete NEWS2",
+    "none": "No NEWS2 yet.",
+    "score": "NEWS2 {total}",
+    "partial": "Partial: {missing} of 7 missing",
+    "band": {
+      "low": "Low risk",
+      "low-medium": "Low-medium risk (a single 3)",
+      "medium": "Medium risk",
+      "high": "High risk"
+    },
+    "params": {
+      "respiratory_rate": "Respiratory rate",
+      "spo2": "SpO2",
+      "systolic_bp": "Systolic BP",
+      "heart_rate": "Heart rate",
+      "acvpu": "ACVPU",
+      "temperature_c": "Temperature",
+      "on_supplemental_o2": "Oxygen"
+    },
+    "missing": "missing",
+    "rr": "Respiratory rate (/min)",
+    "sbp": "Systolic blood pressure (mmHg)",
+    "fromDevice": "From device, confirm",
+    "acvpu": "Consciousness (ACVPU)",
+    "acvpuOptions": {
+      "A": "Alert",
+      "C": "New confusion",
+      "V": "Responds to voice",
+      "P": "Responds to pain",
+      "U": "Unresponsive"
+    },
+    "oxygen": "On supplemental oxygen",
+    "yes": "Yes",
+    "no": "No",
+    "save": "Save vitals",
+    "saving": "Saving…",
+    "failed": "The vitals were not saved. Try again."
   }
 }

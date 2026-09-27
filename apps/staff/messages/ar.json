@@ -39,7 +39,36 @@
     "alerts": "التنبيهات",
     "arrived": "وقت الوصول",
     "level": "{scale} {level}",
-    "noLevel": "لم يُقيَّم بعد"
+    "noLevel": "لم يُقيَّم بعد",
+    "sessionTitle": "الفرز",
+    "session": "الجلسة {id}",
+    "ageSex": "العمر، الجنس",
+    "complaint": "الشكوى",
+    "levelColumn": "المستوى",
+    "suggestedChip": "مقترح {label}",
+    "confirmedChip": "مؤكد {label}",
+    "noSuggestion": "لا يوجد اقتراح",
+    "age": "{age} سنة",
+    "unknown": "غير مسجل",
+    "empty": "لا يوجد مرضى في الانتظار.",
+    "live": "مباشر",
+    "paused": "التحديثات المباشرة متوقفة. التحقق كل 5 ثوانٍ.",
+    "connecting": "جارٍ الاتصال بالتحديثات المباشرة…",
+    "sex": {
+      "male": "ذكر",
+      "female": "أنثى",
+      "other": "آخر",
+      "unknown": "غير معروف"
+    },
+    "states": {
+      "intake": "قيد الاستقبال",
+      "awaiting_nurse": "بانتظار الممرض",
+      "queued": "في الطابور",
+      "called": "تم النداء",
+      "arrived": "حضر",
+      "no_show": "لم يحضر",
+      "closed": "مغلق"
+    }
   },
   "doctor": {
     "title": "ملخص الطبيب",
@@ -60,5 +89,115 @@
     "available": "متاح",
     "yes": "نعم",
     "no": "لا"
+  },
+  "alerts": {
+    "title": "التنبيهات النشطة",
+    "rules": {
+      "FAST_STROKE": "فحص FAST للسكتة",
+      "CHEST_PAIN_ECG_10MIN": "ألم الصدر: تخطيط قلب خلال 10 دقائق",
+      "SEPSIS_NEWS2": "إنتان محتمل (NEWS2)",
+      "NG143_RED_FLAG": "علامة حمراء لدى طفل",
+      "NG143_AMBER_FLAG": "علامة برتقالية لدى طفل",
+      "CHILD_HARD_TO_WAKE": "طفل يصعب إيقاظه"
+    },
+    "severity": {
+      "critical": "حرج",
+      "high": "مرتفع"
+    },
+    "patient": "المريض {name}",
+    "partial": "NEWS2 جزئي",
+    "evidence": "الأدلة",
+    "evidenceLoading": "جارٍ تحميل الأدلة…",
+    "raised": "صدر {time}",
+    "ecgDue": "تخطيط القلب مستحق خلال",
+    "overdue": "متأخر +{time}",
+    "ecgDone": "تم تخطيط القلب",
+    "ecgDoneAt": "تم تخطيط القلب {time}",
+    "ecgFailed": "لم يُسجَّل تخطيط القلب. حاول مرة أخرى.",
+    "openCard": "فتح الفرز"
+  },
+  "provenance": {
+    "EHR": "السجل الصحي",
+    "PATIENT_STATED": "قال المريض",
+    "DEVICE_MEASURED": "جهاز",
+    "NURSE_CONFIRMED": "الممرض",
+    "MODEL_INFERRED": "استنتاج النموذج"
+  },
+  "triage": {
+    "title": "الفرز",
+    "suggestion": "اقتراح النموذج",
+    "notFinal": "اقتراح فقط. القرار لك.",
+    "suggested": "مقترح {label}",
+    "confidence": "الثقة {percent}%",
+    "model": "النموذج {version}",
+    "why": "السبب",
+    "none": "لا يوجد اقتراح من النموذج. اختر مستوى.",
+    "confirm": "تأكيد المستوى {level}",
+    "change": "تغيير المستوى",
+    "pickLevel": "المستوى",
+    "reason": "سبب هذا المستوى",
+    "reasonCodes": {
+      "clinical_judgement": "تقدير سريري",
+      "new_information": "معلومات جديدة",
+      "patient_deteriorated": "تدهور حالة المريض",
+      "model_error": "الاقتراح خاطئ",
+      "other": "أخرى"
+    },
+    "note": "أو صف السبب (5 أحرف على الأقل)",
+    "submitOverride": "تعيين المستوى {level}",
+    "submitOverrideNoLevel": "اختر مستوى",
+    "cancel": "إلغاء",
+    "failed": "لم يُحفظ القرار. حاول مرة أخرى.",
+    "confirmedTitle": "القرار",
+    "confirmedLevel": "{label}، حدده الممرض",
+    "token": "الرقم {code}",
+    "room": "الغرفة {room}",
+    "noToken": "لا يوجد رقم انتظار بعد.",
+    "warnings": {
+      "extraction_incomplete": "الاستخلاص غير مكتمل. راجع الإجابات مع المريض.",
+      "ehr_unavailable": "السجل الصحي غير متاح عند تسجيل الوصول",
+      "intake_stopped_early": "توقف الاستقبال مبكراً"
+    },
+    "facts": "الحقائق",
+    "noFacts": "لا توجد حقائق بعد."
+  },
+  "news2": {
+    "title": "إكمال NEWS2",
+    "none": "لا يوجد NEWS2 بعد.",
+    "score": "NEWS2 {total}",
+    "partial": "جزئي: {missing} من 7 ناقصة",
+    "band": {
+      "low": "خطر منخفض",
+      "low-medium": "خطر منخفض إلى متوسط (قيمة 3 منفردة)",
+      "medium": "خطر متوسط",
+      "high": "خطر مرتفع"
+    },
+    "params": {
+      "respiratory_rate": "معدل التنفس",
+      "spo2": "تشبع الأكسجين",
+      "systolic_bp": "الضغط الانقباضي",
+      "heart_rate": "النبض",
+      "acvpu": "مستوى الوعي",
+      "temperature_c": "الحرارة",
+      "on_supplemental_o2": "الأكسجين"
+    },
+    "missing": "ناقص",
+    "rr": "معدل التنفس (/دقيقة)",
+    "sbp": "ضغط الدم الانقباضي (ملم زئبق)",
+    "fromDevice": "من الجهاز، يرجى التأكيد",
+    "acvpu": "مستوى الوعي (ACVPU)",
+    "acvpuOptions": {
+      "A": "يقظ",
+      "C": "ارتباك جديد",
+      "V": "يستجيب للصوت",
+      "P": "يستجيب للألم",
+      "U": "لا يستجيب"
+    },
+    "oxygen": "على أكسجين إضافي",
+    "yes": "نعم",
+    "no": "لا",
+    "save": "حفظ العلامات الحيوية",
+    "saving": "جارٍ الحفظ…",
+    "failed": "لم تُحفظ العلامات الحيوية. حاول مرة أخرى."
   }
 }
