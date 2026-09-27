@@ -1,4 +1,5 @@
-"""The versioned extraction prompt and the messages sent to the model."""
+"""The versioned extraction prompts and the messages sent to the model. The session language
+picks the prompt (M2-03): the Arabic one keeps the English keys and values and quotes Arabic."""
 
 from __future__ import annotations
 
@@ -8,12 +9,23 @@ from pathlib import Path
 from typing import Final
 
 from careflow_contracts.generated.fact_schema import IntegerFact, TextFact, TriStateFact
-from careflow_contracts.generated.structured_facts_schema import FactKey, Symptom, Turn, TurnRole
+from careflow_contracts.generated.structured_facts_schema import (
+    FactKey,
+    Language,
+    Symptom,
+    Turn,
+    TurnRole,
+)
 from careflow_intake.facts import fact_class
 from careflow_providers.base import Message
 
-PROMPT_VERSION: Final = "extraction_v2"
+PROMPT_VERSIONS: Final = {Language.en: "extraction_v2", Language.ar: "extraction_v2_ar"}
+PROMPT_VERSION: Final = PROMPT_VERSIONS[Language.en]
 PROMPT_DIR: Final = Path(__file__).parent / "prompts"
+
+
+def prompt_version(language: Language | str = Language.en) -> str:
+    return PROMPT_VERSIONS[Language(language)]
 
 
 @cache
@@ -39,10 +51,15 @@ def turn_labels(turns: Sequence[Turn]) -> dict[str, Turn]:
     return {f"t{index}": turn for index, turn in enumerate(turns, start=1)}
 
 
-def build_messages(turns: Sequence[Turn], question_keys: Mapping[str, FactKey]) -> list[Message]:
-    """A system message with the rules and allowed keys, and the transcript with each turn's label,
-    role and question key."""
-    system = template().replace("{keys}", ", ".join(key.value for key in extractable_keys()))
+def build_messages(
+    turns: Sequence[Turn],
+    question_keys: Mapping[str, FactKey],
+    language: Language | str = Language.en,
+) -> list[Message]:
+    """A system message with the rules and allowed keys (in the session language's prompt), and
+    the transcript with each turn's label, role and question key."""
+    keys = ", ".join(key.value for key in extractable_keys())
+    system = template(prompt_version(language)).replace("{keys}", keys)
     lines = []
     for label, turn in turn_labels(turns).items():
         if turn.role is TurnRole.patient:
@@ -55,4 +72,12 @@ def build_messages(turns: Sequence[Turn], question_keys: Mapping[str, FactKey]) 
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
-__all__ = ["PROMPT_VERSION", "build_messages", "extractable_keys", "template", "turn_labels"]
+__all__ = [
+    "PROMPT_VERSION",
+    "PROMPT_VERSIONS",
+    "build_messages",
+    "extractable_keys",
+    "prompt_version",
+    "template",
+    "turn_labels",
+]

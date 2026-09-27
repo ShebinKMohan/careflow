@@ -130,11 +130,12 @@ function SourceDetails({ item, triage }: { item: BriefingItem; triage: BriefingT
 }
 
 /** The patient's words, marked; the briefing keeps only the cited span (transcripts stay in the
- * session), so the whole quote is the span. */
+ * session), so the whole quote is the span. `dir="auto"` isolates an Arabic quote (M2-03) so it
+ * reads right to left inside the English popover. */
 function PatientQuote({ quote }: { quote: string }) {
   const { before, marked, after } = highlight(quote, 0, Array.from(quote).length);
   return (
-    <q>
+    <q dir="auto">
       {before}
       <mark className="rounded bg-prov-patient-tint px-1 text-prov-patient">{marked}</mark>
       {after}

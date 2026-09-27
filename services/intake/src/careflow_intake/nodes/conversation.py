@@ -7,7 +7,7 @@ from typing import Any, Final, Literal
 
 from langgraph.types import interrupt
 
-from careflow_contracts.generated.structured_facts_schema import FactKey, Turn, TurnRole
+from careflow_contracts.generated.structured_facts_schema import FactKey, Language, Turn, TurnRole
 from careflow_intake.nodes import Update
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState
@@ -108,7 +108,9 @@ async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettin
         if turn.role is TurnRole.patient and turn.question_key is not None
     }
     try:
-        result = await ports.extractor.extract(turns, state.get("facts", []), question_keys)
+        result = await ports.extractor.extract(
+            turns, state.get("facts", []), question_keys, Language(state["language"])
+        )
     except Exception as exc:  # fail safe
         logger.warning("extraction failed for %s: %s", state["session_id"], type(exc).__name__)
         return {"flags": {"extraction_incomplete": True}, "node_trace": ["extract"]}
