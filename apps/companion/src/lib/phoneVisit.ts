@@ -50,10 +50,30 @@ export async function resumeVisit(): Promise<PhoneVisit> {
   return current.status === "ready" ? { ...current, session, token } : current;
 }
 
-/** The code is never saved. Only the tab-scoped credential and minimal visit identity survive reload. */
-export async function claimVisit(code: string, onClaimed: () => void = () => undefined): Promise<PhoneVisit> {
+/**
+ * A random claim key for one code (32 bytes, base64url): kept in memory with the code, never
+ * stored or put in a URL. Sending the code again with the same key proves this phone claimed it,
+ * so a claim whose answer was lost can be retried (M2-06, ADR-048).
+ */
+export function newClaimKey(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/**
+ * The code and its claim key are never saved. Only the tab-scoped credential and minimal visit
+ * identity survive reload. A retry sends the same key, so a lost answer to a successful claim
+ * comes back as a new credential instead of "already used".
+ */
+export async function claimVisit(
+  code: string,
+  claimKey: string,
+  onClaimed: () => void = () => undefined,
+): Promise<PhoneVisit> {
   try {
-    const { data, response } = await api.POST("/v1/checkin/qr/claim", { body: { qr_token: code } });
+    const { data, response } = await api.POST("/v1/checkin/qr/claim", {
+      body: { qr_token: code, claim_key: claimKey },
+    });
     if (!data) return { status: response.status >= 500 ? "unavailable" : "failed" };
     const session = { sessionId: data.session_id, language: data.language, display: data.patient_display };
     saveToken(data.session_token);

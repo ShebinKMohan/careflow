@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import contextlib
 import os
+import urllib.request
 import uuid
 from collections.abc import AsyncIterator, Callable, Iterator
 from dataclasses import dataclass
@@ -20,10 +21,12 @@ import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
+from redis import Redis as SyncRedis
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, make_url
+from starlette.testclient import TestClient
 
 API_DIR = Path(__file__).resolve().parents[1]
 TEST_DB = "careflow_test"
@@ -270,3 +273,69 @@ async def client(app: FastAPI) -> AsyncIterator[AsyncClient]:
     transport = ASGITransport(app=app, client=(ip, 40000))
     async with AsyncClient(transport=transport, base_url="http://api.test") as http:
         yield http
+
+
+# The real stack end to end (M1-12, M2-06): the app with its lifespan on the isolated test stack.
+FLOW_CASSETTE = Path(__file__).resolve().parent / "fixtures" / "flow" / "providers.cassette.json"
+FLOW_RECORDING = os.environ.get("CAREFLOW_FLOW_RECORD") == "1"
+TEST_HANDOVER_KEY = "test-only-handover-signing-key-000000000000000000"
+
+
+def fhir_base() -> str:
+    return os.environ.get("FHIR_BASE_URL", "http://localhost:8080/fhir").rstrip("/")
+
+
+def hapi_answers() -> bool:
+    try:
+        with urllib.request.urlopen(f"{fhir_base()}/metadata", timeout=5) as response:  # noqa: S310
+            return bool(response.status == 200)
+    except OSError:
+        return False
+
+
+@pytest.fixture(scope="module")
+def flow(database: Engine, tmp_path_factory: pytest.TempPathFactory) -> Iterator[TestClient]:
+    """The real app with its lifespan (intake runtime, event bus, outbox relay, write-back
+    consumer) and real ports on the isolated test stack, for one test module. Free-text answers
+    are extracted by replaying replies recorded from the local Qwen3.5-9B model
+    (`fixtures/flow/providers.cassette.json`); CAREFLOW_FLOW_RECORD=1 records them again. The QR
+    hand-over is signed with a test-only key. Skipped without HAPI."""
+    if not hapi_answers():
+        if os.environ.get("CAREFLOW_REQUIRE_HAPI") == "1":
+            raise AssertionError(f"HAPI does not answer at {fhir_base()}")
+        pytest.skip(f"hapi: {fhir_base()} does not answer (make test-stack)")
+    from careflow_api import db, hospital, ratelimit
+    from careflow_api.config import get_settings
+    from careflow_api.main import create_app
+
+    folder = tmp_path_factory.mktemp("flow")
+    intake = folder / "intake.yaml"
+    intake.write_text("llm_phrasing: false\nbriefing_summary: false\n", encoding="utf-8")
+    stream = f"careflow:test:{uuid.uuid4().hex}"
+    with pytest.MonkeyPatch.context() as patch:
+        if FLOW_RECORDING:
+            FLOW_CASSETTE.parent.mkdir(parents=True, exist_ok=True)
+            patch.setenv("CAREFLOW_PROVIDER_MODE", "record")
+        else:
+            patch.setenv("CAREFLOW_PROVIDER_MODE", "replay")
+        patch.setenv("CAREFLOW_CASSETTE", str(FLOW_CASSETTE))
+        patch.setenv("CAREFLOW_INTAKE_CONFIG", str(intake))
+        patch.setenv("CAREFLOW_EVENT_STREAM", stream)
+        patch.setenv("TRIAGE_MODEL_PATH", str(folder / "no-triage-model"))  # "no suggestion"
+        patch.setenv("CAREFLOW_ENV", "test")
+        patch.setenv("CAREFLOW_HANDOVER_SIGNING_KEY", TEST_HANDOVER_KEY)
+        get_settings.cache_clear()
+        db.get_engine.cache_clear()
+        db.get_sessionmaker.cache_clear()
+        hospital._adapter.cache_clear()  # noqa: SLF001 - the stack's HAPI, from FHIR_BASE_URL
+        ratelimit.reset_memory()
+        ratelimit.key_prefix = f"cf:flow:{uuid.uuid4().hex}"
+        app: FastAPI = create_app()
+        with TestClient(app, base_url="http://testserver") as client:
+            yield client
+        get_settings.cache_clear()
+        db.get_engine.cache_clear()
+        db.get_sessionmaker.cache_clear()
+    redis = SyncRedis.from_url(os.environ["REDIS_URL"])
+    redis.delete(stream, f"{stream}:dead")
+    redis.close()

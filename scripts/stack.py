@@ -60,6 +60,7 @@ PORTS: dict[str, int] = {
 }
 SECRETS = ("POSTGRES_PASSWORD", "CAREFLOW_DB_APP_PASSWORD", "CAREFLOW_DB_MIGRATOR_PASSWORD")
 NAME = re.compile(r"^[a-z][a-z0-9-]{1,39}$")
+PUBLIC_HOST = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?$")
 PROJECT_LABEL = "com.docker.compose.project"
 WORKDIR_LABEL = "com.docker.compose.project.working_dir"
 _SIZE = re.compile(r"^\s*([\d.]+)\s*([KMGT]?i?B)\s*$", re.IGNORECASE)
@@ -95,10 +96,25 @@ def ports(offset: int) -> dict[str, int]:
     return moved
 
 
-def stack_env(stack: str, offset: int, secrets: dict[str, str]) -> dict[str, str]:
-    """The stack's environment: its name, ports and connection URLs (with passwords)."""
+def public_host_from_env() -> str | None:
+    """CAREFLOW_PUBLIC_HOST: this computer's address on the clinic network (M2-06)."""
+    return os.environ.get("CAREFLOW_PUBLIC_HOST") or None
+
+
+def stack_env(
+    stack: str, offset: int, secrets: dict[str, str], public_host: str | None = None
+) -> dict[str, str]:
+    """The stack's environment: its name, ports and connection URLs (with passwords).
+
+    `public_host` (CAREFLOW_PUBLIC_HOST, e.g. the computer's LAN address) is for a real phone: the
+    kiosk's QR code must open the companion at an address the phone can reach, and the phone must
+    reach the API (`localhost` on a phone is the phone). The apps then use that address, the API
+    accepts it (CORS) and listens on every interface. Without it everything stays on localhost.
+    """
     if not NAME.match(stack):
         raise StackError(f"stack name {stack!r}: use lowercase letters, digits and dashes")
+    if public_host is not None and not PUBLIC_HOST.match(public_host):
+        raise StackError(f"CAREFLOW_PUBLIC_HOST {public_host!r}: a host name or IPv4 address only")
     missing = [key for key in SECRETS if not secrets.get(key)]
     if missing:
         raise StackError(f".env lacks {', '.join(missing)}: run python3 scripts/gen_dev_env.py")
@@ -106,8 +122,14 @@ def stack_env(stack: str, offset: int, secrets: dict[str, str]) -> dict[str, str
     admin, app, migrator = (quote(secrets[key], safe="") for key in SECRETS)
     pg = p["CAREFLOW_POSTGRES_PORT"]
     apps = [p[f"CAREFLOW_{name}_PORT"] for name in ("KIOSK", "STAFF", "COMPANION")]
-    origins = [f"http://{host}:{port}" for port in apps for host in ("localhost", "127.0.0.1")]
+    hosts = ["localhost", "127.0.0.1", *([public_host] if public_host else [])]
+    origins = [f"http://{host}:{port}" for port in apps for host in hosts]
     api = f"http://localhost:{p['CAREFLOW_API_PORT']}"
+    reachable = public_host or "localhost"
+    phone_side = {
+        "CAREFLOW_API_HOST": "0.0.0.0" if public_host else "127.0.0.1",  # noqa: S104 - opt-in LAN
+        **({"CAREFLOW_PUBLIC_HOST": public_host} if public_host else {}),
+    }
     return {
         "CAREFLOW_STACK": stack,
         "COMPOSE_PROJECT_NAME": stack,
@@ -122,9 +144,10 @@ def stack_env(stack: str, offset: int, secrets: dict[str, str]) -> dict[str, str
         # The API lets the stack's own apps call it, and finds its voice service (M1-19).
         "CAREFLOW_CORS_ORIGINS": ",".join(origins),
         "CAREFLOW_VOICE_URL": f"http://127.0.0.1:{p['VOICE_PORT']}",
+        **phone_side,
         # What the stack's apps are built with (public values: URLs only, never a secret).
-        "NEXT_PUBLIC_API_BASE_URL": api,
-        "NEXT_PUBLIC_COMPANION_URL": f"http://localhost:{p['CAREFLOW_COMPANION_PORT']}",
+        "NEXT_PUBLIC_API_BASE_URL": f"http://{reachable}:{p['CAREFLOW_API_PORT']}",
+        "NEXT_PUBLIC_COMPANION_URL": f"http://{reachable}:{p['CAREFLOW_COMPANION_PORT']}",
         "NEXT_PUBLIC_FHIR_BASE_URL": f"http://localhost:{p['CAREFLOW_HAPI_PORT']}/fhir",
         "NEXT_PUBLIC_VOICE_WS_URL": f"ws://localhost:{p['VOICE_PORT']}/kiosk/audio",
     }
@@ -244,7 +267,9 @@ def gib(value: int) -> str:
 def up(stack: str, offset: int, *, seed: bool = True) -> int:
     found = check_owner(stack)
     subprocess.run([sys.executable, str(REPO / "scripts/gen_dev_env.py")], check=True)  # noqa: S603
-    env = stack_env(stack, offset, parse_env(DOT_ENV.read_text(encoding="utf-8")))
+    env = stack_env(
+        stack, offset, parse_env(DOT_ENV.read_text(encoding="utf-8")), public_host_from_env()
+    )
     write_env(stack, env)
     running = docker(
         "ps", "--filter", f"label={PROJECT_LABEL}={stack}", "--format", "{{.Names}}"
@@ -290,7 +315,8 @@ def down(stack: str, volumes: bool) -> int:
     if volumes and stack == DEFAULT_STACK:
         raise StackError("the dev stack's volumes hold its data: they are never deleted here")
     if not env_file(stack).is_file():
-        write_env(stack, stack_env(stack, 0, parse_env(DOT_ENV.read_text(encoding="utf-8"))))
+        secrets = parse_env(DOT_ENV.read_text(encoding="utf-8"))
+        write_env(stack, stack_env(stack, 0, secrets, public_host_from_env()))
     compose(stack, "down", *(["--volumes"] if volumes else []))
     print(f"stack: {stack} stopped{' and its volumes removed' if volumes else ''}.")
     return 0
@@ -341,7 +367,8 @@ def main(argv: list[str] | None = None) -> int:
             offset = TEST_OFFSET if args.stack == TEST_STACK else 0
         if args.command == "env":
             secrets = parse_env(DOT_ENV.read_text(encoding="utf-8")) if DOT_ENV.is_file() else {}
-            path = write_env(args.stack, stack_env(args.stack, offset, secrets))
+            env = stack_env(args.stack, offset, secrets, public_host_from_env())
+            path = write_env(args.stack, env)
             print(path.relative_to(REPO))
             return 0
         if args.command == "up":

@@ -161,16 +161,22 @@ def pending_question(state: Mapping[str, Any] | None) -> IntakeQuestion | None:
 
 
 def patient_token(
-    settings: Settings, *, clinic_id: uuid.UUID, session_id: str, channel: str
+    settings: Settings,
+    *,
+    clinic_id: uuid.UUID,
+    session_id: str,
+    channel: str,
+    now: dt.datetime | None = None,
 ) -> str:
-    """A 30-minute patient token for one session, on the kiosk or (after the QR hand-over, M2-06)
-    the phone."""
+    """A 30-minute patient token for one session (from `now`), on the kiosk or (after the QR
+    hand-over, M2-06) the phone."""
     token, _ = create_access_token(
         secret=settings.jwt_secret.get_secret_value(),
         subject=f"session:{session_id}",
         role="patient_session",
         clinic_id=clinic_id,
         extra={"session_id": session_id, "scope": f"session:{session_id}", "channel": channel},
+        now=now,
         ttl=PATIENT_TOKEN_TTL,
     )
     return token

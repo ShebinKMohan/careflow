@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 import { AppDocument } from "@/components/AppDocument";
 import { IdleGuard } from "@/components/IdleGuard";
+import { RevokedGuard } from "@/components/RevokedGuard";
 import { KioskProvider } from "@/lib/session";
 
 import { fontVariables } from "./fonts";
@@ -21,6 +22,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <KioskProvider>
         {children}
         <IdleGuard />
+        <RevokedGuard />
       </KioskProvider>
     </AppDocument>
   );

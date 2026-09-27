@@ -126,7 +126,7 @@ describe("phone visit recovery", () => {
     expect(screen.queryByText(/stay in the waiting area/)).not.toBeInTheDocument();
   });
 
-  it("retries a failed QR network request without losing its in-memory code", async () => {
+  it("retries a failed QR network request with the same in-memory code and claim key", async () => {
     window.history.replaceState(null, "", "/claim#t=one-time-qr-code-0002");
     post.mockRejectedValueOnce(new TypeError("Failed to fetch")).mockResolvedValueOnce(reply(CLAIM));
     show();
@@ -134,7 +134,28 @@ describe("phone visit recovery", () => {
     await userEvent.click(screen.getByRole("button", { name: "Try again" }));
     await screen.findByRole("heading", { name: FIRST.text });
     expect(post).toHaveBeenCalledTimes(2);
-    expect(post.mock.calls[1]?.[1]).toEqual({ body: { qr_token: "one-time-qr-code-0002" } });
+    const [first, retry] = post.mock.calls.map((call) => (call[1] as { body: { qr_token: string; claim_key: string } }).body);
+    // The server answers the claiming phone's retry with a new credential (a lost answer), so
+    // the retry must prove it is the same phone: the same code and the same random key.
+    expect(retry).toEqual(first);
+    expect(retry?.qr_token).toBe("one-time-qr-code-0002");
+    expect(retry?.claim_key).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(window.sessionStorage.getItem("careflow.companion.session-token")).toBe(CLAIM.session_token);
+    expect(JSON.stringify({ ...window.sessionStorage })).not.toContain(retry?.claim_key ?? "?");
+  });
+
+  it("makes a new claim key for every code", async () => {
+    window.history.replaceState(null, "", "/claim#t=one-time-qr-code-0005");
+    post.mockResolvedValue(reply(CLAIM));
+    const first = show();
+    await screen.findByRole("heading", { name: FIRST.text });
+    first.unmount();
+    window.sessionStorage.clear();
+    window.history.replaceState(null, "", "/claim#t=one-time-qr-code-0006");
+    show();
+    await waitFor(() => expect(post).toHaveBeenCalledTimes(2));
+    const keys = post.mock.calls.map((call) => (call[1] as { body: { claim_key: string } }).body.claim_key);
+    expect(new Set(keys).size).toBe(2);
   });
 
   it("retries the saved visit, not the consumed QR, if its first status read fails", async () => {

@@ -7,7 +7,10 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://loca
 
 export const api = createCareflowClient(API_BASE_URL, readToken);
 
-/** A client that sends this token (the phone-channel session token from the QR claim). */
+/**
+ * A client for the phone's session: it sends the latest stored token (renewed while the patient
+ * waits, M2-06), or this one (from the QR claim) until one is stored.
+ */
 export function createCareflowClientFor(token: string) {
-  return createCareflowClient(API_BASE_URL, () => token);
+  return createCareflowClient(API_BASE_URL, () => readToken() ?? token);
 }

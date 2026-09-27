@@ -38,6 +38,8 @@ export const STACK = {
   api: setting("CAREFLOW_API_URL", "http://localhost:8000"),
   kiosk: `http://localhost:${setting("CAREFLOW_KIOSK_PORT", "3000")}`,
   staff: `http://localhost:${setting("CAREFLOW_STAFF_PORT", "3001")}`,
+  /** Where the kiosk's QR code sends the phone: the stack's configured companion URL (M2-06). */
+  companion: setting("NEXT_PUBLIC_COMPANION_URL", `http://localhost:${setting("CAREFLOW_COMPANION_PORT", "3002")}`).replace(/\/+$/, ""),
   fhir: setting("FHIR_BASE_URL", "http://localhost:8080/fhir").replace(/\/+$/, ""),
 } as const;
 

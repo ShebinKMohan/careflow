@@ -1,10 +1,11 @@
 # The CareFlow processes `make up` runs with honcho (scripts/up.sh adds voice and llm when enabled).
 # Ports and the apps' public URLs come from the stack's environment (scripts/stack.py): the dev
-# stack's CONVENTIONS ports by default, every port + CAREFLOW_PORT_OFFSET for another stack.
+# stack's CONVENTIONS ports by default, every port + CAREFLOW_PORT_OFFSET for another stack. The API
+# listens on localhost only, unless CAREFLOW_PUBLIC_HOST opens the stack to a real phone.
 # `make down` gives each process 5 s after SIGTERM (honcho): the API stops waiting for request
 # background tasks (a simulated vitals stream) after 3 s, cancels them and shuts down cleanly.
 # Research prototype. Synthetic data only. Not for clinical use.
-api: CAREFLOW_ENV=dev uv run uvicorn careflow_api.main:create_app --factory --host 127.0.0.1 --port $CAREFLOW_API_PORT --timeout-graceful-shutdown 3
+api: CAREFLOW_ENV=dev uv run uvicorn careflow_api.main:create_app --factory --host ${CAREFLOW_API_HOST:-127.0.0.1} --port $CAREFLOW_API_PORT --timeout-graceful-shutdown 3
 kiosk: NEXT_TELEMETRY_DISABLED=1 NEXT_PUBLIC_SIMULATORS=1 pnpm -F kiosk exec next dev --port $CAREFLOW_KIOSK_PORT
 staff: NEXT_TELEMETRY_DISABLED=1 pnpm -F staff exec next dev --port $CAREFLOW_STAFF_PORT
 companion: NEXT_TELEMETRY_DISABLED=1 pnpm -F companion exec next dev --port $CAREFLOW_COMPANION_PORT

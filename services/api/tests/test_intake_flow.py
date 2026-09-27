@@ -22,18 +22,14 @@ Needs the isolated test stack with the personas (`make test-stack`); skipped wit
 from __future__ import annotations
 
 import os
-import urllib.request
 import uuid
-from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any
 
 import httpx
 import pytest
 from fastapi import FastAPI
-from redis import Redis
 from sqlalchemy import text
 from sqlalchemy.engine import Engine
 from starlette.testclient import TestClient
@@ -44,74 +40,22 @@ from careflow_intake.facts import fact_class
 
 pytestmark = pytest.mark.hapi
 
-HERE = Path(__file__).resolve().parent
-CASSETTE = HERE / "fixtures" / "flow" / "providers.cassette.json"
-RECORDING = os.environ.get("CAREFLOW_FLOW_RECORD") == "1"
-CHEST_PAIN_DIGITS, ROUTINE_DIGITS = "100001", "100005"
 COMPLAINT = "I've had chest pain since this morning"
 PASSWORD = "Test-Password-123"  # conftest.TEST_PASSWORD
 DEVICE_SECRET = "test-device-secret-000000"  # conftest.TEST_DEVICE_SECRET
 MAX_TURNS = 8  # config/intake.yaml max_turns
+CHEST_PAIN_DIGITS, ROUTINE_DIGITS = "100001", "100005"
+RECORDING = os.environ.get("CAREFLOW_FLOW_RECORD") == "1"  # conftest.FLOW_RECORDING
 
 
-def fhir_base() -> str:
+def fhir_base() -> str:  # conftest.fhir_base: the stack's HAPI
     return os.environ.get("FHIR_BASE_URL", "http://localhost:8080/fhir").rstrip("/")
-
-
-def hapi_answers() -> bool:
-    try:
-        with urllib.request.urlopen(f"{fhir_base()}/metadata", timeout=5) as response:  # noqa: S310
-            return bool(response.status == 200)
-    except OSError:
-        return False
 
 
 @pytest.fixture(scope="module")
 def clinics(clinics_factory: Any) -> Any:
     """This module's own clinics: its check-ins must not add sessions to the shared ones."""
     return clinics_factory()
-
-
-@pytest.fixture(scope="module")
-def flow(database: Engine, tmp_path_factory: pytest.TempPathFactory) -> Iterator[TestClient]:
-    if not hapi_answers():
-        if os.environ.get("CAREFLOW_REQUIRE_HAPI") == "1":
-            raise AssertionError(f"HAPI does not answer at {fhir_base()}")
-        pytest.skip(f"hapi: {fhir_base()} does not answer (make test-stack)")
-    from careflow_api import db, hospital, ratelimit
-    from careflow_api.config import get_settings
-    from careflow_api.main import create_app
-
-    folder = tmp_path_factory.mktemp("flow")
-    intake = folder / "intake.yaml"
-    intake.write_text("llm_phrasing: false\nbriefing_summary: false\n", encoding="utf-8")
-    stream = f"careflow:test:{uuid.uuid4().hex}"
-    with pytest.MonkeyPatch.context() as patch:
-        if RECORDING:
-            CASSETTE.parent.mkdir(parents=True, exist_ok=True)
-            patch.setenv("CAREFLOW_PROVIDER_MODE", "record")
-        else:
-            patch.setenv("CAREFLOW_PROVIDER_MODE", "replay")
-        patch.setenv("CAREFLOW_CASSETTE", str(CASSETTE))
-        patch.setenv("CAREFLOW_INTAKE_CONFIG", str(intake))
-        patch.setenv("CAREFLOW_EVENT_STREAM", stream)
-        patch.setenv("TRIAGE_MODEL_PATH", str(folder / "no-triage-model"))  # "no suggestion"
-        patch.setenv("CAREFLOW_ENV", "test")
-        get_settings.cache_clear()
-        db.get_engine.cache_clear()
-        db.get_sessionmaker.cache_clear()
-        hospital._adapter.cache_clear()  # noqa: SLF001 - the stack's HAPI, from FHIR_BASE_URL
-        ratelimit.reset_memory()
-        ratelimit.key_prefix = f"cf:flow:{uuid.uuid4().hex}"
-        app: FastAPI = create_app()
-        with TestClient(app, base_url="http://testserver") as client:
-            yield client
-        get_settings.cache_clear()
-        db.get_engine.cache_clear()
-        db.get_sessionmaker.cache_clear()
-    redis = Redis.from_url(os.environ["REDIS_URL"])
-    redis.delete(stream, f"{stream}:dead")
-    redis.close()
 
 
 def bearer(token: str) -> dict[str, str]:

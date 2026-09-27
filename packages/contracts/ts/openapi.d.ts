@@ -166,7 +166,7 @@ export interface paths {
         put?: never;
         /**
          * Claim the QR hand-over on the phone
-         * @description The single-use qr_token in the body is the credential, so no bearer is needed (rate-limited to 10 claims a minute per IP). An expired, forged or wrong-audience token is a 401; a spent token, or a closed or already handed-over session, is a 409. The result is a phone-channel patient token for that one session and the question the intake is waiting on; the kiosk's tokens for the session stop working and the kiosk receives the `session.handed_over` WebSocket frame.
+         * @description The single-use qr_token in the body is the credential, so no bearer is needed (rate-limited to 10 claims a minute per IP). An expired, forged or wrong-audience token is a 401; a spent token, or a closed or already handed-over session, is a 409. The result is a phone-channel patient token for that one session and the question the intake is waiting on; the kiosk's tokens for the session stop working and the kiosk receives the `session.handed_over` WebSocket frame. A phone whose claim succeeded but whose answer was lost sends the same qr_token with the same `claim_key` again, while the code is still valid, and gets a new credential for the session it claimed; a spent code without that key is still a 409.
          */
         post: operations["claimQrToken"];
         delete?: never;
@@ -300,6 +300,32 @@ export interface paths {
         get: operations["getSessionStatus"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/sessions/{session_id}/renew": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Renew the phone's session token
+         * @description The phone swaps its still-valid phone-channel patient token (M2-06) for a new 30-minute one while the patient waits, so a long wait does not shut them out of the waiting room or "I feel worse" (M2-07). Only a phone token of this session may renew (a kiosk-channel token or a device gets 403; an expired or revoked token 401). A closed or no-show session, or one checked in more than 12 hours ago, is a 409; the patient then asks at the desk.
+         */
+        post: operations["renewSessionToken"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1183,6 +1209,15 @@ export interface components {
         };
         QrClaimRequest: {
             qr_token: string;
+            /** @description A random secret the phone makes once per code (32 or more random bytes, base64url) and never stores or puts in a URL. Sending the same code with the same key again proves the retry comes from the phone that claimed it. */
+            claim_key?: string;
+        };
+        /** @description A new phone-channel patient token for the same session (M2-06). */
+        SessionRenewal: {
+            /** @description Bearer JWT with role patient_session and channel phone, scoped to this session. */
+            session_token: string;
+            /** Format: date-time */
+            expires_at: string;
         };
         /** @description The kiosk's consent screen (M2-05). The camera is processed on the kiosk and never saved; voice is transcribed on the clinic server and no audio is kept; data use covers the answers going to the clinic team and the clinic record. */
         ConsentRequest: {
@@ -2741,7 +2776,8 @@ export interface operations {
             content: {
                 /**
                  * @example {
-                 *       "qr_token": "qr-example-token-routine"
+                 *       "qr_token": "qr-example-token-routine",
+                 *       "claim_key": "example-claim-key-for-docs-000000000000000000000000"
                  *     }
                  */
                 "application/json": components["schemas"]["QrClaimRequest"];
@@ -3200,6 +3236,42 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["Notfound"];
+        };
+    };
+    renewSessionToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Renew the phone's session token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_token": "example-session-token-renewed",
+                     *       "expires_at": "2026-09-26T09:35:00Z"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["SessionRenewal"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
         };
     };
     postDeviceVitals: {

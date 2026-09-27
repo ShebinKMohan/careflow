@@ -6,7 +6,7 @@
  */
 import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
-import { type Browser, expect, type Page, request, test } from "@playwright/test";
+import { type Browser, type BrowserContext, expect, type Page, request, test } from "@playwright/test";
 
 import { BOARD_A, CLINIC_A, KIOSK_A, secret, STACK, staffUser } from "./stack";
 
@@ -97,10 +97,11 @@ export async function kioskDeviceToken(page: Page): Promise<string> {
   return token;
 }
 
-/** Answer the intake to its end: the complaint typed, then every question as the script says. */
-export async function answerIntake(page: Page, script: PatientScript): Promise<Turn[]> {
+/** Answer the intake to its end (or its first `limit` questions): the complaint typed, then every
+ * question as the script says. */
+export async function answerIntake(page: Page, script: PatientScript, { limit = 12 }: { limit?: number } = {}): Promise<Turn[]> {
   const turns: Turn[] = [];
-  for (let asked = 0; asked < 12; asked += 1) {
+  for (let asked = 0; asked < limit; asked += 1) {
     const heading = page.getByRole("heading", { level: 2 });
     await expect(heading.or(page.getByRole("button", { name: /Measure vitals|Continue|Skip/ })).first()).toBeVisible();
     if (!/\/intake$/.test(page.url())) break;
@@ -152,6 +153,73 @@ export async function answerIntake(page: Page, script: PatientScript): Promise<T
     description: turns.map((turn) => `${turn.mode} ${turn.answeredAt - turn.sentAt} ms`).join(", "),
   });
   return turns;
+}
+
+/** The phone (companion) answers the rest of the intake, as the script says, until it is done.
+ * `answered` is how many answers the kiosk already gave (the complaint was one of them). */
+export async function answerOnPhone(page: Page, script: PatientScript, answered: number): Promise<Turn[]> {
+  const turns: Turn[] = [];
+  const done = page.getByText("Thank you. A nurse will see you shortly.");
+  for (let asked = answered; asked < 12; asked += 1) {
+    const heading = page.getByRole("heading", { level: 2 });
+    await expect(heading.or(done).first()).toBeVisible({ timeout: 30_000 });
+    if (await done.isVisible()) break;
+    const question = (await heading.textContent())?.trim() ?? "";
+    const scale = page.getByRole("group", { name: "Tap a number from 0 to 10" });
+    const yes = page.getByRole("button", { name: "Yes", exact: true });
+    let mode: Turn["mode"] = "tap";
+    let answer: string;
+    let click: () => Promise<void>;
+    if (await yes.isVisible()) {
+      answer = script.yes.some((pattern) => pattern.test(question)) ? "Yes" : "No";
+      click = () => page.getByRole("button", { name: answer, exact: true }).click();
+    } else if (await scale.isVisible()) {
+      answer = script.scale;
+      click = () => scale.getByRole("button", { name: answer, exact: true }).click();
+    } else {
+      mode = "text";
+      answer = script.typed.find(([pattern]) => pattern.test(question))?.[1] ?? "No";
+      click = async () => {
+        await page.getByLabel("Or type your answer").fill(answer);
+        await page.getByRole("button", { name: "Send" }).click();
+      };
+    }
+    const sent = page.waitForResponse(
+      (response) => /\/v1\/sessions\/[^/]+\/turns$/.test(new URL(response.url()).pathname) && response.request().method() === "POST",
+    );
+    const sentAt = Date.now();
+    await click();
+    const response = await sent;
+    expect(response.status(), `the phone's answer to "${question}" is accepted`).toBe(200);
+    turns.push({ question, mode, answer, sentAt, answeredAt: Date.now() });
+    if ((await response.json()).done) break;
+    await expect(heading.or(done).first()).not.toHaveText(question, { timeout: 30_000 });
+  }
+  await expect(done).toBeVisible({ timeout: 30_000 });
+  return turns;
+}
+
+export interface Sent {
+  method: string;
+  url: string;
+  body: string | null;
+}
+
+/** Every request the given browser contexts send, with its URL and body: what a network capture
+ * of the kiosk and the phone would show. */
+export class RequestLog {
+  readonly requests: Sent[] = [];
+
+  watch(context: BrowserContext): void {
+    context.on("request", (request) => {
+      this.requests.push({ method: request.method(), url: request.url(), body: request.postData() });
+    });
+  }
+
+  /** The requests that carry `secret` anywhere: in the URL or in the body. */
+  carrying(secret: string): Sent[] {
+    return this.requests.filter((sent) => sent.url.includes(secret) || (sent.body ?? "").includes(secret));
+  }
 }
 
 /** The simulated vitals (the scenario set at sign-in), then the done screen. */
