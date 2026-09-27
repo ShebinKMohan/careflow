@@ -11,6 +11,7 @@ import { ApiStatus } from "./ApiStatus";
 import { AlertBanner } from "./nurse/AlertBanner";
 import { FeelsWorseBanner } from "./nurse/FeelsWorseBanner";
 import { LevelChip } from "./nurse/LevelChip";
+import { MedicalQuestions } from "./nurse/MedicalQuestions";
 
 const CELL = "border-b border-border px-3 py-3 text-start align-top";
 
@@ -52,6 +53,18 @@ export function Worklist() {
                 .sort((a, b) => (b.feels_worse?.last_reported_at ?? "").localeCompare(a.feels_worse?.last_reported_at ?? ""))
                 .map((row) => (
                   <FeelsWorseBanner key={row.session_id} item={row} />
+                ))}
+            </div>
+          ) : null}
+          {rows.some((row) => row.medical_questions?.length) ? (
+            <div className="flex flex-col gap-3" role="region" aria-label={t("medicalQuestions.region")}>
+              {rows
+                .filter((row) => row.medical_questions?.length)
+                .sort((a, b) =>
+                  (b.medical_questions?.[0]?.asked_at ?? "").localeCompare(a.medical_questions?.[0]?.asked_at ?? ""),
+                )
+                .map((row) => (
+                  <MedicalQuestions key={row.session_id} item={row} />
                 ))}
             </div>
           ) : null}

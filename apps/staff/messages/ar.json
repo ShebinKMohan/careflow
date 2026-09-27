@@ -85,6 +85,16 @@
         "drowsy_or_confused": "نعاس أو ارتباك",
         "drowsy_or_confused_unsure": "غير متأكد من النعاس أو الارتباك"
       }
+    },
+    "medicalQuestions": {
+      "region": "أسئلة طبية من الهواتف",
+      "title": "{count, plural, one {سأل {patient} سؤالًا طبيًا} other {سأل {patient} # أسئلة طبية}}",
+      "asked": "سُئل في {time}، باللغة {language}",
+      "refused": "لم يُجب المساعد. أُبلغ المريض بأن أحد أفراد التمريض سيتحدث معه.",
+      "language": {
+        "en": "الإنجليزية",
+        "ar": "العربية"
+      }
     }
   },
   "doctor": {

@@ -80,6 +80,9 @@
     },
     "child": {
       "drowsyQuestion": "Is your child very hard to wake, or confused?"
+    },
+    "rag": {
+      "refusal": "I can't answer medical questions. I've told the nurse, who will speak with you."
     }
   },
   "ask": {
@@ -87,7 +90,6 @@
     "label": "A question about your visit or the clinic",
     "send": "Ask",
     "sending": "Asking…",
-    "refused": "I can't answer medical questions. The nurse has been told; please ask them.",
     "dontKnow": "I don't know that one. Please ask at the reception desk.",
     "unavailable": "Questions are not available right now. Please ask at the reception desk.",
     "sources": "Sources"

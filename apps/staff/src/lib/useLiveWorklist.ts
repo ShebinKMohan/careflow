@@ -11,14 +11,15 @@ import type { ApiState } from "./useApiData";
 /** While the live channel is down, the worklist is re-read this often. */
 export const POLL_MS = 5_000;
 const REFETCH_DEBOUNCE_MS = 150;
-const REFETCH_EVENTS = /^(alert|triage|token|intake|patient)\./; // patient.feels_worse (M2-07)
+const REFETCH_EVENTS = /^(alert|triage|token|intake|patient|nurse)\./; // patient.feels_worse (M2-07), nurse.flag (M2-09)
 
 export type AlertRaised = Schema<"AlertRaisedData">;
 
 /**
  * The nurse worklist: `GET /v1/nurse/worklist`, sorted danger first, kept fresh by the live
- * channel (`alert.*`, `triage.*`, `token.*`, `intake.*` refetch it) and by polling every 5 s while
- * the channel is paused. `onAlert` gets each `alert.raised` as it arrives.
+ * channel (`alert.*`, `triage.*`, `token.*`, `intake.*`, `patient.*` and `nurse.*` refetch it) and
+ * by polling every 5 s while the channel is paused. `onAlert` gets each `alert.raised` as it
+ * arrives.
  */
 export function useLiveWorklist(onAlert: (raised: AlertRaised) => void): {
   state: ApiState<WorklistItem[]>;
