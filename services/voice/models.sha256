@@ -1,5 +1,10 @@
 # sha256 of each model file, recorded on first download (download_models.py).
 7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5  kokoro-v1.0.onnx
+8695749d49be938a0d4cd233a9a22f554064de7cae6c41cf48f0317bd4b86686  mms-tts-ara/config.json
+77d29c97c92a047e567fcd0002a35775849197bb78f6dcfafbb213e1c63aae0a  mms-tts-ara/model.safetensors
+5fb1bfa11c274509023ee9b78051eb830f80a2a1633440158c54fc346b0f4345  mms-tts-ara/special_tokens_map.json
+2ac9a7f409f16bda83eabf5bad040de3e85f095ecaf81aad365a5e29dcac5db5  mms-tts-ara/tokenizer_config.json
+047c0c27fa0c9acebf14dac703a082ab11494d22ad8586c330deb33a65e998a8  mms-tts-ara/vocab.json
 9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6  silero_vad.onnx
 2bb026316b14a660486a75b1733cd3fbab8c2fd0314dc9af7be49f8cca967e4f  smart-turn-v3.2-cpu.onnx
 bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d  voices-v1.0.bin

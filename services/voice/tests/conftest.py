@@ -126,12 +126,12 @@ class FakeSpeech:
         self.transcribed.append(audio)
         return self.text
 
-    def stt(self) -> MlxWhisperSTT:
+    def stt(self, language: str = "en") -> MlxWhisperSTT:
         return MlxWhisperSTT(
             vad_model_path="unused", vad_factory=EnergyVad, transcriber=self.transcribe
         )
 
-    def tts(self) -> FakeTTS:
+    def tts(self, language: str = "en") -> FakeTTS:
         engine = FakeTTS(self.tts_seconds)
         self.tts_engines.append(engine)
         return engine

@@ -30,6 +30,12 @@ dependencies = [
 mlx-whisper = [
   "mlx-whisper>=0.4.3,<0.5; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
+# Arabic speech (M2-02): MMS-TTS Arabic and the gated Cohere Transcribe Arabic STT. Apple silicon
+# only, like mlx-whisper (torch's Linux wheels would pull the CUDA stack); CI uses the fakes.
+arabic-speech = [
+  "torch>=2.14,<3; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "transformers>=5.17,<6; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
 
 [tool.uv.sources]
 careflow-contracts = { workspace = true }

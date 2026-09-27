@@ -28,6 +28,7 @@ from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Protocol
 
+from voice_agent.providers._memory import peak_rss_mb
 from voice_agent.providers._silero_vad import VAD_FRAME_SAMPLES, SileroVoiceActivityDetector
 from voice_agent.providers.base import TranscriptEvent
 from voice_agent.providers.sherpa_stt import TurnEndpointConfig, TurnEndpointTracker
@@ -115,6 +116,7 @@ class MlxWhisperSTT:
         endpoint_silence_ms: int = 400,
         hard_silence_ms: int = 900,
         transcriber: Transcriber | None = None,
+        warm: bool = False,
         vad_factory: Callable[[], VoiceActivity] | None = None,
         semantic_endpointer: SmartTurnSemanticEndpointer | None = None,
         clock: Callable[[], float] = time.monotonic,
@@ -138,6 +140,8 @@ class MlxWhisperSTT:
                 model_path=clean_smart_turn, threshold=smart_turn_threshold
             )
         self._transcriber = transcriber
+        # An injected transcriber is warmed only on request (keyed by `model`, once per process).
+        self._warm = transcriber is None or warm
         self._vad_factory: Callable[[], VoiceActivity] = vad_factory or (
             lambda: SileroVoiceActivityDetector(model_path=clean_vad_path)
         )
@@ -238,11 +242,14 @@ class MlxWhisperSTT:
         semantic = self._semantic
         if semantic is not None:
             semantic.load()
-        if self._transcriber is None:
+        if self._warm:
             with _WARM_LOCK:
                 if self._model not in _WARMED:  # load the model once per process
                     transcribe(np.zeros(SAMPLE_RATE // 2, dtype=np.float32))
                     _WARMED.add(self._model)
+                    logger.info(
+                        "stt.loaded", extra={"model": self._model, "peak_rss_mb": peak_rss_mb()}
+                    )
         self._ready.set()
 
         tracker = TurnEndpointTracker(self._endpoint_config, semantic_enabled=semantic is not None)

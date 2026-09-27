@@ -26,7 +26,8 @@ scripts/check_prereqs.sh
 make infra
 extras=()
 if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
-  extras=(--extra mlx-whisper)  # the voice service's local STT (Apple silicon)
+  # The voice service's local STT, and its Arabic speech (M2-02); Apple silicon only.
+  extras=(--extra mlx-whisper --extra arabic-speech)
 fi
 uv sync --locked --all-packages "${extras[@]}"
 pnpm install --frozen-lockfile
