@@ -54,7 +54,7 @@ Accepted, 27 Sep 2026 ([M2-08]). This is the core build. The automated handbook 
 - **`bm25`.** The top 20 through the language's index. A chunk with no query term scores 0 and is not a match. The first version ranked those non-matches, and they swamped the fusion.
 - **`hybrid`.** Reciprocal rank fusion, `sum(1 / (60 + rank))`, on ranks only.
 - **Language.** Every mode filters by the question's language. The SQL is written out once per language, so the planner can use the partial index.
-- **Citations.** `citation()` maps a chunk to the API citation: `doc_id` is the section and `chunk_id` is `<section>#<chunk>`.
+- **Citations.** `citation()` maps a chunk to the API citation: `doc_id` is the section and `chunk_id` is `<section>:<chunk>`. (Amended by ADR-040: the first version used `#`, which the API's Identifier pattern rejects.)
 
 ## Consequences
 
