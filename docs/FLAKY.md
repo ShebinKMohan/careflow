@@ -136,4 +136,5 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   the wipe lands when React next commits, and the test reads the patient through an effect that runs
   after that commit. The test asserted the patient right after the push.
 - **Handling.** The test now waits for both in one `waitFor` (the push to "/" and the forgotten
-  patient): the same assertions, no retry. The kiosk suite then passed 5 runs out of 5.
+  patient): the same assertions, no retry. The file then passed 5 runs out of 5, and the whole
+  kiosk suite passed (31 tests).
