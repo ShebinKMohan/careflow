@@ -66,4 +66,5 @@ export function devId(...parts: string[]): string {
 export const CLINIC_A = devId("clinic-a");
 export const KIOSK_A = devId("clinic-a", "kiosk");
 export const BOARD_A = devId("clinic-a", "board");
-export const staffUser = (role: "nurse" | "doctor" | "admin") => `${role}.a@careflow.example`;
+/** A dev staff member's login: clinic A by default, clinic B for the isolation checks. */
+export const staffUser = (role: "nurse" | "doctor" | "admin", clinic: "a" | "b" = "a") => `${role}.${clinic}@careflow.example`;

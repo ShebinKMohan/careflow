@@ -35,7 +35,7 @@ def build_provider(
     if mode == "replay":  # never builds the real provider: no key, server or CLI is needed
         return ReplayProvider(None, task=task, model=_model_name(task, config), mode=mode)
     provider = _configured(task, config, chat_model=chat_model)
-    if mode == "record":
+    if mode in ("record", "add"):
         return ReplayProvider(provider, task=task, model=provider.model_name, mode=mode)
     return provider
 

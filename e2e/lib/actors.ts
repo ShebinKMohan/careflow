@@ -337,14 +337,14 @@ type Role = "nurse" | "doctor" | "admin";
 const AUTH_DIR = new URL("../../.run/e2e/", import.meta.url).pathname;
 const AUTH_FILE = `${AUTH_DIR}staff-tokens.json`;
 
-export async function staffTokenFor(role: Role): Promise<string> {
+export async function staffTokenFor(role: Role, clinic: "a" | "b" = "a"): Promise<string> {
   const api = await request.newContext({ baseURL: STACK.api });
   try {
     const cached: Partial<Record<string, string>> = existsSync(AUTH_FILE) ? JSON.parse(readFileSync(AUTH_FILE, "utf8")) : {};
-    const key = `${STACK.name}:${role}`;
+    const key = clinic === "a" ? `${STACK.name}:${role}` : `${STACK.name}:${role}.${clinic}`;
     const known = cached[key];
     if (known && (await api.get("/v1/auth/me", { headers: { Authorization: `Bearer ${known}` } })).status() === 200) return known;
-    const response = await api.post("/v1/auth/login", { data: { username: staffUser(role), password: secret("CAREFLOW_DEV_PASSWORD") } });
+    const response = await api.post("/v1/auth/login", { data: { username: staffUser(role, clinic), password: secret("CAREFLOW_DEV_PASSWORD") } });
     expect(response.status(), `the dev ${role} signs in (429: wait a minute, the login rate limit)`).toBe(200);
     const token = String((await response.json()).access_token);
     mkdirSync(AUTH_DIR, { recursive: true, mode: 0o700 });
@@ -460,6 +460,9 @@ export interface QueueToken {
   department: string;
   status: string;
   room?: string | null;
+  called_at?: string | null;
+  /** When a called token that has not arrived is re-queued (then a no-show on the second miss). */
+  grace_until?: string | null;
 }
 
 /** The nurse calls patients into `department`, in the queue's order, until `sessionId` is called,

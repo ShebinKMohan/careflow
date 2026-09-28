@@ -1,7 +1,9 @@
 """Record/replay for any provider: the one cassette mechanism in the repo.
 
-`CAREFLOW_PROVIDER_MODE=record` calls the wrapped provider and saves each response; `replay`
-answers from the cassette or raises `CassetteMiss`; anything else passes straight through.
+`CAREFLOW_PROVIDER_MODE=record` calls the wrapped provider and saves each response; `add` answers
+what the cassette holds and records only the prompts it lacks (a new journey's, M2-12), so earlier
+recordings are never re-recorded; `replay` answers from the cassette or raises `CassetteMiss`;
+anything else passes straight through.
 `CAREFLOW_CASSETTE=<path>` selects the file. Entries are keyed by the SHA-256 of the canonical
 `(task, model, messages, temperature)`. M1-06, M1-19, M2-09, M2-11 and M5-06 reuse this.
 """
@@ -18,7 +20,7 @@ from typing import Any, Literal
 from careflow_providers.base import ChatProvider, ChatResult, Message
 from careflow_providers.errors import CassetteMiss
 
-Mode = Literal["record", "replay", "off"]
+Mode = Literal["record", "add", "replay", "off"]
 
 
 def cassette_key(task: str, model: str, messages: Sequence[Message], temperature: float) -> str:
@@ -70,15 +72,17 @@ class ReplayProvider:
         max_tokens: int | None = None,
     ) -> ChatResult:
         key = cassette_key(self.task, self.model_name, messages, temperature)
+        entry = self._entries.get(key)
         if self._mode == "replay":
-            entry = self._entries.get(key)
             if entry is None:
                 raise CassetteMiss(f"no recording for task {self.task!r} (key {key[:12]}...)")
+            return ChatResult(text=entry["text"], model=entry["model"])
+        if self._mode == "add" and entry is not None:  # recorded before: kept as it is
             return ChatResult(text=entry["text"], model=entry["model"])
         if self._inner is None:
             raise CassetteMiss("record and pass-through modes need a real provider to wrap")
         result = await self._inner.chat(messages, temperature=temperature, max_tokens=max_tokens)
-        if self._mode == "record":
+        if self._mode in ("record", "add"):
             self._entries[key] = {"task": self.task, "model": result.model, "text": result.text}
             self._save()
         return result
@@ -88,12 +92,14 @@ class ReplayProvider:
 
 
 def provider_mode() -> Mode:
-    """`CAREFLOW_PROVIDER_MODE` (record, replay or off; unset is off)."""
+    """`CAREFLOW_PROVIDER_MODE` (record, add, replay or off; unset is off)."""
     return _mode_from_env()
 
 
 def _mode_from_env() -> Mode:
     value = os.environ.get("CAREFLOW_PROVIDER_MODE", "off")
-    if value not in ("record", "replay", "off"):
-        raise ValueError(f"CAREFLOW_PROVIDER_MODE must be record, replay or off, not {value!r}")
+    if value not in ("record", "add", "replay", "off"):
+        raise ValueError(
+            f"CAREFLOW_PROVIDER_MODE must be record, add, replay or off, not {value!r}"
+        )
     return value  # type: ignore[return-value]

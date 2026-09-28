@@ -53,6 +53,7 @@ export function AlertBanner({
     <section
       aria-label={t(`rules.${alert.rule_id}`)}
       data-testid="alert-banner"
+      data-rule-id={alert.rule_id}
       className={`flex flex-col gap-3 rounded-card border-4 p-gutter ${
         critical ? "border-danger bg-danger text-on-danger" : "border-danger bg-surface text-ink"
       }`}
