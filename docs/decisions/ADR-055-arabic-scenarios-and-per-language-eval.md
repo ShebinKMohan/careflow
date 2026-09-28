@@ -67,7 +67,8 @@ The pre-check (authoring QA, before the formal review) flagged 120 of 476 answer
 scenarios; 92 were misreadings by the 9B model, 28 only chrF. The misreadings are findings about
 the model, which also extracts:
 
-- Levantine لأ ("no") was translated "Yes" (or "For") every time it stood alone.
+- Levantine لأ ("no") was often translated "Yes" (once "For"), alone or at the start of an answer;
+  the same answer read correctly in one batch and as "Yes" in another.
 - صرله / صرلها / صرلي ("it's been …") became "diarrhea", "cough", "seizure", "took it".
 - تنين ("two") became "Snake" or "Nine"; وايد (Gulf "very") became "waited" or "patients".
 - Homographs: سن (tooth / age), نفسي (my breath / myself / my wish), حالي (myself / current).
