@@ -16,6 +16,7 @@ import {
 } from "../lib/actors";
 import { codes, Hapi } from "../lib/fhir";
 import { msg } from "../lib/i18n";
+import { ROUTINE_WALK_IN_AR } from "../lib/scripts";
 
 // @ar @rtl (M2-01): an Arabic visit on the real stack, persona `routine` (keypad 100005,
 // synthetic). The patient picks Arabic on the kiosk's first screen, and the language then holds
@@ -23,15 +24,7 @@ import { msg } from "../lib/i18n";
 // failing status, and the end of the visit. The nurse works in English on the same session. The
 // answers are Arabic, so the replies to the Arabic extraction prompt are recorded in the cassette
 // (E2E_RECORD=1) like the English ones.
-const PATIENT: PatientScript = {
-  complaint: "لويت كاحلي أمس وأنا ألعب كرة القدم",
-  yes: [],
-  scale: "4",
-  typed: [
-    [/متى بدأ/, "أمس بعد الظهر"],
-    [/أين مكان الألم/, "كاحلي الأيسر"],
-  ],
-};
+const PATIENT: PatientScript = ROUTINE_WALK_IN_AR;
 const kiosk = (key: string, values?: Record<string, string | number>) => msg("kiosk", "ar", key, values);
 const phone = (key: string, values?: Record<string, string | number>) => msg("companion", "ar", key, values);
 
