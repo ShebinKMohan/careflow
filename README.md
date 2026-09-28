@@ -37,7 +37,26 @@ make down    # stops what this checkout started; the data volumes stay
   - `VOICE=0` leaves the voice service out. It runs on :8090 when `make voice-models` has run and the port is free;
   - `CAREFLOW_STACK=<name> CAREFLOW_PORT_OFFSET=<n>` runs a second, isolated stack from another checkout: its own Docker project and volumes, and every port above plus `n` (`careflow-test` defaults to +10000). `make down` with the same `CAREFLOW_STACK` stops only that stack;
   - `CAREFLOW_PUBLIC_HOST=<this computer's address on the Wi-Fi>` lets a real phone on the same network scan the kiosk's QR code: the code, the phone's API address and CORS use that address, and the API listens on the network (your firewall may ask to allow it). Without it everything stays on localhost, which a phone cannot reach.
-- **End-to-end journeys.** `E2E=1 VOICE=0 make up`, then `make e2e`: Playwright drives the kiosk, the nurse station, the doctor briefing and a phone through the journeys (chest pain, routine walk-in, sepsis, and the QR hand-over to a phone) against the running API, Postgres, Valkey and HAPI, and checks what was written to HAPI. `E2E=1` replays every model reply from [`e2e/replays/`](e2e/replays/), so no model or key is needed; `E2E_LIVE=1 LOCAL_LLM=1` runs them against the local model instead, and `E2E_RECORD=1 LOCAL_LLM=1` records new replies. CI runs them on pushes to `main` and on PRs labelled `e2e`.
+- **End-to-end journeys.** `E2E=1 make up`, then `make e2e`. Playwright drives the kiosk, the nurse station, the doctor briefing, the queue board and a phone against the running API, Postgres, Valkey and HAPI, through:
+  - the seven patient journeys: chest pain, stroke, drowsy child, sepsis, routine walk-in, the QR phone path and a no-show;
+  - the three check-in paths: keypad, the simulated ID reader and the QR hand-over;
+  - the consent paths, and `@ar` variants in Arabic.
+
+  Each journey checks, in order:
+  - the alert on the nurse station within 2 s;
+  - the nurse's decision;
+  - the token and room on the patient's screen and the board;
+  - the briefing's provenance;
+  - the HAPI write-back ([`e2e/lib/journey.ts`](e2e/lib/journey.ts)).
+
+  How it runs:
+  - `E2E=1` replays every model reply from [`e2e/replays/`](e2e/replays/), so no model or key is needed.
+  - `E2E_LIVE=1 LOCAL_LLM=1` runs the journeys against the local model instead.
+  - `E2E_RECORD=add LOCAL_LLM=1` records only the replies the cassette lacks.
+  - The E2E stack's queue has a 5-second no-show grace window ([`e2e/config/rooms.yaml`](e2e/config/rooms.yaml)); the shipped window is 120 s.
+  - The voice journeys need the voice service; without it they are skipped with that reason.
+  - CI runs the journeys on pushes to `main`, on PRs labelled `e2e` and on demand.
+- **Nightly journeys on the local model.** `make nightly-e2e` starts its own stack with the live local model, runs every journey and writes [`eval/reports/e2e_nightly.json`](eval/reports/e2e_nightly.json) (each spec's result, duration and provider). To run it every night at 02:00, `make install-nightly` installs a LaunchAgent, and `launchctl load ~/Library/LaunchAgents/com.careflow.nightly-e2e.plist` starts it. Loading it is your choice: it is a lasting change to this Mac. `launchctl unload` with the same path stops it.
 - **Everyday commands:**
   - `make logs` follows the processes;
   - `make infra` starts only the Docker services, which the database and HAPI tests need;
