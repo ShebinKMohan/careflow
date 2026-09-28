@@ -4,6 +4,7 @@ import {
   answerIntake,
   answerOnPhone,
   checkIn,
+  closeToken,
   kioskDeviceToken,
   kioskPage,
   measureVitals,
@@ -123,9 +124,9 @@ test("QR phone path: the phone finishes the intake, I feel worse reaches the nur
   // The nurse calls the next general patient, who walks in: the phone's place moves up without a
   // reload.
   const callNext = async () => {
-    const called = worklist.waitForResponse((response) => response.url().endsWith("/v1/queue/general/call-next"));
+    const next = worklist.waitForResponse((response) => response.url().endsWith("/v1/queue/general/call-next"));
     await worklist.getByRole("button", { name: "Call next: General" }).click();
-    const answer = await called;
+    const answer = await next;
     expect(answer.status(), "a general room was free").toBe(200);
     const token = (await answer.json()).token as { token_code: string; session_id: string } | null;
     expect(token?.session_id, "the nurse calls a patient ahead, never the phone").not.toBe(sessionId);
@@ -156,7 +157,8 @@ test("QR phone path: the phone finishes the intake, I feel worse reaches the nur
 
   // c to e: the phone patient is called (token and room on the phone and the board), the
   // briefing, and HAPI.
-  await assertTokenAndRoom(ctx);
+  const called = await assertTokenAndRoom(ctx);
   await assertBriefing(ctx);
   await assertWriteBack(ctx, []);
+  await closeToken(ctx.nurse, called.token_id); // seen: the room is free for the next journey
 });

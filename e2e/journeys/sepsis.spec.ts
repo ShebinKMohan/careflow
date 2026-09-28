@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { answerIntake, checkIn, kioskDeviceToken, kioskPage, measureVitals, type PatientScript, staffPage } from "../lib/actors";
+import { answerIntake, checkIn, closeToken, kioskDeviceToken, kioskPage, measureVitals, type PatientScript, staffPage } from "../lib/actors";
 import { codes, Hapi, NEWS2_TOTAL } from "../lib/fhir";
 import {
   answerTriggers,
@@ -59,7 +59,7 @@ test("sepsis: partial NEWS2 alert from the kiosk, the nurse completes NEWS2 and 
   await expect(nurse.getByTestId("news2-partial")).toHaveCount(0);
 
   await assertDecision({ ...ctx, nurse }, ["SEPSIS_NEWS2"], { confirm: "suggestion", fallback: 2 });
-  await assertTokenAndRoom({ ...ctx, nurse });
+  const called = await assertTokenAndRoom({ ...ctx, nurse });
   await assertBriefing(ctx);
   await assertWriteBack(ctx, ["SEPSIS_NEWS2"]);
 
@@ -72,4 +72,5 @@ test("sepsis: partial NEWS2 alert from the kiosk, the nurse completes NEWS2 and 
   } finally {
     await hapi.close();
   }
+  await closeToken(ctx.nurse, called.token_id); // seen: the room is free for the next journey
 });

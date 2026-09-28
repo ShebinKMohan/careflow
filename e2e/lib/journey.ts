@@ -277,13 +277,15 @@ export async function assertWriteBack(ctx: JourneyContext, alerts: string[], { o
   }
 }
 
-/** a to e, in order. Returns the level decided and the called token. */
+/** a to e, in order; then the patient is seen and the room freed for the next journey. Returns
+ * the level decided and the called token. */
 export async function assertJourney(ctx: JourneyContext, expected: JourneyExpectation): Promise<{ level: number; token: QueueToken }> {
   await assertAlerts(ctx, expected.alerts);
   const level = await assertDecision(ctx, expected.alerts, expected.decision);
   const token = await assertTokenAndRoom(ctx);
   await assertBriefing(ctx);
   await assertWriteBack(ctx, expected.alerts, { observations: expected.observations });
+  await closeToken(ctx.nurse, token.token_id);
   return { level, token };
 }
 

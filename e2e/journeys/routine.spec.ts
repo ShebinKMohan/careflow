@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { answerIntake, checkIn, kioskDeviceToken, kioskPage, measureVitals, type PatientScript, staffPage, suggestedLevel } from "../lib/actors";
+import { answerIntake, checkIn, closeToken, kioskDeviceToken, kioskPage, measureVitals, type PatientScript, staffPage, suggestedLevel } from "../lib/actors";
 import { codes, Hapi } from "../lib/fhir";
 import type { Locale } from "../lib/i18n";
 import { answerTriggers, assertAlerts, assertBriefing, assertDecision, assertTokenAndRoom, assertWriteBack, type JourneyContext } from "../lib/journey";
@@ -36,7 +36,7 @@ for (const locale of ["en", "ar"] as const) {
     await expect(nurse.getByTestId("alert-banner")).toHaveCount(0);
     const suggested = await suggestedLevel(nurse);
     const level = await assertDecision(ctx, [], { set: suggested === null || suggested >= 5 ? 4 : suggested + 1 });
-    await assertTokenAndRoom(ctx);
+    const called = await assertTokenAndRoom(ctx);
     await assertBriefing(ctx);
     await assertWriteBack(ctx, []);
 
@@ -46,5 +46,6 @@ for (const locale of ["en", "ar"] as const) {
     } finally {
       await hapi.close();
     }
+    await closeToken(ctx.nurse, called.token_id); // seen: the room is free for the next journey
   });
 }

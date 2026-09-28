@@ -5,6 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
 // queue, and a failure is a finding, never re-run until green.
 export default defineConfig({
   testDir: "./journeys",
+  globalSetup: "./global-setup.ts", // frees the rooms an earlier run left held
   workers: 1,
   fullyParallel: false,
   retries: 0,
