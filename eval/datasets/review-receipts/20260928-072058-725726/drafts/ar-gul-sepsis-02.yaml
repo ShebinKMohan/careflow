@@ -1,0 +1,56 @@
+synthetic: true
+id: ar-gul-sepsis-02
+category: sepsis
+language: ar
+dialect: gulf
+description: 'Seeded sepsis intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: SEPSIS_NEWS2.'
+patient:
+  age_years: 36
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: انا مريض وايد
+  gloss_en: I am very sick.
+  states:
+  - chief_complaint
+- question_key: infection.fever_reported
+  patient_text: إيه، حرارتي مرتفعة
+  gloss_en: Yes, my temperature is high.
+  states:
+  - infection.fever_reported
+- question_key: infection.rigors
+  patient_text: لا، ما رجفت
+  gloss_en: No, I didn't shiver.
+  states:
+  - infection.rigors
+- question_key: symptom_onset_at
+  patient_text: بدأ قبل يومين
+  gloss_en: It started two days ago.
+  states:
+  - symptom_onset_at
+device_vitals:
+  heart_rate: 125
+  spo2: 93
+  temperature_c: 39.4
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel very unwell
+    infection.fever_reported: 'yes'
+    infection.rigors: 'no'
+    symptom_onset_at: Two days ago
+  alerts:
+  - SEPSIS_NEWS2
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises SEPSIS_NEWS2 on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

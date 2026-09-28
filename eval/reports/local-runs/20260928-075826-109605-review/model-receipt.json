@@ -1,0 +1,15 @@
+{
+  "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit",
+  "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631",
+  "source": "Fresh scripts/with_llm.sh launch from the pinned Hugging Face snapshot",
+  "launch_evidence": "with_llm: starting mlx_lm.server (mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631) on http://127.0.0.1:8081; log /var/folders/wz/1j18wyv50vb_g1hlhd5zz_yw0000gn/T//careflow-mlx-lm-server.log",
+  "launch_log_sha256": "a1e615ac8368f86290b437ecd63d744f554712f4c4356762d0c74a7ffcef397a",
+  "identity_limit": "Launch-log attribution and endpoint observations, not weight attestation",
+  "base_url": "http://127.0.0.1:8081/v1",
+  "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+  "server_model_ids": [
+    "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+    "mlx-community/SmolLM2-135M-Instruct-8bit"
+  ],
+  "observed_at": "2026-09-28T07:58:26.100852+00:00"
+}

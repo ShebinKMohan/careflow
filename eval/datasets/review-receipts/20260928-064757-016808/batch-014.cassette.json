@@ -1,0 +1,7 @@
+{
+  "ccb923db588274d0a85e8b8fa6d95cf7aeaa5ee1e9e4f2cd3c2d102d63b98c00": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-child-03\",\n      \"content_sha256\": \"04cb3e6cd08ebc21922e232785a208e98923d37f8db57c09ffc1fbc7deb83d36\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Patient is 1 year old (12 months), which is under 5 months (60 months). NG143 rules do not apply to children under 5 months.\",\n        \"Expected alert NG143_AMBER_FLAG is incorrect because the child is too young for the NG143 rule to trigger.\"\n      ]\n    }\n  ]\n}"
+  }
+}

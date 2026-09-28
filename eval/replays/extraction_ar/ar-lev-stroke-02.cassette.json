@@ -1,0 +1,7 @@
+{
+  "9903012528dd38b494ee3fc0e567725f52f09a18bb0d2d4e75d1ebefbfc8cacd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My face is drooping\", \"turn_id\": \"t2\", \"quote\": \"نص وجهي نازل\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، نازل من جهة\", \"negated\": false}, {\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، ما في ضعف\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إي، لساني تقيل\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"Before breakfast\", \"turn_id\": \"t10\", \"quote\": \"قبل الفطور كنت بخير\", \"negated\": false}]}"
+  }
+}

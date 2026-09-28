@@ -1,0 +1,7 @@
+{
+  "d799b9039f41207fb8b2b225e2aa2075317f2e884359c60b9d2dd132d42ff9c4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-07\",\n      \"content_sha256\": \"2454c0f1e8ba95a9b83f7e6d49de3a4f6a9a4797c0b6ddbbd376423e4de4f764\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'I feel very unwell' but patient text only states 'I'm very sick' (chief_complaint).\",\n        \"Expected alerts are empty, but infection evidence (fever 38.2C) and NEWS2 total (5) trigger a critical SEPSIS_NEWS2 alert.\"\n      ]\n    }\n  ]\n}"
+  }
+}

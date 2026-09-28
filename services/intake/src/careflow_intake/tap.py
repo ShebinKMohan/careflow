@@ -71,6 +71,12 @@ _ENDS: Final = " \t\n.,;:!-—،؛"
 _BREAK: Final = frozenset(" \t\n.,;:!?-—،؛؟")
 _QUESTION: Final = frozenset("?؟")
 _FIRST_WORD_END: Final = re.compile(r"[\s.,;:!\-—،؛]")
+# Words said before "I don't know" that do not change it: "والله ما أدري" (honestly, I don't
+# know), "um, not sure". The Arabic eval (M2-03) found the model reading "والله ما أدري، ما
+# انتبهت" as no. They are skipped only before an unsure phrase; yes and no are read as before.
+_FILLERS: Final = frozenset({"um", "umm", "uh", "well", "honestly"}) | frozenset(
+    arabic.normalise(word) for word in ("والله", "يعني", "امم", "اممم", "طيب", "بصراحة")
+)
 
 
 def tap_value(key: FactKey, text: str) -> str | int | None:
@@ -112,9 +118,10 @@ def explicit_answer(text: str) -> tuple[TriState, bool] | None:
     said = _said(text)
     if not said:
         return None
+    unsure = _after_fillers(said)
     for phrase in EXPLICIT_UNSURE:
-        if _starts_with(said, phrase):
-            return TriState.unknown, _rest_is_empty(said, phrase)
+        if _starts_with(unsure, phrase):
+            return TriState.unknown, _rest_is_empty(unsure, phrase)
     if _QUESTION & set(said):
         return None
     first = _FIRST_WORD_END.split(said, maxsplit=1)[0]
@@ -123,6 +130,15 @@ def explicit_answer(text: str) -> tuple[TriState, bool] | None:
     if said in EXPLICIT_NO or _NO_AND_NEGATION.match(said):
         return TriState.no, True
     return None
+
+
+def _after_fillers(said: str) -> str:
+    """`said` without the filler words (`_FILLERS`) it begins with."""
+    while True:
+        first = _FIRST_WORD_END.split(said, maxsplit=1)[0]
+        if first not in _FILLERS or first == said:
+            return said
+        said = said[len(first) :].lstrip(_ENDS)
 
 
 def _rest_is_empty(said: str, phrase: str) -> bool:

@@ -1,0 +1,7 @@
+{
+  "dc784b69da0764216e71e54ce833d95f7d7716eb800839a1ec66b2b3040319c1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-child-02\",\n      \"content_sha256\": \"020f82784b6e75dbdf2d70fd5f22d9134f73825cbc4fa1de73f2949cdfceaa16\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert NG143_RED_FLAG requires age < 5 months; patient is 2 years old (24 months).\",\n        \"Alert requires red features like hard_to_wake or seizure; patient has no red features.\"\n      ]\n    }\n  ]\n}"
+  }
+}

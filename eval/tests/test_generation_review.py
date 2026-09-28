@@ -587,7 +587,8 @@ async def test_cli_review_requires_explicit_claude_config_and_no_local_receipt(
             reviewer_model=CLAUDE_MODEL,
             model_receipt=RECEIPT,
         )
-    with pytest.raises(ValueError, match="tool=claude"):
+    # Codex is a CLI judge too (M2-03), but only with an explicit Codex model id.
+    with pytest.raises(ValueError, match="explicit Codex model ID"):
         await review_dataset(
             dataset_path=dataset,
             config_path=cli_config(tmp_path, "codex"),

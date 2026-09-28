@@ -1,0 +1,7 @@
+{
+  "ea6d0dab8e7d4d6c2aa7e14a20faadce9b17a7b482cccf154cb78567362f38c3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-child-04\",\n      \"content_sha256\": \"1a8c946cba6d6359c141524a8ca7ba74f798f159b0ac87058aa9f0e050d66b56\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Age 3 years (36 months) exceeds the under-5 threshold; NG143 rules should not trigger for this age.\",\n        \"No vital signs (SpO2, temp, HR, RR) are provided to support an NG143_AMBER_FLAG alert.\"\n      ]\n    }\n  ]\n}"
+  }
+}

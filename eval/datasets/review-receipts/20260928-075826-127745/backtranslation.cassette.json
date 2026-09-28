@@ -1,0 +1,22 @@
+{
+  "15cc1e9611e5a0dd4d85d0af375de574d11a8d231060188f9c33eb7c3079f4c6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "a0eebbbc56ece7462cf3332f02f7df4a66148c01b420e31b06caaa339985bf3d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My child is sick\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"I don't know, I'm not sure\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, he breathes normally\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"No, he doesn't have a rash\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"No, he eats and drinks normally\"\n    }\n  ]\n}"
+  },
+  "ab2ac4b49f7d6765918c9b485e85180f7eaf2f35b93730c3c8650211149620ac": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "fea32690a1c3b0c547be2a6bb23c1c583b42d5c36c4b4353d9c8d5f1b07978ab": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My tongue feels heavy and speaking isn't coming out clearly\"}, {\"id\": 1, \"english\": \"No, my face is normal\"}, {\"id\": 2, \"english\": \"No, there is no weakness\"}, {\"id\": 3, \"english\": \"Yes, I am speaking with difficulty\"}, {\"id\": 4, \"english\": \"Half an hour ago I was fine\"}]}"
+  }
+}

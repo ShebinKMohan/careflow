@@ -1,0 +1,7 @@
+{
+  "d569bfe71f8ead35074ec2ed2877ee24a1df78f72ba0f8b7ab2af5307a311121": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest pain\", \"turn_id\": \"t2\", \"quote\": \"صدري بيوجعني\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 7, \"turn_id\": \"t4\", \"quote\": \"الوجع ٧\", \"negated\": false}]}"
+  }
+}

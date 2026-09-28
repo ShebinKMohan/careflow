@@ -1,0 +1,70 @@
+synthetic: true
+id: ar-lev-chest-pain-05
+category: chest_pain
+language: ar
+dialect: levantine
+description: 'Seeded chest pain intake in Levantine Arabic (M2-03 sampler, seed 7);
+  expected alerts: CHEST_PAIN_ECG_10MIN.'
+patient:
+  age_years: 50
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: صدري مشدود
+  gloss_en: My chest is tight.
+  states:
+  - chest_pain.present
+  - chief_complaint
+  - pain_location
+- question_key: chest_pain.present
+  patient_text: إي، مشدود
+  gloss_en: Yes, tight.
+  states:
+  - chest_pain.present
+- question_key: chest_pain.radiates
+  patient_text: مش متأكد
+  gloss_en: I'm not sure.
+  states:
+  - chest_pain.radiates
+- question_key: chest_pain.sweating
+  patient_text: لا، ما عرقت أبداً
+  gloss_en: No, I never sweated.
+  states:
+  - chest_pain.sweating
+- question_key: pain_score
+  patient_text: أربعة تقريباً
+  gloss_en: About four.
+  states:
+  - pain_present
+  - pain_score
+- question_key: chest_pain.onset
+  patient_text: من تلات أيام
+  gloss_en: For three days.
+  states:
+  - chest_pain.onset
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Tightness in my chest
+    chest_pain.present: 'yes'
+    pain_location: chest
+    chest_pain.radiates: unknown
+    chest_pain.sweating: 'no'
+    pain_score: 4
+    pain_present: 'yes'
+    chest_pain.onset: Three days ago
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises CHEST_PAIN_ECG_10MIN on the seeded gold facts and vitals. Not a
+    clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:23:35.056092Z'
+review_method: automated
+reviewed_content_sha256: 91a91684a72163769e73ecc0f1c8768efc9dfb00574636cea96868fa165373ae

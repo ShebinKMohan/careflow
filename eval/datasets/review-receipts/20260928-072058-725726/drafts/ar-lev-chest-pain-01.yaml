@@ -1,0 +1,70 @@
+synthetic: true
+id: ar-lev-chest-pain-01
+category: chest_pain
+language: ar
+dialect: levantine
+description: 'Seeded chest pain intake in Levantine Arabic (M2-03 sampler, seed 7);
+  expected alerts: CHEST_PAIN_ECG_10MIN.'
+patient:
+  age_years: 58
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: حاسس بضيقة بصدري
+  gloss_en: I feel a tightness in my chest.
+  states:
+  - chest_pain.present
+  - chief_complaint
+  - pain_location
+- question_key: chest_pain.present
+  patient_text: إي، في ضيقة بصدري
+  gloss_en: Yes, there is tightness in my chest.
+  states:
+  - chest_pain.present
+- question_key: chest_pain.radiates
+  patient_text: إي، بتوصل لرقبتي
+  gloss_en: Yes, it reaches my neck.
+  states:
+  - chest_pain.radiates
+- question_key: chest_pain.sweating
+  patient_text: إي، عرقت كتير
+  gloss_en: Yes, I sweated a lot.
+  states:
+  - chest_pain.sweating
+- question_key: pain_score
+  patient_text: ستة
+  gloss_en: Six.
+  states:
+  - pain_present
+  - pain_score
+- question_key: chest_pain.onset
+  patient_text: من حوالي أسبوع
+  gloss_en: Since about a week ago.
+  states:
+  - chest_pain.onset
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Tightness in my chest
+    chest_pain.present: 'yes'
+    pain_location: chest
+    chest_pain.radiates: 'yes'
+    chest_pain.sweating: 'yes'
+    pain_score: 6
+    pain_present: 'yes'
+    chest_pain.onset: About a week ago
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises CHEST_PAIN_ECG_10MIN on the seeded gold facts and vitals. Not a
+    clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

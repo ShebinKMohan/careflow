@@ -16,9 +16,10 @@ from typing import Any
 import yaml
 
 from careflow_contracts.generated.fact_schema import IntegerFact, TriStateFact
-from careflow_contracts.generated.structured_facts_schema import FactKey, Turn, TurnRole
+from careflow_contracts.generated.structured_facts_schema import FactKey, Language, Turn, TurnRole
 from careflow_eval.identity import require_distinct_models
 from careflow_eval.models import Dataset, Scalar, Scenario
+from careflow_intake import arabic
 from careflow_intake.conversation.checklist import templates_for
 from careflow_intake.extraction.verify import NUMBER_WORDS, find_span, number_in_quote
 from careflow_intake.facts import FactEntry, fact_class, stable_fact_id
@@ -59,6 +60,13 @@ def review_content(scenario: Scenario) -> dict[str, Any]:
     Inline vitals already contain their values and keep their existing representation.
     """
     body = scenario.model_dump(mode="json", exclude=set(REVIEW_FIELDS))
+    if scenario.language is not Language.ar:
+        # The Arabic-only fields (M2-03) are left out of an English scenario's content, so its
+        # hash, its recorded review and the frozen English baseline stay valid.
+        body.pop("dialect", None)
+        for turn in body["turns"]:
+            turn.pop("gloss_en", None)
+            turn.pop("states", None)
     if isinstance(scenario.device_vitals, str):
         body["resolved_device_vitals"] = device_values(scenario)
     return body
@@ -337,6 +345,44 @@ def _supported_elsewhere(key: FactKey, value: Scalar, turn: Turn) -> bool:
     return False
 
 
+# "Not sure" in Arabic, as `careflow_intake.arabic.normalise` writes it (أ -> ا, lower case).
+UNSURE_AR = (
+    "مش متاكد",
+    "مو متاكد",
+    "مب متاكد",
+    "ما متاكد",
+    "مش اكيد",
+    "لست متاكد",
+    "غير متاكد",
+    "ما ادري",
+    "مدري",
+    "لا ادري",
+    "لا اعرف",
+    "ما اعرف",
+    "ما بعرف",
+    "مش عارف",
+    "لا اعلم",
+    "يمكن",
+    "ممكن",
+)
+
+
+def _supported_ar(key: FactKey, value: Scalar, text: str) -> bool:
+    """An Arabic answer supports a gold fact it states (`ScenarioTurn.states`) when a number is
+    in its words (digits, Arabic-Indic digits or Arabic number words) and "unknown" is an unsure
+    answer. Yes/no and English renderings of free text rest on the statement and on the
+    independent review (the back-translation and the judge), not on English patterns."""
+    kind = fact_class(key)
+    if issubclass(kind, IntegerFact):
+        return type(value) is int and number_in_quote(float(value), text)
+    if issubclass(kind, TriStateFact):
+        if value == "unknown":
+            said = arabic.normalise(text)
+            return any(phrase in said for phrase in UNSURE_AR)
+        return value in ("yes", "no")
+    return isinstance(value, str) and bool(value.strip())
+
+
 def expected_entries(scenario: Scenario) -> list[FactEntry]:
     """Gold contract facts with spans into real scripted answers, never fixture quotes.
 
@@ -346,6 +392,10 @@ def expected_entries(scenario: Scenario) -> list[FactEntry]:
     """
     turns, keys = transcript(scenario)
     patients = [turn for turn in turns if turn.role is TurnRole.patient]
+    stated = {
+        f"{scenario.id}-{index + 1}-patient": set(turn.states)
+        for index, turn in enumerate(scenario.turns)
+    }
     entries: list[FactEntry] = []
     for key, values in scenario.expected.facts.items():
         if key is FactKey.symptoms and not isinstance(values, list):
@@ -353,12 +403,19 @@ def expected_entries(scenario: Scenario) -> list[FactEntry]:
         if key is not FactKey.symptoms and isinstance(values, list):
             raise ValueError(f"{key.value} gold must be a scalar")
         for index, value in enumerate(values if isinstance(values, list) else [values]):
-            supported = [
-                t
-                for t in patients
-                if (keys[t.turn_id] is key and _supported(key, value, t.text))
-                or (keys[t.turn_id] is not key and _supported_elsewhere(key, value, t))
-            ]
+            if scenario.language is Language.ar:
+                supported = [
+                    t
+                    for t in patients
+                    if key in stated[t.turn_id] and _supported_ar(key, value, t.text)
+                ]
+            else:
+                supported = [
+                    t
+                    for t in patients
+                    if (keys[t.turn_id] is key and _supported(key, value, t.text))
+                    or (keys[t.turn_id] is not key and _supported_elsewhere(key, value, t))
+                ]
             if not supported:
                 raise ValueError(f"{key.value} gold is not supported by an actual patient answer")
             turn = supported[-1]

@@ -1,0 +1,7 @@
+{
+  "1a415071d1a6d8d49fd743e3638ab7539577c7799cafd3e31529035994deb99a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"A mild headache\", \"turn_id\": \"t2\", \"quote\": \"عندي وجع راس خفيف\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"one hour ago\", \"turn_id\": \"t4\", \"quote\": \"قبل ساعة\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t6\", \"quote\": \"خمسة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"head\", \"turn_id\": \"t8\", \"quote\": \"براسي\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t10\", \"quote\": \"إي، عندي حساسية من الأسبرين\", \"negated\": false}]}"
+  }
+}

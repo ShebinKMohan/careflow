@@ -4,6 +4,8 @@
 
 Accepted, 27 Sep 2026 ([M2-03]). This is the core build. The Arabic scenarios, the per-language harness and report, the recorded Arabic fixtures and the unit tests follow in the test phase.
 
+Test phase done, 28 Sep 2026 (SHE-290): ADR-055 adds the 100 Arabic scenarios (seeded gold, reviewed after the M2-01 back-translation check), the `extraction_ar` suite and `eval/reports/extraction.json`, the recorded Arabic fixtures and the `-k arabic` tests.
+
 ## Context
 
 The rules engine and the urgency model read only coded facts. An Arabic-speaking patient must therefore produce the same English-coded `StructuredFacts` as an English speaker, each pointing to a verified span of their own words (safety rules 1 and 4). Since [M2-01] the session carries `language: en | ar`, but the conversation, the extractor and the verifier were English-only.

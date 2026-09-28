@@ -1,0 +1,72 @@
+{
+  "41d470c16a894dfca6cb2cc0bad46e51eb0c38a1c28e55e87892be1caadddc88": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 1,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 2,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 3,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 4,\n      \"same_meaning\": true,\n      \"issue\": null\n    }\n  ]\n}"
+  },
+  "4347cef0cea6626e3f9409ff7578f215f5f0b400208b8df9607bd28ffc69a3f4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "6ae828d58829a948cace95b904e98968bfac60fdd0a3b4ff72887cf760b9ecef": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in the molar\"}, {\"id\": 1, \"english\": \"Two days ago\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"In the molar\"}, {\"id\": 4, \"english\": \"No, I don't have an allergy to medications\"}]}"
+  },
+  "7225abee796c0f2518f4b9a091052b3d17d1ff5ca28bbd5f9e57163a0d79d41f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "8bf933fad9472cddc0cc312c0ec682f311a45983f8ca59513e8f2909784926da": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My tongue feels heavy and speaking isn't coming out clearly\"}, {\"id\": 1, \"english\": \"No, my face is normal\"}, {\"id\": 2, \"english\": \"No, there is no weakness\"}, {\"id\": 3, \"english\": \"Yes, speech is coming out difficult\"}, {\"id\": 4, \"english\": \"Half an hour ago I was fine\"}]}"
+  },
+  "a0eebbbc56ece7462cf3332f02f7df4a66148c01b420e31b06caaa339985bf3d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My child is sick\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"I don't know, I'm not sure\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, he breathes normally\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"No, he doesn't have a rash\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"No, he eats and drinks normally\"\n    }\n  ]\n}"
+  },
+  "ad283e5b38305d426684997a12fc7c2e823f81a63aba503ef93d4a7451b7326c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My tongue is heavy and my speech is not clear\"}, {\"id\": 1, \"english\": \"No, my face is normal\"}, {\"id\": 2, \"english\": \"No, there is no weakness\"}, {\"id\": 3, \"english\": \"Yes, I am speaking with difficulty\"}, {\"id\": 4, \"english\": \"I was fine before breakfast\"}]}"
+  },
+  "b9710f5c0c2e023b8d9ebc685392842c0f2747cd2b74c89ef03110297d827090": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "bb2fb76ad8c131193a7b3804be010200c297b077cf82c3187bdb24afe458bcd8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "bc77a4c789798914f755f37c85bba2e838911252e9b6d6d59ea59baefc4ed593": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "dae9e19078938e3c1ab0263e7e0389032a7800ef98f3ea62ac9b116c93735cdc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in the molar\"}, {\"id\": 1, \"english\": \"For about a week\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"In the molar\"}, {\"id\": 4, \"english\": \"No\"}]}"
+  },
+  "e2c3271ee9faf6f897f957f8a1722c6ba7133a16200f43f7c3a1084a4c6c95a0": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"In weakness in one arm\"}, {\"id\": 1, \"english\": \"No\"}, {\"id\": 2, \"english\": \"Yes, one arm weak\"}, {\"id\": 3, \"english\": \"Yes, my speech not clear\"}, {\"id\": 4, \"english\": \"In the morning before breakfast I was normal\"}]}"
+  },
+  "f70149a82ec68259c1f320898dcabbf84ce23a2eb807aefc0169ec67792b2f58": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "fbf7b5daff574b5e3ee825ada6ea4cd4e2836e3420ed132a887244f6fd01f70a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"One side of my face is drooping\"}, {\"id\": 1, \"english\": \"Yeah, my face is drooping on one side\"}, {\"id\": 2, \"english\": \"No\"}, {\"id\": 3, \"english\": \"No, I speak normally\"}, {\"id\": 4, \"english\": \"About an hour ago I was fine\"}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "a2bd154970641696ab05c1a9165f2d608d805d6400bab974646df250a25706eb": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-04\",\n      \"content_sha256\": \"ba3083c0fdfcd87eab2a2a494f139ec1ba7b3fbd1ad90a1808527c7c91f5d3a5\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'pain_location' and 'pain_present', but patient text only states chest pain presence, location, and sweating.\",\n        \"Alert CHEST_PAIN_ECG_10MIN requires chest pain onset within 10 minutes of arrival; patient onset is 'about a week ago'.\"\n      ]\n    }\n  ]\n}"
+  }
+}

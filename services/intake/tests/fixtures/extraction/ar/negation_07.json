@@ -1,0 +1,25 @@
+{
+  "description": "Arabic negation (ما في): the denial is TriState no. Synthetic.",
+  "language": "ar",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "هل لديك ضعف أو خدر في إحدى ذراعيك؟",
+      "question_key": "fast.arm_weakness",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "ما في ضعف بإيدي",
+      "question_key": "fast.arm_weakness",
+      "created_at": "2026-09-27T09:00:10Z"
+    }
+  ],
+  "expected": {
+    "required": {
+      "fast.arm_weakness": "no"
+    }
+  }
+}

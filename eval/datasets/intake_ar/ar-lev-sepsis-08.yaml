@@ -1,0 +1,54 @@
+synthetic: true
+id: ar-lev-sepsis-08
+category: sepsis
+language: ar
+dialect: levantine
+description: 'Seeded sepsis intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 65
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: أنا مريض كتير
+  gloss_en: I am very sick.
+  states:
+  - chief_complaint
+- question_key: infection.fever_reported
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - infection.fever_reported
+- question_key: infection.rigors
+  patient_text: لا، ما في رجفة
+  gloss_en: No, there's no shivering.
+  states:
+  - infection.rigors
+- question_key: symptom_onset_at
+  patient_text: من مبارح بالليل
+  gloss_en: Since last night.
+  states:
+  - symptom_onset_at
+device_vitals:
+  heart_rate: 88
+  spo2: 98
+  temperature_c: 37.9
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel very unwell
+    infection.fever_reported: 'no'
+    infection.rigors: 'no'
+    symptom_onset_at: Since last night
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:19:00.989609Z'
+review_method: automated
+reviewed_content_sha256: 2d377b23fe9b95c6d5b0cd1bf4896df7f64342d756dbc16816e1a55a63cbd58d

@@ -1,0 +1,7 @@
+{
+  "12d97ffd3c2d1cc97c25e886571d38fa640f640eaada26ac0f4d811fedf6f1d1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-child-06\",\n      \"content_sha256\": \"540dd63daaa9f54091f5b96cda70ef02c4a4a568943209c08fa3d514dd3ca57b\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Age 11 years (132 months) exceeds 16 months threshold; CHILD_HARD_TO_WAKE rule returns no alert for this age.\",\n        \"Expected alert CHILD_HARD_TO_WAKE is incorrect for age 11; rule logic requires age 5-15 months to trigger.\"\n      ]\n    }\n  ]\n}"
+  }
+}

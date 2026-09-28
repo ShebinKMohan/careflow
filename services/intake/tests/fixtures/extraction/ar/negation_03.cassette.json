@@ -1,0 +1,7 @@
+{
+  "1e7cdaa5cb45c2deb8ea47e3336a69cb54340dc424171d5511a9ea6a5e1df261": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chest_pain.short_of_breath\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"مش حاسس بضيق نفس\", \"negated\": true}]}"
+  }
+}

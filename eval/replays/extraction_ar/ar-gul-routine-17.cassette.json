@@ -1,0 +1,7 @@
+{
+  "c7bcf0771e312dcfb0446c4674141ccf1cadda233ac5d09a78f13bccbb1b98f3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My heel hurts\", \"turn_id\": \"t2\", \"quote\": \"كعبي يعورني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"this morning\", \"turn_id\": \"t4\", \"quote\": \"من الصبح\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"in the heel\", \"turn_id\": \"t8\", \"quote\": \"في الكعب\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"To aspirin\", \"turn_id\": \"t10\", \"quote\": \"عندي حساسية من الأسبرين\", \"negated\": false}]}"
+  }
+}

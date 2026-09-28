@@ -1,0 +1,7 @@
+{
+  "fee0de29d5560268860d83ece21fec888a2dd782af4d42e012d2f5a03aa7baa7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Normal today\", \"turn_id\": \"t2\", \"quote\": \"ولدي مو طبيعي اليوم\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إيه، صعب يصحى من النوم\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إيه، حرارته مرتفعة\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"afternoon\", \"turn_id\": \"t8\", \"quote\": \"بدأ بعد الظهر\", \"negated\": false}]}"
+  }
+}

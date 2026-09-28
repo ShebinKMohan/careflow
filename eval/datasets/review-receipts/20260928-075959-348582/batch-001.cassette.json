@@ -1,0 +1,7 @@
+{
+  "a818c36923c005cfad6d4298164b091efb806a5dbbfd965862490f56eb973af4": {
+    "model": "gpt-6-astra",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"alerts_consistent\": true, \"content_sha256\": \"7ae7460a0e1ed42f705f18a5c905b7f1f05a3499f9b60ec6b8b8a0ded86dc488\", \"facts_supported\": true, \"id\": \"ar-gul-child-01\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"bcaee39d29a7c02891db6b2574583f8781ea4af31ff089a33d6c291fc839d477\", \"facts_supported\": true, \"id\": \"ar-lev-stroke-01\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"2afdcf884c5fedaf4f224d8e69ac2213f44bace218111f8705a9760cb5477172\", \"facts_supported\": true, \"id\": \"ar-lev-stroke-03\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"98755035889f47f21da3eccff2d3cd2a9724c61a5bd4930166e105bf93ed5f24\", \"facts_supported\": true, \"id\": \"ar-lev-stroke-04\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}]}"
+  }
+}

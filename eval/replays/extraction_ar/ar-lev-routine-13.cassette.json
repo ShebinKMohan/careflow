@@ -1,0 +1,7 @@
+{
+  "605fc978ba21119a9f6d56ccb80274745b4acb20cfb10dc1bc7e0b8b8fc17f36": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"A runny nose\", \"turn_id\": \"t2\", \"quote\": \"أنفي عم يسيل\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about a week ago\", \"turn_id\": \"t4\", \"quote\": \"صرلها أسبوع تقريباً\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"اتنين\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t8\", \"quote\": \"إي، من الأسبرين\", \"negated\": false}]}"
+  }
+}

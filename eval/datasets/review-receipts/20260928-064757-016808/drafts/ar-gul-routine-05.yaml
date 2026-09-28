@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-gul-routine-05
+category: routine
+language: ar
+dialect: gulf
+description: 'Seeded routine intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 29
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: عندي ألم في إصبعي
+  gloss_en: I have pain in my finger.
+  states:
+  - chief_complaint
+  - pain_location
+  - pain_present
+- question_key: symptom_onset_at
+  patient_text: من ثلاث أيام
+  gloss_en: For three days.
+  states:
+  - symptom_onset_at
+- question_key: pain_score
+  patient_text: واحد
+  gloss_en: One.
+  states:
+  - pain_present
+  - pain_score
+- question_key: pain_location
+  patient_text: في الإصبع
+  gloss_en: In the finger.
+  states:
+  - pain_location
+- question_key: allergies_confirm
+  patient_text: إيه، عندي حساسية من الأسبرين
+  gloss_en: Yes, I'm allergic to aspirin.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: A painful finger
+    pain_present: 'yes'
+    pain_location: finger
+    symptom_onset_at: Three days ago
+    pain_score: 1
+    allergies_confirm: Allergic to aspirin
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

@@ -1,0 +1,7 @@
+{
+  "58cdaf6989841ac2be619bc1578e2e7a447d53c8a1339ca059a773c6b8cc4eca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Sore throat\", \"turn_id\": \"t2\", \"quote\": \"حلقي بيوجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"last night\", \"turn_id\": \"t4\", \"quote\": \"من مبارح بالليل\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"throat\", \"turn_id\": \"t8\", \"quote\": \"بالحلق\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، ما عندي حساسية من أي دوا\", \"negated\": true}]}"
+  }
+}

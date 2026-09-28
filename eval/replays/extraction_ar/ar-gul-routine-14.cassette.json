@@ -1,0 +1,7 @@
+{
+  "6e14beea21a9a898e8ac943d224899c7d0e26efa3571766c418192e28eca1d17": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"A mild headache\", \"turn_id\": \"t2\", \"quote\": \"عندي صداع خفيف\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"two days ago\", \"turn_id\": \"t4\", \"quote\": \"قبل يومين\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد، خفيف\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"in my head\", \"turn_id\": \"t8\", \"quote\": \"في راسي\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to penicillin\", \"turn_id\": \"t10\", \"quote\": \"إيه، عندي حساسية من البنسلين\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,54 @@
+synthetic: true
+id: ar-gul-sepsis-07
+category: sepsis
+language: ar
+dialect: gulf
+description: 'Seeded sepsis intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 67
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: أحس إني مريض وايد اليوم
+  gloss_en: I feel very sick today.
+  states:
+  - chief_complaint
+- question_key: infection.fever_reported
+  patient_text: لا، حرارتي عادية
+  gloss_en: No, my temperature is normal.
+  states:
+  - infection.fever_reported
+- question_key: infection.rigors
+  patient_text: مو متأكد
+  gloss_en: I'm not sure.
+  states:
+  - infection.rigors
+- question_key: symptom_onset_at
+  patient_text: بدأ قبل ساعة
+  gloss_en: It started an hour ago.
+  states:
+  - symptom_onset_at
+device_vitals:
+  heart_rate: 96
+  spo2: 97
+  temperature_c: 38.2
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel very unwell
+    infection.fever_reported: 'no'
+    infection.rigors: unknown
+    symptom_onset_at: An hour ago
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:22:28.645450Z'
+review_method: automated
+reviewed_content_sha256: dfea8528c6568dd5e7757a5e5f6550765290adfce5dbea595592242068701e29

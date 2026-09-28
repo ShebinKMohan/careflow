@@ -1,0 +1,53 @@
+synthetic: true
+id: ar-lev-child-06
+category: child
+language: ar
+dialect: levantine
+description: 'Seeded child intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: CHILD_HARD_TO_WAKE.'
+patient:
+  age_years: 9
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: ابني مش على طبيعته
+  gloss_en: My son is not himself.
+  states:
+  - chief_complaint
+- question_key: child_danger.hard_to_wake
+  patient_text: إي، بيضل نايم وما بيفيق
+  gloss_en: Yes, he keeps sleeping and doesn't wake up.
+  states:
+  - child_danger.hard_to_wake
+- question_key: infection.fever_reported
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - infection.fever_reported
+- question_key: symptom_onset_at
+  patient_text: من الصبح
+  gloss_en: Since the morning.
+  states:
+  - symptom_onset_at
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child is not their usual self
+    child_danger.hard_to_wake: 'yes'
+    infection.fever_reported: 'no'
+    symptom_onset_at: Since this morning
+  alerts:
+  - CHILD_HARD_TO_WAKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises CHILD_HARD_TO_WAKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:23:54.606434Z'
+review_method: automated
+reviewed_content_sha256: 96f2d85cac587338fede2ba2f4a33e8ecb07fb0b73cbdf6a535fe362d628a4cb

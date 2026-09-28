@@ -1,0 +1,30 @@
+{
+  "description": "Two invalid replies to an Arabic transcript: extraction_incomplete, the known facts unchanged. Synthetic.",
+  "language": "ar",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "هل لديك ألم أو ضيق في صدرك؟",
+      "question_key": "chest_pain.present",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "إي، في ضيقة بصدري",
+      "question_key": "chest_pain.present",
+      "created_at": "2026-09-27T09:00:10Z"
+    }
+  ],
+  "responses": [
+    "ما عندي جواب",
+    "{\"facts\": [{\"key\": \"chest_pain.present\", \"turn_id\": \"t2\"}]}"
+  ],
+  "expected": {
+    "facts": "existing",
+    "dropped_count": 0,
+    "extraction_incomplete": true,
+    "error_code": "invalid_output"
+  }
+}

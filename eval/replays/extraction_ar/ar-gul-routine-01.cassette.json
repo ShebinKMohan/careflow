@@ -1,0 +1,7 @@
+{
+  "7135936e1ccb07fe5d3e851ce5c0e3e346f9b8a8b4e702345005c9c6cb0d68ae": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pain in my left wrist\", \"turn_id\": \"t2\", \"quote\": \"عندي ألم في رسغي اليسار\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"before an hour\", \"turn_id\": \"t4\", \"quote\": \"بدأ قبل ساعة\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t6\", \"quote\": \"خمسة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"left wrist\", \"turn_id\": \"t8\", \"quote\": \"في الرسغ اليسار\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t10\", \"quote\": \"إيه، عندي حساسية من الأسبرين\", \"negated\": false}]}"
+  }
+}

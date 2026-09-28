@@ -1,0 +1,57 @@
+synthetic: true
+id: ar-lev-stroke-06
+category: stroke
+language: ar
+dialect: levantine
+description: 'Seeded stroke intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 60
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: حاسة في شي مش طبيعي
+  gloss_en: I feel something isn't normal.
+  states:
+  - chief_complaint
+- question_key: fast.face_droop
+  patient_text: مش متأكدة، ما تطلعت بالمراية
+  gloss_en: I'm not sure, I haven't looked in the mirror.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: لا، عم بحكي عادي
+  gloss_en: No, I'm speaking normally.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: كنت بخير قبل الفطور
+  gloss_en: I was fine before breakfast.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Something feels different
+    fast.face_droop: unknown
+    fast.arm_weakness: 'no'
+    fast.speech_difficulty: 'no'
+    fast.last_known_well: Before breakfast
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:20:04.152281Z'
+review_method: automated
+reviewed_content_sha256: d214870f6e5978f22ae52125f8dab8a7f7d1fd6a5a5b471b6f02743d4a45e8cd

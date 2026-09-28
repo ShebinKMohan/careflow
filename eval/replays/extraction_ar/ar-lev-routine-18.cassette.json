@@ -1,0 +1,7 @@
+{
+  "c0fb8be71e051f4ca67698220179e74b595a2ad006f011a8fcd556422fbbe699": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Heartburn after eating\", \"turn_id\": \"t2\", \"quote\": \"بتجيني حرقة بعد الأكل\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"2 days ago\", \"turn_id\": \"t4\", \"quote\": \"من يومين\", \"negated\": false}, {\"key\": \"severity\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"أربعة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عندي حساسية من أي دوا\", \"negated\": true}]}"
+  }
+}

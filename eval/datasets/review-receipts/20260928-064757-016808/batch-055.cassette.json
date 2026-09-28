@@ -1,0 +1,7 @@
+{
+  "ad6004e2561f7380c6806037d911a0510e95adffec51d0b9443f15b8daed000d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-04\",\n      \"content_sha256\": \"0bb1da794cb9ab922fa5fe944d99c7aa2d3a42883f57f11123a4cfddb0c25a13\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert severity is 'critical' in the rule, but expected level is 2 (high).\",\n        \"Alerts list contains only the rule ID, but the rule outcome includes a 'chest_pain_screen' needed fact.\"\n      ]\n    }\n  ]\n}"
+  }
+}

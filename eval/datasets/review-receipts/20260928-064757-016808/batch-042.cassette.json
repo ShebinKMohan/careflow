@@ -1,0 +1,7 @@
+{
+  "6528fc782c7e6715ff1c55e34db12d161957d72bcd527688bb49fed4f91d9172": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-08\",\n      \"content_sha256\": \"2fe33bdd13d43e791555c12558becc054cfedf7768042dcd24f9aed585637da8\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alerts is empty, but infection evidence (fever, rigors) and NEWS2 total 5 trigger a critical SEPSIS_NEWS2 alert per sepsis.py.\",\n        \"Expected level 4 is invalid; the rule only defines critical (4) or high (3) severity, and no level 4 exists.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "9eefa77ec42fc5251f9460151981b9cf6f2e9c2e737475929f2dca847dc8ef51": {
+    "model": "gpt-6-astra",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"alerts_consistent\": true, \"content_sha256\": \"ea3a8f18b708b25cae7fc00caae2e5b708be1b8c8832346053d2d95001735e30\", \"facts_supported\": true, \"id\": \"ar-gul-breathing-03\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"b17abd6d4f1264dc30b4d49068a2d24807c956f3f4488e5b0d19e6f6fcbf37dc\", \"facts_supported\": true, \"id\": \"ar-gul-chest-pain-01\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"09ac490c9b3bfdd6fc42c6a4430a0674b6753d30d0f8d1576dc99bf73f5bbd69\", \"facts_supported\": true, \"id\": \"ar-gul-chest-pain-02\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"8cb1665b1ba8f1b332d01fff6b7f76b95a1a4baeabc5a3d3bcfc3d27f356ea3e\", \"facts_supported\": true, \"id\": \"ar-gul-chest-pain-03\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"ba3083c0fdfcd87eab2a2a494f139ec1ba7b3fbd1ad90a1808527c7c91f5d3a5\", \"facts_supported\": true, \"id\": \"ar-gul-chest-pain-04\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}]}"
+  }
+}

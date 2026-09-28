@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-lev-routine-01
+category: routine
+language: ar
+dialect: levantine
+description: 'Seeded routine intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 36
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: رسغي الشمال بيوجعني
+  gloss_en: My left wrist hurts.
+  states:
+  - chief_complaint
+  - pain_location
+  - pain_present
+- question_key: symptom_onset_at
+  patient_text: من الصبح
+  gloss_en: Since the morning.
+  states:
+  - symptom_onset_at
+- question_key: pain_score
+  patient_text: اتنين
+  gloss_en: Two.
+  states:
+  - pain_present
+  - pain_score
+- question_key: pain_location
+  patient_text: بالرسغ الشمال
+  gloss_en: In the left wrist.
+  states:
+  - pain_location
+- question_key: allergies_confirm
+  patient_text: لا، ما عندي حساسية من أي دوا
+  gloss_en: No, I don't have an allergy to any medicine.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Pain in my left wrist
+    pain_present: 'yes'
+    pain_location: left wrist
+    symptom_onset_at: Since this morning
+    pain_score: 2
+    allergies_confirm: No known medicine allergies
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:15:03.617018Z'
+review_method: automated
+reviewed_content_sha256: 1d36c567970ccf91706acac4cfacf0b29d2fd5e3ad649c1e87f755ae2a8e280e

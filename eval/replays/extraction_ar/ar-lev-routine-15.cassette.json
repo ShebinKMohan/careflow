@@ -1,0 +1,7 @@
+{
+  "101be9538ad27602c6b0625793dfa5ba0c7ac1ad07134d48311566fd0b61d7a3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"A blister on my foot that hurts\", \"turn_id\": \"t2\", \"quote\": \"عندي فقاعة مي بقدمي وبتوجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"yesterday\", \"turn_id\": \"t4\", \"quote\": \"من مبارح\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t6\", \"quote\": \"خمسة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"foot\", \"turn_id\": \"t8\", \"quote\": \"بالقدم\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، ما عندي حساسية\", \"negated\": true}]}"
+  }
+}

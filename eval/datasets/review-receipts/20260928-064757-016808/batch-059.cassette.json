@@ -1,0 +1,7 @@
+{
+  "cede825d221a165aeaa2497d8a4011694c738f64de73ed5ed9a37ac4907ae63e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-08\",\n      \"content_sha256\": \"94858a2e951aa0ebfa13856b225b7c4ce25a9159591fbae3dd06f79ae507a358\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

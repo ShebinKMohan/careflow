@@ -1,0 +1,39 @@
+{
+  "description": "The model quotes without diacritics, tatweel or hamza; the span points into the original text. Synthetic.",
+  "language": "ar",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "هل لديك ألم أو ضيق في صدرك؟",
+      "question_key": "chest_pain.present",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "عِنْدِي أَلَمٌ فِي صَـــدْرِي مِنْ الصُّبْح",
+      "question_key": "chest_pain.present",
+      "created_at": "2026-09-27T09:00:10Z"
+    }
+  ],
+  "responses": [
+    "{\"facts\": [{\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"عندي الم في صدري\", \"char_start\": 0, \"char_end\": 3, \"negated\": false}]}"
+  ],
+  "expected": {
+    "facts": [
+      {
+        "key": "chest_pain.present",
+        "value": "yes",
+        "turn_id": "trn_002",
+        "quote": "عِنْدِي أَلَمٌ فِي صَـــدْرِي"
+      }
+    ],
+    "span": [
+      0,
+      29
+    ],
+    "dropped_count": 0,
+    "extraction_incomplete": false
+  }
+}

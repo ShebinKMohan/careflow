@@ -1,0 +1,7 @@
+{
+  "df70e030b6f6168c1269860b3356f2334c49b12276cc14ead69b5a9671b60007": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-08\",\n      \"content_sha256\": \"2d377b23fe9b95c6d5b0cd1bf4896df7f64342d756dbc16816e1a55a63cbd58d\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

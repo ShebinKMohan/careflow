@@ -1,0 +1,7 @@
+{
+  "915903162a0a21d8c913cbeeed047ff65cc95f72c70b402aebe9a62a8dbe6c15": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Shortness of breath\", \"turn_id\": \"t2\", \"quote\": \"في ضيق بالنفس\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": \"Yes, a little\", \"turn_id\": \"t4\", \"quote\": \"إي، شوي\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عندي حرارة\", \"negated\": true}, {\"key\": \"severity\", \"value\": 3, \"turn_id\": \"t10\", \"quote\": \"تلاتة\", \"negated\": false}]}"
+  }
+}

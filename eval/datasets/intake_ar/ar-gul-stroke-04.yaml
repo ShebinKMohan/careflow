@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-gul-stroke-04
+category: stroke
+language: ar
+dialect: gulf
+description: 'Seeded stroke intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: FAST_STROKE.'
+patient:
+  age_years: 69
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: وجهي نازل من جهة
+  gloss_en: My face is drooping on one side.
+  states:
+  - chief_complaint
+  - fast.face_droop
+- question_key: fast.face_droop
+  patient_text: إيه، واضح في المراية
+  gloss_en: Yes, it's clear in the mirror.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: إيه، ذراعي اليمين ضعيفة
+  gloss_en: Yes, my right arm is weak.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: إيه، لساني ثقيل شوي
+  gloss_en: Yes, my tongue is a bit heavy.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: ما أدري، ما أذكر متى
+  gloss_en: I don't know, I don't remember when.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: One side of my face is drooping
+    fast.face_droop: 'yes'
+    fast.arm_weakness: 'yes'
+    fast.speech_difficulty: 'yes'
+    fast.last_known_well: unknown
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises FAST_STROKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:22:51.246541Z'
+review_method: automated
+reviewed_content_sha256: 3af3374d06695863fbd6d7c2d18959355c4880a56ab45ffaeb3c7bfc27ae6dcf

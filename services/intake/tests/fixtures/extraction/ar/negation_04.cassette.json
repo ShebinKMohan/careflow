@@ -1,0 +1,7 @@
+{
+  "607aeb326253797f157783ee79bbdb4f036ce7334ae59ea1363638182a7f15b1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"ما في حرارة\", \"negated\": true}]}"
+  }
+}

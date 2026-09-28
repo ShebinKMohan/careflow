@@ -172,3 +172,138 @@ async def generate_dataset(
             "model before independent review. Unqualified drafts cannot be approved."
         ),
     }
+
+
+# --- Arabic (M2-03, SHE-290): seeded gold (careflow_eval.sampler), written answers, drafts ---
+
+ARABIC_DATASET: Final = REPO / "eval/datasets/intake_ar"
+PLAN_AT: Final = "2026-09-27T09:00:00Z"
+FREE_TEXT: Final = frozenset({"chest_pain.onset", "fast.last_known_well"})
+
+
+def plan_alerts(plan: dict[str, Any]) -> list[str]:
+    """The rule ids the rules engine raises on a plan's gold facts, age and vitals."""
+    from careflow_eval.datasets import NOW
+    from careflow_eval.sampler import gold_facts
+    from careflow_rules import evaluate
+    from careflow_rules.testing import facts_from_entries
+
+    def text(value: Any) -> str:
+        return ("yes" if value else "no") if isinstance(value, bool) else str(value)
+
+    entries = [{"path": "patient.age_years", "value": str(plan["age_years"]), "provenance": "EHR"}]
+    for source, provenance in (
+        ("device_vitals", "DEVICE_MEASURED"),
+        ("nurse_vitals", "NURSE_CONFIRMED"),
+    ):
+        for name, value in plan[source].items():
+            entries.append(
+                {"path": f"vitals.{name}", "value": text(value), "provenance": provenance}
+            )
+    for key, value in gold_facts(plan).items():
+        # The rules read dotted yes/no facts (and vitals); free text and the top-level pain and
+        # severity answers are no rule input.
+        if "." in key and not isinstance(value, int) and key not in FREE_TEXT:
+            entries.append({"path": key, "value": text(value), "provenance": "PATIENT_STATED"})
+    facts = facts_from_entries([{**entry, "recorded_at": PLAN_AT} for entry in entries])
+    return sorted({alert.rule_id.value for alert in evaluate(facts, NOW).alerts})
+
+
+def _level(alerts: list[str]) -> tuple[int, str]:
+    critical = {
+        "FAST_STROKE",
+        "CHEST_PAIN_ECG_10MIN",
+        "SEPSIS_NEWS2",
+        "NG143_RED_FLAG",
+        "CHILD_HARD_TO_WAKE",
+    }
+    if critical & set(alerts):
+        level = 2
+    elif alerts:
+        level = 3
+    else:
+        level = 4
+    rationale = (
+        f"Synthetic illustrative level {level} from the M2-03 sampler: the rules engine raises "
+        f"{', '.join(alerts) if alerts else 'no alert'} on the seeded gold facts and vitals. "
+        "Not a clinical label."
+    )
+    return level, rationale
+
+
+def write_arabic_drafts(
+    *,
+    dialect: str,
+    answers_path: Path,
+    writer_model: str,
+    seed: int = 7,
+    dataset_path: Path | None = None,
+) -> dict[str, Any]:
+    """Merge the writer's answers (`{id: [{text, gloss_en, also_states?}]}`, one per planned
+    answer, in order) into the seeded plan, and write the drafts to `<dataset>/_inbox`. The
+    gold, the questions and the alerts come from the plan; only the words come from the writer.
+    Drafts need the independent review (`careflow-eval review`) before they count."""
+    from careflow_eval.sampler import arabic_plan, gold_facts
+
+    written: list[str] = []
+    failures: dict[str, list[str]] = {}
+    answers = yaml.safe_load(answers_path.read_text(encoding="utf-8")) or {}
+    inbox = (dataset_path or ARABIC_DATASET) / "_inbox"
+    inbox.mkdir(parents=True, exist_ok=True)
+    for plan in arabic_plan(dialect, seed=seed):
+        said = answers.get(plan["id"])
+        if said is None:
+            continue
+        if len(said) != len(plan["answers"]):
+            failures[plan["id"]] = [f"{len(said)} answers for {len(plan['answers'])} questions"]
+            continue
+        turns = [
+            {
+                "question_key": planned["question_key"],
+                "patient_text": answer["text"],
+                "gloss_en": answer["gloss_en"],
+                "states": sorted({*planned["gold"], *answer.get("also_states", [])}),
+            }
+            for planned, answer in zip(plan["answers"], said, strict=True)
+        ]
+        alerts = plan_alerts(plan)
+        level, rationale = _level(alerts)
+        body = {
+            "synthetic": True,
+            "id": plan["id"],
+            "category": plan["category"],
+            "language": "ar",
+            "dialect": plan["dialect"],
+            "description": (
+                f"Seeded {plan['category'].replace('_', ' ')} intake in {dialect.title()} Arabic "
+                f"(M2-03 sampler, seed {seed}); expected alerts: {', '.join(alerts) or 'none'}."
+            ),
+            "patient": {"age_years": plan["age_years"], "sex": plan["sex"]},
+            "turns": turns,
+            "device_vitals": plan["device_vitals"],
+            "nurse_vitals": plan["nurse_vitals"],
+            "expected": {
+                "facts": gold_facts(plan),
+                "alerts": alerts,
+                "level": level,
+                "level_rationale": rationale,
+            },
+            "generated_by": {
+                "tool": "coding-agent",
+                "model": writer_model,
+                "date": datetime.now(UTC).date().isoformat(),
+            },
+            **dict.fromkeys(REVIEW_FIELDS),
+        }
+        findings = validate_scenario(body)
+        if findings:
+            failures[plan["id"]] = findings
+            continue
+        draft = Scenario.model_validate(body)
+        path = inbox / f"{draft.id}.yaml"
+        with path.open("x", encoding="utf-8") as handle:
+            yaml.safe_dump(
+                draft.model_dump(mode="json"), handle, sort_keys=False, allow_unicode=True
+            )
+        written.append(str(path))
+    return {"status": "drafted", "count": len(written), "written": written, "failures": failures}

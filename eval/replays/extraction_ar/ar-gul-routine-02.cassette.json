@@ -1,0 +1,7 @@
+{
+  "782e647218a744667230fb5894199082ef8c84273c55844a43420e36d947c17f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Right ankle pain\", \"turn_id\": \"t2\", \"quote\": \"كاحلي اليمين يعورني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about an hour ago\", \"turn_id\": \"t4\", \"quote\": \"قبل ساعة تقريباً\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد، شي بسيط\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Right ankle\", \"turn_id\": \"t8\", \"quote\": \"الكاحل اليمين\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Aspirin\", \"turn_id\": \"t10\", \"quote\": \"إيه، الأسبرين\", \"negated\": false}]}"
+  }
+}

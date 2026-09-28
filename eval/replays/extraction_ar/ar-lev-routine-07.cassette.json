@@ -1,0 +1,7 @@
+{
+  "9b971f0636554bebbae7eb87c635d28edefae50c91a40e83094989ba5991fd06": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Dry skin and he is coughing on me\", \"turn_id\": \"t2\", \"quote\": \"جلدي ناشف وعم يحكني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Two days ago\", \"turn_id\": \"t4\", \"quote\": \"من يومين\", \"negated\": false}, {\"key\": \"severity\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"أربعة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, aspirin\", \"turn_id\": \"t8\", \"quote\": \"إي، الأسبرين\", \"negated\": false}]}"
+  }
+}

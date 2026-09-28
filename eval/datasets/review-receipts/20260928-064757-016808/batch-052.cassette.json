@@ -1,0 +1,7 @@
+{
+  "e92e0585d31f074e9ac68010e12a3ab4ec3732d04de38b71db6cf0d08264fc5b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-01\",\n      \"content_sha256\": \"60d576788d5fb1090924e5d5d55c698457d6a20e0be375613bd152105fd9e665\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert severity is 'critical' in the rule, but expected level is 2 (high).\",\n        \"Alerts are not consistent with the rule's defined severity.\"\n      ]\n    }\n  ]\n}"
+  }
+}

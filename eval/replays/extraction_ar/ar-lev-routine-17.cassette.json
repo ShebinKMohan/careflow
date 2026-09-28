@@ -1,0 +1,7 @@
+{
+  "76cb86060a8b0ff0eccd1f87052be95776d5fa7e3d699270eff5e844c758519d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Heel pain\", \"turn_id\": \"t2\", \"quote\": \"كعبي بيوجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"one hour ago\", \"turn_id\": \"t4\", \"quote\": \"قبل ساعة\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"اتنين\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"on the heel\", \"turn_id\": \"t8\", \"quote\": \"بالكعب\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, aspirin causes me an allergy\", \"turn_id\": \"t10\", \"quote\": \"إي، الأسبرين بيعملّي حساسية\", \"negated\": false}]}"
+  }
+}

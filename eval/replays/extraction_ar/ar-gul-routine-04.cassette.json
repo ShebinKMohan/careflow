@@ -1,0 +1,7 @@
+{
+  "f362a9c907fb2661459e419371a3a6d97003c6fc925c01497cdfad9782ba4325": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pain in my shoulder\", \"turn_id\": \"t2\", \"quote\": \"ألم في كتفي\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"one hour ago\", \"turn_id\": \"t4\", \"quote\": \"قبل ساعة\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"الألم واحد\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"in my shoulder\", \"turn_id\": \"t8\", \"quote\": \"في كتفي\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، ما عندي حساسية من أي دوا\", \"negated\": true}]}"
+  }
+}

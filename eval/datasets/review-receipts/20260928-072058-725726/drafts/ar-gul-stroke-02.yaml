@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-gul-stroke-02
+category: stroke
+language: ar
+dialect: gulf
+description: 'Seeded stroke intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: FAST_STROKE.'
+patient:
+  age_years: 67
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: كلامي مو واضح
+  gloss_en: My speech is not clear.
+  states:
+  - chief_complaint
+  - fast.speech_difficulty
+- question_key: fast.face_droop
+  patient_text: لا، وجهي عادي
+  gloss_en: No, my face is normal.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: لا، ما فيني ضعف
+  gloss_en: No, I do not feel weak.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: إيه، الكلام يطلع صعب
+  gloss_en: Yes, the words come out with difficulty.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: كنت طبيعي قبل الفطور
+  gloss_en: I was normal before breakfast.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My speech is slurred
+    fast.speech_difficulty: 'yes'
+    fast.face_droop: 'no'
+    fast.arm_weakness: 'no'
+    fast.last_known_well: Before breakfast
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises FAST_STROKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

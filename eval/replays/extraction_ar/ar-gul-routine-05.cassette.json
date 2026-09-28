@@ -1,0 +1,7 @@
+{
+  "75be263d9421e3e759efc8331d53f7d5f91abab658e43a4f013eabc721fcfcb7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pain in my finger\", \"turn_id\": \"t2\", \"quote\": \"عندي ألم في إصبعي\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"3 days ago\", \"turn_id\": \"t4\", \"quote\": \"من ثلاث أيام\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"In the finger\", \"turn_id\": \"t8\", \"quote\": \"في الإصبع\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t10\", \"quote\": \"إيه، عندي حساسية من الأسبرين\", \"negated\": false}]}"
+  }
+}

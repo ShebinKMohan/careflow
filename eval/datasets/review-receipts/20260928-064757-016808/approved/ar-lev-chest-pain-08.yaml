@@ -1,0 +1,45 @@
+synthetic: true
+id: ar-lev-chest-pain-08
+category: chest_pain
+language: ar
+dialect: levantine
+description: 'Seeded chest pain intake in Levantine Arabic (M2-03 sampler, seed 7);
+  expected alerts: none.'
+patient:
+  age_years: 45
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: بحس إني مريضة بعد الأكل
+  gloss_en: I feel sick after eating.
+  states:
+  - chief_complaint
+- question_key: chest_pain.present
+  patient_text: لا، ما في شي بصدري
+  gloss_en: No, there's nothing in my chest.
+  states:
+  - chest_pain.present
+- question_key: chest_pain.short_of_breath
+  patient_text: لا، بتنفس عادي
+  gloss_en: No, I'm breathing normally.
+  states:
+  - chest_pain.short_of_breath
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I feel unwell after a meal
+    chest_pain.present: 'no'
+    chest_pain.short_of_breath: 'no'
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:13:39.374016Z'
+review_method: automated
+reviewed_content_sha256: 94858a2e951aa0ebfa13856b225b7c4ce25a9159591fbae3dd06f79ae507a358

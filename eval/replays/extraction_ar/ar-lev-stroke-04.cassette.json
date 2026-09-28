@@ -1,0 +1,7 @@
+{
+  "4ada40b6fad8bb082e4d2620cf46452e79cf7cbd55b6ab1b41fea606ddc7a69a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Heavy tongue and unclear speech\", \"turn_id\": \"t2\", \"quote\": \"لساني تقيل والحكي مش طالع واضح\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، وجهي طبيعي\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، ما في ضعف\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إي، عم بحكي بصعوبة\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"30 minutes ago\", \"turn_id\": \"t10\", \"quote\": \"قبل نص ساعة كنت منيح\", \"negated\": false}]}"
+  }
+}

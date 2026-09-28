@@ -1,0 +1,64 @@
+synthetic: true
+id: ar-lev-routine-12
+category: routine
+language: ar
+dialect: levantine
+description: 'Seeded routine intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 66
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: حلقي بيوجعني
+  gloss_en: My throat hurts.
+  states:
+  - chief_complaint
+  - pain_location
+  - pain_present
+  - symptoms
+- question_key: symptom_onset_at
+  patient_text: من مبارح بالليل
+  gloss_en: Since last night.
+  states:
+  - symptom_onset_at
+- question_key: pain_score
+  patient_text: واحد
+  gloss_en: One.
+  states:
+  - pain_present
+  - pain_score
+- question_key: pain_location
+  patient_text: بالحلق
+  gloss_en: In the throat.
+  states:
+  - pain_location
+- question_key: allergies_confirm
+  patient_text: لا، ما عندي حساسية من أي دوا
+  gloss_en: No, I don't have an allergy to any medicine.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: A sore throat
+    pain_present: 'yes'
+    pain_location: throat
+    symptoms:
+    - sore throat
+    symptom_onset_at: Since last night
+    pain_score: 1
+    allergies_confirm: No known medicine allergies
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:16:51.728590Z'
+review_method: automated
+reviewed_content_sha256: 5148a47be5d1a10999664e018fe4681c720799f24783c884735925032b30e5ea

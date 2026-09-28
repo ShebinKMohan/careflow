@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-gul-child-03
+category: child
+language: ar
+dialect: gulf
+description: 'Seeded child intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: NG143_AMBER_FLAG.'
+patient:
+  age_years: 1
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: ولدي ما ياكل
+  gloss_en: My son doesn't eat.
+  states:
+  - chief_complaint
+  - child_amber.poor_feeding
+- question_key: child_danger.hard_to_wake
+  patient_text: لا، يصحى عادي
+  gloss_en: No, he wakes up normally.
+  states:
+  - child_danger.hard_to_wake
+- question_key: child_danger.grunting
+  patient_text: لا، يتنفس عادي
+  gloss_en: No, he's breathing normally.
+  states:
+  - child_danger.grunting
+- question_key: child_amber.poor_feeding
+  patient_text: إيه، يرضع أقل من العادة بكثير
+  gloss_en: Yes, he breastfeeds much less than usual.
+  states:
+  - child_amber.poor_feeding
+- question_key: child_amber.reduced_urine_output
+  patient_text: لا، الحفاظات مبلولة مثل العادة
+  gloss_en: No, the diapers are wet as usual.
+  states:
+  - child_amber.reduced_urine_output
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child is not eating
+    child_amber.poor_feeding: 'yes'
+    child_danger.hard_to_wake: 'no'
+    child_danger.grunting: 'no'
+    child_amber.reduced_urine_output: 'no'
+  alerts:
+  - NG143_AMBER_FLAG
+  level: 3
+  level_rationale: 'Synthetic illustrative level 3 from the M2-03 sampler: the rules
+    engine raises NG143_AMBER_FLAG on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:21:47.394825Z'
+review_method: automated
+reviewed_content_sha256: 04cb3e6cd08ebc21922e232785a208e98923d37f8db57c09ffc1fbc7deb83d36

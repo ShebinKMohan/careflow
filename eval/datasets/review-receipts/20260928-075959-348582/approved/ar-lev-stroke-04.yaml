@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-lev-stroke-04
+category: stroke
+language: ar
+dialect: levantine
+description: 'Seeded stroke intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: FAST_STROKE.'
+patient:
+  age_years: 75
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: لساني تقيل والحكي مش طالع واضح
+  gloss_en: My tongue is heavy and the words aren't coming out clearly.
+  states:
+  - chief_complaint
+  - fast.speech_difficulty
+- question_key: fast.face_droop
+  patient_text: لا، وجهي طبيعي
+  gloss_en: No, my face is normal.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: لا، ما في ضعف
+  gloss_en: No, there's no weakness.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: إي، عم بحكي بصعوبة
+  gloss_en: Yes, I'm speaking with difficulty.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: قبل نص ساعة كنت منيح
+  gloss_en: Half an hour ago I was fine.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My speech is slurred
+    fast.speech_difficulty: 'yes'
+    fast.face_droop: 'no'
+    fast.arm_weakness: 'no'
+    fast.last_known_well: Half an hour ago
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises FAST_STROKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T08:00:18.881771Z'
+review_method: automated
+reviewed_content_sha256: 98755035889f47f21da3eccff2d3cd2a9724c61a5bd4930166e105bf93ed5f24

@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-gul-breathing-03
+category: breathing
+language: ar
+dialect: gulf
+description: 'Seeded breathing intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 60
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: ما أقدر أتنفس زين
+  gloss_en: I can't breathe well.
+  states:
+  - chest_pain.short_of_breath
+  - chief_complaint
+- question_key: chest_pain.short_of_breath
+  patient_text: نعم، أتنفس بصعوبة
+  gloss_en: Yes, I breathe with difficulty.
+  states:
+  - chest_pain.short_of_breath
+- question_key: chest_pain.present
+  patient_text: لا، ما عندي ألم في صدري
+  gloss_en: No, I don't have pain in my chest.
+  states:
+  - chest_pain.present
+- question_key: infection.fever_reported
+  patient_text: لا، ما عندي حرارة
+  gloss_en: No, I don't have a fever.
+  states:
+  - infection.fever_reported
+- question_key: severity
+  patient_text: أقول ٦
+  gloss_en: I say 6.
+  states:
+  - severity
+device_vitals:
+  heart_rate: 110
+  spo2: 94
+  temperature_c: 36.9
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I am short of breath
+    chest_pain.short_of_breath: 'yes'
+    chest_pain.present: 'no'
+    infection.fever_reported: 'no'
+    severity: 6
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:21:20.786814Z'
+review_method: automated
+reviewed_content_sha256: ea3a8f18b708b25cae7fc00caae2e5b708be1b8c8832346053d2d95001735e30

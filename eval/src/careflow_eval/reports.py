@@ -152,7 +152,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
                 "",
                 "For successful model calls, this run replays recorded raw model responses "
                 "through the canonical `ReplayProvider`."
-                if report.get("suite") == "extraction_en"
+                if str(report.get("suite", "")).startswith("extraction_")
                 else "This run replays recorded rules outputs without invoking a model.",
                 "Recorded live latency and replay execution time are distinct; "
                 "use the stated latency source.",

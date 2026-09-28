@@ -1,0 +1,7 @@
+{
+  "7a4a7000a1ebd9924c00779b7a43d37352cb4db445f9c6f22ee40bec1b085949": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-02\",\n      \"content_sha256\": \"a0c8f7a749a230e8e507a214608f3a81ab6207c49e06c9371451cddfcae4a49f\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 does not match rule CHEST_PAIN_ECG_10MIN which defines severity as critical (level 1).\",\n        \"Alerts list contains only the rule ID but expected level 2 implies a different severity not present in the rule.\"\n      ]\n    }\n  ]\n}"
+  }
+}

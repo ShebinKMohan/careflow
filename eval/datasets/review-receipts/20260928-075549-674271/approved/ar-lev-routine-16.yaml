@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-lev-routine-16
+category: routine
+language: ar
+dialect: levantine
+description: 'Seeded routine intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 49
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: عندي وجع بالضرس
+  gloss_en: I have pain in the molar.
+  states:
+  - chief_complaint
+  - pain_location
+  - pain_present
+- question_key: symptom_onset_at
+  patient_text: من أسبوع تقريباً
+  gloss_en: For about a week.
+  states:
+  - symptom_onset_at
+- question_key: pain_score
+  patient_text: خمسة
+  gloss_en: Five.
+  states:
+  - pain_present
+  - pain_score
+- question_key: pain_location
+  patient_text: بالضرس
+  gloss_en: In the molar.
+  states:
+  - pain_location
+- question_key: allergies_confirm
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Toothache
+    pain_present: 'yes'
+    pain_location: tooth
+    symptom_onset_at: About a week ago
+    pain_score: 5
+    allergies_confirm: No known medicine allergies
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:57:37.668152Z'
+review_method: automated
+reviewed_content_sha256: 6aadda7b6dc3eea383373d477ce1f0889e4e62ff16257f95f40c4bd883dd9f40

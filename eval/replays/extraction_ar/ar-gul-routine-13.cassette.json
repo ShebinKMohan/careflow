@@ -1,0 +1,7 @@
+{
+  "7713ee564d79242a886b19f80496d9d6ecfc9d50ed9fc261d16b702c74090e0e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Runny nose\", \"turn_id\": \"t2\", \"quote\": \"خشمي يسيل\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about a week ago\", \"turn_id\": \"t4\", \"quote\": \"من أسبوع تقريباً\", \"negated\": false}, {\"key\": \"severity\", \"value\": 3, \"turn_id\": \"t6\", \"quote\": \"ثلاثة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, penicillin\", \"turn_id\": \"t8\", \"quote\": \"إيه، البنسلين\", \"negated\": false}]}"
+  }
+}

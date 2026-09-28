@@ -1,0 +1,7 @@
+{
+  "08706bc172c836f50bfd3bf6e64a10efa37bdf964ebc28b017c1e4dc37ab3051": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My condition is very bad\", \"turn_id\": \"t2\", \"quote\": \"حالتي كتير سيئة\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، عندي سخونة قوية\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إي، رجفة ما بتوقف\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Two days ago\", \"turn_id\": \"t8\", \"quote\": \"من يومين\", \"negated\": false}]}"
+  }
+}

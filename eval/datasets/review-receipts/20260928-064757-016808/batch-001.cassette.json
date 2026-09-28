@@ -1,0 +1,7 @@
+{
+  "11ff09c6ab76168583d36cd437c00a847223c3aa8577af74cd77aa321932df4b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-breathing-01\",\n      \"content_sha256\": \"6e06f45723e1e01659d728d10015bf6f8b019132ee991e907e927bb11715be96\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

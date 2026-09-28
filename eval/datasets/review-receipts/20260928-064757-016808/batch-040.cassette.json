@@ -1,0 +1,7 @@
+{
+  "b5866a0a2ec7c3e0b8bddebec5f8679537b8609e62eb210826ddb3588e4b77fe": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-06\",\n      \"content_sha256\": \"efddb6a0189308721550b77e98c84954386ce118ed342676ea1702f2444ab0894\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alerts is empty, but SepsisNews2Rule triggers critical alert when NEWS2 total is 5 or more.\",\n        \"NEWS2 total is 5 (rigors 1, hypothermia 1, tachycardia 2, hypoxia 1), which meets the critical threshold.\"\n      ]\n    }\n  ]\n}"
+  }
+}

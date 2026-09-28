@@ -1,0 +1,35 @@
+{
+  "description": "An Arabic quote the patient never said is dropped; the verified fact stays. Synthetic.",
+  "language": "ar",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "هل أصابتك حمّى؟",
+      "question_key": "infection.fever_reported",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "إيه، عندي حرارة من أمس",
+      "question_key": "infection.fever_reported",
+      "created_at": "2026-09-27T09:00:10Z"
+    }
+  ],
+  "responses": [
+    "{\"facts\": [{\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"عندي حرارة\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"عندي رجفة قوية\", \"negated\": false}]}"
+  ],
+  "expected": {
+    "facts": [
+      {
+        "key": "infection.fever_reported",
+        "value": "yes",
+        "turn_id": "trn_002",
+        "quote": "عندي حرارة"
+      }
+    ],
+    "dropped_count": 1,
+    "extraction_incomplete": false
+  }
+}

@@ -8,7 +8,8 @@ fixture, keyed by the exact messages sent. Tests replay the cassette without a m
 prompt changes the key, the replay misses, and the case must be recorded again.
 
 A fixture holds `turns`, optional scripted `responses` (hand-written model replies, for the
-failure cases) and the `expected` result.
+failure cases), the `expected` result and its session `language` ("en" by default; the Arabic
+fixtures in `ar/` say "ar", so the Arabic prompt is used, M2-03).
 """
 
 from __future__ import annotations
@@ -24,7 +25,7 @@ from pathlib import Path
 from typing import Any, Final
 
 from careflow_contracts.generated.extraction_output_schema import ExtractionOutput
-from careflow_contracts.generated.structured_facts_schema import FactKey, Turn, TurnRole
+from careflow_contracts.generated.structured_facts_schema import FactKey, Language, Turn, TurnRole
 from careflow_intake.extraction.extractor import DEFAULT_CONFIG, TASK, LlmExtractor
 from careflow_intake.extraction.prompt import build_messages
 from careflow_intake.ports import ExtractionResult
@@ -44,6 +45,7 @@ class Case:
     turns: list[Turn]
     responses: list[str]
     expected: dict[str, Any]
+    language: Language = Language.en
 
     @property
     def question_keys(self) -> dict[str, FactKey]:
@@ -68,6 +70,7 @@ def load_case(name: str, fixtures: Path = FIXTURES) -> Case:
         turns=[Turn.model_validate(turn) for turn in body["turns"]],
         responses=list(body.get("responses", [])),
         expected=dict(body.get("expected", {})),
+        language=Language(body.get("language", "en")),
     )
 
 
@@ -136,7 +139,7 @@ async def record(name: str, *, config: Path = DEFAULT_CONFIG) -> tuple[Extractio
     )
     extractor = LlmExtractor(provider, provider_kind=providers.tasks[TASK].provider)
     start = time.perf_counter()
-    result = await extractor.extract(case.turns, [], case.question_keys)
+    result = await extractor.extract(case.turns, [], case.question_keys, case.language)
     return result, time.perf_counter() - start
 
 

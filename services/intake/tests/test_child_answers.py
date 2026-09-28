@@ -62,6 +62,12 @@ EXPLICIT: Final = [
     ("لا أدري", TriState.unknown, True),
     ("لست متأكداً", TriState.unknown, True),  # the kiosk's button
     ("ما أدري، نايمة كثير", TriState.unknown, False),
+    # A filler before "I don't know" (M2-03: the model read the first one as no).
+    ("والله ما أدري، ما انتبهت", TriState.unknown, False),
+    ("والله، ما أدري", TriState.unknown, True),
+    ("يعني مو متأكدة", TriState.unknown, True),
+    ("Um, not sure", TriState.unknown, True),
+    ("honestly I don't know", TriState.unknown, True),
 ]
 NOT_EXPLICIT: Final = [
     "No, but she is very hard to wake",  # never "no"
@@ -73,6 +79,9 @@ NOT_EXPLICIT: Final = [
     "yes?",  # a question, not an answer
     "Sure",
     "",
+    "والله",  # a filler alone
+    "والله لا",  # a filler only goes before unsure: this no is left to the extractor
+    "um yes",
 ]
 
 

@@ -1,0 +1,7 @@
+{
+  "b189c602db7a7930625289860f00c10f55b2587cc22ef42a989402f9a737bec9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-01\",\n      \"content_sha256\": \"bcaee39d29a7c02891db6b2574583f8781ea4af31ff089a33d6c291fc839d477\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert level 2 is invalid; FAST_STROKE is defined as critical (level 1) in the rule code.\",\n        \"Expected facts include 'My speech is slurred' which is not a supported extraction from the patient text.\"\n      ]\n    }\n  ]\n}"
+  }
+}

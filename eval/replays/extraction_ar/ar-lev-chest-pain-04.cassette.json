@@ -1,0 +1,7 @@
+{
+  "5f983b8b4c2eda66771fcc3c8f95913e8b1fea40e627d17f9b2fe93b424a8af8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pressure on chest, tightness\", \"turn_id\": \"t2\", \"quote\": \"في شي ضاغط على صدري، ضيقة\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، في ضيقة بصدري\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إي، بتوصل لفكي\", \"negated\": false}, {\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"pain_score\", \"value\": 6, \"turn_id\": \"t10\", \"quote\": \"ستة\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"two days ago\", \"turn_id\": \"t12\", \"quote\": \"من يومين\", \"negated\": false}]}"
+  }
+}

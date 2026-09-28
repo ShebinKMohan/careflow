@@ -1,0 +1,7 @@
+{
+  "8ef1ed371c954a95f3b12268cbcb3989223e88c4382ae12f8e9b9b4ff7b4083f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-05\",\n      \"content_sha256\": \"a320f44123aad12daeabb4b0417015cd23ca916ebec8d06297e719368b39a2df\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected chest_pain.present is 'yes' but patient text states 'Two days ago' onset, contradicting 'now or last hours' rule.\",\n        \"Alert CHEST_PAIN_ECG_10MIN is critical but expected.level is 2; rule defines severity as critical, not level 2.\"\n      ]\n    }\n  ]\n}"
+  }
+}

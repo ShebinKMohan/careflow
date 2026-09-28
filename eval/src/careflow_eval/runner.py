@@ -12,6 +12,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+from careflow_contracts import Language
 from careflow_eval.datasets import load_dataset
 from careflow_eval.metrics import NORMALIZATION_VERSION
 from careflow_eval.providers import (
@@ -22,6 +23,7 @@ from careflow_eval.providers import (
     read_receipt,
 )
 from careflow_eval.suites import extraction_en, rules
+from careflow_eval.suites.extraction_en import ARABIC_SCORING
 from careflow_intake.extraction.extractor import DEFAULT_TIMEOUT_SECONDS
 from careflow_intake.extraction.prompt import PROMPT_DIR, prompt_version
 from careflow_intake.wiring import providers_config
@@ -34,6 +36,21 @@ from careflow_rules import RULESET_VERSION
 REPO = Path(__file__).resolve().parents[3]
 DEFAULT_DATASET = REPO / "eval" / "datasets" / "intake_en"
 DEFAULT_RULES = REPO / "eval" / "scenarios" / "rules"
+# The extraction suites and their scenario language (M2-03 adds Arabic).
+EXTRACTION_SUITES = {"extraction_en": Language.en, "extraction_ar": Language.ar}
+DEFAULT_DATASETS = {
+    "extraction_en": DEFAULT_DATASET,
+    "extraction_ar": REPO / "eval" / "datasets" / "intake_ar",
+}
+
+
+def normalization_version(suite: str) -> str:
+    """What the field scores compare: Arabic free text is scored by presence (see the suite)."""
+    if suite == "extraction_ar":
+        return f"{NORMALIZATION_VERSION}+ar-{ARABIC_SCORING}"
+    return NORMALIZATION_VERSION
+
+
 SOURCE_ROOTS = (
     "eval/src",
     "eval/schemas",
@@ -167,7 +184,7 @@ async def run_suite(
     successful recordings fail hard. Neither replay mode nor the pure rules suite builds a live
     provider. Latency values in replay are historical measurements, never replay wall time.
     """
-    if suite not in {"rules", "extraction_en"}:
+    if suite not in {"rules", *EXTRACTION_SUITES}:
         raise ValueError(f"unknown evaluation suite: {suite}")
     if record_dir is not None and replay_dir is not None:
         raise ValueError("record and replay are mutually exclusive")
@@ -180,7 +197,7 @@ async def run_suite(
     model_name, kind = None, None
     endpoint_checks: list[dict[str, Any]] = []
     local_settings = None
-    version = prompt_version() if suite == "extraction_en" else None
+    version = prompt_version(EXTRACTION_SUITES[suite]) if suite in EXTRACTION_SUITES else None
     prompt_sha = file_hash(PROMPT_DIR / f"{version}.md") if version is not None else None
     if suite == "rules":
         results, dataset_sha = rules.run(Path(dataset_path or DEFAULT_RULES))
@@ -193,7 +210,7 @@ async def run_suite(
         )
     else:
         dataset = load_dataset(
-            Path(dataset_path or DEFAULT_DATASET), include_unreviewed=include_unreviewed
+            Path(dataset_path or DEFAULT_DATASETS[suite]), include_unreviewed=include_unreviewed
         )
         dataset_sha = dataset.sha256
         bindings = {
@@ -201,7 +218,7 @@ async def run_suite(
             "prompt_version": version,
             "prompt_sha256": prompt_sha,
             "ruleset_version": RULESET_VERSION,
-            "normalization_version": NORMALIZATION_VERSION,
+            "normalization_version": normalization_version(suite),
             "timeout_seconds": timeout_seconds,
         }
         if replay_dir is not None:
@@ -270,6 +287,7 @@ async def run_suite(
                 model_receipt=model_receipt,
                 source_provenance=provenance,
                 model_endpoint_verification_required=local_settings is not None,
+                language=EXTRACTION_SUITES[suite],
             )
             results.append(result)
             if progress is not None:
@@ -295,13 +313,13 @@ async def run_suite(
     )
     names = (
         metric_names()
-        if suite == "extraction_en"
+        if suite in EXTRACTION_SUITES
         else ("alert_recall", "false_alert_rate", "latency_p50_ms", "latency_p95_ms")
     )
     measured = {name: get_metric(name)(predictions, expected) for name in names}
     metrics = {name: asdict(value) for name, value in measured.items()}
     for row in completed:
-        if suite == "extraction_en":
+        if suite in EXTRACTION_SUITES:
             field_score = get_metric("field_f1")([row["prediction"]], [row["expected"]])
             row["field_f1"] = field_score.value
             row["quality_passed"] = (
@@ -328,8 +346,9 @@ async def run_suite(
             "prompt_version": version,
             "prompt_sha256": prompt_sha,
             "ruleset_version": RULESET_VERSION,
-            "normalization_version": NORMALIZATION_VERSION,
-            "timeout_seconds": timeout_seconds if suite == "extraction_en" else None,
+            "normalization_version": normalization_version(suite),
+            "language": EXTRACTION_SUITES[suite].value if suite in EXTRACTION_SUITES else None,
+            "timeout_seconds": timeout_seconds if suite in EXTRACTION_SUITES else None,
             "case_count": len(results),
             "completed_count": len(completed),
             "missing_ids": [row["id"] for row in results if row["status"] != "completed"],
@@ -353,4 +372,11 @@ async def run_suite(
     }
 
 
-__all__ = ["DEFAULT_DATASET", "DEFAULT_RULES", "run_suite"]
+__all__ = [
+    "DEFAULT_DATASET",
+    "DEFAULT_DATASETS",
+    "DEFAULT_RULES",
+    "EXTRACTION_SUITES",
+    "normalization_version",
+    "run_suite",
+]

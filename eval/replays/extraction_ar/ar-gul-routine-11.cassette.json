@@ -1,0 +1,7 @@
+{
+  "977e570f0c954ed6ff1857b8f4691666ba2bcf3847c172e5b4e9069a96a02bb9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Constipation\", \"turn_id\": \"t2\", \"quote\": \"عندي إمساك\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"2 days ago\", \"turn_id\": \"t4\", \"quote\": \"من يومين\", \"negated\": false}, {\"key\": \"severity\", \"value\": \"1\", \"turn_id\": \"t6\", \"quote\": \"واحد، خفيف\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to penicillin\", \"turn_id\": \"t8\", \"quote\": \"إيه، عندي حساسية من البنسلين\", \"negated\": false}]}"
+  }
+}

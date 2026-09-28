@@ -1,0 +1,7 @@
+{
+  "f998ab3e06c45915978916376daf930b8fa4756347b94cb94dbda2a3fb48fbed": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My daughter is not well\", \"turn_id\": \"t2\", \"quote\": \"بنتي مو على طبيعتها\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": \"unknown\", \"turn_id\": \"t4\", \"quote\": \"مو متأكدة، ما انتبهت\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، ما عندها حرارة\", \"negated\": true}, {\"key\": \"symptom_onset_at\", \"value\": \"about a week ago\", \"turn_id\": \"t8\", \"quote\": \"من أسبوع تقريباً\", \"negated\": false}]}"
+  }
+}

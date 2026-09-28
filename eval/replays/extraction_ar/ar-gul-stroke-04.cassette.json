@@ -1,0 +1,7 @@
+{
+  "86222f116ac2fbfd8f105bb1a60014c2759d920da0a670c5e26c7fdb9e10546b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Face drooping on one side\", \"turn_id\": \"t2\", \"quote\": \"وجهي نازل من جهة\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إيه، واضح في المراية\", \"negated\": false}, {\"key\": \"fast.arm_weakness\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إيه، ذراعي اليمين ضعيفة\", \"negated\": false}, {\"key\": \"fast.speech_difficulty\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إيه، لساني ثقيل شوي\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"unknown\", \"turn_id\": \"t10\", \"quote\": \"ما أدري، ما أذكر متى\", \"negated\": false}]}"
+  }
+}

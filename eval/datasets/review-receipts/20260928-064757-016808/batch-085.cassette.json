@@ -1,0 +1,7 @@
+{
+  "e1f4c5dbdd063557f61fdf92bfb94b26c971f45222e3d7dceac30b37400dd13d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-03\",\n      \"content_sha256\": \"48abef36d796be84dcb7f71af865966e38b981243f956cfe26ffb5e189869733\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert level 2 does not match rule SEPSIS_NEWS2 which is defined as critical (level 1).\",\n        \"Alerts list contains SEPSIS_NEWS2 but expected level 2 is invalid for this rule.\"\n      ]\n    }\n  ]\n}"
+  }
+}

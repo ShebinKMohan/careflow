@@ -1,0 +1,7 @@
+{
+  "c454dbc8f42667efd7beef9d47c0f4aba5dd6570537b9779423a503c07ed4a3f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Right ankle pain\", \"turn_id\": \"t2\", \"quote\": \"كاحلي اليمين بيوجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"afternoon\", \"turn_id\": \"t4\", \"quote\": \"بلّش بعد الظهر\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t6\", \"quote\": \"خمسة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"right ankle\", \"turn_id\": \"t8\", \"quote\": \"الكاحل اليمين\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, penicillin\", \"turn_id\": \"t10\", \"quote\": \"إي، عندي حساسية من البنسلين\", \"negated\": false}]}"
+  }
+}

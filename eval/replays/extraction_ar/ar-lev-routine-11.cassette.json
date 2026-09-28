@@ -1,0 +1,7 @@
+{
+  "83dd5d281cbebba1ad78d928cb833fac0e7f8c1bcbb741df60712c86c70a6ce2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Constipation\", \"turn_id\": \"t2\", \"quote\": \"عندي إمساك\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"3 days ago\", \"turn_id\": \"t4\", \"quote\": \"من تلات أيام\", \"negated\": false}, {\"key\": \"severity\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"أربعة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا\", \"negated\": true}]}"
+  }
+}

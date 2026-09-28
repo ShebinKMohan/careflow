@@ -1,0 +1,7 @@
+{
+  "13174360d829b332e1174eaf8067d8dc143b8b81f390d5949a6b2932c7ffef3a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-routine-03\",\n      \"content_sha256\": \"6add53bb2863fcda74c9dced852d171ec18b945acb7760bba4240b313d868626\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "a937bcee2302eace54e124dfbacfa835db97a4bcd40ecdf60bc8fdbac61f2111": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Tight chest\", \"turn_id\": \"t2\", \"quote\": \"صدري مشدود\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، مشدود\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": \"unsure\", \"turn_id\": \"t6\", \"quote\": \"مش متأكد\", \"negated\": false}, {\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عرقت أبداً\", \"negated\": true}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t10\", \"quote\": \"أربعة تقريباً\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"3 days ago\", \"turn_id\": \"t12\", \"quote\": \"من تلات أيام\", \"negated\": false}]}"
+  }
+}

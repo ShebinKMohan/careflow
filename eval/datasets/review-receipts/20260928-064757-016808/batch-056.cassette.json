@@ -1,0 +1,7 @@
+{
+  "e4c3fb686df2ea10123c24347c592f10c6b5f268e8d1ccf02d10b85af5a7d45c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-05\",\n      \"content_sha256\": \"91a91684a72163769e73ecc0f1c8768efc9dfb00574636cea96868fa165373ae\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert severity is 'critical' per rule, but expected level is 2 (high).\",\n        \"Alert expected in scenario but rule requires chest pain onset within 10 minutes of arrival.\"\n      ]\n    }\n  ]\n}"
+  }
+}

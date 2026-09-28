@@ -1,0 +1,7 @@
+{
+  "6d2f7ce4a9a2efca7f096db0e8a33d438ab96ebe26af3fe0becd24c9399b254e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-04\",\n      \"content_sha256\": \"98755035889f47f21da3eccff2d3cd2a9724c61a5bd4930166e105bf93ed5f24\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 is invalid; FAST_STROKE is critical (level 1) per rule definition.\",\n        \"Expected facts include 'My speech is slurred' but patient text states 'tongue is heavy'.\"\n      ]\n    }\n  ]\n}"
+  }
+}

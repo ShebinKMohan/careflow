@@ -1,0 +1,7 @@
+{
+  "4e4ae42d89e5f6a92473380b7d5f09a3133acfcd4be52901aeb07d51cc85514e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pain in the molar\", \"turn_id\": \"t2\", \"quote\": \"عندي ألم في الضرس\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Two days ago\", \"turn_id\": \"t4\", \"quote\": \"قبل يومين\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"أربعة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"In the molar\", \"turn_id\": \"t8\", \"quote\": \"في الضرس\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، ما عندي حساسية من الأدوية\", \"negated\": true}]}"
+  }
+}

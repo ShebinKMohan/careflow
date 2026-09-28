@@ -1,0 +1,7 @@
+{
+  "82d0bd3e12cef9b1d665366cb4a3cd9475ea24bae5944465979a4a468d421f7c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-01\",\n      \"content_sha256\": \"b17abd6d4f1264dc30b4d49068a2d24807c956f3f4488e5b0d19e6f6fcbf37dc\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 does not match rule CHEST_PAIN_ECG_10MIN which defines severity as critical (level 1).\",\n        \"Alerts list contains a non-existent rule ID 'CHEST_PAIN_ECG_10MIN' instead of the defined 'CHEST_PAIN_ECG_10MIN'.\"\n      ]\n    }\n  ]\n}"
+  }
+}

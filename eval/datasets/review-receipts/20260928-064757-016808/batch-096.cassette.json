@@ -1,0 +1,7 @@
+{
+  "705273d718dbcbf9be1b43a0b5c8b3116c9f1b2a7446160bed62d3d33fabab42": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-06\",\n      \"content_sha256\": \"d214870f6e5978f22ae52125f8dab8a7f7d1fd6a5a5b471b6f02743d4a45e8cd\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

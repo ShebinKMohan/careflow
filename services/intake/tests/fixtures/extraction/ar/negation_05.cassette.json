@@ -1,0 +1,7 @@
+{
+  "7960e1fe3675a25c6173378d8ab26569575a8b55c2157291cb6dd646da3e9199": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"وجهي مو مايل، طبيعي\", \"negated\": true}]}"
+  }
+}
