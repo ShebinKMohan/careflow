@@ -1,0 +1,7 @@
+{
+  "9617e0b25688908bc3af5b731226dbda0ea341a66d62e7bc7c1098aadd8a0181": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Very sick\", \"turn_id\": \"t2\", \"quote\": \"أنا مريضة كتير\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، ما عندي حرارة\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": \"unknown\", \"turn_id\": \"t6\", \"quote\": \"ما بعرف\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about a week\", \"turn_id\": \"t8\", \"quote\": \"من حوالي أسبوع وأنا هيك\", \"negated\": false}]}"
+  }
+}

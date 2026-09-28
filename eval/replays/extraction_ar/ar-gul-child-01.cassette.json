@@ -1,0 +1,7 @@
+{
+  "d475a7554e1e4debb30677f4271f575db269dd5dccb5f7a0f00e456c46ecb639": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I have a patient\", \"turn_id\": \"t2\", \"quote\": \"ولدي مريض\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"مدري، مو متأكدة\", \"negated\": true}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، يتنفس عادي\", \"negated\": true}, {\"key\": \"child_danger.non_blanching_rash\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عنده طفح\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، ياكل ويشرب عادي\", \"negated\": true}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "240c039a577376c580b0d930fd2285e5dd50b523547e78b884377ad062781bba": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"One side of my face is drooping\", \"turn_id\": \"t2\", \"quote\": \"جهة من وجهي نازلة\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إيه، وجهي نازل من جهة\", \"negated\": false}, {\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، أتكلم عادي\", \"negated\": true}, {\"key\": \"fast.last_known_well\", \"value\": \"About an hour ago\", \"turn_id\": \"t10\", \"quote\": \"قبل ساعة تقريباً كنت زين\", \"negated\": false}]}"
+  }
+}

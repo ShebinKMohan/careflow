@@ -1,0 +1,7 @@
+{
+  "54564849d3b547b851b317ea6dd1b27e92f7363d4d0f336872cc3222537dd9e3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Feeling very sick\", \"turn_id\": \"t2\", \"quote\": \"حاسس حالي مريض كتير\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، ما عندي حرارة\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إي، عم برجف وما بقدر وقّف\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since morning\", \"turn_id\": \"t8\", \"quote\": \"من الصبح\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "6dc0ad9197f52ae394a5c11b6f650eda9be19641848c0b658dfcb39a17c7ad26": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-02\",\n      \"content_sha256\": \"22eff1a57ec11fa834fd7fb3b999b5939c367349eb2f3bfbb8ae1400a7d8ccdf\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'I feel very unwell' but patient text states 'I am very sick' (gloss mismatch).\",\n        \"Expected alerts is empty, but sepsis rule triggers critical alert due to NEWS2 total of 5 (hypoxia 93% + tachycardia 135).\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "949088a7ca99f86e8641fa8612f2a7daf6056f8055539ebe54e35ee01e38bf16": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-05\",\n      \"content_sha256\": \"c89bc03f8df3a80dff7cbc20f0caeecd4fbf2ff08e48e36a3008f5eff9db3e1d\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'I feel very unwell' but patient text states 'I feel very sick' (gloss mismatch).\",\n        \"Alert SEPSIS_NEWS2 requires NEWS2 total >= 5; provided vitals (NEWS2 4) do not meet threshold.\"\n      ]\n    }\n  ]\n}"
+  }
+}

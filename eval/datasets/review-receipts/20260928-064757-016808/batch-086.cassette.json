@@ -1,0 +1,7 @@
+{
+  "5efdaf5b496129444e5c6568d9825913ba5dc625bca9e569b7b8335574c6404e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-04\",\n      \"content_sha256\": \"efc1ccf7a8de0005fb41b59464812539fbfb8266f5689fec9ea11982775f00e3\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected level 2 (high) but rule SEPSIS_NEWS2 only raises critical (level 3) alerts.\",\n        \"Expected alert SEPSIS_NEWS2 requires NEWS2 total >= 5, but only 2 subscores are present.\"\n      ]\n    }\n  ]\n}"
+  }
+}

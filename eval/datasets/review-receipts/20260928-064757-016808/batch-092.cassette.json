@@ -1,0 +1,7 @@
+{
+  "c646730a8c4059fddc8a4396bbff01306165cfc19209652af7685a71d67c2055": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-02\",\n      \"content_sha256\": \"e25ebaaaa752588846de5b1114d47e9d87985614ead54b06dcd2015f31156abf\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected fact 'fast.speech_difficulty' is 'yes', but patient text states 'tongue is heavy' (tongue heaviness is not a FAST sign).\",\n        \"Alert FAST_STROKE requires at least two FAST signs; scenario has only one (face droop) and one unsupported symptom.\"\n      ]\n    }\n  ]\n}"
+  }
+}

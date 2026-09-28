@@ -1,0 +1,7 @@
+{
+  "af19b8653be70d45a9a76b533326894de754736f3896e561e4c6a60d4e094f0b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-stroke-05\",\n      \"content_sha256\": \"b526e91405e49dff5761e87a123164d92695e56f93a8e1f5a64de09d496ac3db\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert level 2 is not valid; FAST_STROKE is critical (level 1) per rule code.\",\n        \"Alert evidence missing; rule requires FAST signs (face/arm/speech) to be yes.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "25c0644c1370b322b1815fd562f15d3b720cc07b54c721bdf23b0ec9d0d85690": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-stroke-01\",\n      \"content_sha256\": \"6d5e99e40a8360a97f6acc645caef11ff74faedf40a5c4989929a4827b910cbf\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected fact fast.speech_difficulty is 'yes' but patient text 'tongue is heavy' does not match the FAST sign definition.\",\n        \"Alert FAST_STROKE is raised for 'tongue is heavy' which is not a FAST sign; only 'face drooping' triggers the alert.\"\n      ]\n    }\n  ]\n}"
+  }
+}

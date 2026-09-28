@@ -1,0 +1,7 @@
+{
+  "383c689f3c09f3124697e016489314fb27e644f68370be543f44deb104686af8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-01\",\n      \"content_sha256\": \"634802030b14bad900782e672cd5383bafa7affed9cfc34ad42a746ec3d7dfb8\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert FAST_STROKE requires at least one FAST sign (face/arm/speech) to be yes; scenario has only speech difficulty yes.\",\n        \"Expected level 2 is invalid; FAST_STROKE rule always raises AlertSeverity.critical (level 1).\"\n      ]\n    }\n  ]\n}"
+  }
+}

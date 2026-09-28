@@ -1,0 +1,396 @@
+Latest report: [20260928-082412.md](20260928-082412.md) · [JSON](20260928-082412.json)
+
+# CareFlow extraction_ar evaluation
+
+Research prototype. Synthetic data only. Not for clinical use.
+
+Scenario review is automated, not performed by clinicians or native speakers.
+Expected urgency levels are synthetic scenario labels; their agreement is not clinical triage accuracy.
+A completed run describes execution, not a clinical pass or acceptable model quality.
+
+**Run status:** completed
+
+## Provenance
+
+| Field | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| completed_count | 100 |
+| dataset_sha256 | eb39e4e16fee0f8837c1b9568036d76ce95462b65442408c04f0432c30aea0b3 |
+| failure_event_replay_count | 0 |
+| git_sha | b8aebfe426b102b5798e0afb0938c7bf3fb9e3ce |
+| include_unreviewed | false |
+| language | ar |
+| latency_source | ["recorded_live"] |
+| logical_model | qwen3.5-9b-4bit |
+| metrics_comparable | true |
+| missing_ids | [] |
+| mode | replay |
+| model_endpoint_checks | [] |
+| model_receipt | {"base_url": "http://127.0.0.1:8081/v1", "identity_limit": "Launch-log attribution and endpoint observations, not weight attestation", "launch_evidence": "with_llm: starting mlx_lm.server (mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631) on http://127.0.0.1:8081; log /var/folders/wz/1j18wyv50vb_g1hlhd5zz_yw0000gn/T//careflow-mlx-lm-server.log", "launch_log_sha256": "09367cfbf470f4a5c020d17b9e96c4b3352ad7ade060bdf06243814ea1c24604", "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit", "observed_at": "2026-09-28T08:00:39.997831+00:00", "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631", "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631", "server_model_ids": ["/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631", "mlx-community/SmolLM2-135M-Instruct-8bit"], "source": "Fresh scripts/with_llm.sh launch from the pinned Hugging Face snapshot"} |
+| normalization_version | field-values-v1+ar-free-text-presence-v1 |
+| prompt_sha256 | 68c032ab9f9a523da0f827a5506dd30f841911df9023925d42dc6f9743e1b725 |
+| prompt_version | extraction_v2_ar |
+| provider | local |
+| recording_provenance | {"git_sha": "b8aebfe426b102b5798e0afb0938c7bf3fb9e3ce", "source_sha256": "c3b092c7dd1dae5dd27a58b3cb8a527f5cac901fecd189c19c10763fa8f2caad", "worktree_dirty": true} |
+| replay_exact | true |
+| replay_exact_scope | outputs_quality_metrics_and_recorded_latency |
+| rules_validation | false |
+| ruleset_version | 2026.3.0 |
+| source_sha256 | 97425cba59557eadc02c274d2a6b49f9108c0efef5c97fed8b0398a700a60fd7 |
+| synthetic_only | true |
+| timeout_seconds | 20.0 |
+| wall_ms | 393.4346669993829 |
+| worktree_dirty | true |
+
+For successful model calls, this run replays recorded raw model responses through the canonical `ReplayProvider`.
+Recorded live latency and replay execution time are distinct; use the stated latency source.
+
+## Summary
+
+| Metric | Observed value |
+| --- | --- |
+| alert recall | 0.9782608695652174 |
+| dropped fact rate | 0.01 |
+| extraction field f1 | 0.910871694417238 |
+| extraction incomplete rate | 0.0 |
+| false alert rate | 0.0 |
+| field f1 | 0.910871694417238 |
+| field precision | 0.9789473684210527 |
+| field recall | 0.8516483516483516 |
+| latency p50 ms | 9232.473874999414 |
+| latency p95 ms | 12276.014416999715 |
+
+## alert recall.details.per rule
+
+| key | benign_false_alert_cases | benign_false_alert_rate | detected | expected | missed | recall | unexpected |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| CHEST_PAIN_ECG_10MIN | 0 | 0.0 | 14 | 14 | 0 | 1.0 | 0 |
+| CHILD_HARD_TO_WAKE | 0 | 0.0 | 4 | 4 | 0 | 1.0 | 0 |
+| FAST_STROKE | 0 | 0.0 | 10 | 10 | 0 | 1.0 | 0 |
+| NG143_AMBER_FLAG | 0 | 0.0 | 4 | 4 | 0 | 1.0 | 0 |
+| NG143_RED_FLAG | 0 | 0.0 | 3 | 4 | 1 | 0.75 | 0 |
+| SEPSIS_NEWS2 | 0 | 0.0 | 10 | 10 | 0 | 1.0 | 0 |
+
+## extraction field f1.details.per key
+
+| key | f1 | fn | fp | precision | recall | tp |
+| --- | --- | --- | --- | --- | --- | --- |
+| allergies_confirm | 1.0 | 0 | 0 | 1.0 | 1.0 | 36 |
+| chest_pain.onset | 1.0 | 0 | 0 | 1.0 | 1.0 | 14 |
+| chest_pain.present | 1.0 | 0 | 0 | 1.0 | 1.0 | 24 |
+| chest_pain.radiates | 0.7142857142857143 | 4 | 4 | 0.7142857142857143 | 0.7142857142857143 | 10 |
+| chest_pain.short_of_breath | 0.9473684210526315 | 1 | 0 | 1.0 | 0.9 | 9 |
+| chest_pain.sweating | 1.0 | 0 | 0 | 1.0 | 1.0 | 14 |
+| chief_complaint | 1.0 | 0 | 0 | 1.0 | 1.0 | 100 |
+| child_amber.poor_feeding | 1.0 | 0 | 0 | 1.0 | 1.0 | 8 |
+| child_amber.reduced_urine_output | 1.0 | 0 | 0 | 1.0 | 1.0 | 4 |
+| child_danger.grunting | 1.0 | 0 | 0 | 1.0 | 1.0 | 8 |
+| child_danger.hard_to_wake | 0.9166666666666666 | 1 | 1 | 0.9166666666666666 | 0.9166666666666666 | 11 |
+| child_danger.non_blanching_rash | 1.0 | 0 | 0 | 1.0 | 1.0 | 4 |
+| fast.arm_weakness | 1.0 | 0 | 0 | 1.0 | 1.0 | 12 |
+| fast.face_droop | 0.8333333333333334 | 2 | 2 | 0.8333333333333334 | 0.8333333333333334 | 10 |
+| fast.last_known_well | 1.0 | 0 | 0 | 1.0 | 1.0 | 12 |
+| fast.speech_difficulty | 1.0 | 0 | 0 | 1.0 | 1.0 | 12 |
+| infection.fever_reported | 1.0 | 0 | 0 | 1.0 | 1.0 | 28 |
+| infection.rigors | 0.8125 | 3 | 3 | 0.8125 | 0.8125 | 13 |
+| pain_location | 0.7586206896551724 | 14 | 0 | 1.0 | 0.6111111111111112 | 22 |
+| pain_present | 0.0 | 36 | 0 | n/a | 0.0 | 0 |
+| pain_score | 1.0 | 0 | 0 | 1.0 | 1.0 | 36 |
+| severity | 1.0 | 0 | 0 | 1.0 | 1.0 | 22 |
+| symptom_onset_at | 1.0 | 0 | 0 | 1.0 | 1.0 | 56 |
+| symptoms | 0.0 | 20 | 0 | n/a | 0.0 | 0 |
+
+### alert recall details
+
+| Detail | Recorded value |
+| --- | --- |
+| benign_cases | 54 |
+| case_count | 100 |
+| detected_alerts | 45 |
+| expected_alerts | 46 |
+| false_alert_cases | 0 |
+| false_alert_rate | 0.0 |
+| missed_alerts | 1 |
+| recall | 0.9782608695652174 |
+| unexpected_alerts | 0 |
+
+### dropped fact rate details
+
+| Detail | Recorded value |
+| --- | --- |
+| candidate_rejection_rate | n/a |
+| case_count | 100 |
+| cases_with_dropped_facts | 1 |
+| definition | fraction_of_cases_with_at_least_one_rejected_candidate |
+| denominator | all_cases |
+| dropped_total | 1 |
+
+### extraction field f1 details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| expected_facts | 546 |
+| f1 | 0.910871694417238 |
+| fn | 81 |
+| fp | 10 |
+| normalization_version | field-values-v1 |
+| precision | 0.9789473684210527 |
+| predicted_facts | 475 |
+| recall | 0.8516483516483516 |
+| tp | 465 |
+
+### extraction incomplete rate details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| denominator | all_cases |
+| incomplete_cases | 0 |
+
+### false alert rate details
+
+| Detail | Recorded value |
+| --- | --- |
+| benign_cases | 54 |
+| case_count | 100 |
+| detected_alerts | 45 |
+| expected_alerts | 46 |
+| false_alert_cases | 0 |
+| false_alert_rate | 0.0 |
+| missed_alerts | 1 |
+| recall | 0.9782608695652174 |
+| unexpected_alerts | 0 |
+
+### field f1 details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| expected_facts | 546 |
+| f1 | 0.910871694417238 |
+| fn | 81 |
+| fp | 10 |
+| normalization_version | field-values-v1 |
+| precision | 0.9789473684210527 |
+| predicted_facts | 475 |
+| recall | 0.8516483516483516 |
+| tp | 465 |
+
+### field precision details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| expected_facts | 546 |
+| f1 | 0.910871694417238 |
+| fn | 81 |
+| fp | 10 |
+| normalization_version | field-values-v1 |
+| precision | 0.9789473684210527 |
+| predicted_facts | 475 |
+| recall | 0.8516483516483516 |
+| tp | 465 |
+
+### field recall details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| expected_facts | 546 |
+| f1 | 0.910871694417238 |
+| fn | 81 |
+| fp | 10 |
+| normalization_version | field-values-v1 |
+| precision | 0.9789473684210527 |
+| predicted_facts | 475 |
+| recall | 0.8516483516483516 |
+| tp | 465 |
+
+### latency p50 ms details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| method | nearest_rank |
+| missing_count | 0 |
+| percentile | 50 |
+| sample_count | 100 |
+| units | ms |
+
+### latency p95 ms details
+
+| Detail | Recorded value |
+| --- | --- |
+| case_count | 100 |
+| method | nearest_rank |
+| missing_count | 0 |
+| percentile | 95 |
+| sample_count | 100 |
+| units | ms |
+
+## Failing or incomplete scenario IDs
+
+- ar-gul-chest-pain-01
+- ar-gul-chest-pain-02
+- ar-gul-chest-pain-03
+- ar-gul-chest-pain-04
+- ar-gul-chest-pain-05
+- ar-gul-chest-pain-06
+- ar-gul-chest-pain-07
+- ar-gul-child-01
+- ar-gul-routine-01
+- ar-gul-routine-02
+- ar-gul-routine-03
+- ar-gul-routine-04
+- ar-gul-routine-05
+- ar-gul-routine-06
+- ar-gul-routine-07
+- ar-gul-routine-08
+- ar-gul-routine-09
+- ar-gul-routine-10
+- ar-gul-routine-11
+- ar-gul-routine-12
+- ar-gul-routine-13
+- ar-gul-routine-14
+- ar-gul-routine-15
+- ar-gul-routine-16
+- ar-gul-routine-17
+- ar-gul-routine-18
+- ar-gul-sepsis-06
+- ar-gul-stroke-06
+- ar-lev-breathing-04
+- ar-lev-chest-pain-01
+- ar-lev-chest-pain-02
+- ar-lev-chest-pain-03
+- ar-lev-chest-pain-04
+- ar-lev-chest-pain-05
+- ar-lev-chest-pain-06
+- ar-lev-chest-pain-07
+- ar-lev-routine-01
+- ar-lev-routine-02
+- ar-lev-routine-03
+- ar-lev-routine-04
+- ar-lev-routine-05
+- ar-lev-routine-06
+- ar-lev-routine-07
+- ar-lev-routine-08
+- ar-lev-routine-09
+- ar-lev-routine-10
+- ar-lev-routine-11
+- ar-lev-routine-12
+- ar-lev-routine-13
+- ar-lev-routine-14
+- ar-lev-routine-15
+- ar-lev-routine-16
+- ar-lev-routine-17
+- ar-lev-routine-18
+- ar-lev-sepsis-06
+- ar-lev-sepsis-07
+- ar-lev-stroke-06
+
+## Scenario outcomes
+
+| Scenario | Execution status | Rule expectations matched | Error / reason | Replay method | Failure event replayed |
+| --- | --- | --- | --- | --- | --- |
+| ar-gul-breathing-01 | completed | true | n/a | recorded_replies | false |
+| ar-gul-breathing-02 | completed | true | n/a | recorded_replies | false |
+| ar-gul-breathing-03 | completed | true | n/a | recorded_replies | false |
+| ar-gul-breathing-04 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-01 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-02 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-03 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-04 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-05 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-06 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-07 | completed | true | n/a | recorded_replies | false |
+| ar-gul-chest-pain-08 | completed | true | n/a | recorded_replies | false |
+| ar-gul-child-01 | completed | false | n/a | recorded_replies | false |
+| ar-gul-child-02 | completed | true | n/a | recorded_replies | false |
+| ar-gul-child-03 | completed | true | n/a | recorded_replies | false |
+| ar-gul-child-04 | completed | true | n/a | recorded_replies | false |
+| ar-gul-child-05 | completed | true | n/a | recorded_replies | false |
+| ar-gul-child-06 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-01 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-02 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-03 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-04 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-05 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-06 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-07 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-08 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-09 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-10 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-11 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-12 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-13 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-14 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-15 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-16 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-17 | completed | true | n/a | recorded_replies | false |
+| ar-gul-routine-18 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-01 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-02 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-03 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-04 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-05 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-06 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-07 | completed | true | n/a | recorded_replies | false |
+| ar-gul-sepsis-08 | completed | true | n/a | recorded_replies | false |
+| ar-gul-stroke-01 | completed | true | n/a | recorded_replies | false |
+| ar-gul-stroke-02 | completed | true | n/a | recorded_replies | false |
+| ar-gul-stroke-03 | completed | true | n/a | recorded_replies | false |
+| ar-gul-stroke-04 | completed | true | n/a | recorded_replies | false |
+| ar-gul-stroke-05 | completed | true | n/a | recorded_replies | false |
+| ar-gul-stroke-06 | completed | true | n/a | recorded_replies | false |
+| ar-lev-breathing-01 | completed | true | n/a | recorded_replies | false |
+| ar-lev-breathing-02 | completed | true | n/a | recorded_replies | false |
+| ar-lev-breathing-03 | completed | true | n/a | recorded_replies | false |
+| ar-lev-breathing-04 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-01 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-02 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-03 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-04 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-05 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-06 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-07 | completed | true | n/a | recorded_replies | false |
+| ar-lev-chest-pain-08 | completed | true | n/a | recorded_replies | false |
+| ar-lev-child-01 | completed | true | n/a | recorded_replies | false |
+| ar-lev-child-02 | completed | true | n/a | recorded_replies | false |
+| ar-lev-child-03 | completed | true | n/a | recorded_replies | false |
+| ar-lev-child-04 | completed | true | n/a | recorded_replies | false |
+| ar-lev-child-05 | completed | true | n/a | recorded_replies | false |
+| ar-lev-child-06 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-01 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-02 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-03 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-04 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-05 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-06 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-07 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-08 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-09 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-10 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-11 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-12 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-13 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-14 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-15 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-16 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-17 | completed | true | n/a | recorded_replies | false |
+| ar-lev-routine-18 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-01 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-02 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-03 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-04 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-05 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-06 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-07 | completed | true | n/a | recorded_replies | false |
+| ar-lev-sepsis-08 | completed | true | n/a | recorded_replies | false |
+| ar-lev-stroke-01 | completed | true | n/a | recorded_replies | false |
+| ar-lev-stroke-02 | completed | true | n/a | recorded_replies | false |
+| ar-lev-stroke-03 | completed | true | n/a | recorded_replies | false |
+| ar-lev-stroke-04 | completed | true | n/a | recorded_replies | false |
+| ar-lev-stroke-05 | completed | true | n/a | recorded_replies | false |
+| ar-lev-stroke-06 | completed | true | n/a | recorded_replies | false |

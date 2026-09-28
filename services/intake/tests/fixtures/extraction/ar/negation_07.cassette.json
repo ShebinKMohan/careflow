@@ -1,0 +1,7 @@
+{
+  "5af992f960256b323c52ea4398025feb65388f50087575aa9382ef54e6d8a674": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"ما في ضعف بإيدي\", \"negated\": true}]}"
+  }
+}

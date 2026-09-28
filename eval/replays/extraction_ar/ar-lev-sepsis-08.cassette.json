@@ -1,0 +1,7 @@
+{
+  "0c054185aff5d8708799ee56bf9e2e0ab1fb4ae13e0227fa56db0468d4ab8faa": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Very sick\", \"turn_id\": \"t2\", \"quote\": \"أنا مريض كتير\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، ما في رجفة\", \"negated\": true}, {\"key\": \"symptom_onset_at\", \"value\": \"last night\", \"turn_id\": \"t8\", \"quote\": \"من مبارح بالليل\", \"negated\": false}]}"
+  }
+}

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
     "Category": {
       "enum": [
@@ -8,6 +9,13 @@
         "child",
         "breathing",
         "routine"
+      ],
+      "type": "string"
+    },
+    "Dialect": {
+      "enum": [
+        "gulf",
+        "levantine"
       ],
       "type": "string"
     },
@@ -162,6 +170,14 @@
       "title": "GeneratedBy",
       "type": "object"
     },
+    "Language": {
+      "enum": [
+        "en",
+        "ar"
+      ],
+      "title": "Language",
+      "type": "string"
+    },
     "Patient": {
       "additionalProperties": false,
       "properties": {
@@ -228,6 +244,27 @@
           "minLength": 1,
           "title": "Patient Text",
           "type": "string"
+        },
+        "gloss_en": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gloss En"
+        },
+        "states": {
+          "items": {
+            "$ref": "#/$defs/FactKey"
+          },
+          "title": "States",
+          "type": "array"
         }
       },
       "required": [
@@ -255,10 +292,19 @@
       "$ref": "#/$defs/Category"
     },
     "language": {
-      "const": "en",
-      "default": "en",
-      "title": "Language",
-      "type": "string"
+      "$ref": "#/$defs/Language",
+      "default": "en"
+    },
+    "dialect": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Dialect"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "description": {
       "maxLength": 2000,
@@ -369,6 +415,5 @@
     "generated_by"
   ],
   "title": "Scenario",
-  "type": "object",
-  "$schema": "https://json-schema.org/draft/2020-12/schema"
+  "type": "object"
 }

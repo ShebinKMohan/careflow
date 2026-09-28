@@ -1,0 +1,7 @@
+{
+  "f42aff18d76230b5d44e4fb7fb9e2f0d978034474162f97dc3e30d5058c9d35b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-03\",\n      \"content_sha256\": \"7ee787c927654918b0e9bd0c6e3cba0b2c6e423236b2a37624238052d26865dd\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts contradict patient text: 'I don't have a fever' vs expected 'no' (supported), but 'not sure' rigors maps to 'unknown' not 'unknown' in expected.\",\n        \"Alert SEPSIS_NEWS2 requires NEWS2 total >= 5; scenario provides no NEWS2 data, so alert cannot be raised per rule logic.\"\n      ]\n    }\n  ]\n}"
+  }
+}

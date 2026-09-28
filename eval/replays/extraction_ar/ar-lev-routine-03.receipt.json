@@ -1,0 +1,51 @@
+{
+  "bindings": {
+    "dataset_sha256": "eb39e4e16fee0f8837c1b9568036d76ce95462b65442408c04f0432c30aea0b3",
+    "normalization_version": "field-values-v1+ar-free-text-presence-v1",
+    "prompt_sha256": "68c032ab9f9a523da0f827a5506dd30f841911df9023925d42dc6f9743e1b725",
+    "prompt_version": "extraction_v2_ar",
+    "ruleset_version": "2026.3.0",
+    "timeout_seconds": 20.0
+  },
+  "calls": [
+    {
+      "request_sha256": "6dce2f5465b4ba44e0db8241dbe34b0456b73b4868ace87ed175b1a162b5c5d7",
+      "response_model": "qwen3.5-9b-4bit",
+      "status": "ok",
+      "wall_ms": 9725.591999999779
+    }
+  ],
+  "case_id": "ar-lev-routine-03",
+  "cassette_sha256": "c4721d5dec2625ed0e7d2bb38328dd40686cfb38f8611539cf1beeb5ea1bc8b6",
+  "duration_ms": 9727.344832999734,
+  "failure_code": null,
+  "logical_model": "qwen3.5-9b-4bit",
+  "model_endpoint_verification_required": true,
+  "model_receipt": {
+    "base_url": "http://127.0.0.1:8081/v1",
+    "identity_limit": "Launch-log attribution and endpoint observations, not weight attestation",
+    "launch_evidence": "with_llm: starting mlx_lm.server (mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631) on http://127.0.0.1:8081; log /var/folders/wz/1j18wyv50vb_g1hlhd5zz_yw0000gn/T//careflow-mlx-lm-server.log",
+    "launch_log_sha256": "09367cfbf470f4a5c020d17b9e96c4b3352ad7ade060bdf06243814ea1c24604",
+    "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit",
+    "observed_at": "2026-09-28T08:00:39.997831+00:00",
+    "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631",
+    "served_model": "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+    "server_model_ids": [
+      "/Users/shebin_mohan_k/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "mlx-community/SmolLM2-135M-Instruct-8bit"
+    ],
+    "source": "Fresh scripts/with_llm.sh launch from the pinned Hugging Face snapshot"
+  },
+  "output_sha256": "d5774ef8142078aeb3139245d1ab90cfbfb0955f41d3fe08a1ac67075386708c",
+  "provider_kind": "local",
+  "replayable": true,
+  "response_models": [
+    "qwen3.5-9b-4bit"
+  ],
+  "schema_version": 1,
+  "source_provenance": {
+    "git_sha": "b8aebfe426b102b5798e0afb0938c7bf3fb9e3ce",
+    "source_sha256": "c3b092c7dd1dae5dd27a58b3cb8a527f5cac901fecd189c19c10763fa8f2caad",
+    "worktree_dirty": true
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "5f86304d1051fbd430b1e582717340e7a55093c93ff0167ca31ce54e5f074d87": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Shortness of breath\", \"turn_id\": \"t2\", \"quote\": \"عندي ضيق نفس\", \"negated\": false}, {\"key\": \"severity\", \"value\": 8, \"turn_id\": \"t4\", \"quote\": \"تقريباً تمانية\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "2a9e2f3e3ce9ebb7ee47c66485674c1ebab48250c3d5706559c4df44b6184b9e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-03\",\n      \"content_sha256\": \"8cb1665b1ba8f1b332d01fff6b7f76b95a1a4baeabc5a3d3bcfc3d27f356ea3e\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert CHEST_PAIN_ECG_10MIN requires chest pain onset within 10 minutes of arrival; patient onset is 'Two days ago' (1440 minutes).\",\n        \"Expected facts include 'chest_pain.present' as 'yes', but patient text states onset was two days ago, contradicting current chest pain.\"\n      ]\n    }\n  ]\n}"
+  }
+}

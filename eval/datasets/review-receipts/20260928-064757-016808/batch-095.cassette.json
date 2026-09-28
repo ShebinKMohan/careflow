@@ -1,0 +1,7 @@
+{
+  "733a50a26c3d860cb93b3cb02a0c128e032849877b848da7da023f417b19e303": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-05\",\n      \"content_sha256\": \"6f951d0671517f89b4c2d37fa9cedcf6d6ecc1aa96c79b189caaf3f49e60cc06\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert level 2 is invalid; FAST_STROKE is critical (level 1) per rule code.\",\n        \"Expected facts include 'fast.last_known_well' but rule only asks for it if FAST signs are missing.\"\n      ]\n    }\n  ]\n}"
+  }
+}

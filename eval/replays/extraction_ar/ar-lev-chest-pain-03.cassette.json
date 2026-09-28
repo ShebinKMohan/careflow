@@ -1,0 +1,7 @@
+{
+  "5f782981ce4b0b1a949db1454318feae7e7167e4ce3a3172a59c2142d50ed159": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest tightness\", \"turn_id\": \"t2\", \"quote\": \"حاسة بضيقة بصدري\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، صدري ضيق\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"ما بعرف، ما انتبهت\", \"negated\": true}, {\"key\": \"chest_pain.sweating\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إي، عرقت\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t10\", \"quote\": \"أربعة تقريباً\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"since morning\", \"turn_id\": \"t12\", \"quote\": \"من الصبح\", \"negated\": false}]}"
+  }
+}

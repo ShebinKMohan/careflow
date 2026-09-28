@@ -1,0 +1,7 @@
+{
+  "e6e0540d07b4b58bcc82520dd4a1f654f842d236187d2d2f10f71500e0984f6e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Right ear blocked\", \"turn_id\": \"t2\", \"quote\": \"أذني اليمين مسدودة\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Two days ago\", \"turn_id\": \"t4\", \"quote\": \"من يومين\", \"negated\": false}, {\"key\": \"severity\", \"value\": 3, \"turn_id\": \"t6\", \"quote\": \"تلاتة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, aspirin\", \"turn_id\": \"t8\", \"quote\": \"إي، الأسبرين\", \"negated\": false}]}"
+  }
+}

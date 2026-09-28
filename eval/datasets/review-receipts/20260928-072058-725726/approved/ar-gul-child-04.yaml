@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-gul-child-04
+category: child
+language: ar
+dialect: gulf
+description: 'Seeded child intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: NG143_AMBER_FLAG.'
+patient:
+  age_years: 4
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: ولدي صار ما ياكل شي
+  gloss_en: My son has stopped eating anything.
+  states:
+  - chief_complaint
+  - child_amber.poor_feeding
+- question_key: child_danger.hard_to_wake
+  patient_text: لا، يصحى بسهولة
+  gloss_en: No, he wakes up easily.
+  states:
+  - child_danger.hard_to_wake
+- question_key: child_danger.grunting
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - child_danger.grunting
+- question_key: child_amber.poor_feeding
+  patient_text: إيه، ما يشرب إلا شوي
+  gloss_en: Yes, he only drinks a little.
+  states:
+  - child_amber.poor_feeding
+- question_key: child_amber.reduced_urine_output
+  patient_text: لا، يروح الحمام عادي
+  gloss_en: No, he goes to the toilet normally.
+  states:
+  - child_amber.reduced_urine_output
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child is not eating
+    child_amber.poor_feeding: 'yes'
+    child_danger.hard_to_wake: 'no'
+    child_danger.grunting: 'no'
+    child_amber.reduced_urine_output: 'no'
+  alerts:
+  - NG143_AMBER_FLAG
+  level: 3
+  level_rationale: 'Synthetic illustrative level 3 from the M2-03 sampler: the rules
+    engine raises NG143_AMBER_FLAG on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:22:08.103690Z'
+review_method: automated
+reviewed_content_sha256: afa8f71e27e5e23974ffaf434b93038107af0ad1ebcecdf1e4c5e9333b9a2b69

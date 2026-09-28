@@ -1,0 +1,7 @@
+{
+  "29d77b2ce955ba0ed6dbb7900d894eaa05a1d07d1409923f68039934a6bc439d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Feeling fine after lunch\", \"turn_id\": \"t2\", \"quote\": \"ما أحس إني بخير بعد الغدا\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، ما عندي ألم في صدري\", \"negated\": true}, {\"key\": \"chest_pain.short_of_breath\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، تنفسي عادي\", \"negated\": true}]}"
+  }
+}

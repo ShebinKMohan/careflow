@@ -1,0 +1,7 @@
+{
+  "04e414b1e54056f878b8edd22a7c13b5a70049e8886e8f7de6890a68e237fd20": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-breathing-03\",\n      \"content_sha256\": \"ea3a8f18b708b25cae7fc00caae2e5b708be1b8c8832346053d2d95001735e30\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alerts expected to be empty, but SEPSIS_NEWS2 triggers critical due to NEWS2 total of 5 (fever 36.0, HR 110, SpO2 94, shortness of breath, severity 6).\",\n        \"Alerts expected to be empty, but FAST_STROKE triggers critical due to shortness of breath being mapped to speech difficulty symptom.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "5798a0b0d40d87b29b0a0d8862f2e4e97c9c22c22b201412055837aab80ff2d8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My daughter is not eating\", \"turn_id\": \"t2\", \"quote\": \"بنتي ما عم تاكل\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، بتفيق بسهولة\", \"negated\": true}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، عم تتنفس عادي\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إي، عم تشرب أقل بكتير من العادة\", \"negated\": false}, {\"key\": \"child_amber.reduced_urine_output\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، عم تفوت عالحمام عادي\", \"negated\": true}]}"
+  }
+}

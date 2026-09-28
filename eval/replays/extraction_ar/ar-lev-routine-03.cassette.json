@@ -1,0 +1,7 @@
+{
+  "6dce2f5465b4ba44e0db8241dbe34b0456b73b4868ace87ed175b1a162b5c5d7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Knee pain\", \"turn_id\": \"t2\", \"quote\": \"ركبتي عم توجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"yesterday\", \"turn_id\": \"t4\", \"quote\": \"من مبارح\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t6\", \"quote\": \"خمسة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"knee\", \"turn_id\": \"t8\", \"quote\": \"بالركبة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t10\", \"quote\": \"إي، من الأسبرين\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "4f54e3554da39350743d98e11d53d98b80319cc1c961466cf6f300e65232ee8d": {
+    "model": "gpt-6-astra",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"alerts_consistent\": true, \"content_sha256\": \"4ef0e93eb556baa928435c469a6451ef0545a9431d9473f63f3136c693a115b2\", \"facts_supported\": true, \"id\": \"ar-lev-breathing-03\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"60d576788d5fb1090924e5d5d55c698457d6a20e0be375613bd152105fd9e665\", \"facts_supported\": true, \"id\": \"ar-lev-chest-pain-01\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"a0c8f7a749a230e8e507a214608f3a81ab6207c49e06c9371451cddfcae4a49f\", \"facts_supported\": true, \"id\": \"ar-lev-chest-pain-02\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"cb697b57d2d259fc2d7063c5e73f85d7a0219207618c2c083650afa5d6f40fa1\", \"facts_supported\": true, \"id\": \"ar-lev-chest-pain-03\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"0bb1da794cb9ab922fa5fe944d99c7aa2d3a42883f57f11123a4cfddb0c25a13\", \"facts_supported\": true, \"id\": \"ar-lev-chest-pain-04\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "ca7dc90f5d9285fd0584eaf00e540f179c72686ffddb31557bcf0935c0f320f8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest tightness\", \"turn_id\": \"t2\", \"quote\": \"أحس بضيقة في صدري\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"نعم، الضيقة في صدري\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"مدري، مو متأكدة\", \"negated\": true}, {\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عرقت أبد\", \"negated\": true}, {\"key\": \"pain_score\", \"value\": 8, \"turn_id\": \"t10\", \"quote\": \"الألم ثمانية\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"Two days ago\", \"turn_id\": \"t12\", \"quote\": \"بدأ قبل يومين\", \"negated\": false}]}"
+  }
+}

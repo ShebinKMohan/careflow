@@ -1,0 +1,7 @@
+{
+  "f54f8f4734422064e1ce074eeefca640fd656cc483b5c05dbbe8a5f4f6e5b188": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-child-03\",\n      \"content_sha256\": \"d11b3effe19ce041926040889079311c76ea6c6fd3be43efaa7e93f1b60cd685\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Patient age 4 years (48 months) exceeds the 5-year threshold for NG143 rules, which only apply to children under 5.\",\n        \"Expected alert NG143_AMBER_FLAG is invalid for this age group; the rule returns no alert because the child is older than the guideline covers.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Arabic negation (ما): the denial is TriState no. Synthetic.",
+  "language": "ar",
+  "turns": [
+    {
+      "turn_id": "trn_001",
+      "role": "assistant",
+      "text": "هل أصابتك رجفة أو قشعريرة لا يمكن إيقافها؟",
+      "question_key": "infection.rigors",
+      "created_at": "2026-09-27T09:00:05Z"
+    },
+    {
+      "turn_id": "trn_002",
+      "role": "patient",
+      "text": "ما رجفت أبداً",
+      "question_key": "infection.rigors",
+      "created_at": "2026-09-27T09:00:10Z"
+    }
+  ],
+  "expected": {
+    "required": {
+      "infection.rigors": "no"
+    }
+  }
+}

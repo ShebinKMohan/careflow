@@ -1,0 +1,7 @@
+{
+  "8db7d06dca354b5b6ea04d1b18fbec14eaa126bf4246a145a7c83df03ef5c92b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-06\",\n      \"content_sha256\": \"e9743b64af3b62bbad026534fe3b8d9cb12ae17ffb46d801b1a2d95a8b7060ed\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert CHEST_PAIN_ECG_10MIN requires chest pain onset within 10 minutes of arrival or recording; patient onset is 'Two days ago' (1440 minutes).\",\n        \"Expected facts include 'chest_pain.present': 'yes' but patient text states 'Two days ago', contradicting the rule's requirement for current or recent pain.\"\n      ]\n    }\n  ]\n}"
+  }
+}

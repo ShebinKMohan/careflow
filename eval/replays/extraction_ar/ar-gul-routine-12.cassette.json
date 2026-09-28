@@ -1,0 +1,7 @@
+{
+  "fdb73e60e54a3bb279f2f748db586a12f161044b7e8afa4e1b86f34769db4ebb": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Throat irritation\", \"turn_id\": \"t2\", \"quote\": \"حلقي يعورني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since morning\", \"turn_id\": \"t4\", \"quote\": \"من الصبح\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"in throat\", \"turn_id\": \"t8\", \"quote\": \"في الحلق\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Penicillin\", \"turn_id\": \"t10\", \"quote\": \"البنسلين، عندي حساسية منه\", \"negated\": false}]}"
+  }
+}

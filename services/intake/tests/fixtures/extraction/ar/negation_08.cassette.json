@@ -1,0 +1,7 @@
+{
+  "9c2e42612ec4c0c3630d25aba1ec9e5f85fc3fe4dcc2bbefd8cec24cf55b5401": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"لا، كلامي مش متلعثم\", \"negated\": true}]}"
+  }
+}

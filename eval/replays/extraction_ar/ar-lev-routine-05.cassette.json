@@ -1,0 +1,7 @@
+{
+  "24a6b663d9fb206a0069326f74b75ef58fd631fc84da1596118aa0179f8f3dd2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Finger pain\", \"turn_id\": \"t2\", \"quote\": \"إصبعي بيوجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about a week ago\", \"turn_id\": \"t4\", \"quote\": \"من أسبوع تقريباً\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 1, \"turn_id\": \"t6\", \"quote\": \"واحد\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"finger\", \"turn_id\": \"t8\", \"quote\": \"بالإصبع\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, penicillin\", \"turn_id\": \"t10\", \"quote\": \"إي، عندي حساسية من البنسلين\", \"negated\": false}]}"
+  }
+}

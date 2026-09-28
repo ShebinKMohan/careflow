@@ -20,7 +20,10 @@ import httpx
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from careflow_contracts.generated.structured_facts_schema import Language
+from careflow_eval import backtranslation
 from careflow_eval.cli_review_provider import AuditedCLIReviewProvider
+from careflow_eval.codex_review_provider import AuditedCodexReviewProvider
 from careflow_eval.datasets import canonical_json, content_hash, load_dataset, review_content
 from careflow_eval.generate import DEFAULT_DATASET, REPO, rule_definitions
 from careflow_eval.identity import model_family, require_distinct_models
@@ -31,6 +34,22 @@ from careflow_providers.adapters.replay import ReplayProvider
 from careflow_providers.base import ChatProvider, Message, StructuredFailure, structured
 from careflow_providers.config import CliTaskConfig, LocalTaskConfig
 from careflow_providers.factory import build_provider
+
+PROMPT_VERSION = "independent-scenario-review-v2"
+# The offline CLI judges, and where each call's model identity is verified.
+CLI_JUDGES = {
+    "claude": "verified Claude CLI result modelUsage",
+    "codex": "verified Codex session log turn_context.model",
+}
+# Arabic batches (M2-03) add this paragraph to the judge's instructions; English ones are unchanged.
+ARABIC_PROMPT_VERSION = "independent-scenario-review-v2-ar1"
+ARABIC_NOTE = (
+    "Arabic scenarios (language ar): patient_text is spoken Gulf or Levantine Arabic; gloss_en "
+    "is the writer's English gloss of it, already checked against a blind back-translation; "
+    "states lists the expected fact keys each answer states. Expected values stay English codes "
+    "and English renderings of the patient's words by design, so judge support by meaning, not "
+    "by string match. Short spoken replies are realistic wording. "
+)
 
 
 class ChecklistVerdict(BaseModel):
@@ -198,7 +217,10 @@ def _promote(
         approved_dir.mkdir(exist_ok=True)
         staged = approved_dir / source.name
         with staged.open("x", encoding="utf-8") as handle:
-            yaml.safe_dump(approved.model_dump(mode="json"), handle, sort_keys=False)
+            # Arabic text stays readable in the approved file (not \u escapes).
+            yaml.safe_dump(
+                approved.model_dump(mode="json"), handle, sort_keys=False, allow_unicode=True
+            )
         if source.exists() or content_hash(load_dataset(archived, True).scenarios[0]) != digest:
             _restore_draft(archived, source)
             return "draft changed while staging approval; draft and archive preserved"
@@ -236,6 +258,145 @@ def _write_log(dataset: Path, entries: list[dict[str, Any]]) -> Path:
     return path
 
 
+def _relative_if_present(path: Path, root: Path) -> str | None:
+    return path.relative_to(root).as_posix() if path.is_file() else None
+
+
+def _prior_backtranslation(
+    root: Path, case_id: str, digest: str
+) -> tuple[list[dict[str, Any]], str] | None:
+    """A passing M2-01 check already recorded for exactly this content, and where it is."""
+    for path in sorted((root / "review-receipts").glob("*/backtranslation.receipt.json")):
+        try:
+            body = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        found = (body.get("rows") or {}).get(case_id)
+        if (
+            (body.get("case_hashes") or {}).get(case_id) == digest
+            and found
+            and not any(row.get("flagged") for row in found)
+        ):
+            source = (body.get("reused") or {}).get(case_id) or path.relative_to(root).as_posix()
+            return found, source
+    return None
+
+
+async def _backtranslation_stage(
+    cases: list[Scenario],
+    *,
+    inner: ChatProvider,
+    model: str,
+    receipts: Path,
+    log_root: Path,
+    local: LocalTaskConfig | None,
+    model_receipt: dict[str, Any] | None,
+    hashes: dict[str, str],
+    reviewer: str,
+    timeout_seconds: float,
+) -> tuple[dict[str, list[dict[str, Any]]], list[dict[str, Any]]]:
+    """Arabic (M2-03): the M2-01 back-translation check on every answer, before the judge.
+
+    A passing check already recorded for exactly this content (same content hash, any earlier
+    review) is reused. Otherwise the local judge runs the check on the local model; a CLI judge
+    has no local model, so such a draft is rejected until a local review has checked it.
+    Returns each checked case's rows, and a rejection entry for each case with a flagged answer
+    or a failed or missing check. The raw replies (the cassette) and the rows (the receipt) are
+    written before any decision is used; a failure rejects, it never approves."""
+    cassette = receipts / "backtranslation.cassette.json"
+    provider = ReplayProvider(
+        inner, task="translation_check", model=model, cassette=cassette, mode="record"
+    )
+    rows: dict[str, list[dict[str, Any]]] = {}
+    reused: dict[str, str] = {}
+    errors: dict[str, str] = {}
+    for case in cases:
+        prior = _prior_backtranslation(log_root, case.id, hashes[case.id])
+        if prior is not None:
+            rows[case.id], reused[case.id] = prior
+        elif local is None:
+            errors[case.id] = (
+                "no passing back-translation record for this exact content: the local review "
+                "runs the M2-01 check first"
+            )
+    todo = [case for case in cases if case.id not in rows and case.id not in errors]
+    observations: list[dict[str, Any]] = []
+    failure: str | None = None
+    stage = "endpoint verification before back-translation"
+    try:
+        if todo and local is not None and model_receipt is not None:
+            observations.append(
+                {"stage": "before", **await verify_model_endpoint(local, model_receipt)}
+            )
+        stage = "back-translation"
+        for case in todo:
+            try:
+                rows[case.id] = await asyncio.wait_for(
+                    backtranslation.check_answers(provider, case), timeout=timeout_seconds
+                )
+            except Exception as exc:
+                errors[case.id] = f"back-translation failed: {type(exc).__name__}"
+            print(f"back-translated {len(rows) + len(errors)}/{len(cases)}", flush=True)
+        if todo and local is not None and model_receipt is not None:
+            stage = "endpoint verification after back-translation"
+            observations.append(
+                {"stage": "after", **await verify_model_endpoint(local, model_receipt)}
+            )
+    except Exception as exc:
+        failure = f"{stage} failed: {type(exc).__name__}"
+    (receipts / "backtranslation.receipt.json").write_text(
+        json.dumps(
+            {
+                "model_receipt": model_receipt,
+                "configured_model": model,
+                "prompt_version": backtranslation.PROMPT_VERSION,
+                "back_system": backtranslation.BACK_SYSTEM,
+                "judge_system": backtranslation.JUDGE_SYSTEM,
+                "chrf_floor": backtranslation.m2_01().CHRF_FLOOR,
+                "case_hashes": {case.id: hashes[case.id] for case in cases},
+                "endpoint_observations": observations,
+                "rows": rows,
+                "reused": reused,
+                "errors": errors,
+                "failure": failure,
+                "recording": cassette.name,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    now = datetime.now(UTC).isoformat()
+    recording = _relative_if_present(cassette, log_root)  # no cassette when nothing was checked
+    rejected: list[dict[str, Any]] = []
+    for case in cases:
+        if failure is not None and case.id not in reused:
+            reasons = [failure]
+        elif case.id in errors:
+            reasons = [errors[case.id]]
+        else:
+            reasons = backtranslation.flag_reasons(rows[case.id])
+        if reasons:
+            rejected.append(
+                {
+                    "id": case.id,
+                    "content_sha256": hashes[case.id],
+                    "decision": "rejected",
+                    "reasons": reasons,
+                    "reviewed_at": now,
+                    "reviewer": reviewer,
+                    "model_receipt": model_receipt,
+                    "endpoint_observations": observations,
+                    "recording": recording,
+                    "dialect": case.dialect,
+                    "backtranslation": rows.get(case.id),
+                    "stage": "back-translation",
+                }
+            )
+    return rows, rejected
+
+
 async def review_dataset(
     *,
     dataset_path: Path | None = None,
@@ -268,7 +429,8 @@ async def review_dataset(
     drafts = load_dataset(inbox, include_unreviewed=True)
     config = providers_config(config_path or REPO / "config/providers.yaml")
     local: LocalTaskConfig | None = None
-    cli_provider: AuditedCLIReviewProvider | None = None
+    cli_provider: AuditedCLIReviewProvider | AuditedCodexReviewProvider | None = None
+    cli_tool = ""
     cli_auth: dict[str, Any] | None = None
     inner: ChatProvider
     if judge == "local":
@@ -285,18 +447,27 @@ async def review_dataset(
         inner = build_provider("eval_judge", judge_config)
     else:
         task_config = config.tasks.get("eval_judge")
-        if not isinstance(task_config, CliTaskConfig) or task_config.tool != "claude":
-            raise ValueError("CLI review requires eval_judge configured as cli tool=claude")
-        # The explicit requested identity is checked against each returned modelUsage by
-        # the audited adapter before it releases text to the canonical record provider.
+        if not isinstance(task_config, CliTaskConfig) or task_config.tool not in CLI_JUDGES:
+            raise ValueError("CLI review requires eval_judge as cli tool=claude or tool=codex")
+        # The explicit requested identity is checked against each call's own evidence (Claude's
+        # modelUsage, Codex's session log) by the audited adapter before it releases text to the
+        # canonical record provider.
         selected_model = str(reviewer_model)
         actual_model = selected_model
-        reviewer = f"agent:claude/{selected_model}"
-        cli_provider = AuditedCLIReviewProvider(
-            model_id=selected_model,
-            schema=ReviewBatch.model_json_schema(),
-            tool=task_config.tool,
-            timeout_seconds=timeout_seconds,
+        cli_tool = task_config.tool
+        reviewer = f"agent:{cli_tool}/{selected_model}"
+        schema = ReviewBatch.model_json_schema()
+        cli_provider = (
+            AuditedCLIReviewProvider(
+                model_id=selected_model,
+                schema=schema,
+                tool=task_config.tool,
+                timeout_seconds=timeout_seconds,
+            )
+            if task_config.tool == "claude"
+            else AuditedCodexReviewProvider(
+                model_id=selected_model, schema=schema, timeout_seconds=timeout_seconds
+            )
         )
         inner = cli_provider
     for case in drafts.scenarios:
@@ -331,6 +502,26 @@ async def review_dataset(
         else:
             candidates.append(case)
     log = _write_log(dataset, entries) if entries else dataset.parent / "review-log.jsonl"
+    back_rows: dict[str, list[dict[str, Any]]] = {}
+    arabic = [case for case in candidates if case.language is Language.ar]
+    if arabic:
+        back_rows, flagged = await _backtranslation_stage(
+            arabic,
+            inner=inner,
+            model=selected_model,
+            receipts=receipts,
+            log_root=dataset.parent,
+            local=local,
+            model_receipt=model_receipt,
+            hashes=hashes,
+            reviewer=reviewer,
+            timeout_seconds=timeout_seconds,
+        )
+        if flagged:
+            entries.extend(flagged)
+            log = _write_log(dataset, flagged)
+            rejected_ids = {entry["id"] for entry in flagged}
+            candidates = [case for case in candidates if case.id not in rejected_ids]
     accepted = 0
     for offset in range(0, len(candidates), batch_size):
         batch_entries_start = len(entries)
@@ -347,6 +538,7 @@ async def review_dataset(
             {"id": case.id, "content_sha256": hashes[case.id], "scenario": contents[case.id]}
             for case in cases
         ]
+        in_arabic = any(case.language is Language.ar for case in cases)
         messages: list[Message] = [
             {
                 "role": "system",
@@ -369,7 +561,9 @@ async def review_dataset(
                     "validated labels. Reject ambiguity or unsupported facts with concrete "
                     "reasons. Approval needs all four checks true. Deterministic schema "
                     "and rules checks passed, but do not substitute for this review. "
-                    "Current rule definitions:\n" + rule_definitions()
+                    + (ARABIC_NOTE if in_arabic else "")
+                    + "Current rule definitions:\n"
+                    + rule_definitions()
                 ),
             },
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
@@ -417,13 +611,13 @@ async def review_dataset(
         if cli_provider is not None:
             batch_model_receipt = {
                 "provider": "cli",
-                "tool": "claude",
+                "tool": cli_tool,
                 "requested_model": selected_model,
                 "model_id": cli_provider.verified_model_id if raw_cli_evidence else None,
                 "auth": cli_auth,
                 "calls_made": cli_provider.calls_made,
                 "remaining_calls": cli_provider.remaining_calls,
-                "identity_source": "verified Claude CLI result modelUsage",
+                "identity_source": CLI_JUDGES[cli_tool],
             }
         # Persist the decision evidence before moving any draft into the approved dataset.
         # Even an interrupted run retains the exact verdict/hash/model binding.
@@ -434,7 +628,7 @@ async def review_dataset(
                     "configured_model": selected_model,
                     "judge": judge,
                     "raw_cli_evidence": raw_cli_evidence,
-                    "review_prompt_version": "independent-scenario-review-v2",
+                    "review_prompt_version": ARABIC_PROMPT_VERSION if in_arabic else PROMPT_VERSION,
                     "review_messages": messages,
                     "review_messages_sha256": hashlib.sha256(
                         canonical_json(messages).encode()
@@ -474,21 +668,23 @@ async def review_dataset(
                     passed = False
                 else:
                     accepted += 1
-            entries.append(
-                {
-                    "id": case.id,
-                    "content_sha256": digest,
-                    "decision": "accepted" if passed else "rejected",
-                    "reasons": reasons,
-                    "reviewed_at": now,
-                    "reviewer": reviewer,
-                    "model_receipt": batch_model_receipt,
-                    "endpoint_observations": endpoint_observations,
-                    "recording": str(cassette.relative_to(dataset.parent)),
-                    "verdict": verdict.model_dump() if verdict else None,
-                    "stage": "independent-model",
-                }
-            )
+            entry = {
+                "id": case.id,
+                "content_sha256": digest,
+                "decision": "accepted" if passed else "rejected",
+                "reasons": reasons,
+                "reviewed_at": now,
+                "reviewer": reviewer,
+                "model_receipt": batch_model_receipt,
+                "endpoint_observations": endpoint_observations,
+                "recording": str(cassette.relative_to(dataset.parent)),
+                "verdict": verdict.model_dump() if verdict else None,
+                "stage": "independent-model",
+            }
+            if case.id in back_rows:  # Arabic: the back-translation provenance of each answer
+                entry["dialect"] = case.dialect
+                entry["backtranslation"] = back_rows[case.id]
+            entries.append(entry)
         # Complete this batch's audit trail before starting another cancellable call.
         # Earlier approvals remain attributable even when a later batch is interrupted.
         log = _write_log(dataset, entries[batch_entries_start:])

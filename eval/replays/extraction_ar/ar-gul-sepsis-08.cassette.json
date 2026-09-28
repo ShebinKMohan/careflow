@@ -1,0 +1,7 @@
+{
+  "37fd35d8721c3b663e4bbdf4d5af491d487da040524026439edda14beaf7f330": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I am very sick\", \"turn_id\": \"t2\", \"quote\": \"انا مريضة وايد\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إيه، عندي حمى\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إيه، أرجف وما أقدر أوقف\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about an hour ago\", \"turn_id\": \"t8\", \"quote\": \"قبل ساعة تقريباً\", \"negated\": false}]}"
+  }
+}

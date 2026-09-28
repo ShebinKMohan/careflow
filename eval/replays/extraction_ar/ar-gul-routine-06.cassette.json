@@ -1,0 +1,7 @@
+{
+  "1f01363692fbd97d3cd929326aa994eacc85a2fe48532449705022fa7e4c92e5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Lower back pain\", \"turn_id\": \"t2\", \"quote\": \"عندي ألم أسفل الظهر\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since morning\", \"turn_id\": \"t4\", \"quote\": \"من الصبح\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"اثنين\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Lower back\", \"turn_id\": \"t8\", \"quote\": \"أسفل ظهري\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, penicillin\", \"turn_id\": \"t10\", \"quote\": \"إيه، البنسلين\", \"negated\": false}]}"
+  }
+}

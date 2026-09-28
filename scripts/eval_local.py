@@ -27,9 +27,10 @@ import httpx
 import yaml
 
 from careflow_contracts.generated.extraction_output_schema import ExtractionOutput
+from careflow_contracts.generated.structured_facts_schema import Language
 from careflow_eval.reports import write_report
 from careflow_eval.review import review_dataset, verify_model_endpoint
-from careflow_eval.runner import run_suite
+from careflow_eval.runner import EXTRACTION_SUITES, run_suite
 from careflow_intake.extraction.prompt import build_messages
 from careflow_intake.wiring import providers_config
 from careflow_providers.base import StructuredFailure, structured
@@ -137,6 +138,9 @@ def parser() -> argparse.ArgumentParser:
         else:
             command.add_argument("--record-root", type=Path, default=REPO / "eval/replays")
             command.add_argument("--warmup-timeout", type=positive_seconds, default=120.0)
+            command.add_argument(
+                "--suite", choices=tuple(EXTRACTION_SUITES), default="extraction_en"
+            )
     return result
 
 
@@ -145,12 +149,14 @@ def write_json(path: Path, body: Any) -> None:
         handle.write(json.dumps(body, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
 
 
-async def warmup(config: ProvidersConfig, timeout_seconds: float) -> dict[str, Any]:
+async def warmup(
+    config: ProvidersConfig, timeout_seconds: float, language: Language = Language.en
+) -> dict[str, Any]:
     """Warm the real extraction prompt/schema with no transcript or expected case content."""
     provider = build_provider("extraction", config)
     started = time.perf_counter()
     response = await asyncio.wait_for(
-        structured(provider, build_messages([], {}), ExtractionOutput, max_tokens=100),
+        structured(provider, build_messages([], {}, language), ExtractionOutput, max_tokens=100),
         timeout=timeout_seconds,
     )
     if isinstance(response, StructuredFailure):
@@ -159,7 +165,10 @@ async def warmup(config: ProvidersConfig, timeout_seconds: float) -> dict[str, A
         "duration_ms": (time.perf_counter() - started) * 1000,
         "output_sha256": hashlib.sha256(response.raw_text.encode()).hexdigest(),
         "raw_text": response.raw_text,
-        "profile": "production extraction prompt and schema, empty transcript, no case input",
+        "profile": (
+            f"production extraction prompt ({language.value}) and schema, empty transcript, "
+            "no case input"
+        ),
         "included_in_case_latencies": False,
     }
 
@@ -216,7 +225,7 @@ async def run(args: argparse.Namespace) -> int:
             write_json(evidence / "summary.json", result)
             print(json.dumps(result, indent=2), flush=True)
             return 0 if result.get("status") == "reviewed" and result.get("rejected") == 0 else 1
-        warmed = await warmup(config, args.warmup_timeout)
+        warmed = await warmup(config, args.warmup_timeout, EXTRACTION_SUITES[args.suite])
         write_json(evidence / "warmup.json", warmed)
         print(f"Warm-up: {warmed['duration_ms']:.0f} ms; excluded from case latency", flush=True)
 
@@ -224,7 +233,7 @@ async def run(args: argparse.Namespace) -> int:
             print(datetime.now(UTC).isoformat(), f"{done}/{total}", case_id, flush=True)
 
         result = await run_suite(
-            "extraction_en",
+            args.suite,
             dataset_path=args.dataset,
             provider_config=config,
             record_dir=args.record_root,
@@ -234,7 +243,7 @@ async def run(args: argparse.Namespace) -> int:
         )
         result["metadata"]["warmup"] = warmed
         result["metadata"]["local_run_evidence"] = str(evidence)
-        paths = write_report(result, args.output_root / "extraction_en")
+        paths = write_report(result, args.output_root / args.suite)
         write_json(
             evidence / "summary.json",
             {"status": result["status"], "report": str(paths.json_path)},

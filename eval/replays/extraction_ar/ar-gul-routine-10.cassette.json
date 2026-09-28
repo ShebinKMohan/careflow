@@ -1,0 +1,7 @@
+{
+  "51c9d83f55f62610de68ec9c4383624eaaef763a36d825aa52b7594c0956b12c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Belly bloating after eating\", \"turn_id\": \"t2\", \"quote\": \"بطني تنفخ بعد الأكل\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"afternoon\", \"turn_id\": \"t4\", \"quote\": \"بدأ بعد الظهر\", \"negated\": false}, {\"key\": \"severity\", \"value\": 3, \"turn_id\": \"t6\", \"quote\": \"ثلاثة تقريباً\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عندي حساسية\", \"negated\": true}]}"
+  }
+}

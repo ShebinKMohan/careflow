@@ -1,0 +1,7 @@
+{
+  "86cbb016962e8cad4dbc85e69f6b2819abda0292b7b99228a763798c0cda7dde": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Very sick today\", \"turn_id\": \"t2\", \"quote\": \"أنا مريضة كتير اليوم\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، حرارتي عالية\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إي، عم برجف من البرد\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since morning\", \"turn_id\": \"t8\", \"quote\": \"من الصبح\", \"negated\": false}]}"
+  }
+}

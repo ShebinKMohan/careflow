@@ -1,0 +1,54 @@
+synthetic: true
+id: ar-gul-routine-10
+category: routine
+language: ar
+dialect: gulf
+description: 'Seeded routine intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 45
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: بطني تنفخ بعد الأكل
+  gloss_en: My stomach bloats after eating.
+  states:
+  - chief_complaint
+  - symptoms
+- question_key: symptom_onset_at
+  patient_text: بدأ بعد الظهر
+  gloss_en: It started in the afternoon.
+  states:
+  - symptom_onset_at
+- question_key: severity
+  patient_text: ثلاثة تقريباً
+  gloss_en: About three.
+  states:
+  - severity
+- question_key: allergies_confirm
+  patient_text: لا، ما عندي حساسية
+  gloss_en: No, I don't have allergies.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Bloating after meals
+    symptoms:
+    - bloating
+    symptom_onset_at: Since the afternoon
+    severity: 3
+    allergies_confirm: No known medicine allergies
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:07:39.476459Z'
+review_method: automated
+reviewed_content_sha256: 3dc5b42cb29a574352a9dffea2132e35422c571b643b996c1dd358c4bf4bb6a0

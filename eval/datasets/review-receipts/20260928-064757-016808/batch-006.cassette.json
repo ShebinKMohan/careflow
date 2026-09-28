@@ -1,0 +1,7 @@
+{
+  "3754dcc6c8559b99e7c05cc82ba40a215fe09b75bc31611c6f56f278a1c173a9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-02\",\n      \"content_sha256\": \"09ac490c9b3bfdd6fc42c6a4430a0674b6753d30d0f8d1576dc99bf73f5bbd69\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'chest_pain.present': 'yes', but patient text states 'Yes, the tightness is in my chest' which is ambiguous without a direct 'yes' to the chest pain question.\",\n        \"Alert CHEST_PAIN_ECG_10MIN requires chest pain onset within 10 minutes of arrival or recording, but patient text states onset was 'Two days ago'.\"\n      ]\n    }\n  ]\n}"
+  }
+}

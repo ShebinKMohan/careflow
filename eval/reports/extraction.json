@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "report": "extraction by language (M2-03)",
+  "publish": false,
+  "missed_alerts": [
+    {
+      "id": "child-parent-unsure-waking",
+      "language": "en",
+      "dialect": null,
+      "category": "child",
+      "missed": [
+        "NG143_RED_FLAG"
+      ],
+      "raised": [],
+      "status": "completed",
+      "error_code": "timeout",
+      "extraction_incomplete": true
+    },
+    {
+      "id": "ar-gul-child-01",
+      "language": "ar",
+      "dialect": "gulf",
+      "category": "child",
+      "missed": [
+        "NG143_RED_FLAG"
+      ],
+      "raised": [],
+      "status": "completed",
+      "error_code": null,
+      "extraction_incomplete": false
+    }
+  ],
+  "missed_alerts_note": "2 scenario(s) with a missed expected alert.",
+  "incomplete_cases": [
+    {
+      "id": "child-parent-unsure-waking",
+      "language": "en",
+      "dialect": null,
+      "status": "completed",
+      "error_code": "timeout"
+    }
+  ],
+  "by_language": {
+    "en": {
+      "cases": 50,
+      "completed": 50,
+      "incomplete_extractions": 1,
+      "field_precision": 0.8025210084033614,
+      "field_recall": 0.6895306859205776,
+      "field_f1": 0.7417475728155339,
+      "tp": 191,
+      "fp": 47,
+      "fn": 86,
+      "alert_recall": 0.96,
+      "expected_alerts": 25,
+      "missed_alerts": 1,
+      "false_alert_rate": 0.0,
+      "span_verified_rate": 0.9875518672199171,
+      "facts_kept": 238,
+      "facts_dropped": 3,
+      "patient_stated_slice_rate": 1.0,
+      "patient_stated_facts": 238,
+      "patient_stated_sliced": 238
+    },
+    "ar": {
+      "cases": 100,
+      "completed": 100,
+      "incomplete_extractions": 0,
+      "field_precision": 0.9789473684210527,
+      "field_recall": 0.8516483516483516,
+      "field_f1": 0.910871694417238,
+      "tp": 465,
+      "fp": 10,
+      "fn": 81,
+      "alert_recall": 0.9782608695652174,
+      "expected_alerts": 46,
+      "missed_alerts": 1,
+      "false_alert_rate": 0.0,
+      "span_verified_rate": 0.9978991596638656,
+      "facts_kept": 475,
+      "facts_dropped": 1,
+      "patient_stated_slice_rate": 1.0,
+      "patient_stated_facts": 475,
+      "patient_stated_sliced": 475
+    },
+    "ar_gulf": {
+      "cases": 50,
+      "completed": 50,
+      "incomplete_extractions": 0,
+      "field_precision": 0.9747899159663865,
+      "field_recall": 0.8498168498168498,
+      "field_f1": 0.9080234833659491,
+      "tp": 232,
+      "fp": 6,
+      "fn": 41,
+      "alert_recall": 0.9565217391304348,
+      "expected_alerts": 23,
+      "missed_alerts": 1,
+      "false_alert_rate": 0.0,
+      "span_verified_rate": 1.0,
+      "facts_kept": 238,
+      "facts_dropped": 0,
+      "patient_stated_slice_rate": 1.0,
+      "patient_stated_facts": 238,
+      "patient_stated_sliced": 238
+    },
+    "ar_levantine": {
+      "cases": 50,
+      "completed": 50,
+      "incomplete_extractions": 0,
+      "field_precision": 0.9831223628691983,
+      "field_recall": 0.8534798534798534,
+      "field_f1": 0.9137254901960784,
+      "tp": 233,
+      "fp": 4,
+      "fn": 40,
+      "alert_recall": 1.0,
+      "expected_alerts": 23,
+      "missed_alerts": 0,
+      "false_alert_rate": 0.0,
+      "span_verified_rate": 0.9957983193277311,
+      "facts_kept": 237,
+      "facts_dropped": 1,
+      "patient_stated_slice_rate": 1.0,
+      "patient_stated_facts": 237,
+      "patient_stated_sliced": 237
+    }
+  },
+  "per_field": {
+    "en": {
+      "allergies_confirm": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "chest_pain.onset": {
+        "tp": 0,
+        "fp": 4,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "scored_by": "exact value"
+      },
+      "chest_pain.present": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.9230769230769231,
+        "recall": 0.9230769230769231,
+        "f1": 0.9230769230769231,
+        "scored_by": "exact value"
+      },
+      "chest_pain.radiates": {
+        "tp": 5,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8333333333333334,
+        "recall": 0.7142857142857143,
+        "f1": 0.7692307692307693,
+        "scored_by": "exact value"
+      },
+      "chest_pain.short_of_breath": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9090909090909091,
+        "f1": 0.9523809523809523,
+        "scored_by": "exact value"
+      },
+      "chest_pain.sweating": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "chief_complaint": {
+        "tp": 18,
+        "fp": 31,
+        "fn": 32,
+        "precision": 0.3673469387755102,
+        "recall": 0.36,
+        "f1": 0.36363636363636365,
+        "scored_by": "exact value"
+      },
+      "child_amber.poor_feeding": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.8888888888888888,
+        "scored_by": "exact value"
+      },
+      "child_amber.reduced_urine_output": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "child_danger.grunting": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.8888888888888888,
+        "scored_by": "exact value"
+      },
+      "child_danger.hard_to_wake": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1": 0.9090909090909091,
+        "scored_by": "exact value"
+      },
+      "child_danger.non_blanching_rash": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "child_danger.pale_mottled_ashen_or_blue": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "scored_by": "exact value"
+      },
+      "fast.arm_weakness": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "fast.face_droop": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "fast.last_known_well": {
+        "tp": 2,
+        "fp": 4,
+        "fn": 4,
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333,
+        "f1": 0.3333333333333333,
+        "scored_by": "exact value"
+      },
+      "fast.speech_difficulty": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "infection.fever_reported": {
+        "tp": 25,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "infection.rigors": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9090909090909091,
+        "f1": 0.9523809523809523,
+        "scored_by": "exact value"
+      },
+      "pain_location": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.5833333333333334,
+        "f1": 0.7368421052631579,
+        "scored_by": "exact value"
+      },
+      "pain_present": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 13,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "scored_by": "exact value"
+      },
+      "pain_score": {
+        "tp": 13,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "severity": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "symptom_onset_at": {
+        "tp": 18,
+        "fp": 6,
+        "fn": 6,
+        "precision": 0.75,
+        "recall": 0.75,
+        "f1": 0.75,
+        "scored_by": "exact value"
+      },
+      "symptoms": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 13,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "scored_by": "exact value"
+      }
+    },
+    "ar": {
+      "allergies_confirm": {
+        "tp": 36,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "presence"
+      },
+      "chest_pain.onset": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "presence"
+      },
+      "chest_pain.present": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "chest_pain.radiates": {
+        "tp": 10,
+        "fp": 4,
+        "fn": 4,
+        "precision": 0.7142857142857143,
+        "recall": 0.7142857142857143,
+        "f1": 0.7142857142857143,
+        "scored_by": "exact value"
+      },
+      "chest_pain.short_of_breath": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9,
+        "f1": 0.9473684210526315,
+        "scored_by": "exact value"
+      },
+      "chest_pain.sweating": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "chief_complaint": {
+        "tp": 100,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "presence"
+      },
+      "child_amber.poor_feeding": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "child_amber.reduced_urine_output": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "child_danger.grunting": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "child_danger.hard_to_wake": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.9166666666666666,
+        "recall": 0.9166666666666666,
+        "f1": 0.9166666666666666,
+        "scored_by": "exact value"
+      },
+      "child_danger.non_blanching_rash": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "fast.arm_weakness": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "fast.face_droop": {
+        "tp": 10,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1": 0.8333333333333334,
+        "scored_by": "exact value"
+      },
+      "fast.last_known_well": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "presence"
+      },
+      "fast.speech_difficulty": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "infection.fever_reported": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "infection.rigors": {
+        "tp": 13,
+        "fp": 3,
+        "fn": 3,
+        "precision": 0.8125,
+        "recall": 0.8125,
+        "f1": 0.8125,
+        "scored_by": "exact value"
+      },
+      "pain_location": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 14,
+        "precision": 1.0,
+        "recall": 0.6111111111111112,
+        "f1": 0.7586206896551724,
+        "scored_by": "presence"
+      },
+      "pain_present": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 36,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "scored_by": "exact value"
+      },
+      "pain_score": {
+        "tp": 36,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "severity": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "exact value"
+      },
+      "symptom_onset_at": {
+        "tp": 56,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "scored_by": "presence"
+      },
+      "symptoms": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 20,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "scored_by": "presence"
+      }
+    }
+  },
+  "span_verified_rate": {
+    "en": 0.9875518672199171,
+    "ar": 0.9978991596638656,
+    "ar_gulf": 1.0,
+    "ar_levantine": 0.9957983193277311
+  },
+  "patient_stated_slice_rate": {
+    "en": 1.0,
+    "ar": 1.0,
+    "ar_gulf": 1.0,
+    "ar_levantine": 1.0
+  },
+  "models": [
+    {
+      "model": "qwen3.5-9b-4bit",
+      "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit",
+      "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "provider": "local",
+      "language": "en",
+      "prompt_version": "extraction_v2",
+      "mode": "replay",
+      "status": "run"
+    },
+    {
+      "model": "qwen3.5-9b-4bit",
+      "model_id": "mlx-community/Qwen3.5-9B-MLX-4bit",
+      "revision": "938d8919941c6e7efd3c7150eff7fe9d12afa631",
+      "provider": "local",
+      "language": "ar",
+      "prompt_version": "extraction_v2_ar",
+      "mode": "replay",
+      "status": "run"
+    },
+    {
+      "model": "Jais 2 8B Chat",
+      "language": "ar",
+      "status": "skipped",
+      "reason": "No ungated pre-converted mlx-community 4-bit Jais 2 build exists (Hugging Face search, 28 Sep 2026). The official inceptionai/Jais-2-8B-Chat (and its inception42 mirror) is gated: accepting its terms is an owner decision. mlx-lm 0.31.3 has no Jais2ForCausalLM architecture, and converting the bf16 weights needs about 16 GB RAM (skipped: RAM)."
+    }
+  ],
+  "caveats": [
+    "Synthetic scenarios only. The gold facts were sampled in code; the patient answers were written by a coding agent, and each scenario was reviewed by an automated model of another family, not by clinicians.",
+    "The Arabic was not validated by native speakers. Each Arabic answer and its English gloss were checked only by machine: a blind back-translation, a model judgement and chrF >= 40 (the M2-01 check), then a local 9B model's review of the whole scenario.",
+    "Arabic free-text facts (complaint, times, places, allergies, symptoms) are scored by presence only, because the extractor writes them as English renderings; yes/no/unknown and numeric facts are scored exactly, as in English. English free text is scored by exact value, so the English and Arabic field scores are not comparable.",
+    "The eval measures the extractor alone, on the whole transcript. In the intake graph an explicit yes, no or not-sure reply to the question on screen is read first without a model (ADR-052), and an unsure reading beats a model's no, so a missed alert listed here from an unsure reply is kept as unknown there.",
+    "These are technical measurements of one recorded local run (Qwen3.5-9B 4-bit), not clinical accuracy. Not for publication (publish: false). No Arabic accuracy percentage may appear in the UI, the README or any public material."
+  ],
+  "agent_review": {
+    "label": "Agent review, not a native speaker",
+    "reviewer": "coding agent (claude-opus-5-5), also the writer of these answers",
+    "date": "2026-09-28",
+    "seed": 290,
+    "sampling": "random.Random(290).sample(sorted approved ids, 10)",
+    "notes": [
+      {
+        "id": "ar-gul-breathing-01",
+        "note": "Reads as natural Gulf speech (ما يعورني، وايد، زين). Each answer states one fact; a breathless patient would more likely add when it started or what brings it on."
+      },
+      {
+        "id": "ar-gul-chest-pain-02",
+        "note": "مدري، مو متأكدة is a typical Gulf unsure reply. The pain score is a bare الألم ثمانية; real patients often hedge (يمكن ثمانية) or describe the pain instead of rating it."
+      },
+      {
+        "id": "ar-gul-child-03",
+        "note": "Plausible parent speech (الحفاظات مبلولة مثل العادة). The complaint says the one-year-old does not eat (ما ياكل) while the feeding answer says he breastfeeds (يرضع); a parent would more likely say ما يرضع from the start."
+      },
+      {
+        "id": "ar-gul-child-05",
+        "note": "An unsure answer about waking a 13-year-old is realistic, as is a week-long change in behaviour. No hesitation or detail about what 'not herself' means, which a worried parent would usually give."
+      },
+      {
+        "id": "ar-gul-routine-14",
+        "note": "Natural and consistent: a mild headache rated one and called خفيف. Very clean."
+      },
+      {
+        "id": "ar-gul-sepsis-08",
+        "note": "Realistic spelling variation (انا without hamza) and the most natural answer in the sample (أرجف وما أقدر أوقف). The vitals are in the low NEWS2 band, so no alert despite fever and rigors, which matches the rules."
+      },
+      {
+        "id": "ar-lev-child-01",
+        "note": "Strong Levantine markers (كتير، فيقها، عم، منيح، لأ). It keeps the standalone لأ that the back-translation check rejected in most other scenarios, so the set has only a few answers of this kind."
+      },
+      {
+        "id": "ar-lev-routine-02",
+        "note": "Natural Levantine (بيوجعني، بلّش). The location answer repeats the complaint word for word, which is realistic for a short kiosk exchange."
+      },
+      {
+        "id": "ar-lev-routine-06",
+        "note": "One speaker spells back two ways: ضهري (Levantine) in the complaint and ظهري (standard) in the location answer. The second came from a back-translation rewrite, so this variation is an artefact, not an observation of real speech."
+      },
+      {
+        "id": "ar-lev-routine-08",
+        "note": "Natural (عم تحكني). The severity is a bare number with no description."
+      }
+    ],
+    "summary": "The dialogue is cleaner than real speech: one fact per answer, few hesitations, no self-corrections, no English code-switching (common in Gulf clinics) and no Gulf and Levantine mixing within a scenario. The back-translation check, run by the same 9B model family that extracts, pushed some answers toward standard forms (لا for لأ, ظهري, تنفسي) and away from words the model misreads, so the hardest dialect forms are under-represented and the Arabic scores are likely optimistic. Arabic fluency judgements here are the agent's own; no native speaker reviewed these scenarios."
+  },
+  "sources": {
+    "en": {
+      "suite": "extraction_en",
+      "status": "completed",
+      "mode": "replay",
+      "dataset_sha256": "b8e3c26807e65a4d634c29bbb4fa783e78f5880eb22399c1bcd019e49d4f0bc9",
+      "report": "eval/reports/replay-verification/extraction_en/20260928-082412.json"
+    },
+    "ar": {
+      "suite": "extraction_ar",
+      "status": "completed",
+      "mode": "replay",
+      "dataset_sha256": "eb39e4e16fee0f8837c1b9568036d76ce95462b65442408c04f0432c30aea0b3",
+      "report": "eval/reports/replay-verification/extraction_ar/20260928-082412.json"
+    }
+  },
+  "generated_at": "2026-09-28T08:24:12+00:00"
+}

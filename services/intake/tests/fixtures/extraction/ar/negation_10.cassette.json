@@ -1,0 +1,7 @@
+{
+  "8077e61242e8c38a11d6145ef6b6eb5902e19fef8bdeaff38d36caa8391643d7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"مو صعب، يصحى عادي\", \"negated\": true}]}"
+  }
+}

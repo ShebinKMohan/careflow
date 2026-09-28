@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-lev-breathing-02
+category: breathing
+language: ar
+dialect: levantine
+description: 'Seeded breathing intake in Levantine Arabic (M2-03 sampler, seed 7);
+  expected alerts: none.'
+patient:
+  age_years: 44
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: عندي ضيق بالتنفس
+  gloss_en: I have shortness of breath.
+  states:
+  - chest_pain.short_of_breath
+  - chief_complaint
+- question_key: chest_pain.short_of_breath
+  patient_text: إي، ما عم بقدر آخد نفس
+  gloss_en: Yes, I can't take a breath.
+  states:
+  - chest_pain.short_of_breath
+- question_key: chest_pain.present
+  patient_text: لا، صدري ما بيوجعني
+  gloss_en: No, my chest doesn't hurt.
+  states:
+  - chest_pain.present
+- question_key: infection.fever_reported
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - infection.fever_reported
+- question_key: severity
+  patient_text: ستة
+  gloss_en: Six.
+  states:
+  - severity
+device_vitals:
+  heart_rate: 88
+  spo2: 97
+  temperature_c: 36.7
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: I am short of breath
+    chest_pain.short_of_breath: 'yes'
+    chest_pain.present: 'no'
+    infection.fever_reported: 'no'
+    severity: 6
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

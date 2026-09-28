@@ -1,0 +1,7 @@
+{
+  "345fba2541acec25ab3cf174daf5e15d8f313f0e7149cae1cf176a4d165e7eed": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-breathing-02\",\n      \"content_sha256\": \"ad224b3aa29193076af27ed263b69ffef954d9e3240606c6c814edce5b03460e\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "611afe2f9916df0bf468d973499ead6c2e7926da0183a09de8c0fb6f4f6f6ea8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-chest-pain-07\",\n      \"content_sha256\": \"f7568f208c58c3a6f5b1ce3d3e54c5e5eacca51fcaee13ca9e7396578806fb1a\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert CHEST_PAIN_ECG_10MIN requires chest pain onset within 10 minutes of arrival; patient onset is 3 days ago.\",\n        \"Expected facts include chest_pain.onset 'Three days ago' which contradicts the rule's requirement for recent onset to trigger the alert.\"\n      ]\n    }\n  ]\n}"
+  }
+}

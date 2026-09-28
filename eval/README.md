@@ -1,7 +1,7 @@
 # CareFlow evaluation
 
-The `careflow-eval` workspace package evaluates the actual rules engine and English fact
-extractor. Its patients are explicitly synthetic. Dataset review is automated and is **not
+The `careflow-eval` workspace package evaluates the actual rules engine and the English and
+Arabic fact extractor. Its patients are explicitly synthetic. Dataset review is automated and is **not
 clinician review or clinical validation**. Expected urgency levels are scenario metadata,
 not evidence that a model is safe for triage.
 
@@ -189,6 +189,51 @@ fresh `--launch-log`. The first corpus exposed repeated incorrect rule interpret
 Qwen's automated reviews; rejected cases were preserved and escalated to the independent
 offline reviewer. A successful structured response alone is never sufficient for approval.
 
-This package does not implement Arabic/RAG evaluation, train urgency models, or use an LLM
-as the extraction scorer. Those are separate milestones. Existing `eval/reports/queue/` artifacts
+## Arabic scenarios and the per-language report (M2-03)
+
+`eval/datasets/intake_ar/` holds the Arabic corpus: 50 Gulf and 50 Levantine scenarios in the
+English category mix, built and reviewed in these steps (ADR-055):
+
+1. **Seeded gold.** `careflow_eval.sampler.arabic_plan(dialect, seed=7)` samples each scenario's
+   gold facts, questions, age and vitals in code. The expected alerts come from the rules engine
+   on that gold, never from the writer. Every rule id is covered at least three times.
+2. **Written answers.** The writer (here the coding agent, `claude-opus-5-5`, in session) puts
+   each planned answer into the dialect, with an English gloss. `generate` merges them:
+
+   ```sh
+   uv run careflow-eval generate --suite intake_ar --dialect gulf \
+     --answers <answers.yaml> --writer-model claude-opus-5-5
+   ```
+
+   Each answer lists the gold keys it states (`states`); the loader checks that a number is in
+   its words and that "unknown" is an unsure answer (ما أدري، مش متأكد …).
+3. **Review.** `review --judge local` (through `scripts/eval_local.py review`) first runs the
+   M2-01 back-translation check on every answer: the local model translates the Arabic back to
+   English without seeing the gloss, judges the two, and chrF must be at least 40. A flagged
+   answer rejects the scenario before the judge sees it. The judge (a different model family
+   from the writer) then reviews the scenario. Failed reviews stay in the inbox and the log.
+4. **Escalation.** Drafts the local judge rejects go to Codex, `eval_judge`'s configured tool
+   (Claude wrote them, so a Claude reviewer is not independent):
+
+   ```sh
+   CAREFLOW_RUNTIME=offline uv run careflow-eval review --dataset eval/datasets/intake_ar \
+     --judge cli --reviewer-model gpt-6-astra --batch-size 5 --timeout 600
+   ```
+
+   The audited adapter runs `codex exec` read-only, with the user's config and rules ignored,
+   and verifies each call's model in Codex's own session log (never its account ids). A CLI
+   review reuses the passing back-translation check recorded for the exact content; it never
+   runs the check itself, so a draft without one is rejected until a local review checks it.
+
+`careflow-eval run extraction --lang en|ar|all` runs `extraction_en` and/or `extraction_ar`,
+writes each suite's report (a replay's under `replay-verification/`, so it never replaces a live
+baseline's `LATEST.md`), then `eval/reports/extraction.json` and `.md`: missed expected
+alerts first (by scenario id, or "none"), field scores per language and per dialect, per field,
+the span-verified rate, the models and the caveats. Arabic free-text facts are scored by
+presence only; coded and numeric facts exactly. The report is `publish: false`. The Arabic was
+not validated by native speakers; its numbers stay in that technical report and never appear
+as an accuracy percentage here, in the UI or anywhere public.
+
+This package does not implement RAG evaluation, train urgency models, or use an LLM as the
+extraction scorer. Those are separate milestones. Existing `eval/reports/queue/` artifacts
 belong to the queue simulation. File paths in this document are relative to the repository root.

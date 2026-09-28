@@ -1,0 +1,7 @@
+{
+  "ea9a3106f3fe9595a33b9b3ec5aa4b5d66642847044bf4dd521957a4dc7a84cd": {
+    "model": "gpt-6-astra",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"alerts_consistent\": true, \"content_sha256\": \"2fe33bdd13d43e791555c12558becc054cfedf7768042dcd24f9aed585637da8\", \"facts_supported\": true, \"id\": \"ar-gul-sepsis-08\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"6d5e99e40a8360a97f6acc645caef11ff74faedf40a5c4989929a4827b910cbf\", \"facts_supported\": true, \"id\": \"ar-gul-stroke-01\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"6203ad70d0c547fe9fcfa429ca5e469efcf116d4c7161a49fa361cdb33600a90\", \"facts_supported\": true, \"id\": \"ar-gul-stroke-02\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"3af3374d06695863fbd6d7c2d18959355c4880a56ab45ffaeb3c7bfc27ae6dcf\", \"facts_supported\": true, \"id\": \"ar-gul-stroke-04\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"b526e91405e49dff5761e87a123164d92695e56f93a8e1f5a64de09d496ac3db\", \"facts_supported\": true, \"id\": \"ar-gul-stroke-05\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}]}"
+  }
+}

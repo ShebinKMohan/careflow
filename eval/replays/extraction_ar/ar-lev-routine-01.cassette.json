@@ -1,0 +1,7 @@
+{
+  "02ef65857d1bafac660d09d90edf3856316c03b5cd3411f62320e3752eb24dc6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Left wrist pain\", \"turn_id\": \"t2\", \"quote\": \"رسغي الشمال بيوجعني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since morning\", \"turn_id\": \"t4\", \"quote\": \"من الصبح\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 2, \"turn_id\": \"t6\", \"quote\": \"اتنين\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"left wrist\", \"turn_id\": \"t8\", \"quote\": \"بالرسغ الشمال\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، ما عندي حساسية من أي دوا\", \"negated\": true}]}"
+  }
+}

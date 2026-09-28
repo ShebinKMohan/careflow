@@ -1,0 +1,7 @@
+{
+  "56fc92ffaa57d304f44e4c0b7cdc868e5875dc90d9de16f57e5fa867852f3312": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-stroke-04\",\n      \"content_sha256\": \"3af3374d06695863fbd6d7c2d18959355c4880a56ab45ffaeb3c7bfc27ae6dcf\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected fact 'fast.speech_difficulty' is 'yes' but patient text says 'tongue is heavy', not 'speech difficulty'.\",\n        \"Alert FAST_STROKE requires all three FAST signs (face, arm, speech) to be yes; patient has unknown onset.\"\n      ]\n    }\n  ]\n}"
+  }
+}

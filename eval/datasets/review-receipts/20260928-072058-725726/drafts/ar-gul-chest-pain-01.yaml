@@ -1,0 +1,70 @@
+synthetic: true
+id: ar-gul-chest-pain-01
+category: chest_pain
+language: ar
+dialect: gulf
+description: 'Seeded chest pain intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: CHEST_PAIN_ECG_10MIN.'
+patient:
+  age_years: 61
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: عندي ضيقة في صدري
+  gloss_en: I have tightness in my chest.
+  states:
+  - chest_pain.present
+  - chief_complaint
+  - pain_location
+- question_key: chest_pain.present
+  patient_text: إي نعم، صدري ضايق
+  gloss_en: Yes, my chest is tight.
+  states:
+  - chest_pain.present
+- question_key: chest_pain.radiates
+  patient_text: والله ما أدري، ما انتبهت
+  gloss_en: Honestly, I don't know, I didn't notice.
+  states:
+  - chest_pain.radiates
+- question_key: chest_pain.sweating
+  patient_text: إيه، عرقت وايد
+  gloss_en: Yes, I sweated a lot.
+  states:
+  - chest_pain.sweating
+- question_key: pain_score
+  patient_text: سبعة تقريباً
+  gloss_en: About seven.
+  states:
+  - pain_present
+  - pain_score
+- question_key: chest_pain.onset
+  patient_text: بدأ من الصبح، أول ما صحيت
+  gloss_en: It started in the morning, as soon as I woke up.
+  states:
+  - chest_pain.onset
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Tightness in my chest
+    chest_pain.present: 'yes'
+    pain_location: chest
+    chest_pain.radiates: unknown
+    chest_pain.sweating: 'yes'
+    pain_score: 7
+    pain_present: 'yes'
+    chest_pain.onset: Since this morning
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises CHEST_PAIN_ECG_10MIN on the seeded gold facts and vitals. Not a
+    clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

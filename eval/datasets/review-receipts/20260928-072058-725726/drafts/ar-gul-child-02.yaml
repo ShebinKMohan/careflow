@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-gul-child-02
+category: child
+language: ar
+dialect: gulf
+description: 'Seeded child intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: NG143_RED_FLAG.'
+patient:
+  age_years: 2
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: بنتي مريضة
+  gloss_en: My daughter is sick.
+  states:
+  - chief_complaint
+- question_key: child_danger.hard_to_wake
+  patient_text: لا، تصحى عادي
+  gloss_en: No, she wakes up normally.
+  states:
+  - child_danger.hard_to_wake
+- question_key: child_danger.grunting
+  patient_text: لا، تتنفس زين
+  gloss_en: No, she's breathing well.
+  states:
+  - child_danger.grunting
+- question_key: child_danger.non_blanching_rash
+  patient_text: إيه، عندها طفح وما يختفي لما ضغطت عليه بالكاس
+  gloss_en: Yes, she has a rash and it doesn't disappear when I pressed on it with
+    the glass.
+  states:
+  - child_danger.non_blanching_rash
+- question_key: child_amber.poor_feeding
+  patient_text: لا، ترضع زين
+  gloss_en: No, she's feeding well.
+  states:
+  - child_amber.poor_feeding
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child is unwell
+    child_danger.hard_to_wake: 'no'
+    child_danger.grunting: 'no'
+    child_danger.non_blanching_rash: 'yes'
+    child_amber.poor_feeding: 'no'
+  alerts:
+  - NG143_RED_FLAG
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises NG143_RED_FLAG on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

@@ -1,0 +1,7 @@
+{
+  "46fe24868375bde8318e6a0e7438ecbd9902c7450cb55a20117db5cc4c87b211": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-04\",\n      \"content_sha256\": \"162faeae0bc767df8ed8d4d7322687beebbf3f4f8025741880d43cc7f7769de6\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert severity is critical per rule, but expected level is 2 (high).\",\n        \"Expected facts include 'My speech is slurred' which is not in the patient text.\"\n      ]\n    }\n  ]\n}"
+  }
+}

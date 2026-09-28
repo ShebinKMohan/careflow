@@ -1,0 +1,7 @@
+{
+  "9a78e762849bf070c0c6861fe108bc33d415eed1ea0c9ec4b71e3010b9660ff9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-05\",\n      \"content_sha256\": \"abc2436ec8ec119d259aaa0cab18dbd1e630e140b84f89214c1377bad62dfa11\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alert level 2 does not match rule SEPSIS_NEWS2 which always raises AlertSeverity.critical.\",\n        \"Expected alert list contains SEPSIS_NEWS2 but rule logic requires NEWS2 total >= 5, which is missing.\"\n      ]\n    }\n  ]\n}"
+  }
+}

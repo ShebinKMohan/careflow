@@ -1,0 +1,7 @@
+{
+  "7c0b4c7091ee1c538c8f2108fc13b52569b5948e0df66df2d83dfeae73c85929": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"لا، ما عرقت\", \"negated\": true}]}"
+  }
+}

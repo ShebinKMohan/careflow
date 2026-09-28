@@ -1,0 +1,70 @@
+synthetic: true
+id: ar-gul-chest-pain-06
+category: chest_pain
+language: ar
+dialect: gulf
+description: 'Seeded chest pain intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: CHEST_PAIN_ECG_10MIN.'
+patient:
+  age_years: 69
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: أحس صدري ضيق
+  gloss_en: I feel my chest is tight.
+  states:
+  - chest_pain.present
+  - chief_complaint
+  - pain_location
+- question_key: chest_pain.present
+  patient_text: إي نعم، فيه ضيقة في صدري
+  gloss_en: Yes, there is tightness in my chest.
+  states:
+  - chest_pain.present
+- question_key: chest_pain.radiates
+  patient_text: إيه، يوصل لرقبتي
+  gloss_en: Yes, it reaches my neck.
+  states:
+  - chest_pain.radiates
+- question_key: chest_pain.sweating
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - chest_pain.sweating
+- question_key: pain_score
+  patient_text: الألم عندي ٥
+  gloss_en: My pain is 5.
+  states:
+  - pain_present
+  - pain_score
+- question_key: chest_pain.onset
+  patient_text: قبل ثلاث أيام
+  gloss_en: Three days ago.
+  states:
+  - chest_pain.onset
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Tightness in my chest
+    chest_pain.present: 'yes'
+    pain_location: chest
+    chest_pain.radiates: 'yes'
+    chest_pain.sweating: 'no'
+    pain_score: 5
+    pain_present: 'yes'
+    chest_pain.onset: Three days ago
+  alerts:
+  - CHEST_PAIN_ECG_10MIN
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises CHEST_PAIN_ECG_10MIN on the seeded gold facts and vitals. Not a
+    clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:21:47.366633Z'
+review_method: automated
+reviewed_content_sha256: cc34fca7dea02484ffc819fd3ee4e1a5b49314ed573218983dde91edbd8b7e6a

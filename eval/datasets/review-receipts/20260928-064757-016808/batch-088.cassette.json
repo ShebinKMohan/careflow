@@ -1,0 +1,7 @@
+{
+  "2d3528156d354c5845d99f5da4d55df6803d4e2789908ee5bf3045303bc94432": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-sepsis-06\",\n      \"content_sha256\": \"a6555755f9184ff71e90c606bde1b31aa9d60c8a84ecdedb3872dc5e63199619\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'infection.rigors' as 'unknown', but the rule requires 'yes' or 'unknown' to trigger; 'unknown' alone does not trigger SEPSIS_NEWS2 without other infection evidence.\",\n        \"Alert level 2 is invalid; SEPSIS_NEWS2 is defined as critical (level 1) in the rule code, and the expected level 2 does not match the rule's AlertSeverity.critical.\"\n      ]\n    }\n  ]\n}"
+  }
+}

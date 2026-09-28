@@ -1,0 +1,7 @@
+{
+  "381fa106244bec15aa8afc3438f422a173ff68e12650716883d916cd0240355a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-child-01\",\n      \"content_sha256\": \"cef6f10b55af58d6d6576ad0e3435e09c13203a81465c6ea6787acde8df9a957\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Patient age is 2 years (24 months), which exceeds the under-5 threshold; NG143 rules should not trigger.\",\n        \"Expected alert NG143_RED_FLAG is inconsistent with the rule logic for a 2-year-old child.\"\n      ]\n    }\n  ]\n}"
+  }
+}

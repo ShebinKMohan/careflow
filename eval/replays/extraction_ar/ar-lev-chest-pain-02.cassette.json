@@ -1,0 +1,7 @@
+{
+  "5fa4601ea6f3c6052045ebb35ad12c73769b6f1eb7b31c66834134778c8818c4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest tightness\", \"turn_id\": \"t2\", \"quote\": \"عندي ضيقة بصدري\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"أيوه\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إي، بتروح لضهري\", \"negated\": false}, {\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لأ، ما عرقت\", \"negated\": true}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t10\", \"quote\": \"أربعة\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"about a week ago\", \"turn_id\": \"t12\", \"quote\": \"صرلها أسبوع تقريباً\", \"negated\": false}]}"
+  }
+}

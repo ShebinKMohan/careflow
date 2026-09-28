@@ -1,0 +1,7 @@
+{
+  "96b067d2e7156a432dcdf5d5ff59c20fcf9b655fee3aaebd97e63d518e0acc04": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Acid reflux after eating\", \"turn_id\": \"t2\", \"quote\": \"عندي حموضة بعد الأكل\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"3 days ago\", \"turn_id\": \"t4\", \"quote\": \"من ثلاث أيام\", \"negated\": false}, {\"key\": \"severity\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"أربع\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا\", \"negated\": true}]}"
+  }
+}

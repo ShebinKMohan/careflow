@@ -1,0 +1,7 @@
+{
+  "524b738d6eeb260bdcc0648ddc7bb77e9d0dd75d47051c8d45424a66d4a98144": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-child-05\",\n      \"content_sha256\": \"896d14899e5c693d032dc6d07ff5025a7c590988207831920395f62f4a6b5be5\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Age 13 years (156 months) exceeds the 5–15 year range for CHILD_HARD_TO_WAKE; rule returns no alert.\",\n        \"Expected alert CHILD_HARD_TO_WAKE is raised in scenario but rule logic suppresses it for this age.\"\n      ]\n    }\n  ]\n}"
+  }
+}

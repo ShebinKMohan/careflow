@@ -1,0 +1,7 @@
+{
+  "aa44111ecbcc74c9770c955ea51ae5b0ae9202a4570aa7907def3a1b077a849d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Not eating anything\", \"turn_id\": \"t2\", \"quote\": \"ولدي صار ما ياكل شي\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، يصحى بسهولة\", \"negated\": true}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إيه، ما يشرب إلا شوي\", \"negated\": false}, {\"key\": \"child_amber.reduced_urine_output\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، يروح الحمام عادي\", \"negated\": true}]}"
+  }
+}

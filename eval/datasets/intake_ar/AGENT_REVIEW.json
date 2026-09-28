@@ -1,0 +1,50 @@
+{
+  "label": "Agent review, not a native speaker",
+  "reviewer": "coding agent (claude-opus-5-5), also the writer of these answers",
+  "date": "2026-09-28",
+  "seed": 290,
+  "sampling": "random.Random(290).sample(sorted approved ids, 10)",
+  "notes": [
+    {
+      "id": "ar-gul-breathing-01",
+      "note": "Reads as natural Gulf speech (ما يعورني، وايد، زين). Each answer states one fact; a breathless patient would more likely add when it started or what brings it on."
+    },
+    {
+      "id": "ar-gul-chest-pain-02",
+      "note": "مدري، مو متأكدة is a typical Gulf unsure reply. The pain score is a bare الألم ثمانية; real patients often hedge (يمكن ثمانية) or describe the pain instead of rating it."
+    },
+    {
+      "id": "ar-gul-child-03",
+      "note": "Plausible parent speech (الحفاظات مبلولة مثل العادة). The complaint says the one-year-old does not eat (ما ياكل) while the feeding answer says he breastfeeds (يرضع); a parent would more likely say ما يرضع from the start."
+    },
+    {
+      "id": "ar-gul-child-05",
+      "note": "An unsure answer about waking a 13-year-old is realistic, as is a week-long change in behaviour. No hesitation or detail about what 'not herself' means, which a worried parent would usually give."
+    },
+    {
+      "id": "ar-gul-routine-14",
+      "note": "Natural and consistent: a mild headache rated one and called خفيف. Very clean."
+    },
+    {
+      "id": "ar-gul-sepsis-08",
+      "note": "Realistic spelling variation (انا without hamza) and the most natural answer in the sample (أرجف وما أقدر أوقف). The vitals are in the low NEWS2 band, so no alert despite fever and rigors, which matches the rules."
+    },
+    {
+      "id": "ar-lev-child-01",
+      "note": "Strong Levantine markers (كتير، فيقها، عم، منيح، لأ). It keeps the standalone لأ that the back-translation check rejected in most other scenarios, so the set has only a few answers of this kind."
+    },
+    {
+      "id": "ar-lev-routine-02",
+      "note": "Natural Levantine (بيوجعني، بلّش). The location answer repeats the complaint word for word, which is realistic for a short kiosk exchange."
+    },
+    {
+      "id": "ar-lev-routine-06",
+      "note": "One speaker spells back two ways: ضهري (Levantine) in the complaint and ظهري (standard) in the location answer. The second came from a back-translation rewrite, so this variation is an artefact, not an observation of real speech."
+    },
+    {
+      "id": "ar-lev-routine-08",
+      "note": "Natural (عم تحكني). The severity is a bare number with no description."
+    }
+  ],
+  "summary": "The dialogue is cleaner than real speech: one fact per answer, few hesitations, no self-corrections, no English code-switching (common in Gulf clinics) and no Gulf and Levantine mixing within a scenario. The back-translation check, run by the same 9B model family that extracts, pushed some answers toward standard forms (لا for لأ, ظهري, تنفسي) and away from words the model misreads, so the hardest dialect forms are under-represented and the Arabic scores are likely optimistic. Arabic fluency judgements here are the agent's own; no native speaker reviewed these scenarios."
+}

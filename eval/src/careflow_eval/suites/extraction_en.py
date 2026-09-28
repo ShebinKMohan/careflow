@@ -1,4 +1,11 @@
-"""Extract patient facts with the production extractor, then evaluate rules on its actual output."""
+"""Extract patient facts with the production extractor, then evaluate rules on its actual output.
+
+The `extraction_en` and `extraction_ar` suites (M2-03) share this code; `language` selects the
+scenarios and the extractor's prompt. In Arabic, the English renderings the extractor writes for
+free-text facts (the complaint, times, places, allergies, symptoms) are scored by presence only:
+their gold is also an English rendering, so an exact string match would score translation
+wording, not extraction. Coded values (yes/no/unknown, numbers) are scored exactly, as in English.
+"""
 
 from __future__ import annotations
 
@@ -8,6 +15,13 @@ from pathlib import Path
 from typing import Any
 
 from careflow_contracts import ExtractionStatus, Language
+from careflow_contracts.generated.fact_schema import (
+    IntegerFact,
+    Provenance,
+    TranscriptSpanSource,
+    TriStateFact,
+)
+from careflow_contracts.generated.structured_facts_schema import FactKey, Turn
 from careflow_eval.datasets import ARRIVED_AT, NOW, context_entries, transcript
 from careflow_eval.models import Scenario
 from careflow_eval.providers import (
@@ -19,18 +33,63 @@ from careflow_eval.providers import (
     write_receipt,
 )
 from careflow_intake.extraction.extractor import LlmExtractor
-from careflow_intake.facts import to_structured_facts
+from careflow_intake.facts import FactEntry, fact_class, to_structured_facts
 from careflow_providers.base import ChatProvider
 from careflow_rules import evaluate
 
+# An Arabic free-text slot's scored value (ARABIC_SCORING): the fact is there, whatever its words.
+STATED = "(stated)"
+ARABIC_SCORING = "free-text-presence-v1"
 
-def expected_slots(scenario: Scenario) -> dict[str, Any]:
-    """Gold enters scoring only. A symptoms list is one scalar slot per symptom."""
+
+def presence_scored(key: str) -> bool:
+    """Free text (TextFact) and symptoms: neither a coded nor a numeric value."""
+    kind = fact_class(FactKey(key))
+    return not issubclass(kind, TriStateFact | IntegerFact)
+
+
+def scored(slots: list[dict[str, Any]], language: Language) -> list[dict[str, Any]]:
+    if language is not Language.ar:
+        return slots
+    return [
+        {"key": slot["key"], "value": STATED} if presence_scored(slot["key"]) else slot
+        for slot in slots
+    ]
+
+
+def gold_slots(scenario: Scenario) -> list[dict[str, Any]]:
     slots = []
     for key, value in scenario.expected.facts.items():
         values = value if isinstance(value, list) else [value]
         slots.extend({"key": key.value, "value": item} for item in values)
-    return {"facts": slots, "alerts": sorted(rule.value for rule in scenario.expected.alerts)}
+    return slots
+
+
+def expected_slots(scenario: Scenario) -> dict[str, Any]:
+    """Gold enters scoring only. A symptoms list is one scalar slot per symptom."""
+    return {
+        "facts": scored(gold_slots(scenario), scenario.language),
+        "alerts": sorted(rule.value for rule in scenario.expected.alerts),
+    }
+
+
+def span_counts(facts: list[FactEntry], dropped: int, turns: list[Turn]) -> dict[str, int]:
+    """Kept facts, the PATIENT_STATED ones whose span slices, in the original turn text, to
+    exactly their quote, and the facts the extractor dropped (unverified span or number, a key
+    outside its scope, a value that does not fit). An earlier statement replaced by a later one
+    for the same key is in neither count."""
+    text = {turn.turn_id: turn.text for turn in turns}
+    stated = [entry for entry in facts if entry.base.provenance is Provenance.PATIENT_STATED]
+    sliced = 0
+    for entry in stated:
+        source = entry.base.source
+        if (
+            isinstance(source, TranscriptSpanSource)
+            and source.turn_id in text
+            and text[source.turn_id][source.start : source.end] == source.quote
+        ):
+            sliced += 1
+    return {"kept": len(facts), "patient_stated": len(stated), "sliced": sliced, "dropped": dropped}
 
 
 async def run_case(
@@ -45,9 +104,12 @@ async def run_case(
     model_receipt: Mapping[str, Any] | None,
     source_provenance: Mapping[str, Any],
     model_endpoint_verification_required: bool,
+    language: Language = Language.en,
 ) -> dict[str, Any]:
-    if scenario.language != Language.en:
-        raise ValueError(f"{scenario.id}: extraction_en only accepts English scenarios")
+    if scenario.language != language:
+        raise ValueError(
+            f"{scenario.id}: extraction_{language.value} only accepts {language.name} scenarios"
+        )
     receipt = None
     if replay_dir is not None:
         try:
@@ -113,15 +175,16 @@ async def run_case(
         verify_replayed_output(scenario.id, receipt, selected, output)
     expected = expected_slots(scenario)
     alerts = sorted(alert.rule_id.value for alert in outcome.alerts)
+    values = [
+        {"key": entry.key.value, "value": entry.base.model_dump(mode="json")["value"]}
+        for entry in extracted.facts
+    ]
     result: dict[str, Any] = {
         "id": scenario.id,
         "category": scenario.category,
         "status": "completed",
         "prediction": {
-            "facts": [
-                {"key": entry.key.value, "value": entry.base.model_dump(mode="json")["value"]}
-                for entry in extracted.facts
-            ],
+            "facts": scored(values, scenario.language),
             "alerts": alerts,
             "extraction_incomplete": extracted.extraction_incomplete,
             "dropped_count": extracted.dropped_count,
@@ -137,6 +200,12 @@ async def run_case(
         "replay_exact": True if replay_dir is not None else None,
         "recording_replayable": receipt["replayable"] if receipt is not None else None,
     }
+    result["spans"] = span_counts(extracted.facts, extracted.dropped_count, turns)
+    if scenario.language is Language.ar:
+        # The words behind the presence scores, for reading the report.
+        result["dialect"] = scenario.dialect
+        result["extracted_values"] = values
+        result["expected_values"] = gold_slots(scenario)
     if replay_dir is not None:
         result["replay_wall_ms"] = measured_ms
         result["failure_event_replayed"] = bool(selected and selected.failure_event_replayed)

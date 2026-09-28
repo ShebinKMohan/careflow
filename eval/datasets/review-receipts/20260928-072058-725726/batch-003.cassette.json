@@ -1,0 +1,7 @@
+{
+  "2bf58d33cac5ee3c8229416aac301968298bbaad7263d8c0ba127aada8ba78ce": {
+    "model": "gpt-6-astra",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"alerts_consistent\": true, \"content_sha256\": \"afa8f71e27e5e23974ffaf434b93038107af0ad1ebcecdf1e4c5e9333b9a2b69\", \"facts_supported\": true, \"id\": \"ar-gul-child-04\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"5515b60474f893f3ef5cb986521dbdacdf4a9ff663df608bfe7039bf6fcb7268\", \"facts_supported\": true, \"id\": \"ar-gul-child-05\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"540dd63daaa9f54091f5b96cda70ef02c4a4a568943209c08fa3d514dd3ca57b\", \"facts_supported\": true, \"id\": \"ar-gul-child-06\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"6f7ba3c62295f38325363acd58b321527cacc4aabd2be7736c6be46ff394db55\", \"facts_supported\": true, \"id\": \"ar-gul-sepsis-01\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}, {\"alerts_consistent\": true, \"content_sha256\": \"6ce36b7af65f23bb2fc6f5cda65aab4623227b65a0ead809b6e4dcf8ffd77a03\", \"facts_supported\": true, \"id\": \"ar-gul-sepsis-02\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}]}"
+  }
+}

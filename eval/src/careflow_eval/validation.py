@@ -25,6 +25,7 @@ PHI_DENYLIST = {
     "phone or NHS number": r"(?<!\d)(?:\+?\d[ .()-]*){10,15}(?!\d)",
     "birth date or named patient": r"\b(?:date of birth|dob|my name is|patient name)\b",
     "street address": r"\b\d{1,5}\s+[A-Za-z ]+\s+(?:street|road|avenue|lane|drive)\b",
+    "Arabic name or birth date": r"(?:اسمي|إسمي|تاريخ ميلادي|رقم هويتي|رقم الهوية)",
 }
 
 
@@ -71,6 +72,10 @@ def validate_scenario(scenario: Scenario | dict[str, Any] | Any) -> list[str]:
             errors.append(f"gold key duplicates known patient context: {key.value}")
     if len(set(case.expected.alerts)) != len(case.expected.alerts):
         errors.append("expected alerts contain duplicates")
+    for turn in case.turns:  # Arabic (M2-03): an answer states only gold keys
+        for key in turn.states:
+            if key not in case.expected.facts:
+                errors.append(f"an answer states {key.value}, which has no gold fact")
     if errors:
         return errors
     try:

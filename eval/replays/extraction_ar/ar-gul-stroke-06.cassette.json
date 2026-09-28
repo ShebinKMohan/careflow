@@ -1,0 +1,7 @@
+{
+  "28182410949ce86cc55bdf964f7757982d89a75592b9b051f8c6abea5aa2d9eb": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Something not normal inside me\", \"turn_id\": \"t2\", \"quote\": \"أحس إن فيني شي مو طبيعي\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"مو متأكدة، ما شفت المراية\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، كلامي عادي\", \"negated\": true}, {\"key\": \"fast.last_known_well\", \"value\": \"Before breakfast\", \"turn_id\": \"t10\", \"quote\": \"قبل الفطور كنت طبيعية\", \"negated\": false}]}"
+  }
+}

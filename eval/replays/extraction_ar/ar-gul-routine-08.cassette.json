@@ -1,0 +1,7 @@
+{
+  "b26308733221bee5a3f739b3d39cf872c6fcc1c14cd9fa2ef26a67d23603f9e8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Scalp itching\", \"turn_id\": \"t2\", \"quote\": \"فروة راسي تحكني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"3 days ago\", \"turn_id\": \"t4\", \"quote\": \"قبل ثلاث أيام\", \"negated\": false}, {\"key\": \"severity\", \"value\": 3, \"turn_id\": \"t6\", \"quote\": \"ثلاثة\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t8\", \"quote\": \"إيه، من الأسبرين\", \"negated\": false}]}"
+  }
+}

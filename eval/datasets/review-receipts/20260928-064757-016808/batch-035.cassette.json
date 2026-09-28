@@ -1,0 +1,7 @@
+{
+  "2fb9fc1c9d0ad6455d669f7449a94c96f50b4aa614d7f2c9afb36e6be6c20a3a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-01\",\n      \"content_sha256\": \"6f7ba3c62295f38325363acd58b321527cacc4aabd2be7736c6be46ff394db55\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert SEPSIS_NEWS2 requires NEWS2 total >= 5; scenario provides no NEWS2 data to meet threshold.\",\n        \"Expected level 2 is invalid; SEPSIS_NEWS2 is critical (level 1) per rule definition.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "089044286b21e652062a0ded82e346a7c7c6e68de834c0610e8b5f8d57252c0e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Weakness in one arm\", \"turn_id\": \"t2\", \"quote\": \"في ضعف بدراع واحد\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إي، دراع واحد ضعيف\", \"negated\": false}, {\"key\": \"fast.speech_difficulty\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إي، كلامي مش واضح\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"Morning before breakfast\", \"turn_id\": \"t10\", \"quote\": \"الصبح قبل الفطور كنت طبيعية\", \"negated\": false}]}"
+  }
+}

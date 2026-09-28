@@ -1,0 +1,7 @@
+{
+  "7fa946efa78c83b403843aa781edf4d09aea9f6271845bfe7cfb7d0a6aeefd09": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-breathing-03\",\n      \"content_sha256\": \"4ef0e93eb556baa928435c469a6451ef0545a9431d9473f63f3136c693a115b2\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected alerts is empty, but SEPSIS_NEWS2 should trigger because NEWS2 total is 5 (respiratory 4, heart rate 110, SpO2 94, fever no, infection no, severity 4).\",\n        \"Expected level is 4, but the rule engine would raise a critical SEPSIS_NEWS2 alert, not a synthetic level 4.\"\n      ]\n    }\n  ]\n}"
+  }
+}

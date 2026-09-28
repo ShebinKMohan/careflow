@@ -1,0 +1,7 @@
+{
+  "fc61b5fd28b1e27c4b8936ff1eaf39cf0fc084b956ef65bd093609ffc1d3d8ed": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-child-01\",\n      \"content_sha256\": \"7ae7460a0e1ed42f705f18a5c905b7f1f05a3499f9b60ec6b8b8a0ded86dc488\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected fact 'child_danger.hard_to_wake' is 'unknown' but patient text states 'I don't know, I'm not sure' (M2-04), which maps to 'unknown' only if the answer is 'Not sure', not 'I don't know'.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,54 @@
+synthetic: true
+id: ar-lev-routine-07
+category: routine
+language: ar
+dialect: levantine
+description: 'Seeded routine intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 47
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: جلدي ناشف وعم يحكني
+  gloss_en: My skin is dry and itchy.
+  states:
+  - chief_complaint
+  - symptoms
+- question_key: symptom_onset_at
+  patient_text: من يومين
+  gloss_en: For two days.
+  states:
+  - symptom_onset_at
+- question_key: severity
+  patient_text: أربعة
+  gloss_en: Four.
+  states:
+  - severity
+- question_key: allergies_confirm
+  patient_text: إي، الأسبرين
+  gloss_en: Yes, aspirin.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Dry, itchy skin
+    symptoms:
+    - dry itchy skin
+    symptom_onset_at: Two days ago
+    severity: 4
+    allergies_confirm: Allergic to aspirin
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:16:03.138477Z'
+review_method: automated
+reviewed_content_sha256: 99e42fad10599637981a3c5f572f01bca29e5469849152a3a2ba1e88380ce30c

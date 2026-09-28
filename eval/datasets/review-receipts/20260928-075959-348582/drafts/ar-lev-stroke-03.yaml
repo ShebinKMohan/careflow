@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-lev-stroke-03
+category: stroke
+language: ar
+dialect: levantine
+description: 'Seeded stroke intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: FAST_STROKE.'
+patient:
+  age_years: 65
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: في ضعف بدراع واحد
+  gloss_en: There's weakness in one arm.
+  states:
+  - chief_complaint
+  - fast.arm_weakness
+- question_key: fast.face_droop
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: إي، دراع واحد ضعيف
+  gloss_en: Yes, one arm is weak.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: إي، كلامي مش واضح
+  gloss_en: Yes, my speech isn't clear.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: الصبح قبل الفطور كنت طبيعية
+  gloss_en: In the morning before breakfast I was normal.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My arm feels weak
+    fast.arm_weakness: 'yes'
+    fast.face_droop: 'no'
+    fast.speech_difficulty: 'yes'
+    fast.last_known_well: Before breakfast
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises FAST_STROKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

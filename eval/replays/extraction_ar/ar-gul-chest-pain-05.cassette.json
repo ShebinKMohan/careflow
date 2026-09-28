@@ -1,0 +1,7 @@
+{
+  "afe764ed0bc905ffb7d8d20fbca068144b5ca3a13036ef4554f51a5d94dbe0df": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest tightness\", \"turn_id\": \"t2\", \"quote\": \"عندي ضيقة بالصدر\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إيه، ضيقة\", \"negated\": false}, {\"key\": \"chest_pain.radiates\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"إيه، ينتشر لذراعي اليسار\", \"negated\": false}, {\"key\": \"chest_pain.sweating\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عرقت\", \"negated\": true}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t10\", \"quote\": \"خمس\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"Two days ago\", \"turn_id\": \"t12\", \"quote\": \"قبل يومين\", \"negated\": false}]}"
+  }
+}

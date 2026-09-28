@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-lev-routine-02
+category: routine
+language: ar
+dialect: levantine
+description: 'Seeded routine intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 56
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: كاحلي اليمين بيوجعني
+  gloss_en: My right ankle hurts.
+  states:
+  - chief_complaint
+  - pain_location
+  - pain_present
+- question_key: symptom_onset_at
+  patient_text: بلّش بعد الظهر
+  gloss_en: It started in the afternoon.
+  states:
+  - symptom_onset_at
+- question_key: pain_score
+  patient_text: خمسة
+  gloss_en: Five.
+  states:
+  - pain_present
+  - pain_score
+- question_key: pain_location
+  patient_text: الكاحل اليمين
+  gloss_en: The right ankle.
+  states:
+  - pain_location
+- question_key: allergies_confirm
+  patient_text: إي، عندي حساسية من البنسلين
+  gloss_en: Yes, I'm allergic to penicillin.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: A sore ankle
+    pain_present: 'yes'
+    pain_location: right ankle
+    symptom_onset_at: Since the afternoon
+    pain_score: 5
+    allergies_confirm: Allergic to penicillin
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

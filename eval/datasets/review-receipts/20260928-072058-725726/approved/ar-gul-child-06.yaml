@@ -1,0 +1,53 @@
+synthetic: true
+id: ar-gul-child-06
+category: child
+language: ar
+dialect: gulf
+description: 'Seeded child intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: CHILD_HARD_TO_WAKE.'
+patient:
+  age_years: 11
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: ولدي مو طبيعي اليوم
+  gloss_en: My son is not normal today.
+  states:
+  - chief_complaint
+- question_key: child_danger.hard_to_wake
+  patient_text: إيه، صعب يصحى من النوم
+  gloss_en: Yes, it's hard for him to wake up from sleep.
+  states:
+  - child_danger.hard_to_wake
+- question_key: infection.fever_reported
+  patient_text: إيه، حرارته مرتفعة
+  gloss_en: Yes, his temperature is high.
+  states:
+  - infection.fever_reported
+- question_key: symptom_onset_at
+  patient_text: بدأ بعد الظهر
+  gloss_en: It started in the afternoon.
+  states:
+  - symptom_onset_at
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: My child is not their usual self
+    child_danger.hard_to_wake: 'yes'
+    infection.fever_reported: 'yes'
+    symptom_onset_at: Since the afternoon
+  alerts:
+  - CHILD_HARD_TO_WAKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises CHILD_HARD_TO_WAKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:22:08.122814Z'
+review_method: automated
+reviewed_content_sha256: 540dd63daaa9f54091f5b96cda70ef02c4a4a568943209c08fa3d514dd3ca57b

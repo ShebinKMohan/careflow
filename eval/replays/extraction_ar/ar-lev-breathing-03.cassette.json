@@ -1,0 +1,7 @@
+{
+  "65fa2c4882bf0aeb075f6e9f41dd1517c9d4c4f99a13f917fb2b0de53f142b5c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Difficulty breathing\", \"turn_id\": \"t2\", \"quote\": \"أنا عم بتنفس بصعوبة\", \"negated\": false}, {\"key\": \"chest_pain.short_of_breath\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، نفسي قصير\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا، ما عندي وجع بصدري\", \"negated\": true}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، ما عندي حرارة\", \"negated\": true}, {\"key\": \"severity\", \"value\": 4, \"turn_id\": \"t10\", \"quote\": \"أربعة\", \"negated\": false}]}"
+  }
+}

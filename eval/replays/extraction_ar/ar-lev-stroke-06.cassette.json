@@ -1,0 +1,7 @@
+{
+  "8254150b1b4d0d032b0064125f6b7ff78f15375718874aee943d85d3cf64d98f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"A strange feeling that something is not right\", \"turn_id\": \"t2\", \"quote\": \"حاسة في شي مش طبيعي\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"مش متأكدة، ما تطلعت بالمراية\", \"negated\": true}, {\"key\": \"fast.arm_weakness\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"fast.speech_difficulty\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لا، عم بحكي عادي\", \"negated\": true}, {\"key\": \"fast.last_known_well\", \"value\": \"Before breakfast\", \"turn_id\": \"t10\", \"quote\": \"كنت بخير قبل الفطور\", \"negated\": false}]}"
+  }
+}

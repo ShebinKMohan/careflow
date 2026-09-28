@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-gul-stroke-03
+category: stroke
+language: ar
+dialect: gulf
+description: 'Seeded stroke intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: FAST_STROKE.'
+patient:
+  age_years: 75
+  sex: male
+turns:
+- question_key: chief_complaint
+  patient_text: جهة من وجهي نازلة
+  gloss_en: One side of my face is drooping.
+  states:
+  - chief_complaint
+  - fast.face_droop
+- question_key: fast.face_droop
+  patient_text: إيه، وجهي نازل من جهة
+  gloss_en: Yes, my face is drooping on one side.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: لا، أتكلم عادي
+  gloss_en: No, I speak normally.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: قبل ساعة تقريباً كنت زين
+  gloss_en: About an hour ago I was fine.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: One side of my face is drooping
+    fast.face_droop: 'yes'
+    fast.arm_weakness: 'no'
+    fast.speech_difficulty: 'no'
+    fast.last_known_well: About an hour ago
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises FAST_STROKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:57:29.645938Z'
+review_method: automated
+reviewed_content_sha256: 4a12cc72a5777c53f917ec921f162adc4c98e04f208a6bf02423abf19f2b7498

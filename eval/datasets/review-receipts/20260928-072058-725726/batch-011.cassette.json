@@ -1,0 +1,7 @@
+{
+  "11fbb43d60ab29d0ee23ab6d29d5c04f895abcb9c943c1e89c4ff3dc7eacd277": {
+    "model": "gpt-6-astra",
+    "task": "eval_judge",
+    "text": "{\"verdicts\": [{\"alerts_consistent\": true, \"content_sha256\": \"6f951d0671517f89b4c2d37fa9cedcf6d6ecc1aa96c79b189caaf3f49e60cc06\", \"facts_supported\": true, \"id\": \"ar-lev-stroke-05\", \"no_phi\": true, \"realistic_wording\": true, \"reasons\": []}]}"
+  }
+}

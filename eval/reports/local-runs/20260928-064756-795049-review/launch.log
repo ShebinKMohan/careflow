@@ -1,0 +1,2 @@
+with_llm: starting mlx_lm.server (mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631) on http://127.0.0.1:8081; log /var/folders/wz/1j18wyv50vb_g1hlhd5zz_yw0000gn/T//careflow-mlx-lm-server.log
+with_llm: server ready after 2s

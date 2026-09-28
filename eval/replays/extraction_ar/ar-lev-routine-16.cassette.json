@@ -1,0 +1,7 @@
+{
+  "b60515581c2d7ae96cc33cf7557078088ffcf43d57df3ead4af04888e2f8fb31": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pain in a molar\", \"turn_id\": \"t2\", \"quote\": \"عندي وجع بالضرس\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"about a week ago\", \"turn_id\": \"t4\", \"quote\": \"من أسبوع تقريباً\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t6\", \"quote\": \"خمسة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"molar\", \"turn_id\": \"t8\", \"quote\": \"بالضرس\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا\", \"negated\": true}]}"
+  }
+}

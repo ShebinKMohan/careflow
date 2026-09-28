@@ -1,0 +1,7 @@
+{
+  "6a7d94d4570ebf39ed1ae90bd5960448969862ab96ee59a349b9509bacd9fa35": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"لا، ما عندي حرارة\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": \"unknown\", \"turn_id\": \"t4\", \"quote\": \"والله ما أدري\", \"negated\": false}]}"
+  }
+}

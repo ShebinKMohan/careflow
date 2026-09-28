@@ -1,0 +1,7 @@
+{
+  "da6e16c9dcab470800f4efc6f29a82211e1d201cb6738b877255398989e4d084": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-stroke-03\",\n      \"content_sha256\": \"27af46b0206dab8531bd45d41627644f17bfac943dae4f45937fdd7a0cd2a3cc\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'fast.face_droop': yes, but patient text and gloss explicitly state 'No' for this sign.\",\n        \"Alert FAST_STROKE requires at least two FAST signs (face, arm, speech), but only arm and speech are positive.\"\n      ]\n    }\n  ]\n}"
+  }
+}

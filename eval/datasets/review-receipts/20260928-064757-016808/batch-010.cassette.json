@@ -1,0 +1,7 @@
+{
+  "bc0917fbe2214e0954c971c46c98d4de1cf1c37c12ca0d8ecc65447c82f2933c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-06\",\n      \"content_sha256\": \"cc34fca7dea02484ffc819fd3ee4e1a5b49314ed573218983dde91edbd8b7e6a\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected facts include 'chest_pain.present': yes but patient text states onset was 'Three days ago', contradicting the rule's requirement for present pain.\",\n        \"Alert CHEST_PAIN_ECG_10MIN is critical and requires pain within 10 minutes of arrival or onset; 3-day onset does not support this alert.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,4 +1,4 @@
-Latest report: [20260927-103651.md](20260927-103651.md) · [JSON](20260927-103651.json)
+Latest report: [20260928-082412.md](20260928-082412.md) · [JSON](20260928-082412.json)
 
 # CareFlow extraction_en evaluation
 
@@ -18,8 +18,9 @@ A completed run describes execution, not a clinical pass or acceptable model qua
 | completed_count | 50 |
 | dataset_sha256 | b8e3c26807e65a4d634c29bbb4fa783e78f5880eb22399c1bcd019e49d4f0bc9 |
 | failure_event_replay_count | 1 |
-| git_sha | d87c4213d6ff9387dc960b014503ebe9fe791eb5 |
+| git_sha | b8aebfe426b102b5798e0afb0938c7bf3fb9e3ce |
 | include_unreviewed | false |
+| language | en |
 | latency_source | ["recorded_live"] |
 | logical_model | qwen3.5-9b-4bit |
 | metrics_comparable | true |
@@ -36,11 +37,11 @@ A completed run describes execution, not a clinical pass or acceptable model qua
 | replay_exact_scope | outputs_quality_metrics_and_recorded_latency |
 | rules_validation | false |
 | ruleset_version | 2026.3.0 |
-| source_sha256 | bc22606199810f819c0dbb2deb11af8c2954f612b380649f58cb358f9f749733 |
+| source_sha256 | 97425cba59557eadc02c274d2a6b49f9108c0efef5c97fed8b0398a700a60fd7 |
 | synthetic_only | true |
 | timeout_seconds | 20.0 |
-| wall_ms | 284.62233301252127 |
-| worktree_dirty | false |
+| wall_ms | 224.49679099918285 |
+| worktree_dirty | true |
 
 For successful model calls, this run replays recorded raw model responses through the canonical `ReplayProvider`.
 Recorded live latency and replay execution time are distinct; use the stated latency source.

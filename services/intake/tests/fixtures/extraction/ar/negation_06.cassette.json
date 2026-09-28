@@ -1,0 +1,7 @@
+{
+  "1c159253723b2eb918eafb3e68680c14a6e2d5b1438250589941fdbac4a8d750": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"infection.rigors\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"ما رجفت أبداً\", \"negated\": true}]}"
+  }
+}

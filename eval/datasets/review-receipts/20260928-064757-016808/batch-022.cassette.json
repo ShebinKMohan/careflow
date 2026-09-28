@@ -1,0 +1,7 @@
+{
+  "20ffca6d987b14a2a847514a3f66a67f4d15cba361b5b448402fb0c1f605a8fd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-routine-05\",\n      \"content_sha256\": \"c14f86359133e814cc3185af8186a39e5db6d41ac4b207e577600908c05b0f36\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

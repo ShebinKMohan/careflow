@@ -1,0 +1,7 @@
+{
+  "8d3d82efa3efff51b28df8cbbf9b5ca53b93e6328763b40ebfc0b910bb2f4b2b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-08\",\n      \"content_sha256\": \"687cf97b479941f1b8e832c3fb8c9b0cbc543da479619e851018fbf99e1e2356\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": true,\n      \"no_phi\": true,\n      \"reasons\": []\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "946ec1ff3fd9dff25556246475802631ce7db11daffab9264165aaea2ea50af7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Dry skin and itching\", \"turn_id\": \"t2\", \"quote\": \"جلدي ناشف ويحكني\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"one hour ago\", \"turn_id\": \"t4\", \"quote\": \"قبل ساعة\", \"negated\": false}, {\"key\": \"severity\", \"value\": \"2\", \"turn_id\": \"t6\", \"quote\": \"اثنين، مو قوي\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, to aspirin\", \"turn_id\": \"t8\", \"quote\": \"إيه، عندي حساسية من الأسبرين\", \"negated\": false}]}"
+  }
+}

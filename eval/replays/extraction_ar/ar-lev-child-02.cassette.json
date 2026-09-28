@@ -1,0 +1,7 @@
+{
+  "01fc651cb38a37147a7d20374e72624242aa0af6933e1e85cfb04e032034bd4f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My daughter is sick\", \"turn_id\": \"t2\", \"quote\": \"بنتي مريضة\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، بتفيق عادي\", \"negated\": true}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لا\", \"negated\": true}, {\"key\": \"child_danger.non_blanching_rash\", \"value\": true, \"turn_id\": \"t8\", \"quote\": \"إي، عندها طفح أحمر ما بيروح لما ضغطت عليه بالكاسة\", \"negated\": false}, {\"key\": \"child_amber.poor_feeding\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لا، بنتي عم تشرب وتاكل عادي\", \"negated\": true}]}"
+  }
+}

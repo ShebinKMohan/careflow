@@ -1,0 +1,7 @@
+{
+  "0ed0d1ba05ad72e1974c97bace218d4de3292b3a5eb60b88a0f83756203b5419": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-chest-pain-07\",\n      \"content_sha256\": \"8128d296ef50b698f4813c7ea965fe34ef39a2dec83c6a631fc6826fa6810854\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected chest_pain.onset 'Three days ago' contradicts the rule requiring pain 'now or in the last hours' to trigger the alert.\",\n        \"Alert CHEST_PAIN_ECG_10MIN is raised despite the onset being 3 days ago, violating the 10-minute door-to-ECG deadline logic.\"\n      ]\n    }\n  ]\n}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "cbd6e089b567ec9a75f38d46d0c6991e0f800e6f36c3bba054feed1dbb1c6ce8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-child-05\",\n      \"content_sha256\": \"5515b60474f893f3ef5cb986521dbdacdf4a9ff663df608bfe7039bf6fcb7268\",\n      \"realistic_wording\": true,\n      \"facts_supported\": false,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Age 13 years (156 months) exceeds the 5-15 year range for CHILD_HARD_TO_WAKE; rule returns no alert.\",\n        \"Expected alert CHILD_HARD_TO_WAKE is unsupported because the patient is outside the rule's age criteria.\"\n      ]\n    }\n  ]\n}"
+  }
+}

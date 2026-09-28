@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-lev-stroke-02
+category: stroke
+language: ar
+dialect: levantine
+description: 'Seeded stroke intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: FAST_STROKE.'
+patient:
+  age_years: 77
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: نص وجهي نازل
+  gloss_en: Half of my face is drooping.
+  states:
+  - chief_complaint
+  - fast.face_droop
+- question_key: fast.face_droop
+  patient_text: إي، نازل من جهة
+  gloss_en: Yes, it's drooping on one side.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: لا، ما في ضعف
+  gloss_en: No, there's no weakness.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: إي، لساني تقيل
+  gloss_en: Yes, my tongue is heavy.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: قبل الفطور كنت بخير
+  gloss_en: Before breakfast I was fine.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: One side of my face is drooping
+    fast.face_droop: 'yes'
+    fast.arm_weakness: 'no'
+    fast.speech_difficulty: 'yes'
+    fast.last_known_well: Before breakfast
+  alerts:
+  - FAST_STROKE
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises FAST_STROKE on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:24:42.363643Z'
+review_method: automated
+reviewed_content_sha256: e25ebaaaa752588846de5b1114d47e9d87985614ead54b06dcd2015f31156abf

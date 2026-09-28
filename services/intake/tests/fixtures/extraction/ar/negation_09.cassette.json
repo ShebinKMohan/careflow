@@ -1,0 +1,7 @@
+{
+  "25b4b64d66f4384a3cbd62528ce4bb145ad557db04beafcd5baf45ec0ed19e10": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"child_danger.non_blanching_rash\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"لا، ما عنده أي طفح\", \"negated\": true}]}"
+  }
+}

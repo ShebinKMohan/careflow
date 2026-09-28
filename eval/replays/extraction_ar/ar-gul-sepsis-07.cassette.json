@@ -1,0 +1,7 @@
+{
+  "065f8a2c79527aa37f21a2a37909182be41514869fd4a5f893148bc8b4bbc85c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I feel very sick today\", \"turn_id\": \"t2\", \"quote\": \"أحس إني مريض وايد اليوم\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، حرارتي عادية\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": \"unsure\", \"turn_id\": \"t6\", \"quote\": \"مو متأكد\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"before an hour\", \"turn_id\": \"t8\", \"quote\": \"بدأ قبل ساعة\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "e33326b125cd9866c323d4cb94447caff42fe22f78ce0e98faf2a5dda3fb3917": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chest_pain.present\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"ما عندي ألم في صدري\", \"negated\": true}]}"
+  }
+}

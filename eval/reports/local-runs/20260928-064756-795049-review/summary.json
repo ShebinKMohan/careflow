@@ -1,0 +1,9 @@
+{
+  "status": "review_failed",
+  "accepted": 45,
+  "rejected": 55,
+  "log_path": "eval/datasets/review-log.jsonl",
+  "model": "mlx-community/Qwen3.5-9B-MLX-4bit",
+  "judge": "local",
+  "review_method": "automated; not clinicians"
+}

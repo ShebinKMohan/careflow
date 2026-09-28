@@ -1,0 +1,57 @@
+synthetic: true
+id: ar-gul-stroke-06
+category: stroke
+language: ar
+dialect: gulf
+description: 'Seeded stroke intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 68
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: أحس إن فيني شي مو طبيعي
+  gloss_en: I feel something is not normal with me.
+  states:
+  - chief_complaint
+- question_key: fast.face_droop
+  patient_text: مو متأكدة، ما شفت المراية
+  gloss_en: I'm not sure, I haven't looked in the mirror.
+  states:
+  - fast.face_droop
+- question_key: fast.arm_weakness
+  patient_text: لا
+  gloss_en: No.
+  states:
+  - fast.arm_weakness
+- question_key: fast.speech_difficulty
+  patient_text: لا، كلامي عادي
+  gloss_en: No, my speech is normal.
+  states:
+  - fast.speech_difficulty
+- question_key: fast.last_known_well
+  patient_text: قبل الفطور كنت طبيعية
+  gloss_en: Before breakfast I was normal.
+  states:
+  - fast.last_known_well
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: Something feels different
+    fast.face_droop: unknown
+    fast.arm_weakness: 'no'
+    fast.speech_difficulty: 'no'
+    fast.last_known_well: Before breakfast
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: null
+reviewed_at: null
+review_method: null
+reviewed_content_sha256: null

@@ -1,0 +1,7 @@
+{
+  "62aa8fab459c66aeb3dd7beec7aaf919eb53aaf9533e661802de330648cf2e34": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-lev-child-02\",\n      \"content_sha256\": \"4ab18ebe16fc708459903ed82d6484f3a25fdeecc253c901b6701f1f69f591b8\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert NG143_RED_FLAG requires age < 5 months; patient is 2 years old (24 months).\",\n        \"Red flag 'non_blanching_rash' is not in the PARENT_RED list for red alerts in this rule.\"\n      ]\n    }\n  ]\n}"
+  }
+}

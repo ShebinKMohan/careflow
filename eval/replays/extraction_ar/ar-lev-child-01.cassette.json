@@ -1,0 +1,7 @@
+{
+  "01f507cfa09137c901946ec1e2f1b499e670f19e57cb5dc4a469195243f3d505": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My daughter is sick\", \"turn_id\": \"t2\", \"quote\": \"بنتي مريضة\", \"negated\": false}, {\"key\": \"child_danger.hard_to_wake\", \"value\": true, \"turn_id\": \"t4\", \"quote\": \"إي، كتير صعب فيقها\", \"negated\": false}, {\"key\": \"child_danger.grunting\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"لأ، عم تتنفس منيح\", \"negated\": true}, {\"key\": \"child_danger.non_blanching_rash\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"لأ، ما في طفح\", \"negated\": true}, {\"key\": \"child_amber.poor_feeding\", \"value\": false, \"turn_id\": \"t10\", \"quote\": \"لأ، عم ترضع منيح\", \"negated\": true}]}"
+  }
+}

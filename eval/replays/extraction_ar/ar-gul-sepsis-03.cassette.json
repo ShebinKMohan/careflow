@@ -1,0 +1,7 @@
+{
+  "49245a7cf5741896b652f0b792be426f6a6daf9551665d16eaf92484a6ec6962": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I feel not well at all\", \"turn_id\": \"t2\", \"quote\": \"أحس إني مو زينة أبد\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": false, \"turn_id\": \"t4\", \"quote\": \"لا، ما عندي حرارة\", \"negated\": true}, {\"key\": \"infection.rigors\", \"value\": \"unknown\", \"turn_id\": \"t6\", \"quote\": \"مو متأكدة\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": 3, \"turn_id\": \"t8\", \"quote\": \"قبل ثلاثة أيام\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,60 @@
+synthetic: true
+id: ar-lev-sepsis-06
+category: sepsis
+language: ar
+dialect: levantine
+description: 'Seeded sepsis intake in Levantine Arabic (M2-03 sampler, seed 7); expected
+  alerts: SEPSIS_NEWS2.'
+patient:
+  age_years: 37
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: بحس إني مريضة كتير
+  gloss_en: I feel I'm very sick.
+  states:
+  - chief_complaint
+- question_key: infection.fever_reported
+  patient_text: إي، عندي حرارة
+  gloss_en: Yes, I have a fever.
+  states:
+  - infection.fever_reported
+- question_key: infection.rigors
+  patient_text: ما بعرف
+  gloss_en: I don't know.
+  states:
+  - infection.rigors
+- question_key: symptom_onset_at
+  patient_text: قبل يومين
+  gloss_en: Two days ago.
+  states:
+  - symptom_onset_at
+device_vitals:
+  heart_rate: 135
+  spo2: 93
+  temperature_c: 37.0
+nurse_vitals:
+  respiratory_rate: 24
+  systolic_bp: 100
+  acvpu: A
+  on_supplemental_o2: 'no'
+expected:
+  facts:
+    chief_complaint: I feel very unwell
+    infection.fever_reported: 'yes'
+    infection.rigors: unknown
+    symptom_onset_at: Two days ago
+  alerts:
+  - SEPSIS_NEWS2
+  level: 2
+  level_rationale: 'Synthetic illustrative level 2 from the M2-03 sampler: the rules
+    engine raises SEPSIS_NEWS2 on the seeded gold facts and vitals. Not a clinical
+    label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:codex/gpt-6-astra
+reviewed_at: '2026-09-28T07:24:15.064945Z'
+review_method: automated
+reviewed_content_sha256: a6555755f9184ff71e90c606bde1b31aa9d60c8a84ecdedb3872dc5e63199619

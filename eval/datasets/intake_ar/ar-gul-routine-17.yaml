@@ -1,0 +1,61 @@
+synthetic: true
+id: ar-gul-routine-17
+category: routine
+language: ar
+dialect: gulf
+description: 'Seeded routine intake in Gulf Arabic (M2-03 sampler, seed 7); expected
+  alerts: none.'
+patient:
+  age_years: 62
+  sex: female
+turns:
+- question_key: chief_complaint
+  patient_text: كعبي يعورني
+  gloss_en: My heel hurts.
+  states:
+  - chief_complaint
+  - pain_location
+  - pain_present
+- question_key: symptom_onset_at
+  patient_text: من الصبح
+  gloss_en: Since the morning.
+  states:
+  - symptom_onset_at
+- question_key: pain_score
+  patient_text: واحد
+  gloss_en: One.
+  states:
+  - pain_present
+  - pain_score
+- question_key: pain_location
+  patient_text: في الكعب
+  gloss_en: In the heel.
+  states:
+  - pain_location
+- question_key: allergies_confirm
+  patient_text: عندي حساسية من الأسبرين
+  gloss_en: I'm allergic to aspirin.
+  states:
+  - allergies_confirm
+device_vitals: {}
+nurse_vitals: {}
+expected:
+  facts:
+    chief_complaint: A painful heel
+    pain_present: 'yes'
+    pain_location: heel
+    symptom_onset_at: Since this morning
+    pain_score: 1
+    allergies_confirm: Allergic to aspirin
+  alerts: []
+  level: 4
+  level_rationale: 'Synthetic illustrative level 4 from the M2-03 sampler: the rules
+    engine raises no alert on the seeded gold facts and vitals. Not a clinical label.'
+generated_by:
+  tool: coding-agent
+  model: claude-opus-5-5
+  date: '2026-09-28'
+reviewed_by: agent:local/qwen3.5-9b-4bit
+reviewed_at: '2026-09-28T07:08:30.023904Z'
+review_method: automated
+reviewed_content_sha256: 71fdced92715792a075d33ad8b5e453f321ab3d719f1bbc7e52d3cbdb484106b

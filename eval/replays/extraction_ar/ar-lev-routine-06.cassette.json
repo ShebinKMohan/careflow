@@ -1,0 +1,7 @@
+{
+  "9327726cb0e65a252ebf37e308ab061f6baebd053ad7bf5311280707e41ae8cd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Pain at the bottom of my back\", \"turn_id\": \"t2\", \"quote\": \"عندي وجع بأسفل ضهري\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"afternoon\", \"turn_id\": \"t4\", \"quote\": \"بلش بعد الظهر\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 3, \"turn_id\": \"t6\", \"quote\": \"تلاتة\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"Lower back\", \"turn_id\": \"t8\", \"quote\": \"أسفل ظهري\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"Yes, penicillin\", \"turn_id\": \"t10\", \"quote\": \"إي، البنسلين\", \"negated\": false}]}"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "441effea3444f93b7bae0dc0f084e6935c56979d0438235a2887ec3ab63e0521": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-04\",\n      \"content_sha256\": \"4a83ece6544574a3e6529b3adf121fd21e5b73c7624e51761c5fbec55584cab0\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Expected level 2 but rule SEPSIS_NEWS2 only raises critical (level 1) alerts; level 2 is not defined for this rule.\",\n        \"Expected alerts list contains SEPSIS_NEWS2 but expected level 2 implies a different rule or mapping not supported by the rule.\"\n      ]\n    }\n  ]\n}"
+  }
+}

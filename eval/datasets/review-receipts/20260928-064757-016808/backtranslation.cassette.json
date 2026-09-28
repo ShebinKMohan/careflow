@@ -1,0 +1,1017 @@
+{
+  "0035391cc0b0e0d295dc46cc117c0aae564b1518173952e604ba2be5b7900127": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel I'm not good at all\"}, {\"id\": 1, \"english\": \"No, I don't have a fever\"}, {\"id\": 2, \"english\": \"Not sure\"}, {\"id\": 3, \"english\": \"Started three days ago\"}]}"
+  },
+  "036704b55c07073788cda267aff5440e5514ebccaa0f25109b3063ac30eed3f1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have shortness of breath\"}, {\"id\": 1, \"english\": \"Yes, I can't breathe\"}, {\"id\": 2, \"english\": \"No, my chest doesn't hurt\"}, {\"id\": 3, \"english\": \"No\"}, {\"id\": 4, \"english\": \"Six\"}]}"
+  },
+  "040b8e42f4a22fa8f2118fdd3d6128d5d8b2311af6f600ae642fb20e6cb0b539": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My heel hurts\"}, {\"id\": 1, \"english\": \"An hour ago\"}, {\"id\": 2, \"english\": \"Two\"}, {\"id\": 3, \"english\": \"On the heel\"}, {\"id\": 4, \"english\": \"Yes, aspirin gives me sensitivity\"}]}"
+  },
+  "04c31c260e7691f880acaf01a47cdfadb7eca7bb37e946d7f16388b8f1cd20a1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in my finger\"}, {\"id\": 1, \"english\": \"For three days\"}, {\"id\": 2, \"english\": \"One\"}, {\"id\": 3, \"english\": \"In the finger\"}, {\"id\": 4, \"english\": \"Yes, I have an allergy to aspirin\"}]}"
+  },
+  "07419721a9a6e092fdc38a74967706666289ea57d0679603a49e11183d1de526": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "08f9aba6218ea686f7c70ed535fd7dcb44386d9630c9a0ce9d27d559f3dee65b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel very sick\"}, {\"id\": 1, \"english\": \"Yes, I have a fever\"}, {\"id\": 2, \"english\": \"Yes, strong shivering\"}, {\"id\": 3, \"english\": \"Three days ago\"}]}"
+  },
+  "099e2edc30a2a509e416cb758c7fc3ce4e05460c603fb4ee0e61e83e42d9e16b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "0db52c68a75cdf6a090cf7cbd809bbedcbed93870141145294d371a369693a73": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have tightness in my chest\"}, {\"id\": 1, \"english\": \"Yes, tight\"}, {\"id\": 2, \"english\": \"Yes, it spreads to my left arm\"}, {\"id\": 3, \"english\": \"No, I did not sweat\"}, {\"id\": 4, \"english\": \"Five\"}, {\"id\": 5, \"english\": \"Two days ago\"}]}"
+  },
+  "0f1c149ad3d7812e293d1f2a54e036d7db74c220376a41ad0bbf16c2fef2fbac": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My heel hurts\"}, {\"id\": 1, \"english\": \"Since morning\"}, {\"id\": 2, \"english\": \"One\"}, {\"id\": 3, \"english\": \"In the heel\"}, {\"id\": 4, \"english\": \"I have an allergy to aspirin\"}]}"
+  },
+  "1020110b2c920b59954fdd6c5196a2d418d52853e099a75e7dcb608233b94d96": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "1050fde1e46570aef63095d400a500e1fa5e52c5c8245f6234ae3bdd678dccf6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My speech is not clear\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"No, my face is normal\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, I do not feel weak\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"Yes, the speech comes out difficult\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"I was normal before breakfast\"\n    }\n  ]\n}"
+  },
+  "15c80d5f3d68db96f848969ba614d447b7b39329d58a5ecf4dbe7442a65bb0a8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "1767a6768066d1f87eebffbd253d2386b183ddb0b2e725de39897c3b80e2e6bf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "185ba0a26639464202f66836d8fb1dd29884893acb2c88ff70a259eff214ccc1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My daughter is sick\"}, {\"id\": 1, \"english\": \"No, she wakes up normally\"}, {\"id\": 2, \"english\": \"No\"}, {\"id\": 3, \"english\": \"Yes, she has a red rash that doesn't go away when I press it with the glass\"}, {\"id\": 4, \"english\": \"No, my daughter is eating and drinking normally\"}]}"
+  },
+  "18e8e32352b6c089e05e26881043071d1e8d048944fc582d33ecb0fb242a7589": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "18fcffa44e0a3106059adf2c7abb387de2898ea369b42378f28ca00739145a4b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel like I'm very sick\"}, {\"id\": 1, \"english\": \"Yes, I have a fever\"}, {\"id\": 2, \"english\": \"I don't know\"}, {\"id\": 3, \"english\": \"Two days ago\"}]}"
+  },
+  "1a2bd3e0141dbdb35f4823167679e3b356c0d44a94bf6637eedd82276546d7c6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have constipation\"}, {\"id\": 1, \"english\": \"For two days\"}, {\"id\": 2, \"english\": \"One, mild\"}, {\"id\": 3, \"english\": \"Yes, I have a penicillin allergy\"}]}"
+  },
+  "1acc571d63deb294df50f258b13def36c38f31eef8fe2d6fb30587ba94f1c10f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null},{\"id\":5,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "1aef6f5b7a4c4c3e29dd2b1f97d17004b190dbafb0958165c782a7632d627aa3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have a blister on my foot and it hurts me\"}, {\"id\": 1, \"english\": \"Since yesterday\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"On the foot\"}, {\"id\": 4, \"english\": \"No, I don't have sensitivity\"}]}"
+  },
+  "1af0b532d73917444db5367c34f51815637d8ec22c449715e71cf12ab9d9da30": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "1d590d794a4899a94b295511ac03d8b652854c92ad23480ec5d25c125fa3045f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"Very sick\"}, {\"id\": 1, \"english\": \"Yes, I have a fever\"}, {\"id\": 2, \"english\": \"I don't know, I swear\"}, {\"id\": 3, \"english\": \"For about a week\"}]}"
+  },
+  "1d869e177a6ae0cf77c4399fd07eff10dbd63809faebe2ebdf6d7b5e69c2fe17": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I am very sick\"}, {\"id\": 1, \"english\": \"No, I don't have a fever\"}, {\"id\": 2, \"english\": \"I don't know\"}, {\"id\": 3, \"english\": \"For about a week I am like this\"}]}"
+  },
+  "1e514c66eb36928fa2cbf627c28029bbbb6326fdab4d79d80da1015418d91a77": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "1eeca64517fa3a52549661de4df008fe57b59659a29f8d476ab98e9b6cd248fd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My nose is running\"}, {\"id\": 1, \"english\": \"For about a week\"}, {\"id\": 2, \"english\": \"Three\"}, {\"id\": 3, \"english\": \"Yes, penicillin\"}]}"
+  },
+  "204d53445ede0c63b964913a6052972847b7fec18852b30bfe8ddcda05dfde82": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "21b3d4764948d47b05ee2eb36df51dfd58f246a4ee1f1ca512ec0ed6f25067eb": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in the lower part of my back\"}, {\"id\": 1, \"english\": \"Started in the afternoon\"}, {\"id\": 2, \"english\": \"Three\"}, {\"id\": 3, \"english\": \"Lower part of my back\"}, {\"id\": 4, \"english\": \"Yes, penicillin\"}]}"
+  },
+  "22d95a6a84fc16ef7de8bdaf40470239564f98d643b6aba57cc653c20ffa3cf6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 1,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 2,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 3,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 4,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 5,\n      \"same_meaning\": true,\n      \"issue\": null\n    }\n  ]\n}"
+  },
+  "247b6b89d418540d10cf084d8819531b0a1aec46059b5cc9c71fb4042ac5d1d4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have a mild headache\"}, {\"id\": 1, \"english\": \"An hour ago\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"In my head\"}, {\"id\": 4, \"english\": \"Yes, I have an allergy to aspirin\"}]}"
+  },
+  "24ac86738e759bd2a4c9afb16cc80adebf9cabf149132180868ccb77602dbd69": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I am very sick\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, I have a fever\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, there is no shivering\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"It started in the afternoon\"\n    }\n  ]\n}"
+  },
+  "25377313547d9896a218f2a22d0b7e5545a888c238914f3cd476d48a91f06a34": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My daughter doesn't want to eat\"}, {\"id\": 1, \"english\": \"No\"}, {\"id\": 2, \"english\": \"No, she is breathing normally\"}, {\"id\": 3, \"english\": \"Yes, she is only drinking a little\"}, {\"id\": 4, \"english\": \"No, the diapers are wet as usual\"}]}"
+  },
+  "27e2fc5dd596f9bdf1159b7fedcf6897a7ef377945f1c1dd0e415caa98c11c37": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "29f0d8d2acaf35797b148743e198b358a1c5e7993bffc6dc444f87a89e3727da": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "2bd60c1b9fdc5387b722706ef65578741ff4eeb562b4e7b9d772817c10d0fd63": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I am very sick, my condition is difficult\"}, {\"id\": 1, \"english\": \"No, I do not have a fever\"}, {\"id\": 2, \"english\": \"I don't know, I am not sure\"}, {\"id\": 3, \"english\": \"An hour ago\"}]}"
+  },
+  "2be4f7940c3fd0666f42695b7e18aa2eddd1d7891d726ad9b8d414d4164c3f83": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My daughter is sick.\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"No, she wakes up normally.\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, she breathes well.\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"Yes, she has a rash and it doesn't disappear when I press it with my finger.\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"No, she breastfeeds well.\"\n    }\n  ]\n}"
+  },
+  "2db60da109212923704af0be236ced57e537c551952a5952adcede68046d4628": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My child doesn't eat\"}, {\"id\": 1, \"english\": \"No, he wakes up normally\"}, {\"id\": 2, \"english\": \"No, he breathes normally\"}, {\"id\": 3, \"english\": \"Yes, he breastfeeds much less than usual\"}, {\"id\": 4, \"english\": \"No, the diapers are wet like usual\"}]}"
+  },
+  "2e81601154e38644f344fd2148a858c296b7bba5f0216e859d0f959257f0a6ff": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "2f94cde2f294200934bb3e2f32661c0e4d1e7895fdbf8ece6de95be595011bff": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "2fae1d50a64a1fc187e28411786ea5616523f9ca163c5f4dbc2b6192cb105dd5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "30cdf5c28cce4cc8456f2253370ffb0abde6f2551f35d176b0ab2d26a40c5ecf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"One side of my face is drooping\"}, {\"id\": 1, \"english\": \"Yes, my face is drooping on one side\"}, {\"id\": 2, \"english\": \"No, I don't have weakness\"}, {\"id\": 3, \"english\": \"Yes, I can't speak well\"}, {\"id\": 4, \"english\": \"Twenty minutes ago I was fine\"}]}"
+  },
+  "32a43586e6b2a160c3deaa9ee6010ba92a869230243d99b542e5718cbfae2c13": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "33e0ac5d26485c9fe709b98cfcf3c86e8a83feee15566f32f6ff556aebc0f48b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "361c0d53ceea389e00d6de1e303dd2c7ab7bb99ce600a8953d589a07ed35fcc4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I came because there is tightness in my chest\"}, {\"id\": 1, \"english\": \"Yes\"}, {\"id\": 2, \"english\": \"No, the pain is only in my chest\"}, {\"id\": 3, \"english\": \"Yes God, I sweated a lot\"}, {\"id\": 4, \"english\": \"Five\"}, {\"id\": 5, \"english\": \"From about a week\"}]}"
+  },
+  "36982831c389eeb0da2ebc5c22ec70b02b90051290a92523781daf4463e7b597": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "37147dbec121c17db00e2348773f25d717d2b92651ce36eb83515d4852a07072": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I get heartburn after eating\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"For two days\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"Four\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"No, I don't have an allergy to any medicine\"\n    }\n  ]\n}"
+  },
+  "37923828f02925f13815b6303c4f11880bcca8c39219171db36b6bf1c99e0a3a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "389bf403f42c22d34ad8bd73b6d26fe9b57ceaa9dccd80eac0810cea1b8466fa": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My right ankle hurts\"}, {\"id\": 1, \"english\": \"Started in the afternoon\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"The right ankle\"}, {\"id\": 4, \"english\": \"Yes, I have a penicillin allergy\"}]}"
+  },
+  "39eeb4dad2e3d36e9bb2f7607cb0da68c5bddba6f8fdbe92f790e31f728e7999": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My chest is tight\"}, {\"id\": 1, \"english\": \"Yes, tight\"}, {\"id\": 2, \"english\": \"Not sure\"}, {\"id\": 3, \"english\": \"No, I never sweated\"}, {\"id\": 4, \"english\": \"About four\"}, {\"id\": 5, \"english\": \"From three days\"}]}"
+  },
+  "3a3403d84e4e93e2fd8f2ec47dc421da34118decc2ace50f9aaec1b74689f167": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "3a90f834682678e4a886ca4898541850526df7d64ad78de743a07e2aa2452726": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My daughter is not eating\"}, {\"id\": 1, \"english\": \"No, she wakes up easily\"}, {\"id\": 2, \"english\": \"No, she is breathing normally\"}, {\"id\": 3, \"english\": \"Yes, she is drinking less than usual\"}, {\"id\": 4, \"english\": \"No, she is going to the bathroom normally\"}]}"
+  },
+  "3af2cc716ddb9cfd8e4f78aa2d1379eb7e532d41086bc9aed55a1b709ab176ef": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My face is drooping\"}, {\"id\": 1, \"english\": \"Yes, it's drooping from one side\"}, {\"id\": 2, \"english\": \"No, there is no weakness\"}, {\"id\": 3, \"english\": \"Yes, my tongue feels heavy\"}, {\"id\": 4, \"english\": \"Before breakfast I was fine\"}]}"
+  },
+  "3d7ff3d31928b9b0d0cfe849db43c41ccfa5362e73fba30d9e5990de0677de59": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I feel very sick.\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, I have a fever.\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, I did not shiver.\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"It started in the afternoon.\"\n    }\n  ]\n}"
+  },
+  "3e3a6ac9a3cdddcd7e9bbecf4ed17e3acebc6f4f0cbeefc37c9aabb1e3c90d1b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"Feeling tight in my chest\"}, {\"id\": 1, \"english\": \"Yes, it's tight in my chest\"}, {\"id\": 2, \"english\": \"Yes, it reaches my neck\"}, {\"id\": 3, \"english\": \"Yes, I sweated a lot\"}, {\"id\": 4, \"english\": \"Six\"}, {\"id\": 5, \"english\": \"About a week\"}]}"
+  },
+  "41cb9b246feecc8323f92772c058cee454e328d876ad7d8c5f6d99fe104c07d3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "42db88bd6d9d07c985d91557e93ad776866a41184adb0b0f81a97c196a7bf9cb": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "438502b12f6ffac9fae5e6fb22e31e160256d112cbb64ad302f743331a8db8c2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My right arm is weak\"}, {\"id\": 1, \"english\": \"No\"}, {\"id\": 2, \"english\": \"Yes, my right arm is weak\"}, {\"id\": 3, \"english\": \"Yes, my speech is not clear\"}, {\"id\": 4, \"english\": \"In the morning before breakfast I was normal\"}]}"
+  },
+  "43cc9fa858dbbe59dba7ade6ce1207c25217ac5e6cb422834e33fa785a5e9363": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "4433d86e8e2c24ce0bed6842f84b3ffa096fe3cecc57575d311812edae683fd3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "456e5a840789f2aae47f1c8249e8bd755972aa522fc39e82ee924b4a4d89f4fe": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "4703bbcf17a25103e7f89533ef4f705284061f841c79e7574141b36529250175": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "4a3d43ee812fbca103624fa85a5e5e6cfcd01466da362c07c2ded2fd91a3b34d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My skin is dry and it itches\"}, {\"id\": 1, \"english\": \"For two days\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"Yes, aspirin\"}]}"
+  },
+  "4aff52a25f73697543de182e19a58b4ed63c4c29b1242763077571fedd99d4ca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have acid reflux after eating\"}, {\"id\": 1, \"english\": \"For three days\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"No\"}]}"
+  },
+  "4d54f1188a33696f02de793874725d216de470405cac1791b9792547c17f6759": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "4f9ab36a00a4fbfbdbb69d274ac8233b9796cda13d20d613eb5c0f8fe2620b9c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "51258553007ce89dbea5d6b1ec2c34426218c4ec4f52dd6c89701586e670d125": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel my chest is tight\"}, {\"id\": 1, \"english\": \"Yes, there is tightness in my chest\"}, {\"id\": 2, \"english\": \"Yes, it goes up to my neck\"}, {\"id\": 3, \"english\": \"No\"}, {\"id\": 4, \"english\": \"My pain is 5\"}, {\"id\": 5, \"english\": \"Three days ago\"}]}"
+  },
+  "543fc7b76903fe9cc663bce81010514a28b655599a28276e03292545da4b55bf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 1,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 2,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 3,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 4,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 5,\n      \"same_meaning\": true,\n      \"issue\": null\n    }\n  ]\n}"
+  },
+  "56a8693b233a50b821066e2f53459e494084d2b0377cf118da06e1603010dfca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I am very sick today\"}, {\"id\": 1, \"english\": \"Yes, my temperature is high\"}, {\"id\": 2, \"english\": \"Yes, I am shivering from the cold\"}, {\"id\": 3, \"english\": \"Since morning\"}]}"
+  },
+  "5bd703fb9387b0dffa8683ad15d8aa3458dae0a6c7ec8ce905438cd1ed6d5655": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "5dce49f02e45b98d3b44a558264eb28c75a282bd27b857083f8d28581b2d8c3a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My face is drooping on one side\"}, {\"id\": 1, \"english\": \"Yeah, it's clear in the mirror\"}, {\"id\": 2, \"english\": \"Yeah, my right arm is weak\"}, {\"id\": 3, \"english\": \"Yeah, my tongue is a bit heavy\"}, {\"id\": 4, \"english\": \"I don't know, I don't remember when\"}]}"
+  },
+  "5f3ce5d1fbcb1db1da0b09bb4f8e7e2ddc65754e74b6673b7ca2f440b18a0963": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My left wrist hurts\"}, {\"id\": 1, \"english\": \"Since morning\"}, {\"id\": 2, \"english\": \"Two\"}, {\"id\": 3, \"english\": \"On the left wrist\"}, {\"id\": 4, \"english\": \"No, I don't have an allergy to any medicine\"}]}"
+  },
+  "5f9ce6935f38aa35203fd6b8882f423692fc929e6c2455ad447ad7f24a81fa5a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel something not normal\"}, {\"id\": 1, \"english\": \"Not sure, didn't look in the mirror\"}, {\"id\": 2, \"english\": \"No\"}, {\"id\": 3, \"english\": \"No, I'm talking normally\"}, {\"id\": 4, \"english\": \"I was fine before breakfast\"}]}"
+  },
+  "6078a6c32e98872b0dc28ac3d4baf3c5616b4356e2f9756b8d95e3a832bcebca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "639362ce8bea3db54e78e044c5e1dd287bd176350a0b5af0ed44f33262ebe91c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My nose is running\"}, {\"id\": 1, \"english\": \"It's been running for about a week\"}, {\"id\": 2, \"english\": \"Two\"}, {\"id\": 3, \"english\": \"Yes, from aspirin\"}]}"
+  },
+  "63b923ef4275931d0b48c7294820e10ebca0c4d4297c68818d64a4a806a6ebb1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 1,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 2,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 3,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 4,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 5,\n      \"same_meaning\": true,\n      \"issue\": null\n    }\n  ]\n}"
+  },
+  "640890586fa0d6af46b7b1bc40ce8ebf6a7368ea298d9dbc96a5e0b2b0de7fd6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in the lower back\"}, {\"id\": 1, \"english\": \"Since morning\"}, {\"id\": 2, \"english\": \"Two\"}, {\"id\": 3, \"english\": \"Lower back\"}, {\"id\": 4, \"english\": \"Yes, penicillin\"}]}"
+  },
+  "65d5f9b165eab3e4a67ec7f1b78a82f28453beef8d193099869e1ce02a88eb4a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}, {\"id\": 5, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "6627f590be20f577305e336ab95b3d876d2eae5ca2eb40f065d207f4f67279cf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have tightness in the chest\"}, {\"id\": 1, \"english\": \"Yes, there is tightness\"}, {\"id\": 2, \"english\": \"No, the pain is in the chest only\"}, {\"id\": 3, \"english\": \"Yes, I sweated a lot\"}, {\"id\": 4, \"english\": \"Seven\"}, {\"id\": 5, \"english\": \"Two days ago\"}]}"
+  },
+  "6707e0d88ed218f64fd666b5a6ced9a52434e1a34831a7427fd7b09fd5b075d5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "686829a719f8343e0352a85128149966b265f5148bfc683e0de59d9681a56544": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "6868f9e9316100e01ca6d493a6d3dbaf4f4f00b98d202f1ecb8f3b5170cd5af9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have tightness in the chest\"}, {\"id\": 1, \"english\": \"Yes, the tightness is present\"}, {\"id\": 2, \"english\": \"No, it does not go to another place\"}, {\"id\": 3, \"english\": \"Yes, I sweated\"}, {\"id\": 4, \"english\": \"The pain is six\"}, {\"id\": 5, \"english\": \"Two days ago\"}]}"
+  },
+  "6947fdbcff9e356652034ec93be1ced31dbf561a79d6207e5da60e81e289830f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "6ab4d044293b41f70463ce0172396e6281a39cc6a84108a1ee5565d9bb3d5d71": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}, {\"id\": 5, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "6ae828d58829a948cace95b904e98968bfac60fdd0a3b4ff72887cf760b9ecef": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in the molar\"}, {\"id\": 1, \"english\": \"Two days ago\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"In the molar\"}, {\"id\": 4, \"english\": \"No, I don't have an allergy to medications\"}]}"
+  },
+  "6b272e2563f1b4e41ba1c420a38b473d4e4ac022e3c0cbfdea68f2265a40388c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I don't feel good after lunch\"}, {\"id\": 1, \"english\": \"No, I don't have chest pain\"}, {\"id\": 2, \"english\": \"No, my breathing is normal\"}]}"
+  },
+  "6c30f7997863d8627857df5edfa02a239ef53e4d01be1938ba85a584b8de840a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My son isn't acting like his usual self\"}, {\"id\": 1, \"english\": \"Yeah, it's really hard for him to wake up\"}, {\"id\": 2, \"english\": \"No, he doesn't have a fever\"}, {\"id\": 3, \"english\": \"He's been like this for two days\"}]}"
+  },
+  "6c49c1b7ea0dd97f2909e23ec43f6daee1f476a51c56f873e619624b6706e564": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "6dde00ac800f39a83586685311753d67e3c93f08d4aab21be4f366482d660f50": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My stomach gets bloated after eating\"}, {\"id\": 1, \"english\": \"For about a week\"}, {\"id\": 2, \"english\": \"One\"}, {\"id\": 3, \"english\": \"No, I don't have allergies\"}]}"
+  },
+  "714a4656941812b62bbca5a79b88b56e98ae372f961d4c53dc11bc98e172fcef": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I am breathing with difficulty\"}, {\"id\": 1, \"english\": \"Yes, my breath is short\"}, {\"id\": 2, \"english\": \"No, I do not have chest pain\"}, {\"id\": 3, \"english\": \"No, I do not have fever\"}, {\"id\": 4, \"english\": \"Four\"}]}"
+  },
+  "716f9611b6a1875c7f0d00ca080464da581114487c5ec333155da4864dd2af54": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have a mild headache\"}, {\"id\": 1, \"english\": \"Two days ago\"}, {\"id\": 2, \"english\": \"One, mild\"}, {\"id\": 3, \"english\": \"In my head\"}, {\"id\": 4, \"english\": \"Yes, I have a penicillin allergy\"}]}"
+  },
+  "7274967c8d83ee790a13e59e8761d908a8d1e86759d2b3a5e0e7df200d52b885": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "72b193441106d9b123d75108370867dbd585b47011dbd24b4c47077e881e0e29": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":false,\"issue\":\"Specific tooth vs molar\"},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":false,\"issue\":\"Specific tooth vs molar\"},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "72edb7417f899fce77e3b5993f09b8b41a1c43be85a9c81104d44f76e2c173ab": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "7550a520a799facc4ec622347933ca36f5fb98873e7f3cad021e959d68d4b88f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "756c1e21c65f631ae1388771034a0b1d676350ce7f8852c40f98a99a63bc4769": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "75814040ce955af3641aef14cdc902e6e916d67e926eaa3b705bc31c3ef1cce7": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null},{\"id\":5,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "77102da16bfe71e1c5f5f786b181882d1f1cf9e4966e869b82303795d0320dba": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "776c74d10c877031e3c9805ad415d67349f7a578c0b3902756e03f1ba0b12660": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My ears are blocked\"}, {\"id\": 1, \"english\": \"Since last night\"}, {\"id\": 2, \"english\": \"Three\"}, {\"id\": 3, \"english\": \"No, I don't have any drug allergies\"}]}"
+  },
+  "781947e93883ba5a940c1a4a12ab9543e62d0883d853de6a2e8375eb2d4869ba": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My face is tilted to the side\"}, {\"id\": 1, \"english\": \"Yes, my face is dropping to one side\"}, {\"id\": 2, \"english\": \"Yes, my left arm is weak\"}, {\"id\": 3, \"english\": \"Yes, my tongue is heavy\"}, {\"id\": 4, \"english\": \"Before breakfast\"}]}"
+  },
+  "78eab27a9cf455c868d2a448cb4482b708df69877088cade1912899f3c346fa3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My throat is bothering me\"}, {\"id\": 1, \"english\": \"Since morning\"}, {\"id\": 2, \"english\": \"One\"}, {\"id\": 3, \"english\": \"In the throat\"}, {\"id\": 4, \"english\": \"Penicillin, I have an allergy to it\"}]}"
+  },
+  "798de99e1cdcc55bd2d9b1d7f693c665e86069842507395703bf39f86a225d46": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "79e632def7df0610be07ffe31a23832e1961ce67c638badb44db80a0a29063e4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 1,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 2,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 3,\n      \"same_meaning\": true,\n      \"issue\": null\n    },\n    {\n      \"id\": 4,\n      \"same_meaning\": true,\n      \"issue\": null\n    }\n  ]\n}"
+  },
+  "7a256de8e8b61cd5c723f1c1b2a06fcf04659b4961aa41a864d0b034e3e7dc1d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "7d5fdd36395c62afe581d58b4f7729fc1bd79814562756143c93f3592692d620": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My daughter is sick.\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, it's very hard for her.\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"Yes, she is breathing well.\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"Yes, there is no rash.\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"Yes, she is breastfeeding well.\"\n    }\n  ]\n}"
+  },
+  "7deffba642f76f6077424472a322f825ed93eb1430eb233b09b33c5347911921": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "7fdb05a46eb4bc076b332557ccba87530b56944a8982e09ba0b44a57da3edf47": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel tightness in my chest\"}, {\"id\": 1, \"english\": \"Yes, the tightness in my chest\"}, {\"id\": 2, \"english\": \"I don't know, not sure\"}, {\"id\": 3, \"english\": \"No, I never sweated\"}, {\"id\": 4, \"english\": \"The pain is eight\"}, {\"id\": 5, \"english\": \"It started two days ago\"}]}"
+  },
+  "80ad426841f02cc76dd62f30f0435440e198945e8c6a0dd54d60c0e1f10b9dc3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"Yes, I feel my chest is tight\"}, {\"id\": 1, \"english\": \"Yes, tight\"}, {\"id\": 2, \"english\": \"Yes, to my neck and shoulders\"}, {\"id\": 3, \"english\": \"No\"}, {\"id\": 4, \"english\": \"Five\"}, {\"id\": 5, \"english\": \"Started three days ago\"}]}"
+  },
+  "8150851c6c22880ec6916307a01ce15462ad98431dbdfedb059fc5c959892424": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I feel very sick today\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"No, my temperature is normal\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"Not sure\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"It started an hour ago\"\n    }\n  ]\n}"
+  },
+  "826820386704c6e1ef9b449dd20329ecfbdcfbac80833f4fce831fafab3ecc55": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"Came because of shortness of breath\"}, {\"id\": 1, \"english\": \"Yes, I breathe with difficulty\"}, {\"id\": 2, \"english\": \"No, my chest doesn't hurt\"}, {\"id\": 3, \"english\": \"No, I don't have a fever\"}, {\"id\": 4, \"english\": \"About seven\"}]}"
+  },
+  "8339e8d6e7a26679c0c796c19c453f11b81c501ee78828b78e6415abbc7ba770": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "85930e8c95ba95a6a617a822ae4dbb1a88eae4c1ce4ac89223d96e65791ad3ab": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "86a8f8cb434134f9ecd02ca3eb804d1035110ebac5a59a381f417732a6567d7d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"Pain in my shoulder\"}, {\"id\": 1, \"english\": \"An hour ago\"}, {\"id\": 2, \"english\": \"The pain is one\"}, {\"id\": 3, \"english\": \"In my shoulder\"}, {\"id\": 4, \"english\": \"No, I don't have an allergy to any medicine\"}]}"
+  },
+  "872b979f959d5780d2e5e0215938c6e831f692dd24c63c5d0711ce3583e7b58f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "891bd1ea7df8f8b978cef095a313fd5003d98ae00b0ba3a92d21455520e3e4c1": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "8a30463c6a6d73714b6ee1af936dda16b0233a4d452b1e6e822073aa8bdf12ca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "8aa732d3ebc3862a153f38313bb3882b7e948e03eba5a4aaa97cc47f21441d23": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "8aec992bb619aa3095af0182015366bebefdeb953298b0b3c312aa68ad86f2fd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I have tightness in my chest\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, my chest is tight\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"God, I don't know, I didn't notice\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"Yeah, I sweated a lot\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"About seven\"\n    },\n    {\n      \"id\": 5,\n      \"english\": \"It started from the morning, when I woke up\"\n    }\n  ]\n}"
+  },
+  "8b09689d5e0582faeb8808994e74d1a8f467409abf296c802aa92186f2c960bf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "8da3c03956874182700562d40d128b590be7a021470183041568391c26e001e5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My right ankle is bothering me\"}, {\"id\": 1, \"english\": \"About an hour ago\"}, {\"id\": 2, \"english\": \"One, something simple\"}, {\"id\": 3, \"english\": \"The right ankle\"}, {\"id\": 4, \"english\": \"Yes, aspirin\"}]}"
+  },
+  "8eaae8748c8cab1d44a39c7a1659e1385285b07dea1bf8a8c04de26309b5a7bd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "8fa9a5983ad4305c70a2ea1038f42efc8dcdf60628c6ff5f71ea9864fb93f7be": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "8fce2269936eda575f8c3426521c99d50b76bf65174a1ec3ccbde977205de18f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "921652ff76e9c1ea9a765c67a1df0ce4054865a695a442fc70dfd220bf4db68c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "92eccf8f135479309c32217444eb163f599aa74097fa263479b518cb799959df": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}, {\"id\": 5, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "931c08d4be4b77346e9d00a3e1d78051e76fbc5350651f315796a41a914db440": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null},{\"id\":5,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "96ea21ae2d64476a573e9e6477c8f05831ed9bfad5aa6dbe72ac79638dce5442": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My throat hurts\"}, {\"id\": 1, \"english\": \"Since last night\"}, {\"id\": 2, \"english\": \"One\"}, {\"id\": 3, \"english\": \"In the throat\"}, {\"id\": 4, \"english\": \"No, I don't have an allergy to any medicine\"}]}"
+  },
+  "9710440ecb3ae7ba2bc6989b6b1e4dec70c3fe8147a70f07d9036e3be36ab0a5": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "98e481b773bde633f8cbf7535fbab53c4378b0fcd82bec5b0efbe5e95fd9e3de": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "9af59288195ddf92c18e0316ba55098f904d51550e79273845cbaf109e4fa608": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "9bba4692f5f4f0f11a6924310cb6b8f6aad515e708cf34ed2184bee2063b9d70": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My son is not normal today\"}, {\"id\": 1, \"english\": \"Yeah, hard to wake up from sleep\"}, {\"id\": 2, \"english\": \"Yeah, his temperature is high\"}, {\"id\": 3, \"english\": \"Started in the afternoon\"}]}"
+  },
+  "9dad3c6587d4b627c6793cafea0b61c4ff268148466c68a8f07c43af432b2527": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "9e4e106d691df28afad8b28fc8650b66abb3cdc2afb88f20c9895134a8a4ded4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My son is sick\"}, {\"id\": 1, \"english\": \"I don't know, I don't know what to say\"}, {\"id\": 2, \"english\": \"No, he breathes normally\"}, {\"id\": 3, \"english\": \"No, he has no rash\"}, {\"id\": 4, \"english\": \"No, he eats and drinks normally\"}]}"
+  },
+  "9eefa4113cbeb9ba4562ef12f64c85f74ba00d9e248528a619dc13f0cd72fa62": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":false,\"issue\":\"Specificity of location (half vs unspecified)\"}]}"
+  },
+  "9f2871b31fd1b765fc1d3dd6565eebf06d89a1380c72b3e3e9f49a8791968691": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "a0982b0707de49b48d661c456519d3bd153590c8630f6f7523266f1254ad0e50": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "a13b09eab4caf8931e3a6507a3c898ed320a3e77928429bf7fda2ee82cd8cf29": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My scalp is itching\"}, {\"id\": 1, \"english\": \"Three days ago\"}, {\"id\": 2, \"english\": \"Three\"}, {\"id\": 3, \"english\": \"Yes, from aspirin\"}]}"
+  },
+  "a15a54e2cd68991a1f7fd8956b7ca509092189f9ca301a5a9305cea898e40f20": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "a18526c6312b82eadeaf44b33d564c226c49b2ca0bce3104a85dec6f9a458138": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "a2e6e85e6ab5876a91a1ae3fd1e9057b547a3cb25bb8c4562a58009c2b3fbd24": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My daughter is not acting like herself.\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Not sure, didn't notice.\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, she doesn't have a fever.\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"About a week.\"\n    }\n  ]\n}"
+  },
+  "a317a135d0d2b06340ca140986c856d86b5e7cc071c2d822f8dfc834c35c1b59": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel sick after eating\"}, {\"id\": 1, \"english\": \"No, nothing in my chest\"}, {\"id\": 2, \"english\": \"No, breathing is normal\"}]}"
+  },
+  "a53e49cf4c9eaa795d93d66e51256ca945a306f97e3bc60dc3a537ca147d719f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have a blister on my foot and it hurts\"}, {\"id\": 1, \"english\": \"About a week\"}, {\"id\": 2, \"english\": \"Two\"}, {\"id\": 3, \"english\": \"In the foot\"}, {\"id\": 4, \"english\": \"Yes, aspirin\"}]}"
+  },
+  "a6a631e88fc31f4099452d9af3021737f6e326790b8dc05fb76ce3c1436d00b4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": false, \"issue\": \"Uncertainty vs inability to speak\"}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "a6aee84305488587d6314c05c8fef70b92874f50ee79a690042a12f4bc03cf77": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": false, \"issue\": \"Tooth vs molar\"}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "a6e94cff936151d3f7cb17f213a957baf070b87d8c73df62130dc806efb97702": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null},{\"id\":5,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "a8fc72dda9b92a1d60ab6944990f41e673ac1cb0fc14cf117d8bb7e7c6edfc0f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My knee hurts\"}, {\"id\": 1, \"english\": \"For about a week\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"In the knee\"}, {\"id\": 4, \"english\": \"I have an allergy to aspirin\"}]}"
+  },
+  "a998cd39d3c1cc5777f8cd3dfb78947d8bd3f3ba2e9c808dbe460a171b95f839": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "aa18ec8729efdea571b0e4d8fb14186fcd93a29e79131eb921a8994806e615f0": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My finger hurts\"}, {\"id\": 1, \"english\": \"For about a week\"}, {\"id\": 2, \"english\": \"One\"}, {\"id\": 3, \"english\": \"On the finger\"}, {\"id\": 4, \"english\": \"Yes, I have a penicillin allergy\"}]}"
+  },
+  "aa814689ffc1ef103bcf2e53332760966d635db35120ce9f908ab56fd393b23a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}, {\"id\": 5, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "aeb67a6206a82cf29e5975afad646d6c9dbb0a64ebcbc14fb898594c5fcd39ca": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"Something is pressing on my chest, it's tight\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, it's tight on my chest\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"Yes, it reaches my jaw\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"No\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"Six\"\n    },\n    {\n      \"id\": 5,\n      \"english\": \"For two days\"\n    }\n  ]\n}"
+  },
+  "af3ac8220afdd227585546bd4611c427670f567136a6888ffb576a7f6deabb41": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have shortness of breath\"}, {\"id\": 1, \"english\": \"Yes, I can't breathe well\"}, {\"id\": 2, \"english\": \"No, my chest doesn't hurt\"}, {\"id\": 3, \"english\": \"No, I don't have a fever\"}, {\"id\": 4, \"english\": \"Eight, very difficult\"}]}"
+  },
+  "b4827a4576201227dfb0683a562d29fa58f56aac992750d65cdca6f89c75b680": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "b5f5e5e288ec1709b89ad7f630c958624adbb99232fbaf0365cfbdb16c8a8afa": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "b9932967903573f6b964ed7b51af36754fcfde61339842a2a7d4f270e5e22d90": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":false,\"issue\":\"Specificity of location (half vs unspecified)\"},\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "bb07f38e555df6b8846e17cbbb2bf1242e7251282bd027ec0604434204bb1504": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null},{\"id\":5,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "bb0ed079a01ef4a3bc36b0c75a7e836da94b4e296d0e1fcbcfc3eba3cd104f0a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "bc66b6cb9b6560ef9f6343b9edb03126c50fa2587815fc0c9ffc5c2f07702a3a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "bc7c9de0cbc80cd37f70a7ad4e3006b8aea1694240e7392f0543eed53c8f8e92": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "bcf8cee012a01809bcd92d5385e0afb85c6f6fbeb9781db8265510d297c4427a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}, {\"id\": 5, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "bdb912fa38307e48201b2493baa724724709627778eeaf747c7d306699f65a59": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My scalp is itching\"}, {\"id\": 1, \"english\": \"Two days ago\"}, {\"id\": 2, \"english\": \"Three\"}, {\"id\": 3, \"english\": \"Yes, I have an allergy to aspirin\"}]}"
+  },
+  "bf9272817138d86790780200de388a75c59df2315f3a276a05322ad5398aad96": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}, {\"id\": 5, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "bfc0be59537e184d3e50d61fa65bd84d94ba6c280ce1d1a11a4e2ef0b19061a2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I can't speak well right now\"}, {\"id\": 1, \"english\": \"No, my face is normal\"}, {\"id\": 2, \"english\": \"No, there is no weakness\"}, {\"id\": 3, \"english\": \"Yes, the speech comes out difficult\"}, {\"id\": 4, \"english\": \"Half an hour ago I was fine\"}]}"
+  },
+  "c0132bcc2b76c3433df916b98dadab51b78dbe7c437aaa87369e1c380a1558de": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "c06a52d7d2dd3f743dca46e31517b315a3ccdc55ac41d3d3c06036653b7983fc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My speech isn't clear\"}, {\"id\": 1, \"english\": \"No, my face is normal\"}, {\"id\": 2, \"english\": \"No, there is no weakness\"}, {\"id\": 3, \"english\": \"Yes, I am speaking with difficulty\"}, {\"id\": 4, \"english\": \"I was fine before breakfast\"}]}"
+  },
+  "c2fe053d0e25aae182b81a432ebe35dc69b062e7fb842f06dd895435b1d2b025": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I am very sick\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, my temperature is high\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, I did not shiver\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"It started two days ago\"\n    }\n  ]\n}"
+  },
+  "c5d951a4e1f9f125eabe9fa84d3e9088e3b88484b36ee3d4500594b89337ee82": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "c62fc0155cc9f6f5a0918bf2b38b541c1d2fb1f0d207c5670d5ff32423d8660f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"My son hasn't eaten anything.\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"No, he wakes up easily.\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No.\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"Yes, he only drinks a little.\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"No, he goes to the bathroom normally.\"\n    }\n  ]\n}"
+  },
+  "c6f2c3b3674431bd98ab08429dd8af3144844dafabd133c02a3ef0720fce0eb4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "cad1d498db97f5c7b55a4d5035a891799faa8a7c57b2c68dc3bbbb7eb729784a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I am very sick\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, I have a fever\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"Yes, I am shivering and I can't stop\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"About an hour ago\"\n    }\n  ]\n}"
+  },
+  "caec77c2bab64029c666a54b36c1f46f6f76c6f39981d9375141ef63ccefe364": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My condition is very bad\"}, {\"id\": 1, \"english\": \"Yes, I have strong fever\"}, {\"id\": 2, \"english\": \"Yes, shivering that won't stop\"}, {\"id\": 3, \"english\": \"For two days\"}]}"
+  },
+  "ce4734b4e6f0acc52ff5d1616b104cf2107cc318703373aa5700dea7567ffb73": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "cffe55ca409edba18f608ea3053f35b6d3c91dd55036af73c82699af86340726": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "d26327c11db2c938965d4ccf34f0df3e534ef1644f21398e1e51892cef68a017": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "d31d328db7ca7216f8ba8f94261e1b570b4a66df649f24b67e8c8eeddd8db2f9": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My right ear is blocked\"}, {\"id\": 1, \"english\": \"For two days\"}, {\"id\": 2, \"english\": \"Three\"}, {\"id\": 3, \"english\": \"Yes, aspirin\"}]}"
+  },
+  "d3994674b11304ce14a7e56d04d8c8372e9f786bc6dbdada0a1e35b199cc99e4": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "d49746eac909ad04ded312f726529179011271ca17477ab47c593c99b419973e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel very sick right now\"}, {\"id\": 1, \"english\": \"No, I don't have a fever\"}, {\"id\": 2, \"english\": \"Yes, I am shaking and can't stop\"}, {\"id\": 3, \"english\": \"Since this morning\"}]}"
+  },
+  "dae9e19078938e3c1ab0263e7e0389032a7800ef98f3ea62ac9b116c93735cdc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in the molar\"}, {\"id\": 1, \"english\": \"For about a week\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"In the molar\"}, {\"id\": 4, \"english\": \"No\"}]}"
+  },
+  "dcc5600b07d21b8ae491e7fbd2355ea76fcd43e6fc3df573f62dbd5c15bbd04a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have constipation\"}, {\"id\": 1, \"english\": \"For three days\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"No\"}]}"
+  },
+  "ddf0eb15c14ee630db1ba5ed9281a0318375e33a99adf3cd67ba50e4a0d1a5bf": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "de6065496a0ccc20b99ba17b2eb1e5a2cf04e135110f08a3ff6efe956c8f5eff": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have tightness in my chest\"}, {\"id\": 1, \"english\": \"Yes\"}, {\"id\": 2, \"english\": \"Yes, it goes to my back\"}, {\"id\": 3, \"english\": \"Yes, I did not sweat\"}, {\"id\": 4, \"english\": \"Four\"}, {\"id\": 5, \"english\": \"I had it for about a week\"}]}"
+  },
+  "e0970fa7ffbc17e7ab6338eda888a2b5ee93c9ce8931ec800c3a238fec5d145c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My shoulder hurts\"}, {\"id\": 1, \"english\": \"Since last night\"}, {\"id\": 2, \"english\": \"Four\"}, {\"id\": 3, \"english\": \"In my shoulder\"}, {\"id\": 4, \"english\": \"Yes, penicillin\"}]}"
+  },
+  "e0eeefaba9c7383001d0613d19579548ae0841a8beea4e0b31be54ed13728c5d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My knee hurts\"}, {\"id\": 1, \"english\": \"Since yesterday\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"In the knee\"}, {\"id\": 4, \"english\": \"Yes, from aspirin\"}]}"
+  },
+  "e120e3cb91ca4317b0e39e2b5ea374081a6ce31c6946c2693b79ab4161a30b7c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "e145efd4cb4a00dc9b80b750f89c9107782aeed54973536ae3f27626d7df412c": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "e195ac5ab57f4b0da0a0e36bba07d6328456751a98ef74d6cce6e833a8bde3bc": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My son is not acting normal\"}, {\"id\": 1, \"english\": \"Yes, he keeps sleeping and won't wake up\"}, {\"id\": 2, \"english\": \"No\"}, {\"id\": 3, \"english\": \"Since morning\"}]}"
+  },
+  "e1d3deeacf3c613dc3d1a730cf62cbdc87c90479d5095cb3cbfcb20f40da13bd": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My stomach gets bloated after eating\"}, {\"id\": 1, \"english\": \"It started in the afternoon\"}, {\"id\": 2, \"english\": \"About three\"}, {\"id\": 3, \"english\": \"No, I don't have an allergy\"}]}"
+  },
+  "e301f98aae2cfaece45d11124929a0a0d6571b3d0566b82a7a3de0c178836dd8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel tight in my chest\"}, {\"id\": 1, \"english\": \"Yeah, my chest is tight\"}, {\"id\": 2, \"english\": \"I don't know, I didn't notice\"}, {\"id\": 3, \"english\": \"Yeah, I sweated\"}, {\"id\": 4, \"english\": \"About four\"}, {\"id\": 5, \"english\": \"Since morning\"}]}"
+  },
+  "e30202998953d2787468b6764fdcb5ff2e66bee81bf68b6034480f2998271739": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I have pain in my left wrist\"}, {\"id\": 1, \"english\": \"It started an hour ago\"}, {\"id\": 2, \"english\": \"Five\"}, {\"id\": 3, \"english\": \"In the left wrist\"}, {\"id\": 4, \"english\": \"Yes, I have an allergy to aspirin\"}]}"
+  },
+  "e398794cc87ff07555ac6e0ccc73b778038fd618a71eda92bfd37dd9172be18f": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My skin is dry and itches\"}, {\"id\": 1, \"english\": \"I noticed it an hour ago\"}, {\"id\": 2, \"english\": \"Two, not strong\"}, {\"id\": 3, \"english\": \"Yes, I have an allergy to aspirin\"}]}"
+  },
+  "e40df05c22e98e0f076e7cbc9b5cd9f7ce2ffa200b495409dbc49e9262ebaf2b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "e55cfc93eceb2d8ef0ec248afdf0088ce1c2a6ee8756dd372b7be984759d1c1e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"I have shortness of breath\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yes, you are breathing with difficulty\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No, there is no pain in my chest\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"No, there is no fever\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"Seven\"\n    }\n  ]\n}"
+  },
+  "e5d6a472435b3666afcd8cdf24daab9053b07922c917b092bfab228ac9302156": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel shortness of breath\"}, {\"id\": 1, \"english\": \"Yes, I am gasping\"}, {\"id\": 2, \"english\": \"No, there is no pain in my chest\"}, {\"id\": 3, \"english\": \"No\"}, {\"id\": 4, \"english\": \"Seven\"}]}"
+  },
+  "e675d50626d67fbc271e0ead94dbcdf9046d66d50ae2962cf2af48fb15def36d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I can't breathe well\"}, {\"id\": 1, \"english\": \"Yes, I breathe with difficulty\"}, {\"id\": 2, \"english\": \"No, I don't have chest pain\"}, {\"id\": 3, \"english\": \"No, I don't have a fever\"}, {\"id\": 4, \"english\": \"I say 6\"}]}"
+  },
+  "eac0d5b2a0ffecb0220b1c52faa6e754901bc0f9ff01a56a7774305470f31081": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "edf150d66d85a62a3ad88b9684e3567131281ca04138ec14fd5ea46d1e2b744d": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I am very sick\"}, {\"id\": 1, \"english\": \"No\"}, {\"id\": 2, \"english\": \"No, there is no shaking\"}, {\"id\": 3, \"english\": \"Since last night\"}]}"
+  },
+  "f060ba0319f336dc1d513f41d37eb8fec7ef0ab3d728ac533225695e9165b085": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"One side of my face is drooping\"}, {\"id\": 1, \"english\": \"Yes, my face is drooping on one side\"}, {\"id\": 2, \"english\": \"No, I don't have weakness\"}, {\"id\": 3, \"english\": \"No, I speak normally\"}, {\"id\": 4, \"english\": \"About an hour ago I was fine\"}]}"
+  },
+  "f1060c9224cfb5a916a0e4d6007af9f901cd0e462f1bfa95ab21bac6ff48f37b": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"So, I have tightness in my chest\"}, {\"id\": 1, \"english\": \"Yes, I have tightness in my chest\"}, {\"id\": 2, \"english\": \"Not sure\"}, {\"id\": 3, \"english\": \"Yeah, I was sweating a lot\"}, {\"id\": 4, \"english\": \"The pain is seven\"}, {\"id\": 5, \"english\": \"It started three days ago\"}]}"
+  },
+  "f43d546097429990850c35b777e9e6d790cd6e8ba2141e555cc7bccbd7c209ef": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "f9a32152f967a9a19e60e4330785bdf7bda3e0b581da163c4e3ccc435296c4ac": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "fb5aa5cce6dfeaf968ecca265fb7fbdcfb398529d31da6c0fa428b040feb0691": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "fb8ae2cd547d3e74ad11c0f1618c320c6837271342e123726a2fd2c367c0ebf8": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"same_meaning\": true, \"issue\": null}, {\"id\": 1, \"same_meaning\": true, \"issue\": null}, {\"id\": 2, \"same_meaning\": true, \"issue\": null}, {\"id\": 3, \"same_meaning\": true, \"issue\": null}, {\"id\": 4, \"same_meaning\": true, \"issue\": null}]}"
+  },
+  "fbab31039dee3a36aad04b4c07d441e534903e886294905d34cadd25b860dc60": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I am very sick today\"}, {\"id\": 1, \"english\": \"Yes, my body is hot\"}, {\"id\": 2, \"english\": \"Yes, I am shivering from the cold\"}, {\"id\": 3, \"english\": \"It started in the afternoon\"}]}"
+  },
+  "fc738de2d399ea95c2d1ba4e2d2780d3c135dba3b3beded8367a8c82677ba8c3": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"My face is drooping\"}, {\"id\": 1, \"english\": \"Yes, my face is drooping on one side\"}, {\"id\": 2, \"english\": \"No, I can raise my hands normally\"}, {\"id\": 3, \"english\": \"Yes, my tongue is heavy\"}, {\"id\": 4, \"english\": \"Before breakfast I was fine\"}]}"
+  },
+  "fcedd73476de1e0b4c0763f1236aa6ec3ef04f30d58b7b924dccf03d89d9d6f6": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\": [{\"id\": 0, \"english\": \"I feel like there's something not right with me\"}, {\"id\": 1, \"english\": \"Not sure, didn't see myself in the mirror\"}, {\"id\": 2, \"english\": \"No\"}, {\"id\": 3, \"english\": \"No, my speech is normal\"}, {\"id\": 4, \"english\": \"Before breakfast I was normal\"}]}"
+  },
+  "fdfb85f6a2eb60e04d32de449d22cba4ada02c4eff7eb9c579c300f4e43b881e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\"items\":[{\"id\":0,\"same_meaning\":true,\"issue\":null},{\"id\":1,\"same_meaning\":true,\"issue\":null},{\"id\":2,\"same_meaning\":true,\"issue\":null},{\"id\":3,\"same_meaning\":true,\"issue\":null},{\"id\":4,\"same_meaning\":true,\"issue\":null}]}"
+  },
+  "ff34bc857c0db6f8baa3d66cff497bd23e2003387cd1e50818439dc302217e21": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "translation_check",
+    "text": "{\n  \"items\": [\n    {\n      \"id\": 0,\n      \"english\": \"Shortness of breath\"\n    },\n    {\n      \"id\": 1,\n      \"english\": \"Yeah, a little\"\n    },\n    {\n      \"id\": 2,\n      \"english\": \"No\"\n    },\n    {\n      \"id\": 3,\n      \"english\": \"No, I don't have a fever\"\n    },\n    {\n      \"id\": 4,\n      \"english\": \"Three\"\n    }\n  ]\n}"
+  }
+}

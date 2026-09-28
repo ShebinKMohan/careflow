@@ -1,0 +1,7 @@
+{
+  "e055d91e02cf078d321fb660159392ce6fa0e79a979056b1033d4b5b6af58d6e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "eval_judge",
+    "text": "{\n  \"verdicts\": [\n    {\n      \"id\": \"ar-gul-sepsis-02\",\n      \"content_sha256\": \"6ce36b7af65f23bb2fc6f5cda65aab4623227b65a0ead809b6e4dcf8ffd77a03\",\n      \"realistic_wording\": true,\n      \"facts_supported\": true,\n      \"alerts_consistent\": false,\n      \"no_phi\": true,\n      \"reasons\": [\n        \"Alert SEPSIS_NEWS2 requires NEWS2 total score >= 5; scenario provides no NEWS2 inputs.\",\n        \"Alert level 2 is invalid; SEPSIS_NEWS2 is always critical (level 1) per rule definition.\"\n      ]\n    }\n  ]\n}"
+  }
+}
