@@ -16,6 +16,7 @@ export default defineConfig({
     // The installed Google Chrome by default; PLAYWRIGHT_CHANNEL=chromium in CI.
     channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome",
     trace: "retain-on-failure",
+    video: "retain-on-failure", // uploaded with the trace by the CI e2e job when a journey fails
     timezoneId: "Asia/Dubai",
   },
 });

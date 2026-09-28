@@ -11,6 +11,11 @@ on:
     types: [opened, synchronize, reopened, labeled]
     paths-ignore: ["docs/**", "**/*.md"]
   workflow_dispatch:
+    inputs:
+      journeys_only:
+        description: "Run only the e2e journeys (repeat runs, M2-12)"
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,6 +34,7 @@ env:
 
 jobs:
   python:
+    if: ${{ !inputs.journeys_only }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -87,6 +93,7 @@ jobs:
           DATABASE_URL_MIGRATOR: postgresql://careflow_migrator:ci-migrator-pw@localhost:5432/careflow
 
   node:
+    if: ${{ !inputs.journeys_only }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -106,6 +113,7 @@ jobs:
         run: make test-node
 
   contracts:
+    if: ${{ !inputs.journeys_only }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -137,6 +145,7 @@ jobs:
         run: make contracts-check
 
   security:
+    if: ${{ !inputs.journeys_only }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -167,10 +176,13 @@ jobs:
         run: uv run --no-project --python 3.12 python scripts/check_banned_deps.py
 
   e2e:
-    # The three M1-19 journeys (chest pain, routine walk-in, sepsis) on the real stack: Postgres,
-    # Valkey and HAPI FHIR in Docker, the API and the three apps from `make up`, every model reply
-    # replayed from e2e/replays (no model, no key, no voice). About a quarter of an hour of the
-    # monthly minutes, so only on pushes to main, on PRs labelled `e2e` and on demand.
+    # The journeys (M1-19, M2-12) on the real stack: the seven patient journeys, the three check-in
+    # paths, the consent paths and the @ar variants. Postgres, Valkey and HAPI FHIR in Docker, the
+    # API and the three apps from `make up`, every model reply replayed from e2e/replays (no model,
+    # no key; no voice service, so the voice journeys are skipped with that reason). About a
+    # quarter of an hour of the monthly minutes, so only on pushes to main, on PRs labelled `e2e`
+    # and on demand (`journeys_only` skips the other jobs for repeat runs). Traces and videos of a
+    # failed journey are uploaded.
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'e2e')
     runs-on: ubuntu-24.04
     timeout-minutes: 45
