@@ -117,18 +117,20 @@ export async function assertAlerts(ctx: JourneyContext, alerts: string[]): Promi
     const seenAt = (await ctx.alertsSeen.get(rule)) ?? Number.NaN;
     expect(seenAt, `${rule} reached the nurse's worklist without a reload`).toBeGreaterThan(0);
     const raisedAt = Math.min(...triage.alerts.filter((alert) => alert.rule_id === rule).map((alert) => Date.parse(alert.raised_at)));
-    // An answer raises an alert while it is being taken; a device's reading, after the device started.
+    // An answer raises an alert while it is being taken: the last one sent before the alert. A
+    // device's reading raises it after the device started.
+    const answers = ctx.triggers.filter((sent) => !sent.device && sent.sentAt <= raisedAt).sort((a, b) => b.sentAt - a.sentAt);
     const trigger =
-      ctx.triggers.find((sent) => !sent.device && sent.sentAt <= raisedAt && raisedAt <= sent.answeredAt + 50) ??
-      ctx.triggers.find((sent) => sent.device && sent.sentAt <= raisedAt);
+      answers[0] && raisedAt <= answers[0].answeredAt + 50 ? answers[0] : ctx.triggers.find((sent) => sent.device && sent.sentAt <= raisedAt);
     expect(trigger, `${rule} was raised while an answer or a reading was being taken`).toBeTruthy();
-    const latency = seenAt - (trigger!.device ? raisedAt : trigger!.answeredAt);
+    const latency = Math.round(seenAt - (trigger!.device ? raisedAt : trigger!.answeredAt));
+    const ms = (value: number) => `${Math.round(value)} ms`;
     test.info().annotations.push({
       type: "alert latency",
       description: trigger!.device
-        ? `${rule}: raised by ${trigger!.label} ${raisedAt - trigger!.sentAt} ms after the device started; on the nurse's worklist ${latency} ms after it was raised`
-        : `${rule}: raised ${raisedAt - trigger!.sentAt} ms after ${trigger!.label} was sent; on the nurse's worklist ` +
-          `${seenAt - trigger!.sentAt} ms after it was sent (${latency} ms after the answer)`,
+        ? `${rule}: raised by ${trigger!.label} ${ms(raisedAt - trigger!.sentAt)} after the device started; on the nurse's worklist ${latency} ms after it was raised`
+        : `${rule}: raised ${ms(raisedAt - trigger!.sentAt)} after ${trigger!.label} was sent; on the nurse's worklist ` +
+          `${ms(seenAt - trigger!.sentAt)} after it was sent (${latency} ms after the answer)`,
     });
     if (process.env.CI) {
       if (latency > 2_000) test.info().annotations.push({ type: "warning", description: `${rule} on the worklist ${latency} ms after the answer (budget 2000 ms)` });
