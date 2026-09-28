@@ -12,7 +12,7 @@ import { COMPANION_URL } from "./ContinueOnPhone";
 import { KioskIcon } from "./KioskIcon";
 
 /** A reusable, expiring clinic entry ticket, before any patient details are collected. */
-export function StartChoices() {
+export function StartChoices({ preview = false }: { preview?: boolean }) {
   const t = useTranslations("experience");
   const locale = useLocale() === "ar" ? "ar" : "en";
   const router = useRouter();
@@ -22,6 +22,7 @@ export function StartChoices() {
   const hasDevice = useSyncExternalStore(subscribeDevice, () => readDevice() !== null, () => false);
 
   useEffect(() => {
+    if (preview) return;
     let stopped = false;
     let requesting = false;
     let refreshAt = 0;
@@ -48,7 +49,7 @@ export function StartChoices() {
     void refresh();
     const timer = setInterval(() => void refresh(), 500);
     return () => { stopped = true; clearInterval(timer); activeRequest?.abort(); };
-  }, [locale, retry, hasDevice]);
+  }, [locale, retry, hasDevice, preview]);
 
   return (
     <div className="entry-options">
@@ -57,15 +58,15 @@ export function StartChoices() {
         <h2>{t("kioskTitle")}</h2>
         <p>{t("kioskDescription")}</p>
         <div className="entry-kiosk-art" aria-hidden="true"><span className="entry-kiosk-screen"><KioskIcon name="cross" /><i /><i /><span><b /><b /><b /></span></span><span className="entry-kiosk-stand" /></div>
-        <button type="button" className="entry-kiosk-action" disabled={!hasDevice} onClick={() => router.push("/checkin")}>{t("kioskAction")}<KioskIcon name="arrow" /></button>
-        <span className="entry-option-note" role="status">{t(hasDevice ? "languageHint" : failed ? "stationUnavailable" : "stationPreparing")}</span>
+        <button type="button" className="entry-kiosk-action" disabled={preview || !hasDevice} onClick={() => router.push("/checkin")}>{t("kioskAction")}<KioskIcon name="arrow" /></button>
+        <span className="entry-option-note" role="status">{t(preview ? "cloudPreviewStatus" : hasDevice ? "languageHint" : failed ? "stationUnavailable" : "stationPreparing")}</span>
       </section>
       <section className="entry-option entry-phone">
         <span className="entry-option-icon"><KioskIcon name="phone" /></span>
-        <h2>{t("phoneTitle")}</h2>
+        <h2>{t(preview ? "cloudPreviewPhoneTitle" : "phoneTitle")}</h2>
         <p>{t("phoneDescription")}</p>
         <div className="entry-qr-area" aria-live="polite">
-          {code && code.language === locale && !failed ? <div className="entry-qr" data-testid="entry-qr"><QRCodeSVG value={`${COMPANION_URL}/start?l=${locale}#t=${code.token}`} size={180} marginSize={2} /></div> : <div className="entry-qr-message"><KioskIcon name={failed ? "help" : "phone"} /><p>{t(failed ? hasDevice ? "qrUnavailable" : "stationUnavailable" : "qrLoading")}</p>{failed ? <button type="button" onClick={() => { window.dispatchEvent(new Event("careflow:retry-device")); setFailed(false); setRetry((value) => value + 1); }}>{t("qrRetry")}</button> : <span className="entry-loading" aria-hidden="true" />}</div>}
+          {preview ? <div className="entry-qr-message"><KioskIcon name="phone" /><p>{t("cloudPreviewPhoneStatus")}</p></div> : code && code.language === locale && !failed ? <div className="entry-qr" data-testid="entry-qr"><QRCodeSVG value={`${COMPANION_URL}/start?l=${locale}#t=${code.token}`} size={180} marginSize={2} /></div> : <div className="entry-qr-message"><KioskIcon name={failed ? "help" : "phone"} /><p>{t(failed ? hasDevice ? "qrUnavailable" : "stationUnavailable" : "qrLoading")}</p>{failed ? <button type="button" onClick={() => { window.dispatchEvent(new Event("careflow:retry-device")); setFailed(false); setRetry((value) => value + 1); }}>{t("qrRetry")}</button> : <span className="entry-loading" aria-hidden="true" />}</div>}
         </div>
         <span className="entry-option-note"><KioskIcon name="shield" />{t("phoneNote")}</span>
       </section>

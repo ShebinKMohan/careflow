@@ -237,7 +237,10 @@
     "phoneNote": "هاتفك. على راحتك.",
     "languageHint": "يمكنك تغيير لغتك في أعلى الشاشة.",
     "stationUnavailable": "تسجيل الوصول غير متاح مؤقتاً. اطلب المساعدة من أحد الموظفين أو حاول مرة أخرى.",
-    "stationPreparing": "نستعد لاستقبالك…"
+    "stationPreparing": "نستعد لاستقبالك…",
+    "cloudPreviewStatus": "معاينة · تسجيل الوصول عبر الإنترنت غير متصل بعد",
+    "cloudPreviewPhoneTitle": "التسجيل عبر الهاتف",
+    "cloudPreviewPhoneStatus": "يتوفر عند توصيل خدمة تسجيل الوصول."
   },
   "reception": {
     "progress": "تقدم التسجيل",

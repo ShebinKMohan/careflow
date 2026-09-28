@@ -14,11 +14,24 @@ vi.mock("@/components/ContinueOnPhone", () => ({ COMPANION_URL: "http://clinic.l
 vi.mock("qrcode.react", () => ({ QRCodeSVG: ({ value }: { value: string }) => <svg data-testid="qr-value" data-value={value} /> }));
 
 const reply = () => ({ data: { qr_token: "entry-code", expires_at: new Date(Date.now() + 600_000).toISOString() } });
-const show = (locale: "en" | "ar" = "en") => render(<NextIntlClientProvider locale={locale} messages={MESSAGES[locale]} timeZone="UTC"><StartChoices /></NextIntlClientProvider>);
+const show = (locale: "en" | "ar" = "en", preview = false) => render(<NextIntlClientProvider locale={locale} messages={MESSAGES[locale]} timeZone="UTC"><StartChoices preview={preview} /></NextIntlClientProvider>);
 
 beforeEach(() => { post.mockReset().mockResolvedValue(reply()); push.mockClear(); device.ready = true; });
 
 describe("welcome entry choices", () => {
+  it.each(["en", "ar"] as const)("shows an immediate %s cloud preview without a QR, request, spinner, or retry", (locale) => {
+    // A stale browser device marker must not bypass the server's preview state.
+    device.ready = true;
+    const { container } = show(locale, true);
+    expect(screen.getByRole("status")).toHaveTextContent(MESSAGES[locale].experience.cloudPreviewStatus);
+    expect(screen.getByRole("button", { name: MESSAGES[locale].experience.kioskAction })).toBeDisabled();
+    expect(screen.queryByTestId("qr-value")).not.toBeInTheDocument();
+    expect(container.querySelector(".entry-loading")).toBeNull();
+    expect(screen.queryByRole("button", { name: MESSAGES[locale].experience.qrRetry })).not.toBeInTheDocument();
+    expect(screen.queryByText(MESSAGES[locale].experience.qrLoading)).not.toBeInTheDocument();
+    expect(post).not.toHaveBeenCalled();
+  });
+
   it("offers both routes immediately and issues a localized entry QR with the token only in the fragment", async () => {
     show("ar");
     expect(screen.getByRole("heading", { name: MESSAGES.ar.experience.phoneTitle })).toBeInTheDocument();

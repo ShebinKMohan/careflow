@@ -7,6 +7,7 @@ import { DeviceBootstrap } from "@/components/DeviceBootstrap";
 import { IdleGuard } from "@/components/IdleGuard";
 import { RevokedGuard } from "@/components/RevokedGuard";
 import { KioskProvider } from "@/lib/session";
+import { isCloudPreview } from "@/lib/server/preview";
 
 import { fontVariables } from "./fonts";
 import "./globals.css";
@@ -21,7 +22,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <AppDocument locale={locale} messages={messages} className={fontVariables}>
       <KioskProvider>
-        <DeviceBootstrap />
+        {!isCloudPreview() && <DeviceBootstrap />}
         {children}
         <IdleGuard />
         <RevokedGuard />

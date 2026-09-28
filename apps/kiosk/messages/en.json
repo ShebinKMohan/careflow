@@ -237,7 +237,10 @@
     "phoneNote": "Your phone. Your own pace.",
     "languageHint": "You can change your language above.",
     "stationUnavailable": "Check-in is temporarily unavailable. Please ask a nearby member of staff, or try again.",
-    "stationPreparing": "Getting ready for you…"
+    "stationPreparing": "Getting ready for you…",
+    "cloudPreviewStatus": "Preview · Online check-in is not connected yet",
+    "cloudPreviewPhoneTitle": "Phone check-in",
+    "cloudPreviewPhoneStatus": "Available when online check-in is connected."
   },
   "reception": {
     "progress": "Registration progress",
