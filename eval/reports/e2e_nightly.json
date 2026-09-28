@@ -1,0 +1,455 @@
+{
+  "generated_at": "2026-09-28T12:18:56+00:00",
+  "started_at": "2026-09-28T12:08:22Z",
+  "commit": "efc9f03493670bfe1b21628bdba2ef0ef9e82c0c",
+  "mode": "live",
+  "stack": "careflow-e2e",
+  "provider": {
+    "extraction": {
+      "provider": "local",
+      "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+    }
+  },
+  "duration_s": 593.6,
+  "passed": true,
+  "totals": {
+    "passed": 22,
+    "failed": 0,
+    "flaky": 0,
+    "skipped": 2
+  },
+  "specs": [
+    {
+      "file": "arabic.spec.ts",
+      "title": "@ar @rtl an Arabic visit keeps its language: kiosk refresh, QR claim, phone refresh, a lost connection and the end of the visit",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 50843,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "turn latency: text 13200 ms, text 4597 ms"
+      ]
+    },
+    {
+      "file": "checkin-id-tap.spec.ts",
+      "title": "check-in by the simulated ID reader: labelled a mock, the card finds its persona, the number never in a URL or an answer",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 1666,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "checkin-keypad.spec.ts",
+      "title": "check-in by keypad: a wrong code is told generically, the persona's code checks in, digits never in a URL",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 1525,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "checkin-qr.spec.ts",
+      "title": "QR hand-over: two answers on the kiosk, the phone claims once and finishes, the kiosk forgets the patient",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 42056,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "turn latency: text 12206 ms, text 4559 ms"
+      ]
+    },
+    {
+      "file": "checkin-qr.spec.ts",
+      "title": "QR hand-over: a claim whose answer was lost is recovered by the same phone, and by no other",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 9865,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "turn latency: text 2518 ms"
+      ]
+    },
+    {
+      "file": "checkin-qr.spec.ts",
+      "title": "QR hand-over: a phone answer whose response was lost is applied once, and a stale answer is refused",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 10147,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "turn latency: text 3274 ms"
+      ]
+    },
+    {
+      "file": "chest-pain.spec.ts",
+      "title": "chest pain: the ECG alert reaches the nurse first, ECG done, the nurse decides, token, briefing, HAPI (en)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 16982,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1308: 5 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: CHEST_PAIN_ECG_10MIN: raised 5910 ms after \"I've had chest pain since this morning\" to \"What is the main reason for your visit today?\" was sent; on the nurse's worklist 6315 ms after it was sent (378 ms after the answer)",
+        "briefing: 21 items, all attributed",
+        "turn latency: text 5937 ms, tap 101 ms, tap 63 ms, tap 163 ms"
+      ]
+    },
+    {
+      "file": "chest-pain.spec.ts",
+      "title": "@ar chest pain: the ECG alert reaches the nurse first, ECG done, the nurse decides, token, briefing, HAPI (ar)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 17611,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1320: 5 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: CHEST_PAIN_ECG_10MIN: raised 6938 ms after \"عندي ألم في صدري من الصبح\" to \"ما السبب الرئيسي لزيارتك اليوم؟\" was sent; on the nurse's worklist 7303 ms after it was sent (333 ms after the answer)",
+        "briefing: 21 items, all attributed",
+        "turn latency: text 6970 ms, tap 54 ms, tap 59 ms, tap 145 ms"
+      ]
+    },
+    {
+      "file": "child-drowsy.spec.ts",
+      "title": "@child a parent's \"Yes\" to hard to wake reaches the nurse as a critical alert, with no vitals step and no model suggestion (en)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 16380,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1332: 1 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: \"Yes\" to \"Is your child very hard to wake, or not staying awake?\": on the nurse's worklist 592 ms after the tap (497 ms after the kiosk got the answer)",
+        "alert latency: NG143_RED_FLAG: raised 48 ms after \"Yes\" to \"Is your child very hard to wake, or not staying awake?\" was sent; on the nurse's worklist 592 ms after it was sent (497 ms after the answer)",
+        "briefing: 24 items, all attributed",
+        "turn latency: text 8677 ms, tap 95 ms, tap 100 ms, tap 109 ms, tap 57 ms, tap 47 ms, tap 58 ms, tap 72 ms, tap 56 ms, tap 54 ms, tap 55 ms, tap 57 ms, tap 62 ms, tap 59 ms, tap 60 ms, tap 60 ms, tap 63 ms"
+      ]
+    },
+    {
+      "file": "child-drowsy.spec.ts",
+      "title": "@child @ar a parent's \"Yes\" to hard to wake reaches the nurse as a critical alert, with no vitals step and no model suggestion (ar)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 15167,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1339: 1 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: \"نعم\" to \"هل يصعب جداً إيقاظ طفلك، أو لا يبقى مستيقظاً؟\": on the nurse's worklist 422 ms after the tap (374 ms after the kiosk got the answer)",
+        "alert latency: NG143_RED_FLAG: raised 27 ms after \"نعم\" to \"هل يصعب جداً إيقاظ طفلك، أو لا يبقى مستيقظاً؟\" was sent; on the nurse's worklist 422 ms after it was sent (374 ms after the answer)",
+        "briefing: 23 items, all attributed",
+        "turn latency: text 6863 ms, tap 48 ms, tap 69 ms, tap 60 ms, tap 118 ms, tap 38 ms, tap 57 ms, tap 64 ms, tap 53 ms, tap 65 ms, tap 54 ms, tap 63 ms, tap 56 ms, tap 62 ms, tap 75 ms, tap 62 ms, tap 58 ms"
+      ]
+    },
+    {
+      "file": "child-drowsy.spec.ts",
+      "title": "@child a parent who declines data use is sent to reception, and nothing is checked in (en)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 734,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "child-drowsy.spec.ts",
+      "title": "@child @ar a parent who declines data use is sent to reception, and nothing is checked in (ar)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 754,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "consent-voice.spec.ts",
+      "title": "(a) agree, tap the ID card, answer by voice: the microphone opens only after the consent is saved",
+      "status": "skipped",
+      "result": "skipped",
+      "duration_ms": 0,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "consent-voice.spec.ts",
+      "title": "a reload forgets the patient and the consent: no microphone until consent is given again",
+      "status": "skipped",
+      "result": "skipped",
+      "duration_ms": 0,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "consent.spec.ts",
+      "title": "(b) without camera and voice: keypad check-in, an intake by tap and text, no getUserMedia",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 27811,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "turn latency: text 3673 ms, text 4621 ms, tap 75 ms, text 7701 ms, tap 9421 ms"
+      ]
+    },
+    {
+      "file": "consent.spec.ts",
+      "title": "(c) declining data use sends the patient to reception: no check-in, no session, no new Encounter",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 906,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "consent.spec.ts",
+      "title": "(d) consent the API did not save stops the kiosk until a retry saves it; the ID card checks in",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 1874,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": []
+    },
+    {
+      "file": "ehr-outage.spec.ts",
+      "title": "EHR outage: HAPI down after check-in, the nurse keeps the alert and decides; the write-back lands once HAPI is back",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 97028,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1347: 10 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: SEPSIS_NEWS2: raised by the simulated device's readings 19 ms after the device started; on the nurse's worklist 605 ms after it was raised",
+        "turn latency: text 8924 ms, tap 91 ms, text 11308 ms, tap 10948 ms"
+      ]
+    },
+    {
+      "file": "no-show.spec.ts",
+      "title": "no-show: called and not arrived, re-queued once behind the next patient, then a no-show off the board",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 77034,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1482: 5 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "briefing: 18 items, all attributed",
+        "turn latency: text 13951 ms, tap 50 ms, tap 6156 ms",
+        "turn latency: text 3595 ms, text 4439 ms, tap 84 ms, text 7336 ms, tap 9003 ms"
+      ]
+    },
+    {
+      "file": "qr-phone.spec.ts",
+      "title": "QR phone path: the phone finishes the intake, I feel worse reaches the nurse live and in time, the place follows the queue, token, briefing, HAPI",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 83367,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1525: 2 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "briefing: 12 items, all attributed",
+        "feels-worse latency: on the nurse's worklist 655 ms after the patient pressed \"Tell the nurse\"",
+        "turn latency: text 2544 ms, text 3927 ms, tap 49 ms, text 6581 ms, tap 8268 ms",
+        "turn latency: text 2603 ms",
+        "turn latency: text 3334 ms, text 3882 ms, tap 56 ms, text 6674 ms, tap 8098 ms"
+      ]
+    },
+    {
+      "file": "routine.spec.ts",
+      "title": "routine walk-in: no alert, the nurse overrides with a reason, token, briefing, HAPI has the nurse's level and no Flag (en)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 27414,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1534: 6 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "briefing: 16 items, all attributed",
+        "turn latency: text 3333 ms, text 3997 ms, tap 48 ms, text 6707 ms, tap 8154 ms"
+      ]
+    },
+    {
+      "file": "routine.spec.ts",
+      "title": "@ar routine walk-in: no alert, the nurse overrides with a reason, token, briefing, HAPI has the nurse's level and no Flag (ar)",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 31990,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1545: 6 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "briefing: 16 items, all attributed",
+        "turn latency: text 3886 ms, text 4716 ms, tap 47 ms, text 7446 ms, tap 9040 ms"
+      ]
+    },
+    {
+      "file": "sepsis.spec.ts",
+      "title": "sepsis: partial NEWS2 alert from the kiosk, the nurse completes NEWS2 and decides, token, briefing, HAPI has NEWS2 and a Flag",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 36307,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1556: 10 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: SEPSIS_NEWS2: raised by the simulated device's readings 301 ms after the device started; on the nurse's worklist 578 ms after it was raised",
+        "briefing: 25 items, all attributed",
+        "turn latency: text 8416 ms, tap 56 ms, text 10265 ms, tap 10377 ms"
+      ]
+    },
+    {
+      "file": "stroke.spec.ts",
+      "title": "stroke: FAST reaches the nurse first, the nurse overrides with a reason, token, briefing, HAPI; clinic B sees nothing",
+      "status": "expected",
+      "result": "passed",
+      "duration_ms": 18837,
+      "retries": 0,
+      "provider": {
+        "extraction": {
+          "provider": "local",
+          "model": "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+        }
+      },
+      "notes": [
+        "HAPI: Encounter 1572: 5 Observations, 1 Flags, 1 QuestionnaireResponse, 1 Composition",
+        "alert latency: FAST_STROKE: raised 7618 ms after \"My face feels droopy on the right and my right arm has gone weak\" to \"What is the main reason for your visit today?\" was sent; on the nurse's worklist 8304 ms after it was sent (668 ms after the answer)",
+        "briefing: 18 items, all attributed",
+        "turn latency: text 7636 ms, text 5618 ms"
+      ]
+    }
+  ],
+  "caveats": [
+    "Synthetic personas and a simulated vitals device, ID reader and hospital (HAPI FHIR).",
+    "The live local model extracts the facts; nothing is replayed, so results can differ from CI.",
+    "Latencies are measured on this machine and reported, never gates.",
+    "The voice journeys run only with a voice service (VOICE=1); otherwise they are skipped."
+  ]
+}

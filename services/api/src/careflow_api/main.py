@@ -71,7 +71,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             app.state.wiring, app.state.intake = wiring, runtime
             app.state.briefings.states = runtime  # the briefing builds on demand from the graph
             if settings.writeback_consumer:
-                handler = writeback_consumer(runtime, wiring.ports.writeback)  # type: ignore[arg-type]
+                handler = writeback_consumer(
+                    runtime,
+                    wiring.ports.writeback,  # type: ignore[arg-type]
+                    briefings=app.state.briefings,
+                )
                 tasks.append(app.state.bus.subscribe(WRITEBACK_GROUP, handler))
         if settings.queue_grace_task:
             tasks.append(asyncio.create_task(run_grace_expiry(app.state.queue)))

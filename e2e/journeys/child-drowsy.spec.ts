@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-import { answerIntake, callIn, checkIn, closeToken, kioskPage, nurseSetsLevel, type PatientScript, staffPage, staffToken } from "../lib/actors";
+import { answerIntake, checkIn, closeToken, kioskDeviceToken, kioskPage, type PatientScript, staffPage, staffToken } from "../lib/actors";
 import { type Locale, msg } from "../lib/i18n";
+import { answerTriggers, assertAlerts, assertBriefing, assertDecision, assertTokenAndRoom, assertWriteBack, type JourneyContext } from "../lib/journey";
 import { STACK } from "../lib/stack";
 
 // @child (M2-04, SHE-293): a parent brings persona `child-drowsy` (keypad 100003, synthetic, 2
@@ -35,7 +36,7 @@ for (const locale of ["en", "ar"] as const) {
     kiosk.on("framenavigated", (frame) => {
       if (frame === kiosk.mainFrame()) visited.push(new URL(frame.url()).pathname);
     });
-    const { sessionId } = await checkIn(kiosk, "100003", locale, { years: 2 });
+    const { sessionId, patientToken } = await checkIn(kiosk, "100003", locale, { years: 2 });
 
     // This session's row on the nurse's open worklist (earlier runs' children stay on it).
     const chip = nurse.locator(`tr[data-session="${sessionId}"]`).filter({ hasText: RED_FLAG_CHIP });
@@ -85,13 +86,24 @@ for (const locale of ["en", "ar"] as const) {
     await nurse.goto(`/nurse/${sessionId}`);
     await expect(nurse.getByTestId("alert-banner").filter({ hasText: msg("staff", "en", "safety.alerts.rules.NG143_RED_FLAG") })).toBeVisible();
     await expect(nurse.getByText("No model suggestion").first()).toBeVisible();
-    await nurseSetsLevel(nurse, 2);
+    // b to e: the nurse sets the level; token and room; the attributed briefing; HAPI. A child
+    // skips the sensors, so the write-back need not hold an Observation.
+    const ctx: JourneyContext = {
+      sessionId,
+      nurse,
+      patient: kiosk,
+      patientToken,
+      kioskToken: await kioskDeviceToken(kiosk),
+      triggers: answerTriggers(turns),
+      alertsSeen: new Map([["NG143_RED_FLAG", Promise.resolve(seenAt)]]),
+    };
+    await assertAlerts(ctx, ["NG143_RED_FLAG"]);
+    await assertDecision(ctx, ["NG143_RED_FLAG"], { set: 2 });
     await expect(kiosk.getByTestId("token-code")).toHaveText(/^[A-Z]-\d{3}$/, { timeout: 30_000 });
-
-    // Seen: the room is free for the next run.
-    const queued = (await (await nurse.request.get(`${STACK.api}/v1/sessions/${sessionId}/token`, { headers })).json()) as { department: string };
-    const called = await callIn(nurse, queued.department, sessionId);
-    await closeToken(nurse, called.token_id);
+    const called = await assertTokenAndRoom(ctx);
+    await assertBriefing(ctx);
+    await assertWriteBack(ctx, ["NG143_RED_FLAG"], { observations: false });
+    await closeToken(nurse, called.token_id); // seen: the room is free for the next run
   });
 }
 

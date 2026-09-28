@@ -9,6 +9,11 @@
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Ankle sprain\", \"turn_id\": \"t2\", \"quote\": \"لويت كاحلي أمس وأنا ألعب كرة القدم\", \"negated\": false}]}"
   },
+  "3d00a7217b1a9e25be628870106cc74cf25c3b988d8f611dd6a2902cbba4f67e": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had an itchy rash on my arm for a week\", \"turn_id\": \"t2\", \"quote\": \"I've had an itchy rash on my arm for a week\", \"negated\": false}, {\"key\": \"severity\", \"value\": 2, \"turn_id\": \"t4\", \"quote\": \"2\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}]}"
+  },
   "40f9eb40797c339127c173784037c31940bee64278e603d492b1b501362cae4e": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
@@ -28,6 +33,11 @@
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"patient.age_years\", \"value\": 2, \"turn_id\": \"t5\", \"quote\": \"2 years\", \"negated\": false}, {\"key\": \"chief_complaint\", \"value\": \"My son has had a fever since last night\", \"turn_id\": \"t6\", \"quote\": \"My son has had a fever since last night\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t6\", \"quote\": \"My son has had a fever\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since last night\", \"turn_id\": \"t6\", \"quote\": \"since last night\", \"negated\": false}]}"
+  },
+  "7a9caefeaa4741fc3429e64ee6ff3d1c0340994487239b5c3c08e8f2483c022a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My face feels droopy on the right and my right arm has gone weak\", \"turn_id\": \"t2\", \"quote\": \"My face feels droopy on the right and my right arm has gone weak\", \"negated\": false}, {\"key\": \"fast.face_droop\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"My face feels droopy on the right\", \"negated\": false}, {\"key\": \"fast.arm_weakness\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"my right arm has gone weak\", \"negated\": false}]}"
   },
   "7b84cbab7c75236c48a88b6e8ed2ee1cc864dde1b6057ab4890b14e389dc86ab": {
     "model": "qwen3.5-9b-4bit",
@@ -54,6 +64,11 @@
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my ankle playing football yesterday\", \"turn_id\": \"t2\", \"quote\": \"I twisted my ankle playing football yesterday\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"Yesterday afternoon\", \"turn_id\": \"t4\", \"quote\": \"Yesterday afternoon\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t6\", \"quote\": \"4\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"My left ankle\", \"turn_id\": \"t8\", \"quote\": \"My left ankle\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": \"No\", \"turn_id\": \"t10\", \"quote\": \"No\", \"negated\": true}]}"
   },
+  "c88f5c33b614ece54c6236ee80efb710728d928bd368b747a597594349593ec2": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had an itchy rash on my arm for a week\", \"turn_id\": \"t2\", \"quote\": \"I've had an itchy rash on my arm for a week\", \"negated\": false}, {\"key\": \"symptoms\", \"value\": \"itchy rash\", \"turn_id\": \"t2\", \"quote\": \"itchy rash\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"for a week\", \"turn_id\": \"t2\", \"quote\": \"for a week\", \"negated\": false}, {\"key\": \"pain_present\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"I've had an itchy rash on my arm for a week\", \"negated\": true}, {\"key\": \"injury\", \"value\": false, \"turn_id\": \"t2\", \"quote\": \"I've had an itchy rash on my arm for a week\", \"negated\": true}]}"
+  },
   "cc750574ff0338d78a97bf5a45fbeed96b1c6073ce509617c71020eefe9af97c": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
@@ -69,9 +84,19 @@
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"chest pain\", \"turn_id\": \"t2\", \"quote\": \"I've had chest pain since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}]}"
   },
+  "de6f77452b756a722dad286021299efcbd0ab52bcb058b8648d9572d782defea": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest pain since morning\", \"turn_id\": \"t2\", \"quote\": \"عندي ألم في صدري من الصبح\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"عندي ألم في صدري\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"since morning\", \"turn_id\": \"t2\", \"quote\": \"من الصبح\", \"negated\": false}]}"
+  },
   "e1d7fcd5e280e589362279f3fab71ad519b68151b77cc951b4b3d75f33ed7b1b": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and shivering since yesterday\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and shivering since yesterday\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t4\", \"quote\": \"5\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"No\", \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"shivering\", \"negated\": false}, {\"key\": \"allergies_confirm\", \"value\": false, \"turn_id\": \"t8\", \"quote\": \"No\", \"negated\": true}]}"
+  },
+  "f4a32a122f292d608f98aa778c46d16b2b7b84a0cd33d4485d34aa24c4d56f0a": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My face feels droopy on the right and my right arm has gone weak\", \"turn_id\": \"t2\", \"quote\": \"My face feels droopy on the right and my right arm has gone weak\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"At quarter past eight this morning\", \"turn_id\": \"t5\", \"quote\": \"At quarter past eight this morning\", \"negated\": false}]}"
   }
 }

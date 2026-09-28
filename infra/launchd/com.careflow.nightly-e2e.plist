@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The nightly journeys (M2-12) at 02:00: scripts/nightly-e2e.sh against the live local model.
+  `make install-nightly` copies this file to ~/Library/LaunchAgents with __REPO__ replaced by the
+  checkout; loading it is the owner's step (README). Never loaded by an agent.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.careflow.nightly-e2e</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>cd "__REPO__" &amp;&amp; mkdir -p .run &amp;&amp; scripts/nightly-e2e.sh &gt;&gt; .run/nightly-e2e.log 2&gt;&amp;1</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>2</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

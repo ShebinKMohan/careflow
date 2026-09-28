@@ -18,6 +18,10 @@ from typing import Any, Final
 import httpx
 
 RETRY_STATUSES: Final = frozenset({429, 502, 503, 504})
+#: A write is also retried on 409 (M2-12). Our writes are conditional creates; HAPI answers 409 when
+#: a twin runs at the same moment, such as a request an EHR outage held back that lands just as its
+#: retry does. The next attempt finds what the twin stored.
+WRITE_RETRY_STATUSES: Final = RETRY_STATUSES | {409}
 RETRY_DELAYS: Final = (0.2, 0.8)
 MAX_PAGES: Final = 5
 PAGE_SIZE: Final = 100
@@ -221,6 +225,7 @@ __all__ = [
     "MAX_PAGES",
     "PAGE_SIZE",
     "RETRY_STATUSES",
+    "WRITE_RETRY_STATUSES",
     "FhirClient",
     "FhirError",
     "canonical_json",

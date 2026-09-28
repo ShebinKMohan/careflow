@@ -16,10 +16,12 @@
 #   LOCAL_LLM=1        also serve the pinned Qwen3.5-9B MLX model on :8081 (through scripts/with_llm.sh)
 #   SEED_SYNTHEA=0     load the 7 personas only (no Synthea population)
 #   E2E=1              deterministic journeys (make e2e): every model reply is replayed from
-#                      e2e/replays/providers.cassette.json and the intake uses e2e/config/intake.yaml
+#                      e2e/replays/providers.cassette.json, the intake uses e2e/config/intake.yaml
+#                      and the queue e2e/config/rooms.yaml (a 5 s grace window, test config only)
 #   E2E_RECORD=1       record that cassette from the local model instead; run the journeys with the
 #                      model up: `scripts/with_llm.sh make e2e` (or LOCAL_LLM=1 here)
-#   E2E_RECORD=add     keep the recorded replies and add a new journey's: run only that journey
+#   E2E_RECORD=add     keep the recorded replies (replayed, never re-recorded) and record only the
+#                      prompts the cassette lacks: a new journey's
 #   E2E_LIVE=1         the journeys against the local model, nothing replayed (same model rule)
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -82,13 +84,16 @@ model_note="run the journeys with the model up: scripts/with_llm.sh make e2e"
 if [[ "${E2E_RECORD:-0}" == "1" || "${E2E_RECORD:-0}" == "add" ]]; then
   [[ "${LOCAL_LLM:-0}" == "1" ]] || echo "up: E2E_RECORD=$E2E_RECORD without LOCAL_LLM=1: $model_note"
   # 1 records the cassette afresh; add keeps its replies and adds the new prompts' (a new journey).
-  [[ "$E2E_RECORD" == "add" ]] || rm -f "$cassette"
-  export CAREFLOW_PROVIDER_MODE=record CAREFLOW_CASSETTE="$PWD/$cassette"
+  # add: replay what the cassette holds, record only the prompts it lacks (never re-record).
+  if [[ "$E2E_RECORD" == "add" ]]; then mode=add; else mode=record; rm -f "$cassette"; fi
+  export CAREFLOW_PROVIDER_MODE=$mode CAREFLOW_CASSETTE="$PWD/$cassette"
   export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
+  export CAREFLOW_ROOMS_CONFIG="$PWD/e2e/config/rooms.yaml"  # a 5 s grace window: the no-show journey
   echo "up: E2E recording: every model reply goes to $cassette"
 elif [[ "${E2E_LIVE:-0}" == "1" ]]; then
   [[ "${LOCAL_LLM:-0}" == "1" ]] || echo "up: E2E_LIVE=1 without LOCAL_LLM=1: $model_note"
   export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
+  export CAREFLOW_ROOMS_CONFIG="$PWD/e2e/config/rooms.yaml"  # a 5 s grace window: the no-show journey
   echo "up: E2E live: the journeys use the local model, nothing is replayed"
 elif [[ "${E2E:-0}" == "1" ]]; then
   if [[ ! -s "$cassette" ]]; then
@@ -97,6 +102,7 @@ elif [[ "${E2E:-0}" == "1" ]]; then
   fi
   export CAREFLOW_PROVIDER_MODE=replay CAREFLOW_CASSETTE="$PWD/$cassette"
   export CAREFLOW_INTAKE_CONFIG="$PWD/e2e/config/intake.yaml"
+  export CAREFLOW_ROOMS_CONFIG="$PWD/e2e/config/rooms.yaml"  # a 5 s grace window: the no-show journey
   echo "up: E2E replay: model replies come from $cassette, no model is called"
 fi
 

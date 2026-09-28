@@ -2,8 +2,10 @@
 
 build (fixed templates) -> check (fail closed) -> summarise (optional, checked) -> store in
 `briefings` -> write the FHIR document Bundle (conditional create). The briefing is served even
-when the document cannot be written: its outcome is recorded next to it. The API runs as one
-process per clinic set, so the service is shared by the graph and the route.
+when the document cannot be written: its outcome is recorded next to it. A document the EHR did
+not take is written later by the write-back consumer (`ensure_document`, M2-12), with the
+triage's retries. The API runs as one process per clinic set, so the service is shared by the
+graph and the route.
 """
 
 from __future__ import annotations
@@ -43,6 +45,12 @@ class BriefingStore(Protocol):
         self, clinic_id: uuid.UUID, session_id: uuid.UUID, outcome: DocumentOutcome
     ) -> None: ...
 
+    async def document(
+        self, clinic_id: uuid.UUID, session_id: uuid.UUID
+    ) -> tuple[str | None, str | None]:
+        """The FHIR document's status and Bundle id, or (None, None) without a briefing."""
+        ...
+
 
 class StateSource(Protocol):
     async def load(self, clinic_id: str, session_id: str) -> IntakeState | None:
@@ -78,6 +86,31 @@ class BriefingService:
 
     async def make(self, state: IntakeState) -> Briefing:
         """Build, check, summarise and store the briefing, then write its FHIR document."""
+        briefing, _ = await self._make(state)
+        return briefing
+
+    async def ensure_document(self, state: IntakeState) -> DocumentOutcome:
+        """The briefing's FHIR document, written now if it is not yet (M2-12). The write-back
+        consumer calls it once the triage is in the EHR: a document that an EHR outage stopped
+        at the nurse's decision is then written, and a failure is retried with the triage's."""
+        await self.drain()  # a briefing still being built writes its own document first
+        clinic_id, session_id = uuid.UUID(state["clinic_id"]), uuid.UUID(state["session_id"])
+        status, bundle_id = await self.store.document(clinic_id, session_id)
+        if status == WritebackStatus.ok.value:
+            return DocumentOutcome(WritebackStatus.ok, bundle_id=bundle_id)
+        stored = await self.store.get(clinic_id, session_id)
+        if stored is None:
+            _, outcome = await self._make(state)
+            return outcome
+        outcome = await self.document(state, Briefing.model_validate(stored))
+        await self.store.set_document(clinic_id, session_id, outcome)
+        logger.info(
+            "briefing.document_retried",
+            extra={"session_id": state["session_id"], "document_status": outcome.status.value},
+        )
+        return outcome
+
+    async def _make(self, state: IntakeState) -> tuple[Briefing, DocumentOutcome]:
         result = await make_briefing(state, now=self.clock(), summarizer=self.summarizer)
         briefing = result.briefing
         clinic_id, session_id = uuid.UUID(state["clinic_id"]), uuid.UUID(state["session_id"])
@@ -93,7 +126,7 @@ class BriefingService:
                 "document_status": outcome.status.value,
             },
         )
-        return briefing
+        return briefing, outcome
 
     async def document(self, state: IntakeState, briefing: Briefing) -> DocumentOutcome:
         written = await self.writebacks.resources(state["clinic_id"], state["session_id"])

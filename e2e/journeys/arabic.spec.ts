@@ -3,7 +3,6 @@ import { expect, type Page, test, type WebSocketRoute } from "@playwright/test";
 import {
   answerIntake,
   answerOnPhone,
-  callIn,
   checkIn,
   closeToken,
   isClaim,
@@ -16,6 +15,8 @@ import {
 } from "../lib/actors";
 import { codes, Hapi } from "../lib/fhir";
 import { msg } from "../lib/i18n";
+import { callWithoutArriving } from "../lib/journey";
+import { ROUTINE_WALK_IN_AR } from "../lib/scripts";
 
 // @ar @rtl (M2-01): an Arabic visit on the real stack, persona `routine` (keypad 100005,
 // synthetic). The patient picks Arabic on the kiosk's first screen, and the language then holds
@@ -23,15 +24,7 @@ import { msg } from "../lib/i18n";
 // failing status, and the end of the visit. The nurse works in English on the same session. The
 // answers are Arabic, so the replies to the Arabic extraction prompt are recorded in the cassette
 // (E2E_RECORD=1) like the English ones.
-const PATIENT: PatientScript = {
-  complaint: "لويت كاحلي أمس وأنا ألعب كرة القدم",
-  yes: [],
-  scale: "4",
-  typed: [
-    [/متى بدأ/, "أمس بعد الظهر"],
-    [/أين مكان الألم/, "كاحلي الأيسر"],
-  ],
-};
+const PATIENT: PatientScript = ROUTINE_WALK_IN_AR;
 const kiosk = (key: string, values?: Record<string, string | number>) => msg("kiosk", "ar", key, values);
 const phone = (key: string, values?: Record<string, string | number>) => msg("companion", "ar", key, values);
 
@@ -130,9 +123,10 @@ test("@ar @rtl an Arabic visit keeps its language: kiosk refresh, QR claim, phon
   await expect(mobile.getByTestId("status-stale")).toHaveCount(0);
   await expect(token).toHaveText(code2);
 
-  // The end of the visit: called in (the room reads left to right), then seen. The phone says the
-  // visit has ended, in Arabic, and still does after a refresh.
-  const called = await callIn(card, "general", sessionId);
+  // The end of the visit: called in (the room reads left to right), then seen. The phone shows the
+  // room only while the token is called, so the patient is not marked arrived before it is read.
+  // The phone says the visit has ended, in Arabic, and still does after a refresh.
+  const called = await callWithoutArriving(card, "general", sessionId);
   expect(called.token_code).toBe(code2);
   const room = mobile.getByText((phone("status.room", { room: called.room ?? "" })));
   await expect(room).toBeVisible();

@@ -21,7 +21,7 @@ from pydantic import ValidationError
 from careflow_contracts.events import FhirWriteCompletedData
 from careflow_contracts.generated.events.triage_confirmed_schema import TriageConfirmedData
 from careflow_integration.adapters.loader import HospitalAdapter, load_adapter
-from careflow_integration.fhir.client import RETRY_STATUSES, FhirClient, FhirError
+from careflow_integration.fhir.client import WRITE_RETRY_STATUSES, FhirClient, FhirError
 from careflow_integration.fhir.writeback.builders import instant
 from careflow_integration.fhir.writeback.bundle import (
     build_transaction,
@@ -134,7 +134,7 @@ class WritebackHandler:
                 resources = written_resources(bundle, await self.client.transaction(bundle))
             except FhirError as exc:
                 error = str(exc)
-                retryable = exc.status is None or exc.status in RETRY_STATUSES
+                retryable = exc.status is None or exc.status in WRITE_RETRY_STATUSES
                 if delay is None or not retryable:
                     break
                 await self.sleep(delay)

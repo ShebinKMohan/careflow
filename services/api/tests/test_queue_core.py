@@ -9,7 +9,16 @@ import pytest
 from pydantic import ValidationError
 
 from careflow_api.queue.core import InvalidTransition, QueueCore, RoomBusy, Status, Token
-from careflow_api.queue.rooms import Department, Room, RoomsConfig, UnknownRoom, load_rooms, rooms
+from careflow_api.queue.rooms import (
+    ROOMS_FILE,
+    Department,
+    Room,
+    RoomsConfig,
+    UnknownRoom,
+    load_rooms,
+    rooms,
+    rooms_file,
+)
 from careflow_api.queue.wait import estimate_wait
 
 T0 = datetime(2026, 9, 26, 9, 0, tzinfo=UTC)
@@ -146,6 +155,32 @@ def test_the_rooms_file_is_valid_and_routes_every_level() -> None:
         department = config.department_for(level)
         assert any(level in room.accepts_levels for room in department.rooms)
     assert all(len(room.name) <= 32 for d in config.departments for room in d.rooms)
+
+
+def test_a_test_run_can_give_the_api_its_own_rooms_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`CAREFLOW_ROOMS_CONFIG` (M2-12): the E2E no-show journey's copy with a 5-second grace."""
+    copy = tmp_path / "rooms.yaml"
+    shipped = ROOMS_FILE.read_text(encoding="utf-8")
+    copy.write_text(shipped.replace("grace_seconds: 120", "grace_seconds: 5"), encoding="utf-8")
+    monkeypatch.setenv("CAREFLOW_ROOMS_CONFIG", str(copy))
+    rooms.cache_clear()
+    try:
+        assert rooms_file() == copy
+        assert rooms().grace_seconds == 5
+    finally:
+        rooms.cache_clear()
+    monkeypatch.delenv("CAREFLOW_ROOMS_CONFIG")
+    assert rooms_file() == ROOMS_FILE
+    assert rooms().grace_seconds == 120  # the shipped window
+
+
+def test_the_e2e_rooms_copy_differs_from_the_shipped_file_only_in_its_grace_window() -> None:
+    e2e = load_rooms(ROOMS_FILE.parents[1] / "e2e" / "config" / "rooms.yaml")
+    shipped = load_rooms()
+    assert (e2e.grace_seconds, shipped.grace_seconds) == (5, 120)  # never ship the 5 s window
+    assert e2e.model_copy(update={"grace_seconds": 120}) == shipped
 
 
 def department_body(department_id: str, prefix: str, levels: list[int]) -> dict[str, object]:

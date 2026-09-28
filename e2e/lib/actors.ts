@@ -337,14 +337,14 @@ type Role = "nurse" | "doctor" | "admin";
 const AUTH_DIR = new URL("../../.run/e2e/", import.meta.url).pathname;
 const AUTH_FILE = `${AUTH_DIR}staff-tokens.json`;
 
-export async function staffTokenFor(role: Role): Promise<string> {
+export async function staffTokenFor(role: Role, clinic: "a" | "b" = "a"): Promise<string> {
   const api = await request.newContext({ baseURL: STACK.api });
   try {
     const cached: Partial<Record<string, string>> = existsSync(AUTH_FILE) ? JSON.parse(readFileSync(AUTH_FILE, "utf8")) : {};
-    const key = `${STACK.name}:${role}`;
+    const key = clinic === "a" ? `${STACK.name}:${role}` : `${STACK.name}:${role}.${clinic}`;
     const known = cached[key];
     if (known && (await api.get("/v1/auth/me", { headers: { Authorization: `Bearer ${known}` } })).status() === 200) return known;
-    const response = await api.post("/v1/auth/login", { data: { username: staffUser(role), password: secret("CAREFLOW_DEV_PASSWORD") } });
+    const response = await api.post("/v1/auth/login", { data: { username: staffUser(role, clinic), password: secret("CAREFLOW_DEV_PASSWORD") } });
     expect(response.status(), `the dev ${role} signs in (429: wait a minute, the login rate limit)`).toBe(200);
     const token = String((await response.json()).access_token);
     mkdirSync(AUTH_DIR, { recursive: true, mode: 0o700 });
@@ -460,12 +460,16 @@ export interface QueueToken {
   department: string;
   status: string;
   room?: string | null;
+  called_at?: string | null;
+  /** When a called token that has not arrived is re-queued (then a no-show on the second miss). */
+  grace_until?: string | null;
 }
 
-/** The nurse calls patients into `department`, in the queue's order, until `sessionId` is called.
- * M1 has no call button yet (the queue controls are M2-07), so this is the API the staff app will
- * use. A test stack keeps earlier runs' patients waiting; each one called first is closed (seen),
- * which frees its room. */
+/** The nurse calls patients into `department`, in the queue's order, until `sessionId` is called,
+ * and the patient walks in: the token is marked arrived at once, so the grace window (5 s on the
+ * E2E stack, for the no-show journey) never re-queues it. A test stack keeps earlier runs'
+ * patients waiting; each one called first is closed (seen), which frees its room. The staff app's
+ * queue controls use the same routes. */
 export async function callIn(page: Page, department: string, sessionId: string): Promise<QueueToken> {
   const headers = { Authorization: `Bearer ${await staffToken(page)}` };
   for (let calls = 0; calls < 100; calls += 1) {
@@ -473,8 +477,13 @@ export async function callIn(page: Page, department: string, sessionId: string):
     expect(response.status(), `a ${department} room is free for the next patient`).toBe(200);
     const token = (await response.json()).token as QueueToken | null;
     if (token === null) throw new Error(`${sessionId} is not waiting in ${department}`);
-    if (token.session_id === sessionId) return token;
-    await closeToken(page, token.token_id);
+    if (token.session_id !== sessionId) {
+      await closeToken(page, token.token_id);
+      continue;
+    }
+    const arrived = await page.request.post(`${STACK.api}/v1/queue/tokens/${encodeURIComponent(token.token_id)}/arrived`, { headers });
+    expect(arrived.status(), `${token.token_code} arrives in ${token.room}`).toBe(200);
+    return (await arrived.json()) as QueueToken;
   }
   throw new Error(`${sessionId} was not called within 100 calls`);
 }

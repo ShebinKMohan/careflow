@@ -264,25 +264,47 @@ async def test_write_document_posts_once_with_if_none_exist() -> None:
 
 
 @pytest.mark.parametrize(
-    ("patient_ref", "written", "reason"),
+    ("patient_ref", "written", "reason", "retryable"),
     [
-        (None, WRITTEN, "no EHR patient to write to"),
-        ("Patient/persona-chest-pain", [], "the triage is not written back yet"),
+        (None, WRITTEN, "no EHR patient to write to", False),
+        # The triage will be written back (M2-12): the document can follow it later.
+        ("Patient/persona-chest-pain", [], "the triage is not written back yet", True),
     ],
 )
 async def test_nothing_to_attach_the_document_to_skips_it(
-    patient_ref: str | None, written: list[WrittenResource], reason: str
+    patient_ref: str | None, written: list[WrittenResource], reason: str, retryable: bool
 ) -> None:
     briefing, _ = load("chest-pain")
     async with FhirClient(BASE) as client:
         outcome = await write_document(client, briefing, patient_ref=patient_ref, written=written)
-    assert (outcome.status, outcome.error) == (WritebackStatus.skipped, reason)
+    assert (outcome.status, outcome.error, outcome.retryable) == (
+        WritebackStatus.skipped,
+        reason,
+        retryable,
+    )
+
+
+@pytest.mark.parametrize(
+    ("status", "retryable"), [(503, True), (429, True), (409, True), (400, False)]
+)
+@respx.mock
+async def test_a_fhir_error_fails_the_document_without_raising(
+    status: int, retryable: bool
+) -> None:
+    """An EHR that does not answer may later (M2-12: retried with the triage); a rejection is
+    final."""
+    briefing, patient = load("chest-pain")
+    respx.get(url__regex=rf"{re.escape(BASE)}/.*").mock(return_value=httpx.Response(status))
+    async with FhirClient(BASE, retry_delays=()) as client:
+        outcome = await write_document(client, briefing, patient_ref=patient, written=WRITTEN)
+    assert (outcome.status, outcome.error) == (WritebackStatus.failed, f"HTTP {status}")
+    assert outcome.retryable is retryable
 
 
 @respx.mock
-async def test_a_fhir_error_fails_the_document_without_raising() -> None:
+async def test_an_ehr_that_cannot_be_reached_is_worth_retrying() -> None:
     briefing, patient = load("chest-pain")
-    respx.get(url__regex=rf"{re.escape(BASE)}/.*").mock(return_value=httpx.Response(503))
+    respx.get(url__regex=rf"{re.escape(BASE)}/.*").mock(side_effect=httpx.ConnectError("down"))
     async with FhirClient(BASE, retry_delays=()) as client:
         outcome = await write_document(client, briefing, patient_ref=patient, written=WRITTEN)
-    assert (outcome.status, outcome.error) == (WritebackStatus.failed, "HTTP 503")
+    assert (outcome.status, outcome.retryable) == (WritebackStatus.failed, True)

@@ -76,3 +76,27 @@ def test_key_is_canonical() -> None:
     b = cassette_key("t", "m", [{"content": "x", "role": "user"}], 0.0)
     assert a == b
     assert a != cassette_key("t", "m", [{"role": "user", "content": "x"}], 0.7)
+
+
+async def test_add_replays_what_is_recorded_and_records_only_what_is_missing(
+    tmp_path: Path,
+) -> None:
+    """E2E_RECORD=add (M2-12): a new journey's prompts are recorded; earlier ones never are."""
+    cassette = tmp_path / "cassette.json"
+    old: list[Message] = [{"role": "user", "content": "recorded before"}]
+    key = cassette_key("conversation", "echo-1", old, 0.0)
+    cassette.write_text(
+        json.dumps({key: {"task": "conversation", "model": "echo-1", "text": "the old reply"}}),
+        encoding="utf-8",
+    )
+    inner = Echo()
+    adding = ReplayProvider(
+        inner, task="conversation", model="echo-1", cassette=cassette, mode="add"
+    )
+    assert (await adding.chat(old)).text == "the old reply"
+    assert inner.calls == 0  # recorded: the model is not asked again
+    assert (await adding.chat(MESSAGES)).text == "echo: hello"
+    assert inner.calls == 1
+    saved = json.loads(cassette.read_text(encoding="utf-8"))
+    assert saved[key]["text"] == "the old reply"  # kept as it was
+    assert saved[cassette_key("conversation", "echo-1", MESSAGES, 0.0)]["text"] == "echo: hello"

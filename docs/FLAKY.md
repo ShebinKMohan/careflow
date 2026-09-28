@@ -152,3 +152,35 @@ This file lists tests whose outcome depends on the machine or on timing, and how
 - **Handling.** `@settings(deadline=None)`, like the sibling. Not retried and no assertion changed:
   every value 0 to 10 must still be accepted by both the JSON Schema and the Pydantic model. Speed
   is not what this contract test checks.
+
+## `e2e/journeys/stroke.spec.ts` alert-latency budget on a long-lived stack (M2-12)
+
+- **What happened.** On 28 September 2026, during SHE-311 [M2-12], one local run of the whole suite
+  failed the stroke journey's 2 s budget: `FAST_STROKE` reached the nurse's open worklist 2,704 ms
+  after the answer (the budget is asserted on the reference machine, reported in CI). In the same
+  run sepsis took 1,660 ms after its alert was raised and "I feel worse" 1,186 ms; four earlier runs
+  had every alert between 449 and 1,178 ms.
+- **Cause (investigated).** Not the rules: the alert was raised 284 ms after the answer. The delay
+  was delivery to the worklist, which reloads the whole worklist on each live alert. The run's
+  e2e stack had kept the day's runs: clinic A's worklist held 205 sessions and loaded in 330 to
+  450 ms, before rendering. That is the scaling problem SHE-325 reduced and SHE-326 (a worklist
+  projection, one query) is open for.
+- **Handling.** Not retried, and the assertion is unchanged. The same suite on a freshly seeded
+  stack, as CI runs it, passed with every alert between 582 and 724 ms. The data point is recorded on
+  SHE-326. CI starts from a fresh stack; a long-lived local stack can be reseeded.
+
+## `e2e/journeys/arabic.spec.ts` room check after the call (M2-12)
+
+- **What happened.** On 28 September 2026 the first repeat run of the CI `e2e` job for SHE-311
+  (GitHub run 36421589977, `journeys_only`) failed the Arabic visit at its end: the phone had shown
+  "يرجى التوجه إلى Room 1 الآن." but its `<bdi>` was then not found. 21 passed, 2 skipped (voice).
+  The same code had passed in the PR's own run (36421572035) and in every local run.
+- **Cause (investigated).** A race the SHE-311 change itself introduced. `callIn` now marks the
+  called patient arrived at once, so the other journeys never re-queue on the 5-second E2E grace
+  window. The phone shows the room only while the token is called (`StatusView`), so the room line
+  disappeared when the "arrived" update landed. Whether the spec's second check ran before that
+  update was a matter of timing.
+- **Handling.** Not retried, and no assertion changed. The spec calls the patient without marking
+  them arrived (`callWithoutArriving`, as `assertTokenAndRoom` does), reads the room while it is
+  shown, then closes the token. It passed three times running on the local E2E stack. The count of
+  three consecutive CI runs restarted after the fix.

@@ -11,7 +11,8 @@ export UV_LOCKED := 1
 	typecheck-node test test-py test-node banned-deps check contracts contracts-lint \
 	contracts-drift contracts-breaking contracts-check up down infra infra-down test-stack \
 	test-stack-down test-integration seed ps logs nuke \
-	llm-local api migrate seed-dev mock e2e e2e-apps rtl rag-ingest voice-models voice
+	llm-local api migrate seed-dev mock e2e e2e-apps nightly-e2e install-nightly rtl rag-ingest \
+	voice-models voice
 
 help: ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -161,6 +162,15 @@ e2e: ## The three MVP journeys (M1-19) on the running stack: start it with `E2E=
 	pnpm --filter @careflow/e2e journeys
 e2e-apps: ## Playwright suites for kiosk, staff and companion against Prism mocks (each starts its own)
 	pnpm test:e2e
+
+nightly-e2e: ## The journeys against the live local model on this Mac; writes eval/reports/e2e_nightly.json
+	scripts/nightly-e2e.sh
+
+install-nightly: ## The owner's step: install the 02:00 LaunchAgent for nightly-e2e (then launchctl load, README)
+	@mkdir -p "$(HOME)/Library/LaunchAgents"
+	sed "s|__REPO__|$(CURDIR)|" infra/launchd/com.careflow.nightly-e2e.plist > "$(HOME)/Library/LaunchAgents/com.careflow.nightly-e2e.plist"
+	@echo "install-nightly: installed, not loaded. Load it with:"
+	@echo "  launchctl load ~/Library/LaunchAgents/com.careflow.nightly-e2e.plist"
 
 # The apps build and serve on E2E_PORT (default each app's dev port; set it beside a running stack).
 # RTL_ARGS=--update-snapshots writes new baselines, from the same pinned browser.

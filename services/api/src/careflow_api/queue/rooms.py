@@ -6,6 +6,7 @@ patient: every level routes to a department that has a room accepting it.
 
 from __future__ import annotations
 
+import os
 from functools import cache
 from pathlib import Path
 from typing import Annotated, Final, Self
@@ -102,10 +103,17 @@ def load_rooms(path: Path = ROOMS_FILE) -> RoomsConfig:
     return RoomsConfig.model_validate(yaml.safe_load(path.read_text(encoding="utf-8")))
 
 
+def rooms_file() -> Path:
+    """`CAREFLOW_ROOMS_CONFIG` when set, else `config/rooms.yaml`. Only tests set it: the E2E
+    no-show journey runs on a copy with a 5-second grace window, a value never shipped (M2-12)."""
+    override = os.environ.get("CAREFLOW_ROOMS_CONFIG")
+    return Path(override) if override else ROOMS_FILE
+
+
 @cache
 def rooms() -> RoomsConfig:
-    """The validated `config/rooms.yaml`, read once."""
-    return load_rooms()
+    """The validated rooms file (`rooms_file()`), read once."""
+    return load_rooms(rooms_file())
 
 
 __all__ = [
@@ -118,4 +126,5 @@ __all__ = [
     "UnknownRoom",
     "load_rooms",
     "rooms",
+    "rooms_file",
 ]

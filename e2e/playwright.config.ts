@@ -5,6 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
 // queue, and a failure is a finding, never re-run until green.
 export default defineConfig({
   testDir: "./journeys",
+  globalSetup: "./global-setup.ts", // frees the rooms an earlier run left held
   workers: 1,
   fullyParallel: false,
   retries: 0,
@@ -16,6 +17,7 @@ export default defineConfig({
     // The installed Google Chrome by default; PLAYWRIGHT_CHANNEL=chromium in CI.
     channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome",
     trace: "retain-on-failure",
+    video: "retain-on-failure", // uploaded with the trace by the CI e2e job when a journey fails
     timezoneId: "Asia/Dubai",
   },
 });

@@ -134,6 +134,7 @@ export function Worklist() {
                         {item.alerts.map((alert) => (
                           <span
                             key={alert.alert_id}
+                            data-rule-id={alert.rule_id}
                             className={`mb-1 me-2 inline-block rounded-control px-2 text-label ${
                               alert.severity === "critical"
                                 ? "bg-danger text-on-danger"
