@@ -1,0 +1,64 @@
+{
+  "url": "https://careflow-omega-seven.vercel.app",
+  "deploymentCommit": "479bc4ab300c9143100bc7c15c48bcc2f66f337b",
+  "checkedAt": "2026-09-28T19:49:53.666Z",
+  "frontendOnly": true,
+  "reports": [
+    {
+      "locale": "en",
+      "width": 1280,
+      "httpStatus": 200,
+      "previewVisible": true,
+      "checkinDisabled": true,
+      "backendRequests": [],
+      "pageErrors": [],
+      "overflow": {
+        "viewport": 1280,
+        "document": 1280
+      },
+      "accessibilityViolations": []
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "httpStatus": 200,
+      "previewVisible": true,
+      "checkinDisabled": true,
+      "backendRequests": [],
+      "pageErrors": [],
+      "overflow": {
+        "viewport": 390,
+        "document": 390
+      },
+      "accessibilityViolations": []
+    },
+    {
+      "locale": "ar",
+      "width": 1280,
+      "httpStatus": 200,
+      "previewVisible": true,
+      "checkinDisabled": true,
+      "backendRequests": [],
+      "pageErrors": [],
+      "overflow": {
+        "viewport": 1280,
+        "document": 1280
+      },
+      "accessibilityViolations": []
+    },
+    {
+      "locale": "ar",
+      "width": 390,
+      "httpStatus": 200,
+      "previewVisible": true,
+      "checkinDisabled": true,
+      "backendRequests": [],
+      "pageErrors": [],
+      "overflow": {
+        "viewport": 390,
+        "document": 390
+      },
+      "accessibilityViolations": []
+    }
+  ]
+}

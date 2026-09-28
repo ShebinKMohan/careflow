@@ -5,13 +5,15 @@ from __future__ import annotations
 import secrets
 import time
 import uuid
-from typing import Any
+from typing import Any, cast
 
 import pytest
+from fastapi import FastAPI
 from starlette.testclient import TestClient
 
 from careflow_api import ratelimit
 from careflow_api.security import decode_token
+from careflow_contracts.generated.fact_schema import TranscriptSpanSource
 
 
 @pytest.fixture(scope="module")
@@ -78,7 +80,7 @@ def test_registration_persists_and_skips_all_model_paths(
     def forbidden(*args: Any, **kwargs: Any) -> Any:
         raise AssertionError("Registration must not invoke an LLM or urgency predictor")
 
-    runtime = flow.app.state.intake
+    runtime = cast(FastAPI, flow.app).state.intake
     monkeypatch.setattr(type(runtime.ports.conversation), "next_question", forbidden)
     monkeypatch.setattr(type(runtime.ports.extractor), "extract", forbidden)
     monkeypatch.setattr(type(runtime.ports.urgency), "predict", forbidden)
@@ -129,7 +131,7 @@ def test_mobile_registration_structured_emergency_and_child(flow: TestClient, cl
     )
     assert claims["channel"] == "phone"
     assert flow.portal is not None
-    view = flow.portal.call(flow.app.state.intake.view, result["session_id"])
+    view = flow.portal.call(cast(FastAPI, flow.app).state.intake.view, result["session_id"])
     assert view.waiting == "nurse_review"
     assert view.state["patient_type"] == "child"
     assert view.state["alerts"]
@@ -161,11 +163,13 @@ def test_long_registration_reason_keeps_exact_fact_specific_provenance() -> None
         ReceptionCheckinRequest.model_validate(data), dt.datetime.now(dt.UTC), str(uuid.uuid4())
     )
     assert len(turns[0].text) > 1000
+    quotes: dict[str, str] = {}
     for entry in facts:
-        source = entry.fact.source
+        source = entry.base.source
+        assert isinstance(source, TranscriptSpanSource)
         assert source.quote == turns[0].text[source.start : source.end]
         assert source.end - source.start == len(source.quote) <= 1000
-    quotes = {entry.key.value: entry.fact.source.quote for entry in facts}
+        quotes[entry.key.value] = source.quote
     assert quotes["chief_complaint"] == data["reason"]
     assert quotes["patient.age_years"] == "8"
     assert quotes["patient.sex"] == "male"
@@ -183,7 +187,9 @@ def test_adult_emergency_choice_remains_visible_without_false_low_urgency(
     response = flow.post("/v1/reception/checkin", json=data, headers=kiosk(flow, clinics))
     assert response.status_code == 200, response.text
     assert flow.portal is not None
-    view = flow.portal.call(flow.app.state.intake.view, response.json()["session_id"])
+    view = flow.portal.call(
+        cast(FastAPI, flow.app).state.intake.view, response.json()["session_id"]
+    )
     assert view.waiting == "nurse_review"
     assert view.state["suggestion"] is None
     assert view.state.get("nurse_decision") is None
@@ -202,7 +208,7 @@ def test_reception_nurse_decision_queues_and_builds_sourced_briefing_without_llm
         called.append(True)
         raise AssertionError("Reception must not call a summary model")
 
-    monkeypatch.setattr(flow.app.state.briefings, "summarizer", forbidden_summary)
+    monkeypatch.setattr(cast(FastAPI, flow.app).state.briefings, "summarizer", forbidden_summary)
     registered = flow.post(
         "/v1/reception/checkin", json=registration(), headers=kiosk(flow, clinics)
     )
@@ -242,8 +248,10 @@ def test_reception_nurse_decision_queues_and_builds_sourced_briefing_without_llm
     assert status.json()["token_code"] == token["token_code"]
     assert status.json()["state"] == "queued"
     assert flow.portal is not None
-    flow.portal.call(flow.app.state.briefings.drain)
-    saved = flow.portal.call(flow.app.state.briefings.store.get, clinics.a, uuid.UUID(session_id))
+    flow.portal.call(cast(FastAPI, flow.app).state.briefings.drain)
+    saved = flow.portal.call(
+        cast(FastAPI, flow.app).state.briefings.store.get, clinics.a, uuid.UUID(session_id)
+    )
     assert saved["summary_status"] == "disabled"
     assert saved["sections"]
     assert not called

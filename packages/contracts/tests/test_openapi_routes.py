@@ -70,11 +70,18 @@ get /health
 """
 EXPECTED = {(m, r) for m, r in (line.split() for line in EXPECTED_ROUTES.strip().splitlines())}
 UNAUTHENTICATED = {
-    ("post", "/v1/identity/lookup"), ("post", "/v1/identity/verify"), ("post", "/v1/checkin/adaptive"), ("post", "/v1/checkin/urgent"),
-    ("get", "/v1/reception/directory"), ("post", "/v1/reception/checkin"),
-    ("get", "/health"), ("post", "/v1/auth/login"), ("post", "/v1/auth/device-token"),
-    ("post", "/v1/checkin/qr/claim"), ("post", "/v1/checkin/start/claim"),
-}  # fmt: skip
+    ("post", "/v1/identity/lookup"),
+    ("post", "/v1/identity/verify"),
+    ("post", "/v1/checkin/adaptive"),
+    ("post", "/v1/checkin/urgent"),
+    ("get", "/v1/reception/directory"),
+    ("post", "/v1/reception/checkin"),
+    ("get", "/health"),
+    ("post", "/v1/auth/login"),
+    ("post", "/v1/auth/device-token"),
+    ("post", "/v1/checkin/qr/claim"),
+    ("post", "/v1/checkin/start/claim"),
+}
 
 
 def schema(name: str) -> dict[str, Any]:

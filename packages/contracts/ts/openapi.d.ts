@@ -3775,6 +3775,18 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    /**
+                     * @example {
+                     *       "session_id": "11111111-1111-4111-8111-111111111111",
+                     *       "visit_reference": "CF-11111111",
+                     *       "nurse_confirmed": false,
+                     *       "assistance_requested": false,
+                     *       "facts": [],
+                     *       "alerts": [],
+                     *       "suggestion": null,
+                     *       "warnings": []
+                     *     }
+                     */
                     "application/json": components["schemas"]["PatientIntakeSummary"];
                 };
             };

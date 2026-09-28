@@ -123,9 +123,7 @@ def providers_config(path: Path = PROVIDERS_CONFIG) -> ProvidersConfig:
     if not overrides:
         return providers
     tasks = {
-        task: config.model_copy(update=overrides)
-        if isinstance(config, LocalTaskConfig)
-        else config
+        task: config.model_copy(update=overrides) if isinstance(config, LocalTaskConfig) else config
         for task, config in providers.tasks.items()
     }
     return providers.model_copy(update={"tasks": tasks})

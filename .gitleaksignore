@@ -1,0 +1,15 @@
+# Reviewed false positives from CI security job 109103927262.
+# These seven findings are decision.token.token_id UUIDv4 queue record IDs in
+# synthetic local-browser evidence, not access_token/session_token credentials.
+# QueueTokenRow inherits its database-generated UUID primary key from _Row;
+# queue/service.py maps that row.id to token_id, and queue/router.py independently
+# requires nurse authentication and clinic scope for operations on that record.
+# Exact commit/path/rule/line fingerprints only: future commits, other fields,
+# bearer credentials, and all default secret-detection rules remain scanned.
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/new-adult-resumed.json:generic-api-key:77
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/anonymous-urgent-help.json:generic-api-key:214
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/initial-run/anonymous-urgent-help.json:generic-api-key:214
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/returning-adult.json:generic-api-key:476
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/caregiver-child.json:generic-api-key:594
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/stage-results.json:generic-api-key:477
+25dc775582614e432888187fe3604743605e56f0:docs/evidence/ADAPTIVE-20260929/live/stage-results.json:generic-api-key:1085

@@ -6,10 +6,11 @@ import datetime as dt
 import secrets
 import uuid
 from collections.abc import Iterator
-from typing import Any
+from typing import Any, cast
 
 import jwt
 import pytest
+from fastapi import FastAPI
 from starlette.testclient import TestClient
 
 from careflow_api import ratelimit
@@ -139,10 +140,10 @@ def test_invalid_entry_code_is_refused(flow: TestClient, clinics: Any, invalid: 
 def test_recovery_after_session_started_does_not_duplicate_visit(
     flow: TestClient, clinics: Any, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    from careflow_api.routers import start_checkin
+    from careflow_api.routers.sessions import start_keypad_session
 
     data = body(issue(flow, clinics))
-    original = start_checkin.start_keypad_session
+    original = start_keypad_session
     seen = []
 
     async def interrupted(*args: Any, **kwargs: Any) -> Any:
@@ -154,7 +155,7 @@ def test_recovery_after_session_started_does_not_duplicate_visit(
             raise HTTPException(503, "Simulated connection lost after session creation")
         return result
 
-    monkeypatch.setattr(start_checkin, "start_keypad_session", interrupted)
+    monkeypatch.setattr("careflow_api.routers.start_checkin.start_keypad_session", interrupted)
     assert flow.post("/v1/checkin/start/claim", json=data).status_code == 503
     retried = flow.post("/v1/checkin/start/claim", json=data)
     assert retried.status_code == 200, retried.text
@@ -204,7 +205,7 @@ def test_phone_entry_records_child_age(flow: TestClient, clinics: Any) -> None:
     assert response.status_code == 200, response.text
     session_id = response.json()["session_id"]
     assert flow.portal is not None
-    state = flow.portal.call(flow.app.state.intake.state, session_id)
+    state = flow.portal.call(cast(FastAPI, flow.app).state.intake.state, session_id)
     assert state["patient_type"] == "child"
     age_months = [
         entry.fact.value for entry in state["facts"] if entry.key.value == "patient.age_months"
