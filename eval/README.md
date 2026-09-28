@@ -192,7 +192,7 @@ offline reviewer. A successful structured response alone is never sufficient for
 ## Arabic scenarios and the per-language report (M2-03)
 
 `eval/datasets/intake_ar/` holds the Arabic corpus: 50 Gulf and 50 Levantine scenarios in the
-English category mix, built in three steps (ADR-055):
+English category mix, built and reviewed in these steps (ADR-055):
 
 1. **Seeded gold.** `careflow_eval.sampler.arabic_plan(dialect, seed=7)` samples each scenario's
    gold facts, questions, age and vitals in code. The expected alerts come from the rules engine
@@ -226,7 +226,8 @@ English category mix, built in three steps (ADR-055):
    runs the check itself, so a draft without one is rejected until a local review checks it.
 
 `careflow-eval run extraction --lang en|ar|all` runs `extraction_en` and/or `extraction_ar`,
-writes each suite's report, then `eval/reports/extraction.json` and `.md`: missed expected
+writes each suite's report (a replay's under `replay-verification/`, so it never replaces a live
+baseline's `LATEST.md`), then `eval/reports/extraction.json` and `.md`: missed expected
 alerts first (by scenario id, or "none"), field scores per language and per dialect, per field,
 the span-verified rate, the models and the caveats. Arabic free-text facts are scored by
 presence only; coded and numeric facts exactly. The report is `publish: false`. The Arabic was
