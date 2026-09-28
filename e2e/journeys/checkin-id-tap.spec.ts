@@ -28,10 +28,7 @@ test("check-in by the simulated ID reader: labelled a mock, the card finds its p
   const started = await tapCard(kiosk, "stroke");
   expect((await saved).status()).toBe(200);
   await forMe(kiosk);
-  const status = await kiosk.request.get(`${STACK.api}/v1/sessions/${started.session_id}/status`, {
-    headers: { Authorization: `Bearer ${started.session_token}` },
-  });
-  const display = String((await status.json()).patient_display ?? "");
+  const display = started.patient_display ?? "";
   expect(display).toMatch(/^[A-Z]\. [A-Z]\.$/);
   await expect(kiosk.getByText(display)).toBeVisible();
 

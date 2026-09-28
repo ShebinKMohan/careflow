@@ -32,19 +32,22 @@ export interface Trigger {
   /** When it was sent, and when the API answered it (ms since the epoch). */
   sentAt: number;
   answeredAt: number;
+  /** A simulated device started here: its readings reach the API afterwards, server-side, so an
+   * alert they raise is timed from its own `raised_at`. */
+  device?: boolean;
 }
 
 export const answerTriggers = (turns: Turn[]): Trigger[] =>
   turns.map((turn) => ({ label: `"${turn.answer}" to "${turn.question}"`, sentAt: turn.sentAt, answeredAt: turn.answeredAt }));
 
-/** The kiosk's vitals readings (POST /v1/sessions/{id}/vitals) from now on, as triggers: a reading
- * can raise an alert (sepsis). */
+/** The kiosk's simulated device from now on (POST /v1/dev/sessions/{id}/vitals-sim starts it; its
+ * readings reach the API in the background), as a trigger: a reading can raise an alert (sepsis). */
 export function readingTriggers(page: Page): Trigger[] {
   const readings: Trigger[] = [];
   page.on("requestfinished", (sent) => {
-    if (sent.method() !== "POST" || !/^\/v1\/sessions\/[^/]+\/vitals$/.test(new URL(sent.url()).pathname)) return;
+    if (sent.method() !== "POST" || !/^\/v1\/dev\/sessions\/[^/]+\/vitals-sim$/.test(new URL(sent.url()).pathname)) return;
     const timing = sent.timing();
-    readings.push({ label: "a kiosk vitals reading", sentAt: timing.startTime, answeredAt: timing.startTime + timing.responseEnd });
+    readings.push({ label: "the simulated device's readings", sentAt: timing.startTime, answeredAt: timing.startTime + timing.responseEnd, device: true });
   });
   return readings;
 }
@@ -114,14 +117,18 @@ export async function assertAlerts(ctx: JourneyContext, alerts: string[]): Promi
     const seenAt = (await ctx.alertsSeen.get(rule)) ?? Number.NaN;
     expect(seenAt, `${rule} reached the nurse's worklist without a reload`).toBeGreaterThan(0);
     const raisedAt = Math.min(...triage.alerts.filter((alert) => alert.rule_id === rule).map((alert) => Date.parse(alert.raised_at)));
-    const trigger = ctx.triggers.find((sent) => sent.sentAt <= raisedAt && raisedAt <= sent.answeredAt + 50);
+    // An answer raises an alert while it is being taken; a device's reading, after the device started.
+    const trigger =
+      ctx.triggers.find((sent) => !sent.device && sent.sentAt <= raisedAt && raisedAt <= sent.answeredAt + 50) ??
+      ctx.triggers.find((sent) => sent.device && sent.sentAt <= raisedAt);
     expect(trigger, `${rule} was raised while an answer or a reading was being taken`).toBeTruthy();
-    const latency = seenAt - trigger!.answeredAt;
+    const latency = seenAt - (trigger!.device ? raisedAt : trigger!.answeredAt);
     test.info().annotations.push({
       type: "alert latency",
-      description:
-        `${rule}: raised ${raisedAt - trigger!.sentAt} ms after ${trigger!.label} was sent; on the nurse's worklist ` +
-        `${seenAt - trigger!.sentAt} ms after it was sent (${latency} ms after the answer)`,
+      description: trigger!.device
+        ? `${rule}: raised by ${trigger!.label} ${raisedAt - trigger!.sentAt} ms after the device started; on the nurse's worklist ${latency} ms after it was raised`
+        : `${rule}: raised ${raisedAt - trigger!.sentAt} ms after ${trigger!.label} was sent; on the nurse's worklist ` +
+          `${seenAt - trigger!.sentAt} ms after it was sent (${latency} ms after the answer)`,
     });
     if (process.env.CI) {
       if (latency > 2_000) test.info().annotations.push({ type: "warning", description: `${rule} on the worklist ${latency} ms after the answer (budget 2000 ms)` });
@@ -207,8 +214,10 @@ export async function assertTokenAndRoom(ctx: JourneyContext, { arrive = true }:
     { token_code: queued.token_code, room: called.room, status: "called" },
   ]);
   for (const entry of board) expect(Object.keys(entry).sort(), "the board carries a token, a room and a state, never a name").toEqual(["room", "status", "token_code"]);
-  const status = await get<{ patient_display?: string }>(`/v1/sessions/${ctx.sessionId}/status`, ctx.patientToken);
-  if (status.patient_display) expect(JSON.stringify(board)).not.toContain(status.patient_display);
+  const worklist = await get<{ session_id: string; patient_display?: string }[]>("/v1/nurse/worklist", await staffTokenFor("nurse"));
+  const display = worklist.find((row) => row.session_id === ctx.sessionId)?.patient_display ?? "";
+  expect(display, "the nurse sees who the patient is").not.toBe("");
+  expect(JSON.stringify(board), "the board never shows who the patient is").not.toContain(display);
 
   await expect(ctx.patient.getByText(queued.token_code).first()).toBeVisible({ timeout: 5_000 });
   await expect(ctx.patient.getByText(called.room!).first()).toBeVisible({ timeout: 5_000 });

@@ -15,6 +15,8 @@ export type ConsentChoice = "agree" | "withoutCameraVoice" | "decline";
 export interface Started {
   session_id: string;
   session_token: string;
+  /** The patient's initials, as the kiosk greets them. */
+  patient_display?: string;
 }
 
 /** Counts every `navigator.mediaDevices.getUserMedia` call on the page, across reloads, then lets

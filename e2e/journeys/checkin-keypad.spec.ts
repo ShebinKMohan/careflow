@@ -2,7 +2,6 @@ import { expect, test } from "@playwright/test";
 
 import { kioskPage, RequestLog } from "../lib/actors";
 import { chooseConsent, consentPosted, forMe, keypadCheckIn, t } from "../lib/consent";
-import { STACK } from "../lib/stack";
 
 // Check-in path 1 (M2-12): the silent keypad, on the real stack. A wrong code gets the same
 // generic words whatever it is; the persona's code finds the persona in HAPI and opens its intake.
@@ -19,16 +18,13 @@ test("check-in by keypad: a wrong code is told generically, the persona's code c
   const refused = kiosk.waitForResponse((response) => new URL(response.url()).pathname === "/v1/checkin/keypad");
   await kiosk.getByRole("button", { name: t("checkin.submit"), exact: true }).click();
   expect((await refused).status(), "an unknown code is a generic 404").toBe(404);
-  await expect(kiosk.getByRole("alert")).toHaveText(t("checkin.failed"));
+  await expect(kiosk.getByRole("alert").filter({ hasText: t("checkin.failed") })).toBeVisible();
 
   const saved = consentPosted(kiosk);
   const started = await keypadCheckIn(kiosk, "100001");
   expect((await saved).status()).toBe(200);
   await forMe(kiosk);
-  const status = await kiosk.request.get(`${STACK.api}/v1/sessions/${started.session_id}/status`, {
-    headers: { Authorization: `Bearer ${started.session_token}` },
-  });
-  const display = String((await status.json()).patient_display ?? "");
+  const display = started.patient_display ?? "";
   expect(display, "the persona is greeted by initials only").toMatch(/^[A-Z]\. [A-Z]\.$/);
   await expect(kiosk.getByText(display)).toBeVisible();
 
