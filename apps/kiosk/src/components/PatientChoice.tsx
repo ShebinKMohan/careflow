@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 
 import { patientApi } from "@/lib/api";
 import { useKiosk } from "@/lib/session";
+import { KioskIcon } from "./KioskIcon";
 
 const BIG =
   "min-h-touch rounded-control border-2 border-primary px-6 text-title font-semibold text-primary aria-pressed:bg-primary aria-pressed:text-on-primary disabled:opacity-50";
@@ -23,6 +24,7 @@ const MONTHS = Array.from({ length: 12 }, (_, index) => index);
  */
 export function PatientChoice() {
   const t = useTranslations("safety.child");
+  const experience = useTranslations("experience");
   const tIntake = useTranslations("intake");
   const router = useRouter();
   const { patient, setPatientType } = useKiosk();
@@ -52,12 +54,12 @@ export function PatientChoice() {
     if (!patient || !client || years === null || !ready) return;
     setSending(true);
     setFailed(false);
-    const { data } = await client.POST("/v1/sessions/{session_id}/patient", {
+    const result = await client.POST("/v1/sessions/{session_id}/patient", {
       params: { path: { session_id: patient.sessionId } },
       body: { patient_type: "child", age_years: years, ...(needsMonths ? { age_months: months ?? 0 } : {}) },
-    });
+    }).catch(() => null);
     setSending(false);
-    if (!data) {
+    if (!result?.data) {
       setFailed(true);
       return;
     }
@@ -71,12 +73,15 @@ export function PatientChoice() {
     return (
       <div className="flex flex-col gap-4">
         {greeting}
-        <button type="button" className={PRIMARY} onClick={() => router.push("/intake")}>
-          {t("me")}
+        <p className="screen-intro">{experience("patientIntro")}</p>
+        <div className="patient-options">
+        <button type="button" className="patient-option" aria-label={t("me")} onClick={() => router.push("/intake")}>
+          <KioskIcon name="person" /><strong>{t("me")}</strong><span>{experience("adultDescription")}</span>
         </button>
-        <button type="button" className={PRIMARY} onClick={() => setChild(true)} data-testid="patient-child">
-          {t("myChild")}
+        <button type="button" className="patient-option" aria-label={t("myChild")} onClick={() => setChild(true)} data-testid="patient-child">
+          <KioskIcon name="child" /><strong>{t("myChild")}</strong><span>{experience("childDescription")}</span>
         </button>
+        </div>
       </div>
     );
   }

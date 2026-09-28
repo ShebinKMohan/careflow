@@ -1,0 +1,148 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "journeys/routine.spec.ts",
+      "--grep",
+      "\\(en\\)"
+    ],
+    "configFile": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/playwright.config.ts",
+    "rootDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/journeys.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "routine.spec.ts",
+      "file": "routine.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "routine walk-in: no alert, the nurse overrides with a reason, token, briefing, HAPI has the nurse's level and no Flag (en)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [
+                {
+                  "type": "turn latency",
+                  "description": "text 3831 ms, text 4461 ms, tap 62 ms, text 7699 ms, tap 9254 ms"
+                },
+                {
+                  "type": "briefing",
+                  "description": "16 items, all attributed"
+                },
+                {
+                  "type": "HAPI",
+                  "description": "Encounter 198503: 6 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 49698,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T18:00:43.655Z",
+                  "annotations": [
+                    {
+                      "type": "turn latency",
+                      "description": "text 3831 ms, text 4461 ms, tap 62 ms, text 7699 ms, tap 9254 ms"
+                    },
+                    {
+                      "type": "briefing",
+                      "description": "16 items, all attributed"
+                    },
+                    {
+                      "type": "HAPI",
+                      "description": "Encounter 198503: 6 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d81165bdd2ee000a579-7401bfbd6f0e95101b5f",
+          "file": "routine.spec.ts",
+          "line": 16,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T18:00:43.295Z",
+    "duration": 50983.912,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

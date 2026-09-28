@@ -31,7 +31,7 @@ export function Keypad({ labels, onSubmit, disabled = false, length = KEYPAD_LEN
   const press = (digit: string) => setDigits((current) => (current.length < length ? current + digit : current));
 
   return (
-    <div className="flex flex-col gap-4" dir="ltr">
+    <div className="keypad-surface flex flex-col gap-4" dir="ltr">
       <input
         aria-label={labels.display}
         readOnly

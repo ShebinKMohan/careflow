@@ -31,11 +31,13 @@ from careflow_api.events.ws import LiveHub
 from careflow_api.hospital import fhir_endpoint
 from careflow_api.intake.consumers import WRITEBACK_GROUP, writeback_consumer
 from careflow_api.intake.runtime import IntakeRuntime
+from careflow_api.intake.warmup import warm_local_extraction
 from careflow_api.intake.wiring import build_ports
 from careflow_api.queue import router as queue_router
 from careflow_api.queue.rooms import rooms
 from careflow_api.queue.service import Notify, QueueService, run_grace_expiry
 from careflow_api.routers import (
+    adaptive,
     admin,
     auth,
     companion,
@@ -43,8 +45,13 @@ from careflow_api.routers import (
     dev,
     handover,
     health,
+    identity,
+    intake_summary,
     nurse,
+    reception,
     sessions,
+    start_checkin,
+    urgent,
 )
 from careflow_api.writeback_store import SqlWritebackStore
 from careflow_contracts.api_models import CompanionStatus
@@ -65,6 +72,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             wiring = build_ports(
                 queue=app.state.queue, briefing=app.state.briefings, ask=app.state.ask
             )
+            if settings.warm_extraction:
+                app.state.extraction_warmup = await warm_local_extraction(wiring.ports.extractor)
             runtime = await stack.enter_async_context(
                 IntakeRuntime.open(settings.database_url, wiring.ports)
             )
@@ -156,10 +165,16 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     )
     for module in (
         health,
+        intake_summary,
         auth,
         sessions,
         consent,
         handover,
+        start_checkin,
+        reception,
+        identity,
+        adaptive,
+        urgent,
         companion,
         nurse,
         doctor,

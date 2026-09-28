@@ -1,3 +1,4 @@
+vi.mock("@/components/PatientReceipt", () => ({ PatientReceipt: () => null }));
 import { act, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

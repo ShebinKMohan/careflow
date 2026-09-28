@@ -8,9 +8,10 @@ import { z } from "zod";
 import { usePhoneVisit } from "@/lib/usePhoneVisit";
 
 import { PhoneIntake } from "./PhoneIntake";
+import { CompanionIcon } from "./CompanionIcon";
 
 const Claim = z.object({ qr_token: z.string().trim().min(16).max(512) });
-const FIELD = "min-h-touch w-full rounded-control border-2 border-border bg-surface px-4 text-body";
+const FIELD = "companion-input companion-code-input";
 
 /** The start page also resumes a saved visit, without asking for its consumed QR code again. */
 export function ClaimForm() {
@@ -28,22 +29,41 @@ export function ClaimForm() {
   if (visit.status === "ready") {
     return <PhoneIntake sessionId={visit.session.sessionId} token={visit.token}
       language={visit.session.language} display={visit.session.display} initialQuestion={visit.question}
-      initialRevision={visit.revision} initialState={visit.state} onReconnect={reset} />;
+      initialRevision={visit.revision} initialState={visit.state} childSession={visit.session.patientType === "child"} onReconnect={reset} />;
   }
   const message = invalid ? "invalid" : visit.status === "expired" || visit.status === "failed" || visit.status === "unavailable" ? visit.status : null;
   return (
-    <form className="flex flex-col gap-4" onSubmit={submit} noValidate>
+    <div className="companion-connect">
+      <div className="companion-page-heading companion-welcome">
+        <span className="companion-hero-icon"><CompanionIcon name="phone" /></span>
+        <span className="companion-eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p>{t("intro")}</p>
+      </div>
+      <section className="companion-start-guide"><CompanionIcon name="phone" /><div><h2>{t("scanTitle")}</h2><p>{t("scanHelp")}</p></div></section>
+      <section className="companion-panel companion-connect-panel">
+      <div className="companion-section-title"><CompanionIcon name="shield" /><h2>{t("connectTitle")}</h2></div>
+      <p className="companion-muted">{t("connectHelp")}</p>
+      <form className="companion-form" onSubmit={submit} noValidate>
       <label className="flex flex-col gap-2 text-label font-semibold">
         {t("code")}
-        <input name="qr_token" autoComplete="off" className={FIELD} dir="ltr" />
+        <input name="qr_token" autoComplete="off" autoCapitalize="none" spellCheck={false} maxLength={512} aria-invalid={invalid} aria-describedby="code-hint" className={FIELD} dir="ltr" placeholder={t("placeholder")} />
       </label>
-      {message ? <p role="alert" className="font-semibold text-danger">{t(message)}</p> : null}
+      <p id="code-hint" className="companion-field-hint">{t("codeHint")}</p>
+      {message ? <p role="alert" className="companion-notice companion-error">{t(message)}</p> : null}
       {visit.status === "unavailable" ? (
         <BigButton type="button" onClick={() => void retry()}>{t("retry")}</BigButton>
       ) : null}
       <BigButton type="submit" disabled={visit.status === "loading"}>
         {visit.status === "loading" ? t("working") : t("submit")}
       </BigButton>
-    </form>
+      </form>
+      </section>
+      <ol className="companion-benefits">
+        <li><CompanionIcon name="check" /><span>{t("benefitIntake")}</span></li>
+        <li><CompanionIcon name="clock" /><span>{t("benefitQueue")}</span></li>
+        <li><CompanionIcon name="message" /><span>{t("benefitClinic")}</span></li>
+      </ol>
+    </div>
   );
 }

@@ -28,11 +28,12 @@ function alertRank(item: WorklistItem): number {
   const active = awaitingDecision(item) ? item.alerts : alertsSinceDecision(item);
   if (active.some((alert) => alert.severity === "critical")) return 0;
   if (active.some((alert) => alert.severity === "high")) return 1;
-  return 2;
+  if (item.urgent_help) return 2;
+  return 3;
 }
 
 /**
- * Danger first: an active critical alert, then an active high alert, then the level (the
+ * Danger first: active critical alerts, active high alerts, explicit urgent-help requests, then the level (the
  * confirmed one once decided, else the suggestion, 1 first; no suggestion counts as 2), then the
  * earliest arrival.
  */

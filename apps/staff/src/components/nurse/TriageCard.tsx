@@ -16,6 +16,7 @@ import {
 import { factLabel } from "@/lib/factLabel";
 import type { FactView } from "@/lib/facts";
 
+import { ClinicalFact } from "./ClinicalSnapshot";
 import { levelLabel } from "./LevelChip";
 import { ProvenanceChip } from "./ProvenanceChip";
 
@@ -57,13 +58,17 @@ export function TriageCard({
   onDecided: (result: DecisionResult) => void;
 }) {
   const t = useTranslations("triage");
+  const reception = useTranslations("reception");
   const tSafety = useTranslations("safety.triage");
   const suggestion = triage.suggestion;
-  const [changing, setChanging] = useState(suggestion === null);
+  // `changing` is a nurse's explicit edit, not the temporary absence of a model result.
+  const [changing, setChanging] = useState(false);
   const [level, setLevel] = useState<Level | null>(null);
-  const [reason, setReason] = useState<OverrideReason>(
-    suggestion === null ? { code: "other", note: NO_SUGGESTION_NOTE } : { code: null, note: "" },
-  );
+  const [reason, setReason] = useState<OverrideReason>({ code: null, note: "" });
+  const displayedReason: OverrideReason = !suggestion && reason.code === null && reason.note === ""
+    ? { code: "other", note: NO_SUGGESTION_NOTE }
+    : reason;
+  const showOverride = !suggestion || changing;
   const [status, setStatus] = useState<"idle" | "saving" | "failed">("idle");
   const [result, setResult] = useState<DecisionResult | null>(null);
   const scale = suggestion?.scale ?? "KTAS";
@@ -82,17 +87,21 @@ export function TriageCard({
       decisionId: newDecisionId(),
       decidedAt: new Date().toISOString(),
     });
-    const { data } = await api.POST("/v1/nurse/sessions/{session_id}/decision", {
-      params: { path: { session_id: triage.session_id } },
-      body,
-    });
-    if (!data) {
+    try {
+      const { data } = await api.POST("/v1/nurse/sessions/{session_id}/decision", {
+        params: { path: { session_id: triage.session_id } },
+        body,
+      });
+      if (!data) {
+        setStatus("failed");
+        return;
+      }
+      setStatus("idle");
+      setResult(data);
+      onDecided(data);
+    } catch {
       setStatus("failed");
-      return;
     }
-    setStatus("idle");
-    setResult(data);
-    onDecided(data);
   }
 
   const decided = result?.decision ?? triage.decision;
@@ -109,18 +118,26 @@ export function TriageCard({
       ) : null}
 
       {suggestion ? (
-        <section className="mb-4 flex flex-col gap-2 rounded-card border-2 border-dashed border-border p-gutter" aria-label={t("suggestion")}>
+        <section className="staff-triage-suggestion mb-4 flex flex-col gap-2 rounded-card border border-border p-gutter" aria-label={t("suggestion")} data-level={suggestion.level}>
           <p className="text-label font-semibold uppercase">{tSafety("notFinal")}</p>
           <p className="text-title font-bold">
             {t("suggested", { label: suggestion.display_label ?? levelLabel(suggestion.scale, suggestion.level) })}
           </p>
+          <p className="staff-scale-level">{t("scaleLevel", { scale: suggestion.scale, level: suggestion.level })}</p>
           <p>
-            {t("confidence", { percent: Math.round(suggestion.confidence * 100) })} · {t("model", { version: suggestion.model_version })}
+            {t("confidence", { percent: Math.round(suggestion.confidence * 100) })}
+            <span className="staff-model-identity">{t("modelIdentity", { id: suggestion.model_id, version: suggestion.model_version })}</span>
           </p>
           <h3 className="font-semibold">{t("why")}</h3>
           <ol className="flex list-decimal flex-col gap-2 ps-6">
             {suggestion.reasons.slice(0, 3).map((item) => (
-              <li key={item.text}>{item.text}</li>
+              <li key={item.text} className="staff-suggestion-reason" data-testid="suggestion-reason">
+                <div className="staff-suggestion-reason-title"><span>{item.text}</span><ProvenanceChip provenance="MODEL_INFERRED" /></div>
+                {item.fact_ids.length ? <ul className="staff-suggestion-evidence">{item.fact_ids.map((id) => {
+                  const fact = facts.get(id);
+                  return <li key={id}>{fact ? <ClinicalFact fact={fact} label={factLabel(fact.path)} /> : <><ProvenanceChip provenance="MODEL_INFERRED" missing /><span className="staff-clinical-note">{t("evidenceUnavailable")}</span></>}</li>;
+                })}</ul> : <p className="staff-clinical-note">{t("noEvidence")}</p>}
+              </li>
             ))}
           </ol>
         </section>
@@ -129,13 +146,13 @@ export function TriageCard({
       )}
 
       {decided ? (
-        <section className="flex flex-col gap-2" aria-label={t("confirmedTitle")} data-testid="decision-result">
+        <section className="staff-confirmed flex flex-col gap-2" aria-label={t("confirmedTitle")} data-testid="decision-result">
           <p className="text-title font-bold">{t("confirmedLevel", { label: levelLabel(decided.scale, decided.final_level) })}</p>
           {result?.token ? (
-            <p className="text-title">
+            <><p className="staff-reception-notice">{reception("assignedQueue")}: <strong>{result.token.department}</strong></p><p className="text-title">
               {t.rich("token", { code: result.token.token_code, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}
               {result.token.room ? <> · {t.rich("room", { room: result.token.room, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</> : null}
-            </p>
+            </p></>
           ) : result ? (
             <p>{t("noToken")}</p>
           ) : null}
@@ -158,7 +175,7 @@ export function TriageCard({
               </button>
             </div>
           ) : null}
-          {changing ? (
+          {showOverride ? (
             <section className="flex flex-col gap-4" aria-label={t("change")}>
               <fieldset className="flex flex-col gap-2">
                 <legend className="font-semibold">{t("pickLevel")}</legend>
@@ -172,7 +189,7 @@ export function TriageCard({
                         level === option ? "bg-primary text-on-primary" : "bg-surface"
                       }`}
                       onKeyDown={ignoreEnter}
-                      onClick={() => setLevel(option)}
+                      onClick={() => { setChanging(true); setLevel(option); }}
                     >
                       {levelLabel(scale, option)}
                     </button>
@@ -186,12 +203,12 @@ export function TriageCard({
                     <button
                       key={code}
                       type="button"
-                      aria-pressed={reason.code === code}
+                      aria-pressed={displayedReason.code === code}
                       className={`min-h-touch rounded-control border-2 border-border px-4 ${
-                        reason.code === code ? "bg-primary text-on-primary" : "bg-surface"
+                        displayedReason.code === code ? "bg-primary text-on-primary" : "bg-surface"
                       }`}
                       onKeyDown={ignoreEnter}
-                      onClick={() => setReason((current) => ({ ...current, code }))}
+                      onClick={() => { setChanging(true); setReason((current) => ({ ...current, code })); }}
                     >
                       {t(`reasonCodes.${code}`)}
                     </button>
@@ -200,10 +217,10 @@ export function TriageCard({
                 <label className="flex flex-col gap-2">
                   {t("note")}
                   <textarea
-                    value={reason.note}
+                    value={displayedReason.note}
                     maxLength={500}
                     rows={2}
-                    onChange={(event) => setReason((current) => ({ ...current, note: event.target.value }))}
+                    onChange={(event) => { setChanging(true); setReason({ ...displayedReason, note: event.target.value }); }}
                     className="rounded-control border-2 border-border bg-surface p-3 text-body"
                   />
                 </label>
@@ -212,9 +229,9 @@ export function TriageCard({
                 <button
                   type="button"
                   className={PRIMARY}
-                  disabled={level === null || !reasonGiven(reason) || status === "saving" || !nurseUserId}
+                  disabled={level === null || !reasonGiven(displayedReason) || status === "saving" || !nurseUserId}
                   onKeyDown={ignoreEnter}
-                  onClick={() => level !== null && void decide(level, reason)}
+                  onClick={() => level !== null && void decide(level, displayedReason)}
                 >
                   {level === null ? t("submitOverrideNoLevel") : t("submitOverride", { level })}
                 </button>
@@ -248,8 +265,8 @@ function FactList({ facts }: { facts: Map<string, FactView> }) {
     groups.set(group, [...(groups.get(group) ?? []), fact]);
   }
   return (
-    <section className="mt-6 flex flex-col gap-3" aria-label={t("facts")}>
-      <h3 className="text-title font-semibold">{t("facts")}</h3>
+    <details className="staff-fact-list mt-6" aria-label={t("facts")}>
+      <summary className="text-title font-semibold">{t("facts")}</summary>
       {groups.size === 0 ? <p>{t("noFacts")}</p> : null}
       {[...groups.entries()].map(([group, items]) => (
         <div key={group}>
@@ -266,6 +283,6 @@ function FactList({ facts }: { facts: Map<string, FactView> }) {
           </ul>
         </div>
       ))}
-    </section>
+    </details>
   );
 }

@@ -11,7 +11,7 @@ async function checkIn(page: Page) {
   }, DEVICE);
   await page.route("**/v1/checkin/keypad", (route) => route.fulfill({ json: CHECKIN }));
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: "Start on this kiosk", exact: true }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
@@ -38,7 +38,7 @@ test("80 s without input wipes the session and returns to the start", async ({ p
   expect(await page.evaluate(() => "sameDocument" in window)).toBe(true);
 
   await page.goForward();
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: "Start on this kiosk", exact: true }).click();
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page.getByLabel("Keypad ID")).toHaveValue("");
   const stored = await page.evaluate(() => ({

@@ -41,26 +41,25 @@ export function AdminStatusView() {
           return (
             <>
               <Card title={t("versions")}>
-                <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2">
-                  <dt className="font-semibold">{t("api")}</dt>
-                  <dd className="font-mono">{body.api_version}</dd>
-                  <dt className="font-semibold">{t("ruleset")}</dt>
-                  <dd className="font-mono">{body.ruleset_version}</dd>
-                  <dt className="font-semibold">{t("urgencyModel")}</dt>
-                  <dd className="font-mono">{model?.detail ?? t("unknown")}</dd>
+                <dl className="staff-admin-versions">
+                  <div><dt>{t("api")}</dt><dd className="font-mono">{body.api_version}</dd></div>
+                  <div><dt>{t("ruleset")}</dt><dd className="font-mono">{body.ruleset_version}</dd></div>
+                  <div><dt>{t("urgencyModel")}</dt><dd className="font-mono">{model?.detail ?? t("unknown")}</dd></div>
                 </dl>
               </Card>
+              <div className="staff-admin-grid">
               <StatusTable title={t("services")} rows={infra} />
               <StatusTable title={t("ports")} rows={byPrefix("port:")} stubs />
               <StatusTable title={t("aiTasks")} rows={byPrefix("ai:")} />
               <StatusTable title={t("speech")} rows={byPrefix("speech:")} />
+              </div>
             </>
           );
         }}
       </ApiStatus>
       <ApiStatus state={providers}>
         {({ tasks }) => (
-          <Card title={t("providers")}>
+          <Card title={t("providers")} className="staff-admin-providers">
             <table className="w-full border-collapse">
               <thead>
                 <tr>

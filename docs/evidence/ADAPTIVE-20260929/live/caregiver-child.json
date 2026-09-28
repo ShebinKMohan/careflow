@@ -1,0 +1,608 @@
+{
+  "startedAt": "2026-09-28T19:34:55.723Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "lookupMs": 95,
+  "verifiedName": "Layla Karim",
+  "verifiedHistory": {
+    "status": "ok",
+    "allergies": [],
+    "conditions": [],
+    "medications": []
+  },
+  "registrationMs": 193,
+  "sessionId": "81bf38f8-9db9-5081-8afd-31952485b0bf",
+  "fhirPatientId": "198647",
+  "turns": [
+    {
+      "key": "chief_complaint",
+      "question": "What is the main reason for your visit today?",
+      "mode": "text",
+      "answer": "My child has had a fever since yesterday evening and is drinking less than usual. He wakes up normally when I talk to him.",
+      "latencyMs": 14922
+    },
+    {
+      "key": "child_danger.hard_to_wake",
+      "question": "Is your child very hard to wake, or not staying awake?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 69
+    },
+    {
+      "key": "child_danger.weak_high_pitched_or_continuous_cry",
+      "question": "Is your child's cry weak, high-pitched or non-stop?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 84
+    },
+    {
+      "key": "child_danger.pale_mottled_ashen_or_blue",
+      "question": "Does your child's skin look very pale, blotchy, grey or blue?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 66
+    },
+    {
+      "key": "child_danger.grunting",
+      "question": "Is your child grunting or struggling to breathe?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 70
+    },
+    {
+      "key": "child_danger.non_blanching_rash",
+      "question": "Does your child have a rash that does not fade when you press a glass on it?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 81
+    },
+    {
+      "key": "child_danger.neck_stiffness",
+      "question": "Does your child have a stiff neck?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 65
+    },
+    {
+      "key": "child_danger.seizure",
+      "question": "Has your child had a fit or seizure?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 64
+    },
+    {
+      "key": "child_amber.decreased_activity",
+      "question": "Is your child much less active than usual?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 64
+    },
+    {
+      "key": "child_amber.not_responding_normally",
+      "question": "Is your child not smiling or not responding to you as usual?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 57
+    },
+    {
+      "key": "child_amber.reduced_urine_output",
+      "question": "Has your child had fewer wet nappies or passed less urine than usual?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 60
+    },
+    {
+      "key": "child_amber.fever_5_days_or_more",
+      "question": "Has your child had a fever for 5 days or more?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 67
+    },
+    {
+      "key": "infection.rigors",
+      "question": "Has your child had shivering fits?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 58
+    },
+    {
+      "key": "child_amber.limb_or_joint_swelling",
+      "question": "Does your child have a swollen joint or limb?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 69
+    },
+    {
+      "key": "child_amber.non_weight_bearing",
+      "question": "Is your child not using an arm or leg, or not able to stand on it?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 83
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "81bf38f8-9db9-5081-8afd-31952485b0bf",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_8KNC2P8FR1XQCNVB5JJXRBPV6S",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 6,
+          "quote": "7"
+        },
+        "recorded_at": "2026-09-28T19:34:56.891906Z",
+        "value": 7
+      },
+      "sex": {
+        "fact_id": "f_Y5MBH6DRAQEM53GYJ9K0HHX96D",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198647",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:34:56.936827Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "male",
+          "display": "Male"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_XTTX55F7GQVWREQTYAYQNV8FSK",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 80,
+        "quote": "My child has had a fever since yesterday evening and is drinking less than usual"
+      },
+      "recorded_at": "2026-09-28T19:34:57.200077Z",
+      "value": "My child has had a fever since yesterday evening and is drinking less than usual"
+    },
+    "symptoms": [
+      {
+        "name": {
+          "fact_id": "f_JCMY2F8PMF2N1J4F56B0RHPMYA",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 53,
+            "end": 80,
+            "quote": "is drinking less than usual"
+          },
+          "recorded_at": "2026-09-28T19:34:57.200077Z",
+          "value": "drinking less than usual"
+        }
+      }
+    ],
+    "infection": {
+      "fever_reported": {
+        "fact_id": "f_BS59CQ5T89X47NXW0JRQCDKCKZ",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 24,
+          "quote": "My child has had a fever"
+        },
+        "recorded_at": "2026-09-28T19:34:57.200077Z",
+        "value": "yes"
+      }
+    },
+    "child_danger": {
+      "no_response_to_social_cues": {
+        "fact_id": "f_D8RAQW12MB4JNTVTS2ZZVGPPYK",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 82,
+          "end": 121,
+          "quote": "He wakes up normally when I talk to him"
+        },
+        "recorded_at": "2026-09-28T19:34:57.200077Z",
+        "value": "no"
+      }
+    },
+    "child_amber": {
+      "poor_feeding": {
+        "fact_id": "f_2J7G3CJQ01RYSH9Q30H7F9X8E9",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 53,
+          "end": 80,
+          "quote": "is drinking less than usual"
+        },
+        "recorded_at": "2026-09-28T19:34:57.200077Z",
+        "value": "yes"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "vitals": "Adult sensor skipped intentionally; paediatric observations require nurse review.",
+  "triage": {
+    "session_id": "81bf38f8-9db9-5081-8afd-31952485b0bf",
+    "status": "awaiting_nurse",
+    "alerts": [],
+    "suggestion": null,
+    "needed_facts": [],
+    "news2": null,
+    "open_tasks": [],
+    "tasks": [],
+    "warnings": [
+      "intake_stopped_early"
+    ]
+  },
+  "facts": {
+    "session_id": "81bf38f8-9db9-5081-8afd-31952485b0bf",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_8KNC2P8FR1XQCNVB5JJXRBPV6S",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 6,
+          "quote": "7"
+        },
+        "recorded_at": "2026-09-28T19:34:56.891906Z",
+        "value": 7
+      },
+      "sex": {
+        "fact_id": "f_Y5MBH6DRAQEM53GYJ9K0HHX96D",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198647",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:34:56.936827Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "male",
+          "display": "Male"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_XTTX55F7GQVWREQTYAYQNV8FSK",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 80,
+        "quote": "My child has had a fever since yesterday evening and is drinking less than usual"
+      },
+      "recorded_at": "2026-09-28T19:34:57.200077Z",
+      "value": "My child has had a fever since yesterday evening and is drinking less than usual"
+    },
+    "symptoms": [
+      {
+        "name": {
+          "fact_id": "f_JCMY2F8PMF2N1J4F56B0RHPMYA",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 53,
+            "end": 80,
+            "quote": "is drinking less than usual"
+          },
+          "recorded_at": "2026-09-28T19:34:57.200077Z",
+          "value": "drinking less than usual"
+        }
+      }
+    ],
+    "infection": {
+      "fever_reported": {
+        "fact_id": "f_BS59CQ5T89X47NXW0JRQCDKCKZ",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 24,
+          "quote": "My child has had a fever"
+        },
+        "recorded_at": "2026-09-28T19:34:57.200077Z",
+        "value": "yes"
+      },
+      "rigors": {
+        "fact_id": "f_752P6MJAQNAN6KPNVJQAEG6MHH",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_027",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:13.031134Z",
+        "value": "no"
+      }
+    },
+    "child_danger": {
+      "hard_to_wake": {
+        "fact_id": "f_3HCCRTEPA389FEE6C616HNDDAQ",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_005",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.240323Z",
+        "value": "no"
+      },
+      "no_response_to_social_cues": {
+        "fact_id": "f_D8RAQW12MB4JNTVTS2ZZVGPPYK",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 82,
+          "end": 121,
+          "quote": "He wakes up normally when I talk to him"
+        },
+        "recorded_at": "2026-09-28T19:34:57.200077Z",
+        "value": "no"
+      },
+      "weak_high_pitched_or_continuous_cry": {
+        "fact_id": "f_13WZXCZTGT297YD7773QW20G5T",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_007",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.316809Z",
+        "value": "no"
+      },
+      "pale_mottled_ashen_or_blue": {
+        "fact_id": "f_9V8JZ4PB29ZYHSQB2M38DANVDV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_009",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.403174Z",
+        "value": "no"
+      },
+      "grunting": {
+        "fact_id": "f_FG29MK9220GPW7Z2SDEKZJ2CKV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_011",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.464596Z",
+        "value": "no"
+      },
+      "non_blanching_rash": {
+        "fact_id": "f_8GJGC9DT2BN8PN5PFJ63V04RYW",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_013",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.559740Z",
+        "value": "no"
+      },
+      "neck_stiffness": {
+        "fact_id": "f_A2Q6VTY8YMY7E0TTGN6BRATXGJ",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_015",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.632182Z",
+        "value": "no"
+      },
+      "seizure": {
+        "fact_id": "f_SJW0HY6VECJCW8GW1Z0FDA9WB8",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_017",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.699047Z",
+        "value": "no"
+      }
+    },
+    "child_amber": {
+      "not_responding_normally": {
+        "fact_id": "f_B8DD2JY9EEXVGWHZY8F48TBJ5B",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_021",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.830608Z",
+        "value": "no"
+      },
+      "decreased_activity": {
+        "fact_id": "f_QGJ5FP0DCQRBYD0HQG4HKW4X8H",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_019",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.764365Z",
+        "value": "no"
+      },
+      "poor_feeding": {
+        "fact_id": "f_2J7G3CJQ01RYSH9Q30H7F9X8E9",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 53,
+          "end": 80,
+          "quote": "is drinking less than usual"
+        },
+        "recorded_at": "2026-09-28T19:34:57.200077Z",
+        "value": "yes"
+      },
+      "reduced_urine_output": {
+        "fact_id": "f_BRH1M2QZ87AA4FM907W9ZGFXAH",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_023",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.897700Z",
+        "value": "no"
+      },
+      "fever_5_days_or_more": {
+        "fact_id": "f_35X7NAKJRTZEMHK81PC7YTZZWZ",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_025",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:12.965926Z",
+        "value": "no"
+      },
+      "limb_or_joint_swelling": {
+        "fact_id": "f_PFZHGP2EYA7DY9Q981VDK2NDRT",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_029",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:13.100438Z",
+        "value": "no"
+      },
+      "non_weight_bearing": {
+        "fact_id": "f_HR0Y81M4MEXVYYGFQP3QYAC6Y7",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_031",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:35:13.173094Z",
+        "value": "no"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "reception": {
+    "visit_for": "child",
+    "caregiver": {
+      "name": "Layla Karim",
+      "relationship": "parent"
+    },
+    "identity_status": "new_patient",
+    "intake_mode": "adaptive",
+    "patient": {
+      "name": "Evan Demo Child",
+      "age_years": 7,
+      "sex": "male"
+    },
+    "department_id": "unsure",
+    "department_name": "To be confirmed by care team",
+    "visit_purpose": "consultation",
+    "reason": "",
+    "emergency_symptoms": [],
+    "registered_at": "2026-09-28T19:34:56.891906Z",
+    "availability_notice": "Example hospital and synthetic doctor rota. Your selection is a preference; no appointment is reserved. The care team confirms your destination."
+  },
+  "decisionMs": 334,
+  "decision": {
+    "decision": {
+      "decision_id": "dec_7f368daf95bd412b8cbb1d65d0b39eec",
+      "session_id": "81bf38f8-9db9-5081-8afd-31952485b0bf",
+      "action": "OVERRIDE",
+      "final_level": 3,
+      "scale": "KTAS",
+      "override_reason_code": "other",
+      "override_note": "no model suggestion",
+      "nurse_user_id": "ec142200-866a-5582-809d-0a842e3325cb",
+      "acknowledged_alert_ids": [],
+      "decided_at": "2026-09-28T19:35:14.085000Z",
+      "suggestion_id": null
+    },
+    "token": {
+      "token_id": "d1466964-a15e-4d5b-8599-7ffeb969aad2",
+      "session_id": "81bf38f8-9db9-5081-8afd-31952485b0bf",
+      "token_code": "A-022",
+      "department": "emergency",
+      "status": "waiting",
+      "issued_at": "2026-09-28T19:35:14.124900Z"
+    }
+  },
+  "fhirEncounter": {
+    "count": 1,
+    "id": "198648",
+    "patientReference": "Patient/198647"
+  },
+  "completedAt": "2026-09-28T19:35:15.930Z"
+}

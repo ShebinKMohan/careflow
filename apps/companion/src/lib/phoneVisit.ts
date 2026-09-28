@@ -22,6 +22,7 @@ export async function currentIntake(sessionId: string, token: string): Promise<C
   try {
     const { data, response } = await createCareflowClientFor(token).GET("/v1/sessions/{session_id}/status", {
       params: { path: { session_id: sessionId } },
+      signal: AbortSignal.timeout(15_000),
     });
     if (response.status === 401 || response.status === 403 || response.status === 404) {
       clearSession();

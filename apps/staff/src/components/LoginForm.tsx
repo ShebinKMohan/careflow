@@ -37,13 +37,17 @@ export function LoginForm() {
       return;
     }
     setStatus("working");
-    const { data } = await api.POST("/v1/auth/login", { body: parsed.data });
-    if (!data) {
+    try {
+      const { data } = await api.POST("/v1/auth/login", { body: parsed.data });
+      if (!data) {
+        setStatus("failed");
+        return;
+      }
+      saveToken(data.access_token);
+      router.push(next);
+    } catch {
       setStatus("failed");
-      return;
     }
-    saveToken(data.access_token);
-    router.push(next);
   }
 
   return (

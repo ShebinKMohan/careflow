@@ -16,7 +16,11 @@ from careflow_intake.conversation.checklist import Templates, load_templates, te
 from careflow_intake.conversation.child_questions import next_child_question
 from careflow_intake.conversation.output_filter import check_patient_facing
 from careflow_intake.conversation.phrasing import Phraser
-from careflow_intake.conversation.picker import has_critical_alert, pick_next_question
+from careflow_intake.conversation.picker import (
+    answered_keys,
+    has_critical_alert,
+    pick_next_question,
+)
 from careflow_intake.ports import Question
 from careflow_intake.state import IntakeState, structured_facts
 
@@ -63,7 +67,13 @@ class ChecklistConversation:
         announced = any(turn.text == nurse_coming for turn in prompts)
         notice = nurse_coming if has_critical_alert(alerts) and not announced else None
         facts = structured_facts(state)
-        if state.get("patient_type") == "child":
+        child = state.get("patient_type") == "child"
+        opening_complaint = (
+            child
+            and FactKey.chief_complaint not in answered_keys(facts)
+            and asked[FactKey.chief_complaint] == 0
+        )
+        if child and not opening_complaint:
             child_key = next_child_question(facts, asked)
             if child_key is not None:  # the fixed bank, verbatim (M2-04)
                 text = templates.render_child(child_key)
@@ -76,13 +86,19 @@ class ChecklistConversation:
                     source="template",
                     notice=notice,
                 )
-        key = pick_next_question(
-            facts,
-            state.get("needed_facts", []),
-            asked,
-            state.get("ehr_context"),
-            alerts=alerts,
-            askable=templates.keys(),
+        # One opening description precedes the child bank. The existing caps exempt every
+        # remaining bank question, so this extra turn cannot shorten its safety screens.
+        key = (
+            FactKey.chief_complaint
+            if opening_complaint
+            else pick_next_question(
+                facts,
+                state.get("needed_facts", []),
+                asked,
+                state.get("ehr_context"),
+                alerts=alerts,
+                askable=templates.keys(),
+            )
         )
         if key is None:
             if notice is None:

@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import type { ConsentChoices } from "@/consent/hasConsent";
 import { useKiosk } from "@/lib/session";
+import { KioskIcon, type KioskIconName } from "./KioskIcon";
 
 const BUTTON = "min-h-touch rounded-control px-6 text-title font-semibold";
 
@@ -19,6 +20,7 @@ const BUTTON = "min-h-touch rounded-control px-6 text-title font-semibold";
  */
 export function ConsentScreen() {
   const t = useTranslations("safety.consent");
+  const experience = useTranslations("experience");
   const router = useRouter();
   const { setConsent, wipe } = useKiosk();
   const [declined, setDeclined] = useState(false);
@@ -49,13 +51,15 @@ export function ConsentScreen() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <ul className="flex list-disc flex-col gap-3 ps-6 text-body">
-        <li>{t("camera")}</li>
-        <li>{t("voice")}</li>
-        <li>{t("dataUse")}</li>
-      </ul>
-      <div className="flex flex-col gap-3">
+    <div className="consent-screen flex flex-col gap-6">
+      <p className="screen-intro">{experience("privacyIntro")}</p>
+      <div className="consent-layout">
+      <div className="consent-details">
+        {([{ key: "camera", icon: "camera" }, { key: "voice", icon: "voice" }, { key: "dataUse", icon: "record" }] as const).map(({ key, icon }) => (
+          <section className="consent-detail" key={key}><span className="consent-detail-icon"><KioskIcon name={icon as KioskIconName} /></span><div><h2>{experience(`privacyTitles.${key}`)}</h2><p>{t(key)}</p></div></section>
+        ))}
+      </div>
+      <div className="consent-actions">
         <button
           type="button"
           className={`${BUTTON} bg-primary text-on-primary`}
@@ -73,6 +77,7 @@ export function ConsentScreen() {
         <button type="button" className={`${BUTTON} border-2 border-border text-ink`} onClick={() => setDeclined(true)}>
           {t("decline")}
         </button>
+      </div>
       </div>
     </div>
   );

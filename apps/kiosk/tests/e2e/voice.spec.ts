@@ -60,7 +60,7 @@ test("a spoken answer shows what was heard, then the next question, and the ques
   });
 
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: "Start on this kiosk", exact: true }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);

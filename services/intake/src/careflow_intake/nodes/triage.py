@@ -37,6 +37,11 @@ async def suggest_urgency(
     """Ask the urgency model for a suggestion. Without one (model cannot suggest, fails, or cites
     facts that are not in the session) the nurse sets the level alone. A child (under 16, M2-04)
     gets none: the model is trained on adults, and its own age guard stops at 15 (SHE-293)."""
+    if state.get("urgent_help") is not None:
+        return _unavailable("Urgent assistance requested: immediate nurse assessment is required.")
+    reception = state.get("reception_context")
+    if reception is not None and reception.get("intake_mode") != "adaptive":
+        return _unavailable("Reception registration: nurse assessment determines urgency.")
     if state.get("patient_type") == "child":
         return _unavailable(CHILD_NO_SUGGESTION)
     facts = structured_facts(state)

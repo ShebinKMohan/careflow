@@ -223,6 +223,27 @@ describe("the nurse's session card after the decision (M2-07)", () => {
     expect(post.mock.calls.filter(([path]) => path === "/v1/ws-ticket").length).toBeGreaterThanOrEqual(2);
   });
 
+  it("retains sourced clinical details with a visible warning when facts alone fail to refresh", async () => {
+    show();
+    await settle();
+    expect(screen.getByTestId("clinical-snapshot")).toHaveTextContent("112 /min");
+    let unavailable = true;
+    get.mockImplementation(async (path: string) => {
+      if (path === "/v1/sessions/{session_id}/triage") return reply(triage);
+      if (path === "/v1/sessions/{session_id}/facts") return unavailable ? reply(undefined, 503) : reply(FACTS);
+      return reply(ME);
+    });
+    act(() => FakeSocket.all[0]!.open());
+    await settle(200);
+    expect(screen.getByTestId("clinical-snapshot")).toHaveTextContent("112 /min");
+    expect(screen.getByText(/Showing the last loaded clinical details/)).toBeInTheDocument();
+    expect(screen.getAllByTestId("alert-banner")).toHaveLength(1);
+    unavailable = false;
+    act(() => FakeSocket.all[0]!.send({ id: "refresh-1", type: "patient.feels_worse", data: { session_id: SESSION } }));
+    await settle(200);
+    expect(screen.queryByText(/Showing the last loaded clinical details/)).not.toBeInTheDocument();
+  });
+
   it("keeps the last card when a reload fails", async () => {
     triage = confirmed([ECG, FAST]);
     show();

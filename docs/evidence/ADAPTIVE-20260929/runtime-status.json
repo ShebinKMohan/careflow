@@ -1,0 +1,177 @@
+{
+  "providers": {
+    "tasks": [
+      {
+        "task": "conversation",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      },
+      {
+        "task": "extraction",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      },
+      {
+        "task": "summary",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      },
+      {
+        "task": "eval_judge",
+        "provider": "cli",
+        "tool": "codex",
+        "available": true,
+        "detail": "offline jobs only"
+      },
+      {
+        "task": "test_data",
+        "provider": "cli",
+        "tool": "codex",
+        "available": true,
+        "detail": "offline jobs only"
+      },
+      {
+        "task": "translation_check",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      }
+    ]
+  },
+  "status": {
+    "api_version": "0.1.0",
+    "ruleset_version": "2026.3.0",
+    "services": [
+      {
+        "name": "postgres",
+        "status": "ok"
+      },
+      {
+        "name": "valkey",
+        "status": "ok"
+      },
+      {
+        "name": "hapi-fhir",
+        "status": "ok"
+      },
+      {
+        "name": "fhir-writeback",
+        "status": "degraded",
+        "detail": "consumer consuming; 8 failed write-backs in this clinic"
+      },
+      {
+        "name": "port:identifier",
+        "status": "ok",
+        "detail": "check-in (keypad)"
+      },
+      {
+        "name": "port:ehr",
+        "status": "ok",
+        "detail": "FHIR R4 reader (M1-08)"
+      },
+      {
+        "name": "port:conversation",
+        "status": "ok",
+        "detail": "checklist; templates only"
+      },
+      {
+        "name": "port:extractor",
+        "status": "ok",
+        "detail": "LLM extractor (M1-06); local qwen3.5-9b-4bit"
+      },
+      {
+        "name": "port:rules",
+        "status": "ok",
+        "detail": "careflow_rules; 2026.3.0"
+      },
+      {
+        "name": "port:urgency",
+        "status": "ok",
+        "detail": "laya-ktas; laya-ktas-ebf31b5e-s42"
+      },
+      {
+        "name": "port:queue",
+        "status": "ok",
+        "detail": "queue (M1-10)"
+      },
+      {
+        "name": "port:writeback",
+        "status": "ok",
+        "detail": "FHIR write-back (M1-09)"
+      },
+      {
+        "name": "port:briefing",
+        "status": "ok",
+        "detail": "briefing (M1-16); summary: local qwen3.5-9b-4bit"
+      },
+      {
+        "name": "port:events",
+        "status": "ok",
+        "detail": "transactional outbox (M1-11)"
+      },
+      {
+        "name": "port:intents",
+        "status": "ok",
+        "detail": "intent router (M2-10); lexicon, then local qwen3.5-9b-4bit for questions"
+      },
+      {
+        "name": "port:clinic_qa",
+        "status": "ok",
+        "detail": "ask the clinic (M2-09); phone only"
+      },
+      {
+        "name": "port:nurse_flags",
+        "status": "ok",
+        "detail": "nurse_flags + nurse.flag (M2-10)"
+      },
+      {
+        "name": "urgency-model",
+        "status": "ok",
+        "detail": "laya-ktas-ebf31b5e-s42"
+      },
+      {
+        "name": "speech:stt",
+        "status": "ok",
+        "detail": "mlx-whisper (en), mlx-whisper (ar)"
+      },
+      {
+        "name": "speech:tts",
+        "status": "ok",
+        "detail": "kokoro (en), mms-tts-ara (ar)"
+      },
+      {
+        "name": "ai:conversation",
+        "status": "ok",
+        "detail": "local qwen3.5-9b-4bit"
+      },
+      {
+        "name": "ai:extraction",
+        "status": "ok",
+        "detail": "local qwen3.5-9b-4bit"
+      },
+      {
+        "name": "ai:summary",
+        "status": "ok",
+        "detail": "local qwen3.5-9b-4bit"
+      },
+      {
+        "name": "ai:eval_judge",
+        "status": "ok",
+        "detail": "cli codex"
+      },
+      {
+        "name": "ai:test_data",
+        "status": "ok",
+        "detail": "cli codex"
+      },
+      {
+        "name": "ai:translation_check",
+        "status": "ok",
+        "detail": "local qwen3.5-9b-4bit"
+      }
+    ]
+  }
+}

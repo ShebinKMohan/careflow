@@ -18,7 +18,7 @@ export interface KeypadProps {
 }
 
 const DIGITS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
-const KEY = "min-h-touch min-w-touch rounded-control border-2 border-border text-display font-semibold";
+const KEY = "min-h-touch min-w-touch rounded-control border border-border text-display font-semibold shadow-soft transition-colors enabled:hover:bg-secondary-hover enabled:hover:text-ink disabled:cursor-not-allowed disabled:opacity-50";
 
 /**
  * Digits 0-9, clear and submit. The grid is always left-to-right like a phone keypad, also in

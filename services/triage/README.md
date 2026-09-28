@@ -53,4 +53,23 @@ uv run careflow-triage laya fixtures        # laya_ktas/fixtures/golden.json (50
 
 The model only suggests a level. The safety rules run first, and a nurse confirms or overrides every level.
 
+## API model selection
+
+Set `TRIAGE_MODEL_KIND=laya` to use an installed fine-tuned, calibrated Laya checkpoint. Set
+`TRIAGE_MODEL_PATH` to pin its directory, or leave the path unset to select the newest installed
+checkpoint under `artifacts/laya/`. `TRIAGE_MODEL_DEVICE=cpu` and `TRIAGE_MODEL_THREADS=2` are the
+API defaults. `scripts/stack.py env` preserves these settings from the environment or `.env`.
+Restart the API after changing them; changing an environment file does not reload a running model.
+
+The loader requires `fine_tuned: true`, the `laya-ktas` model name, calibration metadata, and a
+positive finite temperature. If the selected artifact cannot load, the API reports no suggestion
+with the selected model kind and error category. It does not substitute HGB. To select HGB
+explicitly, set `TRIAGE_MODEL_KIND=hgb` and clear the Laya `TRIAGE_MODEL_PATH` or point it to the
+desired HGB artifact. Installations without explicit selection retain the HGB default.
+
+Adaptive adult intake uses the selected urgency model. Registration-only reception visits and
+children retain the nurse-only urgency path. Staff receive the actual `model_id`, `model_version`,
+and cited fact IDs. Laya explanations describe how a fact affected the probability of the selected
+KTAS class; support for a lower-acuity class is not described as raising urgency.
+
 Research prototype. Synthetic data only in the product; KTAS is public research data used only to train and evaluate the baseline. Not for clinical use.

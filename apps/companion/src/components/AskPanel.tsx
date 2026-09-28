@@ -1,11 +1,12 @@
 "use client";
 
 import type { Schema } from "@careflow/contracts";
-import { Card } from "@careflow/ui";
 import { useLocale, useTranslations } from "next-intl";
 import { type FormEvent, useState } from "react";
 
 import { api } from "@/lib/api";
+
+import { CompanionIcon } from "./CompanionIcon";
 
 type AskResponse = Schema<"AskResponse">;
 
@@ -28,43 +29,55 @@ export function AskPanel() {
     event.preventDefault();
     if (!question.trim()) return;
     setState("sending");
+    setAnswer(null);
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 30_000);
     try {
-      const { data } = await api.POST("/v1/companion/ask", { body: { question: question.trim(), language } });
+      const { data } = await api.POST("/v1/companion/ask", { signal: controller.signal, body: { question: question.trim(), language } });
       setAnswer(data ?? null);
       setState(data ? "idle" : "unavailable");
     } catch {
       setState("unavailable");
+    } finally {
+      window.clearTimeout(timer);
     }
   }
 
   return (
-    <Card title={t("title")}>
-      <form className="flex flex-col gap-2" onSubmit={submit}>
+    <section className="companion-panel companion-ask-panel" id="ask-clinic">
+      <div className="companion-section-title"><CompanionIcon name="message" /><h2>{t("title")}</h2></div>
+      <p className="companion-muted">{t("intro")}</p>
+      <div className="companion-quick-prompts">
+        {(["parking", "hours", "pharmacy"] as const).map((key) => <button key={key} type="button" onClick={() => setQuestion(t(`${key}Question`))} disabled={state === "sending"}>{t(key)}</button>)}
+      </div>
+      <form className="companion-form" onSubmit={submit}>
         <label className="flex flex-col gap-2 font-semibold">
           {t("label")}
           <textarea
             value={question}
             maxLength={500}
             onChange={(event) => setQuestion(event.target.value)}
-            rows={2}
-            className="rounded-control border-2 border-border bg-surface p-3 text-body font-normal"
+            rows={3}
+            placeholder={t("placeholder")}
+            className="companion-input"
           />
         </label>
         <button
           type="submit"
-          className="min-h-touch rounded-control bg-primary px-6 font-semibold text-on-primary disabled:opacity-50"
+          className="companion-primary"
           disabled={state === "sending" || !question.trim()}
         >
           {state === "sending" ? t("sending") : t("send")}
         </button>
       </form>
+      <p className="companion-field-hint">{t("hint")}</p>
       {state === "unavailable" ? (
         <p role="alert" className="mt-3">
           {t("unavailable")}
         </p>
       ) : null}
       {answer ? (
-        <div className="mt-4 flex flex-col gap-2" aria-live="polite" data-testid="ask-answer">
+        <div className="companion-answer" aria-live="polite" data-testid="ask-answer">
           {answer.refused_medical ? (
             <p className="font-semibold">{tSafety("refusal")}</p>
           ) : answer.dont_know ? (
@@ -75,7 +88,7 @@ export function AskPanel() {
           {answer.citations.length > 0 ? (
             <ul className="flex flex-wrap gap-2" aria-label={t("sources")}>
               {answer.citations.map((citation) => (
-                <li key={citation.chunk_id} className="rounded-control border-2 border-border px-2 text-label" dir="auto">
+                <li key={citation.chunk_id} className="companion-citation" dir="auto">
                   {citation.title} <bdi dir="ltr" className="text-ink-muted">({citation.doc_id})</bdi>
                 </li>
               ))}
@@ -83,6 +96,6 @@ export function AskPanel() {
           ) : null}
         </div>
       ) : null}
-    </Card>
+    </section>
   );
 }

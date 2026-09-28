@@ -1,0 +1,223 @@
+{
+  "startedAt": "2026-09-28T19:05:49.485Z",
+  "requestMs": 136,
+  "sessionId": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+  "beforeVitals": {
+    "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+    "status": "awaiting_nurse",
+    "alerts": [
+      {
+        "alert_id": "alr_0c8a04adb0130a18907667a7",
+        "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+        "rule_id": "CHEST_PAIN_ECG_10MIN",
+        "ruleset_version": "2026.3.0",
+        "severity": "critical",
+        "evidence_fact_ids": [
+          "f_J4WXMW09P4BVAKT9GDDBMCK2GP"
+        ],
+        "required_action": "ecg_within_10_min",
+        "display_text": "Chest pain: ECG within 10 minutes of arrival.",
+        "partial": false,
+        "missing_inputs": [],
+        "raised_at": "2026-09-28T19:05:50.378228Z",
+        "deadline_at": "2026-09-28T19:15:50.344566Z"
+      }
+    ],
+    "suggestion": null,
+    "needed_facts": [],
+    "news2": {
+      "total": 0,
+      "subscores": {},
+      "missing": [
+        "vitals.respiratory_rate",
+        "vitals.spo2",
+        "vitals.systolic_bp",
+        "vitals.heart_rate",
+        "vitals.acvpu",
+        "vitals.temperature_c",
+        "vitals.on_supplemental_o2"
+      ],
+      "partial": true,
+      "any_single_3": false,
+      "risk_band": "low"
+    },
+    "open_tasks": [
+      {
+        "task_id": "tsk_ecg_within_10_min",
+        "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+        "kind": "ecg_within_10_min",
+        "status": "open",
+        "due_at": "2026-09-28T19:15:50.344566Z"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "tsk_ecg_within_10_min",
+        "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+        "kind": "ecg_within_10_min",
+        "status": "open",
+        "due_at": "2026-09-28T19:15:50.344566Z"
+      }
+    ],
+    "warnings": [
+      "ehr_unavailable"
+    ]
+  },
+  "worklistItem": {
+    "urgent_help": {
+      "requested_at": "2026-09-28T19:05:50.344566Z",
+      "patient_type": "adult",
+      "emergency_symptoms": [
+        "chest_pain"
+      ]
+    },
+    "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+    "patient_display": "Unknown",
+    "arrived_at": "2026-09-28T19:05:50.344566Z",
+    "state": "awaiting_nurse",
+    "alerts": [
+      {
+        "alert_id": "alr_0c8a04adb0130a18907667a7",
+        "rule_id": "CHEST_PAIN_ECG_10MIN",
+        "severity": "critical",
+        "partial": false,
+        "raised_at": "2026-09-28T19:05:50.378228Z"
+      }
+    ],
+    "open_tasks": [
+      {
+        "task_id": "tsk_ecg_within_10_min",
+        "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+        "kind": "ecg_within_10_min",
+        "status": "open",
+        "due_at": "2026-09-28T19:15:50.344566Z"
+      }
+    ],
+    "complaint": "Urgent assistance requested",
+    "warnings": [
+      "ehr_unavailable"
+    ]
+  },
+  "facts": {
+    "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "chief_complaint": {
+      "fact_id": "f_KJBE1CGMFNHTN5N05K7ZHCT9YD",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_urgent_001",
+        "start": 0,
+        "end": 27,
+        "quote": "Urgent assistance requested"
+      },
+      "recorded_at": "2026-09-28T19:05:50.344566Z",
+      "value": "Urgent assistance requested"
+    },
+    "chest_pain": {
+      "present": {
+        "fact_id": "f_J4WXMW09P4BVAKT9GDDBMCK2GP",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_urgent_001",
+          "start": 48,
+          "end": 58,
+          "quote": "chest_pain"
+        },
+        "recorded_at": "2026-09-28T19:05:50.344566Z",
+        "value": "yes"
+      }
+    },
+    "vitals": {
+      "heart_rate": {
+        "fact_id": "f_PC1W967PKVP0S5R47VSH0PGH4Q",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:05:59.723763Z",
+        "value": 77,
+        "unit": "/min"
+      },
+      "spo2": {
+        "fact_id": "f_2QB1ZCBQ9RFRCCEGRE15PGHMR9",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:05:59.723763Z",
+        "value": 98,
+        "unit": "%"
+      },
+      "temperature_c": {
+        "fact_id": "f_KB2FD86GCT1SB5YKACGF59EXYZ",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:05:59.723763Z",
+        "value": 36.8,
+        "unit": "Cel"
+      },
+      "systolic_bp": {
+        "fact_id": "f_TDRB32MY4PGQ4H2KGBWHDHY728",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:05:59.723763Z",
+        "value": 122,
+        "unit": "mm[Hg]"
+      },
+      "diastolic_bp": {
+        "fact_id": "f_S1NERVC7Y3TAC4PDAZMW6ZP3K4",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:05:59.723763Z",
+        "value": 78,
+        "unit": "mm[Hg]"
+      }
+    },
+    "extraction_status": "complete"
+  },
+  "decision": {
+    "decision": {
+      "decision_id": "dec_9874fbaa348f4e2ea36c5cdab7a9db06",
+      "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+      "action": "OVERRIDE",
+      "final_level": 3,
+      "scale": "KTAS",
+      "override_reason_code": "other",
+      "override_note": "no model suggestion",
+      "nurse_user_id": "ec142200-866a-5582-809d-0a842e3325cb",
+      "acknowledged_alert_ids": [
+        "alr_0c8a04adb0130a18907667a7"
+      ],
+      "decided_at": "2026-09-28T19:06:08.779000Z",
+      "suggestion_id": null
+    },
+    "token": {
+      "token_id": "073bb22a-e592-433d-8e54-7f929f3aae54",
+      "session_id": "6488cf6b-f3cc-5c37-9c1b-b8d683c38d89",
+      "token_code": "A-020",
+      "department": "emergency",
+      "status": "waiting",
+      "issued_at": "2026-09-28T19:06:08.818806Z"
+    }
+  },
+  "completedAt": "2026-09-28T19:06:11.652Z"
+}

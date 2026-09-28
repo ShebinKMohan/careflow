@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Mapping, Sequence
 from dataclasses import dataclass, field
-from typing import Final, Literal, Protocol, TypedDict, runtime_checkable
+from typing import Any, Final, Literal, Protocol, TypedDict, runtime_checkable
 
 from pydantic import BaseModel, ValidationError
 
@@ -93,8 +93,12 @@ def extract_json(text: str) -> str:
     return cleaned
 
 
-def schema_instruction[T: BaseModel](schema: type[T]) -> str:
-    compact = json.dumps(schema.model_json_schema(), separators=(",", ":"))
+def schema_instruction[T: BaseModel](
+    schema: type[T], *, presentation_schema: Mapping[str, Any] | None = None
+) -> str:
+    """Render a schema hint; callers still validate against the canonical Pydantic model."""
+    shown = schema.model_json_schema() if presentation_schema is None else presentation_schema
+    compact = json.dumps(shown, separators=(",", ":"))
     return (
         "Reply with one JSON object only, no prose and no code fences. It must validate "
         f"against this JSON Schema:\n{compact}"
@@ -108,11 +112,12 @@ async def structured[T: BaseModel](
     *,
     temperature: float = 0.0,
     max_tokens: int | None = None,
+    presentation_schema: Mapping[str, Any] | None = None,
 ) -> StructuredOk[T] | StructuredFailure:
     """Chat, then validate against `schema`; on a validation error retry once with the error
     appended; after a second failure return `StructuredFailure`. Never raises for bad output."""
     # One system message at the start: several chat templates (Qwen's included) reject a second.
-    instruction = schema_instruction(schema)
+    instruction = schema_instruction(schema, presentation_schema=presentation_schema)
     if messages and messages[0]["role"] == "system":
         first: Message = {"role": "system", "content": f"{messages[0]['content']}\n\n{instruction}"}
         conversation: list[Message] = [first, *messages[1:]]

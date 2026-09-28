@@ -9,13 +9,19 @@ import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { createCareflowClientFor } from "@/lib/api";
 import { currentIntake, isIntakeRevision } from "@/lib/phoneVisit";
+import { intakeGuidance } from "@/lib/intakeGuidance";
 import { type AnswerKey, quickAnswers } from "@/lib/quickAnswers";
 import { clearSession } from "@/lib/session";
+import { HoldToTalk } from "./HoldToTalk";
+import { FeelsWorse } from "./FeelsWorse";
+import { PatientReceipt } from "./PatientReceipt";
+
+import { CompanionIcon } from "./CompanionIcon";
 
 type Question = Schema<"IntakeQuestion">;
 
-const BUTTON = "min-h-touch rounded-control border-2 border-primary px-4 text-body font-semibold text-primary disabled:opacity-50";
-const PRIMARY = "min-h-touch rounded-control bg-primary px-6 text-title font-semibold text-on-primary disabled:opacity-50";
+const BUTTON = "companion-choice";
+const PRIMARY = "companion-primary";
 
 /**
  * The intake on the phone after the QR hand-over (M2-06): the same questions, the same graph and
@@ -31,6 +37,7 @@ export function PhoneIntake({
   initialRevision,
   initialState,
   onReconnect,
+  childSession = false,
 }: {
   sessionId: string;
   token: string;
@@ -40,6 +47,7 @@ export function PhoneIntake({
   initialRevision: number | null;
   initialState: Schema<"SessionState">;
   onReconnect: () => void;
+  childSession?: boolean;
 }) {
   const t = useTranslations("intake");
   const tClaim = useTranslations("claim");
@@ -50,9 +58,12 @@ export function PhoneIntake({
   const [visitState, setVisitState] = useState(initialState);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [voiceBusy, setVoiceBusy] = useState(false);
+  const [heard, setHeard] = useState("");
   const [failed, setFailed] = useState(false);
   const [recovery, setRecovery] = useState<"needed" | "expired" | null>(null);
   const busy = useRef(false);
+  const answerInput = useRef<HTMLTextAreaElement>(null);
   const needsStatus = visitState === "called" || visitState === "arrived";
 
   useEffect(() => {
@@ -77,12 +88,13 @@ export function PhoneIntake({
   }
 
   async function send(inputMode: "tap" | "text", answer: string) {
-    if (!answer.trim() || busy.current || recovery || revision === null) return;
+    if (!answer.trim() || busy.current || voiceBusy || recovery || revision === null) return;
     busy.current = true;
     setSending(true);
     setFailed(false);
     try {
       const { data, response } = await client.POST("/v1/sessions/{session_id}/turns", {
+        signal: AbortSignal.timeout(40_000),
         params: { path: { session_id: sessionId } },
         body: { input_mode: inputMode, text: answer.trim(), language, expected_intake_revision: revision },
       });
@@ -107,6 +119,11 @@ export function PhoneIntake({
     }
   }
 
+  function reconcileVoice() {
+    busy.current = true; setSending(true);
+    void recover().finally(() => { busy.current = false; setSending(false); });
+  }
+
   async function retryRecovery() {
     if (busy.current) return;
     busy.current = true;
@@ -129,8 +146,11 @@ export function PhoneIntake({
 
   if (!question) {
     return (
-      <Card title={tClaim.rich("welcome", { initials: display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}>
-        <p className="mb-4 text-title">{t("done")}</p>
+      <Card className="companion-panel companion-complete" title={tClaim.rich("welcome", { initials: display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}>
+        <span className="companion-hero-icon"><CompanionIcon name="check" /></span>
+        <p className="companion-eyebrow">{t("completeLabel")}</p>
+        <p className="companion-complete-copy">{t("done")}</p>
+        <p className="companion-muted">{t("reviewHelp")}</p>
         <Link href="/status" className={PRIMARY + " inline-flex items-center"}>
           {t("status")}
         </Link>
@@ -139,51 +159,81 @@ export function PhoneIntake({
   }
 
   const quick = quickAnswers(question.key ?? null);
+  const guidance = intakeGuidance(question.key ?? null);
   const label = (key: AnswerKey) => t(`answers.${key}`);
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-label text-ink-muted">{t.rich("greeting", { initials: display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
+    <div className="companion-intake">
+      <PatientReceipt compact />
+      <section className="companion-panel companion-question-panel">
+      <div className="companion-question-label"><CompanionIcon name="message" /><span>{t("assistantLabel")}</span></div>
       {question.notice ? (
-        <p role="status" className="font-semibold">
+        <p role="status" className="companion-notice">
           {question.notice}
         </p>
       ) : null}
-      <h2 className="text-title font-semibold" dir="auto">
+      <h1 className="companion-question mb-5 text-[28px] font-semibold leading-tight tracking-tight" dir="auto" aria-live="polite">
         {question.text}
-      </h2>
-      {quick.kind === "choices" ? (
-        <div className="flex flex-wrap gap-2">
+      </h1>
+      <p className="sr-only" id="question-help">{t(`guidance.${guidance}.help`)}</p>
+      {question.key !== "chief_complaint" && quick.kind === "choices" ? (
+        <div className="companion-choices">
           {quick.answers.map((key) => (
-            <button key={key} type="button" className={BUTTON} disabled={sending || recovery !== null} onClick={() => void send("tap", label(key))}>
+            <button key={key} type="button" className={BUTTON} disabled={sending || voiceBusy || recovery !== null} onClick={() => void send("tap", label(key))}>
               {label(key)}
             </button>
           ))}
         </div>
       ) : null}
       {quick.kind === "scale" ? (
-        <div className="grid grid-cols-6 gap-2" role="group" aria-label={t("scale")}>
+        <div className="companion-pain-scale" role="group" aria-label={t("scale")}>
           {Array.from({ length: 11 }, (_, value) => (
-            <button key={value} type="button" className={BUTTON} disabled={sending || recovery !== null} onClick={() => void send("tap", String(value))}>
+            <button key={value} type="button" className={BUTTON} disabled={sending || voiceBusy || recovery !== null} onClick={() => void send("tap", String(value))}>
               <bdi dir="ltr">{value}</bdi>
             </button>
           ))}
         </div>
       ) : null}
-      <form className="flex flex-col gap-2" onSubmit={submit}>
+      <HoldToTalk session={{ sessionId, token, language }} disabled={sending || recovery !== null}
+        onBusyChange={setVoiceBusy} onTranscript={setHeard}
+        onQuestion={() => {
+          // The voice service posts the turn itself. Read the authoritative revision before
+          // allowing another typed or spoken answer; never replay the transcript as a text turn.
+          reconcileVoice();
+        }} onUncertain={reconcileVoice} />
+      {heard ? <p className="companion-voice-transcript"><strong>{t("voiceHeard")}</strong><span dir="auto">{heard}</span></p> : null}
+      <form className="companion-form" onSubmit={submit}>
         <label className="flex flex-col gap-2 text-label font-semibold">
           {t("typeAnswer")}
           <textarea
+            ref={answerInput}
             value={text}
             maxLength={1000}
             onChange={(event) => setText(event.target.value)}
             rows={3}
-            className="rounded-control border-2 border-border bg-surface p-3 text-body"
+            dir="auto"
+            aria-describedby="question-help"
+            placeholder={question.key === "chief_complaint" ? t("answerPlaceholder") : t(`guidance.${guidance}.example`)}
+            disabled={sending || voiceBusy || recovery !== null}
+            className="companion-input"
           />
         </label>
-        <button type="submit" className={PRIMARY} disabled={sending || recovery !== null || !text.trim()}>
+        {question.key === "chief_complaint" ? <div className="phone-answer-examples">
+          <p className="mb-2 text-xs text-ink-muted">{t("examples.caption")}</p>
+          <div className="flex flex-wrap gap-2" role="group" aria-label={t("examples.group")}>
+            {(["ankle", "headache", "results"] as const).map((example) => <button key={example} type="button"
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1.5 text-xs text-ink disabled:opacity-50"
+              aria-label={`${t("examples.badge")} ${t(`examples.${example}.label`)}`}
+              disabled={sending || voiceBusy || recovery !== null}
+              onClick={() => { setText(t(`examples.${example}.text`)); answerInput.current?.focus(); }}>
+              <span className="rounded bg-canvas px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-ink-muted">{t("examples.badge")}</span><span>{t(`examples.${example}.label`)}</span>
+            </button>)}
+          </div>
+        </div> : null}
+        <button type="submit" className={PRIMARY} disabled={sending || voiceBusy || recovery !== null || !text.trim()}>
           {sending ? t("sending") : t("send")}
         </button>
       </form>
+      {sending ? <p className="companion-processing" role="status"><span className="companion-spinner" aria-hidden="true" />{t("processingAnswer")}</p> : null}
       {recovery === "needed" ? (
         <div>
           <p role="alert">{t("recoveryNeeded")}</p>
@@ -193,10 +243,12 @@ export function PhoneIntake({
         </div>
       ) : null}
       {failed ? (
-        <p role="alert" className="font-semibold">
+        <p role="alert" className="companion-notice companion-error">
           {t("failed")}
         </p>
       ) : null}
+      </section>
+      <FeelsWorse childSession={childSession} />
     </div>
   );
 }

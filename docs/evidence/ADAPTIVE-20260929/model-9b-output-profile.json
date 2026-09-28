@@ -1,0 +1,65 @@
+[
+  {
+    "language": "en",
+    "text": "I twisted my left ankle playing football yesterday afternoon. It hurts when I walk and the pain is four out of ten.",
+    "elapsed_ms": 17102,
+    "raw": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my left ankle playing football yesterday afternoon\", \"turn_id\": \"t1\", \"quote\": \"I twisted my left ankle playing football yesterday afternoon\", \"negated\": false}, {\"key\": \"symptoms\", \"value\": \"It hurts when I walk\", \"turn_id\": \"t1\", \"quote\": \"It hurts when I walk\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"turn_id\": \"t1\", \"quote\": \"four out of ten\", \"negated\": false}, {\"key\": \"injury\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"I twisted my left ankle\", \"negated\": false}]}",
+    "ok": true,
+    "usage": [
+      {
+        "input_tokens": 2389,
+        "output_tokens": 168
+      }
+    ],
+    "verified": [
+      "chief_complaint",
+      "symptoms",
+      "pain_score",
+      "injury"
+    ],
+    "dropped": [],
+    "attempts": 1
+  },
+  {
+    "language": "en",
+    "text": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.",
+    "elapsed_ms": 10627,
+    "raw": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.\", \"turn_id\": \"t1\", \"quote\": \"My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"My mother has had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"shaking chills\", \"negated\": false}, {\"key\": \"symptoms\", \"value\": \"weak\", \"turn_id\": \"t1\", \"quote\": \"She feels weak\", \"negated\": false}, {\"key\": \"fast.last_known_well\", \"value\": \"awake and speaking normally\", \"turn_id\": \"t1\", \"quote\": \"she is awake and speaking normally\", \"negated\": false}]}",
+    "ok": true,
+    "usage": [
+      {
+        "input_tokens": 2391,
+        "output_tokens": 246
+      }
+    ],
+    "verified": [
+      "chief_complaint",
+      "infection.fever_reported",
+      "infection.rigors",
+      "symptoms",
+      "fast.last_known_well"
+    ],
+    "dropped": [],
+    "attempts": 1
+  },
+  {
+    "language": "ar",
+    "text": "عندي ألم في صدري من الصباح.",
+    "elapsed_ms": 15153,
+    "raw": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"Chest pain since morning\", \"turn_id\": \"t1\", \"quote\": \"عندي ألم في صدري من الصباح\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"عندي ألم في صدري\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"since morning\", \"turn_id\": \"t1\", \"quote\": \"من الصباح\", \"negated\": false}]}",
+    "ok": true,
+    "usage": [
+      {
+        "input_tokens": 2687,
+        "output_tokens": 127
+      }
+    ],
+    "verified": [
+      "chief_complaint",
+      "chest_pain.present",
+      "chest_pain.onset"
+    ],
+    "dropped": [],
+    "attempts": 1
+  }
+]

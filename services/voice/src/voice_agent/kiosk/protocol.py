@@ -3,6 +3,7 @@
 Client → server:
 - first `{"type": "start", "session_id", "token", "sample_rate": 16000}` (optional `language`);
 - then binary PCM16 little-endian mono 16 kHz frames of 20 ms (640 bytes);
+- optional `input_mode: "push_to_talk"` buffers until `{"type": "end_utterance"}`;
 - `{"type": "stop"}` to end.
 
 Server → client:
@@ -38,6 +39,7 @@ class StartMessage(BaseModel):
     session_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     token: str = Field(min_length=1, max_length=4096)
     sample_rate: Literal[16000]
+    input_mode: Literal["continuous", "push_to_talk"] = "continuous"
     language: Literal["en", "ar"] = "en"  # the session's language (M2-01), spoken since M2-02
 
 
@@ -45,6 +47,12 @@ class StopMessage(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     type: Literal["stop"]
+
+
+class EndUtteranceMessage(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    type: Literal["end_utterance"]
 
 
 def text_message(kind: Literal["partial", "final"], text: str) -> dict[str, Any]:

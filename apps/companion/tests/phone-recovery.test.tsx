@@ -1,3 +1,4 @@
+vi.mock("@/components/PatientReceipt", () => ({ PatientReceipt: () => null }));
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NextIntlClientProvider } from "next-intl";
@@ -44,6 +45,25 @@ beforeEach(() => {
 });
 
 describe("phone visit recovery", () => {
+  it("keeps the opening complaint free-form, with an empty editable answer and an example", async () => {
+    savedVisit(); show();
+    await screen.findByRole("heading", { name: FIRST.text });
+    const answer = screen.getByRole("textbox", { name: "Or type your answer" });
+    expect(answer).toHaveValue("");
+    expect(answer).toHaveAttribute("placeholder", "Type your answer here");
+    for (const key of ["chestPain", "breathing", "fever", "injury", "pain", "other"] as const) {
+      expect(screen.queryByRole("button", { name: MESSAGES.en.intake.answers[key] })).not.toBeInTheDocument();
+    }
+    expect(post).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole("button", { name: "Example Ankle pain" }));
+    expect(answer).toHaveValue("My ankle has been sore since yesterday.");
+    expect(answer).toHaveFocus();
+    expect(post).not.toHaveBeenCalled();
+    await userEvent.clear(answer);
+    await userEvent.type(answer, "My own description");
+    expect(answer).toHaveValue("My own description");
+  });
+
   it("claims a QR code once under Strict Mode, then reloads from the server without reusing it", async () => {
     window.history.replaceState(null, "", "/claim#t=one-time-qr-code-0001");
     post.mockResolvedValue(reply(CLAIM));
@@ -57,7 +77,7 @@ describe("phone visit recovery", () => {
     show();
     await screen.findByRole("heading", { name: SECOND.text });
     expect(post).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledWith("/v1/sessions/{session_id}/status", { params: { path: { session_id: "ses_phone" } } });
+    expect(get).toHaveBeenCalledWith("/v1/sessions/{session_id}/status", { params: { path: { session_id: "ses_phone" } }, signal: expect.any(AbortSignal) });
     expect(JSON.stringify({ ...sessionStorage })).not.toContain(FIRST.text);
   });
 

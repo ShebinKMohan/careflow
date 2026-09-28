@@ -1,0 +1,59 @@
+{
+  "scope": "offline synthetic fixture; API triage loader using generated stack configuration; API process not restarted",
+  "model_id": "laya-ktas",
+  "model_version": "laya-ktas-ebf31b5e-s42",
+  "device": "cpu",
+  "threads": "2",
+  "load_seconds": 9.314089291001437,
+  "prediction_seconds": [
+    1.466575708000164,
+    1.1138402500000666,
+    1.102407000002131
+  ],
+  "median_seconds": 1.1138402500000666,
+  "evidence_errors": [],
+  "suggestion": {
+    "suggestion_id": "sug_3a3444fc9a808eee4598170c",
+    "session_id": "ses_chest_pain",
+    "level": 2,
+    "scale": "KTAS",
+    "display_label": "KTAS 2",
+    "confidence": 0.5066,
+    "reasons": [
+      {
+        "text": "Complaint: Crushing chest pain for about an hour made KTAS 2 more likely",
+        "fact_ids": [
+          "f_01M3EF2PM000000000035FW008"
+        ]
+      },
+      {
+        "text": "Pain score 8/10 made KTAS 2 more likely",
+        "fact_ids": [
+          "f_01M3EF2PM000000000035FW00A"
+        ]
+      },
+      {
+        "text": "Systolic BP 158 mmHg made KTAS 2 more likely",
+        "fact_ids": [
+          "f_01M3EF2PM000000000035FW00E"
+        ]
+      }
+    ],
+    "model_id": "laya-ktas",
+    "model_version": "laya-ktas-ebf31b5e-s42",
+    "created_at": "2026-09-28T18:44:59.473401Z"
+  },
+  "bounded_process_timeout_seconds": 90,
+  "validation": {
+    "targeted_unit_tests_passed": 104,
+    "database_tests_run": false,
+    "pyright_errors": 0,
+    "ruff": "passed",
+    "git_diff_check": "passed"
+  },
+  "limits": [
+    "One synthetic chest-pain fixture and three timed calls; not a clinical evaluation or concurrency benchmark.",
+    "Existing API supervisor was not restarted by this task; root owns runtime restart and browser/API journey validation.",
+    "ONNX artifact parity, quantized inference and kiosk deployment were not tested."
+  ]
+}

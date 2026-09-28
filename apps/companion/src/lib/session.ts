@@ -11,6 +11,11 @@ export interface PhoneSession {
   language: "en" | "ar";
   /** Initials only, e.g. "M. S.". */
   display: string;
+  /** The visit was registered with the structured reception form. No patient details are stored. */
+  reception?: boolean;
+  patientType?: "adult" | "child";
+  /** UI choice only; the voice service independently enforces the server consent record. */
+  voiceConsent?: boolean;
 }
 
 export function readToken(): string | null {

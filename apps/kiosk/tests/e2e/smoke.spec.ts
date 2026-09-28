@@ -32,7 +32,7 @@ test("the footer is visible on every page", async ({ page }) => {
 
 test("keypad 100001 opens the mocked session's first question within 1 s", async ({ page }) => {
   await signInKiosk(page);
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: "Start on this kiosk", exact: true }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
@@ -51,8 +51,10 @@ test("keypad 100001 opens the mocked session's first question within 1 s", async
 });
 
 test("choosing Arabic switches the page to right-to-left", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "العربية" }).click();
+  // The production installation bootstraps on its server; configure this contract mock first.
+  await signInKiosk(page);
+  await page.getByRole("banner").getByRole("button", { name: "العربية" }).click();
+  await page.getByRole("main").getByRole("button", { name: "ابدأ على هذا الجهاز", exact: true }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: "أوافق", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);

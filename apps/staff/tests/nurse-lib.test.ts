@@ -115,7 +115,7 @@ describe("facts", () => {
       symptoms: [{ name: { fact_id: "f_sym", provenance: "PATIENT_STATED", source: { kind: "transcript" }, recorded_at: "t", value: "rigors" } }],
     } as unknown as Schema<"StructuredFacts">;
     const index = indexFacts(facts);
-    expect(index.get("f_hr")).toEqual({ factId: "f_hr", path: "vitals.heart_rate", value: "125 /min", provenance: "DEVICE_MEASURED" });
+    expect(index.get("f_hr")).toEqual({ factId: "f_hr", path: "vitals.heart_rate", value: "125 /min", provenance: "DEVICE_MEASURED", source: { kind: "device" }, recordedAt: "t" });
     expect(factLabel("vitals.temperature_c")).toBe("temperature");
     expect(factLabel("vitals.spo2")).toBe("SpO2");
     expect(factLabel("patient.age_years")).toBe("age");

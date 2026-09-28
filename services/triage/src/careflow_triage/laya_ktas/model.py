@@ -63,7 +63,8 @@ class LayaUrgencyModel:
         result = explain(self.agent, laya_input)
         level = level_of(result.choice)
         digest = hashlib.sha256(
-            f"{facts.session_id}|{self.model_version}|{json.dumps(laya_input.state)}".encode()
+            f"{facts.session_id}|{self.model_version}|{json.dumps(laya_input.state)}|"
+            f"{json.dumps(laya_input.fact_ids, sort_keys=True)}".encode()
         ).hexdigest()
         return UrgencySuggestion.model_validate(
             {

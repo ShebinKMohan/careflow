@@ -41,6 +41,7 @@ from careflow_intake.graph import (
     thread_config,
     waiting_at,
 )
+from careflow_intake.nodes.triage import suggest_urgency
 from careflow_intake.patient_details import PatientType, patient_turns_and_facts
 from careflow_intake.ports import IntakePorts
 from careflow_intake.state import IntakeSettings, IntakeState, structured_facts
@@ -153,6 +154,39 @@ class IntakeRuntime:
         async with self.serialized(session_id):
             return await self.graph.ainvoke(state, thread_config(session_id))
 
+    async def start_adaptive(self, state: IntakeState) -> Result:
+        """Start the existing clinical graph or recover this exact patient's unfinished request."""
+        session_id = state["session_id"]
+        async with self.serialized(session_id):
+            config = thread_config(session_id)
+            current = await self.graph.aget_state(config)
+            if current.values:
+                if current.values.get("registration_fingerprint") != state.get(
+                    "registration_fingerprint"
+                ):
+                    raise ValueError("This visit was already registered with different details.")
+                if current.interrupts or not current.next:
+                    return dict(current.values)
+                return await self.graph.ainvoke(None, config)
+            return await self.graph.ainvoke(state, config)
+
+    async def start_reception(self, state: IntakeState) -> Result:
+        """Save explicit registration facts, run existing safety rules, then wait for a nurse.
+
+        No conversation, extractor, intent classifier, or urgency model runs on this path.
+        The existing nurse decision, queue and writeback graph continues after the review.
+        """
+        session_id = state["session_id"]
+        async with self.serialized(session_id):
+            config = thread_config(session_id)
+            current = await self.graph.aget_state(config)
+            if current.values:
+                if current.interrupts:
+                    return dict(current.values)
+                return await self.graph.ainvoke(None, config)
+            await self.graph.aupdate_state(config, state, as_node="extract")
+            return await self.graph.ainvoke(None, config)
+
     async def submit_turn(
         self,
         session_id: str,
@@ -242,8 +276,11 @@ class IntakeRuntime:
             return await self._merge_and_evaluate(session_id, {"facts": list(facts)})
 
     async def _merge_and_evaluate(self, session_id: str, values: dict[str, Any]) -> IntakeState:
-        """Under the session's lock: merge `values`, then run the rules and emit new alerts."""
+        """Persist rules and alerts first; refresh pending adaptive triage for changed vitals."""
         config = thread_config(session_id)
+        previous = await self.graph.aget_state(config)
+        previous_state = cast(IntakeState, previous.values)
+        previous_vitals = structured_facts(previous_state).vitals if previous_state else None
         await self.graph.aupdate_state(config, values)
         state = cast(IntakeState, (await self.graph.aget_state(config)).values)
         now = self.ports.clock()
@@ -257,6 +294,7 @@ class IntakeRuntime:
                 "alerts": list(outcome.alerts),
                 "needed_facts": list(outcome.needed_facts),
                 "ruleset_version": outcome.ruleset_version,
+                "node_trace": ["run_rules"],
             },
         )
         for alert in outcome.alerts:
@@ -266,6 +304,29 @@ class IntakeRuntime:
             data = AlertRaisedData(clinic_id=state["clinic_id"], session_id=session_id, alert=alert)
             key = f"{session_id}:{alert.rule_id.value}"
             await self.ports.events.emit(EventType.alert_raised, data, key)
+        state = cast(IntakeState, (await self.graph.aget_state(config)).values)
+        reception = state.get("reception_context") or {}
+        if (
+            reception.get("intake_mode") == "adaptive"
+            and state.get("patient_type") == "adult"
+            and state.get("urgent_help") is None
+            and state.get("nurse_decision") is None
+            and waiting_at(previous, "nurse_review")
+            and structured_facts(state).vitals != previous_vitals
+        ):
+            # A read during model execution, or after a failed attempt, must not show an
+            # estimate based on old measurements. Safety alerts above are already persisted
+            # and published; a lower model estimate cannot retract them.
+            await self.graph.aupdate_state(
+                config,
+                {
+                    "suggestion": None,
+                    "suggestion_unavailable": "Updating urgency estimate after new vital signs.",
+                },
+            )
+            state = cast(IntakeState, (await self.graph.aget_state(config)).values)
+            update = await suggest_urgency(state, self.ports, self.settings)
+            await self.graph.aupdate_state(config, update)
         return cast(IntakeState, (await self.graph.aget_state(config)).values)
 
     async def update(self, session_id: str, values: IntakeState | dict[str, Any]) -> None:

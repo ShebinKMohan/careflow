@@ -265,6 +265,195 @@ class NoticeKind(StrEnum):
     finish_first = "finish_first"
 
 
+class Kind(StrEnum):
+    mobile = "mobile"
+    patient_id = "patient_id"
+
+
+class Status(StrEnum):
+    match = "match"
+    no_match = "no_match"
+    unavailable = "unavailable"
+
+
+class IdentityLookupResult(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    status: Status
+    challenge_token: Annotated[str | None, Field(min_length=32)] = None
+    masked_name: Annotated[str | None, Field(max_length=8)] = None
+    message: str
+    demo: Literal[True]
+
+
+class IdentityVerifyRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    claim_key: Annotated[str, Field(pattern="^[A-Za-z0-9_-]{43,128}$")]
+    qr_token: Annotated[str | None, Field(min_length=16)] = None
+    challenge_token: Annotated[str, Field(min_length=32)]
+    birth_year: Annotated[int, Field(ge=1890, le=2100)]
+
+
+class Status1(StrEnum):
+    ok = "ok"
+    partial = "partial"
+    unavailable = "unavailable"
+
+
+class IdentityHistory(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    status: Status1
+    allergies: list[str]
+    conditions: list[str]
+    medications: list[str]
+
+
+class Relationship(StrEnum):
+    parent = "parent"
+    carer = "carer"
+    family = "family"
+    other = "other"
+
+
+class CaregiverDetails(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: Annotated[str, Field(max_length=100, min_length=2)]
+    phone: Annotated[str | None, Field(max_length=30)] = None
+    relationship: Relationship
+
+
+class CaregiverRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: Annotated[str, Field(max_length=100, min_length=2)]
+    phone: Annotated[str | None, Field(max_length=30)] = None
+    relationship: Relationship
+    identity_token: Annotated[str | None, Field(min_length=32)] = None
+
+
+class VisitFor(StrEnum):
+    self = "self"
+    child = "child"
+    elder = "elder"
+    dependent = "dependent"
+
+
+class PatientType(StrEnum):
+    adult = "adult"
+    child = "child"
+
+
+class Sex(StrEnum):
+    male = "male"
+    female = "female"
+    other = "other"
+    unknown = "unknown"
+
+
+class ReceptionPatient(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: Annotated[str, Field(max_length=100, min_length=2)]
+    age_years: Annotated[int, Field(ge=0, le=130)]
+    sex: Sex
+    phone: Annotated[str | None, Field(max_length=30)] = None
+
+
+class Availability(StrEnum):
+    demo_available = "demo_available"
+
+
+class ReceptionDoctor(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    id: str
+    name: str
+    availability: Availability
+
+
+class ReceptionDepartment(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    id: str
+    name: str
+    description: str
+    doctors: list[ReceptionDoctor]
+
+
+class ReceptionDirectory(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    hospital_name: str
+    demo: Literal[True]
+    notice: str
+    departments: list[ReceptionDepartment]
+
+
+class VisitPurpose(StrEnum):
+    consultation = "consultation"
+    follow_up = "follow_up"
+    test_results = "test_results"
+    other = "other"
+
+
+class ReceptionSymptom(StrEnum):
+    chest_pain = "chest_pain"
+    short_of_breath = "short_of_breath"
+    face_droop = "face_droop"
+    arm_weakness = "arm_weakness"
+    speech_difficulty = "speech_difficulty"
+    drowsy_or_confused = "drowsy_or_confused"
+
+
+class IdentityStatus(StrEnum):
+    verified_demo = "verified_demo"
+    new_patient = "new_patient"
+
+
+class IntakeMode(StrEnum):
+    adaptive = "adaptive"
+    reception = "reception"
+
+
+class ReceptionContext(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    visit_for: VisitFor | None = None
+    caregiver: CaregiverDetails | None = None
+    identity_status: IdentityStatus | None = None
+    intake_mode: IntakeMode | None = None
+    patient: ReceptionPatient
+    department_id: str
+    department_name: str
+    doctor_id: str | None = None
+    doctor_name: str | None = None
+    visit_purpose: VisitPurpose
+    reason: str
+    emergency_symptoms: list[ReceptionSymptom]
+    registered_at: AwareDatetime
+    availability_notice: str
+
+
+class StartQrRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    language: LanguageModel | None = None
+
+
 class QrToken(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -328,11 +517,6 @@ class ConsentRecord(BaseModel):
     recorded_at: AwareDatetime
 
 
-class PatientType(StrEnum):
-    adult = "adult"
-    child = "child"
-
-
 class PatientDetailsRequest(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -382,6 +566,45 @@ class SessionState(StrEnum):
     arrived = "arrived"
     no_show = "no_show"
     closed = "closed"
+
+
+class PatientSummaryFact(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    key: str
+    fact_id: str
+    value: str
+    provenance: str
+    simulated: bool
+
+
+class PatientSummaryAlert(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    code: RuleIdModel
+    severity: AlertSeverityModel
+
+
+class PatientIntakeSummary(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    session_id: str
+    visit_reference: Annotated[
+        str, Field(description="Reference to this visit; not a queue token or position.")
+    ]
+    nurse_confirmed: bool
+    assistance_requested: Annotated[
+        bool, Field(description="An urgent help request has been durably saved for the nurse.")
+    ] = False
+    confirmed_level: Annotated[int | None, Field(ge=1, le=5)] = None
+    confirmed_scale: TriageScaleModel | None = None
+    facts: list[PatientSummaryFact]
+    alerts: list[PatientSummaryAlert]
+    suggestion: UrgencySuggestionModel | None
+    warnings: list[str]
 
 
 class LatestVitals(BaseModel):
@@ -509,7 +732,7 @@ class TaskKind(StrEnum):
     ecg_within_10_min = "ecg_within_10_min"
 
 
-class Status(StrEnum):
+class Status2(StrEnum):
     open = "open"
     completed = "completed"
 
@@ -521,7 +744,7 @@ class Task(BaseModel):
     task_id: Identifier
     session_id: Identifier
     kind: TaskKind
-    status: Status
+    status: Status2
     due_at: AwareDatetime | None = None
     completed_at: AwareDatetime | None = None
     completed_by: Identifier | None = None
@@ -541,13 +764,6 @@ class AlertChip(BaseModel):
             description="When the rule first raised it (M2-07). A confirmed session shows a banner again for an alert raised after the nurse's decision."
         ),
     ] = None
-
-
-class Sex(StrEnum):
-    male = "male"
-    female = "female"
-    other = "other"
-    unknown = "unknown"
 
 
 class MedicalQuestion(BaseModel):
@@ -926,7 +1142,7 @@ class ProvidersResponse(BaseModel):
     tasks: list[ProviderStatus]
 
 
-class Status1(StrEnum):
+class Status3(StrEnum):
     ok = "ok"
     degraded = "degraded"
     down = "down"
@@ -937,7 +1153,7 @@ class ServiceStatus(BaseModel):
         extra="forbid",
     )
     name: str
-    status: Status1
+    status: Status3
     detail: Annotated[str | None, Field(max_length=200)] = None
 
 
@@ -950,7 +1166,7 @@ class AdminStatus(BaseModel):
     services: list[ServiceStatus]
 
 
-class Status2(StrEnum):
+class Status4(StrEnum):
     ok = "ok"
 
 
@@ -1104,6 +1320,100 @@ class IntakeQuestion(BaseModel):
     ] = None
 
 
+class IdentityLookupRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    claim_key: Annotated[str, Field(pattern="^[A-Za-z0-9_-]{43,128}$")]
+    qr_token: Annotated[str | None, Field(min_length=16)] = None
+    kind: Kind
+    value: Annotated[str, Field(max_length=64, min_length=3)]
+    consent: ConsentRequest
+
+
+class IdentityVerifyResult(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    verification_token: Annotated[str, Field(min_length=32)]
+    patient: ReceptionPatient
+    history: IdentityHistory
+    demo: Literal[True]
+
+
+class AdaptiveCheckinRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    claim_key: Annotated[str, Field(pattern="^[A-Za-z0-9_-]{43,128}$")]
+    qr_token: Annotated[str | None, Field(min_length=16)] = None
+    language: LanguageModel | None = None
+    patient: ReceptionPatient
+    patient_identity_token: Annotated[str | None, Field(min_length=32)] = None
+    visit_for: VisitFor
+    caregiver: CaregiverRequest | None = None
+    consent: ConsentRequest
+    reason: Annotated[str | None, Field(max_length=1000)] = None
+    department_id: Annotated[str, Field(max_length=60)] = "unsure"
+    doctor_id: Annotated[str | None, Field(max_length=60)] = None
+    emergency_symptoms: Annotated[list[ReceptionSymptom], Field(max_length=6)] = []
+
+
+class UrgentCheckinRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    claim_key: Annotated[str, Field(pattern="^[A-Za-z0-9_-]{43,128}$")]
+    qr_token: Annotated[str | None, Field(min_length=16)] = None
+    language: LanguageModel | None = None
+    patient_type: PatientType
+    consent: ConsentRequest
+    emergency_symptoms: Annotated[list[ReceptionSymptom], Field(max_length=6)]
+
+
+class UrgentHelpRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    requested_at: AwareDatetime
+    patient_type: PatientType
+    emergency_symptoms: Annotated[list[ReceptionSymptom], Field(max_length=6)]
+
+
+class ReceptionCheckinRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    claim_key: Annotated[str, Field(pattern="^[A-Za-z0-9_-]{43,128}$")]
+    qr_token: Annotated[str | None, Field(min_length=16)] = None
+    language: LanguageModel | None = None
+    patient: ReceptionPatient
+    department_id: Annotated[str, Field(max_length=60, min_length=1)]
+    doctor_id: Annotated[str | None, Field(max_length=60)] = None
+    visit_purpose: VisitPurpose
+    reason: Annotated[str, Field(max_length=1000, min_length=2)]
+    emergency_symptoms: Annotated[list[ReceptionSymptom], Field(max_length=6)]
+    consent: ConsentRequest
+
+
+class StartClaimRequest(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    qr_token: Annotated[str, Field(min_length=16)]
+    claim_key: Annotated[
+        str,
+        Field(
+            description="Random secret generated once by this phone, kept in memory and reused only for retries.",
+            pattern="^[A-Za-z0-9_-]{43,128}$",
+        ),
+    ]
+    digits: Annotated[str, Field(pattern="^[0-9]{6}$")]
+    language: LanguageModel | None = None
+    consent: ConsentRequest
+    patient: PatientDetailsRequest
+
+
 class TurnResponse(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -1172,6 +1482,8 @@ class WorklistItem(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
+    urgent_help: UrgentHelpRequest | None = None
+    reception_context: ReceptionContext | None = None
     session_id: Identifier
     patient_display: Annotated[str, Field(max_length=8)]
     arrived_at: AwareDatetime
@@ -1230,7 +1542,7 @@ class Health(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    status: Status2
+    status: Status4
     version: str
     db: ComponentStatus
     redis: ComponentStatus

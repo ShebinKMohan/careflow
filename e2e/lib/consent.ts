@@ -41,7 +41,7 @@ export async function countMediaRequests(page: Page): Promise<() => number> {
 /** The first screen in English, then the consent screen's `choice`. */
 export async function chooseConsent(page: Page, choice: ConsentChoice): Promise<void> {
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: t("home.english") }).click();
+  await page.getByRole("main").getByRole("button", { name: t("experience.kioskAction") }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: t(`safety.consent.${choice}`), exact: true }).click();
 }

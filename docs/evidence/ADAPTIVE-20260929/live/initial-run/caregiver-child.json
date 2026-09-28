@@ -1,0 +1,79 @@
+{
+  "startedAt": "2026-09-28T19:05:17.129Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "lookupMs": 1618,
+  "verifiedName": "Layla Karim",
+  "registrationMs": 387,
+  "sessionId": "bd4bc807-5d33-5d32-b5d3-55d225fee2b1",
+  "turns": [
+    {
+      "key": "child_danger.hard_to_wake",
+      "question": "Is your child very hard to wake, or not staying awake?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 1530
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "bd4bc807-5d33-5d32-b5d3-55d225fee2b1",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_6X57JH6EGZ7BF5FQ96SCZCECC6",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 6,
+          "quote": "7"
+        },
+        "recorded_at": "2026-09-28T19:05:20.295173Z",
+        "value": 7
+      },
+      "sex": {
+        "fact_id": "f_KWZ63FHJW1G14E8NBBN5NGZYBF",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198609",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:05:20.437051Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "male",
+          "display": "Male"
+        }
+      }
+    },
+    "child_danger": {
+      "hard_to_wake": {
+        "fact_id": "f_60VRBSSQ1DVZDRC56AFD9RN0XX",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:05:20.815721Z",
+        "value": "no"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  }
+}

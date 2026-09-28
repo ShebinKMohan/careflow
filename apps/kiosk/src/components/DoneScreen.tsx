@@ -8,6 +8,9 @@ import { useEffect, useMemo, useState } from "react";
 
 import { patientApi } from "@/lib/api";
 import { useKiosk } from "@/lib/session";
+import { KioskIcon } from "./KioskIcon";
+import { PatientReceipt } from "./PatientReceipt";
+import { ContinueOnPhone } from "./ContinueOnPhone";
 
 export const STATUS_POLL_MS = 2_000;
 /** After the token is shown, the kiosk starts over for the next patient. */
@@ -20,10 +23,12 @@ export const RESET_AFTER_TOKEN_MS = 30_000;
  */
 export function DoneScreen() {
   const t = useTranslations("done");
+  const experience = useTranslations("experience");
   const tChild = useTranslations("safety.child");
   const router = useRouter();
   const { patient, wipe } = useKiosk();
   const [status, setStatus] = useState<Schema<"SessionStatus"> | null>(null);
+  const [unavailable, setUnavailable] = useState(false);
   const token = patient?.token;
   const sessionId = patient?.sessionId;
   const client = useMemo(() => (token ? patientApi(token) : null), [token]);
@@ -33,10 +38,12 @@ export function DoneScreen() {
     if (!client || !sessionId) return undefined;
     let stopped = false;
     const poll = async () => {
-      const { data } = await client.GET("/v1/sessions/{session_id}/status", {
+      const response = await client.GET("/v1/sessions/{session_id}/status", {
         params: { path: { session_id: sessionId } },
-      });
-      if (!stopped && data) setStatus(data);
+      }).catch(() => null);
+      if (stopped) return;
+      setUnavailable(!response?.data);
+      if (response?.data) setStatus(response.data);
     };
     void poll();
     const timer = setInterval(() => void poll(), STATUS_POLL_MS);
@@ -65,6 +72,7 @@ export function DoneScreen() {
 
   return (
     <div className="flex flex-col gap-6" aria-live="polite">
+      <div className="done-confirmation"><span><KioskIcon name="check" /></span><div><strong className="kiosk-eyebrow">{experience("doneEyebrow")}</strong><p>{experience("doneWaiting")}</p></div></div>
       {patient.patientType === "child" ? (
         <div className="flex flex-col gap-2" data-testid="child-nurse">
           <p className="text-title font-semibold">{tChild("nurseTold")}</p>
@@ -72,8 +80,9 @@ export function DoneScreen() {
         </div>
       ) : null}
       <p className="text-title">{t("seat")}</p>
+      <PatientReceipt refreshKey={tokenCode} />
       {tokenCode ? (
-        <Card title={t("tokenLabel")}>
+        <section className="queue-ticket"><h2>{t("tokenLabel")}</h2>
           <p className="text-display font-bold" dir="ltr" data-testid="token-code">
             {tokenCode}
           </p>
@@ -87,8 +96,10 @@ export function DoneScreen() {
           {status?.wait_estimate_min !== undefined ? (
             <p className="text-label text-ink-muted">{t("estimate", { minutes: status.wait_estimate_min })}</p>
           ) : null}
-        </Card>
+        </section>
       ) : null}
+      {unavailable ? <p role="status" className="screen-intro">{experience("statusUnavailable")}</p> : null}
+      <ContinueOnPhone />
     </div>
   );
 }

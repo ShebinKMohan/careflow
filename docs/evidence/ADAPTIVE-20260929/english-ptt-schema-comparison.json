@@ -1,0 +1,103 @@
+[
+  {
+    "compact": true,
+    "elapsed_ms": 20004,
+    "incomplete": true,
+    "error": "timeout",
+    "usage": [
+      {
+        "input_tokens": 1989,
+        "output_tokens": 209,
+        "raw": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I have chest pain since this morning\", \"turn_id\": \"t3\", \"quote\": \"I have chest pain since this morning\"}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t3\", \"quote\": \"I have chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"since this morning\", \"turn_id\": \"t3\", \"quote\": \"since this morning\"}, {\"key\": \"patient.age_years\", \"value\": 44, \"turn_id\": \"t1\", \"quote\": \"Age: 44\"}, {\"key\": \"patient.age_months\", \"value\": null, \"turn_id\": \"t1\", \"quote\": \"Age: 44\"}, {\"key\": \"symptoms\", \"value\": \"none selected\", \"turn_id\": \"t1\", \"quote\": \"none selected\"}]}",
+        "last_request": {
+          "role": "user",
+          "content": "Conversation:\nt1 [patient]: Age: 44. Sex: male. Visit reason: . Selected symptoms: none selected.\nt2 [assistant, asks about chief_complaint]: What is the main reason for your visit today?\nt3 [patient, answers chief_complaint]: I have chest pain since this morning."
+        }
+      }
+    ],
+    "facts": []
+  },
+  {
+    "compact": false,
+    "elapsed_ms": 18218,
+    "incomplete": false,
+    "error": null,
+    "usage": [
+      {
+        "input_tokens": 2421,
+        "output_tokens": 201,
+        "raw": "{\"facts\": [{\"key\": \"patient.age_years\", \"value\": 44, \"turn_id\": \"t1\", \"quote\": \"Age: 44\", \"negated\": false}, {\"key\": \"patient.sex\", \"value\": \"male\", \"turn_id\": \"t1\", \"quote\": \"Sex: male\", \"negated\": false}, {\"key\": \"chief_complaint\", \"value\": \"I have chest pain since this morning\", \"turn_id\": \"t3\", \"quote\": \"I have chest pain since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t3\", \"quote\": \"I have chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t3\", \"quote\": \"since this morning\", \"negated\": false}]}",
+        "last_request": {
+          "role": "user",
+          "content": "Conversation:\nt1 [patient]: Age: 44. Sex: male. Visit reason: . Selected symptoms: none selected.\nt2 [assistant, asks about chief_complaint]: What is the main reason for your visit today?\nt3 [patient, answers chief_complaint]: I have chest pain since this morning."
+        }
+      }
+    ],
+    "facts": [
+      {
+        "key": "patient.age_years",
+        "fact": {
+          "fact_id": "f_V62V2PXGETKV6880ZJDKMHHG9T",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_reception_001",
+            "start": 0,
+            "end": 7,
+            "quote": "Age: 44"
+          },
+          "recorded_at": "2026-09-28T19:22:42.119077Z",
+          "value": 44
+        }
+      },
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_W75PT6XHVRRN7ZJ4YNCWSQ4ZJ2",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 0,
+            "end": 36,
+            "quote": "I have chest pain since this morning"
+          },
+          "recorded_at": "2026-09-28T19:22:42.119077Z",
+          "value": "I have chest pain since this morning"
+        }
+      },
+      {
+        "key": "chest_pain.present",
+        "fact": {
+          "fact_id": "f_8QJYH4N1SW64H9D6WDZ8HQC8PB",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 0,
+            "end": 17,
+            "quote": "I have chest pain"
+          },
+          "recorded_at": "2026-09-28T19:22:42.119077Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "chest_pain.onset",
+        "fact": {
+          "fact_id": "f_DDMHAJXJPZEZ9ZDHM58TKH9B6A",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 18,
+            "end": 36,
+            "quote": "since this morning"
+          },
+          "recorded_at": "2026-09-28T19:22:42.119077Z",
+          "value": "this morning"
+        }
+      }
+    ]
+  }
+]

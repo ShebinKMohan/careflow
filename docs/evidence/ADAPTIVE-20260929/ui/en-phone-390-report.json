@@ -1,0 +1,27 @@
+{
+  "fixtureOnly": true,
+  "viewport": {
+    "name": "phone-390",
+    "width": 390,
+    "height": 844,
+    "locale": "en"
+  },
+  "cameraOn": [
+    {
+      "state": "live",
+      "label": "fake_device_0"
+    }
+  ],
+  "cameraStopped": true,
+  "cameraStoppedOnNavigation": true,
+  "overflow": {
+    "viewport": 390,
+    "document": 390
+  },
+  "unexpectedRequests": [],
+  "pageErrors": [],
+  "accessibility": {
+    "intake": [],
+    "receipt": []
+  }
+}

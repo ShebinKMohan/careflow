@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "CareFlow kiosk",
+    "title": "Patient check-in · CareFlow",
     "description": "Self check-in kiosk. Research prototype."
   },
   "header": {
@@ -24,7 +24,7 @@
   },
   "checkin": {
     "title": "Check in",
-    "instructions": "Enter your 6-digit keypad ID.",
+    "instructions": "Enter your six-digit patient code.",
     "display": "Keypad ID",
     "clear": "Clear",
     "submit": "Check in",
@@ -51,7 +51,7 @@
     "tapLabel": "Tap an answer",
     "scaleLabel": "Tap a number from 0 to 10",
     "scaleHint": "0 means none, 10 means the worst you can imagine.",
-    "typeLabel": "Or type your answer",
+    "typeLabel": "Your answer",
     "send": "Send",
     "sending": "Sending…",
     "failed": "That did not go through. Please try again, or ask a nurse.",
@@ -73,10 +73,10 @@
       "other": "Something else"
     },
     "phone": {
-      "button": "Continue on your phone",
+      "button": "Use your phone",
       "title": "Scan this code with your phone's camera",
       "expires": "This code works for {seconds} more seconds.",
-      "stay": "Stay on the kiosk",
+      "stay": "Continue here",
       "failed": "The phone code is not available right now. Please continue here.",
       "handedOver": "Continued on your phone. This screen will now clear."
     }
@@ -100,11 +100,39 @@
     "checkinLink": "Check in",
     "failed": "The vitals device could not start. Please ask a nurse.",
     "continue": "Continue",
-    "skip": "Skip"
+    "skip": "Skip",
+    "guide": {
+      "badge": "Demo readings",
+      "placeFinger": "Place your finger on the demo sensor",
+      "instructions": "Rest a finger as shown, then start the demonstration. Keep still for about 10 seconds while the example readings appear.",
+      "touchIdNote": "These are generated demo readings. Mac Touch ID cannot measure pulse, oxygen, blood pressure or temperature; no physical sensor is accessed.",
+      "start": "Start demo measurement",
+      "retry": "Retry demo measurement",
+      "failed": "We could not save a new demo reading. Your visit is safe. Retry, or continue without the demonstration.",
+      "complete": "Demo readings saved",
+      "seconds": "{seconds}s remaining",
+      "finishing": "Finishing…",
+      "progress": "Demo measurement progress",
+      "automatic": "Your readings are saved automatically. The next screen opens when the demonstration finishes.",
+      "noCuff": "Blood pressure is not included in this demo setup.",
+      "skip": "Continue without demo measurement",
+      "stages": {
+        "position": "Keep your finger comfortably in place",
+        "pulse": "Showing the example pulse reading",
+        "oxygen": "Showing the example oxygen reading",
+        "pressure": "Showing the example blood-pressure reading",
+        "temperature": "Showing the example temperature reading",
+        "saving": "Waiting for the saved demo readings…"
+      },
+      "backSummary": "Back to visit summary",
+      "savedSummary": "Your saved visit summary",
+      "alreadySaved": "Your registration is already saved. Please ask reception if any details need changing. Returning to the health check keeps the same visit.",
+      "returnHealth": "Return to health check"
+    }
   },
   "done": {
     "title": "Thank you",
-    "seat": "Please take a seat. A nurse will review your details.",
+    "seat": "Your information is with the care team. Your next step will appear here.",
     "tokenLabel": "Your number",
     "room": "Please go to <ltr>{room}</ltr>.",
     "waiting": "We will call your number soon.",
@@ -132,7 +160,7 @@
     },
     "consent": {
       "title": "Before we start",
-      "camera": "The kiosk camera, if used, is processed on this kiosk only and never saved.",
+      "camera": "Optional: show a local camera preview. No images or video are saved or sent. This demo does not assess your condition from the camera.",
       "voice": "If you speak your answers, your voice is turned into text on the clinic's own server. No recording is kept.",
       "dataUse": "Your answers go to the clinic team and into your clinic record.",
       "agree": "Agree",
@@ -143,5 +171,430 @@
       "saveFailed": "Your choices were not saved. Please try again, or ask at reception.",
       "retry": "Try again"
     }
+  },
+  "experience": {
+    "progressLabel": "Check-in progress",
+    "yourCheckin": "YOUR CHECK-IN",
+    "oneStep": "A little about you. One step at a time.",
+    "steps": {
+      "privacy": "Your choices",
+      "identity": "Check in",
+      "visit": "Your visit",
+      "vitals": "Vital signs",
+      "finish": "All set"
+    },
+    "needHelp": "Here to help",
+    "askReception": "If you need a hand, please ask at reception.",
+    "step": "Step {current} of {total}",
+    "yourChoices": "At your own pace",
+    "skipContent": "Skip to content",
+    "patientCheckin": "Patient check-in",
+    "welcomeEyebrow": "A WARM WELCOME",
+    "welcomeHeading": "Let’s get you checked in.",
+    "welcomeDescription": "Tell us a little about your visit, so the clinic team can take it from here.",
+    "welcomePrivacy": "You choose how to share your information.",
+    "getStarted": "GET STARTED",
+    "whatHappens": "WHAT HAPPENS NEXT",
+    "preview": {
+      "identify": {
+        "title": "Check in",
+        "description": "Use your keypad ID or tap your card."
+      },
+      "share": {
+        "title": "Tell us about your visit",
+        "description": "Answer a few questions in your own way."
+      },
+      "review": {
+        "title": "Meet your care team",
+        "description": "A nurse reviews your details."
+      }
+    },
+    "privacyIntro": "Before you continue, choose how this kiosk may use your information.",
+    "privacyTitles": {
+      "camera": "Camera, with your permission",
+      "voice": "Your voice, turned into text",
+      "dataUse": "Your answers, for your care team"
+    },
+    "identityHint": "Use the code given at reception. For this demo, use 100005. This is not an account password.",
+    "cardTitle": "Have your ID card?",
+    "patientIntro": "Choose who you are checking in for today.",
+    "adultDescription": "I’m checking in for myself",
+    "childDescription": "I’m a parent or caregiver",
+    "answerHint": "Choose an answer below, or use your own words.",
+    "vitalsIntro": "These readings are from a simulated device in this research prototype. You can also skip this step.",
+    "doneEyebrow": "CHECK-IN RECEIVED",
+    "doneWaiting": "Your details are ready for the clinic team to review.",
+    "statusUnavailable": "We cannot refresh your queue status right now. Please ask at reception if you need help.",
+    "entryHeading": "How would you like to check in?",
+    "kioskTitle": "Begin here",
+    "kioskDescription": "Tell us what brought you in. Our assistant helps prepare your visit for the care team.",
+    "kioskAction": "Tap to begin",
+    "phoneTitle": "Scan QR to begin",
+    "phoneDescription": "Use your own phone to check in and continue the conversation.",
+    "qrLoading": "Preparing your phone check-in…",
+    "qrUnavailable": "The phone code is unavailable right now. You can continue on this screen.",
+    "qrRetry": "Try again",
+    "phoneNote": "Your phone. Your own pace.",
+    "languageHint": "You can change your language above.",
+    "stationUnavailable": "Check-in is temporarily unavailable. Please ask a nearby member of staff, or try again.",
+    "stationPreparing": "Getting ready for you…"
+  },
+  "reception": {
+    "progress": "Registration progress",
+    "step": "Step {current} of {total}",
+    "steps": {
+      "patient": "Your details",
+      "department": "Department",
+      "doctor": "Care team",
+      "visit": "Your visit",
+      "review": "Review"
+    },
+    "eyebrows": {
+      "patient": "PATIENT REGISTRATION",
+      "department": "FIND THE RIGHT TEAM",
+      "doctor": "YOUR CARE PREFERENCE",
+      "visit": "TELL US ABOUT YOUR VISIT",
+      "review": "READY WHEN YOU ARE"
+    },
+    "titles": {
+      "patient": "Let’s start with you.",
+      "department": "Where would you like to go?",
+      "doctor": "Choose your care team.",
+      "visit": "How can we help today?",
+      "review": "Does everything look right?"
+    },
+    "descriptions": {
+      "patient": "Add a few details so reception can register your visit.",
+      "department": "Choose a department, or let reception help you decide.",
+      "doctor": "Select a preferred doctor, or choose any available clinician.",
+      "visit": "A little context helps the team prepare for your visit.",
+      "review": "Check your details before sending them to the hospital team."
+    },
+    "demoData": "Research demo · use fictional patient details",
+    "urgentHelp": "I need urgent help",
+    "urgentTitle": "Please tell reception now if you need immediate help.",
+    "urgentDescription": "Do not wait to finish this form. You can also select any symptoms below to include in your registration. These choices do not determine your clinical urgency.",
+    "symptoms": {
+      "chest_pain": "Chest pain",
+      "short_of_breath": "Difficulty breathing",
+      "face_droop": "New facial droop",
+      "arm_weakness": "New arm weakness",
+      "speech_difficulty": "New difficulty speaking",
+      "drowsy_or_confused": "Very drowsy or confused"
+    },
+    "name": "Full name",
+    "namePlaceholder": "Full name",
+    "age": "Age in years",
+    "agePlaceholder": "e.g. 34",
+    "ageValue": "{age} years",
+    "phone": "Phone number (optional)",
+    "phonePlaceholder": "Your contact number",
+    "sex": "Sex recorded for your visit",
+    "sexOptions": {
+      "female": "Female",
+      "male": "Male",
+      "other": "Other",
+      "unknown": "Prefer not to say"
+    },
+    "existingCode": "Already have a demo patient code? Use code check-in",
+    "departments": {
+      "general_medicine": {
+        "title": "General medicine",
+        "description": "Everyday health and general concerns"
+      },
+      "cardiology": {
+        "title": "Cardiology",
+        "description": "Heart and circulation"
+      },
+      "paediatrics": {
+        "title": "Paediatrics",
+        "description": "Care for children and young people"
+      },
+      "orthopaedics": {
+        "title": "Orthopaedics",
+        "description": "Bones, joints and movement"
+      },
+      "dermatology": {
+        "title": "Dermatology",
+        "description": "Skin, hair and nails"
+      },
+      "ent": {
+        "title": "ENT",
+        "description": "Ear, nose and throat"
+      },
+      "ophthalmology": {
+        "title": "Eye care",
+        "description": "Eyes and vision"
+      },
+      "womens_health": {
+        "title": "Women’s health",
+        "description": "Gynaecology and women’s care"
+      },
+      "emergency": {
+        "title": "Emergency",
+        "description": "Urgent concerns · speak to reception now"
+      },
+      "diagnostics": {
+        "title": "Diagnostics",
+        "description": "Tests, scans and investigations"
+      },
+      "unsure": {
+        "title": "I’m not sure",
+        "description": "Let reception guide me"
+      },
+      "dental": {
+        "title": "Dental care",
+        "description": "Teeth, gums and oral health"
+      }
+    },
+    "directoryFailed": "We could not load the department directory. Please try again, or ask at reception.",
+    "directoryLoading": "Loading the hospital directory…",
+    "retry": "Try again",
+    "change": "Change",
+    "anyDoctor": "Any clinician in this department",
+    "anyDoctorDescription": "Let reception assign the care team",
+    "demoDoctor": "Demo doctor · illustrative availability",
+    "doctorNote": "This is a preference, not a booked appointment. Reception will confirm the clinician who can see you.",
+    "purpose": "What brings you in?",
+    "purposes": {
+      "consultation": "New consultation",
+      "follow_up": "Follow-up visit",
+      "test_results": "Tests or results",
+      "other": "Something else"
+    },
+    "reason": "Tell us a little more",
+    "reasonPlaceholder": "For example, a follow-up appointment, a skin concern, a new symptom, or a question for your doctor.",
+    "reasonHint": "Use your own words. You do not need to know a medical term.",
+    "careTeam": "Department and clinician preference",
+    "urgentReported": "Symptoms you selected",
+    "noneSelected": "Not reported",
+    "reviewNote": "Your details go to the hospital team for review. A nurse confirms any clinical urgency; no appointment or diagnosis is being promised.",
+    "submitFailed": "Your registration could not be confirmed. Your details are still here. Please try again, or ask reception for help.",
+    "edit": "Edit",
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Submit my registration",
+    "submitting": "Saving your registration…",
+    "patientRequired": "Enter your name, age and sex to continue.",
+    "visitRequired": "Choose a visit type and add a short reason to continue.",
+    "identitySteps": {
+      "identity": "Find details",
+      "who": "Who is visiting",
+      "patient": "Patient details",
+      "ready": "Begin conversation"
+    },
+    "identityEyebrows": {
+      "identity": "WELCOME TO YOUR VISIT",
+      "who": "CARE FOR YOU AND YOUR FAMILY",
+      "patient": "A FEW DETAILS FIRST",
+      "ready": "YOUR CONVERSATION STARTS HERE"
+    },
+    "identityTitles": {
+      "identity": "Let’s find your details.",
+      "who": "Who is this visit for?",
+      "patient": "Confirm the patient’s details.",
+      "ready": "You’re ready to begin."
+    },
+    "identityDescriptions": {
+      "identity": "Find your hospital record, or create a new patient profile.",
+      "who": "You can check in for yourself or help someone else.",
+      "patient": "Make sure these details describe the person receiving care.",
+      "ready": "Our assistant will listen, ask relevant questions and prepare information for the care team."
+    },
+    "identityKinds": {
+      "mobile": "Mobile number",
+      "patient_id": "Patient ID"
+    },
+    "mobilePlaceholder": "Enter your mobile number",
+    "patientIdPlaceholder": "Patient ID",
+    "lookupConsent": "I agree to the hospital looking up my record using these details.",
+    "lookupHint": "Use your details, or the patient’s ID if you know it. You can choose who needs care next. Demo patient: 100001, birth year: 1968.",
+    "profileFound": "We found a matching record",
+    "verificationHint": "Confirm your birth year before we show your details.",
+    "birthYear": "Your birth year",
+    "differentIdentity": "Use different details",
+    "newPatient": "I’m new here — register a new patient",
+    "identityResults": {
+      "no_match": "We could not find a matching record. Check the number, or register as a new patient below.",
+      "unavailable": "We cannot look up records right now. Try again, register a new patient, or ask a member of staff.",
+      "verification_failed": "We could not verify those details. Check the birth year and try again, or ask a member of staff."
+    },
+    "welcomeBack": "Welcome back, {name}",
+    "visitors": {
+      "self": {
+        "title": "Me",
+        "description": "I am the person receiving care"
+      },
+      "child": {
+        "title": "My child",
+        "description": "I am a parent or guardian"
+      },
+      "elder": {
+        "title": "An older relative",
+        "description": "I am helping an older family member"
+      },
+      "dependent": {
+        "title": "Someone I care for",
+        "description": "I am helping another person"
+      }
+    },
+    "verifiedDetails": "These details came from a verified hospital record. Check that they belong to the person receiving care.",
+    "dependentDetails": "Enter the patient’s details below. Your details are kept separately as their helper.",
+    "newDetails": "Enter fictional details for this research demonstration.",
+    "patientName": "Patient’s full name",
+    "helperDetails": "Your details as the helper",
+    "helperName": "Your full name (helper)",
+    "helperPhone": "Your phone number (optional)",
+    "separateHistory": "The helper’s medical history is not used as the patient’s history.",
+    "optionalDepartment": "Have a department preference? (optional)",
+    "optionalDepartmentHint": "You do not need to choose a department. The care team can guide you after hearing about your visit.",
+    "teamWillGuide": "Let the care team guide me",
+    "conversationNext": "Next: Tell us what brings you in",
+    "conversationDescription": "Speak or type in your own words. The assistant asks follow-up questions based on what you tell it. You can review what has been captured before the care team takes over.",
+    "privacySaved": "Your privacy choices are saved for this visit. You can use touch and typing without camera or voice.",
+    "privacyBeforeMedia": "Choose your privacy preferences before the microphone or camera can be used.",
+    "recordAvailable": "Your verified patient record is available to support this visit.",
+    "adaptiveFailed": "We could not start the conversation. Your details are still here. Please try again or ask a member of staff.",
+    "dependentRequired": "Enter the patient’s name, age and sex, and the helper’s name. For a child, use an age under 16.",
+    "immediateHelp": "Please alert a nearby member of staff now if you need immediate help. You can keep checking in while help is arranged.",
+    "adaptiveFirstQuestion": "What is the main reason for your visit today?",
+    "working": "Please wait…",
+    "verifyIdentity": "Verify my details",
+    "findDetails": "Find my details",
+    "startConversation": "Start conversation",
+    "privacyChoices": "Choose privacy preferences",
+    "requestHelp": "Request urgent help now",
+    "helpRecorded": "Your urgent request has been saved",
+    "helpFailed": "The request could not be saved. Please alert reception now. You can retry or continue checking in.",
+    "continueWithHelp": "Continue checking in",
+    "helpNotSent": "No request has been sent yet. Sending it saves an urgent request for the care team without waiting for identity details.",
+    "urgentIncluded": "Your selected symptoms will be included when this visit is started. No request has been sent yet.",
+    "returnToVisit": "Return to my visit",
+    "savedDetailsTitle": "Your details for this visit.",
+    "savedDetailsDescription": "These details have already been registered. Return to your conversation without starting another visit.",
+    "differentHelper": "Use a different helper",
+    "urgentFor": "Who needs urgent help?",
+    "urgentTypes": {
+      "adult": "An adult",
+      "child": "A child under 16"
+    },
+    "urgentSymptomsOptional": "Select any symptoms that apply, or request help without selecting one.",
+    "urgentConsent": "I agree to share this request and these symptoms with the care team.",
+    "urgentSavedDescription": "Your request is on the nurse worklist. This does not mean a clinician has acknowledged it. Use your visit reference when speaking to staff.",
+    "urgentNoDelay": "Tell the nearest member of staff now. You can continue, but do not wait for measurements before getting help."
+  },
+  "holdToTalk": {
+    "title": "Voice answer",
+    "idle": "Hold to speak",
+    "connecting": "Opening microphone…",
+    "listening": "Listening",
+    "processing": "Processing…",
+    "hint": "Press and hold this button, or hold the Space bar. Speak in the language you selected, then release. Up to 30 seconds per answer.",
+    "releaseHint": "Release to send",
+    "micOff": "Microphone off",
+    "privacy": "Your microphone is off until you hold. Audio is processed locally and is not saved.",
+    "tryAgain": "Microphone setup stopped when you released. Hold again and speak when Listening appears.",
+    "noSpeech": "We did not hear a clear answer. Hold again, or type your answer.",
+    "failed": "Voice is unavailable right now. You can try again or type your answer.",
+    "keepHolding": "Keep holding",
+    "holdKey": "Hold",
+    "spaceKey": "Space",
+    "infoLabel": "Voice instructions and privacy"
+  },
+  "cameraPreview": {
+    "title": "Camera preview",
+    "shortStart": "Camera",
+    "shortStop": "Stop camera",
+    "shortCancel": "Cancel",
+    "off": "Off",
+    "info": "About the camera",
+    "description": "Optional live preview, visible only on this screen. No video is saved or sent. It does not assess your condition.",
+    "videoLabel": "Your local camera preview",
+    "live": "Live · private",
+    "start": "Turn on camera",
+    "stop": "Turn off camera",
+    "cancel": "Cancel camera request",
+    "denied": "Camera permission was not granted. You can continue without it.",
+    "unavailable": "The camera is unavailable. You can continue without it."
+  },
+  "adaptiveIntake": {
+    "eyebrow": "CareFlow assistant",
+    "intro": "Tell us what is happening, in your own words. Your answers guide the next question.",
+    "examplesTitle": "Try an example",
+    "examplesHint": "These are examples, not a list of conditions. Any reason for visiting is welcome.",
+    "complaint": {
+      "0": "I have a problem with…",
+      "1": "I’m here for a follow-up…",
+      "2": "My child needs help with…"
+    },
+    "onset": {
+      "0": "It started this morning.",
+      "1": "It started about two days ago.",
+      "2": "I am not sure when it started."
+    },
+    "location": {
+      "0": "The discomfort is in my…",
+      "1": "It is on the left / right side of my…"
+    },
+    "general": {
+      "0": "It feels like…",
+      "1": "It happens when…",
+      "2": "I am not sure."
+    },
+    "processing": "Understanding your answer… {seconds}s",
+    "processingHint": "Your answer is saved only when the next question appears. Please keep this page open.",
+    "back": "Back",
+    "placeholder": "Type your answer…",
+    "examplesLabel": "Example answer: {example}",
+    "exampleBadge": "Example"
+  },
+  "patientReceipt": {
+    "title": "Your visit, ready for the care team",
+    "reference": "Visit reference",
+    "referenceHint": "Keep this reference. Your queue token appears after the nurse reviews your visit.",
+    "alertTitle": "Priority alert recorded for the nurse",
+    "alertHint": "Please alert a nearby member of staff now. You may continue adding information if you can; do not wait for measurements to seek help.",
+    "ruleCode": "Safety rule code",
+    "suggestion": "Suggested urgency",
+    "confirmed": "Nurse-confirmed urgency",
+    "pending": "Awaiting nurse review",
+    "model": "Model",
+    "confidence": "Model confidence",
+    "notDiagnosis": "This prototype suggestion is not a diagnosis or a decision to wait. A nurse confirms your priority.",
+    "noSuggestion": "A nurse will review your answers. No model suggestion is available yet.",
+    "facts": "Information collected",
+    "missing": "Not recorded",
+    "history": "Hospital record",
+    "symptoms": "Your description",
+    "vitals": "Vital signs",
+    "simulated": "Simulated",
+    "camera": "Camera",
+    "cameraStatus": "Local preview only; no clinical assessment recorded",
+    "source": {
+      "PATIENT_STATED": "You told us",
+      "EHR": "Hospital record",
+      "DEVICE_MEASURED": "Device",
+      "NURSE_CONFIRMED": "Nurse confirmed",
+      "MODEL_INFERRED": "AI extracted"
+    },
+    "keys": {
+      "chief_complaint": "Reason for visit",
+      "symptom_onset_at": "Started",
+      "pain_score": "Discomfort · 0–10",
+      "pain_location": "Location",
+      "heart_rate": "Pulse",
+      "spo2": "Oxygen · SpO₂",
+      "temperature_c": "Temperature",
+      "temperature": "Temperature",
+      "blood_pressure_systolic": "Systolic pressure",
+      "systolic_bp": "Systolic pressure",
+      "diastolic_bp": "Diastolic pressure",
+      "allergies": "Allergies",
+      "conditions": "Conditions",
+      "medications": "Medicines"
+    },
+    "unavailable": "Your receipt could not refresh. Your saved visit is unchanged.",
+    "warnings": "Some information needs the nurse’s review.",
+    "assistanceTitle": "Urgent help request recorded for the nurse"
   }
 }

@@ -2,10 +2,13 @@
 
 import type { Schema } from "@careflow/contracts";
 import { useTranslations } from "next-intl";
+
 import { useState } from "react";
 
 import { api } from "@/lib/api";
 import type { WorklistItem } from "@/lib/sortWorklist";
+
+import { ReceptionPreference } from "../ReceptionSummary";
 
 type QueueToken = Schema<"QueueToken">;
 type Action = "arrived" | "no-show" | "close";
@@ -21,10 +24,12 @@ const PRIMARY = "min-h-touch rounded-control bg-primary px-4 font-semibold text-
  */
 export function QueueControls({ rows, onChanged }: { rows: WorklistItem[]; onChanged: () => void }) {
   const t = useTranslations("nurse.queue");
+  const reception = useTranslations("reception");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null);
   const tokens = rows.map((row) => row.queue_token).filter((token): token is QueueToken => token !== undefined);
   const waiting = [...new Set(tokens.filter((token) => token.status === "waiting").map((token) => token.department))].sort();
+  const contextByToken = new Map(rows.filter((row) => row.queue_token && row.reception_context).map((row) => [row.queue_token!.token_id, row.reception_context!]));
   const called = tokens.filter((token) => token.status === "called" || token.status === "arrived");
   if (!waiting.length && !called.length) return null;
 
@@ -62,8 +67,9 @@ export function QueueControls({ rows, onChanged }: { rows: WorklistItem[]; onCha
     });
 
   return (
-    <section aria-label={t("title")} className="flex flex-col gap-3 rounded-card border-2 border-border bg-surface p-4" data-testid="queue-controls">
+    <section aria-label={t("title")} className="staff-queue-controls flex flex-col gap-3 rounded-card border border-border bg-surface p-4" data-testid="queue-controls">
       <h2 className="text-title font-semibold">{t("title")}</h2>
+      <p className="staff-reception-notice">{reception("queueNotice")}</p>
       {waiting.length ? (
         <div className="flex flex-wrap gap-2">
           {waiting.map((department) => (
@@ -80,7 +86,9 @@ export function QueueControls({ rows, onChanged }: { rows: WorklistItem[]; onCha
               <span className="font-bold" dir="ltr">
                 {token.token_code}
               </span>
+              <span>{reception("assignedQueue")}: <strong>{token.department}</strong></span>
               <span>{token.room ? t("inRoom", { room: token.room }) : null}</span>
+              {contextByToken.has(token.token_id) ? <ReceptionPreference context={contextByToken.get(token.token_id)!} /> : null}
               <span className="text-label text-ink-muted">{t(token.status === "called" ? "status.called" : "status.arrived")}</span>
               {token.status === "called" ? (
                 <>

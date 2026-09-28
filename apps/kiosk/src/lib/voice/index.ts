@@ -13,6 +13,7 @@ export interface VoiceSession {
   /** The patient_session token, sent in the first message (never in a URL). */
   token: string;
   language: "en" | "ar";
+  inputMode?: "continuous" | "push_to_talk";
 }
 
 export interface VoiceEvents {
@@ -29,6 +30,8 @@ export interface VoiceClient {
   readonly available: boolean;
   /** Open the microphone and the voice service; resolves once audio is flowing. */
   start(session: VoiceSession, events: VoiceEvents): Promise<void>;
+  /** End a held answer, stop microphone tracks, and keep the response socket open. */
+  finishUtterance(): boolean;
   /** Stop listening and speaking (the patient taps the mic again or leaves the screen). */
   stop(): void;
   /** Drop everything now (idle wipe): no further events, no queued audio, tracks stopped. */
@@ -38,6 +41,7 @@ export interface VoiceClient {
 export class NoopVoiceClient implements VoiceClient {
   readonly available = false;
   async start(): Promise<void> {}
+  finishUtterance(): boolean { return false; }
   stop(): void {}
   abort(): void {}
 }

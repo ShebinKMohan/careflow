@@ -11,7 +11,9 @@
 
 from __future__ import annotations
 
+import json
 import logging
+import math
 import time
 import uuid
 from collections.abc import Callable
@@ -78,6 +80,9 @@ class NoTriageModel:
 
     model_version = "none"
 
+    def __init__(self, reason: str = "no triage model is installed") -> None:
+        self.reason = reason
+
     def predict(
         self,
         facts: StructuredFacts,
@@ -85,7 +90,7 @@ class NoTriageModel:
         scale: TriageScale = TriageScale.KTAS,
         now: datetime | None = None,
     ) -> UrgencySuggestion:
-        raise NoSuggestion("no triage model is installed")
+        raise NoSuggestion(self.reason)
 
 
 class TriageUrgency:
@@ -98,16 +103,50 @@ class TriageUrgency:
     def model_version(self) -> str:
         return str(self.model.model_version)
 
-    @classmethod
-    def load(cls, path: Path) -> TriageUrgency | NoTriageModel:
-        if not (path / "model.joblib").exists():
-            logger.warning(
-                "intake.port", extra={"port": "urgency", "impl": "none", "path": str(path)}
-            )
-            return NoTriageModel()
-        from careflow_triage.inference import UrgencyModel
+    @property
+    def model_id(self) -> str:
+        return str(getattr(self.model, "model_id", None) or self.model.meta["model_id"])
 
-        return cls(UrgencyModel.load(path))
+    @classmethod
+    def load(
+        cls, path: Path, *, kind: str = "auto", device: str = "cpu", threads: int = 2
+    ) -> TriageUrgency | NoTriageModel:
+        """Load the selected artifact; an error never silently substitutes another model."""
+        selected = kind
+        if selected == "auto":
+            selected = "laya" if (path / "model.safetensors").is_file() else "hgb"
+        try:
+            if selected == "laya":
+                if device not in {"cpu", "mps"} or not 1 <= threads <= 8:
+                    raise ValueError("Laya device must be cpu/mps and thread count 1-8")
+                config = json.loads((path / "rl_agent_config.json").read_text(encoding="utf-8"))
+                temperature = float(config["temperature"][0])
+                if (
+                    config.get("fine_tuned") is not True
+                    or config.get("model_name") != "laya-ktas"
+                    or not config.get("calibration")
+                    or not math.isfinite(temperature)
+                    or temperature <= 0
+                ):
+                    raise ValueError("Laya requires the fine-tuned, calibrated KTAS artifact")
+                import torch
+
+                from careflow_triage.laya_ktas.model import LayaUrgencyModel
+
+                torch.set_num_threads(threads)
+                return cls(LayaUrgencyModel.load(path, device=device))
+            if selected != "hgb":
+                raise ValueError("TRIAGE_MODEL_KIND must be hgb or laya")
+            from careflow_triage.inference import UrgencyModel
+
+            return cls(UrgencyModel.load(path))
+        except Exception as exc:  # keep nurse review available when an optional model fails
+            reason = f"Selected {selected} triage model could not load ({type(exc).__name__})."
+            logger.warning(
+                "intake.port",
+                extra={"port": "urgency", "impl": "none", "path": str(path), "reason": reason},
+            )
+            return NoTriageModel(reason)
 
     def predict(
         self,

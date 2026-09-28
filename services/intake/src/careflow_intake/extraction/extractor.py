@@ -1,6 +1,6 @@
 """`LlmExtractor`: the M1-05 `Extractor` port over the provider layer's `extraction` task.
 
-One call per patient answer over the whole transcript: the provider layer validates the reply
+One call per patient answer over conversational text: the provider layer validates the reply
 against `ExtractionOutput` and retries once with the errors; code then verifies every quote and
 number. A second invalid reply, a timeout or a provider error returns the facts already known with
 `extraction_incomplete`, so the rules still run and the nurse sees it.
@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any, Final, Literal
@@ -27,7 +28,13 @@ from careflow_contracts.generated.fact_schema import (
 )
 from careflow_contracts.generated.structured_facts_schema import FactKey, Language, Symptom, Turn
 from careflow_intake import arabic
-from careflow_intake.extraction.prompt import build_messages, extractable_keys, prompt_version
+from careflow_intake.extraction.compact import OUTPUT_RULE, VERSION_SUFFIX, presentation_schema
+from careflow_intake.extraction.prompt import (
+    build_messages,
+    extractable_keys,
+    prompt_version,
+    registration_spans,
+)
 from careflow_intake.extraction.verify import VerifiedFact, numeric_value, verify_facts
 from careflow_intake.facts import LIST_KEYS, FactEntry, fact_class, stable_fact_id
 from careflow_intake.ports import ExtractionResult
@@ -118,11 +125,19 @@ class LlmExtractor:
         *,
         timeout_seconds: float = DEFAULT_TIMEOUT_SECONDS,
         provider_kind: str | None = None,
+        experimental_compact: bool = False,
     ) -> None:
         self.provider = provider
         self.timeout_seconds = timeout_seconds
         self.provider_kind = (
             provider_kind or type(provider).__name__.removesuffix("Provider").lower()
+        )
+        # Experimental only: live voice testing found a canonical-validation retry regression.
+        # Recording/add/replay all retain their prior exact request hashes and cassettes.
+        self.compact_local = (
+            experimental_compact
+            and self.provider_kind == "local"
+            and not isinstance(provider, ReplayProvider)
         )
 
     @classmethod
@@ -140,11 +155,17 @@ class LlmExtractor:
         # A replayed provider says so: its facts come from a recording, not from the model.
         replaying = isinstance(provider, ReplayProvider) and provider.mode == "replay"
         kind = "replay" if replaying else providers.tasks[TASK].provider
-        return cls(provider, timeout_seconds=timeout_seconds, provider_kind=kind)
+        return cls(
+            provider,
+            timeout_seconds=timeout_seconds,
+            provider_kind=kind,
+            experimental_compact=os.environ.get("CAREFLOW_EXPERIMENTAL_COMPACT_EXTRACTION") == "1",
+        )
 
     def _result(self, language: Language, **fields: Any) -> ExtractionResult:
         return ExtractionResult(
-            prompt_version=prompt_version(language),
+            prompt_version=prompt_version(language)
+            + (VERSION_SUFFIX if self.compact_local else ""),
             model_id=self.provider.model_name,
             provider=self.provider_kind,
             **fields,
@@ -167,10 +188,24 @@ class LlmExtractor:
         """PATIENT_STATED facts from the transcript, with the session language's prompt."""
         language = Language(language)
         transcript = list(turns)
-        messages = build_messages(transcript, question_keys, language)
+        messages = build_messages(
+            transcript, question_keys, language, existing_facts=existing_facts
+        )
+        shown_schema = None
+        if self.compact_local:
+            # Only presentation changes: retain semantic rules, examples and original labels.
+            system = messages[0]["content"].replace(', "negated": false', "")
+            messages[0] = {"role": "system", "content": f"{system}\n\n{OUTPUT_RULE}"}
+            shown_schema = presentation_schema()
         try:
             outcome = await asyncio.wait_for(
-                structured(self.provider, messages, ExtractionOutput, temperature=0.0),
+                structured(
+                    self.provider,
+                    messages,
+                    ExtractionOutput,
+                    temperature=0.0,
+                    presentation_schema=shown_schema,
+                ),
                 timeout=self.timeout_seconds,
             )
         except TimeoutError:
@@ -192,10 +227,25 @@ class LlmExtractor:
                     extra={"key": fact.key.value, "reason": "key_not_extractable"},
                 )
         verified, dropped = verify_facts(usable, transcript)
+        registered = registration_spans(transcript, existing_facts)
+        visible: list[VerifiedFact] = []
+        hidden = 0
+        for item in verified:
+            if item.turn.turn_id in registered:
+                span = registered[item.turn.turn_id]
+                if span is None or item.start < span[0] or item.end > span[1]:
+                    hidden += 1
+                    logger.info(
+                        "extraction.fact_dropped",
+                        extra={"key": item.fact.key.value, "reason": "registration_metadata"},
+                    )
+                    continue
+            visible.append(item)
+        verified = visible
         position = {turn.turn_id: index for index, turn in enumerate(transcript)}
         latest: dict[FactKey, FactEntry] = {}
         listed: list[FactEntry] = []
-        unusable = len(outcome.value.facts) - len(usable) + len(dropped)
+        unusable = len(outcome.value.facts) - len(usable) + len(dropped) + hidden
         # Transcript order, so for the same key the latest patient statement wins.
         for item in sorted(verified, key=lambda v: position[v.turn.turn_id]):
             entry = _entry(item)

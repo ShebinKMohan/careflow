@@ -351,8 +351,12 @@ def create_app(
             checks["luxtts_sidecar"] = "ok" if luxtts_sidecar_is_healthy else "unhealthy"
         if missing_local_speech_models is not None:
             checks["local_speech_models"] = "ok" if local_speech_is_healthy else "unhealthy"
-            if missing_local_speech_models:
-                provider_details["local_speech_models"] = {"missing": missing_local_speech_models}
+            provider_details["local_speech_models"] = {
+                "verification": "file_presence",
+                "scope": "configured_default_providers",
+                "engine_loadability": "not_checked",
+                "missing": missing_local_speech_models,
+            }
         response_body: dict[str, object] = {
             "status": "ready" if is_ready else "not_ready",
             "providers": _provider_status(resolved_settings),

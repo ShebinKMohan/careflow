@@ -13,7 +13,7 @@ export function ApiStatus<T>({ state, children }: { state: ApiState<T>; children
   const t = useTranslations("common");
   const pathname = usePathname();
   if (state.status === "ready") return <>{children(state.data)}</>;
-  if (state.status === "loading") return <p aria-busy="true">{t("loading")}</p>;
+  if (state.status === "loading") return <div className="staff-loading" role="status" aria-busy="true"><span className="staff-loading-dot" aria-hidden="true" /><p>{t("loading")}</p></div>;
   if (state.status === "unauthorized") {
     return (
       <Card>
@@ -28,7 +28,7 @@ export function ApiStatus<T>({ state, children }: { state: ApiState<T>; children
     );
   }
   return (
-    <p role="alert" className="font-semibold text-danger">
+    <p role="alert" className="staff-error font-semibold text-danger">
       {t("failed")}
     </p>
   );

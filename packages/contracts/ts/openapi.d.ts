@@ -92,6 +92,186 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/identity/lookup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Find a masked synthetic hospital record
+         * @description Requires a kiosk bearer or a valid entry QR in the body. Demo identity verification is not production identity assurance. Patient and caregiver records remain separate.
+         */
+        post: operations["lookupIdentity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/identity/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify the demo birth year before showing patient history
+         * @description Requires a kiosk bearer or a valid entry QR in the body. Demo identity verification is not production identity assurance. Patient and caregiver records remain separate.
+         */
+        post: operations["verifyIdentity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkin/adaptive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start the adaptive clinical intake for the actual patient
+         * @description Requires a kiosk bearer or a valid entry QR in the body. Demo identity verification is not production identity assurance. Patient and caregiver records remain separate.
+         */
+        post: operations["adaptiveCheckin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkin/urgent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request urgent nurse assistance before patient registration
+         * @description Requires an authorized kiosk or entry QR and explicit data-use consent. Creates an unidentified visit without a fabricated name, age or hospital identity. No model or FHIR lookup is called. The nurse determines urgency and queue assignment.
+         */
+        post: operations["urgentCheckin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reception/directory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Example hospital departments and demo doctor rota */
+        get: operations["receptionDirectory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reception/checkin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register a visit and send structured answers to nurse review
+         * @description Requires either a kiosk bearer credential or a valid welcome QR token in the body. Records registration and consent without an LLM call. Department and doctor choices are preferences; nurse assessment determines routing.
+         */
+        post: operations["receptionCheckin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/sessions/{session_id}/reception": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        /** Registration details and patient preferences for an authorized care team or patient */
+        get: operations["receptionContext"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkin/start/qr": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start phone check-in from the welcome screen
+         * @description An authenticated kiosk issues a ten-minute entry code carrying only clinic, device and language. Display it in the companion URL fragment at /start#t=TOKEN. No patient session or identity is created yet.
+         */
+        post: operations["issueStartQr"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/checkin/start/claim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check in directly on the phone
+         * @description An entry code, six-digit patient code, explicit consent and patient details create one phone session. No staff or device login is needed. The same request and claim key recover a lost response. Independent phones may use the welcome code, each creating their own identified visit. Five failed patient-code attempts per kiosk in five minutes and ten requests per IP per minute are enforced.
+         */
+        post: operations["claimStartQr"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/checkin/keypad": {
         parameters: {
             query?: never;
@@ -251,6 +431,26 @@ export interface paths {
          * @description When expected_intake_revision is supplied, it must match the current server revision or the answer is rejected with 409 without advancing the intake. Recover the current question and revision from session status before retrying an uncertain request.
          */
         post: operations["postTurn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/sessions/{session_id}/intake-summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Current patient's sourced intake receipt and provisional team review
+         * @description Own-session-only receipt. Codes identify deterministic safety rules, not hospital emergency announcements. Model suggestions remain provisional until a nurse confirms; this is not a diagnosis or permission to wait. No caregiver record or raw transcript is returned.
+         */
+        get: operations["getPatientIntakeSummary"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1201,6 +1401,163 @@ export interface components {
             /** @description The handbook sections a `clinic_answer` notice cites (M2-10); null otherwise. */
             citations?: components["schemas"]["Citation"][] | null;
         };
+        IdentityLookupRequest: {
+            claim_key: string;
+            qr_token?: string;
+            /** @enum {string} */
+            kind: "mobile" | "patient_id";
+            value: string;
+            consent: components["schemas"]["ConsentRequest"];
+        };
+        IdentityLookupResult: {
+            /** @enum {string} */
+            status: "match" | "no_match" | "unavailable";
+            challenge_token?: string;
+            masked_name?: string;
+            message: string;
+            /** @constant */
+            demo: true;
+        };
+        IdentityVerifyRequest: {
+            claim_key: string;
+            qr_token?: string;
+            challenge_token: string;
+            birth_year: number;
+        };
+        IdentityHistory: {
+            /** @enum {string} */
+            status: "ok" | "partial" | "unavailable";
+            allergies: string[];
+            conditions: string[];
+            medications: string[];
+        };
+        IdentityVerifyResult: {
+            verification_token: string;
+            patient: components["schemas"]["ReceptionPatient"];
+            history: components["schemas"]["IdentityHistory"];
+            /** @constant */
+            demo: true;
+        };
+        CaregiverDetails: {
+            name: string;
+            phone?: string;
+            /** @enum {string} */
+            relationship: "parent" | "carer" | "family" | "other";
+        };
+        CaregiverRequest: {
+            name: string;
+            phone?: string;
+            /** @enum {string} */
+            relationship: "parent" | "carer" | "family" | "other";
+            identity_token?: string;
+        };
+        AdaptiveCheckinRequest: {
+            claim_key: string;
+            qr_token?: string;
+            language?: components["schemas"]["Language"];
+            patient: components["schemas"]["ReceptionPatient"];
+            patient_identity_token?: string;
+            /** @enum {string} */
+            visit_for: "self" | "child" | "elder" | "dependent";
+            caregiver?: components["schemas"]["CaregiverRequest"];
+            consent: components["schemas"]["ConsentRequest"];
+            reason?: string;
+            /** @default unsure */
+            department_id: string;
+            doctor_id?: string;
+            /** @default [] */
+            emergency_symptoms: components["schemas"]["ReceptionSymptom"][];
+        };
+        UrgentCheckinRequest: {
+            claim_key: string;
+            qr_token?: string;
+            language?: components["schemas"]["Language"];
+            /** @enum {string} */
+            patient_type: "adult" | "child";
+            consent: components["schemas"]["ConsentRequest"];
+            emergency_symptoms: components["schemas"]["ReceptionSymptom"][];
+        };
+        UrgentHelpRequest: {
+            /** Format: date-time */
+            requested_at: string;
+            /** @enum {string} */
+            patient_type: "adult" | "child";
+            emergency_symptoms: components["schemas"]["ReceptionSymptom"][];
+        };
+        ReceptionPatient: {
+            name: string;
+            age_years: number;
+            /** @enum {string} */
+            sex: "male" | "female" | "other" | "unknown";
+            phone?: string;
+        };
+        ReceptionDoctor: {
+            id: string;
+            name: string;
+            /** @enum {string} */
+            availability: "demo_available";
+        };
+        ReceptionDepartment: {
+            id: string;
+            name: string;
+            description: string;
+            doctors: components["schemas"]["ReceptionDoctor"][];
+        };
+        ReceptionDirectory: {
+            hospital_name: string;
+            /** @constant */
+            demo: true;
+            notice: string;
+            departments: components["schemas"]["ReceptionDepartment"][];
+        };
+        /** @enum {string} */
+        VisitPurpose: "consultation" | "follow_up" | "test_results" | "other";
+        /** @enum {string} */
+        ReceptionSymptom: "chest_pain" | "short_of_breath" | "face_droop" | "arm_weakness" | "speech_difficulty" | "drowsy_or_confused";
+        ReceptionCheckinRequest: {
+            claim_key: string;
+            qr_token?: string;
+            language?: components["schemas"]["Language"];
+            patient: components["schemas"]["ReceptionPatient"];
+            department_id: string;
+            doctor_id?: string;
+            visit_purpose: components["schemas"]["VisitPurpose"];
+            reason: string;
+            emergency_symptoms: components["schemas"]["ReceptionSymptom"][];
+            consent: components["schemas"]["ConsentRequest"];
+        };
+        ReceptionContext: {
+            /** @enum {string} */
+            visit_for?: "self" | "child" | "elder" | "dependent";
+            caregiver?: components["schemas"]["CaregiverDetails"];
+            /** @enum {string} */
+            identity_status?: "verified_demo" | "new_patient";
+            /** @enum {string} */
+            intake_mode?: "adaptive" | "reception";
+            patient: components["schemas"]["ReceptionPatient"];
+            department_id: string;
+            department_name: string;
+            doctor_id?: string;
+            doctor_name?: string;
+            visit_purpose: components["schemas"]["VisitPurpose"];
+            reason: string;
+            emergency_symptoms: components["schemas"]["ReceptionSymptom"][];
+            /** Format: date-time */
+            registered_at: string;
+            availability_notice: string;
+        };
+        StartQrRequest: {
+            language?: components["schemas"]["Language"];
+        };
+        StartClaimRequest: {
+            qr_token: string;
+            /** @description Random secret generated once by this phone, kept in memory and reused only for retries. */
+            claim_key: string;
+            digits: string;
+            language?: components["schemas"]["Language"];
+            consent: components["schemas"]["ConsentRequest"];
+            patient: components["schemas"]["PatientDetailsRequest"];
+        };
         /** @description One-time token shown as a QR code on the kiosk. */
         QrToken: {
             qr_token: string;
@@ -1269,6 +1626,34 @@ export interface components {
         };
         /** @enum {string} */
         SessionState: "intake" | "awaiting_nurse" | "queued" | "called" | "arrived" | "no_show" | "closed";
+        PatientSummaryFact: {
+            key: string;
+            fact_id: string;
+            value: string;
+            provenance: string;
+            simulated: boolean;
+        };
+        PatientSummaryAlert: {
+            code: components["schemas"]["RuleId"];
+            severity: components["schemas"]["AlertSeverity"];
+        };
+        PatientIntakeSummary: {
+            session_id: string;
+            /** @description Reference to this visit; not a queue token or position. */
+            visit_reference: string;
+            nurse_confirmed: boolean;
+            /**
+             * @description An urgent help request has been durably saved for the nurse.
+             * @default false
+             */
+            assistance_requested: boolean;
+            confirmed_level?: number;
+            confirmed_scale?: components["schemas"]["TriageScale"];
+            facts: components["schemas"]["PatientSummaryFact"][];
+            alerts: components["schemas"]["PatientSummaryAlert"][];
+            suggestion: components["schemas"]["UrgencySuggestion"] | null;
+            warnings: string[];
+        };
         /** @description What the patient may see. Never a level or an alert. */
         SessionStatus: {
             state: components["schemas"]["SessionState"];
@@ -1428,6 +1813,8 @@ export interface components {
             note?: string;
         };
         WorklistItem: {
+            urgent_help?: components["schemas"]["UrgentHelpRequest"];
+            reception_context?: components["schemas"]["ReceptionContext"];
             session_id: components["schemas"]["Identifier"];
             patient_display: string;
             /** Format: date-time */
@@ -1977,6 +2364,11 @@ export interface components {
         Identifier: string;
         /** @description Fact id: 'f_' followed by a ULID (Crockford base32, upper case). */
         FactId: string;
+        /** @description One of the top reasons for the suggestion, citing the facts it rests on. */
+        SuggestionReason: {
+            text: string;
+            fact_ids: components["schemas"]["FactId"][];
+        };
         /** @description The patient's own words: character offsets [start, end) into one conversation turn, with end greater than start. */
         TranscriptSpanSource: {
             /**
@@ -2285,11 +2677,6 @@ export interface components {
          * @enum {string}
          */
         ExtractionStatus: "complete" | "incomplete";
-        /** @description One of the top reasons for the suggestion, citing the facts it rests on. */
-        SuggestionReason: {
-            text: string;
-            fact_ids: components["schemas"]["FactId"][];
-        };
         /**
          * @description Who should provide the fact.
          * @enum {string}
@@ -2641,6 +3028,354 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             422: components["responses"]["Unprocessablecontent"];
+        };
+    };
+    lookupIdentity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IdentityLookupRequest"];
+            };
+        };
+        responses: {
+            /** @description Find a masked synthetic hospital record */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "status": "no_match",
+                     *       "message": "No unique matching demo record. You can register as a new patient.",
+                     *       "demo": true
+                     *     }
+                     */
+                    "application/json": components["schemas"]["IdentityLookupResult"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    verifyIdentity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IdentityVerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description Verify the demo birth year before showing patient history */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "verification_token": "example-opaque-verified-identity-token",
+                     *       "patient": {
+                     *         "name": "Alex Reed",
+                     *         "age_years": 35,
+                     *         "sex": "male"
+                     *       },
+                     *       "history": {
+                     *         "status": "partial",
+                     *         "allergies": [],
+                     *         "conditions": [],
+                     *         "medications": []
+                     *       },
+                     *       "demo": true
+                     *     }
+                     */
+                    "application/json": components["schemas"]["IdentityVerifyResult"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    adaptiveCheckin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdaptiveCheckinRequest"];
+            };
+        };
+        responses: {
+            /** @description Start the adaptive clinical intake for the actual patient */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_adaptive",
+                     *       "session_token": "example-adaptive-patient-token",
+                     *       "patient_display": "A. R.",
+                     *       "language": "en",
+                     *       "first_question": {
+                     *         "question_id": "q_chief_1",
+                     *         "text": "What brings you in today?",
+                     *         "key": "chief_complaint",
+                     *         "notice": null
+                     *       }
+                     *     }
+                     */
+                    "application/json": components["schemas"]["CheckinResult"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    urgentCheckin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UrgentCheckinRequest"];
+            };
+        };
+        responses: {
+            /** @description Assistance request saved to the nurse worklist */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_urgent",
+                     *       "session_token": "example-urgent-patient-token",
+                     *       "patient_display": "Unknown",
+                     *       "language": "en"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["CheckinResult"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    receptionDirectory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Synthetic directory, never a live availability or appointment promise */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "hospital_name": "Northstar General Hospital",
+                     *       "demo": true,
+                     *       "notice": "Example hospital and synthetic doctor rota. No appointment is reserved.",
+                     *       "departments": []
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ReceptionDirectory"];
+                };
+            };
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    receptionCheckin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceptionCheckinRequest"];
+            };
+        };
+        responses: {
+            /** @description Session registered and waiting for the care team */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_reception",
+                     *       "session_token": "example-reception-session-token",
+                     *       "patient_display": "A. R.",
+                     *       "language": "en"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["CheckinResult"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    receptionContext: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Opaque session id (never patient identity).
+                 * @example ses_chest_pain
+                 */
+                session_id: components["parameters"]["SessionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Saved visit context */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "patient": {
+                     *         "name": "Alex Reed",
+                     *         "age_years": 35,
+                     *         "sex": "unknown"
+                     *       },
+                     *       "department_id": "general_medicine",
+                     *       "department_name": "General medicine",
+                     *       "visit_purpose": "consultation",
+                     *       "reason": "Routine consultation",
+                     *       "emergency_symptoms": [],
+                     *       "registered_at": "2026-09-28T12:00:00Z",
+                     *       "availability_notice": "Synthetic demo rota; no appointment reserved."
+                     *     }
+                     */
+                    "application/json": components["schemas"]["ReceptionContext"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["Notfound"];
+        };
+    };
+    issueStartQr: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartQrRequest"];
+            };
+        };
+        responses: {
+            /** @description Entry QR token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "qr_token": "example-phone-entry-token",
+                     *       "expires_at": "2026-09-28T12:10:00Z"
+                     *     }
+                     */
+                    "application/json": components["schemas"]["QrToken"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["Unprocessablecontent"];
+        };
+    };
+    claimStartQr: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartClaimRequest"];
+            };
+        };
+        responses: {
+            /** @description Patient session with consent and patient details recorded */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "session_id": "ses_phone_start",
+                     *       "session_token": "example-phone-session-token",
+                     *       "patient_display": "M. S.",
+                     *       "language": "en",
+                     *       "first_question": {
+                     *         "question_id": "q_chief_complaint_1",
+                     *         "text": "What is the main reason for your visit today?",
+                     *         "key": "chief_complaint",
+                     *         "notice": null
+                     *       }
+                     *     }
+                     */
+                    "application/json": components["schemas"]["CheckinResult"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["Notfound"];
+            409: components["responses"]["Conflict"];
+            422: components["responses"]["Unprocessablecontent"];
+            429: components["responses"]["TooManyRequests"];
         };
     };
     checkinKeypad: {
@@ -3021,6 +3756,49 @@ export interface operations {
             404: components["responses"]["Notfound"];
             409: components["responses"]["Conflict"];
             422: components["responses"]["Unprocessablecontent"];
+        };
+    };
+    getPatientIntakeSummary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sourced patient receipt */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientIntakeSummary"];
+                };
+            };
+            /** @description Invalid patient session */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description A different patient or role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Session not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     getFacts: {

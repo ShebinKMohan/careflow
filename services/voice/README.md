@@ -38,6 +38,17 @@ make voice                                   # http://127.0.0.1:8090 (/healthz, 
 
 The kiosk turns voice on at build time with `NEXT_PUBLIC_VOICE_ENABLED=true` and `NEXT_PUBLIC_VOICE_WS_URL=ws://127.0.0.1:8090/kiosk/audio`.
 
+Startup warms English STT and TTS. Arabic MMS TTS loads on the first Arabic voice session,
+so that session can take longer to start; its language routing remains available.
+Whisper releases its GPU weights and cache after warm-up and each transcription, before
+the transcript reaches the API's Qwen extraction. The next spoken turn reloads the same
+local model files. A process-wide lock protects Whisper's shared model holder while decoding
+and releasing memory; it does not coordinate simultaneous Qwen work across patient sessions.
+`/readyz` checks storage health and the presence of the configured default providers' local
+model files. Its `local_speech_models` details explicitly report `file_presence` and
+`engine_loadability: not_checked`; a 200 response does not prove inference or check Arabic
+MMS files. Verify actual speech with the live voice tests below.
+
 ## Tests
 
 ```bash

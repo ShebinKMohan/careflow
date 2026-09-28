@@ -1,0 +1,92 @@
+{
+  "startedAt": "2026-09-28T19:33:57.124Z",
+  "sessionId": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+  "priorEvidence": "compact-run/new-adult.json",
+  "fhirPatientId": "198620",
+  "triage": {
+    "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+    "status": "awaiting_nurse",
+    "alerts": [],
+    "suggestion": {
+      "suggestion_id": "sug_7c951330746ccb236a1b5c45",
+      "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+      "level": 4,
+      "scale": "KTAS",
+      "display_label": "KTAS 4",
+      "confidence": 0.6913,
+      "reasons": [
+        {
+          "text": "Pain score 4/10 made KTAS 4 more likely",
+          "fact_ids": [
+            "f_8E4C6WXQY45D9TWNW1ZW8K4GHF"
+          ]
+        },
+        {
+          "text": "Complaint: I twisted my left ankle playing football yesterday afternoon made KTAS 4 more likely",
+          "fact_ids": [
+            "f_DJMCPHN80N3Q5NMCTMS86VH05B"
+          ]
+        },
+        {
+          "text": "Sex male made KTAS 4 more likely",
+          "fact_ids": [
+            "f_ZYFFN0PRY5NW2C9XX95Y3T8283"
+          ]
+        }
+      ],
+      "model_id": "laya-ktas",
+      "model_version": "laya-ktas-ebf31b5e-s42",
+      "created_at": "2026-09-28T19:27:20.238005Z"
+    },
+    "needed_facts": [],
+    "news2": {
+      "total": 0,
+      "subscores": {
+        "spo2": 0,
+        "systolic_bp": 0,
+        "heart_rate": 0,
+        "temperature_c": 0
+      },
+      "missing": [
+        "vitals.respiratory_rate",
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2"
+      ],
+      "partial": true,
+      "any_single_3": false,
+      "risk_band": "low"
+    },
+    "open_tasks": [],
+    "tasks": [],
+    "warnings": []
+  },
+  "decisionMs": 1812,
+  "decision": {
+    "decision": {
+      "decision_id": "dec_1685e2bb6dd249caaec217270c6a7f3c",
+      "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+      "suggestion_id": "sug_7c951330746ccb236a1b5c45",
+      "action": "CONFIRM",
+      "final_level": 4,
+      "scale": "KTAS",
+      "nurse_user_id": "ec142200-866a-5582-809d-0a842e3325cb",
+      "acknowledged_alert_ids": [],
+      "decided_at": "2026-09-28T19:33:59.383000Z"
+    },
+    "token": {
+      "token_id": "3f991c54-809b-4e63-831e-c56571a005bb",
+      "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+      "token_code": "G-015",
+      "department": "general",
+      "status": "waiting",
+      "issued_at": "2026-09-28T19:33:59.445842Z"
+    }
+  },
+  "fhirEncounter": {
+    "count": 1,
+    "id": "198621",
+    "patientReference": "Patient/198620"
+  },
+  "completedAt": "2026-09-28T19:34:01.342Z",
+  "boundary": "Resumed the same session at the staff UI. The original patient browser context had closed; no post-confirmation patient receipt screenshot is claimed."
+}

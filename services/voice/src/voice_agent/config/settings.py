@@ -57,7 +57,9 @@ DEFAULT_MLX_WHISPER_LANGUAGE = "en"
 DEFAULT_MMS_TTS_MODEL_PATH = "models/mms-tts-ara"
 DEFAULT_CAREFLOW_API_BASE_URL = "http://127.0.0.1:8000"
 DEFAULT_KIOSK_START_TIMEOUT_SECONDS = 5.0
-DEFAULT_KIOSK_API_TIMEOUT_SECONDS = 10.0
+# The API may spend 20 seconds extracting facts before its safe fallback; allow that bounded
+# work and question/transport overhead to finish instead of losing an accepted voice turn.
+DEFAULT_KIOSK_API_TIMEOUT_SECONDS = 30.0
 DEFAULT_DEEPGRAM_ENDPOINTING_MS = 150
 DEFAULT_DEEPGRAM_UTTERANCE_END_MS = 1000
 DEFAULT_DEEPGRAM_TRANSCRIPT_QUEUE_MAX_SIZE = 100

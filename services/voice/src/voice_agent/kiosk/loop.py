@@ -43,6 +43,7 @@ from voice_agent.kiosk.turns import TurnError, TurnPoster
 from voice_agent.latency import KIOSK_TURN_LATENCY_EVENT, summarize_kiosk_turn_latency_events
 from voice_agent.providers._silero_vad import VAD_FRAME_SAMPLES
 from voice_agent.providers.base import (
+    PushToTalkSpeechToText,
     SpeechToText,
     StartableProvider,
     TextToSpeech,
@@ -130,6 +131,7 @@ class KioskTurnLoop:
         sender: KioskSender,
         events: CallEventStore | None = None,
         language: str = "en",
+        push_to_talk: bool = False,
         clock: Callable[[], float] = time.monotonic,
     ) -> None:
         self._session = session
@@ -140,6 +142,10 @@ class KioskTurnLoop:
         self._sender = sender
         self._events = events
         self._language = language
+        self._push_to_talk = push_to_talk
+        self._held_audio = bytearray()
+        self._utterance_submitted = False
+        self._hold_overflow = False
         self._clock = clock
         self._pending: asyncio.Queue[TranscriptEvent | None] = asyncio.Queue()
         self._tasks: list[asyncio.Task[None]] = []
@@ -159,6 +165,8 @@ class KioskTurnLoop:
 
     async def start(self) -> None:
         """Load the engines (the STT raises if it cannot), then start listening."""
+        if self._push_to_talk and not isinstance(self._stt, PushToTalkSpeechToText):
+            raise RuntimeError("This speech provider does not support hold-to-talk")
         for provider in (self._stt, self._tts):
             if isinstance(provider, StartableProvider):
                 await provider.start()
@@ -169,6 +177,16 @@ class KioskTurnLoop:
     async def feed(self, frame: bytes) -> None:
         if self._closed or not frame:
             return
+        if self._push_to_talk:
+            if self._utterance_submitted or self._hold_overflow:
+                return
+            if len(self._held_audio) + len(frame) > 30 * 16000 * 2:
+                self._held_audio.clear()
+                self._hold_overflow = True
+                await self._send(error_message("utterance_too_long"))
+                return
+            self._held_audio.extend(frame)
+            return
         self._recent.append(frame)
         if self._speaking():
             if self._barge_in(frame):
@@ -178,10 +196,24 @@ class KioskTurnLoop:
         if event is not None:
             self._pending.put_nowait(event)
 
+    async def end_utterance(self) -> None:
+        """One socket represents one held answer; replayed releases cannot submit twice."""
+        if not self._push_to_talk or self._utterance_submitted or self._closed:
+            return
+        self._utterance_submitted = True
+        audio = bytes(self._held_audio)
+        self._held_audio.clear()
+        if self._hold_overflow or not audio:
+            await self._send(error_message("no_speech"))
+            return
+        if isinstance(self._stt, PushToTalkSpeechToText):
+            await self._stt.transcribe_utterance(audio)
+
     async def stop(self) -> None:
         if self._closed:
             return
         self._closed = True
+        self._held_audio.clear()
         await self._cancel_speech()
         with suppress(Exception):
             await self._stt.close()
@@ -227,6 +259,9 @@ class KioskTurnLoop:
                 continue
             if event.text.strip():
                 self._segments.append(event.text.strip())
+            if self._push_to_talk and event.speech_final and not self._segments:
+                await self._send(error_message("no_speech"))
+                continue
             if not event.speech_final or not self._segments:
                 continue
             text = " ".join(self._segments)

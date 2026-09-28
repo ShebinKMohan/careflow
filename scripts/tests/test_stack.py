@@ -43,6 +43,21 @@ def test_offset_zero_is_the_conventions_ports() -> None:
     }
 
 
+def test_explicit_triage_model_selection_survives_stack_generation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    configured = {**SECRETS, "TRIAGE_MODEL_KIND": "laya", "TRIAGE_MODEL_DEVICE": "cpu"}
+    monkeypatch.delenv("TRIAGE_MODEL_KIND", raising=False)
+    monkeypatch.delenv("TRIAGE_MODEL_DEVICE", raising=False)
+    monkeypatch.setenv("TRIAGE_MODEL_THREADS", "2")
+    env = stack.stack_env("careflow", 0, configured)
+    assert env["TRIAGE_MODEL_KIND"] == "laya"
+    assert env["TRIAGE_MODEL_DEVICE"] == "cpu"
+    assert env["TRIAGE_MODEL_THREADS"] == "2"
+    monkeypatch.setenv("TRIAGE_MODEL_KIND", "hgb")
+    assert stack.stack_env("careflow", 0, configured)["TRIAGE_MODEL_KIND"] == "hgb"
+
+
 def test_every_port_moves_by_the_offset_and_stays_valid() -> None:
     moved = stack.ports(10_000)
     assert all(moved[name] == port + 10_000 for name, port in stack.PORTS.items())
@@ -95,13 +110,29 @@ def test_by_default_the_apps_and_the_api_stay_on_localhost() -> None:
 def test_a_public_host_makes_the_qr_code_and_the_api_reachable_from_a_phone() -> None:
     env = stack.stack_env("careflow", 0, SECRETS, public_host="192.168.1.20")
     assert env["NEXT_PUBLIC_COMPANION_URL"] == "http://192.168.1.20:3002"  # in the QR code
-    assert env["NEXT_PUBLIC_API_BASE_URL"] == "http://192.168.1.20:8000"
+    assert env["NEXT_PUBLIC_API_BASE_URL"] == "http://192.168.1.20:3002"
     assert "http://192.168.1.20:3002" in env["CAREFLOW_CORS_ORIGINS"].split(",")
     assert "http://localhost:3000" in env["CAREFLOW_CORS_ORIGINS"].split(",")
     assert env["CAREFLOW_API_HOST"] == "0.0.0.0"  # noqa: S104 - the opt-in LAN binding
     assert env["CAREFLOW_PUBLIC_HOST"] == "192.168.1.20"
     assert env["CAREFLOW_API_URL"] == "http://localhost:8000"  # local tools stay local
     assert env["NEXT_PUBLIC_VOICE_WS_URL"].startswith("ws://localhost:")  # the kiosk's voice
+
+
+def test_lan_proxy_follows_offset_and_device_setup_can_be_disabled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("CAREFLOW_KIOSK_AUTO_SETUP", raising=False)
+    monkeypatch.delenv("SIM_BP_CUFF", raising=False)
+    env = stack.stack_env("careflow-test", 10_000, SECRETS, public_host="192.168.1.20")
+    assert env["NEXT_PUBLIC_API_BASE_URL"] == "http://192.168.1.20:13002"
+    assert env["CAREFLOW_API_URL"] == "http://localhost:18000"
+    assert env["CAREFLOW_KIOSK_AUTO_SETUP"] == "1"
+    assert env["SIM_BP_CUFF"] == "1"
+    monkeypatch.setenv("CAREFLOW_KIOSK_AUTO_SETUP", "0")
+    assert stack.stack_env("careflow", 0, SECRETS)["CAREFLOW_KIOSK_AUTO_SETUP"] == "0"
+    monkeypatch.setenv("SIM_BP_CUFF", "0")
+    assert stack.stack_env("careflow", 0, SECRETS)["SIM_BP_CUFF"] == "0"
 
 
 @pytest.mark.parametrize("host", ["http://192.168.1.20", "a b", "host:3002", "x/", "", "-a"])

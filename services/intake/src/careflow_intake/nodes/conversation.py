@@ -212,6 +212,7 @@ async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettin
     except Exception as exc:  # fail safe
         logger.warning("extraction failed for %s: %s", state["session_id"], type(exc).__name__)
         kept = [explicit] if explicit is not None else unread_red(state, latest)
+        kept += verbatim_complaint(state, latest, key, kept)
         failed: Update = {"flags": {"extraction_incomplete": True}, "node_trace": ["extract"]}
         return {**failed, "facts": kept} if kept else failed
     facts = list(result.facts)
@@ -235,8 +236,32 @@ async def extract(state: IntakeState, ports: IntakePorts, settings: IntakeSettin
         "node_trace": ["extract"],
     }
     if incomplete:
+        facts += verbatim_complaint(state, latest, key, facts)
         update["flags"] = {"extraction_incomplete": True}
     return update
+
+
+def verbatim_complaint(
+    state: IntakeState, latest: Turn, key: FactKey | None, extracted: list[FactEntry]
+) -> list[FactEntry]:
+    """On extraction failure, retain a normal complaint answer without interpreting it.
+
+    The original turn stays complete. Long answers use an exact excerpt within the source's
+    1000-character quote limit, so the value and cited span remain identical and verifiable.
+    Side questions and any existing or successfully extracted complaint are never replaced.
+    """
+    intent = state.get("turn_intent")
+    if (
+        key is not FactKey.chief_complaint
+        or latest.turn_id in state.get("side_turn_ids", [])
+        or (intent is not None and not intent.intake_answer)
+        or any(entry.key is FactKey.chief_complaint for entry in extracted)
+        or any(entry.key is FactKey.chief_complaint for entry in state.get("facts", []))
+    ):
+        return []
+    source_turn = latest.model_copy(update={"text": latest.text[:1000]})
+    entry = answer_fact(source_turn, FactKey.chief_complaint, source_turn.text)
+    return [entry] if entry is not None else []
 
 
 def with_explicit(facts: list[FactEntry], explicit: FactEntry) -> list[FactEntry]:

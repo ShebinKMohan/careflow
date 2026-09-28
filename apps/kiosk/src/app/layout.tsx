@@ -3,6 +3,7 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 import { AppDocument } from "@/components/AppDocument";
+import { DeviceBootstrap } from "@/components/DeviceBootstrap";
 import { IdleGuard } from "@/components/IdleGuard";
 import { RevokedGuard } from "@/components/RevokedGuard";
 import { KioskProvider } from "@/lib/session";
@@ -20,6 +21,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <AppDocument locale={locale} messages={messages} className={fontVariables}>
       <KioskProvider>
+        <DeviceBootstrap />
         {children}
         <IdleGuard />
         <RevokedGuard />

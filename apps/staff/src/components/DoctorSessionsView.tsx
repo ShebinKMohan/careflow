@@ -20,9 +20,9 @@ export function DoctorSessionsView() {
     <ApiStatus state={state}>
       {(sessions) =>
         sessions.length === 0 ? (
-          <p>{t("none")}</p>
+          <p className="staff-empty">{t("none")}</p>
         ) : (
-          <table className="w-full border-collapse bg-surface">
+          <div className="staff-table-wrap"><table className="staff-table w-full border-collapse bg-surface">
             <thead>
               <tr>
                 <th className={CELL}>{t("token")}</th>
@@ -69,7 +69,7 @@ export function DoctorSessionsView() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         )
       }
     </ApiStatus>

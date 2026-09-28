@@ -15,6 +15,7 @@ from typing import Annotated, Any, Literal, Required, TypedDict
 from careflow_contracts.generated.alert_schema import Alert
 from careflow_contracts.generated.ehr_fetch_schema import (
     EhrAppointment,
+    EhrFetch,
     EhrStatus,
     PatientIdentifier,
 )
@@ -37,6 +38,7 @@ class Flags(TypedDict, total=False):
     extraction_incomplete: bool
     ehr_unavailable: bool
     intake_truncated: bool
+    assistance_requested: bool
 
 
 class ExtractionInfo(TypedDict, total=False):
@@ -86,6 +88,11 @@ class IntakeState(TypedDict, total=False):
     patient_type: Literal["adult", "child"]
     # Where the patient answers (M2-06): the kiosk, or their phone after the QR hand-over.
     channel: Literal["kiosk", "phone"]
+    # Reception choices are patient preferences, never an appointment or clinical decision.
+    reception_context: dict[str, Any]
+    urgent_help: dict[str, Any]
+    registration_fingerprint: str
+    prefetched_ehr: EhrFetch
     # Set by the nodes.
     started_at: datetime
     patient_identifier: PatientIdentifier | None

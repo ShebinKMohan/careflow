@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { patientApi } from "@/lib/api";
 import { useKiosk } from "@/lib/session";
 import { watchSession } from "@/lib/sessionChannel";
+import { KioskIcon } from "./KioskIcon";
 
 /** Where the phone opens the hand-over (the companion PWA). */
 export const COMPANION_URL = (process.env.NEXT_PUBLIC_COMPANION_URL ?? "http://localhost:3002").replace(/\/+$/, "");
@@ -27,7 +28,7 @@ const HIGHLIGHTED = "min-h-touch rounded-control border-4 border-primary bg-prim
  * can still be claimed); `RevokedGuard` covers a missed frame. `highlight` fills the button after
  * the patient asked a question the phone can answer (M2-10).
  */
-export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) {
+export function ContinueOnPhone({ highlight = false, compact = false }: { highlight?: boolean; compact?: boolean }) {
   const t = useTranslations("intake.phone");
   const router = useRouter();
   const { patient, wipe } = useKiosk();
@@ -46,9 +47,10 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
   const fetchCode = useCallback(async () => {
     if (!token || !sessionId || fetching.current) return;
     fetching.current = true;
-    const { data } = await patientApi(token).POST("/v1/sessions/{session_id}/qr", {
+    const response = await patientApi(token).POST("/v1/sessions/{session_id}/qr", {
       params: { path: { session_id: sessionId } },
-    });
+    }).catch(() => null);
+    const data = response?.data;
     fetching.current = false;
     if (!data) {
       expiresAt.current = null;
@@ -108,7 +110,7 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
     return (
       <button
         type="button"
-        className={highlight ? HIGHLIGHTED : BUTTON}
+        className={compact ? "intake-phone-button" : highlight ? HIGHLIGHTED : BUTTON}
         onClick={() => {
           setOpen(true);
           void fetchCode();
@@ -116,13 +118,14 @@ export function ContinueOnPhone({ highlight = false }: { highlight?: boolean }) 
         data-testid="continue-on-phone"
         data-highlighted={highlight ? "true" : undefined}
       >
+        {compact ? <KioskIcon name="phone" /> : null}
         {t("button")}
       </button>
     );
   }
   const seconds = code ? Math.max(0, Math.ceil((code.expiresAt - now) / 1000)) : null;
   return (
-    <section aria-label={t("title")} className="flex flex-col items-start gap-3 rounded-card border-2 border-border p-4">
+    <section aria-label={t("title")} className={compact ? "intake-phone-panel" : "flex flex-col items-start gap-3 rounded-card border-2 border-border p-4"}>
       <h2 className="text-title font-semibold">{t("title")}</h2>
       {failed ? (
         <p role="alert" className="font-semibold">

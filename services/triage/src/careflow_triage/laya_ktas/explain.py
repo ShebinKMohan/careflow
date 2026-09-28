@@ -2,8 +2,8 @@
 
 Each state key is dropped in turn; its score is p(predicted level | full state) minus
 p(predicted level | state without the key). The top 3 positive scores are the reasons ("Heart rate
-128 /min raised urgency"), each citing its facts. With no positive score, the key whose absence
-changes the probability most stands alone, so a suggestion always has a reason. Staff only.
+128 /min made KTAS 2 more likely"), each citing its facts. With no positive score, the key whose
+absence changes the probability most stands alone, so a suggestion always has a reason. Staff only.
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ def explain(agent: Any, laya_input: LayaInput, k: int = 3) -> Explained:
     return Explained(
         choice=choice,
         probabilities=probabilities,
-        reasons=reasons_from_keys(top, laya_input),
+        reasons=reasons_from_keys(top, laya_input, choice=choice, scores=scores),
         scores=scores,
     )
 

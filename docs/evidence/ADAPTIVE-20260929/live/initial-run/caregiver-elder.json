@@ -1,0 +1,62 @@
+{
+  "startedAt": "2026-09-28T19:05:23.529Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "registrationMs": 1461,
+  "sessionId": "ba09c2eb-9e5e-589e-b53c-372b5ff3238d",
+  "turns": [
+    {
+      "key": "chief_complaint",
+      "question": "What is the main reason for your visit today?",
+      "mode": "text",
+      "answer": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.",
+      "latencyMs": 20303
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "ba09c2eb-9e5e-589e-b53c-372b5ff3238d",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_N6C98636TJTFTBZDAXQ7XNSVT5",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 7,
+          "quote": "72"
+        },
+        "recorded_at": "2026-09-28T19:05:25.764317Z",
+        "value": 72
+      },
+      "sex": {
+        "fact_id": "f_0XH9JCPN2JSJ7PMASY9ZC64HH8",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198610",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:05:25.836370Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "female",
+          "display": "Female"
+        }
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "incomplete"
+  }
+}

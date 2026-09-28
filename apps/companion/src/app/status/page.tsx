@@ -6,7 +6,11 @@ export default async function StatusPage() {
   const t = await getTranslations("status");
   return (
     <>
-      <h1 className="text-title font-bold">{t("title")}</h1>
+      <div className="companion-page-heading">
+        <span className="companion-eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p>{t("intro")}</p>
+      </div>
       <WaitingRoom />
     </>
   );

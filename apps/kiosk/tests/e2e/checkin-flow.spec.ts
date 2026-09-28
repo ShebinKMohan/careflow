@@ -59,7 +59,7 @@ test("keypad, three answers (tap, typed, severity), vitals, the token and room, 
   });
 
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: "Start on this kiosk", exact: true }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
@@ -134,7 +134,7 @@ test("three failed keypad attempts send the patient to reception", async ({ page
     route.fulfill({ status: 404, contentType: "application/problem+json", json: { title: "Not found", status: 404 } }),
   );
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: "English" }).click();
+  await page.getByRole("main").getByRole("button", { name: "Start on this kiosk", exact: true }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: "Agree", exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);

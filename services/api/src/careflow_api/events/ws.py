@@ -40,10 +40,11 @@ logger = logging.getLogger("careflow_api.events")
 WEBHOOK_TYPES: Final = frozenset(e.value for e in EventType)
 NURSE_FAMILIES: Final = frozenset({"alert", "triage", "token", "intake", "patient", "nurse"})
 STAFF_TYPES: Final[dict[str, frozenset[str]]] = {
-    "nurse": frozenset(t for t in WEBHOOK_TYPES if t.split(".", 1)[0] in NURSE_FAMILIES),
+    "nurse": frozenset(t for t in WEBHOOK_TYPES if t.split(".", 1)[0] in NURSE_FAMILIES)
+    | {"patient.help_requested"},
     "doctor": frozenset({"triage.confirmed", "intake.completed"}),
     "board": frozenset({"token.called", "token.no_show"}),
-    "admin": WEBHOOK_TYPES,
+    "admin": WEBHOOK_TYPES | {"patient.help_requested"},
 }
 #: What a patient's own screen may receive: status, token and room. Never alerts or levels.
 #: `session.handed_over` (M2-06) is a WebSocket frame only, never a webhook event.

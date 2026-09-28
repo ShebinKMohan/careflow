@@ -13,7 +13,7 @@
 #                      (scripts/stack.py). Default: the dev stack `careflow` on the CONVENTIONS ports.
 #   VOICE=0            leave the voice service out (default: on when `make voice-models` has run
 #                      and the stack's voice port is free)
-#   LOCAL_LLM=1        also serve the pinned Qwen3.5-9B MLX model on :8081 (through scripts/with_llm.sh)
+#   LOCAL_LLM=1        serve pinned Qwen3.5-9B on :8081; CAREFLOW_LLM_MODEL selects pinned 4B
 #   SEED_SYNTHEA=0     load the 7 personas only (no Synthea population)
 #   E2E=1              deterministic journeys (make e2e): every model reply is replayed from
 #                      e2e/replays/providers.cassette.json, the intake uses e2e/config/intake.yaml
@@ -124,10 +124,12 @@ elif lsof -iTCP:"$voice_port" -sTCP:LISTEN >/dev/null 2>&1; then
 else
   echo "voice: VOICE_PORT=$voice_port uv run --package careflow-voice ${voice_extras[*]} careflow-voice" >>"$procfile"
   services+=("voice=http://127.0.0.1:$voice_port/healthz")
-  # With a voice service to talk to, the kiosk shows its microphone button (only after the
-  # patient's saved consent, M2-05) unless NEXT_PUBLIC_VOICE_ENABLED says otherwise. Expanded by
+  # With a voice service, both apps show consented hold-to-talk on secure origins. The phone
+  # explains the HTTPS requirement on a plain HTTP LAN URL. The public flag is expanded by
   # honcho's shell after .env is loaded, so an empty value there counts as unset.
-  sed -i.orig 's|^kiosk: |kiosk: NEXT_PUBLIC_VOICE_ENABLED=${NEXT_PUBLIC_VOICE_ENABLED:-true} |' "$procfile"
+  sed -i.orig \
+    -e 's|^kiosk: |kiosk: NEXT_PUBLIC_VOICE_ENABLED=${NEXT_PUBLIC_VOICE_ENABLED:-true} |' \
+    -e 's|^companion: |companion: NEXT_PUBLIC_VOICE_ENABLED=${NEXT_PUBLIC_VOICE_ENABLED:-true} |' "$procfile"
   rm -f "$procfile.orig"
 fi
 
@@ -136,8 +138,11 @@ if [[ "${LOCAL_LLM:-0}" == "1" ]]; then
   # The one sanctioned way to start the local model (docs/AGENT_RUNBOOK.md section 6): with_llm.sh
   # serves the pinned Qwen3.5-9B on 8081, or reuses a server already answering there, and stops
   # only a server it started. honcho signals the whole process group on `make down`.
-  echo "llm: scripts/with_llm.sh tail -f /dev/null" >>"$procfile"
+  echo 'llm: CAREFLOW_LLM_MODEL=${CAREFLOW_LLM_MODEL:-mlx-community/Qwen3.5-9B-MLX-4bit} scripts/with_llm.sh tail -f /dev/null' >>"$procfile"
   services+=("llm=http://127.0.0.1:8081/v1/models")
+  # Uvicorn does not accept requests until fixed EN/AR examples pass real extraction.
+  sed -i.orig 's|^api: |api: CAREFLOW_LLM_MODEL=${CAREFLOW_LLM_MODEL:-mlx-community/Qwen3.5-9B-MLX-4bit} CAREFLOW_WARM_EXTRACTION=1 |' "$procfile"
+  rm -f "$procfile.orig"
   wait_s=900  # a first download of the model (~5 GB)
 fi
 

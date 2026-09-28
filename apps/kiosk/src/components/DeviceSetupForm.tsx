@@ -1,13 +1,14 @@
 "use client";
 
 import type { Schema } from "@careflow/contracts";
+import { createCareflowClient } from "@careflow/contracts/client";
 import { BigButton } from "@careflow/ui";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { type FormEvent, useState } from "react";
 import { z } from "zod";
 
-import { api } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/api";
 import { saveDevice } from "@/lib/session";
 
 const DeviceSetup = z.object({
@@ -21,6 +22,8 @@ const DeviceSetup = z.object({
 });
 
 const FIELD = "min-h-touch w-full rounded-control border-2 border-border bg-surface px-4 text-body";
+// Installation authentication must never inherit an existing kiosk's bearer or BFF routing.
+const deviceAuth = createCareflowClient(API_BASE_URL, () => undefined);
 
 /** Stub kiosk sign-in: device ID + secret -> kiosk_device token (POST /v1/auth/device-token). */
 export function DeviceSetupForm() {
@@ -38,7 +41,8 @@ export function DeviceSetupForm() {
     }
     setStatus("working");
     const body = { ...parsed.data, device_type: "kiosk" } satisfies Schema<"DeviceTokenRequest">;
-    const { data } = await api.POST("/v1/auth/device-token", { body });
+    const result = await deviceAuth.POST("/v1/auth/device-token", { body }).catch(() => null);
+    const data = result?.data;
     if (!data) {
       setStatus("failed");
       return;

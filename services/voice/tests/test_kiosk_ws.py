@@ -571,3 +571,42 @@ def test_a_full_kiosk_session_opens_no_file_for_writing(
         path for path in disk_writes.paths if log_dir is None or not path.startswith(log_dir)
     ]
     assert outside_logs == []
+
+
+def test_hold_to_talk_waits_for_release_and_submits_only_once(
+    make_kiosk_app: Callable[..., FastAPI],
+    patient_token: Callable[..., str],
+    api: respx.MockRouter,
+    chest_pain_pcm: bytes,
+) -> None:
+    posted = api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+    with TestClient(make_kiosk_app()) as client, client.websocket_connect("/kiosk/audio") as ws:
+        ws.send_text(_start(patient_token(), input_mode="push_to_talk"))
+        _send_audio(ws, chest_pain_pcm)
+        # A control round-trip acts as a barrier after all audio, proving no automatic endpoint.
+        ws.send_json({"type": "unknown"})
+        messages, _ = _messages_until(ws, lambda item: item.get("code") == "bad_message")
+        assert not posted.called
+        assert not any(item["type"] == "final" for item in messages)
+        ws.send_json({"type": "end_utterance"})
+        ws.send_json({"type": "end_utterance"})
+        messages, _ = _messages_until(ws, lambda item: item["type"] == "tts_end")
+        assert posted.call_count == 1
+        assert sum(item["type"] == "final" for item in messages) == 1
+        ws.send_json({"type": "stop"})
+
+
+def test_releasing_silence_does_not_create_a_patient_turn(
+    make_kiosk_app: Callable[..., FastAPI],
+    patient_token: Callable[..., str],
+    api: respx.MockRouter,
+) -> None:
+    posted = api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+    with TestClient(make_kiosk_app()) as client, client.websocket_connect("/kiosk/audio") as ws:
+        ws.send_text(_start(patient_token(), input_mode="push_to_talk"))
+        _send_audio(ws, bytes(32000))
+        ws.send_json({"type": "end_utterance"})
+        messages, _ = _messages_until(ws, lambda item: item.get("code") == "no_speech")
+        assert messages == [{"type": "error", "code": "no_speech"}]
+        assert not posted.called
+        ws.send_json({"type": "stop"})

@@ -105,14 +105,25 @@ def briefing_summarizer(
 
 
 def providers_config(path: Path = PROVIDERS_CONFIG) -> ProvidersConfig:
-    """providers.yaml, with every local task pointed at CAREFLOW_LOCAL_LLM_BASE_URL when it is set
-    (scripts/with_llm.sh sets it)."""
+    """Resolve local runtime overrides without relabelling the recorded config baseline."""
     providers = load_config(path)
     base_url = os.environ.get("CAREFLOW_LOCAL_LLM_BASE_URL")
-    if not base_url:
+    model = os.environ.get("CAREFLOW_LLM_MODEL")
+    model_names = {
+        "mlx-community/Qwen3.5-4B-4bit": "qwen3.5-4b-4bit",
+        "mlx-community/Qwen3.5-9B-MLX-4bit": "qwen3.5-9b-4bit",
+    }
+    # Unknown explicitly selected repos keep their actual repo name in diagnostics.
+    # CLI and API tasks are never changed by a local-server selection.
+    overrides: dict[str, str] = {}
+    if base_url:
+        overrides["base_url"] = base_url
+    if model:
+        overrides["model"] = model_names.get(model, model)
+    if not overrides:
         return providers
     tasks = {
-        task: config.model_copy(update={"base_url": base_url})
+        task: config.model_copy(update=overrides)
         if isinstance(config, LocalTaskConfig)
         else config
         for task, config in providers.tasks.items()

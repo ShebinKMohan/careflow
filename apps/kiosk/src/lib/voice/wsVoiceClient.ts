@@ -115,6 +115,7 @@ export class WsVoiceClient implements VoiceClient {
   private events: VoiceEvents | null = null;
   private readonly player: Player;
   private generation = 0;
+  private capturedFrames = 0;
   private settleOpen: (() => void) | null = null;
 
   constructor(
@@ -176,6 +177,7 @@ export class WsVoiceClient implements VoiceClient {
             token: session.token,
             sample_rate: INPUT_SAMPLE_RATE,
             language: session.language,
+            ...(session.inputMode ? { input_mode: session.inputMode } : {}),
           }),
         );
         resolve();
@@ -187,7 +189,10 @@ export class WsVoiceClient implements VoiceClient {
     });
     if (!current()) return;
     node.port.onmessage = (event: MessageEvent<ArrayBuffer>) => {
-      if (socket.readyState === OPEN) socket.send(event.data);
+      if (current() && this.stream && socket.readyState === OPEN) {
+        socket.send(event.data);
+        this.capturedFrames += 1;
+      }
     };
     socket.onmessage = (event: MessageEvent<unknown>) => this.receive(event.data);
     socket.onclose = (event: CloseEvent) => {
@@ -195,6 +200,18 @@ export class WsVoiceClient implements VoiceClient {
       this.events?.onError(event.code === 1008 ? "unauthorized" : "disconnected");
       this.release();
     };
+  }
+
+  finishUtterance(): boolean {
+    // Releasing during permission/socket setup cancels it. A later permission grant must
+    // never restart capture after the patient has let go.
+    if (this.socket?.readyState !== OPEN || this.capturedFrames === 0) {
+      this.stop();
+      return false;
+    }
+    this.releaseCapture();
+    this.socket.send(JSON.stringify({ type: "end_utterance" }));
+    return true;
   }
 
   stop(): void {
@@ -258,6 +275,12 @@ export class WsVoiceClient implements VoiceClient {
         // already closed
       }
     }
+    this.releaseCapture();
+    this.player.close();
+  }
+
+  private releaseCapture(): void {
+    this.capturedFrames = 0;
     if (this.node) {
       this.node.port.onmessage = null;
       this.node.disconnect();
@@ -267,7 +290,6 @@ export class WsVoiceClient implements VoiceClient {
     this.stream = null;
     void this.capture?.close();
     this.capture = null;
-    this.player.close();
   }
 }
 

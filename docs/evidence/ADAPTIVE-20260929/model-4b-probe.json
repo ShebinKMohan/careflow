@@ -1,0 +1,45 @@
+[
+  {
+    "language": "ar",
+    "text": "أشعر بألم في معصمي.",
+    "elapsed_ms": 8512,
+    "raw": "{\"facts\": [{\"key\": \"pain_present\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"أشعر بألم في معصمي\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"elbow\", \"turn_id\": \"t1\", \"quote\": \"في معصمي\", \"negated\": false}]}",
+    "ok": true,
+    "verified": [
+      "pain_present",
+      "pain_location"
+    ],
+    "dropped": [],
+    "attempts": 1
+  },
+  {
+    "language": "ar",
+    "text": "عندي ألم في صدري من الصباح.",
+    "elapsed_ms": 3639,
+    "raw": "{\"facts\": [{\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"عندي ألم في صدري من الصباح\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t1\", \"quote\": \"من الصباح\", \"negated\": false}, {\"key\": \"chief_complaint\", \"value\": \"Chest pain since this morning\", \"turn_id\": \"t1\", \"quote\": \"عندي ألم في صدري من الصباح\", \"negated\": false}]}",
+    "ok": true,
+    "verified": [
+      "chest_pain.present",
+      "chest_pain.onset",
+      "chief_complaint"
+    ],
+    "dropped": [],
+    "attempts": 1
+  },
+  {
+    "language": "en",
+    "text": "I twisted my left ankle playing football yesterday afternoon. It hurts when I walk and the pain is four out of ten.",
+    "elapsed_ms": 10410,
+    "raw": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I twisted my left ankle playing football yesterday afternoon\", \"turn_id\": \"t1\", \"quote\": \"I twisted my left ankle playing football yesterday afternoon\", \"negated\": false}, {\"key\": \"injury\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"I twisted my left ankle\", \"negated\": false}, {\"key\": \"pain_present\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"It hurts\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"left ankle\", \"turn_id\": \"t1\", \"quote\": \"left ankle\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 4, \"unit\": \"out of ten\", \"turn_id\": \"t1\", \"quote\": \"four out of ten\", \"negated\": false}]}",
+    "ok": true,
+    "verified": [
+      "chief_complaint",
+      "injury",
+      "pain_present",
+      "pain_location",
+      "pain_score"
+    ],
+    "dropped": [],
+    "attempts": 1
+  }
+]

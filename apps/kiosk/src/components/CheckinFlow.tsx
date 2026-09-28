@@ -10,17 +10,14 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { CONSENT_VERSION, type ConsentChoices, markConsentSaved } from "@/consent/hasConsent";
 import { type CardPayload, cardReader, simulatorsEnabled } from "@/devices/card-reader";
 import { api, patientApi } from "@/lib/api";
-import { readDevice, useKiosk } from "@/lib/session";
+import { readDevice, subscribeDevice, useKiosk } from "@/lib/session";
 
 import { Keypad } from "./Keypad";
 import { SimulatedIdReader } from "./SimulatedIdReader";
+import { KioskIcon } from "./KioskIcon";
 
 /** After this many failed attempts the kiosk sends the patient to reception. */
 export const MAX_FAILURES = 3;
-
-const LINK = "inline-flex min-h-touch items-center rounded-control bg-primary px-6 text-title font-semibold text-on-primary";
-
-const noSubscription = () => () => undefined;
 
 /**
  * Check-in: the silent keypad (POST /v1/checkin/keypad, digits only in the body) or a tap of the
@@ -52,12 +49,13 @@ async function saveConsent({ data, choices }: Unsaved): Promise<boolean> {
 
 export function CheckinFlow() {
   const t = useTranslations("checkin");
+  const experience = useTranslations("experience");
   const locale = useLocale() === "ar" ? "ar" : "en";
   const tIntake = useTranslations("intake");
   const tConsent = useTranslations("safety.consent");
   const router = useRouter();
   const { start, consent, wipe } = useKiosk();
-  const hasDevice = useSyncExternalStore(noSubscription, () => readDevice() !== null, () => true);
+  const hasDevice = useSyncExternalStore(subscribeDevice, () => readDevice() !== null, () => true);
   const [failures, setFailures] = useState(0);
   const [working, setWorking] = useState(false);
   const [cardMessage, setCardMessage] = useState<"notFound" | "reception" | null>(null);
@@ -154,9 +152,9 @@ export function CheckinFlow() {
   if (!hasDevice) {
     return (
       <Card>
-        <p className="mb-4">{t("needsSetup")}</p>
-        <Link href="/setup" className={LINK}>
-          {t("setupLink")}
+        <p className="mb-4">{experience("stationUnavailable")}</p>
+        <Link href="/" className="inline-flex min-h-touch items-center font-semibold text-primary underline">
+          {tConsent("startOver")}
         </Link>
       </Card>
     );
@@ -195,6 +193,7 @@ export function CheckinFlow() {
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="checkin-layout"><div className="checkin-keypad">
       <p>{t("instructions")}</p>
       <Keypad
         key={failures}
@@ -207,6 +206,8 @@ export function CheckinFlow() {
         onSubmit={(digits) => void checkIn(digits)}
         disabled={working || blocked}
       />
+      <p className="keypad-hint"><KioskIcon name="shield" />{experience("identityHint")}</p>
+      </div><aside className="checkin-card-aside"><KioskIcon name="card" /><h2>{experience("cardTitle")}</h2><p>{t("tapCard")}</p></aside></div>
       {failures > 0 ? (
         <p role="alert" className="text-title font-semibold text-danger">
           {blocked ? t("seeReception") : t("failed")}
@@ -217,13 +218,12 @@ export function CheckinFlow() {
           {t("unreachable")}
         </p>
       ) : null}
-      <p className="text-body">{t("tapCard")}</p>
       {cardMessage ? (
         <p role="alert" className="text-title font-semibold text-danger" data-testid="card-message">
           {cardMessage === "reception" ? t("cardReception") : t("cardNotFound")}
         </p>
       ) : null}
-      {simulatorsEnabled() ? <SimulatedIdReader /> : null}
+      {simulatorsEnabled() ? <div className="checkin-simulators"><SimulatedIdReader /></div> : null}
     </div>
   );
 }

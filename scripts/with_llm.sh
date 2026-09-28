@@ -7,8 +7,9 @@
 # loaded at a time (docs/AGENT_RUNBOOK.md section 6).
 #
 # Environment overrides:
-#   CAREFLOW_LLM_MODEL     HF repo to serve (default mlx-community/Qwen3.5-9B-MLX-4bit, pinned)
+#   CAREFLOW_LLM_MODEL     HF repo to serve (default pinned mlx-community/Qwen3.5-9B-MLX-4bit)
 #   CAREFLOW_LLM_REVISION  revision to serve; the snapshot is downloaded and served from disk
+#   CAREFLOW_LLM_CACHE_SIZE / CAREFLOW_LLM_CACHE_BYTES  cache limits (4 entries / 768 MiB)
 #   MLX_PORT               port (default 8081)
 #   WITH_LLM_WAIT_S        readiness timeout in seconds (default 600)
 # The command sees CAREFLOW_LOCAL_LLM_BASE_URL=http://127.0.0.1:<port>/v1.
@@ -23,13 +24,13 @@ fi
 host=127.0.0.1
 port="${MLX_PORT:-8081}"
 default_model=mlx-community/Qwen3.5-9B-MLX-4bit
-default_revision=938d8919941c6e7efd3c7150eff7fe9d12afa631 # pinned in M0-06 (ADR-013)
 model="${CAREFLOW_LLM_MODEL:-$default_model}"
-if [[ "$model" == "$default_model" ]]; then
-  revision="${CAREFLOW_LLM_REVISION:-$default_revision}"
-else
-  revision="${CAREFLOW_LLM_REVISION:-}"
-fi
+case "$model" in
+  mlx-community/Qwen3.5-4B-4bit) default_revision=0e7ffd5c629ef7719d4cbc04069232580bfa9d9c ;;
+  mlx-community/Qwen3.5-9B-MLX-4bit) default_revision=938d8919941c6e7efd3c7150eff7fe9d12afa631 ;;
+  *) default_revision="" ;;
+esac
+revision="${CAREFLOW_LLM_REVISION:-$default_revision}"
 mlx_lm_version="${MLX_LM_VERSION:-0.31.3}"
 hf_hub_version="${HF_HUB_VERSION:-2.0.0}"
 wait_s="${WITH_LLM_WAIT_S:-600}"
@@ -56,6 +57,19 @@ trap stop_server EXIT
 trap 'exit 130' INT TERM
 
 if server_up; then
+  # Never label an already running 9B server as 4B (or vice versa). Reusing the selected
+  # snapshot is safe; replacing another server is the supervising stack's responsibility.
+  if ! curl -fsS --max-time 3 "$base_url/v1/models" | python3 -c '
+import json, sys
+repo, revision = sys.argv[1:]
+ids = [row["id"] for row in json.load(sys.stdin).get("data", [])]
+encoded = "models--" + repo.replace("/", "--") + "/snapshots/"
+matches = any(value == repo or (encoded in value and (not revision or value.endswith("/" + revision))) for value in ids)
+raise SystemExit(0 if matches else 1)
+' "$model" "$revision"; then
+    echo "with_llm: another model answers on $base_url; restart its owning stack before selecting $model." >&2
+    exit 1
+  fi
   echo "with_llm: reusing the server already answering on $base_url" >&2
 else
   if [[ "$(uname -s)" != "Darwin" || "$(uname -m)" != "arm64" ]]; then
@@ -68,8 +82,12 @@ else
       hf download "$model" --revision "$revision" --quiet)"
   fi
   echo "with_llm: starting mlx_lm.server ($model${revision:+@$revision}) on $base_url; log $log" >&2
+  # Each language uses separate system and user entries. Four retain both warmed languages
+  # without the default ten histories (~1.35 GB observed on the 18 GB development Mac).
   uvx --from "mlx-lm==$mlx_lm_version" mlx_lm.server \
-    --model "$model_ref" --host "$host" --port "$port" >"$log" 2>&1 &
+    --model "$model_ref" --host "$host" --port "$port" \
+    --prompt-cache-size "${CAREFLOW_LLM_CACHE_SIZE:-4}" \
+    --prompt-cache-bytes "${CAREFLOW_LLM_CACHE_BYTES:-805306368}" >"$log" 2>&1 &
   started_pid=$!
   start=$SECONDS
   until server_up; do
@@ -88,6 +106,7 @@ else
 fi
 
 export CAREFLOW_LOCAL_LLM_BASE_URL="$base_url/v1"
+export CAREFLOW_LLM_MODEL="$model"
 set +e
 "$@"
 status=$?

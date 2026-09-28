@@ -1,0 +1,156 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "ptt-live.config.ts"
+    ],
+    "configFile": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/ptt-live.config.ts",
+    "rootDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "hold-to-talk-live.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/evidence/ADAPTIVE-20260929/voice-playwright.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "hold-to-talk-live.spec.ts",
+      "file": "hold-to-talk-live.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "a held synthetic answer reaches local Whisper and Qwen, with microphone off after release",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 45813,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.intake-question h2')\nExpected: not \u001b[32m\"What is the main reason for your visit today?\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mWhat is the main reason for your visit today?\u001b[27m\"\u001b[39m\nTimeout:  35000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveText\" locator('.intake-question h2') with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('.intake-question h2')\u001b[22m\n\u001b[2m    74 × locator resolved to <h2 aria-live=\"polite\">What is the main reason for your visit today?</h2>\u001b[22m\n\u001b[2m       - unexpected value \"What is the main reason for your visit today?\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.intake-question h2')\nExpected: not \u001b[32m\"What is the main reason for your visit today?\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mWhat is the main reason for your visit today?\u001b[27m\"\u001b[39m\nTimeout:  35000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveText\" locator('.intake-question h2') with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('.intake-question h2')\u001b[22m\n\u001b[2m    74 × locator resolved to <h2 aria-live=\"polite\">What is the main reason for your visit today?</h2>\u001b[22m\n\u001b[2m       - unexpected value \"What is the main reason for your visit today?\"\u001b[22m\n\n    at /Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/hold-to-talk-live.spec.ts:85:30",
+                    "location": {
+                      "file": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/hold-to-talk-live.spec.ts",
+                      "column": 30,
+                      "line": 85
+                    },
+                    "snippet": "  83 |\n  84 |   await expect(page.getByTestId(\"heard\")).toContainText(/chest pain since this morning/i, { timeout: 60_000 });\n> 85 |   await expect(question).not.toHaveText(firstQuestion ?? \"\", { timeout: 35_000 });\n     |                              ^\n  86 |   await expect.poll(() => firstTtsAt, { timeout: 20_000 }).toBeGreaterThan(0);\n  87 |   expect(messages.filter((item) => item.type === \"error\")).toEqual([]);\n  88 |   expect(audioAfterEnd).toBe(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/hold-to-talk-live.spec.ts",
+                        "column": 30,
+                        "line": 85
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.intake-question h2')\nExpected: not \u001b[32m\"What is the main reason for your visit today?\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mWhat is the main reason for your visit today?\u001b[27m\"\u001b[39m\nTimeout:  35000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveText\" locator('.intake-question h2') with timeout 35000ms\u001b[22m\n\u001b[2m  - waiting for locator('.intake-question h2')\u001b[22m\n\u001b[2m    74 × locator resolved to <h2 aria-live=\"polite\">What is the main reason for your visit today?</h2>\u001b[22m\n\u001b[2m       - unexpected value \"What is the main reason for your visit today?\"\u001b[22m\n\n\n  83 |\n  84 |   await expect(page.getByTestId(\"heard\")).toContainText(/chest pain since this morning/i, { timeout: 60_000 });\n> 85 |   await expect(question).not.toHaveText(firstQuestion ?? \"\", { timeout: 35_000 });\n     |                              ^\n  86 |   await expect.poll(() => firstTtsAt, { timeout: 20_000 }).toBeGreaterThan(0);\n  87 |   expect(messages.filter((item) => item.type === \"error\")).toEqual([]);\n  88 |   expect(audioAfterEnd).toBe(0);\n    at /Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/hold-to-talk-live.spec.ts:85:30"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T18:55:22.169Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results/hold-to-talk-live-a-held-s-10c07-icrophone-off-after-release/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results/hold-to-talk-live-a-held-s-10c07-icrophone-off-after-release/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/hold-to-talk-live.spec.ts",
+                    "column": 30,
+                    "line": 85
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "02d9eefaca5bc2ce50de-b1507d13c9d12ebc6feb",
+          "file": "hold-to-talk-live.spec.ts",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T18:55:21.933Z",
+    "duration": 46683.146,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

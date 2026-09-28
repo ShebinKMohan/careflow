@@ -74,6 +74,7 @@ export function AlertBanner({
         ) : null}
       </div>
       <p className="text-body font-semibold">{alertText(alert, locale)}</p>
+      <p className="staff-rule-identity">{t("ruleIdentity", { code: alert.rule_id, version: alert.ruleset_version })}</p>
       <div>
         <h3 className="font-semibold">{t("evidence")}</h3>
         {evidence.length ? (
@@ -90,6 +91,7 @@ export function AlertBanner({
         ) : (
           <p>{t("evidenceLoading")}</p>
         )}
+        {evidence.length > 0 && evidence.length < alert.evidence_fact_ids.length ? <p className="staff-rule-identity" data-testid="alert-evidence-incomplete">{t("evidenceIncomplete", { count: alert.evidence_fact_ids.length - evidence.length })}</p> : null}
       </div>
       <p className="text-label">{t("raised", { time: format.dateTime(new Date(alert.raised_at), { timeStyle: "short", numberingSystem: "latn" }) })}</p>
       {alert.rule_id === ECG_RULE && alert.deadline_at ? (

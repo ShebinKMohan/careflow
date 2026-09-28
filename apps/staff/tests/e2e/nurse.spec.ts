@@ -84,6 +84,9 @@ async function stubApi(page: Page, options: { holdDecision?: boolean; holdTask?:
 
 test("an alert.raised pushed over the live channel shows a banner with its evidence within 1 s", async ({ page }) => {
   await page.clock.install({ time: new Date(RAISED_AT.getTime() + 60_000) });
+  // Keep the clinical timestamp fixed while browser startup and assertions take real time.
+  // The Node-side latency measurement below still checks the actual alert delivery time.
+  await page.clock.setFixedTime(new Date(RAISED_AT.getTime() + 60_000));
   const stubs = await stubApi(page);
   await page.goto("/nurse");
   await expect(page.getByTestId("live-status")).toHaveText("Live");

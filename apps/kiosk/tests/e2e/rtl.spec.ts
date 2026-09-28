@@ -96,7 +96,8 @@ for (const locale of ["en", "ar"] as const) {
     await page.goto("/");
     await expectLanguage(page, "en"); // no choice yet
     if (locale === "en") await snap(page, "kiosk-language");
-    await page.getByRole("main").getByRole("button", { name: msg("en", `home.${locale === "en" ? "english" : "arabic"}`) }).click();
+    if (locale === "ar") await page.getByRole("banner").getByRole("button", { name: "العربية" }).click();
+    await page.getByRole("main").getByRole("button", { name: locale === "en" ? "Start on this kiosk" : "ابدأ على هذا الجهاز", exact: true }).click();
 
     await expect(page).toHaveURL(/\/consent$/);
     await expectLanguage(page, locale);
@@ -166,8 +167,8 @@ for (const locale of ["en", "ar"] as const) {
     await page.clock.fastForward("00:31");
     await expect(page).toHaveURL(/\/$/);
     await expectLanguage(page, locale); // the last choice stays until someone picks again
-    await expect(page.getByRole("main").getByRole("button", { name: "English" })).toBeVisible();
-    await expect(page.getByRole("main").getByRole("button", { name: "العربية" })).toBeVisible();
+    await expect(page.getByRole("banner").getByRole("button", { name: "English" })).toBeVisible();
+    await expect(page.getByRole("banner").getByRole("button", { name: "العربية" })).toBeVisible();
     if (locale === "ar") await snap(page, "kiosk-ar-language");
   });
 }

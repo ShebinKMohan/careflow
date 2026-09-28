@@ -1,0 +1,125 @@
+{
+  "scope": "Fixture-backed frontend browser checks after simplified conversation layout. No live backend/model evidence.",
+  "runs": [
+    {
+      "report": "ar-desktop-1280-report.json",
+      "viewport": {
+        "name": "desktop-1280",
+        "width": 1280,
+        "height": 800,
+        "locale": "ar"
+      },
+      "camera": [
+        {
+          "state": "live",
+          "label": "fake_device_0"
+        }
+      ],
+      "camera_stopped": true,
+      "camera_stopped_on_navigation": true,
+      "horizontal_overflow": false,
+      "page_errors": [],
+      "unexpected_api_requests": [],
+      "axe_violations": {
+        "intake": 0,
+        "receipt": 0
+      }
+    },
+    {
+      "report": "ar-phone-390-report.json",
+      "viewport": {
+        "name": "phone-390",
+        "width": 390,
+        "height": 844,
+        "locale": "ar"
+      },
+      "camera": [
+        {
+          "state": "live",
+          "label": "fake_device_0"
+        }
+      ],
+      "camera_stopped": true,
+      "camera_stopped_on_navigation": true,
+      "horizontal_overflow": false,
+      "page_errors": [],
+      "unexpected_api_requests": [],
+      "axe_violations": {
+        "intake": 0,
+        "receipt": 0
+      }
+    },
+    {
+      "report": "en-desktop-1280-report.json",
+      "viewport": {
+        "name": "desktop-1280",
+        "width": 1280,
+        "height": 800,
+        "locale": "en"
+      },
+      "camera": [
+        {
+          "state": "live",
+          "label": "fake_device_0"
+        }
+      ],
+      "camera_stopped": true,
+      "camera_stopped_on_navigation": true,
+      "horizontal_overflow": false,
+      "page_errors": [],
+      "unexpected_api_requests": [],
+      "axe_violations": {
+        "intake": 0,
+        "receipt": 0
+      }
+    },
+    {
+      "report": "en-desktop-1440-report.json",
+      "viewport": {
+        "name": "desktop-1440",
+        "width": 1440,
+        "height": 1000,
+        "locale": "en"
+      },
+      "camera": [
+        {
+          "state": "live",
+          "label": "fake_device_0"
+        }
+      ],
+      "camera_stopped": true,
+      "camera_stopped_on_navigation": true,
+      "horizontal_overflow": false,
+      "page_errors": [],
+      "unexpected_api_requests": [],
+      "axe_violations": {
+        "intake": 0,
+        "receipt": 0
+      }
+    },
+    {
+      "report": "en-phone-390-report.json",
+      "viewport": {
+        "name": "phone-390",
+        "width": 390,
+        "height": 844,
+        "locale": "en"
+      },
+      "camera": [
+        {
+          "state": "live",
+          "label": "fake_device_0"
+        }
+      ],
+      "camera_stopped": true,
+      "camera_stopped_on_navigation": true,
+      "horizontal_overflow": false,
+      "page_errors": [],
+      "unexpected_api_requests": [],
+      "axe_violations": {
+        "intake": 0,
+        "receipt": 0
+      }
+    }
+  ]
+}

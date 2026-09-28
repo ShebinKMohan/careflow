@@ -1,4 +1,4 @@
-"""/readyz reports the kiosk speech model files (mlx-whisper, VAD, smart-turn, Kokoro)."""
+"""/readyz checks default speech model files, without claiming engine loadability."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ def test_missing_model_files_make_the_service_not_ready(
     assert sorted(Path(path).relative_to(tmp_path).as_posix() for path in missing) == sorted(FILES)
 
 
-def test_all_model_files_present_is_ready(
+def test_present_model_files_are_ready_but_engine_loadability_is_unchecked(
     tmp_path: Path, make_kiosk_app: Callable[..., FastAPI]
 ) -> None:
     for name in FILES:
@@ -48,3 +48,11 @@ def test_all_model_files_present_is_ready(
         response = client.get("/readyz")
     assert response.status_code == 200, response.json()
     assert response.json()["providers"] == {"stt": "mlx-whisper", "llm": "local", "tts": "kokoro"}
+    # These deliberately invalid model files pass the stat-only check. Readiness must
+    # not imply that their contents were loaded, or that per-language models were checked.
+    assert response.json()["provider_details"]["local_speech_models"] == {
+        "verification": "file_presence",
+        "scope": "configured_default_providers",
+        "engine_loadability": "not_checked",
+        "missing": [],
+    }

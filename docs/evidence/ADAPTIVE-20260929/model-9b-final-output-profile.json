@@ -1,0 +1,256 @@
+[
+  {
+    "scenario": "ankle",
+    "language": "en",
+    "text": "I twisted my left ankle playing football yesterday afternoon. It hurts when I walk and the pain is four out of ten.",
+    "latency_ms": 10636,
+    "usage": [
+      {
+        "input_tokens": 1957,
+        "output_tokens": 222,
+        "raw": "{\n  \"facts\": [\n    {\n      \"key\": \"chief_complaint\",\n      \"value\": \"I twisted my left ankle playing football yesterday afternoon\",\n      \"turn_id\": \"t1\",\n      \"quote\": \"I twisted my left ankle playing football yesterday afternoon\"\n    },\n    {\n      \"key\": \"injury\",\n      \"value\": true,\n      \"turn_id\": \"t1\",\n      \"quote\": \"I twisted my left ankle playing football yesterday afternoon\",\n      \"negated\": false\n    },\n    {\n      \"key\": \"symptoms\",\n      \"value\": \"It hurts when I walk\",\n      \"turn_id\": \"t1\",\n      \"quote\": \"It hurts when I walk\"\n    },\n    {\n      \"key\": \"pain_score\",\n      \"value\": 4,\n      \"turn_id\": \"t1\",\n      \"quote\": \"the pain is four out of ten\"\n    }\n  ]\n}"
+      }
+    ],
+    "facts": [
+      {
+        "key": "symptoms",
+        "fact": {
+          "name": {
+            "fact_id": "f_4C53NK6TFBPVXD3ZKDYEKT3JGX",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "profile",
+              "start": 62,
+              "end": 82,
+              "quote": "It hurts when I walk"
+            },
+            "recorded_at": "2026-09-28T19:19:30.944340Z",
+            "value": "It hurts when I walk"
+          },
+          "onset": null,
+          "severity": null
+        }
+      },
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_BC70EAH1XAPWDE0SCMWZ4BYQM8",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 0,
+            "end": 60,
+            "quote": "I twisted my left ankle playing football yesterday afternoon"
+          },
+          "recorded_at": "2026-09-28T19:19:30.944340Z",
+          "value": "I twisted my left ankle playing football yesterday afternoon"
+        }
+      },
+      {
+        "key": "injury",
+        "fact": {
+          "fact_id": "f_2WHS80GZZPK2HTSHD0E41VF84W",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 0,
+            "end": 60,
+            "quote": "I twisted my left ankle playing football yesterday afternoon"
+          },
+          "recorded_at": "2026-09-28T19:19:30.944340Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "pain_score",
+        "fact": {
+          "fact_id": "f_PC59BJ2BB2F1AHV042EEM65VNK",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 87,
+            "end": 114,
+            "quote": "the pain is four out of ten"
+          },
+          "recorded_at": "2026-09-28T19:19:30.944340Z",
+          "value": 4
+        }
+      }
+    ],
+    "extraction_incomplete": false,
+    "error_code": null,
+    "dropped_count": 0
+  },
+  {
+    "scenario": "elder",
+    "language": "en",
+    "text": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.",
+    "latency_ms": 9556,
+    "usage": [
+      {
+        "input_tokens": 1959,
+        "output_tokens": 217,
+        "raw": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.\", \"turn_id\": \"t1\", \"quote\": \"My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.\"}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"My mother has had a fever\"}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t1\", \"quote\": \"shaking chills\"}, {\"key\": \"symptoms\", \"value\": \"weak\", \"turn_id\": \"t1\", \"quote\": \"She feels weak\"}, {\"key\": \"fast.last_known_well\", \"value\": \"awake and speaking normally\", \"turn_id\": \"t1\", \"quote\": \"she is awake and speaking normally\"}]}"
+      }
+    ],
+    "facts": [
+      {
+        "key": "symptoms",
+        "fact": {
+          "name": {
+            "fact_id": "f_KY3VHGQAZSWF9RYEVZFWXJ7P5D",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "profile",
+              "start": 70,
+              "end": 84,
+              "quote": "She feels weak"
+            },
+            "recorded_at": "2026-09-28T19:19:41.582293Z",
+            "value": "weak"
+          },
+          "onset": null,
+          "severity": null
+        }
+      },
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_GA76W7JN5JP5PE9CH1GCYE44KB",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 0,
+            "end": 125,
+            "quote": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+          },
+          "recorded_at": "2026-09-28T19:19:41.582293Z",
+          "value": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+        }
+      },
+      {
+        "key": "infection.fever_reported",
+        "fact": {
+          "fact_id": "f_EYEX8QF6Z93F0HGJKB698XNB7K",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 0,
+            "end": 25,
+            "quote": "My mother has had a fever"
+          },
+          "recorded_at": "2026-09-28T19:19:41.582293Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "infection.rigors",
+        "fact": {
+          "fact_id": "f_AQBR2CD67X1QNEJTXJMVD122YW",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 30,
+            "end": 44,
+            "quote": "shaking chills"
+          },
+          "recorded_at": "2026-09-28T19:19:41.582293Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "fast.last_known_well",
+        "fact": {
+          "fact_id": "f_6JRY6ZCYSVMY6EDNRAARH1V213",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 90,
+            "end": 124,
+            "quote": "she is awake and speaking normally"
+          },
+          "recorded_at": "2026-09-28T19:19:41.582293Z",
+          "value": "awake and speaking normally"
+        }
+      }
+    ],
+    "extraction_incomplete": false,
+    "error_code": null,
+    "dropped_count": 0
+  },
+  {
+    "scenario": "arabic",
+    "language": "ar",
+    "text": "عندي ألم في صدري من الصباح.",
+    "latency_ms": 7487,
+    "usage": [
+      {
+        "input_tokens": 2249,
+        "output_tokens": 161,
+        "raw": "{\n  \"facts\": [\n    {\n      \"key\": \"chief_complaint\",\n      \"value\": \"Chest pain since morning\",\n      \"turn_id\": \"t1\",\n      \"quote\": \"عندي ألم في صدري من الصباح.\"\n    },\n    {\n      \"key\": \"chest_pain.present\",\n      \"value\": true,\n      \"turn_id\": \"t1\",\n      \"quote\": \"عندي ألم في صدري من الصباح.\"\n    },\n    {\n      \"key\": \"chest_pain.onset\",\n      \"value\": \"morning\",\n      \"turn_id\": \"t1\",\n      \"quote\": \"من الصباح\"\n    }\n  ]\n}"
+      }
+    ],
+    "facts": [
+      {
+        "key": "chief_complaint",
+        "fact": {
+          "fact_id": "f_T4Z1HSM61KSS5A09ZXXY8TFK3X",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 0,
+            "end": 27,
+            "quote": "عندي ألم في صدري من الصباح."
+          },
+          "recorded_at": "2026-09-28T19:19:51.139442Z",
+          "value": "Chest pain since morning"
+        }
+      },
+      {
+        "key": "chest_pain.present",
+        "fact": {
+          "fact_id": "f_9MQQ1VM19TFZRCP07KCRGGBBNX",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 0,
+            "end": 27,
+            "quote": "عندي ألم في صدري من الصباح."
+          },
+          "recorded_at": "2026-09-28T19:19:51.139442Z",
+          "value": "yes"
+        }
+      },
+      {
+        "key": "chest_pain.onset",
+        "fact": {
+          "fact_id": "f_TASWQMJ688EK18681JZN1CWJRR",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "profile",
+            "start": 17,
+            "end": 26,
+            "quote": "من الصباح"
+          },
+          "recorded_at": "2026-09-28T19:19:51.139442Z",
+          "value": "morning"
+        }
+      }
+    ],
+    "extraction_incomplete": false,
+    "error_code": null,
+    "dropped_count": 0
+  }
+]

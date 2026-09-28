@@ -18,11 +18,11 @@ export function ClaimFromLink() {
   if (visit.status === "ready") {
     return <PhoneIntake sessionId={visit.session.sessionId} token={visit.token}
       language={visit.session.language} display={visit.session.display} initialQuestion={visit.question}
-      initialRevision={visit.revision} initialState={visit.state} onReconnect={() => { reset(); router.push("/"); }} />;
+      initialRevision={visit.revision} initialState={visit.state} childSession={visit.session.patientType === "child"} onReconnect={() => { reset(); router.push("/"); }} />;
   }
-  if (visit.status === "loading") return <p role="status" aria-live="polite">{t("working")}</p>;
+  if (visit.status === "loading") return <div className="companion-loading" role="status" aria-live="polite"><span className="companion-spinner" aria-hidden="true" /><h1>{t("working")}</h1><p>{t("connectHelp")}</p></div>;
   return (
-    <Card>
+    <Card className="companion-panel"><h1 className="companion-recovery-title">{t("title")}</h1>
       <p role="alert" className="mb-4">{t(visit.status === "empty" ? "noCode" : visit.status)}</p>
       {visit.status === "unavailable" ? (
         <button type="button" className="min-h-touch px-4 font-semibold text-primary underline" onClick={() => void retry()}>

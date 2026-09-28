@@ -1,16 +1,15 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 
-import { LanguageChoice } from "@/components/LanguageChoice";
 import { StartFresh } from "@/components/StartFresh";
+import { StartChoices } from "@/components/StartChoices";
 
 export default async function HomePage() {
-  const t = await getTranslations("home");
+  const ar = await getLocale() === "ar";
   return (
     <>
       <StartFresh />
-      <h1 className="text-display font-bold">{t("title")}</h1>
-      <p>{t("subtitle")}</p>
-      <LanguageChoice />
+      <section className="entry-intro"><p className="kiosk-eyebrow">{ar ? "أهلاً بك في نورث ستار" : "WELCOME TO NORTHSTAR"}</p><h1>{ar ? "رعايتك تبدأ من هنا." : "Your care starts here."}</h1><p>{ar ? "أخبرنا بسبب زيارتك. سنساعدك في الخطوة التالية." : "Tell us what brings you in. We’ll help with the next step."}</p><div className="entry-service-list"><span>{ar ? "الاستشارات" : "Consultations"}</span><span>{ar ? "المتابعة" : "Follow-up visits"}</span><span>{ar ? "الفحوص والنتائج" : "Tests & results"}</span><span>{ar ? "غير متأكد؟ نساعدك" : "Not sure? We’ll help"}</span></div></section>
+      <StartChoices />
     </>
   );
 }

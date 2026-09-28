@@ -223,6 +223,18 @@ async def keypad_checkin(
     """Digits -> the EHR patient -> a new session with its intake started, and a 30-minute
     patient token. Unknown digits get a generic 404; after 5 of them in 5 minutes the kiosk gets
     429 (guessing protection: successful check-ins are not counted)."""
+    return await start_keypad_session(body, principal, intake, settings)
+
+
+async def start_keypad_session(
+    body: KeypadCheckinRequest,
+    principal: Principal,
+    intake: IntakeRuntime,
+    settings: Settings,
+    *,
+    session_id: uuid.UUID | None = None,
+) -> CheckinResult:
+    """Shared identification with optional stable identity for a phone's safe request retry."""
     if body.clinic_id != str(principal.clinic_id) or body.kiosk_id != principal.device_id:
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="This kiosk may not check in here.")
     allowed, record_failure = failure_limit(
@@ -247,6 +259,7 @@ async def keypad_checkin(
         fetch=fetch,
         kiosk_id=body.kiosk_id,
         language=body.language,
+        session_id=session_id,
     )
     logger.info(
         "checkin.keypad", extra={"session_id": result.session_id, "ehr": fetch.status.value}
@@ -263,35 +276,48 @@ async def open_session(
     fetch: EhrFetch,
     kiosk_id: str,
     language: Language | None,
+    session_id: uuid.UUID | None = None,
 ) -> CheckinResult:
     """The session row, the intake started and a 30-minute patient token: the same for every
     check-in path (keypad, ID tap)."""
     now = utc_now()
-    session_id = uuid.uuid4()
+    recoverable = session_id is not None
+    session_id = session_id or uuid.uuid4()
     lang = Language(language.value) if language is not None else Language.en
     display = await patient_display(fetch.patient_ref)
     fhir_id = fetch.patient_ref.split("/", 1)[1] if fetch.patient_ref else None
     async with clinic_session(principal.clinic_id) as db:
-        db.add(
-            PatientSession(
-                id=session_id,
-                clinic_id=principal.clinic_id,
-                device_id=uuid.UUID(kiosk_id),
-                fhir_patient_id=fhir_id,
-                language=lang.value,
-                status="intake",
-                started_at=now,
-                expires_at=now + SESSION_EXPIRY,
-                patient_display=display,
+        existing = await db.get(PatientSession, session_id) if recoverable else None
+        if existing is not None and (
+            existing.fhir_patient_id != fhir_id or existing.device_id != uuid.UUID(kiosk_id)
+        ):
+            raise HTTPException(status.HTTP_409_CONFLICT, detail="This check-in cannot be changed.")
+        if existing is None:
+            db.add(
+                PatientSession(
+                    id=session_id,
+                    clinic_id=principal.clinic_id,
+                    device_id=uuid.UUID(kiosk_id),
+                    fhir_patient_id=fhir_id,
+                    language=lang.value,
+                    status="intake",
+                    started_at=now,
+                    expires_at=now + SESSION_EXPIRY,
+                    patient_display=display,
+                )
             )
+    restored = await intake.state(str(session_id)) if existing is not None else None
+    if restored:
+        question = pending_question(restored)
+    else:
+        result = await intake.start(
+            session_id=str(session_id),
+            clinic_id=str(principal.clinic_id),
+            arrived_at=existing.started_at if existing is not None else now,
+            language=lang,
+            extra={"patient_identifier": identifier},
         )
-    result = await intake.start(
-        session_id=str(session_id),
-        clinic_id=str(principal.clinic_id),
-        arrived_at=now,
-        language=lang,
-        extra={"patient_identifier": identifier},
-    )
+        question = question_of(result)
     token = patient_token(
         settings, clinic_id=principal.clinic_id, session_id=str(session_id), channel="kiosk"
     )
@@ -300,7 +326,7 @@ async def open_session(
         session_token=token,
         patient_display=display,
         language=lang,
-        first_question=question_of(result),
+        first_question=question,
     )
 
 

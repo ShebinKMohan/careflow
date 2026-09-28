@@ -19,12 +19,15 @@ mlx-whisper is imported lazily (the `mlx-whisper` extra, Apple silicon only); te
 from __future__ import annotations
 
 import asyncio
+import gc
+import importlib
 import logging
 import queue
 import threading
 import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import suppress
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Protocol
 
@@ -54,11 +57,20 @@ _TRANSCRIPT_QUEUE_MAX_SIZE = 20
 _WORKER_JOIN_TIMEOUT_SECONDS = 5.0
 _ENGINE_LOAD_TIMEOUT_SECONDS = 120.0
 _SENTINEL = object()
-_WARMED: set[str] = set()  # models already loaded and warmed in this process
+_WARMED: set[str] = set()  # warmed once in this process; weights are released after each call
 _WARM_LOCK = threading.Lock()
+# mlx-whisper stores one global ModelHolder across languages. Serialize decoding and release
+# together so another kiosk cannot replace or reload that holder during an active turn.
+_TRANSCRIBE_LOCK = threading.Lock()
 
 Transcriber = Callable[["NDArray[np.float32]"], str]
 """16 kHz mono float32 audio in, text out."""
+
+
+@dataclass(frozen=True)
+class HeldUtterance:
+    audio: bytes
+    released_at: float
 
 
 class VoiceActivity(Protocol):
@@ -69,6 +81,24 @@ class VoiceActivity(Protocol):
 
 class MlxWhisperUnavailableError(RuntimeError):
     """mlx-whisper is not installed or the model files are missing."""
+
+
+def _release_whisper_memory() -> None:
+    """Yield Whisper's GPU weights/cache before the transcript starts Qwen extraction.
+
+    This adapts the pinned mlx-whisper ModelHolder; the next turn reloads the same local
+    artifacts. No language is disabled, and no model file or patient audio is written.
+    """
+    transcribe_module = importlib.import_module("mlx_whisper.transcribe")
+    mx = importlib.import_module("mlx.core")
+    mx.synchronize()
+    before = mx.get_active_memory() + mx.get_cache_memory()
+    transcribe_module.ModelHolder.model = None
+    transcribe_module.ModelHolder.model_path = None
+    gc.collect()
+    mx.clear_cache()
+    after = mx.get_active_memory() + mx.get_cache_memory()
+    logger.info("stt.memory_released before_bytes=%d after_bytes=%d", before, after)
 
 
 def mlx_transcriber(model: str, language: str) -> Transcriber:
@@ -89,14 +119,22 @@ def mlx_transcriber(model: str, language: str) -> Transcriber:
     transcribe: Any = mlx_whisper.transcribe
 
     def run(audio: NDArray[np.float32]) -> str:
-        result = transcribe(
-            audio,
-            path_or_hf_repo=model,
-            language=language,
-            condition_on_previous_text=False,
-            verbose=None,
-        )
-        return str(result.get("text", "")) if isinstance(result, dict) else ""
+        with _TRANSCRIBE_LOCK:
+            try:
+                result = transcribe(
+                    audio,
+                    path_or_hf_repo=model,
+                    language=language,
+                    condition_on_previous_text=False,
+                    verbose=None,
+                )
+                return str(result.get("text", "")) if isinstance(result, dict) else ""
+            finally:
+                try:
+                    _release_whisper_memory()
+                except Exception:
+                    # Keep the transcription result (or its original error) if cleanup fails.
+                    logger.exception("Whisper memory release failed after transcription.")
 
     return run
 
@@ -183,6 +221,17 @@ class MlxWhisperSTT:
             logger.warning("Dropped an STT audio frame: the worker is behind.")
         return None
 
+    async def transcribe_utterance(self, audio: bytes) -> None:
+        """A released hold-to-talk answer, with no silence endpoint or ambient capture."""
+        if self._closed:
+            return
+        if len(audio) > int(MAX_TURN_SECONDS * SAMPLE_RATE * 2) or len(audio) % 2:
+            raise ValueError("Invalid held utterance size")
+        if self._loop is None:
+            self._loop = asyncio.get_running_loop()
+        self._ensure_worker()
+        self._audio.put_nowait(HeldUtterance(audio, self._clock()))
+
     async def transcripts(self) -> AsyncIterator[TranscriptEvent]:
         while True:
             event = await self._transcripts.get()
@@ -248,11 +297,11 @@ class MlxWhisperSTT:
             semantic.load()
         if self._warm:
             with _WARM_LOCK:
-                if self._model not in _WARMED:  # load the model once per process
+                if self._model not in _WARMED:  # warm once; real turns reload the local weights
                     transcribe(np.zeros(SAMPLE_RATE // 2, dtype=np.float32))
                     _WARMED.add(self._model)
                     logger.info(
-                        "stt.loaded", extra={"model": self._model, "peak_rss_mb": peak_rss_mb()}
+                        "stt.warmed", extra={"model": self._model, "peak_rss_mb": peak_rss_mb()}
                     )
         self._ready.set()
 
@@ -270,6 +319,29 @@ class MlxWhisperSTT:
             item = self._audio.get()
             if item is _SENTINEL:
                 return
+            if isinstance(item, HeldUtterance):
+                samples = np.frombuffer(item.audio, dtype="<i2").astype(np.float32) / 32768.0
+                # Silence must not become Whisper's stock hallucinated phrases. Check the
+                # same VAD and energy gates as continuous input before decoding the hold.
+                vad.reset()
+                speech = any(
+                    float(np.sqrt(np.mean(frame * frame))) >= MIN_SPEECH_RMS
+                    and vad.process_frame(frame) >= 0.5
+                    for offset in range(0, len(samples) - VAD_FRAME_SAMPLES + 1, VAD_FRAME_SAMPLES)
+                    for frame in [samples[offset : offset + VAD_FRAME_SAMPLES]]
+                )
+                text = normalize_text(transcribe(samples)) if speech else ""
+                self._emit(
+                    TranscriptEvent(
+                        text=text,
+                        is_final=True,
+                        speech_final=True,
+                        speech_ended_at=item.released_at,
+                    )
+                )
+                vad.reset()
+                del item, samples
+                continue
             if not isinstance(item, tuple):
                 continue
             payload, received_at = item

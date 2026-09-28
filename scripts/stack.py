@@ -126,11 +126,23 @@ def stack_env(
     origins = [f"http://{host}:{port}" for port in apps for host in hosts]
     api = f"http://localhost:{p['CAREFLOW_API_PORT']}"
     reachable = public_host or "localhost"
+    browser_api_port = p["CAREFLOW_COMPANION_PORT"] if public_host else p["CAREFLOW_API_PORT"]
     phone_side = {
         "CAREFLOW_API_HOST": "0.0.0.0" if public_host else "127.0.0.1",  # noqa: S104 - opt-in LAN
         **({"CAREFLOW_PUBLIC_HOST": public_host} if public_host else {}),
     }
+    triage_settings = {
+        key: value
+        for key in (
+            "TRIAGE_MODEL_KIND",
+            "TRIAGE_MODEL_PATH",
+            "TRIAGE_MODEL_DEVICE",
+            "TRIAGE_MODEL_THREADS",
+        )
+        if (value := os.environ.get(key) or secrets.get(key))
+    }
     return {
+        **triage_settings,
         "CAREFLOW_STACK": stack,
         "COMPOSE_PROJECT_NAME": stack,
         "CAREFLOW_PORT_OFFSET": str(offset),
@@ -141,6 +153,9 @@ def stack_env(
         "REDIS_URL": f"redis://localhost:{p['CAREFLOW_VALKEY_PORT']}/0",
         "FHIR_BASE_URL": f"http://localhost:{p['CAREFLOW_HAPI_PORT']}/fhir",
         "CAREFLOW_API_URL": api,
+        # This launcher seeds and provisions a synthetic clinic. Secrets remain server-side.
+        "CAREFLOW_KIOSK_AUTO_SETUP": os.environ.get("CAREFLOW_KIOSK_AUTO_SETUP", "1"),
+        "SIM_BP_CUFF": os.environ.get("SIM_BP_CUFF", "1"),
         # The API lets the stack's own apps call it, and finds its voice service (M1-19).
         "CAREFLOW_CORS_ORIGINS": ",".join(origins),
         "CAREFLOW_VOICE_URL": f"http://127.0.0.1:{p['VOICE_PORT']}",
@@ -149,7 +164,8 @@ def stack_env(
         "CAREFLOW_API_BASE_URL": f"http://127.0.0.1:{p['CAREFLOW_API_PORT']}",
         **phone_side,
         # What the stack's apps are built with (public values: URLs only, never a secret).
-        "NEXT_PUBLIC_API_BASE_URL": f"http://{reachable}:{p['CAREFLOW_API_PORT']}",
+        # LAN phones reach the API through the companion's same-origin Next.js reverse proxy.
+        "NEXT_PUBLIC_API_BASE_URL": f"http://{reachable}:{browser_api_port}",
         "NEXT_PUBLIC_COMPANION_URL": f"http://{reachable}:{p['CAREFLOW_COMPANION_PORT']}",
         "NEXT_PUBLIC_FHIR_BASE_URL": f"http://localhost:{p['CAREFLOW_HAPI_PORT']}/fhir",
         "NEXT_PUBLIC_VOICE_WS_URL": f"ws://localhost:{p['VOICE_PORT']}/kiosk/audio",

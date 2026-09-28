@@ -27,6 +27,18 @@ SECRET = secrets.token_urlsafe(32)  # a fresh fake secret for each test run
 API = "http://api.test"
 
 
+def test_voice_deadline_covers_the_apis_extraction_and_question_budgets() -> None:
+    from careflow_intake.wiring import IntakeConfig
+    from voice_agent.config.settings import DEFAULT_KIOSK_API_TIMEOUT_SECONDS
+
+    intake = IntakeConfig()
+    # A voice request must survive the API's bounded extraction and fallback question. The
+    # former ten-second client deadline abandoned accepted turns before the API could reply.
+    assert DEFAULT_KIOSK_API_TIMEOUT_SECONDS > (
+        intake.extraction_timeout_s + intake.phrasing_timeout_s
+    )
+
+
 def test_the_token_rules_are_the_apis() -> None:
     assert security.ALGORITHM == ALGORITHM
     assert list(security.REQUIRED_CLAIMS) == list(REQUIRED_CLAIMS)

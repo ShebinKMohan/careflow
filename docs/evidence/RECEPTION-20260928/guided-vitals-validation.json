@@ -1,0 +1,28 @@
+{
+  "component": "VitalsPanel + VitalsPage",
+  "tests": {
+    "passed": 10,
+    "duration_seconds": 1.07,
+    "command": "pnpm --filter kiosk test tests/vitals-panel.test.tsx"
+  },
+  "typescript": "passed",
+  "eslint": "passed",
+  "measurement_minimum_ms": 10000,
+  "absolute_request_deadline_ms": 35000,
+  "automatic_navigation": "/done after fresh simulated pulse, SpO2 and temperature saved",
+  "safety": [
+    "Generated demo readings explicitly labelled",
+    "Touch ID sensor limitation explicit",
+    "Server timestamp baseline rejects stale readings",
+    "Missing BP never synthesized by UI",
+    "Patient ownership proof preserved",
+    "No browser randomness or model calls"
+  ],
+  "back_navigation": {
+    "behavior": "Local read-only saved summary; returning keeps same session, never resubmits",
+    "tests_passed": 11,
+    "duration_seconds": 0.69
+  },
+  "supervisor_pid": 48882,
+  "voice_pid": 48893
+}

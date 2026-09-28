@@ -1,0 +1,157 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "journeys/consent-voice.spec.ts",
+      "--grep",
+      "agree, tap"
+    ],
+    "configFile": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/playwright.config.ts",
+    "rootDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/journeys.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "consent-voice.spec.ts",
+      "file": "consent-voice.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "(a) agree, tap the ID card, answer by voice: the microphone opens only after the consent is saved",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 37791,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('heading', { level: 2 })\nExpected: not \u001b[32m\"What is the main reason for your visit today?\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mWhat is the main reason for your visit today?\u001b[27m\"\u001b[39m\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveText\" getByRole('heading', { level: 2 }) with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { level: 2 })\u001b[22m\n\u001b[2m    64 × locator resolved to <h2 aria-live=\"polite\">What is the main reason for your visit today?</h2>\u001b[22m\n\u001b[2m       - unexpected value \"What is the main reason for your visit today?\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('heading', { level: 2 })\nExpected: not \u001b[32m\"What is the main reason for your visit today?\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mWhat is the main reason for your visit today?\u001b[27m\"\u001b[39m\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveText\" getByRole('heading', { level: 2 }) with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { level: 2 })\u001b[22m\n\u001b[2m    64 × locator resolved to <h2 aria-live=\"polite\">What is the main reason for your visit today?</h2>\u001b[22m\n\u001b[2m       - unexpected value \"What is the main reason for your visit today?\"\u001b[22m\n\n    at /Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/consent-voice.spec.ts:48:29",
+                    "location": {
+                      "file": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/consent-voice.spec.ts",
+                      "column": 29,
+                      "line": 48
+                    },
+                    "snippet": "  46 |   // Whisper's transcript comes back, and the voice service's turn moved the intake on.\n  47 |   await expect(kiosk.getByTestId(\"heard\")).toContainText(/chest pain since this morning/i, { timeout: 90_000 });\n> 48 |   await expect(heading).not.toHaveText(first, { timeout: 30_000 });\n     |                             ^\n  49 |   await kiosk.getByRole(\"button\", { name: t(\"intake.stopMic\"), exact: true }).click();\n  50 |\n  51 |   // The spoken answer is in the facts, quoted from the transcript, as the patient said it."
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/consent-voice.spec.ts",
+                        "column": 29,
+                        "line": 48
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('heading', { level: 2 })\nExpected: not \u001b[32m\"What is the main reason for your visit today?\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mWhat is the main reason for your visit today?\u001b[27m\"\u001b[39m\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveText\" getByRole('heading', { level: 2 }) with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { level: 2 })\u001b[22m\n\u001b[2m    64 × locator resolved to <h2 aria-live=\"polite\">What is the main reason for your visit today?</h2>\u001b[22m\n\u001b[2m       - unexpected value \"What is the main reason for your visit today?\"\u001b[22m\n\n\n  46 |   // Whisper's transcript comes back, and the voice service's turn moved the intake on.\n  47 |   await expect(kiosk.getByTestId(\"heard\")).toContainText(/chest pain since this morning/i, { timeout: 90_000 });\n> 48 |   await expect(heading).not.toHaveText(first, { timeout: 30_000 });\n     |                             ^\n  49 |   await kiosk.getByRole(\"button\", { name: t(\"intake.stopMic\"), exact: true }).click();\n  50 |\n  51 |   // The spoken answer is in the facts, quoted from the transcript, as the patient said it.\n    at /Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/consent-voice.spec.ts:48:29"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T17:48:09.828Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results/consent-voice--a-agree-tap-06c1f--after-the-consent-is-saved/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results/consent-voice--a-agree-tap-06c1f--after-the-consent-is-saved/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys/consent-voice.spec.ts",
+                    "column": 29,
+                    "line": 48
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d29ad4b78700b12cb549-9eeb95bd9b7f2476ff62",
+          "file": "consent-voice.spec.ts",
+          "line": 29,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T17:48:09.389Z",
+    "duration": 39978.217000000004,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

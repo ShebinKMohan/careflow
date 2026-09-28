@@ -78,7 +78,11 @@ export interface ChildAge {
  * age. */
 export async function checkIn(page: Page, digits: string, locale: Locale = "en", child?: ChildAge): Promise<CheckedIn> {
   await page.goto("/");
-  await page.getByRole("main").getByRole("button", { name: msg("kiosk", "en", locale === "en" ? "home.english" : "home.arabic") }).click();
+  if (locale === "ar") {
+    await page.getByRole("group", { name: "Language / اللغة" }).getByRole("button", { name: msg("kiosk", "en", "home.arabic") }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+  }
+  await page.getByRole("main").getByRole("button", { name: msg("kiosk", locale, "experience.kioskAction") }).click();
   await expect(page).toHaveURL(/\/consent$/);
   await page.getByRole("button", { name: msg("kiosk", locale, "safety.consent.agree"), exact: true }).click();
   await expect(page).toHaveURL(/\/checkin$/);
@@ -125,6 +129,9 @@ export async function kioskDeviceToken(page: Page): Promise<string> {
     return raw ? String((JSON.parse(raw) as { token?: string }).token ?? "") : "";
   });
   if (!token) throw new Error("the kiosk is not signed in");
+  // The lobby browser now keeps only a marker. Role-denial checks still use a real device
+  // credential obtained by the test process; no credential is injected into that browser.
+  if (token === "server-managed") return deviceToken();
   return token;
 }
 
@@ -207,7 +214,14 @@ export async function answerOnPhone(page: Page, script: PatientScript, answered:
     let mode: Turn["mode"] = "tap";
     let answer: string;
     let click: () => Promise<void>;
-    if (await yes.isVisible()) {
+    if (asked === 0) {
+      mode = "text";
+      answer = script.complaint;
+      click = async () => {
+        await page.getByLabel(t("intake.typeAnswer")).fill(answer);
+        await page.getByRole("button", { name: t("intake.send"), exact: true }).click();
+      };
+    } else if (await yes.isVisible()) {
       answer = t(script.yes.some((pattern) => pattern.test(question)) ? "intake.answers.yes" : "intake.answers.no");
       click = () => page.getByRole("button", { name: answer, exact: true }).click();
     } else if (await scale.isVisible()) {

@@ -6,6 +6,7 @@ import json
 from collections.abc import AsyncIterator, Sequence
 
 from careflow_contracts import StructuredFacts
+from careflow_contracts.generated.extraction_output_schema import ExtractionOutput
 from careflow_contracts.testing import load_fixture
 from careflow_providers import ChatResult, Message, StructuredFailure, StructuredOk, structured
 from careflow_providers.base import MAX_ERROR_CHARS, extract_json, strip_thinking
@@ -79,6 +80,28 @@ async def test_schema_is_in_the_system_prompt() -> None:
     await structured(provider, USER, StructuredFacts)
     system = provider.calls[0][0]
     assert system["role"] == "system" and '"StructuredFacts"' in system["content"]
+
+
+async def test_presentation_schema_never_replaces_canonical_validation_or_repair() -> None:
+    invalid = '{"facts":[{"key":"invented","value":true,"turn_id":"t1","quote":"yes"}]}'
+    valid = '{"facts":[{"key":"injury","value":true,"turn_id":"t1","quote":"yes"}]}'
+    provider = ScriptedProvider(invalid, valid)
+    result = await structured(
+        provider, USER, ExtractionOutput, presentation_schema={"type": "object"}
+    )
+    assert isinstance(result, StructuredOk) and result.attempts == 2
+    assert result.value.facts[0].key.value == "injury"
+    assert result.value.facts[0].negated is False
+    assert "did not validate" in provider.calls[1][-1]["content"]
+    assert '"type":"object"' in provider.calls[0][0]["content"]
+
+
+async def test_presentation_schema_cannot_allow_wrong_canonical_value_type() -> None:
+    invalid = '{"facts":[{"key":"injury","value":[],"turn_id":"t1","quote":"yes"}]}'
+    result = await structured(
+        ScriptedProvider(invalid, invalid), USER, ExtractionOutput, presentation_schema={}
+    )
+    assert isinstance(result, StructuredFailure) and len(result.errors) == 2
 
 
 def test_thinking_blocks_and_fences_are_stripped() -> None:

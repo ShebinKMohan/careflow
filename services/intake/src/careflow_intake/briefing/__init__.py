@@ -32,6 +32,8 @@ async def make_briefing(
     """The checked briefing. Without a summarizer (`briefing_summary: false`) the summary is
     `disabled`."""
     checked, problems = check_briefing(build_briefing(state, now=now), state)
+    if state.get("reception_context") is not None or state.get("urgent_help") is not None:
+        return BriefingResult(checked, problems, ["structured reception uses the sourced briefing"])
     if summarizer is None:
         return BriefingResult(checked, problems, ["briefing_summary is off"])
     outcome: SummaryOutcome = await summarizer(checked)

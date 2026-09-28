@@ -42,11 +42,20 @@ ARTIFACTS: Final = REPO / "services" / "triage" / "artifacts"
 
 
 def triage_model_path() -> Path:
-    """TRIAGE_MODEL_PATH, else the newest installed hgb model, one trained on the real KTAS data
-    before a `fixture-*` one (M1-19 trains one when none is installed)."""
+    """Explicit artifact path, or the newest artifact of the selected model kind.
+
+    HGB remains the default for installations without the optional Laya dependency. Selecting
+    Laya never falls back to an HGB artifact when its checkpoint is missing.
+    """
     if configured := os.environ.get("TRIAGE_MODEL_PATH"):
         return Path(configured)
-    found = [p for p in ARTIFACTS.glob("*hgb*") if (p / "model.joblib").exists()]
+    kind = os.environ.get("TRIAGE_MODEL_KIND", "hgb")
+    if kind == "laya":
+        found = [p for p in (ARTIFACTS / "laya").glob("*") if (p / "model.safetensors").is_file()]
+    elif kind == "hgb":
+        found = [p for p in ARTIFACTS.glob("*hgb*") if (p / "model.joblib").is_file()]
+    else:
+        return ARTIFACTS / "none"
     if not found:
         return ARTIFACTS / "none"
     found.sort(key=lambda p: (not p.name.startswith("fixture-"), p.stat().st_mtime))
@@ -72,7 +81,16 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
     """The real ports; the urgency model falls back to "no suggestion" when it is missing."""
     config = load_intake_config()
     providers = providers_config()
-    urgency = TriageUrgency.load(triage_model_path())
+    try:
+        threads = int(os.environ.get("TRIAGE_MODEL_THREADS", "2"))
+    except ValueError:
+        threads = 0  # the loader reports invalid configuration without stopping nurse review
+    urgency = TriageUrgency.load(
+        triage_model_path(),
+        kind=os.environ.get("TRIAGE_MODEL_KIND", "auto"),
+        device=os.environ.get("TRIAGE_MODEL_DEVICE", "cpu"),
+        threads=threads,
+    )
     events = OutboxEvents()
     ports = build_real_ports(
         identifier=CheckinIdentifier(),
@@ -110,8 +128,8 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
         PortChoice("rules", "careflow_rules", RULESET_VERSION),
         PortChoice(
             "urgency",
-            "none (no suggestion)" if no_model else "trained model (M1-04)",
-            str(triage_model_path().name) if not no_model else "TRIAGE_MODEL_PATH has no model",
+            "none (no suggestion)" if no_model else urgency.model_id,
+            urgency.reason if no_model else urgency.model_version,
             degraded=no_model,
         ),
         PortChoice("queue", "queue (M1-10)"),

@@ -25,7 +25,7 @@ export const ARABIC_DISCLAIMER_TEXT: Record<Locale, string> = {
 
 export function PrototypeFooter({ locale }: { locale: Locale }) {
   return (
-    <footer className="bg-footer px-gutter py-4 text-center text-label text-on-footer">
+    <footer className="cf-footer border-t border-line bg-footer px-gutter py-4 text-center text-caption text-on-footer">
       <p lang={locale} data-testid="prototype-footer">
         {PROTOTYPE_FOOTER_TEXT[locale]}
       </p>

@@ -1,0 +1,304 @@
+[
+  {
+    "scenario": "ankle",
+    "session_id": "61e35a9b-9d8d-58ee-9430-51ba56946507",
+    "language": "en",
+    "text": "I twisted my left ankle playing football yesterday afternoon. It hurts when I walk and the pain is four out of ten.",
+    "latency_ms": 8363,
+    "response": {
+      "turn_id": "trn_003",
+      "intake_revision": 4,
+      "assistant_text": "When did this start?",
+      "done": false,
+      "next_question": {
+        "question_id": "q_symptom_onset_at_1",
+        "text": "When did this start?",
+        "key": "symptom_onset_at",
+        "notice": null,
+        "notice_kind": null,
+        "citations": null
+      }
+    },
+    "facts": {
+      "session_id": "61e35a9b-9d8d-58ee-9430-51ba56946507",
+      "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+      "language": "en",
+      "patient": {
+        "age_years": {
+          "fact_id": "f_DWR551AWGCNGNYVRA060D64EST",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_reception_001",
+            "start": 0,
+            "end": 7,
+            "quote": "Age: 29"
+          },
+          "recorded_at": "2026-09-28T19:19:08.795031Z",
+          "value": 29
+        },
+        "sex": {
+          "fact_id": "f_G53CZRWDXFCN6DQRX2WV97V8E1",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "198614",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-28T19:19:08.937362Z",
+          "value": {
+            "system": "http://hl7.org/fhir/administrative-gender",
+            "code": "male",
+            "display": "Male"
+          }
+        }
+      },
+      "chief_complaint": {
+        "fact_id": "f_5K294DZWZRHK3TVC7XNREE275X",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 60,
+          "quote": "I twisted my left ankle playing football yesterday afternoon"
+        },
+        "recorded_at": "2026-09-28T19:19:09.116645Z",
+        "value": "I twisted my left ankle playing football yesterday afternoon"
+      },
+      "symptoms": [
+        {
+          "name": {
+            "fact_id": "f_2AWFRWNKP39YP12GA5GK9GFHM7",
+            "provenance": "PATIENT_STATED",
+            "source": {
+              "kind": "transcript_span",
+              "turn_id": "trn_003",
+              "start": 62,
+              "end": 70,
+              "quote": "It hurts"
+            },
+            "recorded_at": "2026-09-28T19:19:09.116645Z",
+            "value": "pain"
+          }
+        }
+      ],
+      "pain_score": {
+        "fact_id": "f_8NGWPKS5G0D8J30D3BKXZPJ2HR",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 99,
+          "end": 114,
+          "quote": "four out of ten"
+        },
+        "recorded_at": "2026-09-28T19:19:09.116645Z",
+        "value": 4
+      },
+      "injury": {
+        "fact_id": "f_5P2KFCJ8PAR5F1MYKGD81FBSWT",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 60,
+          "quote": "I twisted my left ankle playing football yesterday afternoon"
+        },
+        "recorded_at": "2026-09-28T19:19:09.116645Z",
+        "value": "yes"
+      },
+      "ehr_context": {
+        "allergies": [],
+        "conditions": [],
+        "medications": []
+      },
+      "extraction_status": "complete"
+    },
+    "warnings": []
+  },
+  {
+    "scenario": "elder",
+    "session_id": "e36a2460-499d-5881-888a-b00a763a3df5",
+    "language": "en",
+    "text": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.",
+    "latency_ms": 4180,
+    "response": {
+      "turn_id": "trn_003",
+      "intake_revision": 4,
+      "assistant_text": "When did this start?",
+      "done": false,
+      "next_question": {
+        "question_id": "q_symptom_onset_at_1",
+        "text": "When did this start?",
+        "key": "symptom_onset_at",
+        "notice": null,
+        "notice_kind": null,
+        "citations": null
+      }
+    },
+    "facts": {
+      "session_id": "e36a2460-499d-5881-888a-b00a763a3df5",
+      "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+      "language": "en",
+      "patient": {
+        "age_years": {
+          "fact_id": "f_8Z7XH37X84QXMM34EE42Z9A7V8",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_reception_001",
+            "start": 5,
+            "end": 7,
+            "quote": "72"
+          },
+          "recorded_at": "2026-09-28T19:19:17.512011Z",
+          "value": 72
+        },
+        "sex": {
+          "fact_id": "f_CJ9GQB9J3J6V4A8MMT2JYGGJX9",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "198615",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-28T19:19:17.634324Z",
+          "value": {
+            "system": "http://hl7.org/fhir/administrative-gender",
+            "code": "male",
+            "display": "Male"
+          }
+        }
+      },
+      "chief_complaint": {
+        "fact_id": "f_RXG41XCCCG14TWSHZMW4NEF0TV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 125,
+          "quote": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+        },
+        "recorded_at": "2026-09-28T19:19:17.747242Z",
+        "value": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+      },
+      "ehr_context": {
+        "allergies": [],
+        "conditions": [],
+        "medications": []
+      },
+      "extraction_status": "complete"
+    },
+    "warnings": []
+  },
+  {
+    "scenario": "arabic",
+    "session_id": "c0c77835-1544-5545-abee-d322605b4d6c",
+    "language": "ar",
+    "text": "عندي ألم في صدري من الصباح.",
+    "latency_ms": 7271,
+    "response": {
+      "turn_id": "trn_003",
+      "intake_revision": 5,
+      "assistant_text": "شكراً لك. سيأتي إليك أحد أفراد فريق التمريض قريباً. يرجى البقاء هنا.\n\nهل ينتشر الألم إلى ذراعك أو رقبتك أو فكك أو ظهرك؟",
+      "done": false,
+      "next_question": {
+        "question_id": "q_chest_pain.radiates_1",
+        "text": "هل ينتشر الألم إلى ذراعك أو رقبتك أو فكك أو ظهرك؟",
+        "key": "chest_pain.radiates",
+        "notice": "شكراً لك. سيأتي إليك أحد أفراد فريق التمريض قريباً. يرجى البقاء هنا.",
+        "notice_kind": "nurse_coming",
+        "citations": null
+      }
+    },
+    "facts": {
+      "session_id": "c0c77835-1544-5545-abee-d322605b4d6c",
+      "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+      "language": "ar",
+      "patient": {
+        "age_years": {
+          "fact_id": "f_DAXC3WZ35KVCVGWGX1XEPTY8Y2",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_reception_001",
+            "start": 5,
+            "end": 7,
+            "quote": "35"
+          },
+          "recorded_at": "2026-09-28T19:19:21.954328Z",
+          "value": 35
+        },
+        "sex": {
+          "fact_id": "f_RHH75EYRTW3D9GPF48DTBJBJ24",
+          "provenance": "EHR",
+          "source": {
+            "kind": "fhir",
+            "resource_type": "Patient",
+            "id": "198616",
+            "version_id": "1"
+          },
+          "recorded_at": "2026-09-28T19:19:22.077601Z",
+          "value": {
+            "system": "http://hl7.org/fhir/administrative-gender",
+            "code": "male",
+            "display": "Male"
+          }
+        }
+      },
+      "chief_complaint": {
+        "fact_id": "f_RZ99ZY32KMS9FR7SVAJP1E92TY",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 26,
+          "quote": "عندي ألم في صدري من الصباح"
+        },
+        "recorded_at": "2026-09-28T19:19:22.255515Z",
+        "value": "Chest pain since morning"
+      },
+      "chest_pain": {
+        "present": {
+          "fact_id": "f_TK35V095BQ8KYSRRN7X7AD73T6",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 0,
+            "end": 26,
+            "quote": "عندي ألم في صدري من الصباح"
+          },
+          "recorded_at": "2026-09-28T19:19:22.255515Z",
+          "value": "yes"
+        },
+        "onset": {
+          "fact_id": "f_VZY72XYXZHDTEH30ZRV7FK4C7B",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 17,
+            "end": 26,
+            "quote": "من الصباح"
+          },
+          "recorded_at": "2026-09-28T19:19:22.255515Z",
+          "value": "morning"
+        }
+      },
+      "ehr_context": {
+        "allergies": [],
+        "conditions": [],
+        "medications": []
+      },
+      "extraction_status": "complete"
+    },
+    "warnings": []
+  }
+]

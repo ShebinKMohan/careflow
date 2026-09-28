@@ -1,0 +1,10 @@
+{
+  "kiosk_details_to_departments": 45,
+  "kiosk_reason_to_review": 41,
+  "kiosk_registration_api": 230,
+  "kiosk_guided_vitals": 10456,
+  "nurse_decision_api": 457,
+  "nurse_decision_to_queue_status": 144,
+  "phone_details_to_departments": 37,
+  "phone_registration_api": 122
+}

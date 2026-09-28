@@ -219,6 +219,233 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+  /v1/identity/lookup:
+    post:
+      operationId: lookupIdentity
+      summary: Find a masked synthetic hospital record
+      description: Requires a kiosk bearer or a valid entry QR in the body. Demo identity verification is not production identity assurance. Patient and caregiver records remain separate.
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IdentityLookupRequest'}
+      responses:
+        '200':
+          description: Find a masked synthetic hospital record
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/IdentityLookupResult'}
+              example: {status: no_match, message: No unique matching demo record. You can register as a new patient., demo: true}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessablecontent'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+  /v1/identity/verify:
+    post:
+      operationId: verifyIdentity
+      summary: Verify the demo birth year before showing patient history
+      description: Requires a kiosk bearer or a valid entry QR in the body. Demo identity verification is not production identity assurance. Patient and caregiver records remain separate.
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IdentityVerifyRequest'}
+      responses:
+        '200':
+          description: Verify the demo birth year before showing patient history
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/IdentityVerifyResult'}
+              example: {verification_token: example-opaque-verified-identity-token, patient: {name: Alex Reed, age_years: 35, sex: male}, history: {status: partial, allergies: [], conditions: [], medications: []}, demo: true}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessablecontent'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+  /v1/checkin/adaptive:
+    post:
+      operationId: adaptiveCheckin
+      summary: Start the adaptive clinical intake for the actual patient
+      description: Requires a kiosk bearer or a valid entry QR in the body. Demo identity verification is not production identity assurance. Patient and caregiver records remain separate.
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AdaptiveCheckinRequest'}
+      responses:
+        '200':
+          description: Start the adaptive clinical intake for the actual patient
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CheckinResult'}
+              example: {session_id: ses_adaptive, session_token: example-adaptive-patient-token, patient_display: A. R., language: en, first_question: {question_id: q_chief_1, text: 'What brings you in today?', key: chief_complaint, notice: null}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessablecontent'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+  /v1/checkin/urgent:
+    post:
+      operationId: urgentCheckin
+      summary: Request urgent nurse assistance before patient registration
+      description: Requires an authorized kiosk or entry QR and explicit data-use consent. Creates an unidentified visit without a fabricated name, age or hospital identity. No model or FHIR lookup is called. The nurse determines urgency and queue assignment.
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/UrgentCheckinRequest'}
+      responses:
+        '200':
+          description: Assistance request saved to the nurse worklist
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CheckinResult'}
+              example: {session_id: ses_urgent, session_token: example-urgent-patient-token, patient_display: Unknown, language: en}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessablecontent'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+  /v1/reception/directory:
+    get:
+      operationId: receptionDirectory
+      summary: Example hospital departments and demo doctor rota
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      responses:
+        '200':
+          description: Synthetic directory, never a live availability or appointment promise
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ReceptionDirectory'}
+              example: {hospital_name: Northstar General Hospital, demo: true, notice: Example hospital and synthetic doctor rota. No appointment is reserved., departments: []}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+  /v1/reception/checkin:
+    post:
+      operationId: receptionCheckin
+      summary: Register a visit and send structured answers to nurse review
+      description: Requires either a kiosk bearer credential or a valid welcome QR token in the body. Records registration and consent without an LLM call. Department and doctor choices are preferences; nurse assessment determines routing.
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ReceptionCheckinRequest'}
+      responses:
+        '200':
+          description: Session registered and waiting for the care team
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CheckinResult'}
+              example: {session_id: ses_reception, session_token: example-reception-session-token, patient_display: A. R., language: en}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessablecontent'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+  /v1/sessions/{session_id}/reception:
+    parameters:
+    - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: receptionContext
+      summary: Registration details and patient preferences for an authorized care team or patient
+      tags: [sessions]
+      x-careflow-roles: [patient_session, nurse, doctor, admin]
+      responses:
+        '200':
+          description: Saved visit context
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ReceptionContext'}
+              example: {patient: {name: Alex Reed, age_years: 35, sex: unknown}, department_id: general_medicine, department_name: General medicine, visit_purpose: consultation, reason: Routine consultation, emergency_symptoms: [], registered_at: '2026-09-28T12:00:00Z', availability_notice: Synthetic demo rota; no appointment reserved.}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/Notfound'}
+  /v1/checkin/start/qr:
+    post:
+      operationId: issueStartQr
+      summary: Start phone check-in from the welcome screen
+      description: An authenticated kiosk issues a ten-minute entry code carrying only clinic, device and language. Display it in the companion URL fragment at /start#t=TOKEN. No patient session or identity is created yet.
+      tags: [checkin]
+      x-careflow-roles: [kiosk_device]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartQrRequest'
+      responses:
+        '200':
+          description: Entry QR token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QrToken'
+              example:
+                qr_token: example-phone-entry-token
+                expires_at: '2026-09-28T12:10:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+  /v1/checkin/start/claim:
+    post:
+      operationId: claimStartQr
+      summary: Check in directly on the phone
+      description: An entry code, six-digit patient code, explicit consent and patient details create one phone session. No staff or device login is needed. The same request and claim key recover a lost response. Independent phones may use the welcome code, each creating their own identified visit. Five failed patient-code attempts per kiosk in five minutes and ten requests per IP per minute are enforced.
+      tags: [checkin]
+      x-careflow-roles: []
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartClaimRequest'
+      responses:
+        '200':
+          description: Patient session with consent and patient details recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinResult'
+              example:
+                session_id: ses_phone_start
+                session_token: example-phone-session-token
+                patient_display: M. S.
+                language: en
+                first_question:
+                  question_id: q_chief_complaint_1
+                  text: What is the main reason for your visit today?
+                  key: chief_complaint
+                  notice: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/Notfound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessablecontent'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /v1/checkin/keypad:
     post:
       operationId: checkinKeypad
@@ -576,6 +803,39 @@ paths:
           $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/Unprocessablecontent'
+  /v1/sessions/{session_id}/intake-summary:
+    get:
+      operationId: getPatientIntakeSummary
+      summary: Current patient's sourced intake receipt and provisional team review
+      description: Own-session-only receipt. Codes identify deterministic safety rules, not hospital emergency announcements. Model suggestions remain provisional until a nurse confirms; this is not a diagnosis or permission to wait. No caregiver record or raw transcript is returned.
+      tags: [intake]
+      x-careflow-roles: [patient_session]
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema: {type: string}
+      responses:
+        '200':
+          description: Sourced patient receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientIntakeSummary'
+              example:
+                session_id: 11111111-1111-4111-8111-111111111111
+                visit_reference: CF-11111111
+                nurse_confirmed: false
+                assistance_requested: false
+                facts: []
+                alerts: []
+                suggestion: null
+                warnings: []
+        '401': {description: Invalid patient session}
+        '403': {description: A different patient or role}
+        '404': {description: Session not found}
   /v1/sessions/{session_id}/facts:
     parameters:
     - $ref: '#/components/parameters/SessionId'
@@ -2533,6 +2793,231 @@ components:
       - text
       - key
       additionalProperties: false
+    IdentityLookupRequest:
+      type: object
+      properties:
+        claim_key: {type: string, pattern: '^[A-Za-z0-9_-]{43,128}$'}
+        qr_token: {type: string, minLength: 16}
+        kind: {type: string, enum: [mobile, patient_id]}
+        value: {type: string, minLength: 3, maxLength: 64}
+        consent: {$ref: '#/components/schemas/ConsentRequest'}
+      required: [claim_key, kind, value, consent]
+      additionalProperties: false
+    IdentityLookupResult:
+      type: object
+      properties:
+        status: {type: string, enum: [match, no_match, unavailable]}
+        challenge_token: {type: string, minLength: 32}
+        masked_name: {type: string, maxLength: 8}
+        message: {type: string}
+        demo: {type: boolean, const: true}
+      required: [status, message, demo]
+      additionalProperties: false
+    IdentityVerifyRequest:
+      type: object
+      properties:
+        claim_key: {type: string, pattern: '^[A-Za-z0-9_-]{43,128}$'}
+        qr_token: {type: string, minLength: 16}
+        challenge_token: {type: string, minLength: 32}
+        birth_year: {type: integer, minimum: 1890, maximum: 2100}
+      required: [claim_key, challenge_token, birth_year]
+      additionalProperties: false
+    IdentityHistory:
+      type: object
+      properties:
+        status: {type: string, enum: [ok, partial, unavailable]}
+        allergies: {type: array, items: {type: string}}
+        conditions: {type: array, items: {type: string}}
+        medications: {type: array, items: {type: string}}
+      required: [status, allergies, conditions, medications]
+      additionalProperties: false
+    IdentityVerifyResult:
+      type: object
+      properties:
+        verification_token: {type: string, minLength: 32}
+        patient: {$ref: '#/components/schemas/ReceptionPatient'}
+        history: {$ref: '#/components/schemas/IdentityHistory'}
+        demo: {type: boolean, const: true}
+      required: [verification_token, patient, history, demo]
+      additionalProperties: false
+    CaregiverDetails:
+      type: object
+      properties:
+        name: {type: string, minLength: 2, maxLength: 100}
+        phone: {type: string, maxLength: 30}
+        relationship: {type: string, enum: [parent, carer, family, other]}
+      required: [name, relationship]
+      additionalProperties: false
+    CaregiverRequest:
+      type: object
+      properties:
+        name: {type: string, minLength: 2, maxLength: 100}
+        phone: {type: string, maxLength: 30}
+        relationship: {type: string, enum: [parent, carer, family, other]}
+        identity_token: {type: string, minLength: 32}
+      required: [name, relationship]
+      additionalProperties: false
+    AdaptiveCheckinRequest:
+      type: object
+      properties:
+        claim_key: {type: string, pattern: '^[A-Za-z0-9_-]{43,128}$'}
+        qr_token: {type: string, minLength: 16}
+        language: {$ref: '#/components/schemas/Language'}
+        patient: {$ref: '#/components/schemas/ReceptionPatient'}
+        patient_identity_token: {type: string, minLength: 32}
+        visit_for: {type: string, enum: [self, child, elder, dependent]}
+        caregiver: {$ref: '#/components/schemas/CaregiverRequest'}
+        consent: {$ref: '#/components/schemas/ConsentRequest'}
+        reason: {type: string, maxLength: 1000}
+        department_id: {type: string, default: unsure, maxLength: 60}
+        doctor_id: {type: string, maxLength: 60}
+        emergency_symptoms:
+          type: array
+          maxItems: 6
+          uniqueItems: true
+          default: []
+          items: {$ref: '#/components/schemas/ReceptionSymptom'}
+      required: [claim_key, patient, visit_for, consent]
+      additionalProperties: false
+    UrgentCheckinRequest:
+      type: object
+      properties:
+        claim_key: {type: string, pattern: '^[A-Za-z0-9_-]{43,128}$'}
+        qr_token: {type: string, minLength: 16}
+        language: {$ref: '#/components/schemas/Language'}
+        patient_type: {type: string, enum: [adult, child]}
+        consent: {$ref: '#/components/schemas/ConsentRequest'}
+        emergency_symptoms:
+          type: array
+          maxItems: 6
+          uniqueItems: true
+          items: {$ref: '#/components/schemas/ReceptionSymptom'}
+      required: [claim_key, patient_type, consent, emergency_symptoms]
+      additionalProperties: false
+    UrgentHelpRequest:
+      type: object
+      properties:
+        requested_at: {type: string, format: date-time}
+        patient_type: {type: string, enum: [adult, child]}
+        emergency_symptoms:
+          type: array
+          maxItems: 6
+          uniqueItems: true
+          items: {$ref: '#/components/schemas/ReceptionSymptom'}
+      required: [requested_at, patient_type, emergency_symptoms]
+      additionalProperties: false
+    ReceptionPatient:
+      type: object
+      properties:
+        name: {type: string, minLength: 2, maxLength: 100}
+        age_years: {type: integer, minimum: 0, maximum: 130}
+        sex: {type: string, enum: [male, female, other, unknown]}
+        phone: {type: string, maxLength: 30}
+      required: [name, age_years, sex]
+      additionalProperties: false
+    ReceptionDoctor:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        availability: {type: string, enum: [demo_available]}
+      required: [id, name, availability]
+      additionalProperties: false
+    ReceptionDepartment:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        description: {type: string}
+        doctors:
+          type: array
+          items: {$ref: '#/components/schemas/ReceptionDoctor'}
+      required: [id, name, description, doctors]
+      additionalProperties: false
+    ReceptionDirectory:
+      type: object
+      properties:
+        hospital_name: {type: string}
+        demo: {type: boolean, const: true}
+        notice: {type: string}
+        departments:
+          type: array
+          items: {$ref: '#/components/schemas/ReceptionDepartment'}
+      required: [hospital_name, demo, notice, departments]
+      additionalProperties: false
+    VisitPurpose:
+      type: string
+      enum: [consultation, follow_up, test_results, other]
+    ReceptionSymptom:
+      type: string
+      enum: [chest_pain, short_of_breath, face_droop, arm_weakness, speech_difficulty, drowsy_or_confused]
+    ReceptionCheckinRequest:
+      type: object
+      properties:
+        claim_key: {type: string, pattern: '^[A-Za-z0-9_-]{43,128}$'}
+        qr_token: {type: string, minLength: 16}
+        language: {$ref: '#/components/schemas/Language'}
+        patient: {$ref: '#/components/schemas/ReceptionPatient'}
+        department_id: {type: string, minLength: 1, maxLength: 60}
+        doctor_id: {type: string, maxLength: 60}
+        visit_purpose: {$ref: '#/components/schemas/VisitPurpose'}
+        reason: {type: string, minLength: 2, maxLength: 1000}
+        emergency_symptoms:
+          type: array
+          maxItems: 6
+          uniqueItems: true
+          items: {$ref: '#/components/schemas/ReceptionSymptom'}
+        consent: {$ref: '#/components/schemas/ConsentRequest'}
+      required: [claim_key, patient, department_id, visit_purpose, reason, emergency_symptoms, consent]
+      additionalProperties: false
+    ReceptionContext:
+      type: object
+      properties:
+        visit_for: {type: string, enum: [self, child, elder, dependent]}
+        caregiver: {$ref: '#/components/schemas/CaregiverDetails'}
+        identity_status: {type: string, enum: [verified_demo, new_patient]}
+        intake_mode: {type: string, enum: [adaptive, reception]}
+        patient: {$ref: '#/components/schemas/ReceptionPatient'}
+        department_id: {type: string}
+        department_name: {type: string}
+        doctor_id: {type: string}
+        doctor_name: {type: string}
+        visit_purpose: {$ref: '#/components/schemas/VisitPurpose'}
+        reason: {type: string}
+        emergency_symptoms:
+          type: array
+          items: {$ref: '#/components/schemas/ReceptionSymptom'}
+        registered_at: {type: string, format: date-time}
+        availability_notice: {type: string}
+      required: [patient, department_id, department_name, visit_purpose, reason, emergency_symptoms, registered_at, availability_notice]
+      additionalProperties: false
+    StartQrRequest:
+      type: object
+      properties:
+        language:
+          $ref: '#/components/schemas/Language'
+      additionalProperties: false
+    StartClaimRequest:
+      type: object
+      properties:
+        qr_token:
+          type: string
+          minLength: 16
+        claim_key:
+          type: string
+          pattern: ^[A-Za-z0-9_-]{43,128}$
+          description: Random secret generated once by this phone, kept in memory and reused only for retries.
+        digits:
+          type: string
+          pattern: ^[0-9]{6}$
+        language:
+          $ref: '#/components/schemas/Language'
+        consent:
+          $ref: '#/components/schemas/ConsentRequest'
+        patient:
+          $ref: '#/components/schemas/PatientDetailsRequest'
+      required: [qr_token, claim_key, digits, consent, patient]
+      additionalProperties: false
     QrToken:
       type: object
       description: One-time token shown as a QR code on the kiosk.
@@ -2720,6 +3205,47 @@ components:
       - arrived
       - no_show
       - closed
+    PatientSummaryFact:
+      type: object
+      additionalProperties: false
+      required: [key, fact_id, value, provenance, simulated]
+      properties:
+        key: {type: string}
+        fact_id: {type: string}
+        value: {type: string}
+        provenance: {type: string}
+        simulated: {type: boolean}
+    PatientSummaryAlert:
+      type: object
+      additionalProperties: false
+      required: [code, severity]
+      properties:
+        code: {$ref: '#/components/schemas/RuleId'}
+        severity: {$ref: '#/components/schemas/AlertSeverity'}
+    PatientIntakeSummary:
+      type: object
+      additionalProperties: false
+      required: [session_id, visit_reference, nurse_confirmed, facts, alerts, suggestion, warnings]
+      properties:
+        session_id: {type: string}
+        visit_reference: {type: string, description: Reference to this visit; not a queue token or position.}
+        nurse_confirmed: {type: boolean}
+        assistance_requested: {type: boolean, default: false, description: An urgent help request has been durably saved for the nurse.}
+        confirmed_level: {type: integer, minimum: 1, maximum: 5}
+        confirmed_scale: {$ref: '#/components/schemas/TriageScale'}
+        facts:
+          type: array
+          items: {$ref: '#/components/schemas/PatientSummaryFact'}
+        alerts:
+          type: array
+          items: {$ref: '#/components/schemas/PatientSummaryAlert'}
+        suggestion:
+          oneOf:
+          - {$ref: '#/components/schemas/UrgencySuggestion'}
+          - {type: 'null'}
+        warnings:
+          type: array
+          items: {type: string}
     SessionStatus:
       type: object
       description: What the patient may see. Never a level or an alert.
@@ -3099,6 +3625,10 @@ components:
     WorklistItem:
       type: object
       properties:
+        urgent_help:
+          $ref: '#/components/schemas/UrgentHelpRequest'
+        reception_context:
+          $ref: '#/components/schemas/ReceptionContext'
         session_id: *id005
         patient_display:
           type: string

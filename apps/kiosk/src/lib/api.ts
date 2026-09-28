@@ -7,6 +7,24 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://loca
 
 /** Kiosk calls (check-in, vitals) use the kiosk_device token from the setup step. */
 export const api = createCareflowClient(API_BASE_URL, () => readDevice()?.token);
+api.use({
+  async onRequest({ request }) {
+    if (typeof window === "undefined" || readDevice()?.token !== "server-managed") {
+      // The direct API authorizes a provisioned device itself; this proof belongs only to our BFF.
+      request.headers.delete("X-CareFlow-Patient");
+      return request;
+    }
+    const source = new URL(request.url);
+    const headers = new Headers(request.headers);
+    headers.delete("Authorization");
+    return new Request(new URL(`/api/kiosk${source.pathname}`, window.location.origin), {
+      method: request.method,
+      headers,
+      body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.text(),
+      signal: request.signal,
+    });
+  },
+});
 
 /**
  * Fired (on `window`, with the token as `detail`) when the API refuses a patient's token: the

@@ -187,6 +187,10 @@ def worklist_item(
         ],
         "warnings": [w.value for w in warnings(state)],
     }
+    if (urgent := state.get("urgent_help")) is not None:
+        body["urgent_help"] = urgent
+    if (reception := state.get("reception_context")) is not None:
+        body["reception_context"] = reception
     if token_code:
         body["token_code"] = token_code
     if queue_token is not None:

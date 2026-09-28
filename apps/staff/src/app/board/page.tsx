@@ -12,9 +12,14 @@ export default async function BoardPage({
   const { department: requested } = await searchParams;
   const department = typeof requested === "string" && IDENTIFIER.test(requested) ? requested : "ed";
   const t = await getTranslations("board");
+  const workspace = await getTranslations("workspace");
   return (
     <>
+      <div className="staff-page-heading">
+        <p className="staff-eyebrow">{workspace("workspace")}</p>
       <h1 className="text-display font-bold">{t("title", { department })}</h1>
+        <p>{workspace("boardDescription")}</p>
+      </div>
       <BoardView department={department} />
     </>
   );

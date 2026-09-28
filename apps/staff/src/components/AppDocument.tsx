@@ -16,11 +16,14 @@ export interface AppDocumentProps {
 export function AppDocument({ locale, messages, className, children }: AppDocumentProps) {
   return (
     <html lang={locale} dir={direction(locale)} className={className}>
-      <body className="flex min-h-dvh flex-col">
+      <body className="staff-shell" data-density="desktop">
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={DEFAULT_TIME_ZONE}>
+          <a href="#main-content" className="staff-skip-link">{locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}</a>
           <SiteHeader />
-          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-gutter py-8">{children}</main>
-          <PrototypeFooter locale={locale} />
+          <div className="staff-workspace">
+            <main id="main-content" className="staff-main">{children}</main>
+            <PrototypeFooter locale={locale} />
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>

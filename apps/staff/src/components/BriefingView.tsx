@@ -9,6 +9,7 @@ import { api } from "@/lib/api";
 import { useApiData } from "@/lib/useApiData";
 
 import { ApiStatus } from "./ApiStatus";
+import { SessionReception } from "./ReceptionSummary";
 import { SourcePopover } from "./SourcePopover";
 
 type Briefing = Schema<"Briefing">;
@@ -25,18 +26,20 @@ export function BriefingView({ sessionId }: { sessionId: string }) {
     () => api.GET("/v1/doctor/sessions/{session_id}/briefing", { params: { path: { session_id: sessionId } } }),
     `briefing:${sessionId}`,
   );
-  return <ApiStatus state={state}>{(briefing) => <BriefingBody briefing={briefing} />}</ApiStatus>;
+  return <ApiStatus state={state.status === "ready" && state.data.session_id !== sessionId ? { status: "loading" } : state}>{(briefing) => <><SessionReception key={sessionId} sessionId={sessionId} /><BriefingBody briefing={briefing} /></>}</ApiStatus>;
 }
 
 function BriefingBody({ briefing }: { briefing: Briefing }) {
   const [cited, setCited] = useState<ReadonlySet<string>>(new Set());
   return (
-    <div className="flex flex-col gap-4" data-testid="briefing">
+    <div className="staff-briefing" data-testid="briefing">
       <TriageBlock briefing={briefing} />
       <SummaryBlock briefing={briefing} onCite={(ids) => setCited(new Set(ids))} />
+      <div className="staff-briefing-sections">
       {briefing.sections.map((section) => (
         <SectionCard key={section.id} section={section} briefing={briefing} cited={cited} />
       ))}
+      </div>
     </div>
   );
 }

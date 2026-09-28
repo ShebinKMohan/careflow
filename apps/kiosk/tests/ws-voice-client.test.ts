@@ -279,3 +279,50 @@ describe("WsVoiceClient", () => {
     expect(t.contexts[0]!.closed).toBe(true);
   });
 });
+
+describe("hold-to-talk capture boundaries", () => {
+  beforeEach(() => { setConsentChoices({ camera: false, voice: true, dataUse: true }); markConsentSaved(); });
+  afterEach(() => setConsentChoices(null));
+
+  it("release stops capture immediately while the socket stays open for the reply", async () => {
+    const t = setup();
+    const socket = await t.connect();
+    const sendFrame = t.nodes[0]!.port.onmessage!;
+    sendFrame({ data: new Int16Array(320).buffer });
+    expect(t.client.finishUtterance()).toBe(true);
+    expect(t.track.stopped).toBe(true);
+    expect(t.contexts[0]!.closed).toBe(true);
+    expect(t.contexts[1]!.closed).toBe(false);
+    expect(socket.closedWith).toBeNull();
+    expect(socket.json().at(-1)).toEqual({ type: "end_utterance" });
+    const before = socket.sent.length;
+    sendFrame({ data: new Int16Array(320).buffer });
+    expect(socket.sent).toHaveLength(before);
+    socket.serverSends(JSON.stringify({ type: "final", text: "My stomach hurts" }));
+    expect(t.events.onTranscript).toHaveBeenCalledWith("My stomach hurts");
+  });
+
+  it("release before the permission grant never captures later ambient audio", async () => {
+    const t = setup();
+    const started = t.client.start({ ...SESSION, inputMode: "push_to_talk" }, t.events);
+    await t.flush();
+    expect(t.client.finishUtterance()).toBe(false);
+    t.grant();
+    await started;
+    expect(t.track.stopped).toBe(true);
+    expect(t.sockets).toHaveLength(0);
+  });
+
+  it("release during socket setup cancels before any frame or late start message", async () => {
+    const t = setup();
+    const started = t.client.start({ ...SESSION, inputMode: "push_to_talk" }, t.events);
+    t.grant();
+    await t.flush();
+    const socket = t.sockets[0]!;
+    expect(t.client.finishUtterance()).toBe(false);
+    socket.open();
+    await started;
+    expect(t.track.stopped).toBe(true);
+    expect(socket.sent).toEqual([]);
+  });
+});

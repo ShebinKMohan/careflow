@@ -19,6 +19,7 @@ from voice_agent.kiosk.protocol import (
     CLOSE_POLICY_VIOLATION,
     CLOSE_SERVER_ERROR,
     MAX_FRAME_BYTES,
+    EndUtteranceMessage,
     StartMessage,
     StopMessage,
     error_message,
@@ -111,6 +112,7 @@ async def kiosk_audio(websocket: WebSocket) -> None:
             sender=sender,
             events=channel.events,
             language=start.language,
+            push_to_talk=start.input_mode == "push_to_talk",
         )
         await loop.start()
     except Exception:
@@ -135,8 +137,13 @@ async def kiosk_audio(websocket: WebSocket) -> None:
             text = message.get("text")
             if isinstance(text, str):
                 try:
-                    StopMessage.model_validate_json(text)
-                except ValidationError:
+                    payload = json.loads(text)
+                    if isinstance(payload, dict) and payload.get("type") == "end_utterance":
+                        EndUtteranceMessage.model_validate(payload)
+                        await loop.end_utterance()
+                        continue
+                    StopMessage.model_validate(payload)
+                except (ValidationError, ValueError):
                     await sender.send_json(error_message("bad_message"))
                     continue
                 break

@@ -1,0 +1,138 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/26.8.2/bin/node",
+      "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "journeys/mobile-start.spec.ts"
+    ],
+    "configFile": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/playwright.config.ts",
+    "rootDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/shebin_mohan_k/CODES/CursorFiles/careflow/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/journeys.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "mobile-start.spec.ts",
+      "file": "mobile-start.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "phone-first check-in: lobby QR, private consent and identity, intake, nurse, queue and FHIR",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [
+                {
+                  "type": "briefing",
+                  "description": "12 items, all attributed"
+                },
+                {
+                  "type": "HAPI",
+                  "description": "Encounter 198485: 2 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 46590,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-28T17:45:26.902Z",
+                  "annotations": [
+                    {
+                      "type": "briefing",
+                      "description": "12 items, all attributed"
+                    },
+                    {
+                      "type": "HAPI",
+                      "description": "Encounter 198485: 2 Observations, 0 Flags, 1 QuestionnaireResponse, 1 Composition"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bc0e3d1bda9a3864ac97-5aae4d3966a8757e47c3",
+          "file": "mobile-start.spec.ts",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-28T17:45:26.463Z",
+    "duration": 47923.666000000005,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

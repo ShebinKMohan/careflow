@@ -1,0 +1,62 @@
+{
+  "startedAt": "2026-09-28T19:04:08.244Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "registrationMs": 541,
+  "sessionId": "a71274c8-48f4-5fec-93fa-56fe1b11dfb3",
+  "turns": [
+    {
+      "key": "chief_complaint",
+      "question": "What is the main reason for your visit today?",
+      "mode": "text",
+      "answer": "I twisted my left ankle playing football yesterday afternoon. It hurts when I walk and the pain is four out of ten.",
+      "latencyMs": 20106
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "a71274c8-48f4-5fec-93fa-56fe1b11dfb3",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_481WA9SAWMMKNC7PQKT88DKG90",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 7,
+          "quote": "29"
+        },
+        "recorded_at": "2026-09-28T19:04:10.533449Z",
+        "value": 29
+      },
+      "sex": {
+        "fact_id": "f_2E6Y0VD2MVJJ2FM2FTPM1YW3TP",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198608",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:04:10.836999Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "male",
+          "display": "Male"
+        }
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "incomplete"
+  }
+}

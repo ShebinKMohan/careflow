@@ -86,16 +86,20 @@ export function News2Form({
     event.preventDefault();
     if (!valid || status === "saving") return;
     setStatus("saving");
-    const { data } = await api.POST("/v1/nurse/sessions/{session_id}/vitals", {
-      params: { path: { session_id: sessionId } },
-      body,
-    });
-    if (!data) {
+    try {
+      const { data } = await api.POST("/v1/nurse/sessions/{session_id}/vitals", {
+        params: { path: { session_id: sessionId } },
+        body,
+      });
+      if (!data) {
+        setStatus("failed");
+        return;
+      }
+      setStatus("idle");
+      onSaved(data);
+    } catch {
       setStatus("failed");
-      return;
     }
-    setStatus("idle");
-    onSaved(data);
   }
 
   return (

@@ -468,3 +468,23 @@ async def test_the_recorded_summaries_replay(persona: str) -> None:
     if briefing.summary is not None:
         cited = {item.fact_id for item in fact_items(briefing)}
         assert all(set(s.fact_ids) <= cited for s in briefing.summary.sentences)
+
+
+async def test_reception_uses_sourced_briefing_without_calling_summary_provider() -> None:
+    state = load_persona("chest-pain")
+    baseline = await plain(state)
+    state["reception_context"] = {"reason": "Chest pain", "department_id": "emergency"}
+
+    def forbidden_provider() -> Any:
+        raise AssertionError("Reception must not wait for a summary model")
+
+    result = await make_briefing(
+        state, now=decided(state), summarizer=Summarizer(provider=forbidden_provider)
+    )
+    assert result.problems == []
+    assert result.briefing.sections == baseline.sections
+    assert result.briefing.triage == baseline.triage
+    assert result.briefing.summary is None
+    assert result.briefing.summary_status is SummaryStatus.disabled
+    assert result.briefing.versions.prompt is None
+    assert result.summary_reasons == ["structured reception uses the sourced briefing"]

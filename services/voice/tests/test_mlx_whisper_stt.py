@@ -238,3 +238,28 @@ async def test_mlx_whisper_near_silence_is_never_a_turn(chest_pain_pcm: bytes) -
     [event] = await _finals(loud)
     await loud.close()
     assert event.text == "I have chest pain." and len(heard) == 1
+
+
+async def test_held_answer_transcribes_whole_utterance_once_without_silence_endpoint(
+    chest_pain_pcm: bytes, energy_vad: Any
+) -> None:
+    transcribed: list[Any] = []
+    stt = _stt(transcribed, energy_vad)
+    await stt.start()
+    await stt.transcribe_utterance(chest_pain_pcm)
+    [event] = await _finals(stt)
+    await stt.close()
+    assert len(transcribed) == 1
+    assert len(transcribed[0]) == len(chest_pain_pcm) // 2
+    assert event.speech_final and event.text == "I have chest pain since this morning."
+
+
+async def test_held_silence_emits_empty_final_without_hallucinating(energy_vad: Any) -> None:
+    transcribed: list[Any] = []
+    stt = _stt(transcribed, energy_vad)
+    await stt.start()
+    await stt.transcribe_utterance(bytes(16000 * 2))
+    [event] = await _finals(stt)
+    await stt.close()
+    assert transcribed == []
+    assert event.speech_final and event.text == ""

@@ -1,0 +1,60 @@
+{
+  "scenario": "Synthetic microphone, one held Arabic answer; no real room audio",
+  "language": "ar",
+  "session_id": "39c5e0a3-c347-5ee1-b469-329dd135a64d",
+  "transcript": "عدي ألم في صدري من الصباح",
+  "next_question": "هل ينتشر الألم إلى ذراعك أو رقبتك أو فكك أو ظهرك؟",
+  "release_to_transcript_ms": 2696,
+  "transcript_to_question_ms": 13207,
+  "release_to_first_tts_ms": 16195,
+  "capture_frames": 229,
+  "audio_frames_after_release": 0,
+  "audio_track_states_on_release": [
+    "ended"
+  ],
+  "microphone_requests_including_playback": 1,
+  "providers": {
+    "tasks": [
+      {
+        "task": "conversation",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      },
+      {
+        "task": "extraction",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      },
+      {
+        "task": "summary",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      },
+      {
+        "task": "eval_judge",
+        "provider": "cli",
+        "tool": "codex",
+        "available": true,
+        "detail": "offline jobs only"
+      },
+      {
+        "task": "test_data",
+        "provider": "cli",
+        "tool": "codex",
+        "available": true,
+        "detail": "offline jobs only"
+      },
+      {
+        "task": "translation_check",
+        "provider": "local",
+        "model": "qwen3.5-9b-4bit",
+        "available": true
+      }
+    ]
+  },
+  "warnings": [],
+  "extraction_incomplete": false
+}

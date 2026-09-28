@@ -81,38 +81,58 @@ class LocalProvider:
         temperature: float = 0.0,
         max_tokens: int | None = None,
     ) -> ChatResult:
+        # MLX only notices a disconnected non-streaming client after generation ends.
+        # Consume SSE internally so cancellation releases the server's generation context
+        # on its next write, while callers still receive one complete reply to validate.
         kwargs: dict[str, Any] = {"model": self.served_model, "messages": list(messages)}
         kwargs["temperature"] = temperature
         kwargs["extra_body"] = self._extra_body
+        kwargs["stream_options"] = {"include_usage": True}
         if max_tokens is not None:
             kwargs["max_tokens"] = max_tokens
-        response = await self._with_retry(lambda: self._client.chat.completions.create(**kwargs))
-        choice = response.choices[0]
-        usage = response.usage
+        response = await self._with_retry(
+            lambda: self._client.chat.completions.create(stream=True, **kwargs)
+        )
+        parts: list[str] = []
+        input_tokens = output_tokens = None
+        try:
+            async for chunk in response:
+                if chunk.choices:
+                    parts.append(chunk.choices[0].delta.content or "")
+                if chunk.usage is not None:
+                    input_tokens = chunk.usage.prompt_tokens
+                    output_tokens = chunk.usage.completion_tokens
+        finally:
+            await response.close()
         return ChatResult(
-            text=strip_thinking(choice.message.content or ""),
+            text=strip_thinking("".join(parts)),
             model=self.model_name,
-            input_tokens=usage.prompt_tokens if usage else None,
-            output_tokens=usage.completion_tokens if usage else None,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
         )
 
     async def stream(self, messages: Sequence[Message]) -> AsyncIterator[str]:
         """Yield content deltas without `<think>` blocks. Retries only before the first token."""
         kwargs: dict[str, Any] = {"model": self.served_model, "messages": list(messages)}
-        kwargs |= {"stream": True, "temperature": 0.0, "extra_body": self._extra_body}
-        stream = await self._with_retry(lambda: self._client.chat.completions.create(**kwargs))
+        kwargs |= {"temperature": 0.0, "extra_body": self._extra_body}
+        stream = await self._with_retry(
+            lambda: self._client.chat.completions.create(stream=True, **kwargs)
+        )
         thinking = False
-        async for chunk in stream:
-            if not chunk.choices:
-                continue
-            delta = chunk.choices[0].delta.content or ""
-            if "<think>" in delta:
-                thinking = True
-                delta = delta.split("<think>", 1)[0]
-            if thinking:
-                if "</think>" not in delta:
+        try:
+            async for chunk in stream:
+                if not chunk.choices:
                     continue
-                thinking = False
-                delta = delta.split("</think>", 1)[1]
-            if delta:
-                yield delta
+                delta = chunk.choices[0].delta.content or ""
+                if "<think>" in delta:
+                    thinking = True
+                    delta = delta.split("<think>", 1)[0]
+                if thinking:
+                    if "</think>" not in delta:
+                        continue
+                    thinking = False
+                    delta = delta.split("</think>", 1)[1]
+                if delta:
+                    yield delta
+        finally:
+            await stream.close()

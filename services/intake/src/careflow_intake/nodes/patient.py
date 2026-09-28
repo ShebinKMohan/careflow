@@ -52,7 +52,11 @@ async def fetch_ehr_context(
     `ehr_unavailable`, and the allergy question is asked fresh. An empty record is never shown
     as if it were complete."""
     identifier = state.get("patient_identifier")
-    if identifier is None:
+    prefetched = state.get("prefetched_ehr")
+    if prefetched is not None:
+        # Only server-side authenticated check-in supplies this already scoped fetch.
+        fetch = prefetched
+    elif identifier is None:
         fetch = EhrFetch(
             status=EhrStatus.not_found, fetched_at=ports.clock(), errors=["no patient identifier"]
         )

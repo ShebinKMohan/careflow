@@ -12,6 +12,7 @@ import type { Schema } from "@careflow/contracts";
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useRef, useState } from "react";
 
 import { type ConsentChoices, setConsentChoices } from "@/consent/hasConsent";
+import { emptyReceptionDraft, type ReceptionDraft } from "./reception";
 
 const DEVICE_KEY = "careflow.kiosk.device";
 
@@ -32,6 +33,12 @@ export function readDevice(): DeviceSession | null {
 
 export function saveDevice(device: DeviceSession): void {
   window.sessionStorage.setItem(DEVICE_KEY, JSON.stringify(device));
+  window.dispatchEvent(new Event("careflow:device-ready"));
+}
+
+export function subscribeDevice(listener: () => void): () => void {
+  window.addEventListener("careflow:device-ready", listener);
+  return () => window.removeEventListener("careflow:device-ready", listener);
 }
 
 export type IntakeQuestion = Schema<"IntakeQuestion">;
@@ -49,12 +56,14 @@ export interface PatientSession {
 }
 
 interface KioskContext {
+  receptionDraft: ReceptionDraft;
+  updateReceptionDraft: (patch: Partial<ReceptionDraft>) => void;
   patient: PatientSession | null;
   /** The consent screen's choices (M2-05), before and after check-in; null until chosen. */
   consent: ConsentChoices | null;
   setConsent: (choices: ConsentChoices) => void;
   start: (result: Schema<"CheckinResult">, fallback: IntakeQuestion) => void;
-  setQuestion: (question: IntakeQuestion | null) => void;
+  setQuestion: (question: IntakeQuestion | null, sessionId?: string) => void;
   setPatientType: (patientType: "adult" | "child") => void;
   /** Forget the patient and stop anything running for them (e.g. a voice stream). */
   wipe: () => void;
@@ -65,6 +74,8 @@ interface KioskContext {
 const Context = createContext<KioskContext | null>(null);
 
 export function KioskProvider({ children }: { children: ReactNode }) {
+  const [receptionDraft, setReceptionDraft] = useState<ReceptionDraft>(emptyReceptionDraft);
+  const updateReceptionDraft = useCallback((patch: Partial<ReceptionDraft>) => setReceptionDraft((current) => ({ ...current, ...patch })), []);
   const [patient, setPatient] = useState<PatientSession | null>(null);
   const [consent, setConsentState] = useState<ConsentChoices | null>(null);
   const cleanups = useRef(new Set<() => void>());
@@ -87,8 +98,8 @@ export function KioskProvider({ children }: { children: ReactNode }) {
   const setPatientType = useCallback((patientType: "adult" | "child") => {
     setPatient((current) => (current ? { ...current, patientType } : current));
   }, []);
-  const setQuestion = useCallback((question: IntakeQuestion | null) => {
-    setPatient((current) => (current ? { ...current, question } : current));
+  const setQuestion = useCallback((question: IntakeQuestion | null, sessionId?: string) => {
+    setPatient((current) => (current && (!sessionId || current.sessionId === sessionId) ? { ...current, question } : current));
   }, []);
   const wipe = useCallback(() => {
     for (const cleanup of cleanups.current) cleanup();
@@ -96,6 +107,7 @@ export function KioskProvider({ children }: { children: ReactNode }) {
     setPatient(null);
     setConsentChoices(null);
     setConsentState(null);
+    setReceptionDraft(emptyReceptionDraft());
   }, []);
   const onWipe = useCallback((cleanup: () => void) => {
     cleanups.current.add(cleanup);
@@ -105,8 +117,8 @@ export function KioskProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ patient, consent, setConsent, start, setQuestion, setPatientType, wipe, onWipe }),
-    [patient, consent, setConsent, start, setQuestion, setPatientType, wipe, onWipe],
+    () => ({ patient, consent, setConsent, start, setQuestion, setPatientType, wipe, onWipe, receptionDraft, updateReceptionDraft }),
+    [patient, consent, setConsent, start, setQuestion, setPatientType, wipe, onWipe, receptionDraft, updateReceptionDraft],
   );
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

@@ -1,15 +1,120 @@
 /*
- * CareFlow base styles: page colours and a visible focus ring (drawn outside the control, so it
- * contrasts with the page, not the button). Import after tokens.css.
+ * CareFlow base styles. Import after tokens.css.
+ * - Page colours and type follow the density tokens.
+ * - Mixed-script text: an element marked lang="ar" uses the Arabic face first, also on English
+ *   pages (the العربية buttons), and lang="en" uses the Latin face first on Arabic pages.
+ * - A two-tone focus ring on every focusable element (unlayered, so no utility can remove it).
+ * - prefers-reduced-motion switches animation and transitions off (spinners slow down, not stop).
  */
-body {
-  background-color: var(--color-canvas);
-  color: var(--color-ink);
-  font-size: var(--text-body);
-  line-height: var(--text-body--line-height);
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    margin: 0;
+  }
+
+  h1, h2, h3 {
+    color: var(--color-ink-heading);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  h1 { line-height: 1.15; }
+  p { text-wrap: pretty; }
+
+  input:not([type="checkbox"]):not([type="radio"]), textarea, select {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-field);
+    border-width: 1px;
+    border-color: var(--color-border);
+    accent-color: var(--color-primary);
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--color-ink-subtle); }
+
+  button, a, input, textarea, select { touch-action: manipulation; }
+
+  button:disabled { cursor: not-allowed; }
+
+  th { font-weight: 600; }
+  td, th { font-variant-numeric: tabular-nums; }
+
+  [lang="ar"] {
+    font-family: var(--font-stack-arabic);
+  }
+
+  [lang="en"] {
+    font-family: var(--font-stack-latin);
+  }
+
+  ::selection {
+    background-color: var(--color-primary-tint-strong);
+    color: var(--color-ink);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
 }
 
+.cf-button { line-height: 1.35; }
+.cf-button:active:not(:disabled) { transform: translateY(1px); }
+.cf-panel > :last-child { margin-bottom: 0; }
+.cf-footer p + p { margin-top: 0.25rem; font-size: 0.9em; }
+.cf-language button { min-height: max(2.75rem, var(--spacing-touch)); min-width: max(2.75rem, var(--spacing-touch)); }
+
+@supports (color: oklch(97% 0.01 160)) {
+  html { background-color: oklch(96.6% 0.009 160); }
+}
+
+@media (max-width: 540px) {
+  [data-density="kiosk"] {
+    --spacing-gutter: 1.125rem;
+    --text-display: 2.125rem;
+    --text-title: 1.5rem;
+    --text-body: 1.0625rem;
+    --text-label: 1rem;
+    --text-button: 1.125rem;
+  }
+}
+
+/* The ring sits outside the control: 2px paper, then 3px forest. */
 :focus-visible {
-  outline: 4px solid var(--color-focus);
-  outline-offset: 3px;
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-focus-inner);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* A progress spinner still turns (slowly): without it a wait looks like a frozen screen. */
+  [data-motion="essential"] {
+    animation-duration: 1.4s !important;
+    animation-iteration-count: infinite !important;
+  }
 }

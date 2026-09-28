@@ -19,7 +19,7 @@ from fastapi import FastAPI
 from starlette.routing import BaseRoute
 
 from voice_agent.app import create_app
-from voice_agent.config.careflow import LANGUAGES
+from voice_agent.config.careflow import LANGUAGE
 from voice_agent.config.settings import Settings, get_settings
 from voice_agent.kiosk.speech import KioskSpeech, LocalKioskSpeech
 from voice_agent.kiosk.turns import TurnPoster, TurnsClient
@@ -78,13 +78,15 @@ def create_careflow_app(
 
 
 async def _preload(speech: KioskSpeech) -> None:
-    """Load the engines once (they are cached process-wide) and release the per-call parts.
+    """Warm default engines once and release the per-call parts.
 
-    The English STT (mlx-whisper serves Arabic with the same model) and each language's TTS. A
-    configured Cohere Arabic STT (4 GB) loads on the first Arabic session instead.
+    The default-language STT (mlx-whisper serves Arabic with the same model) and TTS are warmed.
+    Arabic synthesis loads on its first Arabic session, preserving Qwen's memory headroom on
+    the 18 GB development machine. Arabic engines remain configured and available on demand.
+    Whisper releases its weights after warm-up and after each real transcription.
     """
     started = asyncio.get_running_loop().time()
-    providers = [speech.stt(), *(speech.tts(language) for language in LANGUAGES)]
+    providers = [speech.stt(), speech.tts(LANGUAGE)]
     try:
         for provider in providers:
             if isinstance(provider, StartableProvider):
@@ -99,4 +101,7 @@ async def _preload(speech: KioskSpeech) -> None:
     finally:
         for provider in providers:
             await provider.close()
-    logger.info("Speech engines ready in %.1f s.", asyncio.get_running_loop().time() - started)
+    logger.info(
+        "Default-language speech warm-up finished in %.1f s; Arabic synthesis loads on first use.",
+        asyncio.get_running_loop().time() - started,
+    )

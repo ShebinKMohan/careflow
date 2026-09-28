@@ -20,11 +20,11 @@ export interface AppDocumentProps {
  */
 export function AppDocument({ locale, messages, className, children }: AppDocumentProps) {
   return (
-    <html lang={locale} dir={direction(locale)} className={className}>
-      <body className="flex min-h-dvh flex-col">
+    <html lang={locale} dir={direction(locale)} data-density="phone" className={className}>
+      <body className="companion-body">
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={DEFAULT_TIME_ZONE}>
           <SiteHeader />
-          <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-gutter py-8">{children}</main>
+          <main id="main-content" className="companion-main">{children}</main>
           <PrototypeFooter locale={locale} />
           <ServiceWorkerRegistrar />
           <TokenRenewer />

@@ -25,6 +25,15 @@ post /v1/auth/login
 post /v1/auth/device-token
 get /v1/auth/me
 post /v1/ws-ticket
+post /v1/identity/lookup
+post /v1/identity/verify
+post /v1/checkin/adaptive
+post /v1/checkin/urgent
+get /v1/reception/directory
+post /v1/reception/checkin
+get /v1/sessions/{session_id}/reception
+post /v1/checkin/start/qr
+post /v1/checkin/start/claim
 post /v1/checkin/keypad
 post /v1/checkin/id-tap
 post /v1/sessions/{session_id}/qr
@@ -34,6 +43,7 @@ post /v1/sessions/{session_id}/consent
 post /v1/sessions/{session_id}/patient
 post /v1/sessions/{session_id}/turns
 get /v1/sessions/{session_id}/facts
+get /v1/sessions/{session_id}/intake-summary
 get /v1/sessions/{session_id}/status
 post /v1/sessions/{session_id}/renew
 post /v1/sessions/{session_id}/vitals
@@ -60,8 +70,10 @@ get /health
 """
 EXPECTED = {(m, r) for m, r in (line.split() for line in EXPECTED_ROUTES.strip().splitlines())}
 UNAUTHENTICATED = {
+    ("post", "/v1/identity/lookup"), ("post", "/v1/identity/verify"), ("post", "/v1/checkin/adaptive"), ("post", "/v1/checkin/urgent"),
+    ("get", "/v1/reception/directory"), ("post", "/v1/reception/checkin"),
     ("get", "/health"), ("post", "/v1/auth/login"), ("post", "/v1/auth/device-token"),
-    ("post", "/v1/checkin/qr/claim"),
+    ("post", "/v1/checkin/qr/claim"), ("post", "/v1/checkin/start/claim"),
 }  # fmt: skip
 
 

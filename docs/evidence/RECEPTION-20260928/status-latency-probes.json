@@ -1,0 +1,23 @@
+[
+  {
+    "surface": "loopback-status",
+    "http_status": 200,
+    "duration_ms": 28.0,
+    "state": "queued",
+    "health": null
+  },
+  {
+    "surface": "LAN-proxy-status",
+    "http_status": 200,
+    "duration_ms": 37.2,
+    "state": "queued",
+    "health": null
+  },
+  {
+    "surface": "API-health",
+    "http_status": 200,
+    "duration_ms": 78.3,
+    "state": null,
+    "health": "ok"
+  }
+]

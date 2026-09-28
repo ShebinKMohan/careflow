@@ -24,3 +24,23 @@ Every AI task (conversation, extraction, summary, eval judge, test data, transla
 - Switching `extraction` to an API model is one line in `providers.yaml`; without a key the task raises `ProviderUnavailable` and callers fall back or record `not_run`.
 - The live structured check depends on prompt quality: the smoke prompt has to name the fields to fill, and span offsets from the model are approximate. M1-06 owns the real extraction prompt and recomputes spans from the quotes.
 - mlx-lm is a macOS-arm64-only dev dependency; CI (Ubuntu) never loads a model and uses fakes and replay.
+
+## Interactive runtime follow-up, 29 Sep 2026
+
+The interactive default remains pinned **9B**. The existing cached 4B fallback was tested as a
+latency workaround: English ankle extraction succeeded, but the Arabic wrist example omitted
+the chief complaint and translated wrist as elbow. Its Arabic startup readiness gate correctly
+failed. It is an **experimental, explicit opt-in**, not a validated bilingual replacement; see
+`docs/evidence/ADAPTIVE-20260929/model-4b-probe.json`. No weights were downloaded for that trial.
+
+`CAREFLOW_LLM_MODEL` selects the runtime repo, with pinned revisions for either documented model.
+`providers_config` reflects that selection in every local task's diagnostics, leaving API/CLI
+tasks and the recorded 9B baseline unchanged. `with_llm.sh` refuses to reuse a server reporting
+a different model instead of silently labelling its results with the requested model's name.
+
+The MLX prompt-cache bounds are four entries and 768 MiB. A two-entry trial retained only the
+system/user pair for the last language and forced full prefill when switching languages; four
+entries permit the English and Arabic pairs. The original default retained ten histories
+(approximately 1.35 GB observed). This is a memory bound, not a latency guarantee. Startup
+readiness verifies real English/Arabic extraction before accepting patients, separately from
+the unchanged 20-second patient deadline.

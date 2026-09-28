@@ -1,0 +1,27 @@
+{
+  "fixtureOnly": true,
+  "viewport": {
+    "name": "desktop-1440",
+    "width": 1440,
+    "height": 1000,
+    "locale": "en"
+  },
+  "cameraOn": [
+    {
+      "state": "live",
+      "label": "fake_device_0"
+    }
+  ],
+  "cameraStopped": true,
+  "cameraStoppedOnNavigation": true,
+  "overflow": {
+    "viewport": 1440,
+    "document": 1440
+  },
+  "unexpectedRequests": [],
+  "pageErrors": [],
+  "accessibility": {
+    "intake": [],
+    "receipt": []
+  }
+}

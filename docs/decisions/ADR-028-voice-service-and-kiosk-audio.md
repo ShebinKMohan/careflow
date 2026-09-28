@@ -110,3 +110,52 @@ Two constraints shape it. The intake graph must stay the only "brain", and no ra
 - **M5-05** traces the voice turn stages.
 - **M6-01** tunes latency: end of speech to the final transcript is about 1 s (endpointing silence plus Whisper), the largest stage.
 - **Browser playback** assumes the question plays for as long as its audio. A kiosk that plays it slower would get a slightly early barge-in window.
+
+## Update: patient-controlled hold-to-talk, 29 September 2026
+
+The patient now holds the microphone button or the Space bar and releases it to submit one
+answer. The shortcut ignores editable fields, other buttons, modifiers and repeated keydown
+messages. Blur, a hidden page, pointer cancellation, leaving the screen and the idle wipe cancel
+capture. The first hold may request microphone permission; releasing during that request or
+socket setup cancels the attempt, so a later permission grant cannot start ambient capture.
+
+The browser sends optional `input_mode: "push_to_talk"` in `start` and sends
+`{"type":"end_utterance"}` on release. Release immediately stops all microphone tracks and the
+capture AudioContext. The socket and playback context stay open for the transcript, API reply and
+spoken next question; playback never starts a microphone. A new hold opens a new answer socket.
+The legacy protocol defaults to `continuous` for existing clients.
+
+The service buffers at most 30 seconds of 16 kHz PCM16 in memory, checks the existing VAD and
+energy gate, and decodes the entire held utterance once only after release. Silence does not
+reach Whisper or create a patient turn. Duplicate end markers and audio after submission are
+ignored. A hold over the cap is discarded, never partially submitted. The UI releases at 29
+seconds to leave transport headroom. No raw audio is stored; the Whisper cache release after
+transcription remains in place so extraction can use the Mac's memory.
+
+Verification: the focused client/component suite covers consent, keyboard capture, editing,
+permission and connection races, release, capture shutdown and playback staying microphone-off.
+The voice suite covers release-before-transcription, a single API submission despite duplicate
+release, silence rejection and the legacy continuous path. Real microphone/model evidence is
+recorded separately from these deterministic tests.
+
+### Local model readiness after the first hold-to-talk live run
+
+The first real PTT run after a cold process restart transcribed correctly but exposed the local
+Qwen server's cold prefill cost: its 2,421-token extraction prompt used almost the entire
+20-second patient deadline before generation. Returning HTTP 200 from `/v1/models` did not prove
+patient extraction was ready.
+
+For `LOCAL_LLM=1`, the launcher now sets `CAREFLOW_WARM_EXTRACTION=1` for the API. Before Uvicorn
+accepts requests, the API uses its configured extraction provider and exact extraction schemas
+on two fixed synthetic statements, one English and one Arabic. Each must produce a chief
+complaint with a verified transcript span. These calls create no patient session or database
+record. Both calls and model availability share a 60-second startup limit; failure prevents API
+readiness rather than declaring a cold or failed model ready. The patient timeout stays at 20
+seconds. Nonlocal and replay providers are not warmed.
+
+The live gate verified English in 11.87 seconds and Arabic in 12.01 seconds. Afterward, two real
+synthetic-microphone turns reached complete extraction and a new question. The first prefilled
+only 78 tokens beyond its cached prompt; the second prefilled one token. End-to-end spoken
+responses were still 13.00 and 14.15 seconds after release on this Mac; warming prevents the cold
+failure but does not establish the project's voice latency target. Evidence is under
+`docs/evidence/ADAPTIVE-20260929/`.

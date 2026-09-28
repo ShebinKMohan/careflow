@@ -13,8 +13,10 @@ import { useLiveSession } from "@/lib/useLiveSession";
 import type { Task } from "@/lib/useSessionAlerts";
 
 import { ApiStatus } from "../ApiStatus";
+import { SessionReception } from "../ReceptionSummary";
 import { AlertBanner } from "./AlertBanner";
 import { FeelsWorseBanner } from "./FeelsWorseBanner";
+import { ClinicalSnapshot } from "./ClinicalSnapshot";
 import { News2Form } from "./News2Form";
 import { TriageCard } from "./TriageCard";
 
@@ -25,6 +27,7 @@ type SessionWarning = Schema<"SessionWarning">;
 interface Loaded {
   triage: TriageView;
   facts: StructuredFacts | null;
+  factsStale?: boolean;
   nurseUserId: string | null;
 }
 
@@ -60,7 +63,12 @@ export function NurseSession({ sessionId }: { sessionId: string }) {
     void loadSession(sessionId).then((next) => {
       if (onScreen.current !== sessionId || load <= shown.current) return;
       shown.current = load;
-      setState((current) => (next.status !== "ready" && current.status === "ready" ? current : next));
+      setState((current) => {
+        if (current.status !== "ready") return next;
+        if (next.status !== "ready") return { ...current, data: { ...current.data, factsStale: true } };
+        if (!next.data.facts && current.data.facts) return { status: "ready", data: { ...next.data, facts: current.data.facts, factsStale: true } };
+        return next;
+      });
     });
   }, [sessionId]);
   const live = useLiveSession(sessionId, reload);
@@ -70,7 +78,7 @@ export function NurseSession({ sessionId }: { sessionId: string }) {
   }, []);
 
   return (
-    <ApiStatus state={state}>
+    <ApiStatus state={state.status === "ready" && state.data.triage.session_id !== sessionId ? { status: "loading" } : state}>
       {(loaded) => <SessionView loaded={loaded} update={update} sectionLabel={t("title")} live={live} />}
     </ApiStatus>
   );
@@ -81,8 +89,8 @@ async function loadSession(sessionId: string): Promise<ApiState<Loaded>> {
   try {
     const [triage, facts, me] = await Promise.all([
       api.GET("/v1/sessions/{session_id}/triage", params),
-      api.GET("/v1/sessions/{session_id}/facts", params),
-      api.GET("/v1/auth/me"),
+      api.GET("/v1/sessions/{session_id}/facts", params).catch(() => ({ data: undefined })),
+      api.GET("/v1/auth/me").catch(() => ({ data: undefined })),
     ]);
     if (!triage.data) return { status: triage.response.status === 401 ? "unauthorized" : "failed" };
     return {
@@ -106,6 +114,7 @@ function SessionView({
   live: LiveStatus;
 }) {
   const tNurse = useTranslations("nurse");
+  const clinical = useTranslations("clinical");
   const { triage, facts } = loaded;
   const index = useMemo(() => indexFacts(facts), [facts]);
   const tasks = triage.tasks ?? triage.open_tasks ?? []; // done tasks too: "ECG done" survives a reload
@@ -128,7 +137,7 @@ function SessionView({
     }));
 
   return (
-    <div className="flex max-w-4xl flex-col gap-6">
+    <div className="staff-session">
       <p
         className={`w-fit rounded-control border-2 px-3 py-1 font-semibold ${live === "paused" ? "border-danger text-danger" : "border-border"}`}
         data-testid="live-status"
@@ -152,6 +161,9 @@ function SessionView({
         </div>
       ) : null}
       <FeelsWorseBanner sessionId={triage.session_id} report={triage.feels_worse} />
+      <SessionReception key={triage.session_id} sessionId={triage.session_id} />
+      {loaded.factsStale ? <p className="staff-clinical-unavailable" role="status">{clinical("stale")}</p> : !facts ? <p className="staff-clinical-unavailable" role="status">{clinical("unavailable")}</p> : null}
+      <div className="staff-assessment-grid">
       <TriageCard
         triage={triage}
         facts={index}
@@ -167,6 +179,8 @@ function SessionView({
         deviceSystolic={deviceSystolic}
         onSaved={(view) => update((current) => ({ ...current, triage: view }))}
       />
+      </div>
+      <ClinicalSnapshot facts={facts} neededFacts={triage.needed_facts} />
     </div>
   );
 }

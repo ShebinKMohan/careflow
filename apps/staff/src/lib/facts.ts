@@ -9,6 +9,9 @@ export interface FactView {
   path: string;
   value: string;
   provenance: Provenance;
+  source?: Schema<"SourceRef">;
+  recordedAt?: string;
+  criticality?: string;
 }
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -44,6 +47,9 @@ export function indexFacts(facts: StructuredFacts | null | undefined): Map<strin
         path,
         value: display(node.value, node.unit),
         provenance: node.provenance as Provenance,
+        ...(isObject(node.source) ? { source: node.source as unknown as Schema<"SourceRef"> } : {}),
+        ...(typeof node.recorded_at === "string" ? { recordedAt: node.recorded_at } : {}),
+        ...(typeof node.criticality === "string" ? { criticality: node.criticality } : {}),
       });
       return;
     }

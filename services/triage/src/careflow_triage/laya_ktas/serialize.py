@@ -139,19 +139,28 @@ def facts_to_state(facts: StructuredFacts) -> LayaInput:
     )
 
 
-def reasons_from_keys(keys: list[str], laya_input: LayaInput) -> list[Reason]:
-    """One reason per key, e.g. "Heart rate 128 /min raised urgency", citing its facts."""
+def reasons_from_keys(
+    keys: list[str],
+    laya_input: LayaInput,
+    *,
+    choice: str | None = None,
+    scores: dict[str, float] | None = None,
+) -> list[Reason]:
+    """Cited effects on the selected class, without claiming every effect raises urgency."""
     reasons = []
     for key in keys:
         value = laya_input.state.get(key)
         if value is None:
             continue
         label = LABELS.get(key, key.replace("_", " ").capitalize())
-        text = (
-            f"{label}: {value} raised urgency"
-            if key == "chief_complaint"
-            else (f"{label} {value} raised urgency")
-        )
+        description = f"{label}: {value}" if key == "chief_complaint" else f"{label} {value}"
+        score = (scores or {}).get(key, 0.0)
+        if choice is not None and score != 0:
+            direction = "more" if score > 0 else "less"
+            effect = f"made KTAS {level_of(choice)} {direction} likely"
+        else:
+            effect = "was included in the model input"
+        text = f"{description} {effect}"
         reasons.append(Reason(text=text[:300], fact_ids=list(laya_input.fact_ids.get(key, []))))
     return reasons
 

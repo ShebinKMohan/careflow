@@ -1,0 +1,486 @@
+{
+  "startedAt": "2026-09-28T19:35:16.081Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "registrationMs": 208,
+  "sessionId": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+  "fhirPatientId": "198654",
+  "turns": [
+    {
+      "key": "chief_complaint",
+      "question": "What is the main reason for your visit today?",
+      "mode": "text",
+      "answer": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally.",
+      "latencyMs": 10593
+    },
+    {
+      "key": "symptom_onset_at",
+      "question": "When did this start?",
+      "mode": "text",
+      "answer": "Yesterday evening",
+      "latencyMs": 11191
+    },
+    {
+      "key": "pain_score",
+      "question": "On a scale from 0 to 10, how bad is your pain right now?",
+      "mode": "tap",
+      "answer": "2",
+      "latencyMs": 102
+    },
+    {
+      "key": "pain_location",
+      "question": "Where is the pain?",
+      "mode": "text",
+      "answer": "No specific pain",
+      "latencyMs": 9950
+    },
+    {
+      "key": "allergies_confirm",
+      "question": "Are you allergic to any medicines?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 11205
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_5SWXDXWMBVTNVGSW3HMFN5RBZX",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 7,
+          "quote": "72"
+        },
+        "recorded_at": "2026-09-28T19:35:17.832048Z",
+        "value": 72
+      },
+      "sex": {
+        "fact_id": "f_1NXGPT2VT5JG3HVFKXJ7RFFQY3",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198654",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:35:17.877043Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "female",
+          "display": "Female"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_J2AN8WPJGDH2PN0R4QQVPBFT3G",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 125,
+        "quote": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+      },
+      "recorded_at": "2026-09-28T19:35:18.179428Z",
+      "value": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+    },
+    "symptoms": [
+      {
+        "name": {
+          "fact_id": "f_7W3B0RAQA3R041RW0F86DB9Z57",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 70,
+            "end": 84,
+            "quote": "She feels weak"
+          },
+          "recorded_at": "2026-09-28T19:35:18.179428Z",
+          "value": "weak"
+        }
+      }
+    ],
+    "infection": {
+      "fever_reported": {
+        "fact_id": "f_NN8BSZ59ZDVHPJBHH9BHPCE6JV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 25,
+          "quote": "My mother has had a fever"
+        },
+        "recorded_at": "2026-09-28T19:35:18.179428Z",
+        "value": "yes"
+      },
+      "rigors": {
+        "fact_id": "f_J3PQCSAT2H0VGS6ZEQFF1SYK1W",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 30,
+          "end": 44,
+          "quote": "shaking chills"
+        },
+        "recorded_at": "2026-09-28T19:35:18.179428Z",
+        "value": "yes"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "vitalsMs": 10746,
+  "triage": {
+    "session_id": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+    "status": "awaiting_nurse",
+    "alerts": [],
+    "suggestion": {
+      "suggestion_id": "sug_348a8c8425cec79f5ea5244f",
+      "session_id": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+      "level": 3,
+      "scale": "KTAS",
+      "display_label": "KTAS 3",
+      "confidence": 0.4335,
+      "reasons": [
+        {
+          "text": "Complaint: My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally. made KTAS 3 more likely",
+          "fact_ids": [
+            "f_J2AN8WPJGDH2PN0R4QQVPBFT3G"
+          ]
+        },
+        {
+          "text": "Age 72 years made KTAS 3 more likely",
+          "fact_ids": [
+            "f_5SWXDXWMBVTNVGSW3HMFN5RBZX"
+          ]
+        },
+        {
+          "text": "Pain score 2/10 made KTAS 3 more likely",
+          "fact_ids": [
+            "f_WGH3GXQTE4R9E9FEYWMN31B1MG"
+          ]
+        }
+      ],
+      "model_id": "laya-ktas",
+      "model_version": "laya-ktas-ebf31b5e-s42",
+      "created_at": "2026-09-28T19:36:11.116105Z"
+    },
+    "needed_facts": [
+      {
+        "key": "vitals.respiratory_rate",
+        "audience": "nurse",
+        "reason": "news2_incomplete"
+      },
+      {
+        "key": "vitals.acvpu",
+        "audience": "nurse",
+        "reason": "news2_incomplete"
+      },
+      {
+        "key": "vitals.on_supplemental_o2",
+        "audience": "nurse",
+        "reason": "news2_incomplete"
+      }
+    ],
+    "news2": {
+      "total": 0,
+      "subscores": {
+        "spo2": 0,
+        "systolic_bp": 0,
+        "heart_rate": 0,
+        "temperature_c": 0
+      },
+      "missing": [
+        "vitals.respiratory_rate",
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2"
+      ],
+      "partial": true,
+      "any_single_3": false,
+      "risk_band": "low"
+    },
+    "open_tasks": [],
+    "tasks": [],
+    "warnings": []
+  },
+  "facts": {
+    "session_id": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_5SWXDXWMBVTNVGSW3HMFN5RBZX",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 7,
+          "quote": "72"
+        },
+        "recorded_at": "2026-09-28T19:35:17.832048Z",
+        "value": 72
+      },
+      "sex": {
+        "fact_id": "f_1NXGPT2VT5JG3HVFKXJ7RFFQY3",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198654",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:35:17.877043Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "female",
+          "display": "Female"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_J2AN8WPJGDH2PN0R4QQVPBFT3G",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 125,
+        "quote": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+      },
+      "recorded_at": "2026-09-28T19:35:18.179428Z",
+      "value": "My mother has had a fever and shaking chills since yesterday evening. She feels weak, but she is awake and speaking normally."
+    },
+    "symptoms": [
+      {
+        "name": {
+          "fact_id": "f_7W3B0RAQA3R041RW0F86DB9Z57",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 70,
+            "end": 84,
+            "quote": "She feels weak"
+          },
+          "recorded_at": "2026-09-28T19:35:18.179428Z",
+          "value": "weak"
+        }
+      }
+    ],
+    "symptom_onset_at": {
+      "fact_id": "f_VKW73RZKG88RJBY31ZHQR2Y3ST",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_005",
+        "start": 0,
+        "end": 17,
+        "quote": "Yesterday evening"
+      },
+      "recorded_at": "2026-09-28T19:35:28.836707Z",
+      "value": "Yesterday evening"
+    },
+    "pain_score": {
+      "fact_id": "f_WGH3GXQTE4R9E9FEYWMN31B1MG",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_007",
+        "start": 0,
+        "end": 1,
+        "quote": "2"
+      },
+      "recorded_at": "2026-09-28T19:35:40.108106Z",
+      "value": 2
+    },
+    "pain_location": {
+      "fact_id": "f_JE2RZGCTY5N3T8GHTM0ZH5A01W",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_009",
+        "start": 0,
+        "end": 16,
+        "quote": "No specific pain"
+      },
+      "recorded_at": "2026-09-28T19:35:40.215733Z",
+      "value": "No specific pain"
+    },
+    "allergies_confirm": {
+      "fact_id": "f_QF6XSAZ72F28FXPJ99Z7SZ0JC3",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_011",
+        "start": 0,
+        "end": 2,
+        "quote": "No"
+      },
+      "recorded_at": "2026-09-28T19:35:50.207923Z",
+      "value": "No"
+    },
+    "infection": {
+      "fever_reported": {
+        "fact_id": "f_NN8BSZ59ZDVHPJBHH9BHPCE6JV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 25,
+          "quote": "My mother has had a fever"
+        },
+        "recorded_at": "2026-09-28T19:35:18.179428Z",
+        "value": "yes"
+      },
+      "rigors": {
+        "fact_id": "f_J3PQCSAT2H0VGS6ZEQFF1SYK1W",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 30,
+          "end": 44,
+          "quote": "shaking chills"
+        },
+        "recorded_at": "2026-09-28T19:35:18.179428Z",
+        "value": "yes"
+      }
+    },
+    "vitals": {
+      "heart_rate": {
+        "fact_id": "f_DAAFYWAHEBG72K9TVSASSVCHDZ",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:36:05.835785Z",
+        "value": 79,
+        "unit": "/min"
+      },
+      "spo2": {
+        "fact_id": "f_DV3ERB56HZ3F1JS1KHC1CXCEFC",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:36:05.835785Z",
+        "value": 98,
+        "unit": "%"
+      },
+      "temperature_c": {
+        "fact_id": "f_RDPDX83Q0HG2V49VDFS4EM4N15",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:36:05.835785Z",
+        "value": 36.8,
+        "unit": "Cel"
+      },
+      "systolic_bp": {
+        "fact_id": "f_M78GR2RNJS8Q5XGC3BTJY91D37",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:36:05.835785Z",
+        "value": 123,
+        "unit": "mm[Hg]"
+      },
+      "diastolic_bp": {
+        "fact_id": "f_HG68X3D3M2XXRD41VA79JSQBM6",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:36:05.835785Z",
+        "value": 79,
+        "unit": "mm[Hg]"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "reception": {
+    "visit_for": "elder",
+    "caregiver": {
+      "name": "Taylor Demo Helper",
+      "relationship": "family"
+    },
+    "identity_status": "new_patient",
+    "intake_mode": "adaptive",
+    "patient": {
+      "name": "Mira Demo Elder",
+      "age_years": 72,
+      "sex": "female"
+    },
+    "department_id": "unsure",
+    "department_name": "To be confirmed by care team",
+    "visit_purpose": "consultation",
+    "reason": "",
+    "emergency_symptoms": [],
+    "registered_at": "2026-09-28T19:35:17.832048Z",
+    "availability_notice": "Example hospital and synthetic doctor rota. Your selection is a preference; no appointment is reserved. The care team confirms your destination."
+  },
+  "decisionMs": 403,
+  "decision": {
+    "decision": {
+      "decision_id": "dec_f2378e13da5d4f1da9ae34fbd3c5a095",
+      "session_id": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+      "suggestion_id": "sug_8edc8c95a6c0684c06b55ca7",
+      "action": "CONFIRM",
+      "final_level": 3,
+      "scale": "KTAS",
+      "nurse_user_id": "ec142200-866a-5582-809d-0a842e3325cb",
+      "acknowledged_alert_ids": [],
+      "decided_at": "2026-09-28T19:36:15.420000Z"
+    },
+    "token": {
+      "token_id": "f825cf40-ecbd-4fbe-b0d0-ef54445dc22c",
+      "session_id": "0a08ceca-dd1d-5830-aaa8-3782fb3fe9c2",
+      "token_code": "A-023",
+      "department": "emergency",
+      "status": "waiting",
+      "issued_at": "2026-09-28T19:36:15.450103Z"
+    }
+  },
+  "fhirEncounter": {
+    "count": 1,
+    "id": "198655",
+    "patientReference": "Patient/198654"
+  },
+  "completedAt": "2026-09-28T19:36:16.090Z"
+}

@@ -62,6 +62,10 @@ class Settings(BaseSettings):
     intake_runtime: bool = Field(
         default=True, validation_alias=AliasChoices("CAREFLOW_INTAKE_RUNTIME")
     )
+    #: Gate local-demo readiness on real EN/AR extraction warmup, never a patient request.
+    warm_extraction: bool = Field(
+        default=False, validation_alias=AliasChoices("CAREFLOW_WARM_EXTRACTION")
+    )
     #: Consume `triage.confirmed` as the `fhir-writeback` group (M1-09 write-back safety net).
     writeback_consumer: bool = Field(
         default=True, validation_alias=AliasChoices("CAREFLOW_WRITEBACK_CONSUMER")

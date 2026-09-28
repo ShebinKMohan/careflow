@@ -1,0 +1,3 @@
+# Raw browser captures contain development authorization and entry-ticket material.
+browser-artifacts/
+browser-results.json

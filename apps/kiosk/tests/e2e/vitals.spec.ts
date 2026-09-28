@@ -8,7 +8,7 @@ const HYPOXIC = JSON.parse(
   readFileSync(new URL("./fixtures/vitals-hypoxic.json", import.meta.url), "utf8"),
 ) as Record<string, unknown>[];
 
-test("?scenario=hypoxic shows SpO2 of 90 or less within 5 s (mock API)", async ({ page }) => {
+test("?scenario=hypoxic shows SpO2 of 90 or less within 6 s of the guided demo (mock API)", async ({ page }) => {
   // A signed-in kiosk (the mock accepts any device token).
   await page.addInitScript(() => {
     window.sessionStorage.setItem(
@@ -35,18 +35,18 @@ test("?scenario=hypoxic shows SpO2 of 90 or less within 5 s (mock API)", async (
   const opened = Date.now();
   await page.goto("/vitals?scenario=hypoxic&session=ses_e2e");
   const spo2 = page.getByRole("region", { name: "Oxygen (SpO2)" }).getByTestId("vital-value");
-  await expect(spo2).toHaveText(/^\d+$/, { timeout: 5_000 });
+  await expect(spo2).toHaveText(/^\d+$/, { timeout: 6_000 });
   const value = Number(await spo2.textContent());
   const elapsed = Date.now() - opened;
   console.log(`hypoxic: SpO2 ${value} shown ${elapsed} ms after opening the kiosk`);
   expect(value).toBeLessThanOrEqual(90);
-  expect(elapsed).toBeLessThan(5_000);
+  expect(elapsed).toBeLessThan(6_000);
   expect(requested).toEqual({ scenario: "hypoxic" });
-  await expect(page.getByText("Simulated device")).toBeVisible();
+  await expect(page.getByText("Demo readings", { exact: true })).toBeVisible();
   await expect(page.getByText("Pulse oximeter: warns about known skin-tone limits")).toBeVisible();
   await expect(page.getByRole("contentinfo")).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
-  const evidence = new URL("../../../../docs/evidence/M1-03/", import.meta.url).pathname;
+  const evidence = new URL("../../../../docs/evidence/RECEPTION-20260928/", import.meta.url).pathname;
   mkdirSync(evidence, { recursive: true });
   await page.screenshot({ path: `${evidence}kiosk-vitals-hypoxic.png`, fullPage: true });
 });

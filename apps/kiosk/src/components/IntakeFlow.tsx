@@ -4,19 +4,21 @@ import { Card } from "@careflow/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { patientApi } from "@/lib/api";
 import { type AnswerKey, quickAnswers } from "@/lib/quickAnswers";
 import { type IntakeQuestion, useKiosk } from "@/lib/session";
 import { ContinueOnPhone } from "@/components/ContinueOnPhone";
-import { hasConsent } from "@/consent/hasConsent";
-import { createVoiceClient, voiceEnabled } from "@/lib/voice";
+import { MESSAGES } from "@/i18n/messages";
+import { HoldToTalk } from "./HoldToTalk";
+import { CameraPreview } from "./CameraPreview";
+import { KioskIcon } from "./KioskIcon";
+import { PatientReceipt } from "./PatientReceipt";
 
 type InputMode = "tap" | "text" | "voice";
 
 const ANSWER = "min-h-touch rounded-control border-2 border-border bg-surface px-5 text-title font-semibold text-ink";
-const PRIMARY = "min-h-touch rounded-control bg-primary px-6 text-title font-semibold text-on-primary disabled:opacity-60";
 // 0-10 in one row on a kiosk-width screen: each button stays at least 56 px wide.
 const SCALE = "min-h-touch min-w-0 rounded-control border-2 border-border bg-surface text-title font-semibold text-ink";
 
@@ -29,20 +31,24 @@ const SCALE = "min-h-touch min-w-0 rounded-control border-2 border-border bg-sur
  */
 export function IntakeFlow() {
   const t = useTranslations("intake");
+  const adaptive = useTranslations("adaptiveIntake");
   const router = useRouter();
-  const { patient, setQuestion, onWipe } = useKiosk();
+  const { patient, setQuestion } = useKiosk();
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [listening, setListening] = useState(false);
+  const [voiceBusy, setVoiceBusy] = useState(false);
   const [heard, setHeard] = useState<string | null>(null);
-  const [voiceFailed, setVoiceFailed] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  const answerField = useRef<HTMLTextAreaElement>(null);
   const token = patient?.token;
   const client = useMemo(() => (token ? patientApi(token) : null), [token]);
-  const voice = useMemo(() => createVoiceClient(), []);
-
-  useEffect(() => onWipe(() => voice.abort()), [onWipe, voice]);
-  useEffect(() => () => voice.stop(), [voice]); // leaving the screen closes the microphone
+  useEffect(() => {
+    if (!sending) return;
+    const start = Date.now();
+    const timer = setInterval(() => setSeconds(Math.floor((Date.now() - start) / 1000)), 1000);
+    return () => clearInterval(timer);
+  }, [sending]);
   useEffect(() => {
     // A child skips the adult sensor steps (M2-04): a nurse checks temperature and breathing.
     if (patient && patient.question === null) router.push(patient.patientType === "child" ? "/done" : "/vitals");
@@ -62,15 +68,16 @@ export function IntakeFlow() {
   if (!question) return null;
 
   async function send(inputMode: InputMode, answer: string) {
-    if (!patient || !client || !answer.trim()) return;
-    if (listening) stopListening(); // one answer at a time: a tap or text ends the voice turn
+    if (!patient || !client || !answer.trim() || sending || voiceBusy) return;
     setSending(true);
+    setSeconds(0);
     setFailed(false);
-    const { data } = await client.POST("/v1/sessions/{session_id}/turns", {
+    const result = await client.POST("/v1/sessions/{session_id}/turns", {
       params: { path: { session_id: patient.sessionId } },
       body: { input_mode: inputMode, text: answer.trim(), language: patient.language },
-    });
+    }).catch(() => null);
     setSending(false);
+    const data = result?.data;
     if (!data) {
       setFailed(true);
       return;
@@ -82,7 +89,7 @@ export function IntakeFlow() {
           ? null
           : { question_id: data.turn_id, text: data.assistant_text, key: null, notice: null }
         : data.next_question;
-    setQuestion(next);
+    setQuestion(next, patient.sessionId);
   }
 
   function submitText(event: FormEvent<HTMLFormElement>) {
@@ -90,64 +97,47 @@ export function IntakeFlow() {
     void send("text", text);
   }
 
-  function stopListening() {
-    voice.stop();
-    setListening(false);
-  }
-
-  /** The voice service posts the spoken answer itself; the kiosk shows it and the next question. */
-  async function listen() {
-    if (!patient) return;
-    if (listening) return stopListening();
-    setVoiceFailed(false);
-    setHeard(null);
-    setListening(true);
-    try {
-      await voice.start(
-        { sessionId: patient.sessionId, token: patient.token, language: patient.language },
-        {
-          onTranscript: (text) => setHeard(text),
-          onQuestion: (next) => setQuestion(next),
-          onError: (code) => {
-            setVoiceFailed(true);
-            if (code === "unauthorized" || code === "disconnected") setListening(false);
-          },
-        },
-      );
-    } catch {
-      setVoiceFailed(true);
-      setListening(false);
-    }
-  }
-
   const answers = quickAnswers(question.key ?? null);
   const label = (answer: AnswerKey) => t(`answers.${answer}`);
+  const isOpen = question.key === "chief_complaint" || answers.kind === "none";
+  const exampleKey = question.key === "chief_complaint" ? "complaint" : question.key?.includes("onset") || question.key?.includes("last_known") ? "onset" : question.key === "pain_location" ? "location" : "general";
+  const examples = Object.values(MESSAGES[patient.language].adaptiveIntake[exampleKey]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <p className="text-label text-ink-muted">{t.rich("greeting", { initials: patient.display, ltr: (chunks) => <bdi dir="ltr">{chunks}</bdi> })}</p>
+    <div className="adaptive-intake">
+      <div className="adaptive-intake-heading"><span className="assistant-brand"><span className="assistant-signal" aria-hidden="true"><i /><i /><i /></span>{adaptive("eyebrow")}</span><Link className="reception-back" href="/checkin"><KioskIcon name="back" />{adaptive("back")}</Link></div>
+      <PatientReceipt compact />
+      <div className="adaptive-intake-main">
       {question.notice ? (
         <p role="status" className="rounded-card border-2 border-border bg-secondary p-gutter text-title text-on-secondary">
           {question.notice}
         </p>
       ) : null}
-      <h2 className="text-title font-bold" aria-live="polite">
+      <div className="intake-question"><h1 aria-live="polite">
         {question.text}
-      </h2>
-      {answers.kind === "choices" ? (
+      </h1></div>
+      {answers.kind === "choices" && !isOpen ? (
         <div className="grid gap-3 sm:grid-cols-3" role="group" aria-label={t("tapLabel")}>
           {answers.answers.map((answer) => (
-            <button key={answer} type="button" className={ANSWER} disabled={sending} onClick={() => void send("tap", label(answer))}>
+            <button key={answer} type="button" className={ANSWER} disabled={sending || voiceBusy} onClick={() => void send("tap", label(answer))}>
               {label(answer)}
             </button>
           ))}
         </div>
       ) : null}
+      <HoldToTalk
+        session={{ sessionId: patient.sessionId, token: patient.token, language: patient.language }}
+        disabled={sending}
+        onBusyChange={setVoiceBusy}
+        onTranscript={setHeard}
+        onQuestion={(next) => setQuestion(next, patient.sessionId)}
+      />
+      {heard ? <p className="text-body" data-testid="heard">{t("heard", { text: heard })}</p> : null}
       {answers.kind === "scale" ? (
         <div className="flex flex-col gap-2" role="group" aria-label={t("scaleLabel")}>
-          <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-11">
+          <div className="intake-scale-grid grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-11">
             {Array.from({ length: answers.max - answers.min + 1 }, (_, i) => String(answers.min + i)).map((value) => (
-              <button key={value} type="button" className={SCALE} disabled={sending} onClick={() => void send("tap", value)}>
+              <button key={value} type="button" className={SCALE} disabled={sending || voiceBusy} onClick={() => void send("tap", value)}>
                 {value}
               </button>
             ))}
@@ -155,45 +145,33 @@ export function IntakeFlow() {
           <p className="text-label text-ink-muted">{t("scaleHint")}</p>
         </div>
       ) : null}
-      <form className="flex flex-col gap-3" onSubmit={submitText}>
-        <label className="flex flex-col gap-2 text-label font-semibold">
-          {t("typeLabel")}
+      <div className="intake-response">
+      <label className="intake-answer-label" htmlFor="intake-answer">{t("typeLabel")}</label>
+      <form className="intake-composer" onSubmit={submitText}>
           <textarea
+            ref={answerField}
+            id="intake-answer"
             value={text}
             onChange={(event) => setText(event.target.value)}
             maxLength={1000}
-            rows={3}
-            className="rounded-control border-2 border-border bg-surface p-4 text-body"
+            rows={2}
+            placeholder={adaptive("placeholder")}
+            disabled={sending || voiceBusy}
           />
-        </label>
-        <button type="submit" className={PRIMARY} disabled={sending || !text.trim()}>
-          {sending ? t("sending") : t("send")}
+        <button type="submit" className="intake-send" disabled={sending || voiceBusy || !text.trim()} aria-label={sending ? t("sending") : t("send")}>
+          <KioskIcon name="arrow" /><span className="sr-only">{sending ? t("sending") : t("send")}</span>
         </button>
       </form>
-      {voiceEnabled() && hasConsent("voice") ? (
-        <div className="flex flex-col gap-3">
-          <button type="button" className={PRIMARY} disabled={sending} aria-pressed={listening} onClick={() => void listen()}>
-            {listening ? t("stopMic") : t("mic")}
-          </button>
-          {listening ? (
-            <p role="status" className="text-label text-ink-muted">
-              {t("listening")}
-            </p>
-          ) : null}
-          {heard ? (
-            <p className="text-body" data-testid="heard">
-              {t("heard", { text: heard })}
-            </p>
-          ) : null}
-          {voiceFailed ? <p className="font-semibold text-danger">{t("voiceFailed")}</p> : null}
-        </div>
-      ) : null}
+      </div>
+      {isOpen && <div className="answer-examples"><p>{adaptive("examplesTitle")}</p><div>{examples.map((example) => <button type="button" key={example} disabled={sending || voiceBusy} onClick={() => { setText(example); answerField.current?.focus(); }} aria-label={adaptive("examplesLabel", { example })}><span className="example-badge" aria-hidden="true">{adaptive("exampleBadge")}</span><span>{example}</span></button>)}</div></div>}
+      {sending && <p className="intake-processing" role="status">{adaptive("processing", { seconds })}<small>{adaptive("processingHint")}</small></p>}
       {failed ? (
         <p role="alert" className="font-semibold text-danger">
           {t("failed")}
         </p>
       ) : null}
-      <ContinueOnPhone highlight={question.notice_kind === "ask_on_phone"} />
+      </div>
+      <div className="intake-tools"><CameraPreview /><ContinueOnPhone compact highlight={question.notice_kind === "ask_on_phone"} /></div>
     </div>
   );
 }

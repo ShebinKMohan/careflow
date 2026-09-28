@@ -1,4 +1,4 @@
-"""The fixed child question bank (M2-04), asked of a parent before any other question.
+"""The fixed child question bank (M2-04), asked after the parent's opening description.
 
 The questions are the NICE NG143 ("Fever in under 5s: assessment and initial management")
 traffic-light features a parent can answer at a kiosk: the red ones first, then the amber ones.

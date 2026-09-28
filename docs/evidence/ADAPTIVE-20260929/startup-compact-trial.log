@@ -1,0 +1,4 @@
+00:48:30 voice.1     | INFO:     Application startup complete.
+00:48:49 api.1       | INFO:     Local extraction startup warmup verified: {'language': 'en', 'elapsed_ms': 10317, 'verified_facts': 1, 'model': 'qwen3.5-9b-4bit'}
+00:49:00 api.1       | INFO:     Local extraction startup warmup verified: {'language': 'ar', 'elapsed_ms': 10674, 'verified_facts': 1, 'model': 'qwen3.5-9b-4bit'}
+00:49:00 api.1       | INFO:     Application startup complete.

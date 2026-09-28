@@ -29,6 +29,11 @@ class SpeechToText(Protocol):
     async def close(self) -> None: ...
 
 
+@runtime_checkable
+class PushToTalkSpeechToText(Protocol):
+    async def transcribe_utterance(self, audio: bytes) -> None: ...
+
+
 class LLMClient(Protocol):
     def generate_reply(self, *, call_id: str, user_text: str) -> AsyncIterator[str]: ...
 

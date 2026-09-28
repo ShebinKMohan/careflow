@@ -1,0 +1,435 @@
+{
+  "startedAt": "2026-09-28T19:25:13.848Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "registrationMs": 625,
+  "sessionId": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+  "fhirPatientId": "198620",
+  "turns": [
+    {
+      "key": "chief_complaint",
+      "question": "What is the main reason for your visit today?",
+      "mode": "text",
+      "answer": "I twisted my left ankle playing football yesterday afternoon. It hurts when I walk and the pain is four out of ten.",
+      "latencyMs": 16175
+    },
+    {
+      "key": "symptom_onset_at",
+      "question": "When did this start?",
+      "mode": "text",
+      "answer": "Yesterday afternoon",
+      "latencyMs": 11368
+    },
+    {
+      "key": "allergies_confirm",
+      "question": "Are you allergic to any medicines?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 21107
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_AZBQV2Y67YQHHPTKXD7HHWNVBV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 0,
+          "end": 7,
+          "quote": "Age: 29"
+        },
+        "recorded_at": "2026-09-28T19:25:15.223526Z",
+        "value": 29
+      },
+      "sex": {
+        "fact_id": "f_ZYFFN0PRY5NW2C9XX95Y3T8283",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198620",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:25:15.506147Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "male",
+          "display": "Male"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_DJMCPHN80N3Q5NMCTMS86VH05B",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 60,
+        "quote": "I twisted my left ankle playing football yesterday afternoon"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": "I twisted my left ankle playing football yesterday afternoon"
+    },
+    "symptoms": [
+      {
+        "name": {
+          "fact_id": "f_XYV89FZDEQ7BSZN5Z0EBW5GMWV",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 62,
+            "end": 70,
+            "quote": "It hurts"
+          },
+          "recorded_at": "2026-09-28T19:25:15.992240Z",
+          "value": "pain"
+        }
+      }
+    ],
+    "pain_score": {
+      "fact_id": "f_8E4C6WXQY45D9TWNW1ZW8K4GHF",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 99,
+        "end": 114,
+        "quote": "four out of ten"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": 4
+    },
+    "injury": {
+      "fact_id": "f_0N5T32KACPSSQ8YJJ3KX8TDKEB",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 60,
+        "quote": "I twisted my left ankle playing football yesterday afternoon"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": "yes"
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "vitalsMs": 11323,
+  "triage": {
+    "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+    "status": "awaiting_nurse",
+    "alerts": [],
+    "suggestion": {
+      "suggestion_id": "sug_0cfd732c94d7f6c78c4c4dd0",
+      "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+      "level": 4,
+      "scale": "KTAS",
+      "display_label": "KTAS 4",
+      "confidence": 0.6845,
+      "reasons": [
+        {
+          "text": "Pain score 4/10 made KTAS 4 more likely",
+          "fact_ids": [
+            "f_8E4C6WXQY45D9TWNW1ZW8K4GHF"
+          ]
+        },
+        {
+          "text": "Complaint: I twisted my left ankle playing football yesterday afternoon made KTAS 4 more likely",
+          "fact_ids": [
+            "f_DJMCPHN80N3Q5NMCTMS86VH05B"
+          ]
+        },
+        {
+          "text": "Sex male made KTAS 4 more likely",
+          "fact_ids": [
+            "f_ZYFFN0PRY5NW2C9XX95Y3T8283"
+          ]
+        }
+      ],
+      "model_id": "laya-ktas",
+      "model_version": "laya-ktas-ebf31b5e-s42",
+      "created_at": "2026-09-28T19:26:14.247591Z"
+    },
+    "needed_facts": [],
+    "news2": {
+      "total": 0,
+      "subscores": {
+        "spo2": 0,
+        "systolic_bp": 0,
+        "heart_rate": 0,
+        "temperature_c": 0
+      },
+      "missing": [
+        "vitals.respiratory_rate",
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2"
+      ],
+      "partial": true,
+      "any_single_3": false,
+      "risk_band": "low"
+    },
+    "open_tasks": [],
+    "tasks": [],
+    "warnings": []
+  },
+  "facts": {
+    "session_id": "d4c813ba-73ef-598f-8c34-3b5150d64ead",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_AZBQV2Y67YQHHPTKXD7HHWNVBV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 0,
+          "end": 7,
+          "quote": "Age: 29"
+        },
+        "recorded_at": "2026-09-28T19:25:15.223526Z",
+        "value": 29
+      },
+      "sex": {
+        "fact_id": "f_ZYFFN0PRY5NW2C9XX95Y3T8283",
+        "provenance": "EHR",
+        "source": {
+          "kind": "fhir",
+          "resource_type": "Patient",
+          "id": "198620",
+          "version_id": "1"
+        },
+        "recorded_at": "2026-09-28T19:25:15.506147Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "male",
+          "display": "Male"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_DJMCPHN80N3Q5NMCTMS86VH05B",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 60,
+        "quote": "I twisted my left ankle playing football yesterday afternoon"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": "I twisted my left ankle playing football yesterday afternoon"
+    },
+    "symptoms": [
+      {
+        "name": {
+          "fact_id": "f_XYV89FZDEQ7BSZN5Z0EBW5GMWV",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 62,
+            "end": 70,
+            "quote": "It hurts"
+          },
+          "recorded_at": "2026-09-28T19:25:15.992240Z",
+          "value": "pain"
+        }
+      },
+      {
+        "name": {
+          "fact_id": "f_9MNWY75HTY59RTTWZNK12MY5XP",
+          "provenance": "PATIENT_STATED",
+          "source": {
+            "kind": "transcript_span",
+            "turn_id": "trn_003",
+            "start": 0,
+            "end": 60,
+            "quote": "I twisted my left ankle playing football yesterday afternoon"
+          },
+          "recorded_at": "2026-09-28T19:25:15.992240Z",
+          "value": "twisted left ankle"
+        }
+      }
+    ],
+    "symptom_onset_at": {
+      "fact_id": "f_MWNBWF024ZYNJ5KYZKM6XJN70E",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_005",
+        "start": 0,
+        "end": 19,
+        "quote": "Yesterday afternoon"
+      },
+      "recorded_at": "2026-09-28T19:25:32.272494Z",
+      "value": "Yesterday afternoon"
+    },
+    "pain_score": {
+      "fact_id": "f_8E4C6WXQY45D9TWNW1ZW8K4GHF",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 87,
+        "end": 114,
+        "quote": "the pain is four out of ten"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": 4
+    },
+    "pain_present": {
+      "fact_id": "f_NYE540M5MSNNZ29HZDQ12GSGZP",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 62,
+        "end": 82,
+        "quote": "It hurts when I walk"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": "yes"
+    },
+    "pain_location": {
+      "fact_id": "f_BQ1ZFGWV2VBK14080GYPZ7ZGW9",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 62,
+        "end": 114,
+        "quote": "It hurts when I walk and the pain is four out of ten"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": "left ankle"
+    },
+    "injury": {
+      "fact_id": "f_0N5T32KACPSSQ8YJJ3KX8TDKEB",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 60,
+        "quote": "I twisted my left ankle playing football yesterday afternoon"
+      },
+      "recorded_at": "2026-09-28T19:25:15.992240Z",
+      "value": "yes"
+    },
+    "allergies_confirm": {
+      "fact_id": "f_209RXDFMZ35J7M2D0CBJBM9EZW",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_007",
+        "start": 0,
+        "end": 2,
+        "quote": "No"
+      },
+      "recorded_at": "2026-09-28T19:25:43.625697Z",
+      "value": "No"
+    },
+    "vitals": {
+      "heart_rate": {
+        "fact_id": "f_0JSTAQB4EJ5BDT674W0HEYVTHF",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:26:08.550295Z",
+        "value": 77,
+        "unit": "/min"
+      },
+      "spo2": {
+        "fact_id": "f_B5V5VV6MA8HQ23GQ5B0JPPR3SF",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:26:08.550295Z",
+        "value": 98,
+        "unit": "%"
+      },
+      "temperature_c": {
+        "fact_id": "f_N0NZW8X6YKTGNTV35N759QKANC",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:26:08.550295Z",
+        "value": 36.8,
+        "unit": "Cel"
+      },
+      "systolic_bp": {
+        "fact_id": "f_NHRSNNAA9S776RF1H2NRMNVFYJ",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:26:08.550295Z",
+        "value": 122,
+        "unit": "mm[Hg]"
+      },
+      "diastolic_bp": {
+        "fact_id": "f_7FE066YPN11HW00K2AR0JNHYGX",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0004"
+        },
+        "recorded_at": "2026-09-28T19:26:08.550295Z",
+        "value": 78,
+        "unit": "mm[Hg]"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "reception": {
+    "visit_for": "self",
+    "identity_status": "new_patient",
+    "intake_mode": "adaptive",
+    "patient": {
+      "name": "Alex Demo Adaptive",
+      "age_years": 29,
+      "sex": "male"
+    },
+    "department_id": "unsure",
+    "department_name": "To be confirmed by care team",
+    "visit_purpose": "consultation",
+    "reason": "",
+    "emergency_symptoms": [],
+    "registered_at": "2026-09-28T19:25:15.223526Z",
+    "availability_notice": "Example hospital and synthetic doctor rota. Your selection is a preference; no appointment is reserved. The care team confirms your destination."
+  }
+}

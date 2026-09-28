@@ -1,0 +1,490 @@
+{
+  "startedAt": "2026-09-28T19:34:24.226Z",
+  "extractionProvider": {
+    "task": "extraction",
+    "provider": "local",
+    "model": "qwen3.5-9b-4bit",
+    "available": true
+  },
+  "lookupMs": 128,
+  "verifiedName": "Layla Karim",
+  "verifiedHistory": {
+    "status": "ok",
+    "allergies": [],
+    "conditions": [],
+    "medications": []
+  },
+  "registrationMs": 151,
+  "sessionId": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+  "fhirPatientId": "persona-routine",
+  "turns": [
+    {
+      "key": "chief_complaint",
+      "question": "What is the main reason for your visit today?",
+      "mode": "text",
+      "answer": "I have had a tight pain in the middle of my chest since seven this morning. I feel sweaty and the pain is seven out of ten.",
+      "latencyMs": 11145
+    },
+    {
+      "key": "chest_pain.radiates",
+      "question": "Does the pain spread to your arm, neck, jaw or back?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 70
+    },
+    {
+      "key": "chest_pain.short_of_breath",
+      "question": "Are you short of breath?",
+      "mode": "tap",
+      "answer": "No",
+      "latencyMs": 4611
+    }
+  ],
+  "firstNaturalAnswerFacts": {
+    "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_T08WEE9Y078DDH9S4HSMDZ6WNC",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 7,
+          "quote": "34"
+        },
+        "recorded_at": "2026-09-28T19:34:26.621871Z",
+        "value": 34
+      },
+      "sex": {
+        "fact_id": "f_YECWC7M2AMZSP5XHAMJTVB0VYV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 14,
+          "end": 20,
+          "quote": "female"
+        },
+        "recorded_at": "2026-09-28T19:34:26.621871Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "female",
+          "display": "female"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_D5JTW7SKRC713PXYJSYXAP9J1X",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 123,
+        "quote": "I have had a tight pain in the middle of my chest since seven this morning. I feel sweaty and the pain is seven out of ten."
+      },
+      "recorded_at": "2026-09-28T19:34:26.914897Z",
+      "value": "tight pain in the middle of my chest"
+    },
+    "pain_score": {
+      "fact_id": "f_KFB7VD9HR0DDCAKMJBK374KBSK",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 106,
+        "end": 122,
+        "quote": "seven out of ten"
+      },
+      "recorded_at": "2026-09-28T19:34:26.914897Z",
+      "value": 7
+    },
+    "chest_pain": {
+      "present": {
+        "fact_id": "f_MD0AAPQE6MPP9PFS3S3RA9JK96",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 49,
+          "quote": "I have had a tight pain in the middle of my chest"
+        },
+        "recorded_at": "2026-09-28T19:34:26.914897Z",
+        "value": "yes"
+      },
+      "sweating": {
+        "fact_id": "f_NXXQRVHSF5GQ6DNVADTJJ0R6DP",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 76,
+          "end": 89,
+          "quote": "I feel sweaty"
+        },
+        "recorded_at": "2026-09-28T19:34:26.914897Z",
+        "value": "yes"
+      },
+      "onset": {
+        "fact_id": "f_GQ9XDDANSCNJ0DE51CK6D8TH4M",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 50,
+          "end": 74,
+          "quote": "since seven this morning"
+        },
+        "recorded_at": "2026-09-28T19:34:26.914897Z",
+        "value": "seven this morning"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "vitalsMs": 10756,
+  "triage": {
+    "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+    "status": "awaiting_nurse",
+    "alerts": [
+      {
+        "alert_id": "alr_6ad1f056578f85fb2d8a88e2",
+        "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+        "rule_id": "CHEST_PAIN_ECG_10MIN",
+        "ruleset_version": "2026.3.0",
+        "severity": "critical",
+        "evidence_fact_ids": [
+          "f_MD0AAPQE6MPP9PFS3S3RA9JK96",
+          "f_NXXQRVHSF5GQ6DNVADTJJ0R6DP"
+        ],
+        "required_action": "ecg_within_10_min",
+        "display_text": "Chest pain: ECG within 10 minutes of arrival.",
+        "partial": false,
+        "missing_inputs": [],
+        "raised_at": "2026-09-28T19:34:37.969791Z",
+        "deadline_at": "2026-09-28T19:44:26.621871Z"
+      }
+    ],
+    "suggestion": {
+      "suggestion_id": "sug_fecc7f7f3d2021c27e6bf523",
+      "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+      "level": 2,
+      "scale": "KTAS",
+      "display_label": "KTAS 2",
+      "confidence": 0.5218,
+      "reasons": [
+        {
+          "text": "Complaint: tight pain in the middle of my chest made KTAS 2 more likely",
+          "fact_ids": [
+            "f_D5JTW7SKRC713PXYJSYXAP9J1X"
+          ]
+        },
+        {
+          "text": "Age 34 years made KTAS 2 more likely",
+          "fact_ids": [
+            "f_T08WEE9Y078DDH9S4HSMDZ6WNC"
+          ]
+        },
+        {
+          "text": "Sex female made KTAS 2 more likely",
+          "fact_ids": [
+            "f_YECWC7M2AMZSP5XHAMJTVB0VYV"
+          ]
+        }
+      ],
+      "model_id": "laya-ktas",
+      "model_version": "laya-ktas-ebf31b5e-s42",
+      "created_at": "2026-09-28T19:34:52.690855Z"
+    },
+    "needed_facts": [],
+    "news2": {
+      "total": 0,
+      "subscores": {
+        "spo2": 0,
+        "systolic_bp": 0,
+        "heart_rate": 0,
+        "temperature_c": 0
+      },
+      "missing": [
+        "vitals.respiratory_rate",
+        "vitals.acvpu",
+        "vitals.on_supplemental_o2"
+      ],
+      "partial": true,
+      "any_single_3": false,
+      "risk_band": "low"
+    },
+    "open_tasks": [
+      {
+        "task_id": "tsk_ecg_within_10_min",
+        "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+        "kind": "ecg_within_10_min",
+        "status": "open",
+        "due_at": "2026-09-28T19:44:26.621871Z"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "tsk_ecg_within_10_min",
+        "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+        "kind": "ecg_within_10_min",
+        "status": "open",
+        "due_at": "2026-09-28T19:44:26.621871Z"
+      }
+    ],
+    "warnings": []
+  },
+  "facts": {
+    "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+    "clinic_id": "5facbe7c-5ffc-5114-874b-c5d57e46ae5b",
+    "language": "en",
+    "patient": {
+      "age_years": {
+        "fact_id": "f_T08WEE9Y078DDH9S4HSMDZ6WNC",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 5,
+          "end": 7,
+          "quote": "34"
+        },
+        "recorded_at": "2026-09-28T19:34:26.621871Z",
+        "value": 34
+      },
+      "sex": {
+        "fact_id": "f_YECWC7M2AMZSP5XHAMJTVB0VYV",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_reception_001",
+          "start": 14,
+          "end": 20,
+          "quote": "female"
+        },
+        "recorded_at": "2026-09-28T19:34:26.621871Z",
+        "value": {
+          "system": "http://hl7.org/fhir/administrative-gender",
+          "code": "female",
+          "display": "female"
+        }
+      }
+    },
+    "chief_complaint": {
+      "fact_id": "f_D5JTW7SKRC713PXYJSYXAP9J1X",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 0,
+        "end": 123,
+        "quote": "I have had a tight pain in the middle of my chest since seven this morning. I feel sweaty and the pain is seven out of ten."
+      },
+      "recorded_at": "2026-09-28T19:34:26.914897Z",
+      "value": "tight pain in the middle of my chest"
+    },
+    "pain_score": {
+      "fact_id": "f_KFB7VD9HR0DDCAKMJBK374KBSK",
+      "provenance": "PATIENT_STATED",
+      "source": {
+        "kind": "transcript_span",
+        "turn_id": "trn_003",
+        "start": 106,
+        "end": 122,
+        "quote": "seven out of ten"
+      },
+      "recorded_at": "2026-09-28T19:34:26.914897Z",
+      "value": 7
+    },
+    "chest_pain": {
+      "present": {
+        "fact_id": "f_MD0AAPQE6MPP9PFS3S3RA9JK96",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 0,
+          "end": 49,
+          "quote": "I have had a tight pain in the middle of my chest"
+        },
+        "recorded_at": "2026-09-28T19:34:26.914897Z",
+        "value": "yes"
+      },
+      "radiates": {
+        "fact_id": "f_GHVG2QSEVJHWSQXYEFHRA0EVZH",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_006",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:34:38.135172Z",
+        "value": "no"
+      },
+      "sweating": {
+        "fact_id": "f_NXXQRVHSF5GQ6DNVADTJJ0R6DP",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 76,
+          "end": 89,
+          "quote": "I feel sweaty"
+        },
+        "recorded_at": "2026-09-28T19:34:26.914897Z",
+        "value": "yes"
+      },
+      "short_of_breath": {
+        "fact_id": "f_4CXDA9HQZKY4YNFSBXH2M6N277",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_008",
+          "start": 0,
+          "end": 2,
+          "quote": "No"
+        },
+        "recorded_at": "2026-09-28T19:34:38.216676Z",
+        "value": "no"
+      },
+      "onset": {
+        "fact_id": "f_GQ9XDDANSCNJ0DE51CK6D8TH4M",
+        "provenance": "PATIENT_STATED",
+        "source": {
+          "kind": "transcript_span",
+          "turn_id": "trn_003",
+          "start": 50,
+          "end": 74,
+          "quote": "since seven this morning"
+        },
+        "recorded_at": "2026-09-28T19:34:26.914897Z",
+        "value": "seven this morning"
+      }
+    },
+    "vitals": {
+      "heart_rate": {
+        "fact_id": "f_8NNRSTPYS09X4PQ7R66N6CCFWH",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:34:47.277174Z",
+        "value": 79,
+        "unit": "/min"
+      },
+      "spo2": {
+        "fact_id": "f_F4EY4DS8MD2ZRRNDGW0Z9AHZGN",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:34:47.277174Z",
+        "value": 98,
+        "unit": "%"
+      },
+      "temperature_c": {
+        "fact_id": "f_NQGJAMDTQEJCAMVX1YQM9EFGAC",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:34:47.277174Z",
+        "value": 36.8,
+        "unit": "Cel"
+      },
+      "systolic_bp": {
+        "fact_id": "f_3FWX56YFQ9XKQDF8ANKR6HRJMS",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:34:47.277174Z",
+        "value": 123,
+        "unit": "mm[Hg]"
+      },
+      "diastolic_bp": {
+        "fact_id": "f_9XB37WYMRWW8D1BZGAEVB7370F",
+        "provenance": "DEVICE_MEASURED",
+        "source": {
+          "kind": "device",
+          "device_id": "sim_vitals_01",
+          "reading_id": "rd_0005"
+        },
+        "recorded_at": "2026-09-28T19:34:47.277174Z",
+        "value": 79,
+        "unit": "mm[Hg]"
+      }
+    },
+    "ehr_context": {
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    },
+    "extraction_status": "complete"
+  },
+  "reception": {
+    "visit_for": "self",
+    "identity_status": "verified_demo",
+    "intake_mode": "adaptive",
+    "patient": {
+      "name": "Layla Karim",
+      "age_years": 34,
+      "sex": "female"
+    },
+    "department_id": "unsure",
+    "department_name": "To be confirmed by care team",
+    "visit_purpose": "consultation",
+    "reason": "",
+    "emergency_symptoms": [],
+    "registered_at": "2026-09-28T19:34:26.621871Z",
+    "availability_notice": "Example hospital and synthetic doctor rota. Your selection is a preference; no appointment is reserved. The care team confirms your destination."
+  },
+  "decisionMs": 574,
+  "decision": {
+    "decision": {
+      "decision_id": "dec_839ec404613e4d3e8e8aa55021e2574d",
+      "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+      "suggestion_id": "sug_fecc7f7f3d2021c27e6bf523",
+      "action": "CONFIRM",
+      "final_level": 2,
+      "scale": "KTAS",
+      "nurse_user_id": "ec142200-866a-5582-809d-0a842e3325cb",
+      "acknowledged_alert_ids": [
+        "alr_6ad1f056578f85fb2d8a88e2"
+      ],
+      "decided_at": "2026-09-28T19:34:54.706000Z"
+    },
+    "token": {
+      "token_id": "74081e78-d223-4964-935c-e0164b12f629",
+      "session_id": "75ec44be-9bdf-5afc-ac67-4f13288dda44",
+      "token_code": "A-021",
+      "department": "emergency",
+      "status": "waiting",
+      "issued_at": "2026-09-28T19:34:54.740255Z"
+    }
+  },
+  "fhirEncounter": {
+    "count": 1,
+    "id": "198633",
+    "patientReference": "Patient/persona-routine"
+  },
+  "completedAt": "2026-09-28T19:34:55.558Z"
+}
