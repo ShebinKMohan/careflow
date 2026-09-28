@@ -180,9 +180,10 @@ export async function assertDecision(ctx: JourneyContext, alerts: string[], deci
 export const sessionToken = async (sessionId: string) => get<QueueToken>(`/v1/sessions/${sessionId}/token`, await staffTokenFor("nurse"));
 
 /** c. The token and the room, on the public board (waiting, then called with the room; never a
- * name) and where the patient waits. The patient walks in at once (`arrive`, default true), so the
- * E2E stack's 5 s grace window never re-queues a journey's patient; the no-show's patient never
- * does. An arrived patient keeps the room and leaves the board. */
+ * name) and where the patient waits, while called: the phone shows the room only then. Then the
+ * patient walks in (`arrive`, default true), so the E2E stack's 5 s grace window never re-queues a
+ * journey's patient; the no-show's patient never does. A called token keeps its room for the whole
+ * grace window, so the patient's screen gets 5 s to show it. */
 export async function assertTokenAndRoom(ctx: JourneyContext, { arrive = true }: { arrive?: boolean } = {}): Promise<QueueToken> {
   const queued = await sessionToken(ctx.sessionId);
   expect(queued.token_code).toMatch(/^[A-Z]-\d{3}$/);
@@ -200,16 +201,14 @@ export async function assertTokenAndRoom(ctx: JourneyContext, { arrive = true }:
   const status = await get<{ patient_display?: string }>(`/v1/sessions/${ctx.sessionId}/status`, ctx.patientToken);
   if (status.patient_display) expect(JSON.stringify(board)).not.toContain(status.patient_display);
 
-  let token = called;
-  if (arrive) {
-    const headers = { Authorization: `Bearer ${await staffTokenFor("nurse")}` };
-    const arrived = await ctx.nurse.request.post(`${STACK.api}/v1/queue/tokens/${encodeURIComponent(called.token_id)}/arrived`, { headers });
-    expect(arrived.status(), `${called.token_code} walks into ${called.room}`).toBe(200);
-    token = (await arrived.json()) as QueueToken;
-  }
-  await expect(ctx.patient.getByText(queued.token_code).first()).toBeVisible({ timeout: 30_000 });
-  await expect(ctx.patient.getByText(called.room!).first()).toBeVisible({ timeout: 30_000 });
-  return token;
+  await expect(ctx.patient.getByText(queued.token_code).first()).toBeVisible({ timeout: 5_000 });
+  await expect(ctx.patient.getByText(called.room!).first()).toBeVisible({ timeout: 5_000 });
+
+  if (!arrive) return called;
+  const headers = { Authorization: `Bearer ${await staffTokenFor("nurse")}` };
+  const arrived = await ctx.nurse.request.post(`${STACK.api}/v1/queue/tokens/${encodeURIComponent(called.token_id)}/arrived`, { headers });
+  expect(arrived.status(), `${called.token_code} walks into ${called.room}`).toBe(200);
+  return (await arrived.json()) as QueueToken;
 }
 
 /** d. The doctor's briefing: every item attributed, no source missing. */
