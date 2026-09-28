@@ -3,7 +3,6 @@ import { expect, type Page, test, type WebSocketRoute } from "@playwright/test";
 import {
   answerIntake,
   answerOnPhone,
-  callIn,
   checkIn,
   closeToken,
   isClaim,
@@ -16,6 +15,7 @@ import {
 } from "../lib/actors";
 import { codes, Hapi } from "../lib/fhir";
 import { msg } from "../lib/i18n";
+import { callWithoutArriving } from "../lib/journey";
 import { ROUTINE_WALK_IN_AR } from "../lib/scripts";
 
 // @ar @rtl (M2-01): an Arabic visit on the real stack, persona `routine` (keypad 100005,
@@ -123,9 +123,10 @@ test("@ar @rtl an Arabic visit keeps its language: kiosk refresh, QR claim, phon
   await expect(mobile.getByTestId("status-stale")).toHaveCount(0);
   await expect(token).toHaveText(code2);
 
-  // The end of the visit: called in (the room reads left to right), then seen. The phone says the
-  // visit has ended, in Arabic, and still does after a refresh.
-  const called = await callIn(card, "general", sessionId);
+  // The end of the visit: called in (the room reads left to right), then seen. The phone shows the
+  // room only while the token is called, so the patient is not marked arrived before it is read.
+  // The phone says the visit has ended, in Arabic, and still does after a refresh.
+  const called = await callWithoutArriving(card, "general", sessionId);
   expect(called.token_code).toBe(code2);
   const room = mobile.getByText((phone("status.room", { room: called.room ?? "" })));
   await expect(room).toBeVisible();
