@@ -41,6 +41,7 @@ from careflow_api.intake.consumers import (
 )
 from careflow_api.models import ProcessedEvent
 from careflow_api.rls import clinic_session
+from careflow_integration.fhir.writeback.composition import DocumentOutcome
 from careflow_integration.fhir.writeback.ports import WritebackOutcome, WritebackStatus
 
 GROUP = "test-recovery"
@@ -128,8 +129,23 @@ class FakeWriteback:
         )
 
 
-def consumer_for(writeback: FakeWriteback) -> Callable[[AsyncSession, BusEvent], Awaitable[None]]:
-    return writeback_consumer(cast(Any, FakeRuntime()), cast(Any, writeback))
+def consumer_for(
+    writeback: FakeWriteback, briefings: FakeBriefings | None = None
+) -> Callable[[AsyncSession, BusEvent], Awaitable[None]]:
+    return writeback_consumer(cast(Any, FakeRuntime()), cast(Any, writeback), briefings)
+
+
+class FakeBriefings:
+    """`BriefingService.ensure_document` with scripted outcomes (M2-12)."""
+
+    def __init__(self, outcomes: list[DocumentOutcome]) -> None:
+        self.outcomes = outcomes
+        self.calls = 0
+
+    async def ensure_document(self, state: dict[str, Any]) -> DocumentOutcome:
+        outcome = self.outcomes[min(self.calls, len(self.outcomes) - 1)]
+        self.calls += 1
+        return outcome
 
 
 @pytest.mark.parametrize(
@@ -231,6 +247,62 @@ async def test_a_successful_writeback_is_acknowledged_once(
     await asyncio.sleep(0.2)
     await stop(consumer)
     assert (writeback.calls, await processed(clinic)) == (1, 1)
+
+
+async def test_a_briefing_document_the_ehr_did_not_take_is_written_with_the_triage_retries(
+    app: FastAPI,
+    new_clinic: Callable[[], uuid.UUID],
+    redis_client: Redis,
+    stream: str,
+) -> None:
+    """M2-12: the EHR was down when the nurse decided. The triage is written on a retry; the
+    briefing's document, written once at the decision, used to stay unwritten. Now the event
+    stays pending until the document is in the EHR too."""
+    clinic = new_clinic()
+    bus = fast_bus(redis_client, stream, max_deliveries=2)
+    await bus.ensure_group(GROUP)
+    await confirmed(redis_client, stream, clinic)
+    writeback = FakeWriteback([(WritebackStatus.ok, False, None)])
+    unreachable = DocumentOutcome(WritebackStatus.failed, error="ConnectError", retryable=True)
+    briefings = FakeBriefings([unreachable, unreachable, DocumentOutcome(WritebackStatus.ok)])
+
+    async def written() -> bool:
+        return briefings.calls == 3 and await pending(redis_client, stream) == 0
+
+    consumer = bus.subscribe(GROUP, consumer_for(writeback, briefings))
+    await wait_for(written, "the briefing document to be written")
+    await asyncio.sleep(0.3)  # more claim rounds: nothing is written again
+    await stop(consumer)
+    assert (writeback.calls, briefings.calls) == (1, 3)  # the triage once, the document retried
+    assert await processed(clinic) == 1
+    assert not await redis_client.exists(bus.dead_stream)
+
+
+async def test_a_rejected_briefing_document_is_dead_lettered_with_its_reason(
+    app: FastAPI,
+    new_clinic: Callable[[], uuid.UUID],
+    redis_client: Redis,
+    stream: str,
+) -> None:
+    clinic = new_clinic()
+    bus = fast_bus(redis_client, stream, max_deliveries=2)
+    await bus.ensure_group(GROUP)
+    await confirmed(redis_client, stream, clinic)
+    writeback = FakeWriteback([(WritebackStatus.ok, False, None)])
+    briefings = FakeBriefings([DocumentOutcome(WritebackStatus.failed, error="HTTP 422")])
+
+    async def dead() -> bool:
+        return (
+            await redis_client.xlen(bus.dead_stream) == 1
+            and await pending(redis_client, stream) == 0
+        )
+
+    consumer = bus.subscribe(GROUP, consumer_for(writeback, briefings))
+    await wait_for(dead, "the dead letter")
+    await stop(consumer)
+    [(_, letter)] = await xrange(redis_client, bus.dead_stream)
+    assert letter["error"] == "WritebackRejected: briefing document: HTTP 422"
+    assert await processed(clinic) == 0
 
 
 @pytest.mark.parametrize("command", ["xreadgroup", "xgroup_create", "xautoclaim"])

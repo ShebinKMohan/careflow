@@ -31,7 +31,7 @@ from fhir.resources.R4B.bundle import Bundle
 
 from careflow_contracts.api_models import Briefing, BriefingSection, BriefingSectionId
 from careflow_contracts.generated.fact_schema import FhirSource, Provenance
-from careflow_integration.fhir.client import FhirClient, FhirError
+from careflow_integration.fhir.client import RETRY_STATUSES, FhirClient, FhirError
 from careflow_integration.fhir.writeback import codes
 from careflow_integration.fhir.writeback.builders import (
     DEVICE_SYSTEM,
@@ -264,6 +264,8 @@ class DocumentOutcome:
     created: bool = False
     #: Short reason for a failed or skipped write; never patient data.
     error: str | None = None
+    #: Worth trying again later (M2-12): the EHR did not answer, or the triage is not in it yet.
+    retryable: bool = False
 
 
 async def write_document(
@@ -277,7 +279,9 @@ async def write_document(
     if patient_ref is None:
         return DocumentOutcome(WritebackStatus.skipped, error="no EHR patient to write to")
     if encounter_ref(written) is None:
-        return DocumentOutcome(WritebackStatus.skipped, error="the triage is not written back yet")
+        return DocumentOutcome(
+            WritebackStatus.skipped, error="the triage is not written back yet", retryable=True
+        )
     try:
         resources = await read_resources(client, needed_refs(briefing, written, patient_ref))
         bundle = build_document(
@@ -287,7 +291,9 @@ async def write_document(
         stored = await client.create(bundle, if_none_exist=document_match(briefing.session_id))
     except FhirError as exc:
         logger.warning("fhir.briefing_document", extra={"status": "failed", "error": str(exc)})
-        return DocumentOutcome(WritebackStatus.failed, error=str(exc)[:200])
+        # No answer, or 429/502/503/504: the EHR may answer later. Anything else is a rejection.
+        unreachable = exc.status is None or exc.status in RETRY_STATUSES
+        return DocumentOutcome(WritebackStatus.failed, error=str(exc)[:200], retryable=unreachable)
     except ValueError as exc:  # a builder bug: the Bundle does not fit the FHIR models
         logger.error("fhir.briefing_document", extra={"status": "failed", "error": "invalid"})
         return DocumentOutcome(
