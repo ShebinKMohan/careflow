@@ -65,8 +65,9 @@ export interface JourneyContext {
   alertsSeen: Map<string, Promise<number>>;
 }
 
-/** Set a level (confirmed when it is the suggestion), or override the suggestion with a reason. */
-export type Decision = { set: number } | { override: "suggestion"; reason?: string };
+/** Set a level (confirmed when it is the suggestion); confirm the suggestion (or set `fallback`
+ * when the model made none); or override the suggestion with a coded reason. */
+export type Decision = { set: number } | { confirm: "suggestion"; fallback: number } | { override: "suggestion"; reason?: string };
 
 export interface JourneyExpectation {
   /** The rule ids the journey must raise (Alert.rule_id), and no others. */
@@ -138,7 +139,15 @@ export async function assertDecision(ctx: JourneyContext, alerts: string[], deci
   await expect(card.getByText(/Suggestion only|No model suggestion/).first()).toBeVisible({ timeout: 30_000 });
   const suggested = await suggestedLevel(card);
   let level: number;
-  if ("set" in decision) {
+  if ("confirm" in decision) {
+    level = suggested ?? decision.fallback;
+    if (suggested === null) {
+      await card.getByRole("button", { name: `KTAS ${level}`, exact: true }).click();
+      await card.getByRole("button", { name: `Set level ${level}` }).click();
+    } else {
+      await card.getByRole("button", { name: `Confirm level ${level}` }).click();
+    }
+  } else if ("set" in decision) {
     level = decision.set;
     if (suggested === level) {
       await card.getByRole("button", { name: `Confirm level ${level}` }).click();
