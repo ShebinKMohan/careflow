@@ -13,6 +13,8 @@ dependencies = [
   "pyyaml>=6.0.3,<7",
   "jsonschema>=4.26,<5",
   "httpx>=0.28.1,<0.29",
+  # WER and CER for the speech eval (M2-02, careflow_eval.speech).
+  "jiwer>=4.0,<5",
 ]
 
 [project.scripts]

@@ -1,0 +1,767 @@
+{"id": "ar-gul-01", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ألم في صدري من ساعة", "transcript": "عدي ألم في صدري من ساعتي"}
+{"id": "ar-gul-02", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "صدري يعورني وايد من الصبح", "transcript": "صديعورني ويد من الصبح"}
+{"id": "ar-gul-03", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "راسي يعورني وأحس بدوخة", "transcript": "رسي عورني وأحسبي دوخا"}
+{"id": "ar-gul-04", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ما أقدر أتنفس زين", "transcript": "ما أقدر أتنفس زي"}
+{"id": "ar-gul-05", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ولدي حرارته مرتفعة من أمس", "transcript": "ودي حرارته مرتفعة من أمسه"}
+{"id": "ar-gul-06", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم يروح لذراعي اليسار", "transcript": "ألم يروح لذراعي اليساية"}
+{"id": "ar-gul-07", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عرقت وايد وحسيت بغثيان", "transcript": "عرقة ويد وحسيت بغثيان"}
+{"id": "ar-gul-08", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بطني يعورني من الليل", "transcript": "ماضي عورم يمياللي"}
+{"id": "ar-gul-09", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "طحت على يدي وهي منتفخة", "transcript": "حط على يدي وهي منتفخة دني"}
+{"id": "ar-gul-10", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي سكر وضغط", "transcript": "عن يسكر وضهد"}
+{"id": "ar-gul-11", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "آخذ حبوب الضغط كل يوم", "transcript": "خذ حبوب الضهط كل يون"}
+{"id": "ar-gul-12", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الولد ما ياكل ولا يشرب زين", "transcript": "رلد ما ياكل ولا يشرب زي"}
+{"id": "ar-gul-13", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس بخدر في وجهي من شوي", "transcript": "حسبي خدري في وجهي من شوي"}
+{"id": "ar-gul-14", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "كحة وبلغم من ثلاث أيام", "transcript": "حتى نوبلغم من ثلاث أيان"}
+{"id": "ar-gul-15", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم ثمانية من عشرة", "transcript": "ألم ثمانية من عشرتي"}
+{"id": "ar-lev-01", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي وجع بصدري من ساعة", "transcript": "عدي وجع بصدري من ساعدي"}
+{"id": "ar-lev-02", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "راسي عم يوجعني كتير من امبارح", "transcript": "أسي عم يوجعني كثيرا من بارحي"}
+{"id": "ar-lev-03", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ما عم بقدر اتنفس منيح", "transcript": "معا بقدر تنفس منيحا"}
+{"id": "ar-lev-04", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "الوجع بيروح على إيدي الشمال", "transcript": "وجع بروحي على إيدي الشمي"}
+{"id": "ar-lev-05", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حاسس بدوخة وغثيان", "transcript": "حسس بدوخة وغثيان"}
+{"id": "ar-lev-06", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ابني سخن من يومين", "transcript": "بدني سخن من يومين"}
+{"id": "ar-lev-07", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "وقعت عالدرج ورجلي وارمة", "transcript": "وقطع الدرج ورجلي وارماتني"}
+{"id": "ar-lev-08", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بطني عم يوجعني من الصبح", "transcript": "بطي عم يوجعني من الصبح"}
+{"id": "ar-lev-09", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي سكري وضغط", "transcript": "عني سكري وضهل"}
+{"id": "ar-lev-10", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "باخد دوا للضغط كل يوم", "transcript": "بخدي دول الضلط كل يوم"}
+{"id": "ar-lev-11", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "صار عندي تنميل بوجهي فجأة", "transcript": "صار عندي تنميل بوجهي فجأة لن"}
+{"id": "ar-lev-12", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عم بسعل من تلات أيام", "transcript": "أم بالساعة لمن ثلاث أيان؟"}
+{"id": "ar-lev-13", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "الوجع تمانية من عشرة", "transcript": "أو وجع تمانية من عشاراً"}
+{"id": "ar-lev-14", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "البنت نعسانة كتير وما عم تاكل", "transcript": "البنت نعسانة كتير ومما عم تاكن"}
+{"id": "ar-lev-15", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عرقت كتير وحسيت حالي رح يغمى علي", "transcript": "عاقت كثير وحسية حالي رح يهمى علي"}
+{"id": "en-01", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have chest pain since this morning.", "transcript": "I have chest pain since this morning."}
+{"id": "en-02", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "The pain goes down my left arm.", "transcript": "The pain goes down. My left arm."}
+{"id": "en-03", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel short of breath when I walk.", "transcript": "I feel short of breath when I walk."}
+{"id": "en-04", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My daughter has had a fever for two days.", "transcript": "My daughter has had a fever for two days."}
+{"id": "en-05", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I fell and hurt my wrist, and it is swollen.", "transcript": "I fell and hurt my wrist and it is swollen."}
+{"id": "en-06", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have a bad headache and I feel dizzy.", "transcript": "I have a bad headache and I feel dizzy."}
+{"id": "en-07", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My face feels numb on the right side.", "transcript": "My face feels numb on the right side."}
+{"id": "en-08", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I take tablets for blood pressure and diabetes.", "transcript": "I take tablets for blood pressure and diabetes."}
+{"id": "en-09", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "The pain is about seven out of ten.", "transcript": "The pain is about 7 out of 10."}
+{"id": "en-10", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have been coughing up yellow phlegm.", "transcript": "I have been coughing, up yellow phlegm."}
+{"id": "en-11", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have been vomiting since last night.", "transcript": "I have been vomiting since last night."}
+{"id": "en-12", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "He is very sleepy and he is not drinking much.", "transcript": "He is very sleepy, and he is not drinking much."}
+{"id": "en-13", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am allergic to penicillin.", "transcript": "I am allergic to penicillin."}
+{"id": "en-14", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "It started suddenly about an hour ago.", "transcript": "It started suddenly, about an hour ago."}
+{"id": "en-15", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I was sweating a lot and I felt faint.", "transcript": "I was sweating a lot, and I felt faint."}
+{"id": "scn-breathing-low-oxygen-no-infection-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Breathing is difficult.", "transcript": "Breathing is difficult."}
+{"id": "scn-breathing-low-oxygen-no-infection-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I am short of breath.", "transcript": "Yes, I am short of breath."}
+{"id": "scn-breathing-low-oxygen-no-infection-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-low-oxygen-no-infection-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-low-oxygen-no-infection-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-low-oxygen-no-infection-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Eight out of ten.", "transcript": "8 out of 10."}
+{"id": "scn-breathing-mild-focused-screen-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel a little short of breath.", "transcript": "I feel a little, short of breath."}
+{"id": "scn-breathing-mild-focused-screen-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, a little.", "transcript": "Yes, a little."}
+{"id": "scn-breathing-mild-focused-screen-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-mild-focused-screen-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-mild-focused-screen-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Three out of ten.", "transcript": "3 out of 10."}
+{"id": "scn-breathing-moderate-no-infection-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel short of breath.", "transcript": "I feel short of breath."}
+{"id": "scn-breathing-moderate-no-infection-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-breathing-moderate-no-infection-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have no chest pain.", "transcript": "No, I have no chest pain."}
+{"id": "scn-breathing-moderate-no-infection-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-moderate-no-infection-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-moderate-no-infection-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Five out of ten.", "transcript": "5 out of 10."}
+{"id": "scn-breathing-persistent-no-chest-pain-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am short of breath.", "transcript": "I am short of breath."}
+{"id": "scn-breathing-persistent-no-chest-pain-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-breathing-persistent-no-chest-pain-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, there is no chest pain or tightness.", "transcript": "No, there is no chest pain or tightness."}
+{"id": "scn-breathing-persistent-no-chest-pain-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-persistent-no-chest-pain-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-breathing-persistent-no-chest-pain-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since yesterday.", "transcript": "Since yesterday."}
+{"id": "scn-chest-pain-localised-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have pain in my chest.", "transcript": "I have pain in my chest."}
+{"id": "scn-chest-pain-localised-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-chest-pain-localised-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-chest-pain-localised-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, my breathing feels normal.", "transcript": "No, my breathing feels normal."}
+{"id": "scn-chest-pain-localised-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have not been sweating.", "transcript": "No, I have not been sweating."}
+{"id": "scn-chest-pain-localised-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Four out of ten.", "transcript": "4 out of 10."}
+{"id": "scn-chest-pain-no-breathlessness-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My chest hurts.", "transcript": "My chest hurts."}
+{"id": "scn-chest-pain-no-breathlessness-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, it hurts at the moment.", "transcript": "Yes, it hurts at the moment."}
+{"id": "scn-chest-pain-no-breathlessness-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I am not short of breath.", "transcript": "No, I am not short of breath."}
+{"id": "scn-chest-pain-no-breathlessness-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-chest-pain-no-breathlessness-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Six out of ten.", "transcript": "6 out of 10."}
+{"id": "scn-chest-pain-radiating-arm-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My chest feels tight.", "transcript": "My chest feels tight."}
+{"id": "scn-chest-pain-radiating-arm-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have chest pain now.", "transcript": "Yes, I have chest pain now."}
+{"id": "scn-chest-pain-radiating-arm-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, the pain spreads to my left arm.", "transcript": "Yes, the pain spreads to my left arm."}
+{"id": "scn-chest-pain-radiating-arm-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I am short of breath.", "transcript": "Yes, I am short of breath."}
+{"id": "scn-chest-pain-radiating-arm-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "The pain is 8 out of 10.", "transcript": "The pain is 8 out of 10."}
+{"id": "scn-chest-pain-radiating-arm-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "About twenty minutes ago.", "transcript": "About 20 minutes ago."}
+{"id": "scn-chest-pain-screen-negative-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I need to speak with a nurse.", "transcript": "I need to speak with a nurse."}
+{"id": "scn-chest-pain-screen-negative-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have no chest pain or tightness.", "transcript": "No, I have no chest pain or tightness."}
+{"id": "scn-chest-pain-screen-negative-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-chest-pain-screen-negative-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-chest-pain-screen-negative-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Zero out of ten.", "transcript": "0 out of 10."}
+{"id": "scn-chest-pain-screen-uncertain-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel unwell.", "transcript": "I feel unwell."}
+{"id": "scn-chest-pain-screen-uncertain-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am not sure.", "transcript": "I am not sure."}
+{"id": "scn-chest-pain-screen-uncertain-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I do not know.", "transcript": "I do not know."}
+{"id": "scn-chest-pain-screen-uncertain-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-chest-pain-screen-uncertain-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Five out of ten.", "transcript": "5 out of 10."}
+{"id": "scn-chest-pain-sweating-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have discomfort in my chest.", "transcript": "I have discomfort in my chest."}
+{"id": "scn-chest-pain-sweating-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, it is still there.", "transcript": "Yes, it is still there."}
+{"id": "scn-chest-pain-sweating-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, it does not spread anywhere.", "transcript": "No, it does not spread anywhere."}
+{"id": "scn-chest-pain-sweating-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have been sweating a lot.", "transcript": "Yes, I have been sweating a lot."}
+{"id": "scn-chest-pain-sweating-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Seven out of ten.", "transcript": "7 out of 10."}
+{"id": "scn-chest-pain-sweating-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "This morning.", "transcript": "This morning"}
+{"id": "scn-chest-pain-unsure-radiation-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My chest is tight.", "transcript": "My chest is tight."}
+{"id": "scn-chest-pain-unsure-radiation-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, the tightness is here now.", "transcript": "Yes, the tightness is here now."}
+{"id": "scn-chest-pain-unsure-radiation-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am not sure.", "transcript": "I am not sure."}
+{"id": "scn-chest-pain-unsure-radiation-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-chest-pain-unsure-radiation-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "An hour ago.", "transcript": "An hour ago."}
+{"id": "scn-chest-pain-with-jaw-radiation-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "There is pain in my chest.", "transcript": "There is pain in my chest."}
+{"id": "scn-chest-pain-with-jaw-radiation-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-chest-pain-with-jaw-radiation-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, it spreads to my jaw.", "transcript": "Yes, it spreads to my jaw."}
+{"id": "scn-chest-pain-with-jaw-radiation-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-chest-pain-with-jaw-radiation-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Ten minutes ago.", "transcript": "10 minutes ago."}
+{"id": "scn-chest-pain-with-jaw-radiation-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Nine out of ten.", "transcript": "9 out of 10."}
+{"id": "scn-child-feeding-and-urine-amber-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My child seems poorly.", "transcript": "My child seems poorly."}
+{"id": "scn-child-feeding-and-urine-amber-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, she wakes normally.", "transcript": "No, she wakes normally."}
+{"id": "scn-child-feeding-and-urine-amber-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-feeding-and-urine-amber-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-feeding-and-urine-amber-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, she is drinking much less.", "transcript": "Yes, she is drinking much less."}
+{"id": "scn-child-feeding-and-urine-amber-t6", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, she is passing less urine.", "transcript": "Yes, she is passing less urine."}
+{"id": "scn-child-grunting-and-poor-feeding-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My child is not well.", "transcript": "My child is not well."}
+{"id": "scn-child-grunting-and-poor-feeding-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, he wakes normally.", "transcript": "No, he wakes normally."}
+{"id": "scn-child-grunting-and-poor-feeding-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, he makes a grunting noise.", "transcript": "Yes, he makes a grunting noise."}
+{"id": "scn-child-grunting-and-poor-feeding-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, he is drinking much less.", "transcript": "Yes, he is drinking much less."}
+{"id": "scn-child-grunting-and-poor-feeding-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-hard-to-wake-under-five-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My child is unwell.", "transcript": "My child is unwell."}
+{"id": "scn-child-hard-to-wake-under-five-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, he is very hard to wake.", "transcript": "Yes, he is very hard to wake."}
+{"id": "scn-child-hard-to-wake-under-five-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-hard-to-wake-under-five-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, he is drinking as usual.", "transcript": "No, he is drinking as usual."}
+{"id": "scn-child-hard-to-wake-under-five-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, wet nappies are as usual.", "transcript": "No, wet nappies are as usual."}
+{"id": "scn-child-non-blanching-rash-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My child needs to be checked.", "transcript": "My child needs to be checked."}
+{"id": "scn-child-non-blanching-rash-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-non-blanching-rash-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, the spots do not fade when pressed.", "transcript": "Yes, the spots do not fade when pressed."}
+{"id": "scn-child-non-blanching-rash-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-non-blanching-rash-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-older-hard-to-wake-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My child is unwell.", "transcript": "My child is unwell."}
+{"id": "scn-child-older-hard-to-wake-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, he is very difficult to wake.", "transcript": "Yes, he is very difficult to wake."}
+{"id": "scn-child-older-hard-to-wake-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-older-hard-to-wake-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "This afternoon.", "transcript": "This afternoon."}
+{"id": "scn-child-parent-unsure-waking-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My child seems unwell.", "transcript": "My child seems unwell."}
+{"id": "scn-child-parent-unsure-waking-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am not sure.", "transcript": "I am not sure."}
+{"id": "scn-child-parent-unsure-waking-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-parent-unsure-waking-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-child-parent-unsure-waking-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-routine-01-wrist-ache-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left wrist ache", "transcript": "Left wrist ache."}
+{"id": "scn-routine-01-wrist-ache-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Three days ago", "transcript": "Three days ago."}
+{"id": "scn-routine-01-wrist-ache-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-01-wrist-ache-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left wrist", "transcript": "left wrist"}
+{"id": "scn-routine-01-wrist-ache-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No known medicine allergies", "transcript": "No known medicine allergies."}
+{"id": "scn-routine-02-ankle-soreness-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right ankle soreness", "transcript": "Right ankle soreness."}
+{"id": "scn-routine-02-ankle-soreness-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since last weekend", "transcript": "Since last weekend."}
+{"id": "scn-routine-02-ankle-soreness-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-02-ankle-soreness-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right ankle", "transcript": "Right ankle."}
+{"id": "scn-routine-02-ankle-soreness-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-03-knee-ache-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left knee ache", "transcript": "Left knee ache."}
+{"id": "scn-routine-03-knee-ache-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Five days ago", "transcript": "5 days ago."}
+{"id": "scn-routine-03-knee-ache-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "3", "transcript": "3A"}
+{"id": "scn-routine-03-knee-ache-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left knee", "transcript": "Left knee."}
+{"id": "scn-routine-03-knee-ache-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "None that I know of", "transcript": "None that I know of."}
+{"id": "scn-routine-04-shoulder-stiffness-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right shoulder stiffness", "transcript": "Right shoulder stiffness."}
+{"id": "scn-routine-04-shoulder-stiffness-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since Tuesday", "transcript": "Since Tuesday."}
+{"id": "scn-routine-04-shoulder-stiffness-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-04-shoulder-stiffness-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-04-shoulder-stiffness-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I do not know", "transcript": "I do not know."}
+{"id": "scn-routine-05-elbow-tenderness-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left elbow tenderness", "transcript": "Left elbow tenderness."}
+{"id": "scn-routine-05-elbow-tenderness-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "About a week ago", "transcript": "About a week ago."}
+{"id": "scn-routine-05-elbow-tenderness-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-05-elbow-tenderness-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left elbow", "transcript": "Left elbow."}
+{"id": "scn-routine-05-elbow-tenderness-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-06-heel-discomfort-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right heel discomfort", "transcript": "Right heel discomfort."}
+{"id": "scn-routine-06-heel-discomfort-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Four days ago", "transcript": "Four days ago."}
+{"id": "scn-routine-06-heel-discomfort-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "1", "transcript": "1"}
+{"id": "scn-routine-06-heel-discomfort-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right heel", "transcript": "Right heel."}
+{"id": "scn-routine-06-heel-discomfort-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I have no medicine allergies", "transcript": "I have no medicine allergies."}
+{"id": "scn-routine-07-finger-ache-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right index finger ache", "transcript": "Right index finger ache."}
+{"id": "scn-routine-07-finger-ache-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since yesterday", "transcript": "Since yesterday."}
+{"id": "scn-routine-07-finger-ache-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-07-finger-ache-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Right index finger", "transcript": "Right index finger."}
+{"id": "scn-routine-07-finger-ache-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-08-dry-skin-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Dry skin", "transcript": "Dry skin."}
+{"id": "scn-routine-08-dry-skin-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Two weeks ago", "transcript": "Two weeks ago."}
+{"id": "scn-routine-08-dry-skin-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "1", "transcript": "1"}
+{"id": "scn-routine-08-dry-skin-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-08-dry-skin-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No known drug allergies", "transcript": "No known drug allergies."}
+{"id": "scn-routine-09-scalp-itch-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Itchy scalp", "transcript": "Itchy Scalp"}
+{"id": "scn-routine-09-scalp-itch-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Six days ago", "transcript": "Six days ago."}
+{"id": "scn-routine-09-scalp-itch-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-09-scalp-itch-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No medicine allergies that I know of", "transcript": "No medicine. Allergies that I know of."}
+{"id": "scn-routine-10-flaky-skin-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Flaky skin patch", "transcript": "Flaky Skin Patch"}
+{"id": "scn-routine-10-flaky-skin-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "About ten days ago", "transcript": "About 10 days ago."}
+{"id": "scn-routine-10-flaky-skin-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "1", "transcript": "1"}
+{"id": "scn-routine-10-flaky-skin-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-10-flaky-skin-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Unknown", "transcript": "Unknown."}
+{"id": "scn-routine-11-ear-itch-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left ear itch", "transcript": "Left ear itch."}
+{"id": "scn-routine-11-ear-itch-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Two days ago", "transcript": "Two days ago."}
+{"id": "scn-routine-11-ear-itch-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-11-ear-itch-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-11-ear-itch-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No known medicine allergies", "transcript": "No known medicine allergies."}
+{"id": "scn-routine-12-blocked-ear-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Blocked right ear", "transcript": "Blocked right ear."}
+{"id": "scn-routine-12-blocked-ear-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since Monday", "transcript": "Since Monday."}
+{"id": "scn-routine-12-blocked-ear-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-12-blocked-ear-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-13-bloating-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Bloating", "transcript": "Bloating."}
+{"id": "scn-routine-13-bloating-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since yesterday afternoon", "transcript": "Since yesterday afternoon."}
+{"id": "scn-routine-13-bloating-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-13-bloating-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-13-bloating-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am not sure", "transcript": "I am not sure."}
+{"id": "scn-routine-14-constipation-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Constipation", "transcript": "constipation"}
+{"id": "scn-routine-14-constipation-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Three days ago", "transcript": "Three days ago."}
+{"id": "scn-routine-14-constipation-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-14-constipation-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-14-constipation-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No known medicine allergies", "transcript": "No known medicine allergies."}
+{"id": "scn-routine-15-queasiness-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Queasiness", "transcript": "Queasiness."}
+{"id": "scn-routine-15-queasiness-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since this morning", "transcript": "Since this morning"}
+{"id": "scn-routine-15-queasiness-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-15-queasiness-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-15-queasiness-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "None that I know of", "transcript": "None that I know of."}
+{"id": "scn-routine-16-toenail-irritation-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left big toenail irritation", "transcript": "Left big toenail irritation."}
+{"id": "scn-routine-16-toenail-irritation-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "One week ago", "transcript": "One week ago."}
+{"id": "scn-routine-16-toenail-irritation-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "2", "transcript": "2"}
+{"id": "scn-routine-16-toenail-irritation-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-16-toenail-irritation-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I do not know", "transcript": "I do not know."}
+{"id": "scn-routine-17-foot-blister-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Blister on my left foot", "transcript": "Blister on my left foot."}
+{"id": "scn-routine-17-foot-blister-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yesterday morning", "transcript": "Yesterday morning."}
+{"id": "scn-routine-17-foot-blister-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "1", "transcript": "1"}
+{"id": "scn-routine-17-foot-blister-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Left foot", "transcript": "Left foot."}
+{"id": "scn-routine-17-foot-blister-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "no", "transcript": "No."}
+{"id": "scn-routine-18-dry-lips-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Dry lips", "transcript": "Dry lips."}
+{"id": "scn-routine-18-dry-lips-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Four days ago", "transcript": "Four days ago."}
+{"id": "scn-routine-18-dry-lips-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "1", "transcript": "1"}
+{"id": "scn-routine-18-dry-lips-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No known drug allergies", "transcript": "No known drug allergies."}
+{"id": "scn-sepsis-kiosk-below-threshold-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel unwell today.", "transcript": "I feel unwell today."}
+{"id": "scn-sepsis-kiosk-below-threshold-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have felt feverish.", "transcript": "Yes, I have felt feverish."}
+{"id": "scn-sepsis-kiosk-below-threshold-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-sepsis-kiosk-below-threshold-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Five out of ten.", "transcript": "5 out of 10."}
+{"id": "scn-sepsis-kiosk-high-fever-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel ill.", "transcript": "I feel ill."}
+{"id": "scn-sepsis-kiosk-high-fever-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have had a fever.", "transcript": "Yes, I have had a fever."}
+{"id": "scn-sepsis-kiosk-high-fever-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have been shivering uncontrollably.", "transcript": "Yes, I have been shivering uncontrollably."}
+{"id": "scn-sepsis-kiosk-high-fever-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yesterday evening.", "transcript": "Yesterday evening."}
+{"id": "scn-sepsis-kiosk-threshold-five-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am feeling poorly.", "transcript": "I am feeling poorly."}
+{"id": "scn-sepsis-kiosk-threshold-five-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-sepsis-kiosk-threshold-five-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have not had shaking chills.", "transcript": "No, I have not had shaking chills."}
+{"id": "scn-sepsis-kiosk-threshold-five-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Six out of ten.", "transcript": "6 out of 10."}
+{"id": "scn-sepsis-low-measured-temperature-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel poorly.", "transcript": "I feel poorly."}
+{"id": "scn-sepsis-low-measured-temperature-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-sepsis-low-measured-temperature-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am not sure.", "transcript": "I am not sure."}
+{"id": "scn-sepsis-low-measured-temperature-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Since last night.", "transcript": "Since last night."}
+{"id": "scn-sepsis-measured-fever-denied-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I do not feel right.", "transcript": "I do not feel right."}
+{"id": "scn-sepsis-measured-fever-denied-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have not felt feverish.", "transcript": "No, I have not felt feverish."}
+{"id": "scn-sepsis-measured-fever-denied-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have not had shivering fits.", "transcript": "No, I have not had shivering fits."}
+{"id": "scn-sepsis-measured-fever-denied-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Seven out of ten.", "transcript": "7 out of 10."}
+{"id": "scn-sepsis-nurse-completes-high-score-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel very ill.", "transcript": "I feel very ill."}
+{"id": "scn-sepsis-nurse-completes-high-score-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-sepsis-nurse-completes-high-score-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have had shaking chills.", "transcript": "Yes, I have had shaking chills."}
+{"id": "scn-sepsis-nurse-completes-high-score-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Eight out of ten.", "transcript": "8 out of 10."}
+{"id": "scn-sepsis-nurse-confirms-threshold-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel sick.", "transcript": "I feel sick."}
+{"id": "scn-sepsis-nurse-confirms-threshold-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I have had a fever.", "transcript": "Yes, I have had a fever."}
+{"id": "scn-sepsis-nurse-confirms-threshold-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-sepsis-nurse-confirms-threshold-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Two days ago.", "transcript": "Two days ago."}
+{"id": "scn-sepsis-rigors-with-normal-temperature-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I feel very unwell.", "transcript": "I feel very unwell."}
+{"id": "scn-sepsis-rigors-with-normal-temperature-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, I have not noticed a fever.", "transcript": "No, I have not noticed a fever."}
+{"id": "scn-sepsis-rigors-with-normal-temperature-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, I keep having shaking chills.", "transcript": "Yes, I keep having shaking chills."}
+{"id": "scn-sepsis-rigors-with-normal-temperature-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Early this morning.", "transcript": "Early this morning."}
+{"id": "scn-stroke-arm-positive-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My left arm feels weak.", "transcript": "My left arm feels weak."}
+{"id": "scn-stroke-arm-positive-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-arm-positive-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, my left arm is weak.", "transcript": "Yes, my left arm is weak."}
+{"id": "scn-stroke-arm-positive-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-arm-positive-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "About an hour ago.", "transcript": "About an hour ago."}
+{"id": "scn-stroke-face-positive-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "One side of my face is drooping.", "transcript": "One side of my face is drooping."}
+{"id": "scn-stroke-face-positive-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, one side is drooping.", "transcript": "Yes, one side is drooping."}
+{"id": "scn-stroke-face-positive-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, neither arm feels weak or numb.", "transcript": "No, neither arm feels weak or numb."}
+{"id": "scn-stroke-face-positive-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No, my speech feels normal.", "transcript": "No, my speech feels normal."}
+{"id": "scn-stroke-face-positive-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Half an hour ago.", "transcript": "half an hour ago"}
+{"id": "scn-stroke-last-known-well-unknown-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My right arm is weak.", "transcript": "My right arm is weak."}
+{"id": "scn-stroke-last-known-well-unknown-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-stroke-last-known-well-unknown-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-last-known-well-unknown-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-last-known-well-unknown-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "unknown", "transcript": "Unknown."}
+{"id": "scn-stroke-multiple-signs-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I need help with these new symptoms.", "transcript": "I need help with these new symptoms."}
+{"id": "scn-stroke-multiple-signs-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes.", "transcript": "Yes."}
+{"id": "scn-stroke-multiple-signs-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, one arm is weak.", "transcript": "Yes, one arm is weak."}
+{"id": "scn-stroke-multiple-signs-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, my speech is slurred.", "transcript": "Yes, my speech is slurred."}
+{"id": "scn-stroke-multiple-signs-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Twenty minutes ago.", "transcript": "20 minutes ago."}
+{"id": "scn-stroke-screen-unsure-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Something feels different.", "transcript": "Something feels different."}
+{"id": "scn-stroke-screen-unsure-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-screen-unsure-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "I am not sure.", "transcript": "I am not sure."}
+{"id": "scn-stroke-screen-unsure-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-screen-unsure-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "unknown", "transcript": "Unknown."}
+{"id": "scn-stroke-speech-positive-t1", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "My words are hard to get out.", "transcript": "My words are hard to. Get out."}
+{"id": "scn-stroke-speech-positive-t2", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-speech-positive-t3", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "No.", "transcript": "No."}
+{"id": "scn-stroke-speech-positive-t4", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Yes, speaking is difficult.", "transcript": "Yes, speaking is difficult."}
+{"id": "scn-stroke-speech-positive-t5", "lang": "en", "dialect": "en", "provider": "mlx-whisper", "reference": "Before breakfast.", "transcript": "Before breakfast."}
+{"id": "scn-ar-gul-breathing-01-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ضيق في التنفس", "transcript": "عادي ضيق في تنفس"}
+{"id": "scn-ar-gul-breathing-01-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نعم، ما أقدر أتنفس زين", "transcript": "نعم أقدر أتنفس زيان"}
+{"id": "scn-ar-gul-breathing-01-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، صدري ما يعورني", "transcript": "لا صدري ما يعورني"}
+{"id": "scn-ar-gul-breathing-01-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما فيني حرارة", "transcript": "لما فيني حرات"}
+{"id": "scn-ar-gul-breathing-01-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ثمانية، صعب وايد", "transcript": "ثنانية صعب وين"}
+{"id": "scn-ar-gul-breathing-02-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس بضيق في التنفس", "transcript": "أحسى بضيق في التنفس"}
+{"id": "scn-ar-gul-breathing-02-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، ألهث", "transcript": "إيهو ألهال؟"}
+{"id": "scn-ar-gul-breathing-02-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما فيه ألم في صدري", "transcript": "لا ما فيه ألم في صدري"}
+{"id": "scn-ar-gul-breathing-02-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-gul-breathing-02-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "سبعة", "transcript": "زادن"}
+{"id": "scn-ar-gul-breathing-03-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ما أقدر أتنفس زين", "transcript": "ما أقدر أتنفس زي"}
+{"id": "scn-ar-gul-breathing-03-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نعم، أتنفس بصعوبة", "transcript": "نم أتنفس بصعوبة لن"}
+{"id": "scn-ar-gul-breathing-03-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي ألم في صدري", "transcript": "لا ما عندي ألم في صدري"}
+{"id": "scn-ar-gul-breathing-03-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي حرارة", "transcript": "لما عندي حرارني"}
+{"id": "scn-ar-gul-breathing-03-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أقول ٦", "transcript": "عرالين"}
+{"id": "scn-ar-gul-breathing-04-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "جيت عشان ضيق النفس", "transcript": "شيتي عشاني ديق النفس"}
+{"id": "scn-ar-gul-breathing-04-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، أتنفس بصعوبة", "transcript": "إيه أتنفس بصعوبا"}
+{"id": "scn-ar-gul-breathing-04-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، صدري ما يعورني", "transcript": "لا صدري ما يعورني"}
+{"id": "scn-ar-gul-breathing-04-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما فيني حمى", "transcript": "لما فيني حما"}
+{"id": "scn-ar-gul-breathing-04-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "سبعة تقريباً", "transcript": "ساعات التقريبة"}
+{"id": "scn-ar-gul-chest-pain-01-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ضيقة في صدري", "transcript": "عدي ضيقة في صدري"}
+{"id": "scn-ar-gul-chest-pain-01-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إي نعم، صدري ضايق", "transcript": "إن عم صدري ضايقه"}
+{"id": "scn-ar-gul-chest-pain-01-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "والله ما أدري، ما انتبهت", "transcript": "والله ما أدري من تبهدي"}
+{"id": "scn-ar-gul-chest-pain-01-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عرقت وايد", "transcript": "إهي عرق التوائلي"}
+{"id": "scn-ar-gul-chest-pain-01-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "سبعة تقريباً", "transcript": "ساعات التقريبة"}
+{"id": "scn-ar-gul-chest-pain-01-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ من الصبح، أول ما صحيت", "transcript": "بالأمن الصبح أول ما صحيت"}
+{"id": "scn-ar-gul-chest-pain-02-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس بضيقة في صدري", "transcript": "حسب ضيقة في صدري"}
+{"id": "scn-ar-gul-chest-pain-02-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نعم، الضيقة في صدري", "transcript": "نامت ضيقة في صدري"}
+{"id": "scn-ar-gul-chest-pain-02-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مدري، مو متأكدة", "transcript": "نظيم متأكدا"}
+{"id": "scn-ar-gul-chest-pain-02-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عرقت أبد", "transcript": "لما عرقت أبني"}
+{"id": "scn-ar-gul-chest-pain-02-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم ثمانية", "transcript": "الألم ثمانيا"}
+{"id": "scn-ar-gul-chest-pain-02-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ قبل يومين", "transcript": "بلقى قبل يومين"}
+{"id": "scn-ar-gul-chest-pain-03-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ضيقة في الصدر", "transcript": "عدي ضيقة في الصدل"}
+{"id": "scn-ar-gul-chest-pain-03-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، الضيقة موجودة", "transcript": "إيه الضيقة موجوداً"}
+{"id": "scn-ar-gul-chest-pain-03-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما يروح لمكان ثاني", "transcript": "لما يروح لمكان ثاني"}
+{"id": "scn-ar-gul-chest-pain-03-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عرقت", "transcript": "إيها عرقت"}
+{"id": "scn-ar-gul-chest-pain-03-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم ستة", "transcript": "للموسى تنن"}
+{"id": "scn-ar-gul-chest-pain-03-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-gul-chest-pain-04-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "جيت لأن فيه ضيقة في صدري", "transcript": "جيت لأن فيه ضيقة في صدري"}
+{"id": "scn-ar-gul-chest-pain-04-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نعم", "transcript": "ثم"}
+{"id": "scn-ar-gul-chest-pain-04-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، الألم في صدري بس", "transcript": "لا الألم في صدري بسة"}
+{"id": "scn-ar-gul-chest-pain-04-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إي والله، عرقت وايد", "transcript": "أيوالله عرقة وين"}
+{"id": "scn-ar-gul-chest-pain-04-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-gul-chest-pain-04-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من حوالي أسبوع", "transcript": "من حوالي أسبوع"}
+{"id": "scn-ar-gul-chest-pain-05-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ضيقة بالصدر", "transcript": "عندي ضيقة من الصدل"}
+{"id": "scn-ar-gul-chest-pain-05-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، ضيقة", "transcript": "إهدي قلن"}
+{"id": "scn-ar-gul-chest-pain-05-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، ينتشر لذراعي اليسار", "transcript": "إه ينتشر لضياع لسارة"}
+{"id": "scn-ar-gul-chest-pain-05-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عرقت", "transcript": "للمنع رقص"}
+{"id": "scn-ar-gul-chest-pain-05-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "خمس", "transcript": "للهجر"}
+{"id": "scn-ar-gul-chest-pain-05-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-gul-chest-pain-06-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس صدري ضيق", "transcript": "حسوا صدري ضيقه"}
+{"id": "scn-ar-gul-chest-pain-06-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إي نعم، فيه ضيقة في صدري", "transcript": "إنعم فيه ضيقة في صدلي"}
+{"id": "scn-ar-gul-chest-pain-06-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، يوصل لرقبتي", "transcript": "إيهي يوصل ليقبتي"}
+{"id": "scn-ar-gul-chest-pain-06-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-gul-chest-pain-06-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم عندي ٥", "transcript": "هي ألموا عندي"}
+{"id": "scn-ar-gul-chest-pain-06-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ثلاث أيام", "transcript": "فذي الثلاث أيان"}
+{"id": "scn-ar-gul-chest-pain-07-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "يعني، عندي ضيقة في صدري", "transcript": "يعني عندي ذيقتي في صدري"}
+{"id": "scn-ar-gul-chest-pain-07-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نعم، عندي ضيقة في صدري", "transcript": "نام عندي ضيقة في صدري"}
+{"id": "scn-ar-gul-chest-pain-07-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مو متأكدة", "transcript": "ممتأكدا"}
+{"id": "scn-ar-gul-chest-pain-07-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، كنت أعرق وايد", "transcript": "إيه كنت أعرق وين"}
+{"id": "scn-ar-gul-chest-pain-07-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم عندي سبعة", "transcript": "ألم عندي سبعة لي"}
+{"id": "scn-ar-gul-chest-pain-07-t6", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ قبل ثلاث أيام", "transcript": "بلئ قبل ثلاث أيان"}
+{"id": "scn-ar-gul-chest-pain-08-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ما أحس إني بخير بعد الغدا", "transcript": "ما أحسن إني بخير بعد الغدى"}
+{"id": "scn-ar-gul-chest-pain-08-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي ألم في صدري", "transcript": "لا ما عندي ألم في صدري"}
+{"id": "scn-ar-gul-chest-pain-08-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، تنفسي عادي", "transcript": "لا تنفسي عدي"}
+{"id": "scn-ar-gul-child-01-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ولدي مريض", "transcript": "لدي مريد"}
+{"id": "scn-ar-gul-child-01-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مدري، مو متأكدة", "transcript": "نظيم متأكدا"}
+{"id": "scn-ar-gul-child-01-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، يتنفس عادي", "transcript": "لا يتنفس عدي"}
+{"id": "scn-ar-gul-child-01-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عنده طفح", "transcript": "لما عنده طفحة"}
+{"id": "scn-ar-gul-child-01-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ياكل ويشرب عادي", "transcript": "لا يكل ويشرب عادي"}
+{"id": "scn-ar-gul-child-02-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بنتي مريضة", "transcript": "ماتي مريضة"}
+{"id": "scn-ar-gul-child-02-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، تصحى عادي", "transcript": "لا تصحى عادي"}
+{"id": "scn-ar-gul-child-02-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، تتنفس زين", "transcript": "لا تتنف السلزين"}
+{"id": "scn-ar-gul-child-02-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندها طفح وما يختفي لما ضغطت عليه بالكاس", "transcript": "إيه عندها طفحة وما يختفي لما ضغطت عليه بالكاسي"}
+{"id": "scn-ar-gul-child-02-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ترضع زين", "transcript": "لا ترضع زين"}
+{"id": "scn-ar-gul-child-03-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ولدي ما ياكل", "transcript": "ودي ما يكن"}
+{"id": "scn-ar-gul-child-03-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، يصحى عادي", "transcript": "ليصح عدي"}
+{"id": "scn-ar-gul-child-03-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، يتنفس عادي", "transcript": "لا يتنفس عدي"}
+{"id": "scn-ar-gul-child-03-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، يرضع أقل من العادة بكثير", "transcript": "إه يلضع أقل من العادة بكثير"}
+{"id": "scn-ar-gul-child-03-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، الحفاظات مبلولة مثل العادة", "transcript": "للحفاظات مبلولة مثل العادل"}
+{"id": "scn-ar-gul-child-04-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ولدي صار ما ياكل شي", "transcript": "ودي صار ما يكن شيء"}
+{"id": "scn-ar-gul-child-04-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، يصحى بسهولة", "transcript": "لا يصح بسهوداً"}
+{"id": "scn-ar-gul-child-04-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-gul-child-04-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، ما يشرب إلا شوي", "transcript": "إيه ما يشرب إلا شوي"}
+{"id": "scn-ar-gul-child-04-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، يروح الحمام عادي", "transcript": "لا يروح الحمام عادي"}
+{"id": "scn-ar-gul-child-05-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بنتي مو على طبيعتها", "transcript": "ماتي مو على طبيعتها"}
+{"id": "scn-ar-gul-child-05-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مو متأكدة، ما انتبهت", "transcript": "مو متأكدة من تبهل"}
+{"id": "scn-ar-gul-child-05-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندها حرارة", "transcript": "لم عندها حرالا"}
+{"id": "scn-ar-gul-child-05-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من أسبوع تقريباً", "transcript": "من أسبوع تقريبا"}
+{"id": "scn-ar-gul-child-06-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ولدي مو طبيعي اليوم", "transcript": "ويديم طبيعي يوم"}
+{"id": "scn-ar-gul-child-06-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، صعب يصحى من النوم", "transcript": "إيه صعب يصحى من النون"}
+{"id": "scn-ar-gul-child-06-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، حرارته مرتفعة", "transcript": "إهلا حرارته مالتفعا"}
+{"id": "scn-ar-gul-child-06-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ بعد الظهر", "transcript": "بقى بعد الظهي"}
+{"id": "scn-ar-gul-routine-01-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ألم في رسغي اليسار", "transcript": "عندي ألم في رسغي لي صار"}
+{"id": "scn-ar-gul-routine-01-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ قبل ساعة", "transcript": "يبقى قبل الساعة اللي"}
+{"id": "scn-ar-gul-routine-01-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-gul-routine-01-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في الرسغ اليسار", "transcript": "فرسر ليسارا"}
+{"id": "scn-ar-gul-routine-01-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حساسية من الأسبرين", "transcript": "إيه عندي حساسية من الأسبرينة؟"}
+{"id": "scn-ar-gul-routine-02-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "كاحلي اليمين يعورني", "transcript": "فاحلي لمين يورني"}
+{"id": "scn-ar-gul-routine-02-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ساعة تقريباً", "transcript": "قبل ساعة تقريبة"}
+{"id": "scn-ar-gul-routine-02-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "واحد، شي بسيط", "transcript": "واحد شي بيسيك"}
+{"id": "scn-ar-gul-routine-02-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الكاحل اليمين", "transcript": "الكاحل ليمين"}
+{"id": "scn-ar-gul-routine-02-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، الأسبرين", "transcript": "إيهو الأسبري"}
+{"id": "scn-ar-gul-routine-03-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ركبتي تعورني", "transcript": "تبتيت أورني"}
+{"id": "scn-ar-gul-routine-03-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من أسبوع تقريباً", "transcript": "من أسبوع تقريبا"}
+{"id": "scn-ar-gul-routine-03-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-gul-routine-03-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في الركبة", "transcript": "في الركبة دي"}
+{"id": "scn-ar-gul-routine-03-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي حساسية من الأسبرين", "transcript": "عدي حساسية من الأصبريني"}
+{"id": "scn-ar-gul-routine-04-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ألم في كتفي", "transcript": "لنفيك تفي"}
+{"id": "scn-ar-gul-routine-04-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ساعة", "transcript": "فميوساعد"}
+{"id": "scn-ar-gul-routine-04-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "الألم واحد", "transcript": "اقلموا واحد"}
+{"id": "scn-ar-gul-routine-04-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في كتفي", "transcript": "في الفتة في"}
+{"id": "scn-ar-gul-routine-04-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية من أي دوا", "transcript": "لا معندي حساسية من أيدو"}
+{"id": "scn-ar-gul-routine-05-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ألم في إصبعي", "transcript": "هذه ألم في إصبعي"}
+{"id": "scn-ar-gul-routine-05-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من ثلاث أيام", "transcript": "من ثلاث أيان"}
+{"id": "scn-ar-gul-routine-05-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "واحد", "transcript": "سبحانه وتعالى"}
+{"id": "scn-ar-gul-routine-05-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في الإصبع", "transcript": "فلإصبع"}
+{"id": "scn-ar-gul-routine-05-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حساسية من الأسبرين", "transcript": "إيه عندي حساسية من الأسبرينة؟"}
+{"id": "scn-ar-gul-routine-06-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ألم أسفل الظهر", "transcript": "عدي ألم أسفل الضهي"}
+{"id": "scn-ar-gul-routine-06-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-gul-routine-06-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "اثنين", "transcript": "والفنين"}
+{"id": "scn-ar-gul-routine-06-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أسفل ظهري", "transcript": "أسفل ظهري"}
+{"id": "scn-ar-gul-routine-06-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، البنسلين", "transcript": "إيه البنسلي"}
+{"id": "scn-ar-gul-routine-07-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "جلدي ناشف ويحكني", "transcript": "سادي ناشف ويحكني"}
+{"id": "scn-ar-gul-routine-07-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لاحظته قبل ساعة", "transcript": "لحظته قبل ساعة"}
+{"id": "scn-ar-gul-routine-07-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "اثنين، مو قوي", "transcript": "اثنين مقوي"}
+{"id": "scn-ar-gul-routine-07-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حساسية من الأسبرين", "transcript": "إيه عندي حساسية من الأسبرينة؟"}
+{"id": "scn-ar-gul-routine-08-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "فروة راسي تحكني", "transcript": "فروة راسي تحكني"}
+{"id": "scn-ar-gul-routine-08-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ثلاث أيام", "transcript": "فذي الثلاث أيان"}
+{"id": "scn-ar-gul-routine-08-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ثلاثة", "transcript": "ثاثا"}
+{"id": "scn-ar-gul-routine-08-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، من الأسبرين", "transcript": "إيه هم من الأصبرية؟"}
+{"id": "scn-ar-gul-routine-09-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أذني مسدودة", "transcript": "فنمسدوداً"}
+{"id": "scn-ar-gul-routine-09-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من البارحة في الليل", "transcript": "من البارحة في اللي"}
+{"id": "scn-ar-gul-routine-09-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ثلاث", "transcript": "فل"}
+{"id": "scn-ar-gul-routine-09-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي أي حساسية من الأدوية", "transcript": "لم عندي أي إساسية من الأدوين"}
+{"id": "scn-ar-gul-routine-10-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بطني تنفخ بعد الأكل", "transcript": "بطي تنفخ بعد الأكل"}
+{"id": "scn-ar-gul-routine-10-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ بعد الظهر", "transcript": "بقى بعد الظهي"}
+{"id": "scn-ar-gul-routine-10-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ثلاثة تقريباً", "transcript": "فيافت التقريبة"}
+{"id": "scn-ar-gul-routine-10-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية", "transcript": "لما عندي حساسيا"}
+{"id": "scn-ar-gul-routine-11-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي إمساك", "transcript": "عدي إمسا"}
+{"id": "scn-ar-gul-routine-11-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من يومين", "transcript": "ما يومين"}
+{"id": "scn-ar-gul-routine-11-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "واحد، خفيف", "transcript": "وحد الخفيل"}
+{"id": "scn-ar-gul-routine-11-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حساسية من البنسلين", "transcript": "إيها عندي حساسية من البنسلين"}
+{"id": "scn-ar-gul-routine-12-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "حلقي يعورني", "transcript": "حلقي يا عورني"}
+{"id": "scn-ar-gul-routine-12-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-gul-routine-12-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "واحد", "transcript": "سبحانه وتعالى"}
+{"id": "scn-ar-gul-routine-12-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في الحلق", "transcript": "في الحلق"}
+{"id": "scn-ar-gul-routine-12-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "البنسلين، عندي حساسية منه", "transcript": "ابن سلين عندي حساسية منه"}
+{"id": "scn-ar-gul-routine-13-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "خشمي يسيل", "transcript": "شامي يسيلن"}
+{"id": "scn-ar-gul-routine-13-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من أسبوع تقريباً", "transcript": "من أسبوع تقريبا"}
+{"id": "scn-ar-gul-routine-13-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ثلاثة", "transcript": "ثاثا"}
+{"id": "scn-ar-gul-routine-13-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، البنسلين", "transcript": "إيه البنسلي"}
+{"id": "scn-ar-gul-routine-14-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي صداع خفيف", "transcript": "عدين الصداعة خفيفة"}
+{"id": "scn-ar-gul-routine-14-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-gul-routine-14-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "واحد، خفيف", "transcript": "وحد الخفيل"}
+{"id": "scn-ar-gul-routine-14-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في راسي", "transcript": "فلسي"}
+{"id": "scn-ar-gul-routine-14-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حساسية من البنسلين", "transcript": "إيها عندي حساسية من البنسلين"}
+{"id": "scn-ar-gul-routine-15-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي فقاعة ماي في قدمي وتعورني", "transcript": "علي فقاعة ماي في قدمي وتعورني"}
+{"id": "scn-ar-gul-routine-15-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من أسبوع تقريباً", "transcript": "من أسبوع تقريبا"}
+{"id": "scn-ar-gul-routine-15-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "اثنين", "transcript": "والفنين"}
+{"id": "scn-ar-gul-routine-15-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في القدم", "transcript": "في القدم"}
+{"id": "scn-ar-gul-routine-15-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، الأسبرين", "transcript": "إيهو الأسبري"}
+{"id": "scn-ar-gul-routine-16-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي ألم في الضرس", "transcript": "عني ألم في الدرسة"}
+{"id": "scn-ar-gul-routine-16-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-gul-routine-16-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-gul-routine-16-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في الضرس", "transcript": "في الدرس"}
+{"id": "scn-ar-gul-routine-16-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية من الأدوية", "transcript": "لما عندي حساسية من الأدو يدي"}
+{"id": "scn-ar-gul-routine-17-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "كعبي يعورني", "transcript": "فابي عورني"}
+{"id": "scn-ar-gul-routine-17-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-gul-routine-17-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "واحد", "transcript": "سبحانه وتعالى"}
+{"id": "scn-ar-gul-routine-17-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "في الكعب", "transcript": "في الكان"}
+{"id": "scn-ar-gul-routine-17-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي حساسية من الأسبرين", "transcript": "عدي حساسية من الأصبريني"}
+{"id": "scn-ar-gul-routine-18-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "عندي حموضة بعد الأكل", "transcript": "عن حموضة بعد الأكن"}
+{"id": "scn-ar-gul-routine-18-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "من ثلاث أيام", "transcript": "من ثلاث أيان"}
+{"id": "scn-ar-gul-routine-18-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أربع", "transcript": "لدى"}
+{"id": "scn-ar-gul-routine-18-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-gul-sepsis-01-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس إني مريضة وايد", "transcript": "أحسن مريضة وين"}
+{"id": "scn-ar-gul-sepsis-01-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حرارة", "transcript": "إيه عندي حرات"}
+{"id": "scn-ar-gul-sepsis-01-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما رجفت", "transcript": "لما رجفت"}
+{"id": "scn-ar-gul-sepsis-01-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ بعد الظهر", "transcript": "بقى بعد الظهي"}
+{"id": "scn-ar-gul-sepsis-02-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "انا مريض وايد", "transcript": "يا مريد وين"}
+{"id": "scn-ar-gul-sepsis-02-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، حرارتي مرتفعة", "transcript": "إهي حرارتي مرتفعا"}
+{"id": "scn-ar-gul-sepsis-02-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما رجفت", "transcript": "لما رجفت"}
+{"id": "scn-ar-gul-sepsis-02-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ قبل يومين", "transcript": "بلقى قبل يومين"}
+{"id": "scn-ar-gul-sepsis-03-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس إني مو زينة أبد", "transcript": "حس أني مزينة أبن"}
+{"id": "scn-ar-gul-sepsis-03-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما عندي حرارة", "transcript": "لما عندي حرارني"}
+{"id": "scn-ar-gul-sepsis-03-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مو متأكدة", "transcript": "ممتأكدا"}
+{"id": "scn-ar-gul-sepsis-03-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ قبل ثلاثة أيام", "transcript": "باية قبل ثلاثة أيان"}
+{"id": "scn-ar-gul-sepsis-04-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أنا مريضة جداً اليوم", "transcript": "أنا مريضة جدا اليون"}
+{"id": "scn-ar-gul-sepsis-04-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، جسمي حار", "transcript": "إها جسمي حاراً"}
+{"id": "scn-ar-gul-sepsis-04-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، أرجف من البرد", "transcript": "إيهي أرجف من البر"}
+{"id": "scn-ar-gul-sepsis-04-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ بعد الظهر", "transcript": "بقى بعد الظهي"}
+{"id": "scn-ar-gul-sepsis-05-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس إني مريض وايد", "transcript": "أحس أني مريض موين"}
+{"id": "scn-ar-gul-sepsis-05-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، فيني حمى", "transcript": "إيه الفيني حما"}
+{"id": "scn-ar-gul-sepsis-05-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، رجفة قوية", "transcript": "إهرشفة قوية لن"}
+{"id": "scn-ar-gul-sepsis-05-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ثلاث أيام", "transcript": "فذي الثلاث أيان"}
+{"id": "scn-ar-gul-sepsis-06-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أنا مريضة كثير، حالتي صعبة", "transcript": "أنا مريضة كثيرا حالتي صعبا"}
+{"id": "scn-ar-gul-sepsis-06-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما فيني حرارة", "transcript": "لما فيني حرات"}
+{"id": "scn-ar-gul-sepsis-06-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مدري، مو متأكدة", "transcript": "نظيم متأكدا"}
+{"id": "scn-ar-gul-sepsis-06-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ساعة", "transcript": "فميوساعد"}
+{"id": "scn-ar-gul-sepsis-07-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس إني مريض وايد اليوم", "transcript": "حس اني مريد ويد اليون"}
+{"id": "scn-ar-gul-sepsis-07-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، حرارتي عادية", "transcript": "لا حرارة عادية"}
+{"id": "scn-ar-gul-sepsis-07-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مو متأكد", "transcript": "أم متأكن"}
+{"id": "scn-ar-gul-sepsis-07-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "بدأ قبل ساعة", "transcript": "يبقى قبل الساعة اللي"}
+{"id": "scn-ar-gul-sepsis-08-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "انا مريضة وايد", "transcript": "ها مريضة وين"}
+{"id": "scn-ar-gul-sepsis-08-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، عندي حمى", "transcript": "إيهي عندي ينحوما"}
+{"id": "scn-ar-gul-sepsis-08-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، أرجف وما أقدر أوقف", "transcript": "ايه ارجف وما اقدر اوقف"}
+{"id": "scn-ar-gul-sepsis-08-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ساعة تقريباً", "transcript": "قبل ساعة تقريبة"}
+{"id": "scn-ar-gul-stroke-01-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نص وجهي نازل", "transcript": "نصل وجهي نازن"}
+{"id": "scn-ar-gul-stroke-01-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، وجهي نازل من جهة", "transcript": "إيه وجهي نازل من جهندي"}
+{"id": "scn-ar-gul-stroke-01-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، أقدر أرفع يديني عادي", "transcript": "لا أقدر أرفع يديني عادي"}
+{"id": "scn-ar-gul-stroke-01-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، لساني ثقيل", "transcript": "إيها اللساني الفقيين"}
+{"id": "scn-ar-gul-stroke-01-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل الفطور كنت زين", "transcript": "قبل فطورة كنت زين"}
+{"id": "scn-ar-gul-stroke-02-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "كلامي مو واضح", "transcript": "كيميم وضح"}
+{"id": "scn-ar-gul-stroke-02-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، وجهي عادي", "transcript": "لا وجه عادي"}
+{"id": "scn-ar-gul-stroke-02-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما فيني ضعف", "transcript": "لما فيني ضعف"}
+{"id": "scn-ar-gul-stroke-02-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، الكلام يطلع صعب", "transcript": "اي الكلام يطلع صعل"}
+{"id": "scn-ar-gul-stroke-02-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "كنت طبيعي قبل الفطور", "transcript": "كلتو طبيعي قبل الفطون"}
+{"id": "scn-ar-gul-stroke-03-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "جهة من وجهي نازلة", "transcript": "هي تن من وجهي نازلا"}
+{"id": "scn-ar-gul-stroke-03-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، وجهي نازل من جهة", "transcript": "إيه وجهي نازل من جهندي"}
+{"id": "scn-ar-gul-stroke-03-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-gul-stroke-03-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، أتكلم عادي", "transcript": "لا أتكلم عاد"}
+{"id": "scn-ar-gul-stroke-03-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل ساعة تقريباً كنت زين", "transcript": "قبل ساعة تقريبا كنت زين"}
+{"id": "scn-ar-gul-stroke-04-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "وجهي نازل من جهة", "transcript": "هاجه ينزل من جهل"}
+{"id": "scn-ar-gul-stroke-04-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، واضح في المراية", "transcript": "إهي واضح في المرايات؟"}
+{"id": "scn-ar-gul-stroke-04-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، ذراعي اليمين ضعيفة", "transcript": "إهي ذراعي اليمين ضعيفة لن"}
+{"id": "scn-ar-gul-stroke-04-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إيه، لساني ثقيل شوي", "transcript": "إهي لساني الفقيل الشوي"}
+{"id": "scn-ar-gul-stroke-04-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "ما أدري، ما أذكر متى", "transcript": "ما أدري ما أذكر متى"}
+{"id": "scn-ar-gul-stroke-05-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "جهة من وجهي نازلة", "transcript": "هي تن من وجهي نازلا"}
+{"id": "scn-ar-gul-stroke-05-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "إي نعم، وجهي نازل من جهة", "transcript": "نعم وجهي نازل من جهد"}
+{"id": "scn-ar-gul-stroke-05-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، ما فيني ضعف", "transcript": "لما فيني ضعف"}
+{"id": "scn-ar-gul-stroke-05-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "نعم، ما أقدر أتكلم زين", "transcript": "نعم ما أقدر أتكلم زيا"}
+{"id": "scn-ar-gul-stroke-05-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل عشرين دقيقة كنت تمام", "transcript": "قبع عشرين دقيقة انت تمان"}
+{"id": "scn-ar-gul-stroke-06-t1", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "أحس إن فيني شي مو طبيعي", "transcript": "أحس إن فيني شي مطبيعي"}
+{"id": "scn-ar-gul-stroke-06-t2", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "مو متأكدة، ما شفت المراية", "transcript": "موم تأكدت ما شفت المارايل"}
+{"id": "scn-ar-gul-stroke-06-t3", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-gul-stroke-06-t4", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "لا، كلامي عادي", "transcript": "ليك لي ميعاد"}
+{"id": "scn-ar-gul-stroke-06-t5", "lang": "ar", "dialect": "gulf", "provider": "mlx-whisper", "reference": "قبل الفطور كنت طبيعية", "transcript": "قبل فطور كنت طبيعيا"}
+{"id": "scn-ar-lev-breathing-01-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي ضيق نفس", "transcript": "عني يضيق نفسه"}
+{"id": "scn-ar-lev-breathing-01-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عم بتنفس بصعوبة", "transcript": "اي عم بتنفس بصعوبا"}
+{"id": "scn-ar-lev-breathing-01-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في وجع بصدري", "transcript": "لا ما في وجع بالصدري"}
+{"id": "scn-ar-lev-breathing-01-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في حرارة", "transcript": "لا من في حرات"}
+{"id": "scn-ar-lev-breathing-01-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "سبعة", "transcript": "زادن"}
+{"id": "scn-ar-lev-breathing-02-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي ضيق بالتنفس", "transcript": "علي بيق بالتنفس"}
+{"id": "scn-ar-lev-breathing-02-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، ما عم بقدر آخد نفس", "transcript": "إما عن بقدرا آخذ نفس"}
+{"id": "scn-ar-lev-breathing-02-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، صدري ما بيوجعني", "transcript": "لا صدري ما بيجعني"}
+{"id": "scn-ar-lev-breathing-02-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-breathing-02-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ستة", "transcript": "تيزين"}
+{"id": "scn-ar-lev-breathing-03-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أنا عم بتنفس بصعوبة", "transcript": "أنا عم بتنفس بصعوبة"}
+{"id": "scn-ar-lev-breathing-03-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، نفسي قصير", "transcript": "يا نفسي قصير"}
+{"id": "scn-ar-lev-breathing-03-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي وجع بصدري", "transcript": "لما عندي وجع بصدري"}
+{"id": "scn-ar-lev-breathing-03-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حرارة", "transcript": "لما عندي حرارني"}
+{"id": "scn-ar-lev-breathing-03-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-lev-breathing-04-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "في ضيق بالنفس", "transcript": "في ضيق بالنفس"}
+{"id": "scn-ar-lev-breathing-04-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، شوي", "transcript": "يا شري"}
+{"id": "scn-ar-lev-breathing-04-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-breathing-04-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حرارة", "transcript": "لما عندي حرارني"}
+{"id": "scn-ar-lev-breathing-04-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "تلاتة", "transcript": "لا تلو"}
+{"id": "scn-ar-lev-chest-pain-01-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حاسس بضيقة بصدري", "transcript": "حسس بضيقتي بصدري"}
+{"id": "scn-ar-lev-chest-pain-01-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، في ضيقة بصدري", "transcript": "اي في ضيقة بالصدري"}
+{"id": "scn-ar-lev-chest-pain-01-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، بتوصل لرقبتي", "transcript": "إي بتوصل لرقبتي"}
+{"id": "scn-ar-lev-chest-pain-01-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عرقت كتير", "transcript": "إعراقة كتير"}
+{"id": "scn-ar-lev-chest-pain-01-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ستة", "transcript": "تيزين"}
+{"id": "scn-ar-lev-chest-pain-01-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من حوالي أسبوع", "transcript": "من حوالي أسبوع"}
+{"id": "scn-ar-lev-chest-pain-02-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي ضيقة بصدري", "transcript": "عدي ضيقة بالصدري"}
+{"id": "scn-ar-lev-chest-pain-02-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أيوه", "transcript": "يا"}
+{"id": "scn-ar-lev-chest-pain-02-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، بتروح لضهري", "transcript": "إيبت روح لظهري"}
+{"id": "scn-ar-lev-chest-pain-02-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لأ، ما عرقت", "transcript": "لا مباعرقة"}
+{"id": "scn-ar-lev-chest-pain-02-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-lev-chest-pain-02-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "صرلها أسبوع تقريباً", "transcript": "صار لها أسبوع تقريبة"}
+{"id": "scn-ar-lev-chest-pain-03-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حاسة بضيقة بصدري", "transcript": "حست البديقة بالصدري"}
+{"id": "scn-ar-lev-chest-pain-03-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، صدري ضيق", "transcript": "إصدريا ضيخة"}
+{"id": "scn-ar-lev-chest-pain-03-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ما بعرف، ما انتبهت", "transcript": "ما بعرف من تبهن"}
+{"id": "scn-ar-lev-chest-pain-03-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عرقت", "transcript": "إعرقت فو"}
+{"id": "scn-ar-lev-chest-pain-03-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة تقريباً", "transcript": "آبعة تقريبة"}
+{"id": "scn-ar-lev-chest-pain-03-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-lev-chest-pain-04-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "في شي ضاغط على صدري، ضيقة", "transcript": "في شيل باغة على صدري دي قدن"}
+{"id": "scn-ar-lev-chest-pain-04-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، في ضيقة بصدري", "transcript": "اي في ضيقة بالصدري"}
+{"id": "scn-ar-lev-chest-pain-04-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، بتوصل لفكي", "transcript": "إي بتوصل لفكي"}
+{"id": "scn-ar-lev-chest-pain-04-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-chest-pain-04-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ستة", "transcript": "تيزين"}
+{"id": "scn-ar-lev-chest-pain-04-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من يومين", "transcript": "ما يومين"}
+{"id": "scn-ar-lev-chest-pain-05-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "صدري مشدود", "transcript": "زادل مشدون"}
+{"id": "scn-ar-lev-chest-pain-05-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، مشدود", "transcript": "اي مش دون"}
+{"id": "scn-ar-lev-chest-pain-05-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "مش متأكد", "transcript": "مجيمة أكن"}
+{"id": "scn-ar-lev-chest-pain-05-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عرقت أبداً", "transcript": "لمعرقت أبدا"}
+{"id": "scn-ar-lev-chest-pain-05-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة تقريباً", "transcript": "آبعة تقريبة"}
+{"id": "scn-ar-lev-chest-pain-05-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من تلات أيام", "transcript": "من ثلاث أيام"}
+{"id": "scn-ar-lev-chest-pain-06-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي ضيقة بالصدر", "transcript": "عندي ضيقة من الصدل"}
+{"id": "scn-ar-lev-chest-pain-06-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، في ضيقة", "transcript": "إفي ديقني"}
+{"id": "scn-ar-lev-chest-pain-06-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، الوجع بالصدر بس", "transcript": "للوجع بالصد بس"}
+{"id": "scn-ar-lev-chest-pain-06-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عرقت كتير", "transcript": "إعراقة كتير"}
+{"id": "scn-ar-lev-chest-pain-06-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "سبعة", "transcript": "زادن"}
+{"id": "scn-ar-lev-chest-pain-06-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-lev-chest-pain-07-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "امم، حاسس صدري ضيق", "transcript": "وني محسس صدري يديقو"}
+{"id": "scn-ar-lev-chest-pain-07-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، ضيق", "transcript": "يديح"}
+{"id": "scn-ar-lev-chest-pain-07-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، لرقبتي وكتفي", "transcript": "إذ رقبتي وكتفي"}
+{"id": "scn-ar-lev-chest-pain-07-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-chest-pain-07-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-lev-chest-pain-07-t6", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بلّش قبل تلات أيام", "transcript": "باش قبل تلات ايان"}
+{"id": "scn-ar-lev-chest-pain-08-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بحس إني مريضة بعد الأكل", "transcript": "حس اني مريضة بعد الاكل"}
+{"id": "scn-ar-lev-chest-pain-08-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في شي بصدري", "transcript": "لما في شيب الصدري"}
+{"id": "scn-ar-lev-chest-pain-08-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، بتنفس عادي", "transcript": "لا بتنفس عادي"}
+{"id": "scn-ar-lev-child-01-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بنتي مريضة", "transcript": "ماتي مريضة"}
+{"id": "scn-ar-lev-child-01-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، كتير صعب فيقها", "transcript": "كثير صعب فيقها"}
+{"id": "scn-ar-lev-child-01-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لأ، عم تتنفس منيح", "transcript": "لن عم تتنفس منيحه"}
+{"id": "scn-ar-lev-child-01-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لأ، ما في طفح", "transcript": "لا ما في تفحن"}
+{"id": "scn-ar-lev-child-01-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لأ، عم ترضع منيح", "transcript": "لا عم ترد عميح"}
+{"id": "scn-ar-lev-child-02-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بنتي مريضة", "transcript": "ماتي مريضة"}
+{"id": "scn-ar-lev-child-02-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، بتفيق عادي", "transcript": "لا بتفيق عادي"}
+{"id": "scn-ar-lev-child-02-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-child-02-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندها طفح أحمر ما بيروح لما ضغطت عليه بالكاسة", "transcript": "عندها طفح أحمرني ما بروحني لما ضغطت عليه بالكاسد"}
+{"id": "scn-ar-lev-child-02-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، بنتي عم تشرب وتاكل عادي", "transcript": "لا بنتي عم تشرب وتاكل عادي"}
+{"id": "scn-ar-lev-child-03-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بنتي ما عم تاكل", "transcript": "ماتي ما عم تكن"}
+{"id": "scn-ar-lev-child-03-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، بتفيق بسهولة", "transcript": "لا بتفيق بسهود"}
+{"id": "scn-ar-lev-child-03-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، عم تتنفس عادي", "transcript": "لعمت تنفس عادي"}
+{"id": "scn-ar-lev-child-03-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عم تشرب أقل بكتير من العادة", "transcript": "عم تشرب أقل بكثير من العادل"}
+{"id": "scn-ar-lev-child-03-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، عم تفوت عالحمام عادي", "transcript": "لا عم تفوت على حمام عادي"}
+{"id": "scn-ar-lev-child-04-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بنتي ما بدها تاكل", "transcript": "منت ما بدها تاكل"}
+{"id": "scn-ar-lev-child-04-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-child-04-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، عم تتنفس عادي", "transcript": "لعمت تنفس عادي"}
+{"id": "scn-ar-lev-child-04-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، ما عم تشرب إلا شوي", "transcript": "إما عم تشرب إلا شوي"}
+{"id": "scn-ar-lev-child-04-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، الحفاضات مبلولة متل العادة", "transcript": "للحفظات مبلولة متل العادل"}
+{"id": "scn-ar-lev-child-05-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ابني مش متل عادته", "transcript": "ابن مشي متى العادته"}
+{"id": "scn-ar-lev-child-05-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، صعب كتير يصحى", "transcript": "إصاب كتير يصحى"}
+{"id": "scn-ar-lev-child-05-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عنده حرارة", "transcript": "لمن عنده حرالا"}
+{"id": "scn-ar-lev-child-05-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من يومين وهو هيك", "transcript": "من يومين وهوه"}
+{"id": "scn-ar-lev-child-06-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ابني مش على طبيعته", "transcript": "البني مش على طبيعته"}
+{"id": "scn-ar-lev-child-06-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، بيضل نايم وما بيفيق", "transcript": "إي بيضل نيم وما بي فيق"}
+{"id": "scn-ar-lev-child-06-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-child-06-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-lev-routine-01-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "رسغي الشمال بيوجعني", "transcript": "اعسغي الشمال بيوجعني"}
+{"id": "scn-ar-lev-routine-01-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-lev-routine-01-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "اتنين", "transcript": "لنن"}
+{"id": "scn-ar-lev-routine-01-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالرسغ الشمال", "transcript": "بل رسغ الشمال"}
+{"id": "scn-ar-lev-routine-01-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية من أي دوا", "transcript": "لا معندي حساسية من أيدو"}
+{"id": "scn-ar-lev-routine-02-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "كاحلي اليمين بيوجعني", "transcript": "كحلي لمين بيوجعني؟"}
+{"id": "scn-ar-lev-routine-02-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بلّش بعد الظهر", "transcript": "ما يشى بعد الظهي"}
+{"id": "scn-ar-lev-routine-02-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-lev-routine-02-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "الكاحل اليمين", "transcript": "الكاحل ليمين"}
+{"id": "scn-ar-lev-routine-02-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حساسية من البنسلين", "transcript": "إن عندي حساسية من البنسليه"}
+{"id": "scn-ar-lev-routine-03-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ركبتي عم توجعني", "transcript": "كبتي عم توجعني"}
+{"id": "scn-ar-lev-routine-03-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من مبارح", "transcript": "من مبارح"}
+{"id": "scn-ar-lev-routine-03-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-lev-routine-03-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالركبة", "transcript": "مروقت بلي"}
+{"id": "scn-ar-lev-routine-03-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، من الأسبرين", "transcript": "إي من الأسبري"}
+{"id": "scn-ar-lev-routine-04-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "كتفي عم يوجعني", "transcript": "تافي عم يجعني"}
+{"id": "scn-ar-lev-routine-04-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من مبارح بالليل", "transcript": "من مبارح باللليلي؟"}
+{"id": "scn-ar-lev-routine-04-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-lev-routine-04-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بكتفي", "transcript": "باتهن"}
+{"id": "scn-ar-lev-routine-04-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، البنسلين", "transcript": "إل بنسلي"}
+{"id": "scn-ar-lev-routine-05-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إصبعي بيوجعني", "transcript": "سبعي بيوجاني"}
+{"id": "scn-ar-lev-routine-05-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من أسبوع تقريباً", "transcript": "من أسبوع تقريبا"}
+{"id": "scn-ar-lev-routine-05-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "واحد", "transcript": "سبحانه وتعالى"}
+{"id": "scn-ar-lev-routine-05-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالإصبع", "transcript": "مل اسمه"}
+{"id": "scn-ar-lev-routine-05-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حساسية من البنسلين", "transcript": "إن عندي حساسية من البنسليه"}
+{"id": "scn-ar-lev-routine-06-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي وجع بأسفل ضهري", "transcript": "عني وجع بأصفل ظهري"}
+{"id": "scn-ar-lev-routine-06-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بلش بعد الظهر", "transcript": "باش بعد الظهي"}
+{"id": "scn-ar-lev-routine-06-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "تلاتة", "transcript": "لا تلو"}
+{"id": "scn-ar-lev-routine-06-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أسفل ظهري", "transcript": "أسفل ظهري"}
+{"id": "scn-ar-lev-routine-06-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، البنسلين", "transcript": "إل بنسلي"}
+{"id": "scn-ar-lev-routine-07-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "جلدي ناشف وعم يحكني", "transcript": "سيدي ناشف وعم يحكني"}
+{"id": "scn-ar-lev-routine-07-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من يومين", "transcript": "ما يومين"}
+{"id": "scn-ar-lev-routine-07-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-lev-routine-07-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، الأسبرين", "transcript": "الأصبرية"}
+{"id": "scn-ar-lev-routine-08-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "فروة راسي عم تحكني", "transcript": "فرات راسي عم تحكاني"}
+{"id": "scn-ar-lev-routine-08-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-lev-routine-08-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "تلاتة", "transcript": "لا تلو"}
+{"id": "scn-ar-lev-routine-08-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حساسية من الأسبرين", "transcript": "عندي حساسية من الأسبرين"}
+{"id": "scn-ar-lev-routine-09-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أذني اليمين مسدودة", "transcript": "أني اليمين مسدوداً"}
+{"id": "scn-ar-lev-routine-09-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من يومين", "transcript": "ما يومين"}
+{"id": "scn-ar-lev-routine-09-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "تلاتة", "transcript": "لا تلو"}
+{"id": "scn-ar-lev-routine-09-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، الأسبرين", "transcript": "الأصبرية"}
+{"id": "scn-ar-lev-routine-10-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بطني بتنفخ بعد الأكل", "transcript": "باطي بتنفخ بعد الأكن"}
+{"id": "scn-ar-lev-routine-10-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من حوالي أسبوع", "transcript": "من حوالي أسبوع"}
+{"id": "scn-ar-lev-routine-10-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "واحد", "transcript": "سبحانه وتعالى"}
+{"id": "scn-ar-lev-routine-10-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية", "transcript": "لما عندي حساسيا"}
+{"id": "scn-ar-lev-routine-11-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي إمساك", "transcript": "عدي إمسا"}
+{"id": "scn-ar-lev-routine-11-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من تلات أيام", "transcript": "من ثلاث أيام"}
+{"id": "scn-ar-lev-routine-11-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-lev-routine-11-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-routine-12-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حلقي بيوجعني", "transcript": "خرقي بيجعني"}
+{"id": "scn-ar-lev-routine-12-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من مبارح بالليل", "transcript": "من مبارح باللليلي؟"}
+{"id": "scn-ar-lev-routine-12-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "واحد", "transcript": "سبحانه وتعالى"}
+{"id": "scn-ar-lev-routine-12-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالحلق", "transcript": "للحلقة"}
+{"id": "scn-ar-lev-routine-12-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية من أي دوا", "transcript": "لا معندي حساسية من أيدو"}
+{"id": "scn-ar-lev-routine-13-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أنفي عم يسيل", "transcript": "آفعم يسيا"}
+{"id": "scn-ar-lev-routine-13-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "صرلها أسبوع تقريباً", "transcript": "صار لها أسبوع تقريبة"}
+{"id": "scn-ar-lev-routine-13-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "اتنين", "transcript": "لنن"}
+{"id": "scn-ar-lev-routine-13-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، من الأسبرين", "transcript": "إي من الأسبري"}
+{"id": "scn-ar-lev-routine-14-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي وجع راس خفيف", "transcript": "عدي وجع راس خفيف"}
+{"id": "scn-ar-lev-routine-14-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل ساعة", "transcript": "فميوساعد"}
+{"id": "scn-ar-lev-routine-14-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-lev-routine-14-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "براسي", "transcript": "لتر king"}
+{"id": "scn-ar-lev-routine-14-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حساسية من الأسبرين", "transcript": "عندي حساسية من الأسبرين"}
+{"id": "scn-ar-lev-routine-15-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي فقاعة مي بقدمي وبتوجعني", "transcript": "عدي فقاع تنمي بقدمي وبتوجعني"}
+{"id": "scn-ar-lev-routine-15-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من مبارح", "transcript": "من مبارح"}
+{"id": "scn-ar-lev-routine-15-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-lev-routine-15-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالقدم", "transcript": "للخدم"}
+{"id": "scn-ar-lev-routine-15-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لأ، ما عندي حساسية", "transcript": "لما عندي حساسيا"}
+{"id": "scn-ar-lev-routine-16-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "عندي وجع بالضرس", "transcript": "عدي وجع بالدرسة"}
+{"id": "scn-ar-lev-routine-16-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من أسبوع تقريباً", "transcript": "من أسبوع تقريبا"}
+{"id": "scn-ar-lev-routine-16-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "خمسة", "transcript": "هاجن"}
+{"id": "scn-ar-lev-routine-16-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالضرس", "transcript": "بالدرسي"}
+{"id": "scn-ar-lev-routine-16-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-routine-17-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "كعبي بيوجعني", "transcript": "فعبيبي وجعني"}
+{"id": "scn-ar-lev-routine-17-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل ساعة", "transcript": "فميوساعد"}
+{"id": "scn-ar-lev-routine-17-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "اتنين", "transcript": "لنن"}
+{"id": "scn-ar-lev-routine-17-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بالكعب", "transcript": "ليل كاردن"}
+{"id": "scn-ar-lev-routine-17-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، الأسبرين بيعملّي حساسية", "transcript": "الأسبرين بعمل حساسي لي"}
+{"id": "scn-ar-lev-routine-18-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بتجيني حرقة بعد الأكل", "transcript": "من الجيني حرقة بعد الأكن"}
+{"id": "scn-ar-lev-routine-18-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من يومين", "transcript": "ما يومين"}
+{"id": "scn-ar-lev-routine-18-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أربعة", "transcript": "لبعدون"}
+{"id": "scn-ar-lev-routine-18-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حساسية من أي دوا", "transcript": "لا معندي حساسية من أيدو"}
+{"id": "scn-ar-lev-sepsis-01-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حاسس حالي مريض كتير", "transcript": "حسس حالي مريد كتير"}
+{"id": "scn-ar-lev-sepsis-01-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حرارة", "transcript": "لما عندي حرارني"}
+{"id": "scn-ar-lev-sepsis-01-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عم برجف وما بقدر وقّف", "transcript": "اي عم برج فل وما بقدر وقف"}
+{"id": "scn-ar-lev-sepsis-01-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-lev-sepsis-02-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أنا مريضة كتير", "transcript": "أنا مريضة كتير"}
+{"id": "scn-ar-lev-sepsis-02-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما عندي حرارة", "transcript": "لما عندي حرارني"}
+{"id": "scn-ar-lev-sepsis-02-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ما بعرف", "transcript": "ما بعرفي"}
+{"id": "scn-ar-lev-sepsis-02-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من حوالي أسبوع وأنا هيك", "transcript": "من حوالي أسبوعا وأنا هيكة"}
+{"id": "scn-ar-lev-sepsis-03-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أنا مريض كتير", "transcript": "أنا مريض كتي"}
+{"id": "scn-ar-lev-sepsis-03-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حرارة", "transcript": "إي عني حراري"}
+{"id": "scn-ar-lev-sepsis-03-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في رجفة", "transcript": "لا منافر جفن"}
+{"id": "scn-ar-lev-sepsis-03-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بلّش بعد الظهر", "transcript": "ما يشى بعد الظهي"}
+{"id": "scn-ar-lev-sepsis-04-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حالتي كتير سيئة", "transcript": "حلتي كثير سيئا"}
+{"id": "scn-ar-lev-sepsis-04-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي سخونة قوية", "transcript": "إي عندي سخونة قويا"}
+{"id": "scn-ar-lev-sepsis-04-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، رجفة ما بتوقف", "transcript": "إي رجفة ما بتوقف"}
+{"id": "scn-ar-lev-sepsis-04-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من يومين", "transcript": "ما يومين"}
+{"id": "scn-ar-lev-sepsis-05-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أنا مريضة كتير اليوم", "transcript": "أن مريضة كتير اليون"}
+{"id": "scn-ar-lev-sepsis-05-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، حرارتي عالية", "transcript": "إحرارة على يلدي"}
+{"id": "scn-ar-lev-sepsis-05-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عم برجف من البرد", "transcript": "اي عمبرج فمين البري"}
+{"id": "scn-ar-lev-sepsis-05-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من الصبح", "transcript": "من الصبح"}
+{"id": "scn-ar-lev-sepsis-06-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "بحس إني مريضة كتير", "transcript": "حسن اني مريضة كتين"}
+{"id": "scn-ar-lev-sepsis-06-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حرارة", "transcript": "إي عني حراري"}
+{"id": "scn-ar-lev-sepsis-06-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ما بعرف", "transcript": "ما بعرفي"}
+{"id": "scn-ar-lev-sepsis-06-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل يومين", "transcript": "قد يومين"}
+{"id": "scn-ar-lev-sepsis-07-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "كتير مريضة", "transcript": "كاتر مريضاً"}
+{"id": "scn-ar-lev-sepsis-07-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عندي حرارة", "transcript": "إي عني حراري"}
+{"id": "scn-ar-lev-sepsis-07-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "ما بعرف والله", "transcript": "ما بعرف والله"}
+{"id": "scn-ar-lev-sepsis-07-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من حوالي أسبوع", "transcript": "من حوالي أسبوع"}
+{"id": "scn-ar-lev-sepsis-08-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "أنا مريض كتير", "transcript": "أنا مريض كتي"}
+{"id": "scn-ar-lev-sepsis-08-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-sepsis-08-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في رجفة", "transcript": "لا منافر جفن"}
+{"id": "scn-ar-lev-sepsis-08-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "من مبارح بالليل", "transcript": "من مبارح باللليلي؟"}
+{"id": "scn-ar-lev-stroke-01-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لساني تقيل وحكيي مش واضح", "transcript": "غساني تقيلاً وحكي ماشي واضحة"}
+{"id": "scn-ar-lev-stroke-01-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، وجهي طبيعي", "transcript": "لا وجه طبيعي"}
+{"id": "scn-ar-lev-stroke-01-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في ضعف", "transcript": "لا ما في ضعف"}
+{"id": "scn-ar-lev-stroke-01-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عم بحكي بصعوبة", "transcript": "اي عم بحكي بصعبني"}
+{"id": "scn-ar-lev-stroke-01-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "كنت منيح قبل الفطور", "transcript": "كنت منيح قبل الفطن"}
+{"id": "scn-ar-lev-stroke-02-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "نص وجهي نازل", "transcript": "نصل وجهي نازن"}
+{"id": "scn-ar-lev-stroke-02-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، نازل من جهة", "transcript": "اي نازل من جهب"}
+{"id": "scn-ar-lev-stroke-02-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في ضعف", "transcript": "لا ما في ضعف"}
+{"id": "scn-ar-lev-stroke-02-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، لساني تقيل", "transcript": "لساني تقيل"}
+{"id": "scn-ar-lev-stroke-02-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل الفطور كنت بخير", "transcript": "قبل فطورة كنت بخيا"}
+{"id": "scn-ar-lev-stroke-03-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "في ضعف بدراع واحد", "transcript": "في ضعف بدراعي وحين"}
+{"id": "scn-ar-lev-stroke-03-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-stroke-03-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، دراع واحد ضعيف", "transcript": "إدراع الواحد ضعيف"}
+{"id": "scn-ar-lev-stroke-03-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، كلامي مش واضح", "transcript": "اي كلامي مش واضح"}
+{"id": "scn-ar-lev-stroke-03-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "الصبح قبل الفطور كنت طبيعية", "transcript": "صبح قبل الفطور كنت طبيعية"}
+{"id": "scn-ar-lev-stroke-04-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لساني تقيل والحكي مش طالع واضح", "transcript": "ساني تقيل والحكي مش طالع الواضح"}
+{"id": "scn-ar-lev-stroke-04-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، وجهي طبيعي", "transcript": "لا وجه طبيعي"}
+{"id": "scn-ar-lev-stroke-04-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، ما في ضعف", "transcript": "لا ما في ضعف"}
+{"id": "scn-ar-lev-stroke-04-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، عم بحكي بصعوبة", "transcript": "اي عم بحكي بصعبني"}
+{"id": "scn-ar-lev-stroke-04-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل نص ساعة كنت منيح", "transcript": "قبل نص ساعة كنت مني حين"}
+{"id": "scn-ar-lev-stroke-05-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "وجهي مايل على جنب", "transcript": "وجهي ميل على جن"}
+{"id": "scn-ar-lev-stroke-05-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، وجهي نازل من جهة", "transcript": "الوجه نازل من جهد"}
+{"id": "scn-ar-lev-stroke-05-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، دراعي الشمال ضعيف", "transcript": "ادراع الشمال ضعيف"}
+{"id": "scn-ar-lev-stroke-05-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "إي، لساني تقيل", "transcript": "لساني تقيل"}
+{"id": "scn-ar-lev-stroke-05-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "قبل الفطور", "transcript": "قدى الفطون"}
+{"id": "scn-ar-lev-stroke-06-t1", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "حاسة في شي مش طبيعي", "transcript": "حسة في شيء مش طبيعي"}
+{"id": "scn-ar-lev-stroke-06-t2", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "مش متأكدة، ما تطلعت بالمراية", "transcript": "رجين متأكدة ما تطلعت بالمراية"}
+{"id": "scn-ar-lev-stroke-06-t3", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا", "transcript": "بل"}
+{"id": "scn-ar-lev-stroke-06-t4", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "لا، عم بحكي عادي", "transcript": "لا عم بحكي عادي"}
+{"id": "scn-ar-lev-stroke-06-t5", "lang": "ar", "dialect": "levantine", "provider": "mlx-whisper", "reference": "كنت بخير قبل الفطور", "transcript": "كتب خيري قبل الفطور"}

@@ -368,6 +368,145 @@ def test_oversized_or_odd_frames_are_refused(
         assert ws.receive_json() == {"type": "error", "code": "bad_frame"}
 
 
+# --- the session's language, a lost connection, failing engines (M2-02) ---
+
+ARABIC_QUESTION: Final = {
+    "question_id": "q_symptom_onset_at_1",
+    "text": "متى بدأ هذا؟",
+    "key": "symptom_onset_at",
+    "notice": None,
+}
+
+
+class _LanguageSpeech:
+    """A KioskSpeech that records the language each engine is built for."""
+
+    def __init__(self, speech: Any) -> None:
+        self.speech = speech
+        self.built: list[tuple[str, str]] = []
+
+    def stt(self, language: str = "en") -> Any:
+        self.built.append(("stt", language))
+        return self.speech.stt(language)
+
+    def tts(self, language: str = "en") -> Any:
+        self.built.append(("tts", language))
+        return self.speech.tts(language)
+
+    def vad(self) -> Any:
+        return self.speech.vad()
+
+
+def test_an_arabic_session_builds_arabic_engines_and_posts_arabic_turns(
+    make_kiosk_app: Callable[..., FastAPI],
+    fake_speech: Any,
+    patient_token: Callable[..., str],
+    chest_pain_pcm: bytes,
+    api: respx.MockRouter,
+) -> None:
+    route = api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply(ARABIC_QUESTION))
+    fake = fake_speech(text="عندي ألم في صدري من ساعة")
+    speech = _LanguageSpeech(fake)
+    with (
+        TestClient(make_kiosk_app(speech=speech)) as client,
+        client.websocket_connect("/kiosk/audio") as ws,
+    ):
+        ws.send_text(_start(patient_token(), language="ar"))
+        _send_audio(ws, chest_pain_pcm)
+        messages, audio = _messages_until(ws, lambda m: m["type"] == "tts_end")
+        ws.send_text(json.dumps({"type": "stop"}))
+
+    assert speech.built == [("stt", "ar"), ("tts", "ar")]  # the session's language, not detected
+    assert messages[0] == {"type": "final", "text": "عندي ألم في صدري من ساعة"}
+    assert messages[1]["text"] == ARABIC_QUESTION["text"]
+    [call] = route.calls
+    assert json.loads(call.request.content)["language"] == "ar"
+    [engine] = fake.tts_engines
+    assert engine.spoken == [ARABIC_QUESTION["text"]] and audio > 0
+
+
+def test_a_lost_connection_can_start_again_for_the_same_session(
+    make_kiosk_app: Callable[..., FastAPI],
+    fake_speech: Any,
+    patient_token: Callable[..., str],
+    chest_pain_pcm: bytes,
+    api: respx.MockRouter,
+) -> None:
+    route = api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+    with TestClient(make_kiosk_app(speech=fake_speech())) as client:
+        with client.websocket_connect("/kiosk/audio") as ws:
+            ws.send_text(_start(patient_token()))
+            _send_audio(ws, chest_pain_pcm)
+            _messages_until(ws, lambda m: m["type"] == "question")
+            # the connection drops: no stop message
+        with client.websocket_connect("/kiosk/audio") as ws:
+            ws.send_text(_start(patient_token()))
+            _send_audio(ws, chest_pain_pcm)
+            messages, audio = _messages_until(ws, lambda m: m["type"] == "tts_end")
+            ws.send_text(json.dumps({"type": "stop"}))
+
+    assert messages[0] == {"type": "final", "text": "I have chest pain since this morning."}
+    assert audio > 0 and len(route.calls) == 2
+
+
+def test_engines_that_fail_to_start_are_speech_unavailable_and_the_next_start_works(
+    make_kiosk_app: Callable[..., FastAPI],
+    fake_speech: Any,
+    patient_token: Callable[..., str],
+    chest_pain_pcm: bytes,
+    api: respx.MockRouter,
+) -> None:
+    api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+
+    class LoadingSpeech(fake_speech):  # type: ignore[misc, valid-type]
+        failures = 1
+
+        def stt(self, language: str = "en") -> Any:
+            if self.failures:
+                self.failures -= 1
+                raise RuntimeError("the speech model did not load")
+            return super().stt(language)
+
+    with TestClient(make_kiosk_app(speech=LoadingSpeech())) as client:
+        with client.websocket_connect("/kiosk/audio") as ws:
+            ws.send_text(_start(patient_token()))
+            assert _receive(ws)["text"] == json.dumps(
+                {"type": "error", "code": "speech_unavailable"}, separators=(",", ":")
+            )
+            assert _close_code(ws) == 1011
+        with client.websocket_connect("/kiosk/audio") as ws:
+            ws.send_text(_start(patient_token()))
+            _send_audio(ws, chest_pain_pcm)
+            messages, _ = _messages_until(ws, lambda m: m["type"] == "question")
+            ws.send_text(json.dumps({"type": "stop"}))
+    assert messages[0]["type"] == "final"
+
+
+def test_an_stt_engine_that_fails_mid_session_is_speech_unavailable_and_closes(
+    make_kiosk_app: Callable[..., FastAPI],
+    fake_speech: Any,
+    patient_token: Callable[..., str],
+    chest_pain_pcm: bytes,
+    api: respx.MockRouter,
+) -> None:
+    route = api.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+
+    class CrashingSpeech(fake_speech):  # type: ignore[misc, valid-type]
+        def transcribe(self, audio: Any) -> str:
+            raise RuntimeError("the speech model crashed")
+
+    with (
+        TestClient(make_kiosk_app(speech=CrashingSpeech())) as client,
+        client.websocket_connect("/kiosk/audio") as ws,
+    ):
+        ws.send_text(_start(patient_token()))
+        _send_audio(ws, chest_pain_pcm)
+        messages, _ = _messages_until(ws, lambda m: m["type"] == "error")
+        assert _close_code(ws) == 1011  # the kiosk falls back to typing, as for a failed start
+    assert messages == [{"type": "error", "code": "speech_unavailable"}]
+    assert route.calls == []  # nothing was heard, so nothing was posted
+
+
 # --- flags, latency, disk ---
 
 

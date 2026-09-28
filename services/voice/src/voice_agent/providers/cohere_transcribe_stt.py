@@ -4,14 +4,15 @@
 Hugging Face: it needs the owner's HF login and a one-time acceptance of its terms (a human step,
 [M0-00]). The runtime never downloads it (4.1 GB): the pinned snapshot must already be in the local
 Hugging Face cache, and when it is not, `model_info` says why and the service refuses to start
-with this engine configured ("gated model, owner HF token needed"). It never falls back silently;
-mlx-whisper stays the Arabic STT in config/providers.yaml until the owner unlocks the model.
+with this engine configured ("gated model, owner HF token needed", also for a 401 or 403). It never
+falls back silently; mlx-whisper stays the Arabic STT in config/providers.yaml until the owner
+unlocks the model.
 
 Loading and inference follow the model card (transformers >= 5.4, no remote code): the processor
 takes 16 kHz audio and `language="ar"`, and the model generates up to 256 tokens. The model runs on
 MPS when available, else CPU, loads once per process on first use (in the STT worker thread) and
 never auto-detects the language. The turn logic (Silero VAD, Smart Turn v3, pre-roll, the 30 s
-cap) is `MlxWhisperSTT`'s; only the transcriber differs.
+cap) is `MlxWhisperSTT`'s; only the transcriber differs (`CohereTranscribeSTT`).
 """
 
 from __future__ import annotations
@@ -45,7 +46,7 @@ class CohereTranscribeUnavailableError(RuntimeError):
 def ensure_accessible(model_id: str = MODEL_ID, revision: str = MODEL_REVISION) -> None:
     """Raise unless the pinned snapshot is in the local Hugging Face cache (never downloads)."""
     from huggingface_hub import hf_hub_download, model_info
-    from huggingface_hub.errors import LocalEntryNotFoundError
+    from huggingface_hub.errors import GatedRepoError, HfHubHTTPError, LocalEntryNotFoundError
 
     try:
         hf_hub_download(model_id, "config.json", revision=revision, local_files_only=True)
@@ -55,7 +56,16 @@ def ensure_accessible(model_id: str = MODEL_ID, revision: str = MODEL_REVISION) 
     fetch = f"`hf download {model_id} --revision {revision}`"
     try:
         gated = bool(model_info(model_id, revision=revision).gated)
-    except Exception as exc:  # noqa: BLE001 - offline or refused: the model is missing either way
+    except GatedRepoError as exc:
+        raise CohereTranscribeUnavailableError(
+            f"{model_id} is not downloaded ({GATED_REASON})"
+        ) from exc
+    except HfHubHTTPError as exc:
+        status = exc.response.status_code
+        refused = status in (401, 403)  # no token, or the terms are not accepted: the owner's step
+        reason = GATED_REASON if refused else f"HTTP {status} from Hugging Face"
+        raise CohereTranscribeUnavailableError(f"{model_id} is not downloaded ({reason})") from exc
+    except Exception as exc:  # noqa: BLE001 - offline: the model is missing either way
         raise CohereTranscribeUnavailableError(
             f"{model_id} is not downloaded ({type(exc).__name__} from Hugging Face)"
         ) from exc
@@ -115,24 +125,34 @@ def cohere_transcriber(model_id: str = MODEL_ID, revision: str = MODEL_REVISION)
     return run
 
 
+class CohereTranscribeSTT(MlxWhisperSTT):
+    """Arabic only: `MlxWhisperSTT`'s turn logic with the Cohere transcriber, warmed once."""
+
+    def __init__(
+        self, *, vad_model_path: str, transcriber: Transcriber | None = None, **turn: Any
+    ) -> None:
+        super().__init__(
+            vad_model_path=vad_model_path,
+            model=MODEL_ID,
+            language="ar",
+            transcriber=transcriber or cohere_transcriber(),
+            warm=True,
+            **turn,
+        )
+
+
 def cohere_stt(
     *, vad_model_path: str, transcriber: Transcriber | None = None, **turn: Any
-) -> MlxWhisperSTT:
-    """The Arabic STT: `MlxWhisperSTT`'s turn logic with the Cohere transcriber, warmed once."""
-    return MlxWhisperSTT(
-        vad_model_path=vad_model_path,
-        model=MODEL_ID,
-        language="ar",
-        transcriber=transcriber or cohere_transcriber(),
-        warm=True,
-        **turn,
-    )
+) -> CohereTranscribeSTT:
+    """The Arabic STT the kiosk builds when `speech.stt.by_language.ar` names this engine."""
+    return CohereTranscribeSTT(vad_model_path=vad_model_path, transcriber=transcriber, **turn)
 
 
 __all__ = [
     "GATED_REASON",
     "MODEL_ID",
     "MODEL_REVISION",
+    "CohereTranscribeSTT",
     "CohereTranscribeUnavailableError",
     "cohere_stt",
     "cohere_transcriber",

@@ -3,15 +3,16 @@
 `config/providers.yaml` `speech.stt|tts.{provider, by_language}` picks the engine per language:
 STT `mlx-whisper` (English and Arabic, never auto-detecting), `deepgram` (optional; needs
 DEEPGRAM_API_KEY) or `cohere-transcribe-arabic` (Arabic; gated, owner HF token needed); TTS
-`kokoro` (English) or `mms-tts-ara` (Arabic). VAD: Silero, for barge-in. The agent's LLM client and
-Gemini Live are never used on the kiosk path.
+`kokoro` (English) or `mms-tts-ara` (Arabic). VAD: Silero, for barge-in. `speech.turn` sets when
+each language's spoken turn ends (ADR-058). The agent's LLM client and Gemini Live are never used
+on the kiosk path.
 """
 
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Any, Protocol
 
-from voice_agent.config.careflow import LANGUAGE, SpeechConfig, load_speech_config
+from voice_agent.config.careflow import LANGUAGE, LANGUAGES, SpeechConfig, load_speech_config
 from voice_agent.config.settings import Settings
 from voice_agent.providers._silero_vad import SileroVoiceActivityDetector
 from voice_agent.providers.base import SpeechToText, TextToSpeech
@@ -41,6 +42,8 @@ class LocalKioskSpeech:
         self._settings = settings
         self._speech = speech or load_speech_config()
         self._speech.validate_engines()  # an unknown engine fails here, at startup
+        for language in LANGUAGES:
+            self._speech.turn_settings(language, settings)  # and inconsistent turn settings
         if self._speech.stt_provider("ar") == "cohere-transcribe-arabic":
             ensure_accessible()  # gated: refuse to start rather than fall back silently
 
@@ -50,14 +53,7 @@ class LocalKioskSpeech:
         if language != LANGUAGE and engine == "mlx-whisper":
             return self._mlx_whisper(language)
         if engine == "cohere-transcribe-arabic":
-            return cohere_stt(
-                vad_model_path=settings.sherpa_stt_vad_model_path,
-                smart_turn_model_path=settings.sherpa_stt_smart_turn_model_path,
-                smart_turn_threshold=settings.sherpa_stt_smart_turn_threshold,
-                semantic_check_silence_ms=settings.sherpa_stt_semantic_silence_ms,
-                endpoint_silence_ms=settings.sherpa_stt_endpoint_silence_ms,
-                hard_silence_ms=settings.sherpa_stt_hard_silence_ms,
-            )
+            return cohere_stt(vad_model_path=settings.sherpa_stt_vad_model_path, **self._turn("ar"))
         if settings.stt_provider == "deepgram":
             if settings.deepgram_api_key is None:
                 raise ValueError("stt_provider=deepgram requires DEEPGRAM_API_KEY.")
@@ -75,12 +71,19 @@ class LocalKioskSpeech:
             vad_model_path=settings.sherpa_stt_vad_model_path,
             model=settings.mlx_whisper_model,
             language=language,  # the session's language: never auto-detected
-            smart_turn_model_path=settings.sherpa_stt_smart_turn_model_path,
-            smart_turn_threshold=settings.sherpa_stt_smart_turn_threshold,
-            semantic_check_silence_ms=settings.sherpa_stt_semantic_silence_ms,
-            endpoint_silence_ms=settings.sherpa_stt_endpoint_silence_ms,
-            hard_silence_ms=settings.sherpa_stt_hard_silence_ms,
+            **self._turn(language),
         )
+
+    def _turn(self, language: str) -> dict[str, Any]:
+        """The end of the turn for `language` (config/providers.yaml `speech.turn`, ADR-058)."""
+        turn = self._speech.turn_settings(language, self._settings)
+        return {
+            "smart_turn_model_path": turn.smart_turn_model_path,
+            "smart_turn_threshold": turn.smart_turn_threshold,
+            "semantic_check_silence_ms": turn.semantic_check_silence_ms,
+            "endpoint_silence_ms": turn.endpoint_silence_ms,
+            "hard_silence_ms": turn.hard_silence_ms,
+        }
 
     def tts(self, language: str = LANGUAGE) -> TextToSpeech:
         settings = self._settings

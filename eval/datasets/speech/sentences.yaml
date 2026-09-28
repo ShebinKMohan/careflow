@@ -1,0 +1,54 @@
+# Synthetic intake sentences for the speech eval (M2-02). Written by the agent (Claude Code) for
+# this eval: not patient speech, and the dialect labels are not reviewed by native speakers.
+# eval/speech/make_clips.py voices them (Arabic with MMS-TTS, English with Kokoro) into
+# manifest.jsonl; the WAVs are gitignored. gloss_en is a reading aid only.
+synthetic: true
+sentences:
+  # Gulf Arabic (15)
+  - {id: ar-gul-01, lang: ar, dialect: gulf, text: "عندي ألم في صدري من ساعة", gloss_en: "I have had chest pain for an hour"}
+  - {id: ar-gul-02, lang: ar, dialect: gulf, text: "صدري يعورني وايد من الصبح", gloss_en: "My chest has hurt a lot since the morning"}
+  - {id: ar-gul-03, lang: ar, dialect: gulf, text: "راسي يعورني وأحس بدوخة", gloss_en: "My head hurts and I feel dizzy"}
+  - {id: ar-gul-04, lang: ar, dialect: gulf, text: "ما أقدر أتنفس زين", gloss_en: "I can't breathe well"}
+  - {id: ar-gul-05, lang: ar, dialect: gulf, text: "ولدي حرارته مرتفعة من أمس", gloss_en: "My son's temperature has been high since yesterday"}
+  - {id: ar-gul-06, lang: ar, dialect: gulf, text: "الألم يروح لذراعي اليسار", gloss_en: "The pain goes to my left arm"}
+  - {id: ar-gul-07, lang: ar, dialect: gulf, text: "عرقت وايد وحسيت بغثيان", gloss_en: "I sweated a lot and felt sick"}
+  - {id: ar-gul-08, lang: ar, dialect: gulf, text: "بطني يعورني من الليل", gloss_en: "My stomach has hurt since the night"}
+  - {id: ar-gul-09, lang: ar, dialect: gulf, text: "طحت على يدي وهي منتفخة", gloss_en: "I fell on my hand and it is swollen"}
+  - {id: ar-gul-10, lang: ar, dialect: gulf, text: "عندي سكر وضغط", gloss_en: "I have diabetes and high blood pressure"}
+  - {id: ar-gul-11, lang: ar, dialect: gulf, text: "آخذ حبوب الضغط كل يوم", gloss_en: "I take blood pressure pills every day"}
+  - {id: ar-gul-12, lang: ar, dialect: gulf, text: "الولد ما ياكل ولا يشرب زين", gloss_en: "The boy is not eating or drinking well"}
+  - {id: ar-gul-13, lang: ar, dialect: gulf, text: "أحس بخدر في وجهي من شوي", gloss_en: "My face has felt numb for a little while"}
+  - {id: ar-gul-14, lang: ar, dialect: gulf, text: "كحة وبلغم من ثلاث أيام", gloss_en: "A cough and phlegm for three days"}
+  - {id: ar-gul-15, lang: ar, dialect: gulf, text: "الألم ثمانية من عشرة", gloss_en: "The pain is eight out of ten"}
+  # Levantine Arabic (15)
+  - {id: ar-lev-01, lang: ar, dialect: levantine, text: "عندي وجع بصدري من ساعة", gloss_en: "I have had chest pain for an hour"}
+  - {id: ar-lev-02, lang: ar, dialect: levantine, text: "راسي عم يوجعني كتير من امبارح", gloss_en: "My head has hurt a lot since yesterday"}
+  - {id: ar-lev-03, lang: ar, dialect: levantine, text: "ما عم بقدر اتنفس منيح", gloss_en: "I can't breathe well"}
+  - {id: ar-lev-04, lang: ar, dialect: levantine, text: "الوجع بيروح على إيدي الشمال", gloss_en: "The pain goes to my left arm"}
+  - {id: ar-lev-05, lang: ar, dialect: levantine, text: "حاسس بدوخة وغثيان", gloss_en: "I feel dizzy and sick"}
+  - {id: ar-lev-06, lang: ar, dialect: levantine, text: "ابني سخن من يومين", gloss_en: "My son has had a fever for two days"}
+  - {id: ar-lev-07, lang: ar, dialect: levantine, text: "وقعت عالدرج ورجلي وارمة", gloss_en: "I fell on the stairs and my leg is swollen"}
+  - {id: ar-lev-08, lang: ar, dialect: levantine, text: "بطني عم يوجعني من الصبح", gloss_en: "My stomach has hurt since the morning"}
+  - {id: ar-lev-09, lang: ar, dialect: levantine, text: "عندي سكري وضغط", gloss_en: "I have diabetes and high blood pressure"}
+  - {id: ar-lev-10, lang: ar, dialect: levantine, text: "باخد دوا للضغط كل يوم", gloss_en: "I take medicine for blood pressure every day"}
+  - {id: ar-lev-11, lang: ar, dialect: levantine, text: "صار عندي تنميل بوجهي فجأة", gloss_en: "My face suddenly went numb"}
+  - {id: ar-lev-12, lang: ar, dialect: levantine, text: "عم بسعل من تلات أيام", gloss_en: "I have been coughing for three days"}
+  - {id: ar-lev-13, lang: ar, dialect: levantine, text: "الوجع تمانية من عشرة", gloss_en: "The pain is eight out of ten"}
+  - {id: ar-lev-14, lang: ar, dialect: levantine, text: "البنت نعسانة كتير وما عم تاكل", gloss_en: "The girl is very sleepy and is not eating"}
+  - {id: ar-lev-15, lang: ar, dialect: levantine, text: "عرقت كتير وحسيت حالي رح يغمى علي", gloss_en: "I sweated a lot and felt I was going to faint"}
+  # English (15)
+  - {id: en-01, lang: en, dialect: en, text: "I have chest pain since this morning."}
+  - {id: en-02, lang: en, dialect: en, text: "The pain goes down my left arm."}
+  - {id: en-03, lang: en, dialect: en, text: "I feel short of breath when I walk."}
+  - {id: en-04, lang: en, dialect: en, text: "My daughter has had a fever for two days."}
+  - {id: en-05, lang: en, dialect: en, text: "I fell and hurt my wrist, and it is swollen."}
+  - {id: en-06, lang: en, dialect: en, text: "I have a bad headache and I feel dizzy."}
+  - {id: en-07, lang: en, dialect: en, text: "My face feels numb on the right side."}
+  - {id: en-08, lang: en, dialect: en, text: "I take tablets for blood pressure and diabetes."}
+  - {id: en-09, lang: en, dialect: en, text: "The pain is about seven out of ten."}
+  - {id: en-10, lang: en, dialect: en, text: "I have been coughing up yellow phlegm."}
+  - {id: en-11, lang: en, dialect: en, text: "I have been vomiting since last night."}
+  - {id: en-12, lang: en, dialect: en, text: "He is very sleepy and he is not drinking much."}
+  - {id: en-13, lang: en, dialect: en, text: "I am allergic to penicillin."}
+  - {id: en-14, lang: en, dialect: en, text: "It started suddenly about an hour ago."}
+  - {id: en-15, lang: en, dialect: en, text: "I was sweating a lot and I felt faint."}

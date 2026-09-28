@@ -67,4 +67,5 @@ markers = [
   "requires_ktas: needs the real KTAS CSV in services/triage/data/raw (skipped when absent)",
   "live: needs a local model: mlx_lm.server (CAREFLOW_LIVE_LLM=1, scripts/with_llm.sh) or the voice models (CAREFLOW_LIVE_VOICE=1)",
   "hapi: needs HAPI FHIR seeded by `make up` (skipped when it does not answer)",
+  "models: loads the real speech models on the dev Mac (CAREFLOW_LIVE_VOICE=1); never in CI",
 ]

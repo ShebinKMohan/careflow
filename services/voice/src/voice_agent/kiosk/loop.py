@@ -30,6 +30,7 @@ from numpy.typing import NDArray
 from careflow_contracts.api_models import TurnResponse
 from voice_agent.kiosk.auth import PatientSession
 from voice_agent.kiosk.protocol import (
+    CLOSE_SERVER_ERROR,
     OUTPUT_SAMPLE_RATE,
     TTS_FRAME_BYTES,
     error_message,
@@ -63,6 +64,8 @@ class KioskSender(Protocol):
     async def send_json(self, message: dict[str, Any]) -> None: ...
 
     async def send_bytes(self, data: bytes) -> None: ...
+
+    async def close(self, code: int) -> None: ...
 
 
 @dataclass
@@ -207,6 +210,14 @@ class KioskTurnLoop:
         async for event in self._stt.transcripts():
             self._pending.put_nowait(event)
         self._pending.put_nowait(None)
+        if not self._closed:
+            # The speech engine stopped mid-session: say so and close, as a failed start does,
+            # so the kiosk falls back to typing instead of listening to nothing.
+            logger.warning("Kiosk STT for %s stopped mid-session.", self._session.session_id)
+            await self._send(error_message("speech_unavailable"))
+            async with self._send_lock:
+                with suppress(Exception):
+                    await self._sender.close(CLOSE_SERVER_ERROR)
 
     async def _consume(self) -> None:
         while (event := await self._pending.get()) is not None:
