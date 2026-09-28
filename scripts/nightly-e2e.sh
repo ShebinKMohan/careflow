@@ -19,10 +19,10 @@ mkdir -p .run
 
 E2E_LIVE=1 LOCAL_LLM=1 VOICE="${VOICE:-0}" SEED_SYNTHEA=0 CAREFLOW_PORT_OFFSET="$offset" make up
 trap 'scripts/down.sh' EXIT
-served="$(curl -fsS http://127.0.0.1:8081/v1/models | python3 -c 'import json, sys; print(json.load(sys.stdin)["data"][0]["id"])')"
+curl -fsS http://127.0.0.1:8081/v1/models > .run/nightly-models.json  # local paths: stays in .run
 
 status=0
 pnpm --filter @careflow/e2e exec playwright test || status=$?
 uv run python scripts/nightly_report.py e2e/test-results/journeys.json \
-  --model "$served" --started "$started" --stack "$CAREFLOW_STACK"
+  --models .run/nightly-models.json --started "$started" --stack "$CAREFLOW_STACK"
 exit "$status"

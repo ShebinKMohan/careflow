@@ -18,24 +18,21 @@ nightly = importlib.util.module_from_spec(_spec)
 sys.modules["nightly_report"] = nightly
 _spec.loader.exec_module(nightly)
 
-SNAPSHOT = (
-    "/Users/someone/.cache/huggingface/hub/models--mlx-community--Qwen3.5-9B-MLX-4bit"
-    "/snapshots/938d8919941c6e7efd3c7150eff7fe9d12afa631"
-)
+PINNED = "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
+CACHE = "/Users/someone/.cache/huggingface/hub"
+MODELS = {  # mlx_lm.server lists every cached model; the pinned one is not first
+    "data": [
+        {"id": f"{CACHE}/models--mlx-community--SmolLM2-135M-Instruct-8bit/snapshots/{'a' * 40}"},
+        {"id": f"{CACHE}/models--mlx-community--Qwen3.5-9B-MLX-4bit/snapshots/{PINNED[-40:]}"},
+    ]
+}
 
 
-def test_the_model_is_named_by_org_model_and_revision_never_a_path() -> None:
-    assert (
-        nightly.model_identity(SNAPSHOT)
-        == "mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631"
-    )
-    assert (
-        nightly.model_identity("mlx-community/Qwen3.5-9B-MLX-4bit")
-        == "mlx-community/Qwen3.5-9B-MLX-4bit"
-    )
-    for bad in ("/Users/someone/models/qwen", "qwen", "a/b/c"):
-        with pytest.raises(ValueError):
-            nightly.model_identity(bad)
+def test_the_model_is_the_pinned_one_when_the_server_advertises_it_never_a_path() -> None:
+    assert nightly.served_model(MODELS, {}) == PINNED
+    without = {"data": MODELS["data"][:1]}  # the pinned snapshot is not there
+    with pytest.raises(ValueError, match="pinned snapshot"):
+        nightly.served_model(without, {})
 
 
 def result(status: str, duration: int, notes: list[dict[str, str]] | None = None) -> dict[str, Any]:
@@ -101,7 +98,7 @@ PLAYWRIGHT: dict[str, Any] = {
 def test_the_report_counts_every_spec_and_keeps_the_measured_timings() -> None:
     report = nightly.build(
         PLAYWRIGHT,
-        served=SNAPSHOT,
+        model=PINNED,
         started="2026-09-29T02:00:00Z",
         stack="careflow-e2e",
         commit="abc",
@@ -131,12 +128,14 @@ def test_the_report_counts_every_spec_and_keeps_the_measured_timings() -> None:
 def test_main_writes_the_report(tmp_path: Path) -> None:
     results = tmp_path / "journeys.json"
     results.write_text(json.dumps(PLAYWRIGHT), encoding="utf-8")
+    models = tmp_path / "models.json"
+    models.write_text(json.dumps(MODELS), encoding="utf-8")
     out = tmp_path / "e2e_nightly.json"
     code = nightly.main(
         [
             str(results),
-            "--model",
-            SNAPSHOT,
+            "--models",
+            str(models),
             "--started",
             "2026-09-29T02:00:00Z",
             "--stack",

@@ -1,33 +1,35 @@
 """Write eval/reports/e2e_nightly.json from a Playwright run of the journeys (M2-12).
 
 scripts/nightly-e2e.sh runs the suite on this Mac against the live local model, then calls this
-with Playwright's JSON report (e2e/test-results/journeys.json) and the id the model server gave.
+with Playwright's JSON report (e2e/test-results/journeys.json) and the model server's /v1/models
+answer. The model is the one scripts/with_llm.sh pins, once the server advertises that exact
+snapshot (the check scripts/eval_local.py makes); mlx_lm.server lists every cached model.
 The report lists each spec's result, duration and provider, with the timings the journeys measured
 (alert and feels-worse latency, reported, never gates) and what they found in HAPI. It names the
 model as org/model@revision, never a local path.
 
     uv run python scripts/nightly_report.py e2e/test-results/journeys.json \\
-        --model <served id> --started 2026-09-29T02:00:00Z --stack careflow-e2e
+        --models .run/nightly-models.json --started 2026-09-29T02:00:00Z --stack careflow-e2e
 """
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
+import importlib.util
 import json
-import re
+import os
 import shutil
 import subprocess
 import sys
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from functools import cache
 from pathlib import Path
+from types import ModuleType
 from typing import Any, Final
 
 REPO: Final = Path(__file__).resolve().parents[1]
 REPORT: Final = REPO / "eval" / "reports" / "e2e_nightly.json"
-SNAPSHOT: Final = re.compile(
-    r"models--(?P<org>[^/]+?)--(?P<name>[^/]+)/snapshots/(?P<rev>[0-9a-f]{7,64})"
-)
 KEPT: Final = (
     "alert latency",
     "feels-worse latency",
@@ -44,14 +46,26 @@ CAVEATS: Final = (
 )
 
 
-def model_identity(served: str) -> str:
-    """The served model as org/model@revision: mlx_lm.server reports its local snapshot path."""
-    found = SNAPSHOT.search(served)
-    if found:
-        return f"{found['org']}/{found['name']}@{found['rev']}"
-    if served.count("/") == 1 and not served.startswith(("/", "~", ".")):
-        return served  # already an org/model id
-    raise ValueError("the served model is neither an org/model id nor a Hugging Face snapshot")
+@cache
+def _eval_local() -> ModuleType:
+    """scripts/eval_local.py, loaded once (the scripts folder is not a package)."""
+    spec = importlib.util.spec_from_file_location(
+        "careflow_eval_local", REPO / "scripts" / "eval_local.py"
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError("cannot load scripts/eval_local.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def served_model(models: Any, environment: Mapping[str, str]) -> str:
+    """The pinned model as org/model@revision, once the server advertises its exact snapshot."""
+    local = _eval_local()
+    model, revision = local.pinned_model(local.WRAPPER.read_text(encoding="utf-8"), environment)
+    local.observed_snapshot(models, model=model, revision=revision)  # raises unless advertised
+    return f"{model}@{revision}"
 
 
 def specs(report: dict[str, Any], model: str) -> list[dict[str, Any]]:
@@ -89,9 +103,8 @@ def specs(report: dict[str, Any], model: str) -> list[dict[str, Any]]:
 
 
 def build(
-    report: dict[str, Any], *, served: str, started: str, stack: str, commit: str
+    report: dict[str, Any], *, model: str, started: str, stack: str, commit: str
 ) -> dict[str, Any]:
-    model = model_identity(served)
     rows = specs(report, model)
     stats = report.get("stats", {})
     totals = {
@@ -118,7 +131,7 @@ def build(
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("results", type=Path, help="Playwright's JSON report")
-    parser.add_argument("--model", required=True, help="the id the model server reported")
+    parser.add_argument("--models", type=Path, required=True, help="the server's /v1/models answer")
     parser.add_argument("--started", required=True, help="when the run started (UTC, ISO 8601)")
     parser.add_argument("--stack", required=True)
     parser.add_argument("--out", type=Path, default=REPORT)
@@ -131,7 +144,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ).strip()
     report = build(
         json.loads(args.results.read_text(encoding="utf-8")),
-        served=args.model,
+        model=served_model(json.loads(args.models.read_text(encoding="utf-8")), os.environ),
         started=args.started,
         stack=args.stack,
         commit=commit,
