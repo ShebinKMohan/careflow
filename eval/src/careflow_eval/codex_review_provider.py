@@ -294,12 +294,12 @@ class AuditedCodexReviewProvider:
                     try:
                         output = _last_message(last_message)
                         identity = codex_identity(run["thread_id"], home=self._home)
+                        evidence["identity"] = identity  # kept even when it does not verify
                         verify_identity(identity, self.model_name, self._effort)
                     except ValueError as exc:
                         raise ProviderUnavailable(self.task, str(exc)) from exc
                     if exit_code != 0 or output is None:
                         raise ProviderUnavailable(self.task, "Codex review did not finish")
-                    evidence["identity"] = identity
                     if not isinstance(output, dict):
                         raise ProviderUnavailable(self.task, "Codex review has no JSON object")
                     self.verified_model_id = self.model_name

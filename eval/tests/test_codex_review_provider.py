@@ -150,6 +150,10 @@ async def test_a_different_model_in_the_session_log_fails_closed(
     with pytest.raises(ProviderUnavailable, match=reason):
         await provider.chat(MESSAGES)
     assert provider.verified_model_id is None
+    # The evidence keeps what actually ran, for the audit.
+    recorded = provider.raw_cli_evidence[0]["identity"]
+    assert recorded["turns"][0]["model"] == session.get("model", MODEL)
+    assert recorded["session"]["model_provider"] == session.get("provider", "openai")
 
 
 async def test_a_failed_turn_or_missing_log_fails_closed(
