@@ -20,7 +20,7 @@
  */
 import { expect, type Page, request, test } from "@playwright/test";
 
-import { boardEntries, callIn, closeToken, decisionBody, nurseOverrides, type QueueToken, staffTokenFor, staffUserId, suggestedLevel, type Turn } from "./actors";
+import { boardEntries, closeToken, decisionBody, nurseOverrides, type QueueToken, staffTokenFor, staffUserId, suggestedLevel, type Turn } from "./actors";
 import { Hapi } from "./fhir";
 import { STACK } from "./stack";
 
@@ -179,24 +179,37 @@ export async function assertDecision(ctx: JourneyContext, alerts: string[], deci
 /** The session's queue token (the nurse's view). */
 export const sessionToken = async (sessionId: string) => get<QueueToken>(`/v1/sessions/${sessionId}/token`, await staffTokenFor("nurse"));
 
-/** c. The token and the room, where the patient waits and on the board, which shows no name. The
- * patient is called in (and walks in, unless `arrive` is false: the no-show). */
+/** c. The token and the room, on the public board (waiting, then called with the room; never a
+ * name) and where the patient waits. The patient walks in at once (`arrive`, default true), so the
+ * E2E stack's 5 s grace window never re-queues a journey's patient; the no-show's patient never
+ * does. An arrived patient keeps the room and leaves the board. */
 export async function assertTokenAndRoom(ctx: JourneyContext, { arrive = true }: { arrive?: boolean } = {}): Promise<QueueToken> {
   const queued = await sessionToken(ctx.sessionId);
   expect(queued.token_code).toMatch(/^[A-Z]-\d{3}$/);
-  const called = arrive ? await callIn(ctx.nurse, queued.department, ctx.sessionId) : await callWithoutArriving(ctx.nurse, queued.department, ctx.sessionId);
+  const waiting = (await boardEntries(queued.department)).filter((entry) => entry.token_code === queued.token_code);
+  expect(waiting, `${queued.token_code} waits on the board once`).toEqual([{ token_code: queued.token_code, room: null, status: "waiting" }]);
+
+  const called = await callWithoutArriving(ctx.nurse, queued.department, ctx.sessionId);
   expect(called.token_code, "one token for the session, the same everywhere").toBe(queued.token_code);
   expect(called.room, "a called patient has a room").toBeTruthy();
-  await expect(ctx.patient.getByText(queued.token_code).first()).toBeVisible({ timeout: 30_000 });
-  await expect(ctx.patient.getByText(called.room!).first()).toBeVisible({ timeout: 30_000 });
   const board = await boardEntries(queued.department);
-  const onBoard = board.filter((entry) => entry.token_code === queued.token_code);
-  expect(onBoard, `${queued.token_code} is on the board once`).toHaveLength(1);
-  expect(onBoard[0]!.room).toBe(called.room);
+  expect(board.filter((entry) => entry.token_code === queued.token_code), "called: on the board once, with the room").toEqual([
+    { token_code: queued.token_code, room: called.room, status: "called" },
+  ]);
   for (const entry of board) expect(Object.keys(entry).sort(), "the board carries a token, a room and a state, never a name").toEqual(["room", "status", "token_code"]);
   const status = await get<{ patient_display?: string }>(`/v1/sessions/${ctx.sessionId}/status`, ctx.patientToken);
   if (status.patient_display) expect(JSON.stringify(board)).not.toContain(status.patient_display);
-  return called;
+
+  let token = called;
+  if (arrive) {
+    const headers = { Authorization: `Bearer ${await staffTokenFor("nurse")}` };
+    const arrived = await ctx.nurse.request.post(`${STACK.api}/v1/queue/tokens/${encodeURIComponent(called.token_id)}/arrived`, { headers });
+    expect(arrived.status(), `${called.token_code} walks into ${called.room}`).toBe(200);
+    token = (await arrived.json()) as QueueToken;
+  }
+  await expect(ctx.patient.getByText(queued.token_code).first()).toBeVisible({ timeout: 30_000 });
+  await expect(ctx.patient.getByText(called.room!).first()).toBeVisible({ timeout: 30_000 });
+  return token;
 }
 
 /** d. The doctor's briefing: every item attributed, no source missing. */

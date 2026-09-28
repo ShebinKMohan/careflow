@@ -33,9 +33,16 @@ test("stroke: FAST reaches the nurse first, the nurse overrides with a reason, t
     const facts = (await (await http.get(`/v1/sessions/${sessionId}/facts`, { headers: nurseHeaders })).json()) as {
       fast?: Record<string, Fact | undefined>;
     };
-    const signs = ["face_droop", "arm_weakness", "speech_difficulty"].map((key) => facts.fast?.[key]);
-    for (const sign of signs) expect(sign).toMatchObject({ provenance: "PATIENT_STATED", source: { kind: "transcript_span" } });
-    expect(signs.filter((sign) => sign?.value === "yes")).toHaveLength(3);
+    // Any one FAST sign raises the alert; the intake then asks when the patient was last well.
+    const fast = Object.entries(facts.fast ?? {});
+    const signs = fast.filter(([key]) => key !== "last_known_well");
+    expect(signs.filter(([, fact]) => fact?.value === "yes").length, "a FAST sign the patient stated").toBeGreaterThan(0);
+    for (const [key, fact] of fast) {
+      expect(fact, key).toMatchObject({ provenance: "PATIENT_STATED", source: { kind: "transcript_span" } });
+      const quote = String(fact?.source.quote ?? "");
+      expect(turns.some((turn) => turn.answer.includes(quote)), `${key}: "${quote}" is the patient's own words`).toBe(true);
+    }
+    expect(facts.fast?.last_known_well, "the time last known well, asked for by the alert").toBeTruthy();
 
     await assertJourney(
       { sessionId, nurse, patient: kiosk, patientToken, kioskToken: await kioskDeviceToken(kiosk), triggers: answerTriggers(turns), alertsSeen },
