@@ -112,8 +112,15 @@ describe("kiosk after the QR hand-over", () => {
 
     act(() => frames.deliver("session.handed_over"));
     expect(await screen.findByTestId("handed-over")).toBeInTheDocument();
-    await waitFor(() => expect(router.push).toHaveBeenCalledWith("/"), { timeout: 7_000 });
-    expect(seen.current?.patient).toBeNull();
+    // `wipe()` and `router.push("/")` run in one timer callback: the push is recorded at once, the
+    // wipe when React next commits (and `seen` is read after that commit). Wait for both.
+    await waitFor(
+      () => {
+        expect(router.push).toHaveBeenCalledWith("/");
+        expect(seen.current?.patient).toBeNull();
+      },
+      { timeout: 7_000 },
+    );
     expect(frames.stops).toBe(1);
   }, 10_000);
 });

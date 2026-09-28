@@ -125,3 +125,15 @@ This file lists tests whose outcome depends on the machine or on timing, and how
   at once, which a loaded machine can reach before the effect runs.
 - **Handling.** The test now waits for the redirect it asserts (`waitFor`): the same assertion, no
   retry.
+
+## `apps/kiosk/tests/handover.test.tsx` › "keeps listening for the claim after the patient closes the code, then forgets them" (M2-06)
+
+- **What happened.** During SHE-290 on 28 September 2026, the node job of CI run 36399341938 failed
+  it: `seen.current.patient` was not yet null when `router.push("/")` had been seen. The same code
+  passed the two runs before, and the file passed 5 runs out of 5 locally.
+- **Cause.** A race in the test, not the product. After the 5-second "Continued on your phone" screen,
+  one timer callback calls `wipe()` and then `router.push("/")`. The mocked push is recorded at once;
+  the wipe lands when React next commits, and the test reads the patient through an effect that runs
+  after that commit. The test asserted the patient right after the push.
+- **Handling.** The test now waits for both in one `waitFor` (the push to "/" and the forgotten
+  patient): the same assertions, no retry. The kiosk suite then passed 5 runs out of 5.
