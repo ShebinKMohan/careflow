@@ -2,8 +2,8 @@
 
 A machine drift check, not a validation. No native speaker reviewed these strings, and no accuracy figure is claimed. Each Arabic string was translated back to English by the model without seeing the English. The model then judged whether the back-translation means the same as the English original, and chrF (sacrebleu 2.6.0) compared the two. A string is flagged when the model says the meaning differs or chrF < 40.
 
-- Report written 2026-09-27T18:34:32+00:00; task `translation_check`, model `qwen3.5-9b-4bit` (served: `mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631`).
-- Strings checked: 486 (99 `safety.`).
+- Report written 2026-09-28T09:33:03+00:00; task `translation_check`, model `qwen3.5-9b-4bit` (served: `mlx-community/Qwen3.5-9B-MLX-4bit@938d8919941c6e7efd3c7150eff7fe9d12afa631`).
+- Strings checked: 489 (101 `safety.`).
 - Flagged: 113 (0 `safety.`; 0 of them listed in docs/i18n/unresolved.md).
 - Unresolved after five rewrites, shown with their English original beside the Arabic: 5 (docs/i18n/unresolved.md).
 

@@ -155,6 +155,75 @@ def test_audio_before_the_start_message_closes_with_1008(
         assert _close_code(ws) == 1008
 
 
+# --- consent (M2-05): the microphone needs the session's saved voice and data-use consent ---
+
+# What `GET /v1/sessions/{id}/consent` answers; None is an API that cannot be reached.
+REFUSALS: Final[dict[str, tuple[int, dict[str, Any]] | None]] = {
+    "no_record": (404, {"title": "Not Found", "status": 404}),
+    "voice_declined": (200, CONSENTED | {"voice": False}),
+    "data_use_declined": (200, CONSENTED | {"data_use": False}),
+    "api_error": (500, {"title": "Internal Server Error", "status": 500}),
+    "not_a_record": (200, {"voice": True, "data_use": True}),
+    "unreachable": None,
+}
+
+
+@pytest.mark.parametrize("refusal", sorted(REFUSALS))
+def test_a_start_without_voice_consent_closes_with_1008_before_any_audio(
+    refusal: str,
+    make_kiosk_app: Callable[..., FastAPI],
+    fake_speech: Any,
+    patient_token: Callable[..., str],
+) -> None:
+    speech, token, answer = fake_speech(), patient_token(), REFUSALS[refusal]
+    with respx.mock(base_url=API, assert_all_called=False) as router:
+        consent = router.get(f"/v1/sessions/{SESSION}/consent")
+        if answer is None:
+            consent.mock(side_effect=httpx.ConnectError("refused"))
+        else:
+            consent.respond(answer[0], json=answer[1])
+        turns = router.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+        with (
+            TestClient(make_kiosk_app(speech=speech)) as client,
+            client.websocket_connect("/kiosk/audio") as ws,
+        ):
+            ws.send_text(_start(token))
+            assert _close_code(ws) == 1008
+    [call] = consent.calls
+    assert call.request.headers["authorization"] == f"Bearer {token}"
+    assert not turns.called
+    assert speech.transcribed == [] and speech.tts_engines == []
+
+
+def test_consent_is_read_at_every_start_so_a_revocation_stops_the_next_one(
+    make_kiosk_app: Callable[..., FastAPI],
+    fake_speech: Any,
+    patient_token: Callable[..., str],
+    chest_pain_pcm: bytes,
+) -> None:
+    speech = fake_speech()
+    with respx.mock(base_url=API, assert_all_called=False) as router:
+        consent = router.get(f"/v1/sessions/{SESSION}/consent").mock(
+            side_effect=[
+                httpx.Response(200, json=CONSENTED),
+                httpx.Response(200, json=CONSENTED | {"voice": False}),  # revoked
+            ]
+        )
+        turns = router.post(f"/v1/sessions/{SESSION}/turns").respond(200, json=_reply())
+        with TestClient(make_kiosk_app(speech=speech)) as client:
+            with client.websocket_connect("/kiosk/audio") as ws:
+                ws.send_text(_start(patient_token()))
+                _send_audio(ws, chest_pain_pcm)
+                _messages_until(ws, lambda m: m["type"] == "tts_end")
+                ws.send_text(json.dumps({"type": "stop"}))
+            with client.websocket_connect("/kiosk/audio") as ws:
+                ws.send_text(_start(patient_token()))
+                assert _close_code(ws) == 1008
+    assert consent.call_count == 2
+    assert turns.call_count == 1  # only the consented session's turn
+    assert len(speech.transcribed) == 1
+
+
 # --- a turn ---
 
 

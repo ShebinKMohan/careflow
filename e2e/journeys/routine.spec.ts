@@ -14,20 +14,13 @@ import {
   suggestedLevel,
 } from "../lib/actors";
 import { codes, Hapi } from "../lib/fhir";
+import { ROUTINE_WALK_IN } from "../lib/scripts";
 import { STACK } from "../lib/stack";
 
 // Journey 5 (M1-19): a routine walk-in, persona `routine` (keypad 100005, synthetic). No danger
 // sign, so no alert; the nurse overrides the level with a coded reason, and the Encounter written
 // to HAPI carries the nurse's level, with no Flag.
-const PATIENT: PatientScript = {
-  complaint: "I twisted my ankle playing football yesterday",
-  yes: [],
-  scale: "4",
-  typed: [
-    [/when did (this|the pain) start/i, "Yesterday afternoon"],
-    [/where is the pain/i, "My left ankle"],
-  ],
-};
+const PATIENT: PatientScript = ROUTINE_WALK_IN;
 
 test("routine walk-in: no alert, the nurse overrides with a reason, HAPI has the nurse's level and no Flag", async ({ browser }) => {
   const kiosk = await kioskPage(browser, "normal");

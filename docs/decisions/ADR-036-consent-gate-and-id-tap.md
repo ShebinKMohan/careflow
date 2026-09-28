@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted, 27 Sep 2026 ([M2-05]). This is the core build. The pytest cases, the two Playwright paths, the log-scan test and the back-translation check of `safety.consent.*` follow in the test phase.
+Accepted, 27 Sep 2026 ([M2-05]). This is the core build. The pytest cases, the two Playwright paths, the log-scan test and the back-translation check of `safety.consent.*` follow in the test phase: ADR-056, which also fixes what those tests found (a failed consent save was ignored, voice ignored data use, card numbers were in FHIR search URLs).
 
 ## Context
 

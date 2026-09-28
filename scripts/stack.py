@@ -144,6 +144,9 @@ def stack_env(
         # The API lets the stack's own apps call it, and finds its voice service (M1-19).
         "CAREFLOW_CORS_ORIGINS": ",".join(origins),
         "CAREFLOW_VOICE_URL": f"http://127.0.0.1:{p['VOICE_PORT']}",
+        # ...and the voice service finds its API: the consent check and the patient's turns
+        # (M1-14, M2-05). Without it a second stack's voice service used the dev stack's port.
+        "CAREFLOW_API_BASE_URL": f"http://127.0.0.1:{p['CAREFLOW_API_PORT']}",
         **phone_side,
         # What the stack's apps are built with (public values: URLs only, never a secret).
         "NEXT_PUBLIC_API_BASE_URL": f"http://{reachable}:{p['CAREFLOW_API_PORT']}",

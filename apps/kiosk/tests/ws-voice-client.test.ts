@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { setConsentChoices } from "@/consent/hasConsent";
+import { markConsentSaved, setConsentChoices } from "@/consent/hasConsent";
 import type { VoiceEvents } from "@/lib/voice";
 import { type VoiceDeps, WsVoiceClient } from "@/lib/voice/wsVoiceClient";
 
@@ -136,13 +136,29 @@ function setup() {
 }
 
 describe("WsVoiceClient", () => {
-  // The patient agreed to voice on the consent screen (M2-05); without it start() refuses.
-  beforeEach(() => setConsentChoices({ camera: false, voice: true, dataUse: true }));
+  // The patient agreed to voice on the consent screen and the API saved it (M2-05); without that
+  // start() refuses.
+  beforeEach(() => {
+    setConsentChoices({ camera: false, voice: true, dataUse: true });
+    markConsentSaved();
+  });
   afterEach(() => setConsentChoices(null));
 
   let t: ReturnType<typeof setup>;
   beforeEach(() => {
     t = setup();
+  });
+
+  it.each([
+    ["the choices are not saved yet", { camera: false, voice: true, dataUse: true }, false],
+    ["voice was declined", { camera: false, voice: false, dataUse: true }, true],
+    ["data use was declined", { camera: true, voice: true, dataUse: false }, true],
+  ])("refuses to start, before asking for the microphone, when %s", async (_case, choices, saved) => {
+    setConsentChoices(choices);
+    if (saved) markConsentSaved();
+    await expect(t.client.start(SESSION, t.events)).rejects.toThrow("Voice was not consented to.");
+    expect(t.deps.getUserMedia).not.toHaveBeenCalled();
+    expect(t.sockets).toEqual([]);
   });
 
   it("opens the microphone with echo cancellation and sends the token only in the start message", async () => {

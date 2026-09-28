@@ -337,7 +337,7 @@ type Role = "nurse" | "doctor" | "admin";
 const AUTH_DIR = new URL("../../.run/e2e/", import.meta.url).pathname;
 const AUTH_FILE = `${AUTH_DIR}staff-tokens.json`;
 
-async function staffTokenFor(role: Role): Promise<string> {
+export async function staffTokenFor(role: Role): Promise<string> {
   const api = await request.newContext({ baseURL: STACK.api });
   try {
     const cached: Partial<Record<string, string>> = existsSync(AUTH_FILE) ? JSON.parse(readFileSync(AUTH_FILE, "utf8")) : {};

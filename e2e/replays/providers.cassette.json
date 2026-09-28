@@ -44,6 +44,11 @@
     "task": "extraction",
     "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I've had a fever and shivering since yesterday\", \"turn_id\": \"t2\", \"quote\": \"I've had a fever and shivering since yesterday\", \"negated\": false}, {\"key\": \"infection.fever_reported\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I've had a fever\", \"negated\": false}, {\"key\": \"infection.rigors\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"shivering\", \"negated\": false}, {\"key\": \"symptom_onset_at\", \"value\": \"since yesterday\", \"turn_id\": \"t2\", \"quote\": \"since yesterday\", \"negated\": false}, {\"key\": \"pain_score\", \"value\": 5, \"turn_id\": \"t4\", \"quote\": \"5\", \"negated\": false}, {\"key\": \"pain_location\", \"value\": \"No\", \"turn_id\": \"t6\", \"quote\": \"No\", \"negated\": true}]}"
   },
+  "b0a1b128195469cfe6c950ddee69ebf411adecd4661aaf5f590c09d63a88ef46": {
+    "model": "qwen3.5-9b-4bit",
+    "task": "extraction",
+    "text": "{\"facts\": [{\"key\": \"chief_complaint\", \"value\": \"I have chest pain since this morning\", \"turn_id\": \"t2\", \"quote\": \"I have chest pain since this morning\", \"negated\": false}, {\"key\": \"chest_pain.present\", \"value\": true, \"turn_id\": \"t2\", \"quote\": \"I have chest pain\", \"negated\": false}, {\"key\": \"chest_pain.onset\", \"value\": \"this morning\", \"turn_id\": \"t2\", \"quote\": \"since this morning\", \"negated\": false}]}"
+  },
   "b2d5fef4bf7635b7246577a719728ccb348f12a946e1e2b75a2553c603e615e4": {
     "model": "qwen3.5-9b-4bit",
     "task": "extraction",

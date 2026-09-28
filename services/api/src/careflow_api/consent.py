@@ -65,6 +65,12 @@ async def record_consent(
     return _record(row)
 
 
+def allows_voice(record: ConsentRecord | None) -> bool:
+    """The microphone needs a record with voice and data use both agreed, as on the kiosk
+    (`hasConsent`): the voice service reads the same fields."""
+    return record is not None and record.voice and record.data_use
+
+
 async def get_consent(clinic_id: uuid.UUID, session_id: str) -> ConsentRecord | None:
     """The session's latest consent, or None when it has none (nothing is consented)."""
     try:
@@ -82,4 +88,4 @@ async def get_consent(clinic_id: uuid.UUID, session_id: str) -> ConsentRecord | 
     return None if row is None else _record(row)
 
 
-__all__ = ["CONSENT_RECORDED", "get_consent", "record_consent"]
+__all__ = ["CONSENT_RECORDED", "allows_voice", "get_consent", "record_consent"]

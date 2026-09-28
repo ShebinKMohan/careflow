@@ -2,6 +2,8 @@
 $validate, with timeouts and retries (M1-08, M1-09).
 
 Only this package talks FHIR. It returns raw resource dicts; `adapters.mapper` parses them.
+A search sends its parameters in a form body (`POST [type]/_search`), never in the URL: a patient
+identifier in a URL ends up in request logs, httpx's, the server's and any proxy's (M2-05).
 """
 
 from __future__ import annotations
@@ -110,19 +112,21 @@ class FhirClient:
         *,
         params: Mapping[str, str] | None = None,
         body: Json | None = None,
+        form: Mapping[str, str] | None = None,
         headers: Mapping[str, str] | None = None,
         retry: bool = True,
         accept: frozenset[int] = frozenset(),
     ) -> Json:
-        """One request, retried per the class policy (unless `retry` is False). An error status in
-        `accept` returns its body (an OperationOutcome) instead of raising."""
+        """One request, retried per the class policy (unless `retry` is False). `body` is sent as
+        FHIR JSON, `form` form-encoded. An error status in `accept` returns its body (an
+        OperationOutcome) instead of raising."""
         content = None if body is None else canonical_json(body)
         sent = {**(headers or {}), **({"Content-Type": FHIR_JSON} if body is not None else {})}
         delays: list[float | None] = [*self._retry_delays, None] if retry else [None]
         for delay in delays:
             try:
                 response = await self._client.request(
-                    method, url, params=params, content=content, headers=sent
+                    method, url, params=params, content=content, data=form, headers=sent
                 )
             except httpx.TransportError as exc:  # connection errors and timeouts
                 if delay is None:
@@ -194,8 +198,10 @@ class FhirClient:
 
     async def search(self, resource_type: str, params: Mapping[str, str]) -> list[Json]:
         """Every matching resource, following `Bundle.link[relation=next]` for up to 5 pages of
-        100. A next link to another server is refused."""
-        bundle = await self._get(resource_type, {**params, "_count": str(PAGE_SIZE)})
+        100. A next link to another server is refused. The parameters go in the body of
+        `POST [type]/_search`, never in the URL (a search is a read, so it is retried as one)."""
+        form = {**params, "_count": str(PAGE_SIZE)}
+        bundle = await self._request("POST", f"{resource_type}/_search", form=form)
         resources = _entries(bundle)
         for _ in range(MAX_PAGES - 1):
             link = _next_link(bundle)

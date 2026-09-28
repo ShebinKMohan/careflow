@@ -84,9 +84,10 @@ class TurnsClient:
         if response.status_code != 200:
             return False
         try:
-            return ConsentRecord.model_validate(response.json()).voice
+            record = ConsentRecord.model_validate(response.json())
         except (ValueError, ValidationError):
             return False
+        return record.voice and record.data_use  # as the API and the kiosk read it
 
     async def aclose(self) -> None:
         if self._owns_client:

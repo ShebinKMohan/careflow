@@ -1,7 +1,9 @@
-"""FhirClient: paging, retries on the right errors only, and no paging off the server."""
+"""FhirClient: paging, retries on the right errors only, no paging off the server, and search
+parameters in the body, never in the URL."""
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import httpx
@@ -31,9 +33,13 @@ def make_client(sleeps: list[float]) -> FhirClient:
     return FhirClient(BASE, sleep=sleep)
 
 
+def form(request: httpx.Request) -> dict[str, str]:
+    return dict(httpx.QueryParams(request.content.decode()))
+
+
 @respx.mock
 async def test_search_follows_next_links_and_asks_for_100_per_page() -> None:
-    first = respx.get(f"{BASE}/Condition").mock(
+    first = respx.post(f"{BASE}/Condition/_search").mock(
         return_value=httpx.Response(
             200, json=page(["c1", "c2"], f"{BASE}?_getpages=abc&_getpagesoffset=2")
         )
@@ -45,15 +51,36 @@ async def test_search_follows_next_links_and_asks_for_100_per_page() -> None:
         found = await client.search("Condition", {"patient": "p1"})
     assert [r["id"] for r in found] == ["c1", "c2", "c3"]
     request = first.calls.last.request
-    assert request.url.params["_count"] == "100" and request.url.params["patient"] == "p1"
+    assert form(request) == {"patient": "p1", "_count": "100"}
     assert request.headers["Accept"] == "application/fhir+json"
 
 
 @respx.mock
-async def test_paging_stops_after_5_pages() -> None:
-    respx.get(url__startswith=BASE).mock(
-        return_value=httpx.Response(200, json=page(["c"], f"{BASE}?_getpages=loop"))
+async def test_a_search_never_puts_its_parameters_in_the_url(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """An identifier in a URL is in every request log on the way (M2-05): httpx logs the URL."""
+    caplog.set_level(logging.INFO)
+    card = "784-1992-1215279-9"  # a persona's synthetic card number
+    route = respx.post(f"{BASE}/Patient/_search").mock(
+        return_value=httpx.Response(200, json=page(["p1"]))
     )
+    async with make_client([]) as client:
+        await client.search("Patient", {"identifier": f"urn:mock-id|{card}"})
+    request = route.calls.last.request
+    assert request.url.query == b"" and card not in str(request.url)
+    assert request.headers["Content-Type"] == "application/x-www-form-urlencoded"
+    assert form(request)["identifier"] == f"urn:mock-id|{card}"
+    logged = [record.getMessage() for record in caplog.records]
+    assert any("Patient/_search" in line for line in logged)  # the request was logged...
+    assert not any(card in line for line in logged)  # ...without the card number
+
+
+@respx.mock
+async def test_paging_stops_after_5_pages() -> None:
+    looping = httpx.Response(200, json=page(["c"], f"{BASE}?_getpages=loop"))
+    respx.post(f"{BASE}/Condition/_search").mock(return_value=looping)
+    respx.get(url__startswith=BASE).mock(return_value=looping)
     async with make_client([]) as client:
         found = await client.search("Condition", {})
     assert len(found) == MAX_PAGES == 5
@@ -61,7 +88,7 @@ async def test_paging_stops_after_5_pages() -> None:
 
 @respx.mock
 async def test_a_next_link_to_another_server_is_refused() -> None:
-    respx.get(f"{BASE}/Condition").mock(
+    respx.post(f"{BASE}/Condition/_search").mock(
         return_value=httpx.Response(
             200, json=page(["c1"], "http://elsewhere.test/fhir?_getpages=x")
         )
@@ -73,7 +100,7 @@ async def test_a_next_link_to_another_server_is_refused() -> None:
 
 @respx.mock
 async def test_a_503_is_retried_then_succeeds() -> None:
-    route = respx.get(f"{BASE}/Patient").mock(
+    route = respx.post(f"{BASE}/Patient/_search").mock(
         side_effect=[httpx.Response(503), httpx.Response(200, json=page(["p1"]))]
     )
     sleeps: list[float] = []
@@ -85,7 +112,7 @@ async def test_a_503_is_retried_then_succeeds() -> None:
 @pytest.mark.parametrize("status", [429, 502, 503, 504])
 @respx.mock
 async def test_retryable_statuses_are_tried_three_times(status: int) -> None:
-    route = respx.get(f"{BASE}/Patient").mock(return_value=httpx.Response(status))
+    route = respx.post(f"{BASE}/Patient/_search").mock(return_value=httpx.Response(status))
     sleeps: list[float] = []
     async with make_client(sleeps) as client:
         with pytest.raises(FhirError, match=f"HTTP {status}"):
@@ -96,7 +123,7 @@ async def test_retryable_statuses_are_tried_three_times(status: int) -> None:
 @pytest.mark.parametrize("status", [400, 401, 404, 410, 500])
 @respx.mock
 async def test_other_errors_are_not_retried(status: int) -> None:
-    route = respx.get(f"{BASE}/Patient").mock(return_value=httpx.Response(status))
+    route = respx.post(f"{BASE}/Patient/_search").mock(return_value=httpx.Response(status))
     sleeps: list[float] = []
     async with make_client(sleeps) as client:
         with pytest.raises(FhirError) as error:
@@ -106,7 +133,7 @@ async def test_other_errors_are_not_retried(status: int) -> None:
 
 @respx.mock
 async def test_connection_errors_and_timeouts_are_retried() -> None:
-    route = respx.get(f"{BASE}/Patient").mock(
+    route = respx.post(f"{BASE}/Patient/_search").mock(
         side_effect=[
             httpx.ConnectError("refused"),
             httpx.ReadTimeout("slow"),
