@@ -1,0 +1,30 @@
+# The E2E stack's copy of config/rooms.yaml (M2-12): the same departments and rooms, with a
+# 5-second grace window so the no-show journey needs no two-minute waits. Test config only: the
+# shipped window stays 120 s (services/api/tests/test_queue_core.py checks both files).
+# Levels are nurse-confirmed urgency levels, 1 = most urgent (safety rule 3: nothing else queues).
+
+# A called patient not marked arrived within this window is re-queued once, then a no-show.
+grace_seconds: 5
+# Mean minutes a room is used per patient, by level: wait estimates and the queue simulation.
+service_minutes: {1: 30, 2: 25, 3: 20, 4: 12, 5: 8}
+# The department a confirmed level queues in.
+routing: {1: emergency, 2: emergency, 3: emergency, 4: general, 5: general}
+departments:
+  - id: emergency
+    name: Emergency
+    prefix: A
+    # Calling order when no room is named: an urgent patient takes a resus room first.
+    rooms:
+      - {id: resus-1, name: Resus 1, accepts_levels: [1, 2]}
+      - {id: resus-2, name: Resus 2, accepts_levels: [1, 2]}
+      - {id: ed-1, name: ED 1, accepts_levels: [1, 2, 3, 4, 5]}
+      - {id: ed-2, name: ED 2, accepts_levels: [1, 2, 3, 4, 5]}
+      - {id: ed-3, name: ED 3, accepts_levels: [1, 2, 3, 4, 5]}
+  - id: general
+    name: General
+    prefix: G
+    rooms:
+      - {id: room-1, name: Room 1, accepts_levels: [3, 4, 5]}
+      - {id: room-2, name: Room 2, accepts_levels: [3, 4, 5]}
+      - {id: room-3, name: Room 3, accepts_levels: [3, 4, 5]}
+      - {id: room-4, name: Room 4, accepts_levels: [3, 4, 5]}

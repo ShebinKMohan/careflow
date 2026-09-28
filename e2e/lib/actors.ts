@@ -462,10 +462,11 @@ export interface QueueToken {
   room?: string | null;
 }
 
-/** The nurse calls patients into `department`, in the queue's order, until `sessionId` is called.
- * M1 has no call button yet (the queue controls are M2-07), so this is the API the staff app will
- * use. A test stack keeps earlier runs' patients waiting; each one called first is closed (seen),
- * which frees its room. */
+/** The nurse calls patients into `department`, in the queue's order, until `sessionId` is called,
+ * and the patient walks in: the token is marked arrived at once, so the grace window (5 s on the
+ * E2E stack, for the no-show journey) never re-queues it. A test stack keeps earlier runs'
+ * patients waiting; each one called first is closed (seen), which frees its room. The staff app's
+ * queue controls use the same routes. */
 export async function callIn(page: Page, department: string, sessionId: string): Promise<QueueToken> {
   const headers = { Authorization: `Bearer ${await staffToken(page)}` };
   for (let calls = 0; calls < 100; calls += 1) {
@@ -473,8 +474,13 @@ export async function callIn(page: Page, department: string, sessionId: string):
     expect(response.status(), `a ${department} room is free for the next patient`).toBe(200);
     const token = (await response.json()).token as QueueToken | null;
     if (token === null) throw new Error(`${sessionId} is not waiting in ${department}`);
-    if (token.session_id === sessionId) return token;
-    await closeToken(page, token.token_id);
+    if (token.session_id !== sessionId) {
+      await closeToken(page, token.token_id);
+      continue;
+    }
+    const arrived = await page.request.post(`${STACK.api}/v1/queue/tokens/${encodeURIComponent(token.token_id)}/arrived`, { headers });
+    expect(arrived.status(), `${token.token_code} arrives in ${token.room}`).toBe(200);
+    return (await arrived.json()) as QueueToken;
   }
   throw new Error(`${sessionId} was not called within 100 calls`);
 }
