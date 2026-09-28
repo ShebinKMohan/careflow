@@ -13,17 +13,13 @@ import {
   readingTriggers,
   watchAlerts,
 } from "../lib/journey";
+import { SEPSIS } from "../lib/scripts";
 
 // Journey 4 (M1-19, M2-12): sepsis, persona `sepsis` (keypad 100004, synthetic), with the simulated
 // device on its septic scenario. The kiosk's reading already raises SEPSIS_NEWS2 on a partial
 // NEWS2, live on the nurse's worklist; the nurse's measurements complete the NEWS2; the nurse
 // decides; the confirmed triage writes the full NEWS2 and a Flag.
-const PATIENT: PatientScript = {
-  complaint: "I've had a fever and shivering since yesterday",
-  yes: [/fever/i, /shaking or shivering/i],
-  scale: "5",
-  typed: [[/when did (this|the) .*start/i, "Since yesterday evening"]],
-};
+const PATIENT: PatientScript = SEPSIS;
 
 test("sepsis: partial NEWS2 alert from the kiosk, the nurse completes NEWS2 and decides, token, briefing, HAPI has NEWS2 and a Flag", async ({ browser }) => {
   const worklist = await staffPage(browser, "nurse", "/nurse");

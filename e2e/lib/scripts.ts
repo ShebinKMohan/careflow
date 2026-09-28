@@ -49,3 +49,11 @@ export const CHEST_PAIN_AR: PatientScript = {
   ],
 };
 
+/** Persona `sepsis` (keypad 100004, synthetic): fever and shivering, with the septic device scenario. */
+export const SEPSIS: PatientScript = {
+  complaint: "I've had a fever and shivering since yesterday",
+  yes: [/fever/i, /shaking or shivering/i],
+  scale: "5",
+  typed: [[/when did (this|the) .*start/i, "Since yesterday evening"]],
+};
+
