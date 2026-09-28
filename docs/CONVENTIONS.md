@@ -102,9 +102,13 @@ tasks:
 speech:
   stt: { provider: mlx-whisper, by_language: { en: mlx-whisper, ar: mlx-whisper } }   # cohere-transcribe-arabic is gated on HF: use only if downloadable
   tts: { provider: kokoro, by_language: { en: kokoro, ar: mms-tts-ara } }   # Kokoro has no Arabic; SILMA cannot share numpy 2 (ADR-033)
+  turn:   # when a spoken turn ends, per language (ADR-058)
+    en: { smart_turn: false, endpoint_silence_ms: 400 }
+    ar: { smart_turn: false, endpoint_silence_ms: 700, hard_silence_ms: 1200 }
 ```
 
 - `provider` is the default; `by_language` overrides it per session language. Deepgram is an optional STT.
+- `turn` sets when a spoken turn ends in each language: after how much silence, and whether Smart Turn v3 may end it early. A language without an entry keeps the voice service's settings. `eval/speech/run_turns.py` measures how often each setting cuts an answer in two.
 - Other config files: `config/rooms.yaml` (queue, rooms, grace window), `config/intake.yaml` (`llm_phrasing`, `briefing_summary`), `config/triage_scales.yaml` (scale display mapping), `config/hospitals/demo_hapi.yaml` (per-hospital FHIR adapter).
 
 - Every LLM output is validated against a Pydantic model from `packages/contracts`.

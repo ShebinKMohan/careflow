@@ -57,6 +57,13 @@ make down    # stops what this checkout started; the data volumes stay
   - The voice journeys need the voice service; without it they are skipped with that reason.
   - CI runs the journeys on pushes to `main`, on PRs labelled `e2e` and on demand.
 - **Nightly journeys on the local model.** `make nightly-e2e` starts its own stack with the live local model, runs every journey and writes [`eval/reports/e2e_nightly.json`](eval/reports/e2e_nightly.json) (each spec's result, duration and provider). To run it every night at 02:00, `make install-nightly` installs a LaunchAgent, and `launchctl load ~/Library/LaunchAgents/com.careflow.nightly-e2e.plist` starts it. Loading it is your choice: it is a lasting change to this Mac. `launchctl unload` with the same path stops it.
+- **Speech eval, on this Mac.** It needs the voice models (`make voice-models`) and the `mlx-whisper` and `arabic-speech` extras:
+  - `eval/speech/make_clips.py --from-scenarios` voices the synthetic sentences and every scenario turn (Kokoro for English, MMS-TTS for Arabic);
+  - `run_wer.py` writes the WER and CER of each speech-to-text engine;
+  - `run_turns.py` writes how often the end of a turn cuts an answer in two;
+  - `run_latency.py` writes the kiosk's p50/p95 from the end of speech to the spoken question.
+
+  Everything goes to [`eval/reports/speech.json`](eval/reports/speech.json). The numbers are machine measurements on TTS-voiced audio, never an accuracy figure (ADR-058).
 - **Everyday commands:**
   - `make logs` follows the processes;
   - `make infra` starts only the Docker services, which the database and HAPI tests need;

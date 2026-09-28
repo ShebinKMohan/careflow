@@ -12,6 +12,7 @@ import pytest
 
 from voice_agent.providers.base import SpeechToText, TranscriptEvent
 from voice_agent.providers.mlx_whisper_stt import (
+    MIN_SPEECH_RMS,
     MlxWhisperSTT,
     MlxWhisperUnavailableError,
     mlx_transcriber,
@@ -198,3 +199,42 @@ def test_mlx_transcriber_passes_the_model_and_language(monkeypatch: pytest.Monke
             "verbose": None,
         }
     ]
+
+
+class _EverythingIsSpeech:
+    """A VAD that calls every frame speech, as a reset Silero can on faint noise."""
+
+    def reset(self) -> None:
+        return None
+
+    def process_frame(self, frame: Any) -> float:
+        return 1.0
+
+
+async def test_mlx_whisper_near_silence_is_never_a_turn(chest_pain_pcm: bytes) -> None:
+    """Whisper writes words into silence, so a turn of faint noise would be an answer the patient
+    never gave: frames under -60 dBFS never count as speech (M2-02, ADR-058)."""
+    transcribed: list[Any] = []
+    stt = MlxWhisperSTT(
+        vad_model_path="unused",
+        vad_factory=_EverythingIsSpeech,
+        transcriber=lambda audio: transcribed.append(audio) or "Thank you.",
+    )
+    await stt.start()
+    rng = np.random.default_rng(0)
+    faint = (rng.standard_normal(3 * 16000) * MIN_SPEECH_RMS * 0.3 * 32768).astype("<i2").tobytes()
+    await _feed(stt, faint)  # 3 s of noise around -70 dBFS
+    await stt.close()
+    assert transcribed == []
+
+    heard: list[Any] = []
+    loud = MlxWhisperSTT(
+        vad_model_path="unused",
+        vad_factory=_EverythingIsSpeech,
+        transcriber=lambda audio: heard.append(audio) or "I have chest pain.",
+    )
+    await loud.start()
+    await _feed(loud, chest_pain_pcm)  # the answer itself still ends as one turn
+    [event] = await _finals(loud)
+    await loud.close()
+    assert event.text == "I have chest pain." and len(heard) == 1

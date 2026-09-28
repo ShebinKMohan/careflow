@@ -55,7 +55,11 @@ def _not_run_reason() -> str | None:
 
 
 REASON = _not_run_reason()
-pytestmark = [pytest.mark.live, pytest.mark.skipif(REASON is not None, reason=REASON or "")]
+pytestmark = [
+    pytest.mark.models,
+    pytest.mark.live,
+    pytest.mark.skipif(REASON is not None, reason=REASON or ""),
+]
 
 
 def _live_settings() -> CareflowSettings:

@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted, 27 Sep 2026 ([M2-02]). This is the core build. The tests and the speech eval (`eval/speech/*`, `eval/reports/speech.json`) follow in the test phase.
+Accepted, 27 Sep 2026 ([M2-02]). This is the core build. The tests and the speech eval (`eval/speech/*`, `eval/reports/speech.json`) followed in the test phase, 28 Sep 2026: see ADR-058. That phase also changed where a spoken turn ends (`speech.turn`, per language) and stopped near-silence from becoming a turn.
 
 ## Context
 

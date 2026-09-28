@@ -15,3 +15,9 @@ tasks:
 speech:
   stt: { provider: mlx-whisper, by_language: { en: mlx-whisper, ar: mlx-whisper } }   # cohere-transcribe-arabic is gated on HF: use only if downloadable
   tts: { provider: kokoro, by_language: { en: kokoro, ar: mms-tts-ara } }   # Kokoro has no Arabic; SILMA cannot share numpy 2 (ADR-033)
+  # When a spoken turn ends, per language (ADR-058, eval/speech/run_turns.py). Smart Turn v3 at 0.5
+  # ended turns at the first 200 ms pause and split 30 of 261 English and 41 of 506 Arabic TTS-voiced
+  # answers in two; silence alone splits 0 English at 400 ms and 3 Arabic at 700 ms.
+  turn:
+    en: { smart_turn: false, endpoint_silence_ms: 400 }
+    ar: { smart_turn: false, endpoint_silence_ms: 700, hard_silence_ms: 1200 }

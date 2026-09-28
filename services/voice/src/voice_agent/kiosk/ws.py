@@ -52,6 +52,9 @@ class _Sender:
     async def send_bytes(self, data: bytes) -> None:
         await self._websocket.send_bytes(data)
 
+    async def close(self, code: int) -> None:
+        await self._websocket.close(code=code)
+
 
 async def _receive_start(websocket: WebSocket) -> StartMessage | None:
     message = await websocket.receive()

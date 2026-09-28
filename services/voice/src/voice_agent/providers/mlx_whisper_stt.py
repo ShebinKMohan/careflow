@@ -45,6 +45,10 @@ DEFAULT_MODEL = "mlx-community/whisper-large-v3-turbo"
 DEFAULT_LANGUAGE = "en"
 PRE_ROLL_SECONDS = 0.3
 MAX_TURN_SECONDS = 30.0  # Whisper's window; a longer turn is committed at the cap
+# A frame quieter than -60 dBFS is never speech (M2-02, ADR-058). After a reset Silero can score
+# faint noise as speech, and Whisper writes words into silence ("Thank you.", "ترجمة نانسي قنقر"):
+# a turn of near-silence would post an answer the patient never gave.
+MIN_SPEECH_RMS = 0.001
 _AUDIO_QUEUE_MAX_SIZE = 1000
 _TRANSCRIPT_QUEUE_MAX_SIZE = 20
 _WORKER_JOIN_TIMEOUT_SECONDS = 5.0
@@ -280,7 +284,10 @@ class MlxWhisperSTT:
                 pending = pending[VAD_FRAME_SAMPLES:]
                 audio_time += VAD_FRAME_SAMPLES / SAMPLE_RATE
                 was_speaking = tracker.is_speaking
-                tracker.observe_frame(vad.process_frame(frame), audio_time)
+                probability = vad.process_frame(frame)  # every frame, so the VAD keeps its state
+                if float(np.sqrt(np.mean(frame * frame))) < MIN_SPEECH_RMS:
+                    probability = 0.0
+                tracker.observe_frame(probability, audio_time)
                 if tracker.speech_seen:
                     if not turn and pre_roll:
                         turn.extend(pre_roll)

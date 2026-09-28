@@ -260,4 +260,22 @@ describe("WsVoiceClient", () => {
     expect(t.track.stopped).toBe(true);
     expect(t.contexts[0]!.closed).toBe(true);
   });
+
+  it("a denied microphone rejects start() and opens no socket (M2-02)", async () => {
+    t.deps.getUserMedia.mockImplementationOnce(() => Promise.reject(new DOMException("Permission denied", "NotAllowedError")));
+    await expect(t.client.start(SESSION, t.events)).rejects.toThrow("Permission denied");
+    expect(t.sockets).toHaveLength(0);
+    expect(t.contexts.every((context) => context.closed)).toBe(true);
+    expect(t.events.onError).not.toHaveBeenCalled(); // the caller shows the fallback: start() rejected
+  });
+
+  it("a voice service whose speech engine stopped says so, closes, and the microphone is released (M2-02)", async () => {
+    const socket = await t.connect();
+    socket.serverSends(JSON.stringify({ type: "error", code: "speech_unavailable" }));
+    socket.readyState = 3;
+    socket.onclose?.({ code: 1011 });
+    expect(vi.mocked(t.events.onError).mock.calls).toEqual([["speech_unavailable"], ["disconnected"]]);
+    expect(t.track.stopped).toBe(true);
+    expect(t.contexts[0]!.closed).toBe(true);
+  });
 });

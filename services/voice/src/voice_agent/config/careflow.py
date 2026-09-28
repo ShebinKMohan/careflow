@@ -4,15 +4,20 @@
 `.env`: the `speech` section of `config/providers.yaml` picks the STT and TTS engines, and the
 model files default to `services/voice/models/`. A `VOICE_AGENT_*` variable still wins, so a
 single engine can be switched without editing the file.
+
+`speech.turn` sets the end of a spoken turn per language (M2-02, ADR-058): whether Smart Turn v3
+may end it early, and after how much silence it ends. A language without an entry uses the
+service's settings.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Final, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
@@ -42,6 +47,29 @@ class _Engine(BaseModel):
         return self.by_language.get(language, self.provider)
 
 
+class _Turn(BaseModel):
+    """`speech.turn.<language>`: the end of a spoken turn; an unset field keeps the service's."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    smart_turn: bool = True  # may Smart Turn v3 end the turn early, after a short silence?
+    smart_turn_threshold: float | None = Field(default=None, gt=0, lt=1)
+    semantic_check_silence_ms: int | None = Field(default=None, gt=0)
+    endpoint_silence_ms: int | None = Field(default=None, gt=0)  # the silence-only end
+    hard_silence_ms: int | None = Field(default=None, gt=0)  # the end whatever Smart Turn says
+
+
+@dataclass(frozen=True)
+class TurnSettings:
+    """What `MlxWhisperSTT` needs to end one language's turns."""
+
+    smart_turn_model_path: str | None  # None: silence alone ends the turn
+    smart_turn_threshold: float
+    semantic_check_silence_ms: int
+    endpoint_silence_ms: int
+    hard_silence_ms: int
+
+
 class SpeechConfig(BaseModel):
     """`speech:` in config/providers.yaml."""
 
@@ -49,6 +77,38 @@ class SpeechConfig(BaseModel):
 
     stt: _Engine
     tts: _Engine
+    turn: dict[str, _Turn] = Field(default_factory=dict[str, _Turn])
+
+    @model_validator(mode="after")
+    def _known_languages(self) -> SpeechConfig:
+        unknown = sorted(set(self.turn) - set(LANGUAGES))
+        if unknown:
+            raise ValueError(f"speech.turn: unknown language {unknown}; expected {LANGUAGES}")
+        return self
+
+    def turn_settings(self, language: str, settings: Settings) -> TurnSettings:
+        """`speech.turn.<language>` over the service's settings; inconsistent gates raise."""
+        turn = self.turn.get(language, _Turn())
+        resolved = TurnSettings(
+            smart_turn_model_path=(
+                settings.sherpa_stt_smart_turn_model_path if turn.smart_turn else None
+            ),
+            smart_turn_threshold=turn.smart_turn_threshold
+            or settings.sherpa_stt_smart_turn_threshold,
+            semantic_check_silence_ms=turn.semantic_check_silence_ms
+            or settings.sherpa_stt_semantic_silence_ms,
+            endpoint_silence_ms=turn.endpoint_silence_ms or settings.sherpa_stt_endpoint_silence_ms,
+            hard_silence_ms=turn.hard_silence_ms or settings.sherpa_stt_hard_silence_ms,
+        )
+        if resolved.smart_turn_model_path is not None and (
+            resolved.semantic_check_silence_ms > resolved.endpoint_silence_ms
+        ):
+            raise ValueError(f"speech.turn.{language}: the Smart Turn check comes after the end")
+        if resolved.hard_silence_ms < resolved.endpoint_silence_ms:
+            raise ValueError(
+                f"speech.turn.{language}: hard_silence_ms is below endpoint_silence_ms"
+            )
+        return resolved
 
     def stt_provider(self, language: str = LANGUAGE) -> SpeechToTextName:
         name = self.stt.for_language(language)
