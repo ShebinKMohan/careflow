@@ -138,3 +138,17 @@ This file lists tests whose outcome depends on the machine or on timing, and how
 - **Handling.** The test now waits for both in one `waitFor` (the push to "/" and the forgotten
   patient): the same assertions, no retry. The file then passed 5 runs out of 5, and the whole
   kiosk suite passed (31 tests).
+
+## `packages/contracts/tests/test_pain_score_property.py::test_every_valid_pain_score_is_accepted` (M0-03)
+
+- **What happened.** On 28 September 2026, during SHE-296 [M2-05], one `make check` run failed this
+  test with Hypothesis `DeadlineExceeded`. The first example (`value=2`) took 316 ms against the
+  default 200 ms deadline; Hypothesis's own replay took 28 ms, so it reported "unreliable test
+  timings". The same run's other 2,828 tests passed, and the run before it passed this test.
+- **Cause.** Load, not the validators. Two pyright processes were using a full core each during the
+  run (one stalled for 29 minutes inside `make check`, one started beside it to find out why). The
+  answer was right; only the timing guard failed. The test's sibling in the same file, which calls
+  the same `accepted()` 500 times, already runs with `deadline=None`.
+- **Handling.** `@settings(deadline=None)`, like the sibling. Not retried and no assertion changed:
+  every value 0 to 10 must still be accepted by both the JSON Schema and the Pydantic model. Speed
+  is not what this contract test checks.

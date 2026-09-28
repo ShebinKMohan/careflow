@@ -33,6 +33,13 @@ export class Hapi {
     return (bundle.entry ?? []).map((entry) => entry.resource);
   }
 
+  /** How many resources of `type` the server holds. */
+  async count(type: string): Promise<number> {
+    const response = await this.api.get(type, { params: { _summary: "count" } });
+    expect(response.status(), `GET ${type}?_summary=count`).toBe(200);
+    return Number(((await response.json()) as Json).total ?? Number.NaN);
+  }
+
   /** The session's Encounter, waiting briefly for the write-back that follows the decision. */
   async encounter(sessionId: string): Promise<Record<string, unknown>> {
     let found: Record<string, unknown>[] = [];

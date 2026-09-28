@@ -89,7 +89,8 @@ def adapter() -> HospitalAdapter:
 
 @pytest.fixture
 def serve() -> Callable[..., respx.MockRouter]:
-    """Route every FHIR search to `answers` (by resource type); `fail` maps types to a status."""
+    """Route every FHIR search (`POST [type]/_search`) to `answers` by resource type; `fail` maps
+    types to a status."""
 
     def make(
         router: respx.MockRouter, answers: Answers, fail: dict[str, int] | None = None
@@ -97,12 +98,12 @@ def serve() -> Callable[..., respx.MockRouter]:
         failures = fail or {}
 
         def handler(request: httpx.Request) -> httpx.Response:
-            kind = request.url.path.rsplit("/", 1)[-1]
+            kind = request.url.path.removesuffix("/_search").rsplit("/", 1)[-1]
             if kind in failures:
                 return httpx.Response(failures[kind])
             return httpx.Response(200, json=bundle(answers.get(kind, [])))
 
-        router.get(url__startswith=BASE).mock(side_effect=handler)
+        router.post(url__startswith=BASE, path__regex=r"/_search$").mock(side_effect=handler)
         return router
 
     return make

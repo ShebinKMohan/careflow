@@ -38,6 +38,9 @@ def test_pain_score_accepts_only_0_to_10(value: int) -> None:
     assert accepted(value) == (expected, expected)
 
 
+# No timing deadline, as above: the property is what both validators accept, not how fast they
+# run on a loaded machine (docs/FLAKY.md).
+@settings(deadline=None)
 @given(st.integers(min_value=0, max_value=10))
 def test_every_valid_pain_score_is_accepted(value: int) -> None:
     assert accepted(value) == (True, True)

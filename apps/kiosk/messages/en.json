@@ -37,6 +37,7 @@
     "tapCard": "Or tap your ID card on the reader.",
     "cardNotFound": "We could not find your record with this card. Please use the keypad.",
     "cardReception": "Please go to the reception desk.",
+    "unreachable": "The kiosk cannot reach the clinic system right now. Please try again, or ask at reception.",
     "simulatedReader": "Simulated ID reader",
     "simulatedReaderNote": "A mock for this prototype: synthetic cards only, not a real ID service.",
     "mockCard": "Mock card ({persona})"
@@ -138,7 +139,9 @@
       "withoutCameraVoice": "Continue without camera and voice",
       "decline": "I don't agree to data use",
       "reception": "Please go to the reception desk.",
-      "startOver": "Start again"
+      "startOver": "Start again",
+      "saveFailed": "Your choices were not saved. Please try again, or ask at reception.",
+      "retry": "Try again"
     }
   }
 }

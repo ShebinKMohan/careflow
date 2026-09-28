@@ -76,6 +76,14 @@ def test_offset_zero_reproduces_the_dev_urls() -> None:
     )
 
 
+def test_the_api_and_its_voice_service_find_each_other_on_the_stacks_ports() -> None:
+    env = stack.stack_env("careflow-e2e", 30000, SECRETS)
+    assert env["CAREFLOW_VOICE_URL"] == "http://127.0.0.1:38090"  # the API's voice service
+    assert env["CAREFLOW_API_BASE_URL"] == "http://127.0.0.1:38000"  # the voice service's API
+    dev = stack.stack_env("careflow", 0, SECRETS)
+    assert dev["CAREFLOW_API_BASE_URL"] == "http://127.0.0.1:8000"
+
+
 def test_by_default_the_apps_and_the_api_stay_on_localhost() -> None:
     env = stack.stack_env("careflow", 0, SECRETS)
     assert env["CAREFLOW_API_HOST"] == "127.0.0.1"

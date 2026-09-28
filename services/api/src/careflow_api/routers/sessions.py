@@ -17,7 +17,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select, update
 
 from careflow_api.config import Settings, get_settings
-from careflow_api.consent import get_consent
+from careflow_api.consent import allows_voice, get_consent
 from careflow_api.deps import Principal, require_roles
 from careflow_api.devices.gateway import latest_vitals
 from careflow_api.feels_worse import summaries as feels_worse_summaries
@@ -376,8 +376,7 @@ async def post_turn(
     own_session(principal, session_id)
     await session_row(principal, session_id)
     if body.input_mode.value == "voice":  # the microphone needs the session's consent (M2-05)
-        consent = await get_consent(principal.clinic_id, session_id)
-        if consent is None or not consent.voice:
+        if not allows_voice(await get_consent(principal.clinic_id, session_id)):
             raise HTTPException(status.HTTP_403_FORBIDDEN, detail=VOICE_NOT_CONSENTED)
     try:
         result = await intake.submit_turn(

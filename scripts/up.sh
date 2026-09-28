@@ -60,9 +60,13 @@ python3 scripts/check_mem_budget.py
 python3 scripts/stack.py up --stack "$stack" --offset "$offset" --no-seed
 
 extras=()
+voice_extras=()
 if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
   # The voice service's local STT, and its Arabic speech (M2-02); Apple silicon only.
-  extras=(--extra mlx-whisper --extra arabic-speech --extra embeddings)
+  voice_extras=(--extra mlx-whisper --extra arabic-speech)
+  # Plus the handbook's local embeddings (careflow-rag, M2-08). Only the sync takes them: the
+  # voice service's `uv run --package careflow-voice` refuses an extra its package lacks.
+  extras=("${voice_extras[@]}" --extra embeddings)
 fi
 # --inexact: never remove what another extra installed (e.g. the laya fine-tuning stack).
 uv sync --locked --all-packages --inexact "${extras[@]}"
@@ -112,8 +116,13 @@ elif [[ -z "$(ls -A services/voice/models 2>/dev/null)" ]]; then
 elif lsof -iTCP:"$voice_port" -sTCP:LISTEN >/dev/null 2>&1; then
   echo "up: voice service off: port $voice_port is in use (set CAREFLOW_PORT_OFFSET or VOICE=0)."
 else
-  echo "voice: VOICE_PORT=$voice_port uv run --package careflow-voice ${extras[*]} careflow-voice" >>"$procfile"
+  echo "voice: VOICE_PORT=$voice_port uv run --package careflow-voice ${voice_extras[*]} careflow-voice" >>"$procfile"
   services+=("voice=http://127.0.0.1:$voice_port/healthz")
+  # With a voice service to talk to, the kiosk shows its microphone button (only after the
+  # patient's saved consent, M2-05) unless NEXT_PUBLIC_VOICE_ENABLED says otherwise. Expanded by
+  # honcho's shell after .env is loaded, so an empty value there counts as unset.
+  sed -i.orig 's|^kiosk: |kiosk: NEXT_PUBLIC_VOICE_ENABLED=${NEXT_PUBLIC_VOICE_ENABLED:-true} |' "$procfile"
+  rm -f "$procfile.orig"
 fi
 
 wait_s=300

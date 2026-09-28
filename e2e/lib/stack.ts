@@ -41,6 +41,8 @@ export const STACK = {
   /** Where the kiosk's QR code sends the phone: the stack's configured companion URL (M2-06). */
   companion: setting("NEXT_PUBLIC_COMPANION_URL", `http://localhost:${setting("CAREFLOW_COMPANION_PORT", "3002")}`).replace(/\/+$/, ""),
   fhir: setting("FHIR_BASE_URL", "http://localhost:8080/fhir").replace(/\/+$/, ""),
+  /** The voice service, when the stack runs one (Apple silicon, its models downloaded, VOICE≠0). */
+  voice: setting("CAREFLOW_VOICE_URL", "http://127.0.0.1:8090").replace(/\/+$/, ""),
 } as const;
 
 /** A dev secret from the environment or `.env`; the journeys never print one. */

@@ -10,6 +10,7 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any
 
+import httpx
 import pytest
 import respx
 
@@ -68,9 +69,12 @@ async def test_the_request_asks_hapi_for_the_right_searches(
     router = serve(respx.mock, recorded("routine"))
     fetch = await reader(adapter, now).fetch_context(keypad("100005"), "clinic_a")
     asked = {
-        call.request.url.path.rsplit("/", 1)[-1]: dict(call.request.url.params)
+        call.request.url.path.removesuffix("/_search").rsplit("/", 1)[-1]: dict(
+            httpx.QueryParams(call.request.content.decode())
+        )
         for call in router.calls
     }
+    assert all(call.request.url.query == b"" for call in router.calls)  # nothing in the URL
     assert asked["Patient"]["identifier"] == f"{KEYPAD}|100005"
     assert asked["AllergyIntolerance"]["clinical-status"] == "active"
     assert asked["Condition"]["clinical-status"] == "active"

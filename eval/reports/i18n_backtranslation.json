@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T18:34:32+00:00",
+  "generated_at": "2026-09-28T09:33:03+00:00",
   "provider": {
     "task": "translation_check",
     "model": "qwen3.5-9b-4bit",
@@ -10,9 +10,9 @@
   "chrf_floor": 40.0,
   "apps": {
     "kiosk": {
-      "ar_messages_sha256": "f9749992478bb5177ababd611ff4b4ebe34dadc0519172d016cb68526348e917",
-      "en_messages_sha256": "3c4757527771b11607ff671c2536add3bfd6d5c7fcfd26514db9f079cf86b534",
-      "strings": 114
+      "ar_messages_sha256": "a9acdab93abb6e2dd58e6d906015dcdc39ff621d8382464acb586cc3d609bd2a",
+      "en_messages_sha256": "d766193462a92c1cfd4292c080190dd93dead393a40da6a675d3a5618680e0f2",
+      "strings": 117
     },
     "staff": {
       "ar_messages_sha256": "0aa4027b2059b066d54f4c879f6caa4897c6d019f57bd40f6b96b74d1b44b476",
@@ -711,6 +711,34 @@
       "chrf": 78.5,
       "flagged": false,
       "checked_at": "2026-09-27T15:06:35+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "kiosk",
+      "key": "safety.consent.retry",
+      "safety": true,
+      "english": "Try again",
+      "arabic": "حاول مرة أخرى",
+      "back_translation": "Try again",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 100.0,
+      "flagged": false,
+      "checked_at": "2026-09-28T09:33:03+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "kiosk",
+      "key": "safety.consent.saveFailed",
+      "safety": true,
+      "english": "Your choices were not saved. Please try again, or ask at reception.",
+      "arabic": "لم يتم حفظ اختياراتك. يرجى المحاولة مرة أخرى، أو التوجه إلى مكتب الاستقبال.",
+      "back_translation": "Your selections were not saved. Please try again, or go to the reception desk.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 69.3,
+      "flagged": false,
+      "checked_at": "2026-09-28T09:33:03+00:00",
       "model": "qwen3.5-9b-4bit"
     },
     {
@@ -2811,6 +2839,20 @@
       "chrf": 9.6,
       "flagged": true,
       "checked_at": "2026-09-27T15:03:50+00:00",
+      "model": "qwen3.5-9b-4bit"
+    },
+    {
+      "app": "kiosk",
+      "key": "checkin.unreachable",
+      "safety": false,
+      "english": "The kiosk cannot reach the clinic system right now. Please try again, or ask at reception.",
+      "arabic": "لا يمكن الاتصال بنظام العيادة الآن. يرجى المحاولة مرة أخرى، أو التوجه إلى مكتب الاستقبال.",
+      "back_translation": "Cannot connect to the clinic system now. Please try again, or go to the reception desk.",
+      "same_meaning": true,
+      "issue": null,
+      "chrf": 58.6,
+      "flagged": false,
+      "checked_at": "2026-09-28T09:33:03+00:00",
       "model": "qwen3.5-9b-4bit"
     },
     {
