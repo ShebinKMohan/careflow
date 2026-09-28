@@ -183,6 +183,33 @@ async def test_a_503_is_retried_and_a_400_is_not(
 
 
 @respx.mock
+async def test_a_conflict_with_a_twin_is_retried_and_finds_what_the_twin_stored(
+    triage_record: Load, adapter: HospitalAdapter
+) -> None:
+    """M2-12: after an EHR outage, a held-back request can land just as its retry runs; HAPI
+    answers the twin conditional create with 409. It used to be dead-lettered as a rejection."""
+    record = triage_record("chest_pain")
+    seen: list[httpx.Request] = []
+
+    def conflict_once(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return httpx.Response(409) if len(seen) == 1 else created(request)
+
+    respx.post(f"{adapter.fhir_base_url}/").mock(side_effect=conflict_once)
+    s = Setup(record, adapter)
+    outcome = await s.handler.on_triage_confirmed(confirmed(record))
+    assert (outcome.status, outcome.attempts, s.sleeps) == (WritebackStatus.ok, 2, [1.0])
+    respx.post(f"{adapter.fhir_base_url}/").mock(return_value=httpx.Response(409))
+    s = Setup(record, adapter)
+    outcome = await s.handler.on_triage_confirmed(confirmed(record))
+    assert (outcome.status, outcome.error, outcome.retryable) == (
+        WritebackStatus.failed,
+        "HTTP 409",
+        True,  # left pending for the bus to retry, never dead-lettered
+    )
+
+
+@respx.mock
 async def test_a_server_that_stays_unavailable_is_a_retryable_failure(
     triage_record: Load, adapter: HospitalAdapter
 ) -> None:

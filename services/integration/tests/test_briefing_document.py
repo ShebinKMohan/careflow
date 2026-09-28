@@ -284,7 +284,9 @@ async def test_nothing_to_attach_the_document_to_skips_it(
     )
 
 
-@pytest.mark.parametrize(("status", "retryable"), [(503, True), (429, True), (400, False)])
+@pytest.mark.parametrize(
+    ("status", "retryable"), [(503, True), (429, True), (409, True), (400, False)]
+)
 @respx.mock
 async def test_a_fhir_error_fails_the_document_without_raising(
     status: int, retryable: bool

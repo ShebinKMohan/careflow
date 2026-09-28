@@ -31,7 +31,7 @@ from fhir.resources.R4B.bundle import Bundle
 
 from careflow_contracts.api_models import Briefing, BriefingSection, BriefingSectionId
 from careflow_contracts.generated.fact_schema import FhirSource, Provenance
-from careflow_integration.fhir.client import RETRY_STATUSES, FhirClient, FhirError
+from careflow_integration.fhir.client import WRITE_RETRY_STATUSES, FhirClient, FhirError
 from careflow_integration.fhir.writeback import codes
 from careflow_integration.fhir.writeback.builders import (
     DEVICE_SYSTEM,
@@ -291,8 +291,8 @@ async def write_document(
         stored = await client.create(bundle, if_none_exist=document_match(briefing.session_id))
     except FhirError as exc:
         logger.warning("fhir.briefing_document", extra={"status": "failed", "error": str(exc)})
-        # No answer, or 429/502/503/504: the EHR may answer later. Anything else is a rejection.
-        unreachable = exc.status is None or exc.status in RETRY_STATUSES
+        # No answer, 429/502/503/504, or a concurrent twin (409): worth trying again later.
+        unreachable = exc.status is None or exc.status in WRITE_RETRY_STATUSES
         return DocumentOutcome(WritebackStatus.failed, error=str(exc)[:200], retryable=unreachable)
     except ValueError as exc:  # a builder bug: the Bundle does not fit the FHIR models
         logger.error("fhir.briefing_document", extra={"status": "failed", "error": "invalid"})
