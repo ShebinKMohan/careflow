@@ -516,6 +516,11 @@ async def get_status(
         current_question=current_question,
     )
     vitals = latest_vitals.get(session_id)  # the kiosk's vitals panel: numbers only
+    if get_settings().serverless:
+        from careflow_contracts.api_models import LatestVitals
+
+        saved = await request.app.state.redis.get(f"careflow:demo-vitals:{session_id}")
+        vitals = LatestVitals.model_validate_json(saved) if saved else None
     return found.model_copy(update={"vitals": vitals}) if vitals is not None else found
 
 

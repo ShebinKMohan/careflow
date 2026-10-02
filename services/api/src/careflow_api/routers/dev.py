@@ -14,6 +14,7 @@ from careflow_api.devices.gateway import VitalsSink, latest_vitals, run_simulati
 from careflow_api.routers.sessions import device_facts
 from careflow_contracts.api_models import (
     DeviceVitalsReading,
+    LatestVitals,
     VitalsScenario,
     VitalsSimRequest,
     VitalsSimStarted,
@@ -46,6 +47,13 @@ def session_sink(request: Request, session_id: str) -> VitalsSink:
 
     async def put(reading: DeviceVitalsReading) -> None:
         await latest(reading)
+        if get_settings().serverless:
+            vitals = LatestVitals.model_validate(
+                {**reading.model_dump(exclude={"reading_id"}, exclude_none=True), "simulated": True}
+            )
+            await request.app.state.redis.set(
+                f"careflow:demo-vitals:{session_id}", vitals.model_dump_json(), ex=86400
+            )
         if intake is not None and await intake.state(session_id) is not None:
             await intake.add_facts_and_evaluate(session_id, device_facts(session_id, reading))
 

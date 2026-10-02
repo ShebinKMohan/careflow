@@ -1,0 +1,14 @@
+# Hosted CV demo. Uses the same extraction schema, source gate, rules, nurse interrupt and
+# briefing validation as local mode. Requires GEMINI_API_KEY on the backend only.
+# Google AI Studio free-tier project with billing DISABLED; quotas stop requests, never upgrade.
+# config/providers.yaml remains the original local baseline.
+tasks:
+  conversation: { provider: api, vendor: gemini, model: gemini-3.5-flash-lite }
+  extraction: { provider: api, vendor: gemini, model: gemini-3.5-flash-lite }
+  summary: { provider: api, vendor: gemini, model: gemini-3.5-flash-lite }
+  translation_check: { provider: api, vendor: gemini, model: gemini-3.5-flash-lite }
+  eval_judge: { provider: cli, tool: codex }
+  test_data: { provider: cli, tool: codex }
+speech:
+  stt: { provider: gemini-live, by_language: { en: gemini-live, ar: gemini-live } }
+  tts: { provider: gemini-live, by_language: { en: gemini-live, ar: gemini-live } }

@@ -35,6 +35,14 @@ class Settings(BaseSettings):
         default=None, validation_alias=AliasChoices("CAREFLOW_VOICE_URL")
     )
     runtime: str = Field(default="live", validation_alias=AliasChoices("CAREFLOW_RUNTIME"))
+    #: Explicit synthetic workflow demo; never enabled as a model-failure fallback.
+    demo_mode: bool = Field(default=False, validation_alias=AliasChoices("CAREFLOW_DEMO_MODE"))
+    #: Request-driven Vercel runtime, independent of the scripted AI demo override.
+    serverless: bool = Field(default=False, validation_alias="CAREFLOW_SERVERLESS")
+    #: PostgreSQL-backed synthetic FHIR adapter; no live hospital is connected.
+    demo_fhir: bool = Field(default=False, validation_alias="CAREFLOW_DEMO_FHIR")
+    gemini_voice: bool = Field(default=False, validation_alias="CAREFLOW_GEMINI_VOICE")
+    demo_access: bool = Field(default=False, validation_alias="CAREFLOW_DEMO_ACCESS")
     #: "dev" enables the /v1/dev test hooks; any other value (the default) leaves them out.
     env: str = Field(default="prod", validation_alias=AliasChoices("CAREFLOW_ENV"))
     #: Simulated vitals device pace (1 = real time, 0 = no waiting; tests).

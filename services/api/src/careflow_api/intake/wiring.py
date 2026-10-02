@@ -12,12 +12,14 @@ from __future__ import annotations
 
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Final
 
 from careflow_api.ask import AskService
 from careflow_api.briefing.service import BriefingService
+from careflow_api.config import get_settings
+from careflow_api.demo import DEMO_MODEL, DemoChat, DemoExtractor
 from careflow_api.intake.ports import (
     CachedEhrReader,
     CheckinIdentifier,
@@ -30,7 +32,12 @@ from careflow_api.intake.ports import (
 from careflow_api.intake.side_questions import AgentClinicQA, SqlNurseFlags, TurnClassifier
 from careflow_api.queue.service import QueueService
 from careflow_intake.ports import IntakePorts
-from careflow_intake.wiring import build_real_ports, load_intake_config, providers_config
+from careflow_intake.wiring import (
+    RealPortsSettings,
+    build_real_ports,
+    load_intake_config,
+    providers_config,
+)
 from careflow_providers.adapters.replay import provider_mode
 from careflow_providers.factory import build_provider
 from careflow_rules import RULESET_VERSION
@@ -81,6 +88,7 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
     """The real ports; the urgency model falls back to "no suggestion" when it is missing."""
     config = load_intake_config()
     providers = providers_config()
+    demo = get_settings().demo_mode
     try:
         threads = int(os.environ.get("TRIAGE_MODEL_THREADS", "2"))
     except ValueError:
@@ -93,6 +101,11 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
     )
     events = OutboxEvents()
     ports = build_real_ports(
+        settings=(
+            RealPortsSettings(llm_phrasing=False, extraction_provider=DemoChat("extraction"))
+            if demo
+            else None
+        ),
         identifier=CheckinIdentifier(),
         ehr=CachedEhrReader(),
         urgency=urgency,
@@ -100,12 +113,20 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
         writeback=WritebackPort(events=events),
         briefing=briefing,
         events=events,
-        intents=TurnClassifier(lambda: build_provider("conversation", providers)),
+        intents=TurnClassifier(
+            (lambda: DemoChat("conversation"))
+            if demo
+            else (lambda: build_provider("conversation", providers))
+        ),
         clinic_qa=AgentClinicQA(ask, queue, events.publisher),
         nurse_flags=SqlNurseFlags(events.publisher),
     )
+    if demo:
+        ports = replace(ports, extractor=DemoExtractor())
 
     def provider(task: str) -> str:
+        if demo:
+            return f"demo {DEMO_MODEL}; deterministic responses, no LLM"
         spec = providers.tasks.get(task)
         if spec is None:
             return "not configured"
@@ -122,9 +143,17 @@ def build_ports(*, queue: QueueService, briefing: BriefingService, ask: AskServi
         PortChoice(
             "conversation",
             "checklist",
-            f"phrasing: {provider('conversation')}" if config.llm_phrasing else "templates only",
+            "approved templates only (demo)"
+            if demo
+            else (
+                f"phrasing: {provider('conversation')}" if config.llm_phrasing else "templates only"
+            ),
         ),
-        PortChoice("extractor", "LLM extractor (M1-06)", provider("extraction")),
+        PortChoice(
+            "extractor",
+            "scripted demo extractor" if demo else "LLM extractor (M1-06)",
+            provider("extraction"),
+        ),
         PortChoice("rules", "careflow_rules", RULESET_VERSION),
         PortChoice(
             "urgency",

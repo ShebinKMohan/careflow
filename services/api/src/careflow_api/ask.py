@@ -15,11 +15,14 @@ kiosk RAG and wayfinding.
 
 from __future__ import annotations
 
+import json
 import threading
 import uuid
 from collections import OrderedDict, deque
 from collections.abc import Callable
 from typing import Final
+
+from redis.asyncio import Redis
 
 from careflow_api.events.outbox import OutboxPublisher
 from careflow_api.nurse_flags import record_medical_question
@@ -30,6 +33,7 @@ from careflow_providers.base import ChatProvider
 from careflow_rag.agent import AskAgent, AskPorts, AskResult, Lang, MedicalFlag, QueueSnapshot, Turn
 from careflow_rag.config import RagConfig
 from careflow_rag.embed import Embedder, HashEmbedder, QwenEmbedder
+from careflow_rag.gemini_embed import GeminiEmbedder
 from careflow_rag.retrieve import retrieve
 
 #: Sessions whose turns are remembered; the oldest is forgotten first.
@@ -49,10 +53,12 @@ class AskService:
         provider: Callable[[], ChatProvider],
         *,
         embedder: Embedder | None = None,
+        redis: Redis | None = None,
     ) -> None:
         self.config = config
         self.agent = AskAgent(provider, config.ask)
         self._embedder = embedder
+        self._redis = redis
         self._embedder_lock = threading.Lock()
         self._turns: OrderedDict[str, deque[Turn]] = OrderedDict()
 
@@ -60,7 +66,11 @@ class AskService:
         with self._embedder_lock:
             if self._embedder is None:
                 self._embedder = (
-                    QwenEmbedder() if self.config.embedder == "qwen" else HashEmbedder()
+                    GeminiEmbedder()
+                    if self.config.embedder == "gemini"
+                    else QwenEmbedder()
+                    if self.config.embedder == "qwen"
+                    else HashEmbedder()
                 )
             return self._embedder
 
@@ -122,11 +132,23 @@ class AskService:
     async def ask(
         self, question: str, lang: Lang, *, session_id: str, ports: AskPorts
     ) -> AskResult:
+        history = self.history(session_id)
+        key = f"careflow:ask-history:{session_id}"
+        if self._redis is not None:
+            history = [Turn(**json.loads(item)) for item in await self._redis.lrange(key, 0, -1)]
         result = await self.agent.ask(
-            question, lang, session_id=session_id, ports=ports, history=self.history(session_id)
+            question, lang, session_id=session_id, ports=ports, history=history
         )
         if not result.refused_medical:
-            self.remember(session_id, Turn(question=question, answer=result.answer))
+            turn = Turn(question=question, answer=result.answer)
+            if self._redis is None:
+                self.remember(session_id, turn)
+            else:
+                async with self._redis.pipeline(transaction=True) as pipe:
+                    pipe.rpush(key, json.dumps({"question": turn.question, "answer": turn.answer}))
+                    pipe.ltrim(key, -self.config.history_turns, -1)
+                    pipe.expire(key, 86400)
+                    await pipe.execute()
         return result
 
 

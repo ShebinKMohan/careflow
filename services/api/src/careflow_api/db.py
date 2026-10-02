@@ -11,8 +11,13 @@ from careflow_api.config import get_settings, sqlalchemy_url
 
 @lru_cache
 def get_engine() -> AsyncEngine:
+    settings = get_settings()
     return create_async_engine(
-        sqlalchemy_url(get_settings().database_url), pool_pre_ping=True, pool_size=5
+        sqlalchemy_url(settings.database_url),
+        pool_pre_ping=True,
+        pool_size=2 if settings.serverless else 5,
+        max_overflow=2 if settings.serverless else 10,
+        connect_args={"connect_timeout": 10},
     )
 
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Final, Literal, cast
@@ -13,7 +14,7 @@ from careflow_rag.retrieve import Mode
 
 RAG_CONFIG: Final = Path(__file__).resolve().parents[4] / "config" / "rag.yaml"
 MODES: Final = ("dense", "bm25", "hybrid")
-EMBEDDERS: Final = ("qwen", "hash")
+EMBEDDERS: Final = ("qwen", "hash", "gemini")
 
 
 @dataclass(frozen=True)
@@ -21,11 +22,13 @@ class RagConfig:
     ask: AskConfig
     mode: Mode = "dense"
     k: int = 5
-    embedder: Literal["qwen", "hash"] = "qwen"
+    embedder: Literal["qwen", "hash", "gemini"] = "qwen"
     history_turns: int = 3
 
 
 def load_rag_config(path: Path = RAG_CONFIG) -> RagConfig:
+    if path == RAG_CONFIG and (override := os.environ.get("CAREFLOW_RAG_CONFIG")):
+        path = Path(override)
     body: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     retrieval: dict[str, Any] = body.get("retrieval") or {}
     ask: dict[str, Any] = body.get("ask") or {}
@@ -42,7 +45,7 @@ def load_rag_config(path: Path = RAG_CONFIG) -> RagConfig:
         ),
         mode=cast(Mode, mode),
         k=int(retrieval.get("k", 5)),
-        embedder=cast(Literal["qwen", "hash"], embedder),
+        embedder=cast(Literal["qwen", "hash", "gemini"], embedder),
         history_turns=int(ask.get("history_turns", 3)),
     )
 

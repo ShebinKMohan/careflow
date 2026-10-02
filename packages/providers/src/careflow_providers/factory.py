@@ -14,6 +14,7 @@ from langchain_core.language_models import BaseChatModel
 
 from careflow_providers.adapters.api import ApiProvider, build_chat_model
 from careflow_providers.adapters.cli import CliProvider
+from careflow_providers.adapters.gemini import GeminiProvider
 from careflow_providers.adapters.local import LocalProvider
 from careflow_providers.adapters.replay import ReplayProvider, provider_mode
 from careflow_providers.base import ChatProvider
@@ -61,6 +62,8 @@ def _configured(
         case LocalTaskConfig(model=model, base_url=base_url, served_model=served_model):
             return LocalProvider(task, model, base_url, served_model=served_model)
         case ApiTaskConfig(vendor=vendor, model=model):
+            if vendor == "gemini" and chat_model is None:
+                return GeminiProvider(task, model)
             model_impl = chat_model or build_chat_model(task, vendor, model)
             return ApiProvider(task, vendor, model, model_impl)
         case CliTaskConfig(tool=tool):

@@ -106,6 +106,8 @@ def briefing_summarizer(
 
 def providers_config(path: Path = PROVIDERS_CONFIG) -> ProvidersConfig:
     """Resolve local runtime overrides without relabelling the recorded config baseline."""
+    if path == PROVIDERS_CONFIG and (override := os.environ.get("CAREFLOW_PROVIDERS_CONFIG")):
+        path = Path(override)
     providers = load_config(path)
     base_url = os.environ.get("CAREFLOW_LOCAL_LLM_BASE_URL")
     model = os.environ.get("CAREFLOW_LLM_MODEL")

@@ -18,6 +18,7 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy import func, select
 
 from careflow_api.config import Settings, get_settings
+from careflow_api.demo import DEMO_MODEL, DEMO_TASKS
 from careflow_api.deps import Principal, require_roles
 from careflow_api.models import FhirWritebackStatus
 from careflow_api.rls import clinic_session
@@ -53,7 +54,13 @@ async def admin_status(
     and models, and the versions of the ruleset and the urgency model."""
     components = await component_status(settings)
     services: list[dict[str, str]] = [
-        {"name": SERVICE_NAMES[key], "status": value} for key, value in components.items()
+        {
+            "name": "synthetic-fhir"
+            if key == "fhir" and settings.demo_fhir
+            else SERVICE_NAMES[key],
+            "status": value,
+        }
+        for key, value in components.items()
     ]
     services.append(await writeback_row(request, principal.clinic_id))
     wiring = getattr(request.app.state, "wiring", None)
@@ -110,7 +117,7 @@ async def writeback_row(request: Request, clinic_id: uuid.UUID) -> dict[str, str
     if consumer is None:
         status = "down"
     else:
-        status = "ok" if consumer == "consuming" and failed == 0 else "degraded"
+        status = "ok" if consumer in {"consuming", "request-driven"} and failed == 0 else "degraded"
     detail = f"consumer {consumer or 'not running'}; {failed} failed write-backs in this clinic"
     return {"name": "fhir-writeback", "status": status, "detail": detail}
 
@@ -138,7 +145,13 @@ async def speech_rows(settings: Settings) -> list[dict[str, str]]:
 
     speech = providers_config().speech or {}
     url = voice_url(settings)
-    up = await careflow_voice_answers(url)
+    if settings.gemini_voice:
+        from careflow_api.hosting.voice import available
+
+        up = await available()
+        url = "Gemini Live API (backend bridge)"
+    else:
+        up = await careflow_voice_answers(url)
     rows = []
     for kind in ("stt", "tts"):
         spec = speech.get(kind) or {}
@@ -189,6 +202,17 @@ async def provider_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     answers: dict[str, bool] = {}
     for task, spec in providers_config().tasks.items():
+        if get_settings().demo_mode and task in DEMO_TASKS:
+            rows.append(
+                {
+                    "task": task,
+                    "provider": "local",
+                    "model": DEMO_MODEL,
+                    "available": True,
+                    "detail": "explicit deterministic demo adapter; no live model or LLM is called",
+                }
+            )
+            continue
         body = spec.model_dump()
         kind = str(body.get("provider"))
         row: dict[str, Any] = {"task": task, "provider": kind}
@@ -197,8 +221,13 @@ async def provider_rows() -> list[dict[str, Any]]:
         if body.get("tool"):
             row["tool"] = str(body["tool"])
         if kind == "api":
-            vendor = str(body.get("vendor", "")).upper()
-            row["available"] = bool(os.environ.get(f"{vendor}_API_KEY"))
+            from careflow_providers.adapters.api import KEY_ENV
+
+            vendor = str(body.get("vendor", ""))
+            row["available"] = bool(
+                os.environ.get(KEY_ENV.get(vendor, ""))
+                or (vendor == "gemini" and os.environ.get("GEMINI_API_KEY"))
+            )
             if not row["available"]:
                 row["detail"] = "no API key configured"
         elif kind == "cli":

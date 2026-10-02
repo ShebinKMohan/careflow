@@ -100,6 +100,7 @@ class LiveHub:
         self.redis, self.stream, self.block_ms = redis, stream, block_ms
         self.heartbeat_seconds = heartbeat_seconds
         self.connections: set[Connection] = set()
+        self._request_reader: asyncio.Task[None] | None = None
 
     async def run(self) -> None:
         """Read new stream entries forever and hand each to the connections that want it."""
@@ -156,12 +157,21 @@ class LiveHub:
                 continue
             if stream_key(stream_id) > connection.sent_up_to:
                 await self.send(connection, stream_id, fields)
+                connection.sent_up_to = stream_key(stream_id)
 
     async def serve(
         self, websocket: WebSocket, claims: TicketClaims, last_event_id: str | None
     ) -> None:
+        from careflow_api.config import get_settings
+
+        # A Vercel invocation owns only its current sockets. Start the stream reader for this
+        # invocation; stop it at disconnect. No always-on worker or instance affinity needed.
         connection = Connection(websocket, claims)
         self.connections.add(connection)  # before the replay, so nothing falls between them
+        if get_settings().serverless and (
+            self._request_reader is None or self._request_reader.done()
+        ):
+            self._request_reader = asyncio.create_task(self.run())
         try:
             if last_event_id:
                 with contextlib.suppress(ValueError):
@@ -180,6 +190,10 @@ class LiveHub:
                         logger.warning("events.socket_closed", exc_info=task.exception())
         finally:
             self.connections.discard(connection)
+            if not self.connections and self._request_reader is not None:
+                self._request_reader.cancel()
+                await asyncio.gather(self._request_reader, return_exceptions=True)
+                self._request_reader = None
 
 
 async def _until_disconnect(websocket: WebSocket) -> None:

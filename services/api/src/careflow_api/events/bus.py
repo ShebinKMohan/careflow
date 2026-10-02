@@ -143,9 +143,9 @@ class EventBus:
         """Start consuming for `group` in a background task (cancel it to stop)."""
         return asyncio.create_task(self.run(group, handler), name=f"events:{group}")
 
-    async def ensure_group(self, group: str) -> None:
+    async def ensure_group(self, group: str, *, start_id: str = "$") -> None:
         try:
-            await self.redis.xgroup_create(self.stream, group, id="$", mkstream=True)
+            await self.redis.xgroup_create(self.stream, group, id=start_id, mkstream=True)
         except ResponseError as exc:
             if "BUSYGROUP" not in str(exc):
                 raise

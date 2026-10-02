@@ -14,6 +14,7 @@ from careflow_api.config import Settings, get_settings
 from careflow_api.db import get_engine
 from careflow_api.hospital import fhir_endpoint
 from careflow_contracts.api_models import Health
+from careflow_integration.fhir.client import FhirClient
 
 router = APIRouter(tags=["health"])
 Component = Literal["ok", "down"]
@@ -21,7 +22,7 @@ Component = Literal["ok", "down"]
 
 async def check_db() -> Component:
     try:
-        async with asyncio.timeout(2):
+        async with asyncio.timeout(8 if get_settings().serverless else 2):
             async with get_engine().connect() as connection:
                 await connection.execute(text("SELECT 1"))
         return "ok"
@@ -41,12 +42,10 @@ async def check_redis(url: str) -> Component:
 
 async def check_fhir(base_url: str) -> Component:
     try:
-        async with httpx.AsyncClient(timeout=2) as client:
-            response = await client.get(
-                f"{base_url.rstrip('/')}/metadata", params={"_summary": "true"}
-            )
-        return "ok" if response.status_code == 200 else "down"
-    except httpx.HTTPError:
+        async with FhirClient(base_url, timeout=httpx.Timeout(2)) as client:
+            await client._get("metadata", {"_summary": "true"})
+        return "ok"
+    except Exception:
         return "down"
 
 

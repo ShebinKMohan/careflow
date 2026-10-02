@@ -103,11 +103,15 @@ class IntakeRuntime:
         cls, database_url: str, ports: IntakePorts, settings: IntakeSettings | None = None
     ) -> AsyncIterator[IntakeRuntime]:
         """A runtime on its own connection pool, closed on exit."""
+        from careflow_api.config import get_settings
+
+        hosted = get_settings().serverless
         pool: AsyncConnectionPool[Any] = AsyncConnectionPool(
             libpq_url(database_url),
             kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row},
-            min_size=1,
-            max_size=10,
+            min_size=0 if hosted else 1,
+            max_size=4 if hosted else 10,
+            timeout=15,
             open=False,
         )
         await pool.open()

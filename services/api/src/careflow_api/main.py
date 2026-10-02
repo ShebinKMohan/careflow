@@ -9,6 +9,7 @@ import asyncio
 import contextlib
 import uuid
 from collections.abc import AsyncIterator
+from dataclasses import replace
 from datetime import UTC, datetime
 
 from fastapi import FastAPI
@@ -22,6 +23,7 @@ from careflow_api.briefing import router as doctor
 from careflow_api.briefing.service import BriefingService
 from careflow_api.briefing.store import SqlBriefingStore
 from careflow_api.config import Settings, get_settings
+from careflow_api.demo import DemoChat
 from careflow_api.events import tickets, ws
 from careflow_api.events.bus import EventBus
 from careflow_api.events.frames import QUEUE_STATUS, publish_frame
@@ -55,7 +57,8 @@ from careflow_api.routers import (
 )
 from careflow_api.writeback_store import SqlWritebackStore
 from careflow_contracts.api_models import CompanionStatus
-from careflow_intake.wiring import briefing_summarizer, providers_config
+from careflow_intake.briefing.summary import Summarizer
+from careflow_intake.wiring import briefing_summarizer, load_intake_config, providers_config
 from careflow_integration.fhir.client import FhirClient
 from careflow_providers.factory import build_provider
 from careflow_rag.config import load_rag_config
@@ -72,25 +75,30 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             wiring = build_ports(
                 queue=app.state.queue, briefing=app.state.briefings, ask=app.state.ask
             )
-            if settings.warm_extraction:
+            if settings.warm_extraction and not settings.demo_mode:
                 app.state.extraction_warmup = await warm_local_extraction(wiring.ports.extractor)
             runtime = await stack.enter_async_context(
                 IntakeRuntime.open(settings.database_url, wiring.ports)
             )
             app.state.wiring, app.state.intake = wiring, runtime
             app.state.briefings.states = runtime  # the briefing builds on demand from the graph
-            if settings.writeback_consumer:
+            if settings.writeback_consumer or settings.serverless:
                 handler = writeback_consumer(
                     runtime,
                     wiring.ports.writeback,  # type: ignore[arg-type]
                     briefings=app.state.briefings,
                 )
-                tasks.append(app.state.bus.subscribe(WRITEBACK_GROUP, handler))
-        if settings.queue_grace_task:
+                app.state.writeback_handler = handler
+                if settings.serverless:
+                    await app.state.bus.ensure_group(WRITEBACK_GROUP, start_id="0-0")
+                    app.state.bus.status[WRITEBACK_GROUP] = "request-driven"
+                else:
+                    tasks.append(app.state.bus.subscribe(WRITEBACK_GROUP, handler))
+        if settings.queue_grace_task and not settings.serverless:
             tasks.append(asyncio.create_task(run_grace_expiry(app.state.queue)))
-        if settings.outbox_relay:
+        if settings.outbox_relay and not settings.serverless:
             tasks.append(asyncio.create_task(app.state.relay.run()))
-        if settings.live_events:
+        if settings.live_events and not settings.serverless:
             tasks.append(asyncio.create_task(app.state.hub.run()))
         yield
         for task in tasks:
@@ -121,6 +129,21 @@ def queue_notifier(app: FastAPI, settings: Settings) -> Notify:
 
 def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     settings = get_settings()
+    if settings.demo_access and not (
+        settings.env == "dev" and settings.serverless and settings.demo_fhir
+    ):
+        raise ValueError(
+            "Public demo access requires the isolated serverless synthetic installation"
+        )
+    if settings.demo_mode and settings.env != "dev":
+        raise ValueError("CAREFLOW_DEMO_MODE requires CAREFLOW_ENV=dev and synthetic data only")
+    if settings.demo_fhir:
+        from careflow_api.hosting.fhir import DEMO_FHIR_URL, factory
+        from careflow_integration.fhir.client import configure_transport
+
+        if settings.env != "dev" or fhir_endpoint() != DEMO_FHIR_URL:
+            raise ValueError("Demo FHIR requires dev and the internal synthetic FHIR endpoint")
+        configure_transport(factory)
     app = FastAPI(
         title="CareFlow API",
         version=settings.api_version,
@@ -141,6 +164,7 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         allow_credentials=False,
     )
     app.state.redis = Redis.from_url(settings.redis_url, decode_responses=True)
+    app.state.maintenance_lock = asyncio.Lock()
     app.state.events = OutboxPublisher()
     app.state.relay = OutboxRelay(app.state.redis, stream=settings.event_stream)
     app.state.bus = EventBus(app.state.redis, stream=settings.event_stream)
@@ -151,17 +175,33 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
     )
     # config/rooms.yaml is validated here, so a bad file stops the API at start.
     app.state.queue = QueueService(rooms(), app.state.events, notify=queue_notifier(app, settings))
+    intake_config = load_intake_config()
+    summarizer = (
+        (
+            Summarizer(lambda: DemoChat("summary"), timeout_seconds=intake_config.summary_timeout_s)
+            if intake_config.briefing_summary
+            else None
+        )
+        if settings.demo_mode
+        else briefing_summarizer()
+    )
     app.state.briefings = BriefingService(
         store=SqlBriefingStore(),
         writebacks=SqlWritebackStore(),
         fhir=lambda: FhirClient(fhir_endpoint()),
-        summarizer=briefing_summarizer(),
+        summarizer=summarizer,
     )
     # Ask the clinic (M2-09). config/rag.yaml is validated here; the `conversation` provider is
     # built on the first question, so a missing one refuses questions (fail safe) instead of
     # stopping the API.
     app.state.ask = AskService(
-        load_rag_config(), lambda: build_provider("conversation", providers_config())
+        replace(load_rag_config(), mode="bm25", embedder="hash")
+        if settings.demo_mode
+        else load_rag_config(),
+        (lambda: DemoChat("conversation"))
+        if settings.demo_mode
+        else (lambda: build_provider("conversation", providers_config())),
+        redis=app.state.redis if settings.serverless else None,
     )
     for module in (
         health,
@@ -186,5 +226,17 @@ def create_app(*, tracer_provider: TracerProvider | None = None) -> FastAPI:
         app.include_router(module.router)
     if settings.env == "dev":  # test hooks exist only in development (otherwise: 404)
         app.include_router(dev.router)
+    if settings.serverless:
+        from careflow_api.hosting.runtime import RequestWork
+
+        app.add_middleware(RequestWork, careflow=app)
+    if settings.gemini_voice:
+        from careflow_api.hosting.voice import router as gemini_voice
+
+        app.include_router(gemini_voice)
+    if settings.demo_access:
+        from careflow_api.hosting.access import router as demo_access
+
+        app.include_router(demo_access)
     telemetry.instrument(app, tracer_provider or telemetry.build_tracer_provider())
     return app

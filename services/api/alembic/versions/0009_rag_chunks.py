@@ -13,6 +13,7 @@ data ever enters this table. Clinic-scoped like 0001 (ENABLE + FORCE ROW LEVEL S
 clinic_isolation policy); the app reads, and the ingest writes and removes chunks.
 """
 
+import os
 from collections.abc import Sequence
 
 from alembic import op
@@ -26,8 +27,21 @@ CURRENT_CLINIC = "NULLIF(current_setting('app.clinic_id', true), '')::uuid"
 
 
 def upgrade() -> None:
+    # The local schema keeps pg_textsearch. Managed demo Postgres uses the same dense pgvector
+    # index; explicitly hosted dense-only installs omit the optional BM25 indexes.
+    hosted = os.environ.get("CAREFLOW_SERVERLESS") == "1"
+    keyword_indexes = (
+        ""
+        if hosted
+        else """
+        CREATE INDEX rag_bm25_en ON rag_chunks
+            USING bm25 (body) WITH (text_config = 'english') WHERE lang = 'en';
+        CREATE INDEX rag_bm25_ar ON rag_chunks
+            USING bm25 (body) WITH (text_config = 'arabic') WHERE lang = 'ar';
+    """
+    )
     op.execute(
-        """
+        f"""
         CREATE TABLE rag_chunks (
             id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
             clinic_id uuid NOT NULL REFERENCES clinic (id),
@@ -45,10 +59,7 @@ def upgrade() -> None:
         CREATE INDEX ix_rag_chunks_clinic_id ON rag_chunks (clinic_id);
         CREATE INDEX rag_chunks_embedding_hnsw ON rag_chunks
             USING hnsw (embedding vector_cosine_ops);
-        CREATE INDEX rag_bm25_en ON rag_chunks
-            USING bm25 (body) WITH (text_config = 'english') WHERE lang = 'en';
-        CREATE INDEX rag_bm25_ar ON rag_chunks
-            USING bm25 (body) WITH (text_config = 'arabic') WHERE lang = 'ar';
+        {keyword_indexes}
         """
     )
     op.execute("GRANT SELECT, INSERT, UPDATE, DELETE ON rag_chunks TO careflow_app")

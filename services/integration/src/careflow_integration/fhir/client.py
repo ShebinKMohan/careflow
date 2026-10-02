@@ -32,6 +32,14 @@ VALIDATION_STATUSES: Final = frozenset({400, 412, 422})
 
 type Json = dict[str, Any]
 type Sleep = Callable[[float], Awaitable[None]]
+type TransportFactory = Callable[[str], httpx.AsyncBaseTransport | None]
+_transport_factory: TransportFactory | None = None
+
+
+def configure_transport(factory: TransportFactory | None) -> None:
+    """Explicit installation port (hosted synthetic adapter); normal HTTP is the default."""
+    global _transport_factory
+    _transport_factory = factory
 
 
 #: `.../Bundle/123/_history/1` in a Location header.
@@ -92,6 +100,8 @@ class FhirClient:
         self._origin = httpx.URL(self.base_url)
         self._retry_delays = tuple(retry_delays)
         self._sleep = sleep
+        if transport is None and _transport_factory is not None:
+            transport = _transport_factory(base_url)
         self._client = httpx.AsyncClient(
             base_url=self.base_url + "/",
             timeout=timeout,

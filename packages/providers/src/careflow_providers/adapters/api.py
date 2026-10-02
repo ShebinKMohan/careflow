@@ -40,6 +40,8 @@ def _to_langchain(messages: Sequence[Message]) -> list[BaseMessage]:
 def build_chat_model(task: str, vendor: str, model: str) -> BaseChatModel:
     key_env = KEY_ENV[vendor]
     api_key = os.environ.get(key_env)
+    if vendor == "gemini":
+        api_key = os.environ.get("GEMINI_API_KEY") or api_key
     if not api_key:
         raise ProviderUnavailable(task, f"{key_env} is not set")
     from langchain.chat_models import init_chat_model  # heavy import, only when a key exists

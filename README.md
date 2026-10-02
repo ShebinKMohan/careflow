@@ -6,6 +6,103 @@ CareFlow is a hospital check-in, triage and clinical workflow research prototype
 
 The separate legacy intake path retains six-digit patient codes, the ID-tap mock, English/Arabic text and voice intake, and an intake graph that turns conversation into structured facts. A plain-code safety rules engine checks reported facts before model output; the nurse confirms any clinical urgency. The staff workflow supports a queue token and room, a doctor briefing with fact provenance, and simulated hospital integration through FHIR R4 and HL7 v2. All patient data is synthetic.
 
+## Hosted demo on Vercel
+
+The current hosted demo uses the **original kiosk, phone and staff UIs** with an opt-in
+serverless backend adapter. Gemini cloud APIs perform text extraction/conversation/summary,
+handbook embeddings and consented hold-to-talk through Gemini Live. No GPU or local model
+server runs on Vercel. `config/providers.yaml` and the original local speech services remain
+available for installations that supply the local models; the hosted configuration is
+`config/providers.gemini.yaml`, selected by `CAREFLOW_PROVIDERS_CONFIG`.
+
+Public patient app: <https://careflow-omega-seven.vercel.app>.
+Staff app: <https://careflow-staff.vercel.app>.
+Phone app: <https://careflow-companion.vercel.app> (begin with the kiosk QR).
+Demo access guide: <https://careflow-api-rho.vercel.app/demo>.
+
+This mode calls real Gemini APIs; **`CAREFLOW_DEMO_MODE=0`**. It is separate from the
+optional scripted override below. The original extraction schema/source checks, deterministic
+alerts, medical-question refusal, nurse confirmation and sourced briefing validation still
+apply. Gemini does not replace the trained KTAS urgency classifier. Its fine-tuned checkpoint
+is not distributed with the hosted bundle: the original no-suggestion path lets the nurse
+select every final priority. This deployment is not evidence for local-model/voice/triage
+accuracy or performance claims.
+
+Neon free Postgres persists visits, LangGraph checkpoints, clinic-scoped data, handbook
+vectors and **synthetic FHIR resources**. The internal FHIR transport supports the existing
+read/search/conditional-create/update/transaction operations needed by the workflow; it is
+not a hospital connection or a complete FHIR server. Upstash free Redis persists QR claims,
+event streams, tickets, simulated-vitals display state and short handbook follow-up history.
+The hosted index uses Gemini embeddings with dense retrieval, not the local Qwen/BM25 index.
+The BM25 extension indexes are explicitly omitted for fresh serverless demo migrations.
+
+`CAREFLOW_SERVERLESS=1` completes bounded outbox, grace-expiry, writeback and briefing work
+during requests. Durable work is retried on later requests. Live stream readers run only
+while sockets are connected. An idle demo does not have an always-on background worker.
+The original local workers remain the default when this setting is off.
+
+`CAREFLOW_GEMINI_VOICE=1` exposes the original voice WebSocket protocol on the API.
+The backend checks session ownership and voice/data-use consent before sending audio to
+Google, commits the transcript through the original intake route, and releases generated
+speech only when its transcript matches the approved next question. Raw audio is not stored.
+Voice needs HTTPS and browser microphone permission. Quota, network or output-gate failures
+use the existing visible speech-error and typing paths; no scripted answer or paid fallback
+is substituted. Google free-tier processing terms apply, so use fictional information only.
+
+Deployment preparation is documented in [the hosted runbook](docs/vercel-hosting.md).
+The free plans were selected with automatic upgrades disabled; the Gemini project has billing
+disabled. Free-tier limits can pause requests and are not an unlimited-service guarantee.
+
+## Optional scripted backend override (Raspberry Pi / isolated testing)
+
+**The demo override demonstrates the existing workflow; it does not run live AI.**
+Set `CAREFLOW_DEMO_MODE=1` with `CAREFLOW_ENV=dev`, or start the API with:
+
+```bash
+CAREFLOW_ENV=dev .venv/bin/python scripts/serve_demo_api.py
+```
+
+Use this only with a dedicated synthetic demo database. It still needs the
+original Postgres, Valkey and seeded HAPI FHIR services. It replaces expensive
+model calls, not the API itself, and does not change the kiosk, staff or phone
+screens, their options, authentication, consent or clinical safety rules.
+
+| Behaviour | Explicit demo mode |
+|---|---|
+| Identification, registration, visits, consent, vitals simulator, nurse review, queue, QR handover and FHIR write-back | Original backend and database workflows |
+| Intake questions | Existing approved English/Arabic templates; no LLM rephrasing |
+| Typed answers | Verbatim text, existing yes/no/unsure and numeric parsing, plus exact synthetic sample statements; original source verification still runs |
+| Arbitrary descriptions outside the samples | Saved as stated; extraction is marked incomplete for nurse review, without guessing symptoms or urgency |
+| Doctor summary | Copies up to five existing fact items with their fact IDs, through the original summary checks; no generated narrative |
+| Phone clinic questions | Existing BM25 keyword retrieval with cited handbook excerpts for a small list of practical questions; live queue answers use the actual session's queue |
+| Medical / unsupported questions | Existing refusal, reception fallback or nurse flag; no medical advice |
+| Triage model | Actual selected artifact if available; otherwise **no urgency suggestion**. This mode does not impersonate the missing trained Laya checkpoint |
+| Microphone and spoken replies | Still require the original voice service. Speech recognition/synthesis are not simulated or accelerated by this flag |
+
+Synthetic text examples: `I have had a cough for two days.`, `I have a headache.`,
+`I have chest pain.`, `I have a fever.`, `I hurt my ankle yesterday.`,
+`عندي سعال منذ يومين.`, `عندي صداع.`, `عندي ألم في الصدر.`, `عندي حمى.`
+Use the existing answer buttons for follow-up yes/no/unsure and pain scores.
+On the phone, try `Where are the toilets?`, `What are the opening hours?`,
+`Where is the pharmacy?` or `What is my queue position?`.
+
+The admin provider screen identifies the overridden tasks as `demo-scripted-v1`
+with an explicit demo explanation. It retains the contract's `local` provider
+category and does not report them as Qwen or a working model server.
+The override is off by default and never activates automatically on a model
+error. Remove the flag (or set it to `0`) and restart the API to restore the
+original configured model path. Speech, trained-model accuracy and live-AI
+latency cannot be evaluated from demo responses.
+
+For public hosting, keep the original Vercel UI and connect it to this API
+through a stable HTTPS Cloudflare Tunnel, with the voice and companion routes
+configured separately. Frontend device credentials remain server-only. Enabling
+this flag alone does not connect or redeploy the existing Vercel preview.
+See [Pi setup and public deployment requirements](docs/pi-hosting.md).
+The [Oracle Always Free CPU deployment notes](docs/oracle-hosting.md) record
+the current provisioning status and the checks required before publishing a
+working product demo.
+
 ## Quick start
 
 Requires macOS (Apple silicon) or Linux with Docker, [uv](https://docs.astral.sh/uv/), Node 24+ and pnpm. On a Mac, `scripts/bootstrap_mac.sh` installs the missing tools (no sudo).

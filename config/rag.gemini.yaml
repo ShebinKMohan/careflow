@@ -1,0 +1,10 @@
+# Separate Gemini vectors; do not reuse a Qwen/hash-populated database index.
+retrieval:
+  mode: dense
+  k: 5
+  embedder: gemini
+ask:
+  # Demo threshold, not a reuse of the published Qwen retrieval accuracy. Validate separately.
+  min_score: 0.30
+  llm_timeout_s: 20
+  history_turns: 3
